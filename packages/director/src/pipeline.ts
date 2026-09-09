@@ -128,7 +128,7 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
 
   // Step 11 — exactly one constrained repair pass. Never a loop.
   if (!report.valid) {
-    narrative = repairNarrative(narrative, report);
+    narrative = repairNarrative(narrative, report, context.player.name);
     report = validateNarrative({ context, turn: narrative });
     repaired = true;
   }

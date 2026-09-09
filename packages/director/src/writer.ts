@@ -372,7 +372,14 @@ function sceneSummary(context: TurnContext): string {
  * Spec §10.7 — chips carry the numbers so prose does not have to, capped at the
  * three that matter most.
  */
-function buildDeltas(context: TurnContext): StateDeltaPresentation[] {
+/**
+ * The change strip, derived from the mutations that actually committed.
+ *
+ * Exported because the model writer reconciles its own labels against this: a
+ * delta the engine did not produce is a change the player is being shown and
+ * did not get.
+ */
+export function buildDeltas(context: TurnContext): StateDeltaPresentation[] {
   const deltas: StateDeltaPresentation[] = [];
 
   for (const mutation of context.resolution.mutations) {

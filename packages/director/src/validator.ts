@@ -5,6 +5,7 @@ import type {
 } from '@aniplay/contracts';
 import { countItem, isSuccess } from '@aniplay/engine';
 import type { TurnContext } from './context.js';
+import { narratesPlayerInThirdPerson, toSecondPerson } from './second-person.js';
 
 /**
  * Spec §17.1 step 10 — the consistency validator.
@@ -33,6 +34,22 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
   ): void => {
     violations.push({ code, severity, description, blockIndex });
   };
+
+  // --- VOICE ---
+  // The player is "you" in narration, everywhere, always. A writer that reaches
+  // for `playerName` instead turns the player's own move into something they
+  // watched happen.
+  turn.blocks.forEach((block, index) => {
+    if (block.type === 'DIALOGUE') return;
+    if (narratesPlayerInThirdPerson(block.text, state.player.identity.displayName)) {
+      push(
+        'NAME_IDENTITY_DRIFT',
+        'ERROR',
+        `Narration refers to the player as "${state.player.identity.displayName}" instead of "you".`,
+        index,
+      );
+    }
+  });
 
   // --- FORMAT ---
   if (turn.blocks.length === 0) push('FORMAT', 'ERROR', 'Turn has no blocks.');
@@ -281,7 +298,35 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
 export function repairNarrative(
   turn: NarrativeTurn,
   report: ConsistencyReport,
+  /** Needed to rewrite third-person narration rather than delete it. */
+  playerName?: string,
 ): NarrativeTurn {
+  // Voice is fixable in place, and deleting a whole narration block over a
+  // pronoun would cost the player the beat. Do this before anything is dropped.
+  let repaired = turn;
+  if (playerName) {
+    const voiceErrors = new Set(
+      report.violations
+        .filter((v) => v.code === 'NAME_IDENTITY_DRIFT' && typeof v.blockIndex === 'number')
+        .map((v) => v.blockIndex as number),
+    );
+    if (voiceErrors.size > 0) {
+      repaired = {
+        ...turn,
+        blocks: turn.blocks.map((block, index) =>
+          voiceErrors.has(index) ? { ...block, text: toSecondPerson(block.text, playerName) } : block,
+        ),
+      };
+      report = {
+        ...report,
+        violations: report.violations.filter(
+          (v) => !(v.code === 'NAME_IDENTITY_DRIFT' && voiceErrors.has(v.blockIndex as number)),
+        ),
+      };
+    }
+  }
+  turn = repaired;
+
   const badIndices = new Set(
     report.violations
       .filter((v) => v.severity === 'ERROR' && typeof v.blockIndex === 'number')

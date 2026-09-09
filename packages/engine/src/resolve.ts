@@ -857,6 +857,23 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
         : 'Nobody is present. Narrate the impulse and the empty room. Do not invent a target.',
     );
   }
+  // You cannot hit someone who is not in the room. Social verbs already refuse
+  // this; attack did not, so a player could swing at a name the last turn had
+  // just said was absent, and the engine would roll it, deal damage from them,
+  // and open an encounter with a character who is somewhere else entirely.
+  if (!charactersPresent(state).some((runtime) => runtime.characterId === character.id)) {
+    const runtime = state.characters.find((c) => c.characterId === character.id);
+    const whereabouts = story.locations.find((l) => l.id === runtime?.locationId);
+    return refusal(
+      action,
+      'TARGET_ABSENT',
+      `${character.name} is not here.`,
+      `${character.name} is${whereabouts ? ` at ${whereabouts.name}` : ' elsewhere'} at this hour. ` +
+        'Narrate the player squaring up at nobody. Do not put them in the scene, do not give them a line, ' +
+        'and do not let a blow land on either side.',
+    );
+  }
+
   if (!story.rules.allowsCombat) {
     return refusal(
       action,

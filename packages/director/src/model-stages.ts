@@ -4,6 +4,7 @@ import {
   NarrativeTurn,
   QUALITY_TIERS,
 } from '@aniplay/contracts';
+import type { SuggestedAction } from '@aniplay/contracts';
 import type { ModelGateway, ModelMessage } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { stripInventedTravel, stripSubstitutedPeople } from './entity-resolution.js';
@@ -11,7 +12,7 @@ import { NARRATIVE_CLARITY_RULES } from './narrative-clarity.js';
 import { CHOICE_CLARITY_RULES } from './choice-clarity.js';
 import { RuleBasedIntentParser, type IntentParser, type ParseContext } from './parser.js';
 import { RuleBasedDirector, type Director } from './director.js';
-import { TemplateWriter, type Writer } from './writer.js';
+import { TemplateWriter, buildDeltas, type Writer } from './writer.js';
 import type { TurnContext } from './context.js';
 
 /**
@@ -246,16 +247,31 @@ export class ModelDirector implements Director {
       return {
         ...result.value,
         wordBudget: config.wordBudget,
-        suggestedActions:
-          suggestedActions.length > 0
-            ? suggestedActions
-            : this.#fallback.planSync(context).suggestedActions,
+        suggestedActions: (suggestedActions.length > 0
+          ? suggestedActions
+          : this.#fallback.planSync(context).suggestedActions
+        ).map(withRisk),
       };
     } catch (error) {
       if (error instanceof ModelGatewayError) return this.#fallback.planSync(context);
       throw error;
     }
   }
+}
+
+/**
+ * `risk` is optional in the AI contract, so a model may leave it off — and a
+ * choice card that cannot say whether the thing is dangerous is not doing its
+ * job. Inferred from what the action is when it is missing, never left blank.
+ */
+function withRisk(action: SuggestedAction): SuggestedAction {
+  if (action.risk) return action;
+  const hint = `${action.intentHint} ${action.text}`.toLowerCase();
+  if (/\battack|strike|hit|kill|press the attack|charge\b/.test(hint)) return { ...action, risk: 'EXTREME' };
+  if (/\bsteal|threaten|deceive|lie|defend|flee|disengage|break away|use_ability\b/.test(hint)) {
+    return { ...action, risk: 'RISKY' };
+  }
+  return { ...action, risk: 'SAFE' };
 }
 
 function directorPayload(context: TurnContext): Record<string, unknown> {
@@ -303,6 +319,11 @@ const WRITER_POLICY = [
   'Characters have their own goals and may disagree with the player.',
   'The player says only what is in `playerSpeech`. If it is empty they said nothing aloud, so narrate',
   'what they did rather than quoting their own sentence back as a line of dialogue.',
+  '',
+  'Narration addresses the player as "you". Always. `playerName` is there so other characters can say it',
+  'out loud and so you know who they are — it is never the subject of narration. "You lunge at her",',
+  'never "Robin lunges at her": the player typed "I hit her" and being answered in the third person reads',
+  'like watching someone else play their own story.',
   '',
   'Show the specific thing the player did, using their own nouns.',
   'If they handed over a letter, a letter changes hands on the page. If they named a person,',
@@ -389,10 +410,33 @@ export class ModelWriter implements Writer {
         }),
         { maxTokens: 2000, temperature: 0.9, timeoutMs: 15_000 },
       );
-      return result.value;
+      return { ...result.value, stateDeltaPresentation: reconcileDeltas(context, result.value) };
     } catch (error) {
       if (error instanceof ModelGatewayError) return this.#fallback.writeSync(context, plan);
       throw error;
     }
   }
+}
+
+/**
+ * The change strip shows what changed, and only what changed.
+ *
+ * A model asked for `stateDeltaPresentation` will write plausible entries with
+ * invented mutation ids — "Kael notes your public outburst" against a turn in
+ * which Kael's opinion of the player did not move at all. That is the interface
+ * telling a player their action landed when it did not, which is worse than
+ * showing nothing.
+ *
+ * So: a label survives only if it names a mutation the engine actually
+ * committed, and any real change the model left out is filled in from the
+ * derived set. The model gets to phrase it; the engine decides what there is.
+ */
+function reconcileDeltas(context: TurnContext, turn: NarrativeTurn): NarrativeTurn['stateDeltaPresentation'] {
+  const derived = buildDeltas(context);
+  const real = new Map(derived.map((delta) => [delta.mutationId, delta]));
+
+  const kept = turn.stateDeltaPresentation.filter((delta) => real.has(delta.mutationId));
+  const covered = new Set(kept.map((delta) => delta.mutationId));
+
+  return [...kept, ...derived.filter((delta) => !covered.has(delta.mutationId))].slice(0, 8);
 }

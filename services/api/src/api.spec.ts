@@ -9,7 +9,7 @@ import { MemoryRepository } from './repo/memory.js';
 import { WalletService } from './wallet.js';
 import type { AppContext } from './context.js';
 import { createHmac } from 'node:crypto';
-import { DevTokenVerifier, SupabaseJwtVerifier } from './auth.js';
+import { DevTokenVerifier, SupabaseJwtVerifier, devUserId } from './auth.js';
 import { NoVerifierError, createStoreVerifierFromEnv } from './store-verifier.js';
 import type { TurnStreamHub } from './stream.js';
 
@@ -17,8 +17,11 @@ type Server = FastifyInstance & { ctx: AppContext; hub: TurnStreamHub };
 
 let app: Server;
 let ctx: AppContext;
-const GUEST = 'guest_test_user';
-const auth = { authorization: `Bearer ${GUEST}` };
+const GUEST_TOKEN = 'guest_test_user';
+// The development verifier maps a token to a stable uuid, because that is what
+// the production schema stores. Assertions about stored rows use the mapped id.
+const GUEST = devUserId(GUEST_TOKEN);
+const auth = { authorization: `Bearer ${GUEST_TOKEN}` };
 
 function makeContext(now: () => Date = () => new Date()): AppContext {
   const repo = new MemoryRepository();
@@ -760,9 +763,9 @@ describe('account and safety', () => {
 
     expect(response.json()).toEqual({ migrated: true, sessionsMoved: 1 });
     const moved = await ctx.repo.getSession(sessionId);
-    expect(moved!.userId).toBe('real_account_1');
+    expect(moved!.userId).toBe(devUserId('real_account_1'));
     // One new-user grant, not two.
-    expect(await ctx.wallet.getBalance('real_account_1')).toBe(GRANT_NEW_USER);
+    expect(await ctx.wallet.getBalance(devUserId('real_account_1'))).toBe(GRANT_NEW_USER);
   });
 
   it('does not migrate the same guest twice', async () => {

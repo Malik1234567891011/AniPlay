@@ -1,4 +1,4 @@
-import { createHmac, createPublicKey, timingSafeEqual, verify as verifySignature } from 'node:crypto';
+import { createHash, createHmac, createPublicKey, timingSafeEqual, verify as verifySignature } from 'node:crypto';
 import type { AppConfig } from './context.js';
 
 /**
@@ -51,13 +51,38 @@ export class DevTokenVerifier implements TokenVerifier {
     return {
       ok: true,
       token: {
-        userId: trimmed,
+        // Mapped to a uuid rather than used raw. Real identities come from
+        // Supabase and are uuids, which is what the schema is built on — so a
+        // development token has to be one too, or `npm run api` against a real
+        // Postgres fails on the first request with a type error.
+        userId: devUserId(trimmed),
         isGuest: trimmed.startsWith('guest_'),
         email: null,
         expiresAt: null,
       },
     };
   }
+}
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** The account a development bearer token resolves to. */
+export function devUserId(token: string): string {
+  const trimmed = token.trim();
+  return UUID.test(trimmed) ? trimmed : deterministicUuid(trimmed);
+}
+
+/** Stable per token, so the same development token is the same account. */
+export function deterministicUuid(seed: string): string {
+  const hash = createHash('sha256').update(`aniplay:dev:${seed}`).digest('hex');
+  return [
+    hash.slice(0, 8),
+    hash.slice(8, 12),
+    // Version 8 (custom), and the RFC 4122 variant bits, so it is a valid uuid.
+    `8${hash.slice(13, 16)}`,
+    ((parseInt(hash.slice(16, 17), 16) & 0x3) | 0x8).toString(16) + hash.slice(17, 20),
+    hash.slice(20, 32),
+  ].join('-');
 }
 
 export interface SupabaseJwtVerifierOptions {

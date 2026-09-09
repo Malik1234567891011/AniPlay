@@ -184,12 +184,26 @@ describe('choosing a verifier', () => {
 });
 
 describe('DevTokenVerifier', () => {
-  it('treats the token as the user id, and says so in its name', async () => {
+  it('accepts any token and reads a guest prefix as a guest', async () => {
     const result = await new DevTokenVerifier().verify('guest_abc');
-    expect(result).toEqual({
-      ok: true,
-      token: { userId: 'guest_abc', isGuest: true, email: null, expiresAt: null },
-    });
+    expect(result.ok && result.token.isGuest).toBe(true);
+  });
+
+  it('maps a token to a stable uuid, because that is what the schema stores', async () => {
+    const once = await new DevTokenVerifier().verify('guest_abc');
+    const again = await new DevTokenVerifier().verify('guest_abc');
+    const other = await new DevTokenVerifier().verify('guest_def');
+    expect(once.ok && once.token.userId).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    );
+    expect(once.ok && once.token.userId).toBe(again.ok && again.token.userId);
+    expect(once.ok && once.token.userId).not.toBe(other.ok && other.token.userId);
+  });
+
+  it('passes a token that is already a uuid through unchanged', async () => {
+    const id = '11111111-2222-4333-8444-555555555555';
+    const result = await new DevTokenVerifier().verify(id);
+    expect(result.ok && result.token.userId).toBe(id);
   });
 
   it('rejects an empty token', async () => {

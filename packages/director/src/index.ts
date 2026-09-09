@@ -6,6 +6,7 @@ export * from './context.js';
 export * from './director.js';
 export * from './writer.js';
 export * from './validator.js';
+export * from './second-person.js';
 export * from './narrative-clarity.js';
 export * from './choice-clarity.js';
 export * from './pipeline.js';

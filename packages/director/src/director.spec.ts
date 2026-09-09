@@ -21,7 +21,7 @@ import { ModelGatewayError, OpenAiGateway, createGatewayFromEnv } from './gatewa
 import { RuleBasedIntentParser } from './parser.js';
 import { RuleBasedDirector } from './director.js';
 import { ModelWriter } from './model-stages.js';
-import { TemplateWriter } from './writer.js';
+import { TemplateWriter, buildDeltas } from './writer.js';
 import { validateNarrative, repairNarrative } from './validator.js';
 import { buildTurnContext } from './context.js';
 import { runTurn, buildRecap } from './pipeline.js';
@@ -1836,5 +1836,49 @@ describe('player agency and action resolution', () => {
     expect(replay.resolution).toEqual(good.resolution);
     expect(replay.resolution.checks[0]?.keptRoll).toBe(good.resolution.checks[0]?.keptRoll);
     expect(replay.state.player.resources).toEqual(good.state.player.resources);
+  });
+});
+
+/**
+ * The change strip is a report of what the engine did, never a report of what
+ * the prose felt like. A model asked for it will invent entries.
+ */
+describe('reconciling the change strip', () => {
+  it('drops a delta that names no mutation, and keeps the ones that do', async () => {
+    // A turn that genuinely changes something, so there are real deltas to
+    // keep alongside the invented one.
+    const context = contextFor(baseState(), 'I show Kael the acceptance letter.', 'delta_turn');
+    const plan = new RuleBasedDirector().planSync(context);
+    const invented = {
+      schemaVersion: '1.0' as const,
+      sceneSummary: 'Something happened.',
+      blocks: [
+        {
+          type: 'NARRATION' as const,
+          speakerId: null,
+          text: 'You say the thing out loud and the room hears it.',
+          visibility: 'GROUP' as const,
+          voiceEligible: false,
+        },
+      ],
+      stateDeltaPresentation: [
+        { mutationId: 'kael_notes_your_outburst', label: 'Kael notes your outburst.', priority: 3 },
+      ],
+      endStatePrompt: 'What now?',
+    };
+
+    const gateway = {
+      name: 'stub',
+      generateStructured: async () => ({ value: invented, invocation: {} }),
+      streamText: async function* () {},
+      embed: async () => [],
+      moderate: async () => ({ flagged: false, categories: [], playerFacingMessage: null }),
+    };
+
+    const turn = await new ModelWriter(gateway as never).write(context, plan);
+    const shown = turn.stateDeltaPresentation.map((d) => d.mutationId);
+    expect(shown).not.toContain('kael_notes_your_outburst');
+    // Everything the engine actually did is still reported.
+    for (const delta of buildDeltas(context)) expect(shown).toContain(delta.mutationId);
   });
 });
