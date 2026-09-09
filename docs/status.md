@@ -56,9 +56,9 @@ them.
 | §21 creator platform | The whole world builder. A placeholder screen explains what it will be. |
 | §38 admin console | `apps/admin` is empty. |
 | §19.7 voice | Blocks are marked `voiceEligible`; nothing speaks them. |
-| GP-04 | Turn menu: retry, edit branch, report inconsistency. |
+| GP-04 | `Rephrase narration` only. It needs a server path that re-runs the writer against a stored resolution without re-rolling the dice. Retry, edit and report are built. |
 | SH-01 | Share artifacts. |
-| WS-07 / WS-08 | Timeline pin and correct are partial. |
+| WS-07 | Timeline pinning has no UI. Correction (WS-08) is built. |
 | §24 | Diegetic push notifications, flagged off at launch by design. |
 
 ## Known limitations worth writing down
