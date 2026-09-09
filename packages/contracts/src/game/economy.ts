@@ -137,9 +137,17 @@ export const StoreOffer = z
   .strict();
 export type StoreOffer = z.infer<typeof StoreOffer>;
 
-/** Spec §20.4/§20.5 launch proposals. Remote-configurable. */
-export const GRANT_NEW_USER = 900;
-export const GRANT_DAILY = 300;
+/**
+ * Spec §20.4/§20.5. Remote-configurable, and expressed in turns rather than in
+ * credits, because turns are the unit anybody actually reasons in.
+ *
+ * The default tier costs 60. A new account gets ten turns to find out whether
+ * it likes this, and seven a day after that — enough for a scene, not enough to
+ * finish a session on, which is the shape the daily grant is supposed to have.
+ */
+const DEFAULT_TURN_COST = 60;
+export const GRANT_NEW_USER = 10 * DEFAULT_TURN_COST;
+export const GRANT_DAILY = 7 * DEFAULT_TURN_COST;
 export const FORK_COST_CREDITS = 120;
 export const ANIMATION_COST_CREDITS = 600;
 
