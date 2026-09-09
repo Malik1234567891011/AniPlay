@@ -25,7 +25,8 @@ them.
 | Relationships §14 | Built: five dimensions, dampening, predicate gates |
 | Combat §13 | Built: encounters, turn economy, NPC turns from the same seed |
 | Media §19 | Covers, key art, stages, portraits, hero frames, player portraits. `npm run art` and `npm run brand` |
-| Safety §29/§33.8 | Reports, blocks, hide, moderation on generated media |
+| Safety §29/§33.8 | Input moderation before the reserve, reports, blocks, hide, moderation on generated media |
+| Rate limits §31.7 | Sliding window per account or address, four budgets, 429 with Retry-After |
 | Mobile client | All launch screens except the creator console. Turn menu, rephrase, canon correction, pinning, forks, share |
 | Postgres §34/§35 | Built. `npm run migrate` applies the schema and seeds the catalog; a run survives restart, redeploy and a second device |
 | Auth §6 | Built on Supabase Auth: Sign in with Apple, emailed codes, anonymous guests, JWT verified server-side |
@@ -117,6 +118,26 @@ Worth knowing because the shape of these bugs recurs:
 - Waiting advanced the clock by six minutes, so no authored schedule was
   reachable by waiting for it.
 
+## Is it a game?
+
+The question worth asking of every world is whether the systems on screen
+change what can happen. Per world, the number of quest routes and how many of
+them a build, a relationship or an institution actually gates:
+
+| World | Routes | Build-gated | Relationship-gated | Faction-gated |
+| --- | --- | --- | --- | --- |
+| The Ninth Archive | 14 | 4 | 5 | 0 |
+| The Understudy | 10 | 8 | 5 | 0 |
+| The Salt Road | 7 | 3 | 3 | 0 |
+| The Tidewall | 12 | 6 | 5 | 6 |
+| The Unbound | 18 | 6 | 6 | 1 |
+| Nine Weeks | 15 | 1 | 8 | 1 |
+
+Two of these were zero across the board a day ago. `catalog.spec.ts` holds the
+floor: a world must have more than one way through, must never gate on an
+ability nobody can learn, an item nothing gives out or standing nothing can
+earn, and must close something somewhere.
+
 ## Known limitations worth writing down
 
 - Suggestions come from `newOpportunities`, so on a turn that changed little
@@ -125,6 +146,16 @@ Worth knowing because the shape of these bugs recurs:
 - The rule-based writer is deliberately plain. It exists so the product works
   with no keys, not to be good prose. With a provider configured the difference
   is large.
+- Rate limiting is per API instance. Correct for the launch shape — one
+  process — and it has to move to a shared store before a second one exists.
+- The moderation fallback, used when no model provider is configured, is three
+  narrow categories rather than a classifier. It is a floor, not a policy.
+- A new account gets 900 credits and the default tier costs 60, so the free
+  allowance is fifteen turns and then 300 a day. Whether that is the right
+  funnel is a product decision, not a bug, but it is the number.
+- Blocking stores a list nothing reads, because the launch catalog is
+  first-party and no player ever sees another player's content. It becomes real
+  the moment the creator platform does.
 
 ## What is needed from outside this repo
 
