@@ -161,13 +161,16 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const wallet = user ? await ctx.wallet.getSummary(user.userId) : null;
 
     return {
+      // Flags describe what this build can actually do. `voicePlayback` and
+      // `creatorPublishing` were true for features that do not exist, which is
+      // the same lie as a button that does nothing — just further upstream.
       featureFlags: {
         coopBeta: false,
         animationBeta: false,
-        voicePlayback: true,
+        voicePlayback: false,
         heroImages: true,
         offScreenEvents: false,
-        creatorPublishing: true,
+        creatorPublishing: false,
         pushNotifications: false,
       },
       qualityTiers: Object.values(QUALITY_TIERS).map((tier) => ({
