@@ -3,6 +3,9 @@
 What is built, what is stubbed, and what the spec still wants. Updated
 2026-09-09.
 
+Run `npm run smoke` before believing any of it: it plays five turns in every
+world against a live API and reports what looks wrong.
+
 ## Playable end to end
 
 The full turn pipeline runs offline with no API keys, and with an
@@ -19,9 +22,9 @@ them.
 | Quests §15 | Built, including multi-route steps and engine-observed gates |
 | Relationships §14 | Built: five dimensions, dampening, predicate gates |
 | Combat §13 | Built: encounters, turn economy, NPC turns from the same seed |
-| Media §19 | Covers, key art, stages, portraits, hero frames, player portraits |
+| Media §19 | Covers, key art, stages, portraits, hero frames, player portraits. `npm run art` and `npm run brand` |
 | Safety §29/§33.8 | Reports, blocks, hide, moderation on generated media |
-| Mobile client | All launch screens except the creator console |
+| Mobile client | All launch screens except the creator console. Turn menu, canon correction, timeline forks |
 | Postgres §34/§35 | Schema written; `MemoryRepository` is what runs today |
 
 ## The six worlds
@@ -46,8 +49,13 @@ them.
   provider, so this cannot ship by accident.
 - **Persistence.** `MemoryRepository` loses everything on restart. The Postgres
   schema exists; the adapter does not.
-- **Store.** Verification and reconciliation are real. The native purchase sheet
-  is not wired, so the client posts sandbox transactions in development.
+- **Store.** Verification, reconciliation and restore are real, and a production
+  build cannot accept an unverified purchase. The native purchase sheet is not
+  wired, so the client posts sandbox transactions in development.
+- **Forks.** Real: the API snapshots the state each turn began from and a fork
+  copies the snapshot for the chosen moment, inheriting the transcript up to it.
+  Snapshots are capped at 60 per session, so a very long run cannot be forked
+  back to its beginning.
 
 ## Not built
 
@@ -60,6 +68,25 @@ them.
 | SH-01 | Share artifacts. |
 | WS-07 | Timeline pinning has no UI. Correction (WS-08) is built. |
 | §24 | Diegetic push notifications, flagged off at launch by design. |
+
+## Recently closed
+
+Worth knowing because the shape of these bugs recurs:
+
+- Authored progression was unreachable. 39 flags and 16 events across the
+  catalog that nothing could ever set, so every main quest stalled at step two
+  and nothing surfaced it. The engine now records what it observed and two
+  tests make an unsettable gate unshippable.
+- A fork cloned the present and ignored the fork point.
+- The client was sent the exact DC, the roll maths and the raw mutation list
+  regardless of what the world said it hid.
+- `/v1/store/purchases/sync` credited a wallet on the client's word alone.
+- The writer never saw what the player typed, or anyone's pronouns, or what the
+  player had said aloud.
+- The parser could invent travel, and could redirect a named stranger at
+  whoever was standing nearby.
+- Waiting advanced the clock by six minutes, so no authored schedule was
+  reachable by waiting for it.
 
 ## Known limitations worth writing down
 
