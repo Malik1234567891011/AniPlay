@@ -104,7 +104,20 @@ export class OpenAiGateway implements ModelGateway {
       });
 
       if (response.status === 429) {
-        throw new ModelGatewayError('Rate limited by provider', 'RATE_LIMITED', true);
+        // A 429 is usually "slow down" and is worth retrying. It is also what
+        // both providers return for an exhausted balance, which no amount of
+        // retrying will fix — and retrying it turns every turn into three
+        // pointless round trips before the fallback the player was always
+        // going to get.
+        const body = await response.text().catch(() => '');
+        const outOfCredit = /insufficient_quota|credit_balance_exhausted|billing|no credits/i.test(body);
+        throw new ModelGatewayError(
+          outOfCredit
+            ? `Provider balance exhausted: ${body.slice(0, 160)}`
+            : 'Rate limited by provider',
+          'RATE_LIMITED',
+          !outOfCredit,
+        );
       }
       if (!response.ok) {
         const text = await response.text().catch(() => '');

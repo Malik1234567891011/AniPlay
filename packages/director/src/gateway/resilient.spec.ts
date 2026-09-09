@@ -87,3 +87,37 @@ describe('ResilientGateway', () => {
     expect(calls).toBe(2);
   });
 });
+
+/**
+ * Both providers return 429 for "slow down" and for "you have no money left".
+ * Only one of those is worth retrying.
+ */
+describe('telling a rate limit from an empty balance', () => {
+  const respondWith = (status: number, body: string) =>
+    (async () => new Response(body, { status })) as unknown as typeof fetch;
+
+  it('retries a real rate limit', async () => {
+    const { OpenAiGateway } = await import('./openai.js');
+    const gateway = new OpenAiGateway({
+      apiKey: 'k',
+      fetchImpl: respondWith(429, JSON.stringify({ error: { message: 'Rate limit reached' } })),
+    });
+    await expect(
+      gateway.generateStructured('writer_fast', schema, [{ role: 'user', content: 'x' }]),
+    ).rejects.toMatchObject({ code: 'RATE_LIMITED', retryable: true });
+  });
+
+  it('does not retry an exhausted balance', async () => {
+    const { OpenAiGateway } = await import('./openai.js');
+    const gateway = new OpenAiGateway({
+      apiKey: 'k',
+      fetchImpl: respondWith(
+        429,
+        JSON.stringify({ error: { code: 'credit_balance_exhausted', type: 'insufficient_quota' } }),
+      ),
+    });
+    await expect(
+      gateway.generateStructured('writer_fast', schema, [{ role: 'user', content: 'x' }]),
+    ).rejects.toMatchObject({ code: 'RATE_LIMITED', retryable: false });
+  });
+});
