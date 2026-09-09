@@ -177,10 +177,21 @@ export function clampRelationshipDelta(
 export function relationshipLabel(rel: RelationshipState): string {
   if (rel.fear >= 55 && rel.fear > rel.affection) return 'Afraid';
   if (rel.rivalry >= 50 && rel.rivalry > rel.affection) return 'Rival';
+  if (rel.trust <= -30 || rel.affection <= -30) return 'Hostile';
   if (rel.affection >= 70 && rel.trust >= 50) return 'Devoted';
   if (rel.affection >= 45 && rel.trust >= 30) return 'Close';
   if (rel.trust >= 40) return 'Trusted';
-  if (rel.trust <= -30 || rel.affection <= -30) return 'Hostile';
+
+  // The interesting shapes below the top of the ladder, which a single
+  // catch-all used to flatten. Four people the player feels four different ways
+  // about all read "Familiar", on the panel that exists to tell them apart.
+  //
+  // Liked without being trusted is the specific state a lot of this product is
+  // about, so it gets its own word.
+  if (rel.affection >= 35 && rel.trust < 30) return 'Complicated';
+  if (rel.respect >= 40 && rel.affection < 35) return 'Respected';
+  if (rel.rivalry >= 25 && rel.rivalry > rel.trust) return 'Competitive';
+  if (rel.affection >= 20) return 'Warm';
   if (rel.trust >= 10 || rel.affection >= 10) return 'Familiar';
   return 'Wary';
 }
@@ -189,6 +200,10 @@ export function relationshipLabel(rel: RelationshipState): string {
 export const RELATIONSHIP_LABELS = [
   'Wary',
   'Familiar',
+  'Warm',
+  'Competitive',
+  'Respected',
+  'Complicated',
   'Trusted',
   'Close',
   'Devoted',

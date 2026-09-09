@@ -323,7 +323,7 @@ function resolveAction(args: ResolveActionArgs): ActionOutcome {
     case 'speak':
       return resolveSpeak(args);
     case 'wait':
-      return resolveFreeAction(args);
+      return resolveWait(args);
     default:
       return resolveGenericCheck(args);
   }
@@ -1001,6 +1001,76 @@ function resolveFreeAction(args: ResolveActionArgs): ActionOutcome {
     timeCategory: VERB_TIME[action.verb] ?? 'BRIEF',
     normalized: { verb: action.verb, status: 'RESOLVED' },
   };
+}
+
+/**
+ * Waiting, which has to actually move the clock.
+ *
+ * "I wait until after service", "I come back when she is on shift", "be on the
+ * leads at four and wait" all used to advance the world by the base cost of a
+ * verb — six minutes — so a player could not wait for anything, and every
+ * authored schedule was unreachable by the one action that exists to reach it.
+ *
+ * The world moves to the next moment something is different: the next boundary
+ * in somebody's day. If the player named a person, it is that person's next
+ * boundary, so "wait for Mira" lands when Mira arrives. Capped at eight hours,
+ * because a turn should never quietly cost the player a day.
+ */
+function resolveWait(args: ResolveActionArgs): ActionOutcome {
+  const { story, state, action } = args;
+
+  const named = action.targets.find((target) => target.entityType === 'npc');
+  const relevant = named
+    ? story.characters.filter((c) => c.id === named.entityId)
+    : story.characters;
+
+  const minuteOfDay = ((state.worldMinute % 1440) + 1440) % 1440;
+  let soonest = MAX_WAIT_MINUTES;
+
+  for (const character of relevant) {
+    for (const block of character.schedule) {
+      for (const boundary of [block.startMinute, block.endMinute]) {
+        // Forward only, and wrapping past midnight rather than going backwards.
+        const delta = (boundary - minuteOfDay + 1440) % 1440;
+        if (delta > 0 && delta < soonest) soonest = delta;
+      }
+    }
+  }
+
+  const minutes = Math.max(TIME_COST_MINUTES.BRIEF, Math.min(MAX_WAIT_MINUTES, soonest));
+  const waitedFor = named
+    ? story.characters.find((c) => c.id === named.entityId)?.name ?? null
+    : null;
+
+  return {
+    checks: [],
+    mutations: [],
+    observableFacts: [
+      waitedFor ? `You wait for ${waitedFor}.` : 'You wait, and the day moves on without you.',
+    ],
+    privateFacts: [
+      {
+        visibility: 'SELF',
+        fact:
+          `Time passed: ${formatDuration(minutes)}. Narrate the wait and what changed while it happened. ` +
+          'Do not invent an arrival the scene does not contain.',
+      },
+    ],
+    timeCategory: 'BRIEF',
+    overrideMinutes: minutes,
+    normalized: { verb: action.verb, status: 'RESOLVED', waitedMinutes: minutes },
+  };
+}
+
+/** A turn should never silently swallow a whole day. */
+const MAX_WAIT_MINUTES = 8 * 60;
+
+function formatDuration(minutes: number): string {
+  if (minutes < 60) return `${minutes} minutes`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  if (rest === 0) return hours === 1 ? 'an hour' : `${hours} hours`;
+  return `${hours}h ${rest}m`;
 }
 
 /** Everything without a bespoke handler still gets a real, seeded check. */

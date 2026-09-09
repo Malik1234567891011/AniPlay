@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { NINTH_ARCHIVE as STORY } from '@aniplay/test-fixtures';
+import { NINE_WEEKS, NINTH_ARCHIVE as STORY } from '@aniplay/test-fixtures';
 import type { ActionIntent, GameState, StateMutation } from '@aniplay/contracts';
 import { SeededRng, deriveTurnSeed, sha256Hex } from './rng.js';
 import {
@@ -12,13 +12,18 @@ import {
 } from './check.js';
 import { createInitialState, countItem, getRelationship, locationForSchedule } from './state.js';
 import { applyMutations, validateMutations } from './mutations.js';
-import { clampRelationshipDelta, isGateSatisfied, relationshipLabel } from './relationships.js';
+import {
+  clampRelationshipDelta,
+  isGateSatisfied,
+  relationshipLabel,
+  RELATIONSHIP_LABELS,
+} from './relationships.js';
 import { advanceQuests, evaluatePredicate, topObjective } from './quests.js';
 import { resolveIntent } from './resolve.js';
 import { commitTurn } from './commit.js';
 import { qualitativeHealth } from './combat.js';
 import { chooseNpcAction } from './npc-turns.js';
-import { formatWorldTime, dayNumber } from './clock.js';
+import { formatWorldTime, dayNumber, TIME_COST_MINUTES } from './clock.js';
 
 const baseState = (): GameState =>
   createInitialState({
@@ -889,6 +894,130 @@ describe('combat (spec §13.5, §13.6)', () => {
     expect(result.state.encounter).toBeNull();
     expect(result.state.flags.player_dead).toBeUndefined();
     expect(result.state.player.statuses.some((s) => s.id === 'wounded')).toBe(true);
+  });
+});
+
+describe('relationship labels say something', () => {
+  it('tells four different starting relationships apart', () => {
+    // The bug: a single catch-all meant Juno, Teo, Nadia and Cass all read
+    // "Familiar" on the panel whose whole job is telling them apart.
+    const labels = NINE_WEEKS.characters.map((c) => ({
+      name: c.name,
+      label: relationshipLabel({
+        characterId: c.id,
+        ...c.startingRelationship,
+        unlockedGates: [],
+        lastChangedTurn: -1,
+        recentEventKinds: [],
+      }),
+    }));
+
+    const distinct = new Set(labels.map((l) => l.label));
+    expect(distinct.size, JSON.stringify(labels)).toBeGreaterThanOrEqual(3);
+
+    // Liked and not yet trusted is the specific shape this story is about.
+    expect(labels.find((l) => l.name === 'Juno Vale')?.label).toBe('Complicated');
+  });
+
+  it('only ever returns a label the UI knows about', () => {
+    const sample = (over: Partial<Record<string, number>>) =>
+      relationshipLabel({
+        characterId: 'x',
+        trust: 0,
+        affection: 0,
+        respect: 0,
+        fear: 0,
+        rivalry: 0,
+        unlockedGates: [],
+        lastChangedTurn: -1,
+        recentEventKinds: [],
+        ...over,
+      } as Parameters<typeof relationshipLabel>[0]);
+
+    const seen = new Set<string>();
+    for (const dimension of ['trust', 'affection', 'respect', 'fear', 'rivalry']) {
+      for (let value = -100; value <= 100; value += 5) seen.add(sample({ [dimension]: value }));
+    }
+    seen.add(sample({ affection: 80, trust: 60 }));
+    seen.add(sample({ affection: 50, trust: 35 }));
+
+    for (const label of seen) {
+      expect(RELATIONSHIP_LABELS as readonly string[]).toContain(label);
+    }
+  });
+});
+
+describe('waiting actually moves the world', () => {
+  const waitIntent = (targets: { entityType: 'npc'; entityId: string }[] = []) =>
+    intent([
+      {
+        verb: 'wait',
+        actor: player,
+        targets,
+        method: 'wait',
+        declaredOutcome: null,
+        timeIntent: 'NOW',
+      },
+    ]);
+
+  it('advances to the next moment something is different', () => {
+    // The bug: "I wait until after service" advanced the clock by six minutes,
+    // so a player could not wait for anything and every authored schedule was
+    // unreachable by the one action that exists to reach it.
+    const state = baseState();
+    const result = resolveIntent({
+      story: STORY,
+      state,
+      intent: waitIntent(),
+      turnId: 't_wait',
+      seed: 'wait-seed',
+    });
+
+    expect(result.timeAdvancedMinutes).toBeGreaterThan(TIME_COST_MINUTES.BRIEF);
+    expect(result.timeAdvancedMinutes).toBeLessThanOrEqual(8 * 60);
+
+    // It lands exactly on a boundary in somebody's day, not on a round number.
+    const landing = ((state.worldMinute + result.timeAdvancedMinutes) % 1440 + 1440) % 1440;
+    const boundaries = new Set<number>();
+    for (const character of STORY.characters) {
+      for (const block of character.schedule) {
+        boundaries.add(block.startMinute);
+        boundaries.add(block.endMinute);
+      }
+    }
+    expect(boundaries.has(landing)).toBe(true);
+  });
+
+  it('waits for the person you named, not just for anything', () => {
+    const state = baseState();
+    const mira = STORY.characters.find((c) => c.id === 'mira')!;
+
+    const result = resolveIntent({
+      story: STORY,
+      state,
+      intent: waitIntent([{ entityType: 'npc', entityId: 'mira' }]),
+      turnId: 't_wait_mira',
+      seed: 'wait-seed',
+    });
+
+    const landing = ((state.worldMinute + result.timeAdvancedMinutes) % 1440 + 1440) % 1440;
+    const hers = new Set(mira.schedule.flatMap((b) => [b.startMinute, b.endMinute]));
+    expect(hers.has(landing)).toBe(true);
+    expect(result.observableFacts.join(' ')).toContain(mira.name);
+  });
+
+  it('never swallows a whole day in one turn', () => {
+    const state = baseState();
+    // Somewhere with nothing scheduled ahead of it for a long time.
+    state.worldMinute = 3 * 60;
+    const result = resolveIntent({
+      story: STORY,
+      state,
+      intent: waitIntent(),
+      turnId: 't_wait_long',
+      seed: 'wait-seed',
+    });
+    expect(result.timeAdvancedMinutes).toBeLessThanOrEqual(8 * 60);
   });
 });
 

@@ -742,7 +742,12 @@ const raw = {
           directorNotes:
             'Nadia is deciding what kind of summer you are going to be. Being good at the job is the cheapest ' +
             'currency in the building and the player should be allowed to notice that.',
-          succeedWhen: { flagsSet: ['spoke:nadia', 'visited:kitchen'] },
+          // Service starts at five. Being in the kitchen at half past four is
+          // arriving, not getting through a service.
+          succeedWhen: {
+            flagsSet: ['spoke:nadia', 'visited:kitchen'],
+            afterWorldMinute: 17 * 60,
+          },
           rewards: {
             xp: 30,
             items: [{ itemId: 'shift_swap', qty: 1 }],

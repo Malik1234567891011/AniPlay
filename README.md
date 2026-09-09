@@ -46,10 +46,12 @@ npm run api      # http://localhost:4000  — works with zero API keys
 npm run mobile   # Expo; press "i" for the iOS simulator
 ```
 
-The API defaults to a deterministic mock model provider, so the full turn
-pipeline — parse → resolve → direct → write → validate → commit → stream — runs
-end to end offline. Set `ANTHROPIC_API_KEY` to route the parser/director/writer
-roles to a real model instead.
+The API defaults to the rule-based pipeline, so the full turn sequence —
+parse → resolve → direct → write → validate → commit → stream — runs end to end
+offline with no keys at all. Put `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in a
+`.env` at the repo root and the parser, director and writer route to a real
+model instead; `MODEL_PROVIDER` picks between them if both are set. The same
+`OPENAI_API_KEY` drives image generation (`npx tsx infra/scripts/generate-art.ts`).
 
 ## Docs
 
