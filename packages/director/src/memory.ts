@@ -145,6 +145,7 @@ export function materializeProposals(
   proposals: readonly MemoryProposal[],
   state: GameState,
   turnId: string,
+  story?: StoryVersion,
 ): MemoryFact[] {
   // Spec §17.6 — retrieval is a budget. A single dramatic turn can produce a
   // dozen proposals, many of them the same fact about the same person, and
@@ -164,7 +165,7 @@ export function materializeProposals(
     subjectId: proposal.subjectId,
     predicate: proposal.predicate,
     value: proposal.value,
-    text: renderFactText(proposal),
+    text: renderFactText(proposal, story, state.player.identity.displayName),
     visibility: proposal.visibility,
     importance: proposal.importance,
     confidence: 1,
@@ -177,14 +178,41 @@ export function materializeProposals(
   }));
 }
 
-function renderFactText(proposal: MemoryProposal): string {
-  const value =
-    typeof proposal.value === 'string'
-      ? proposal.value
-      : proposal.value === null || proposal.value === undefined
-        ? ''
-        : JSON.stringify(proposal.value);
-  return `${proposal.subjectId} ${proposal.predicate.replace(/_/g, ' ')}${value ? `: ${value}` : ''}`;
+/**
+ * The player-facing sentence for a fact.
+ *
+ * `text` is rendered directly in the World Sheet's "Recently" panel, so it has
+ * to read as English. It used to be the raw triple — "kael explained red ward:
+ * true" — which is a database row with a bullet in front of it.
+ */
+function renderFactText(proposal: MemoryProposal, story?: StoryVersion, playerName?: string): string {
+  const subject = displayNameFor(proposal.subjectId, story, playerName);
+  const phrase = proposal.predicate.replace(/_/g, ' ').trim();
+
+  // `true` is what the predicate already says; printing it adds nothing.
+  const body =
+    proposal.value === true || proposal.value === null || proposal.value === undefined
+      ? `${subject} ${phrase}.`
+      : proposal.value === false
+        ? `${subject} ${phrase}: no.`
+        : typeof proposal.value === 'string'
+          ? `${subject} ${phrase}: ${proposal.value}`
+          : `${subject} ${phrase}: ${JSON.stringify(proposal.value)}`;
+
+  return body.charAt(0).toUpperCase() + body.slice(1);
+}
+
+/** An id is not a name. Resolves against everything a fact can be about. */
+function displayNameFor(subjectId: string, story?: StoryVersion, playerName?: string): string {
+  if (subjectId === 'player') return playerName && playerName.length > 0 ? playerName : 'You';
+  if (!story) return subjectId.replace(/_/g, ' ');
+  return (
+    story.characters.find((c) => c.id === subjectId)?.name ??
+    story.locations.find((l) => l.id === subjectId)?.name ??
+    story.items.find((i) => i.id === subjectId)?.name ??
+    story.factions.find((f) => f.id === subjectId)?.name ??
+    subjectId.replace(/_/g, ' ')
+  );
 }
 
 /**

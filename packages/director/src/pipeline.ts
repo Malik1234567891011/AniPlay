@@ -144,7 +144,7 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     turnId,
     now: options.now,
   });
-  const newMemories = materializeProposals(plan.memoryProposals, commit.state, turnId);
+  const newMemories = materializeProposals(plan.memoryProposals, commit.state, turnId, story);
   clock.end('commit');
 
   return {

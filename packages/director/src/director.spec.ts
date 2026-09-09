@@ -25,7 +25,13 @@ import { TemplateWriter } from './writer.js';
 import { validateNarrative, repairNarrative } from './validator.js';
 import { buildTurnContext } from './context.js';
 import { runTurn, buildRecap } from './pipeline.js';
-import { retrieveMemories, lexicalSimilarity, checkCorrectionConflict, applyCorrection } from './memory.js';
+import {
+  retrieveMemories,
+  lexicalSimilarity,
+  checkCorrectionConflict,
+  applyCorrection,
+  materializeProposals,
+} from './memory.js';
 
 const parser = new RuleBasedIntentParser();
 
@@ -563,6 +569,53 @@ describe('consistency validator (spec §17.1 step 10)', () => {
     const repaired = repairNarrative(turn, report);
     expect(repaired.blocks).toHaveLength(1);
     expect(validateNarrative({ context, turn: repaired }).valid).toBe(true);
+  });
+});
+
+describe('memory facts read as English', () => {
+  const proposal = (over: Record<string, unknown>) => ({
+    subjectId: 'kael',
+    predicate: 'explained_red_ward',
+    value: true,
+    visibility: 'PLAYER_PRIVATE' as const,
+    importance: 0.6,
+    sourceEventIds: [],
+    ...over,
+  });
+
+  const render = (over: Record<string, unknown>) => {
+    const state = createInitialState({
+      sessionId: 'sess_fact',
+      story: STORY,
+      identity: { ...bareIdentity(null), displayName: 'Rell' },
+    });
+    return materializeProposals([proposal(over) as never], state, 't_fact', STORY)[0]!.text;
+  };
+
+  it('uses names, not ids, and drops a boolean that says nothing', () => {
+    // The World Sheet renders this string directly, and it was showing
+    // "kael explained red ward: true" — a database row with a bullet on it.
+    expect(render({})).toBe('Kael Ostrand explained red ward.');
+  });
+
+  it('keeps a value that carries information', () => {
+    expect(render({ value: 'the ward reads a mark it does not trust' })).toBe(
+      'Kael Ostrand explained red ward: the ward reads a mark it does not trust',
+    );
+    expect(render({ value: false })).toBe('Kael Ostrand explained red ward: no.');
+  });
+
+  it('calls the player by their name', () => {
+    expect(render({ subjectId: 'player', predicate: 'was_stopped_at_the_gate' })).toBe(
+      'Rell was stopped at the gate.',
+    );
+  });
+
+  it('resolves places and items too', () => {
+    expect(render({ subjectId: 'archive_floor', predicate: 'is_watched' })).toContain(
+      'Archive Reading Floor',
+    );
+    expect(render({ subjectId: 'ledger_page', predicate: 'has_one_signature' })).toContain('Ledger');
   });
 });
 
