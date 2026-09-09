@@ -12,4 +12,6 @@ export * from './resolve.js';
 export * from './world-events.js';
 export * from './loop.js';
 export * from './crew.js';
+export * from './tendencies.js';
+export * from './contest.js';
 export * from './commit.js';

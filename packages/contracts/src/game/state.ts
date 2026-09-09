@@ -166,6 +166,58 @@ export const EncounterState = z
   .strict();
 export type EncounterState = z.infer<typeof EncounterState>;
 
+/**
+ * Spec §13.8 — a bounded contest with a clock and a score.
+ *
+ * A basketball game, a duel tournament, a race. Distinct from `EncounterState`
+ * because the unit of play is different: an encounter resolves every round
+ * with the player acting in each one, while a contest is forty minutes long
+ * and the player should be handed the ball perhaps a dozen times.
+ *
+ * The engine owns the score and the clock. Nothing downstream may claim a
+ * number that is not here, which is the whole reason it exists as state rather
+ * than as something the writer keeps track of in prose.
+ */
+export const ContestState = z
+  .object({
+    contestId: z.string(),
+    /** Who this is against. A story character id. */
+    opponentId: z.string(),
+    opponentName: z.string(),
+    /** What it takes to win, in the world's own words. */
+    stakes: z.string().default(''),
+    period: z.number().int().min(1),
+    periodCount: z.number().int().min(1).default(4),
+    /** Seconds left in the current period. */
+    clockSeconds: z.number().int().min(0),
+    playerScore: z.number().int().min(0).default(0),
+    opponentScore: z.number().int().min(0).default(0),
+    /** True when the player's side has the ball. */
+    playerPossession: z.boolean().default(true),
+    /**
+     * Swings with runs and drains with effort. Not a resource the player
+     * spends — a reading of how the contest is going that the director uses to
+     * decide when to hand over control.
+     */
+    momentum: z.number().min(-1).max(1).default(0),
+    /** Rising fatigue, 0â€“100. Costs accuracy late. */
+    playerFatigue: z.number().min(0).max(100).default(0),
+    playerFouls: z.number().int().min(0).default(0),
+    /** Who is guarding the player right now. */
+    matchupId: z.string().nullable().default(null),
+    /** Set while the player has direct control of the possession. */
+    playerControlled: z.boolean().default(false),
+    /** Why control was handed over, for the director. */
+    controlReason: z.string().default(''),
+    /** Beat-by-beat log of what the simulation did, newest last. */
+    log: z.array(z.string()).default([]),
+    finished: z.boolean().default(false),
+    /** Set once finished. */
+    playerWon: z.boolean().nullable().default(null),
+  })
+  .strict();
+export type ContestState = z.infer<typeof ContestState>;
+
 /** Spec §17.6 — retrievable canon. */
 export const MemoryFact = z
   .object({
@@ -229,6 +281,8 @@ export const GameState = z
     discoveredLocationIds: z.array(z.string()),
     flags: z.record(z.union([z.string(), z.number(), z.boolean()])),
     encounter: EncounterState.nullable().default(null),
+    /** Spec §13.8 — a match in progress, if there is one. */
+    contest: ContestState.nullable().default(null),
     arc: ArcState,
     /** Lineage of consumed seeds, so a branch can be replayed deterministically. */
     rngCursor: z.number().int().min(0).default(0),

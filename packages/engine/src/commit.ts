@@ -14,6 +14,7 @@ import { charactersPresent, locationForSchedule } from './state.js';
 import type { FiredWorldEvent } from './world-events.js';
 import { echoDirectorNotes, loopShouldReset, resetLoop, type LoopResetResult } from './loop.js';
 import { departuresFromMutations, type CrewDeparture } from './crew.js';
+import { scoutingMutations } from './tendencies.js';
 
 /**
  * Spec §32.4 `commitTurn` — the single transaction that turns a `Resolution`
@@ -74,6 +75,16 @@ export function commitTurn(options: CommitOptions): CommitResult {
   // the player is standing and what they are holding, which is why authored
   // steps like "find the archive assistant" could never complete.
   recordObservations(state, story, resolution);
+
+  // Spec §12.10 — anyone who competed against the player today takes something
+  // away from it. Once per world-day per opponent: a rival who guards you for
+  // a whole game has learned a game's worth, not a turn's worth, and charging
+  // per turn would let one long scene solve the player completely.
+  const scouted = applyScouting(state, story, nextMutationId);
+  if (scouted.length > 0) {
+    state = applyMutations(state, story, scouted);
+    accepted.push(...scouted);
+  }
 
   // Quests re-evaluate against settled state, then their rewards apply, then
   // progression reacts to those rewards. Two passes, not a fixed point loop.
@@ -389,4 +400,42 @@ export function forkState(
   forked.sessionId = newSessionId;
   forked.revision = 0;
   return forked;
+}
+
+/**
+ * Opponents study the player. Spec §12.10.
+ *
+ * Gated on having actually been in it with them this turn — `engaged:` is set
+ * by the observation pass above — and then rate-limited to once per world-day
+ * per opponent, so an opponent's understanding grows over a season rather than
+ * over a conversation.
+ */
+function applyScouting(
+  state: GameState,
+  story: StoryVersion,
+  nextMutationId: () => string,
+): StateMutation[] {
+  const day = Math.floor(state.worldMinute / 1440);
+  const mutations: StateMutation[] = [];
+
+  for (const character of story.characters) {
+    if (!character.scouting) continue;
+    if (!state.flags[`engaged:${character.id}`]) continue;
+
+    const marker = `scouted_on:${character.id}:${day}`;
+    if (state.flags[marker]) continue;
+
+    const learned = scoutingMutations(state, story, character.id, nextMutationId);
+    if (learned.length === 0) continue;
+
+    mutations.push(...learned, {
+      mutationId: nextMutationId(),
+      type: 'FLAG_SET',
+      subjectId: character.id,
+      reasonCode: 'SCOUTING_SESSION',
+      payload: { flag: marker, value: true },
+    });
+  }
+
+  return mutations;
 }

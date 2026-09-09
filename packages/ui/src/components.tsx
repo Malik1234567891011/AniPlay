@@ -54,7 +54,7 @@ export function StoryCoverCard({
   // name matters in a way "ANIMA Studio" on all nine cards does not.
   const metaLine = [
     story.tags[0] ?? null,
-    story.runs > 0 ? `${formatCredits(story.runs, true)} runs` : null,
+    story.runs > 0 ? `${formatCredits(story.runs, true)} ${story.runs === 1 ? 'run' : 'runs'}` : null,
     story.official ? null : story.creatorName,
   ]
     .filter((part): part is string => !!part)

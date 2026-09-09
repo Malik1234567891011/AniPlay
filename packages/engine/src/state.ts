@@ -142,6 +142,7 @@ export function createInitialState({ sessionId, story, identity }: CreateStateOp
     discoveredLocationIds,
     flags: {},
     encounter: null,
+    contest: null,
     arc: {
       episode: 1,
       turnsInEpisode: 0,

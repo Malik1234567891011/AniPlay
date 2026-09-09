@@ -23,6 +23,7 @@ import {
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
 import { fireWorldEvents } from './world-events.js';
 import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
+import { scoutingPressure, tendencyMutations } from './tendencies.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
 import { buildEncounter, canSpend, newTurnEconomy, spend, type ActionWeight, type TurnEconomy } from './combat.js';
 import { resolveNpcTurns } from './npc-turns.js';
@@ -528,8 +529,22 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
   const checks: CheckResult[] = [];
   const observableFacts: string[] = [];
 
+  // Spec §12.10 — habits are counted on use, not on success. Leaning on
+  // something that keeps failing is still leaning on it, and film shows the
+  // attempts.
+  mutations.push(...tendencyMutations(story, state, ability, nextMutationId));
+
+  // Who is in a position to have studied you. Whoever the action is aimed at,
+  // plus anyone else present — a defender does not have to be your assignment
+  // to have watched your film.
+  const observers = [
+    ...action.targets.map((t) => t.entityId),
+    ...charactersPresent(state).map((c) => c.characterId),
+  ].filter((id, index, all) => all.indexOf(id) === index);
+  const pressure = scoutingPressure(state, story, ability, observers);
+
   if (ability.check) {
-    const dc = ability.check.baseDc + situationalDc(args);
+    const dc = ability.check.baseDc + situationalDc(args) + pressure.dcDelta;
     const check = resolveCheck(rng, {
       checkId: `chk_${ability.id}_${state.turnIndex}`,
       label: ability.name,
@@ -605,6 +620,22 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
   // will sail with you lives in `joinsWhen`, and if it is unmet they say so in
   // their own words rather than the offer silently doing nothing.
   const privateFacts: PrivateFact[] = [];
+
+  // A roll that got harder because somebody worked you out has to be *legible*
+  // as that, or it reads as the dice being unfair. The writer is told what
+  // changed and why; the player is shown it happening on the floor.
+  if (pressure.note && pressure.dcDelta !== 0) {
+    privateFacts.push({
+      visibility: 'SELF',
+      fact:
+        pressure.dcDelta > 0
+          ? `${nameOf(story, pressure.opponentId)} has scouted this. ${pressure.note} Show them reading it early — ` +
+            'beating you to the spot, not simply winning a coin flip. Do not name a game system.'
+          : `${nameOf(story, pressure.opponentId)} has over-committed to stopping something else. ${pressure.note} ` +
+            'Show the opening being there before the player takes it.',
+    });
+  }
+
   if (ability.tags.includes('recruit')) {
     const target = story.characters.find((c) => c.id === action.targets[0]?.entityId)!;
     const verdict = recruitCheck(state, story, target.id);
@@ -1931,4 +1962,10 @@ function buildOpportunities(state: GameState, story: StoryVersion): string[] {
 
   opportunities.push('inspect:surroundings');
   return opportunities;
+}
+
+/** A character's name for a director note, falling back to something neutral. */
+function nameOf(story: StoryVersion, characterId: string | null): string {
+  if (!characterId) return 'The defence';
+  return story.characters.find((c) => c.id === characterId)?.name ?? 'The defence';
 }

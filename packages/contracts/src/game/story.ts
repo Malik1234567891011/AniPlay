@@ -104,6 +104,22 @@ export const AbilityDef = z
       .default(null),
     unlockedByDefault: z.boolean().default(false),
     /**
+     * Habits this action feeds. Spec §12.10.
+     *
+     * Every use increments these counters, which is what makes a playstyle
+     * something the player grew into rather than something they declared at
+     * setup — and what gives an opponent something real to study.
+     */
+    tendencies: z.array(z.string()).default([]),
+    /**
+     * The habit this action punishes.
+     *
+     * A defender sitting on your drive is beaten by the pull-up, and the
+     * engine has to know that or "develop a counter" is only ever narration.
+     * Using a counter against a scouted habit removes the scouting penalty.
+     */
+    countersTendency: z.string().nullable().default(null),
+    /**
      * What the world has to be like before this can be used at all.
      *
      * Knowing a technique and being able to use it are different things: a
@@ -207,6 +223,34 @@ export const LoopRules = z
   })
   .strict();
 export type LoopRules = z.infer<typeof LoopRules>;
+
+/**
+ * A habit the engine counts.
+ *
+ * Spec §12.10 — the same piece of state answers two questions that are usually
+ * built as separate systems: what kind of player you have become, and what a
+ * good opponent has worked out about you. Both are "what does this person keep
+ * doing", so both read the same counters.
+ *
+ * Authored per world because what counts as a habit is domain knowledge: a
+ * basketball world tracks driving direction and shot zones, a duelling world
+ * would track opening and distance.
+ */
+export const TendencyDef = z
+  .object({
+    id: z.string(),
+    /** How the world names it when somebody talks about it. "Driving right." */
+    label: z.string().max(48),
+    /**
+     * What a player who leans on this becomes known as. Shown as an earned
+     * identity, never as a class the player picked.
+     */
+    identity: z.string().max(40),
+    /** One line the director can use once an opponent has this scouted. */
+    scoutedNote: z.string().default(''),
+  })
+  .strict();
+export type TendencyDef = z.infer<typeof TendencyDef>;
 
 export const LocationDef = z
   .object({
@@ -510,6 +554,26 @@ export const CharacterDef = z
     }),
     /** Set when this person can sail with you. Spec §14.7. */
     companion: CompanionDef.nullable().default(null),
+    /**
+     * How well this person learns what you keep doing. Spec §12.10.
+     *
+     * `null` for anyone who never studies you. The whole point of the field is
+     * that being figured out is a property of the opponent — a rival who
+     * watches film is a different problem from one who does not, and both
+     * should exist.
+     */
+    scouting: z
+      .object({
+        /** Habit points gained per encounter with the player. */
+        learnRate: z.number().min(0).max(10).default(1),
+        /** They stop learning past this. Nobody solves you completely. */
+        cap: z.number().min(1).max(20).default(6),
+        /** What they say the first time they show you they know. */
+        revealCopy: z.string().default(''),
+      })
+      .strict()
+      .nullable()
+      .default(null),
     combatant: z
       .object({
         health: z.number().int().min(1),
@@ -828,6 +892,8 @@ export const StoryVersion = z
     characters: z.array(CharacterDef).default([]),
     factions: z.array(FactionDef).default([]),
     quests: z.array(QuestDef).default([]),
+    /** Habits this world counts. Spec §12.10. Empty in most worlds. */
+    tendencies: z.array(TendencyDef).default([]),
     /** What the world does on its own, at its own hours. */
     worldEvents: z.array(WorldEventDef).default([]),
     promises: z.array(StoryPromiseDef).default([]),
