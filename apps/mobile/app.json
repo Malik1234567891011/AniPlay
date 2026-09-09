@@ -16,7 +16,6 @@
     },
     "android": {
       "package": "com.aniplay.app",
-      "edgeToEdgeEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
@@ -28,17 +27,20 @@
     },
     "scheme": "aniplay",
     "backgroundColor": "#0B0D12",
-    "splash": {
-      "backgroundColor": "#0B0D12",
-      "resizeMode": "contain",
-      "image": "./assets/splash-icon.png"
-    },
     "plugins": [
       "expo-font",
       "expo-secure-store",
       "expo-apple-authentication",
       "expo-iap",
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "backgroundColor": "#0B0D12",
+          "resizeMode": "contain"
+        }
+      ]
     ]
   }
 }
