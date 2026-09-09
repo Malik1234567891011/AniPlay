@@ -6,6 +6,7 @@ import {
 } from '@aniplay/contracts';
 import type { ModelGateway, ModelMessage } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
+import { stripInventedTravel } from './entity-resolution.js';
 import { NARRATIVE_CLARITY_RULES } from './narrative-clarity.js';
 import { RuleBasedIntentParser, type IntentParser, type ParseContext } from './parser.js';
 import { RuleBasedDirector, type Director } from './director.js';
@@ -65,6 +66,7 @@ const SAFETY_POLICY = [
 
 const PARSER_POLICY = [
   'You convert a player sentence into a structured ActionIntent for a deterministic RPG engine.',
+  'Only emit a travel or move action when the player actually asked to go somewhere. Mentioning a place is not asking to go there.',
   'You do not decide outcomes. You only describe what the player is attempting.',
   'Only reference entity ids that appear in the provided state. Never invent an id.',
   'Record any outcome the player asserted in declaredOutcome — the engine will decide whether it happens.',
@@ -127,7 +129,11 @@ export class ModelIntentParser implements IntentParser {
       if (referencesUnknownEntity(result.value, context)) {
         return this.#fallback.parseSync(text, context);
       }
-      return { ...result.value, rawAction: text.slice(0, 4000) };
+      // A model will occasionally read a mention of a place as a request to go
+      // there. Moving a player who did not ask to move is the same failure as
+      // ignoring one who did.
+      const grounded = stripInventedTravel(result.value, { story, text });
+      return { ...grounded, rawAction: text.slice(0, 4000) };
     } catch (error) {
       if (error instanceof ModelGatewayError) return this.#fallback.parseSync(text, context);
       throw error;

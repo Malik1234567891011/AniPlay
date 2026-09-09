@@ -1,4 +1,4 @@
-import type { CharacterDef, GameState, StoryVersion } from '@aniplay/contracts';
+import type { ActionIntent, CharacterDef, GameState, StoryVersion } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
 
 /**
@@ -203,4 +203,70 @@ export function detectWorldAuthoring(
 
 function escapeRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// --- Unrequested travel ----------------------------------------------------
+
+/**
+ * Movement language. A player who wants to be somewhere else says so.
+ */
+const MOVEMENT_VERBS =
+  /\b(go|goes|going|walk|walks|walking|head|heads|heading|travel|travels|travelling|traveling|leave|leaves|leaving|run|runs|running|move|moves|moving|climb|climbs|enter|enters|return|returns|returning|ride|rides|riding|make my way|set off|set out|back to|over to|up to|down to|out to|off to|toward|towards|into|onto|through|follow|follows)\b/i;
+
+/**
+ * Drops travel the player never asked for.
+ *
+ * A model parser will occasionally read a phrase that merely mentions a place —
+ * "I take the front rank", "put me against them in the yard" — as a request to
+ * relocate, and pick the most evocative destination on the map. The engine then
+ * faithfully moves the player somewhere they did not go, and the beat is
+ * written about a room they never entered. It is the same failure as a turn
+ * ignoring the player, arrived at from the other direction.
+ *
+ * The rule is deliberately conservative: a travel action survives if the player
+ * used movement language at all, or named the destination. Only travel with
+ * neither is dropped, because only that is certainly invented.
+ */
+export function stripInventedTravel(
+  intent: ActionIntent,
+  options: { readonly story: StoryVersion; readonly text: string },
+): ActionIntent {
+  const { story, text } = options;
+  if (MOVEMENT_VERBS.test(text)) return intent;
+
+  const lower = text.toLowerCase();
+  const names = (locationId: string): string[] => {
+    const location = story.locations.find((l) => l.id === locationId);
+    if (!location) return [];
+    return [location.name, location.shortName].filter((n): n is string => !!n && n.length > 2);
+  };
+
+  const kept = intent.actions.filter((action) => {
+    if (action.verb !== 'travel' && action.verb !== 'move') return true;
+    const destination = action.targets.find((t) => t.entityType === 'location');
+    if (!destination) return false;
+    // The player naming the place is enough on its own.
+    return names(destination.entityId).some((name) => lower.includes(name.toLowerCase()));
+  });
+
+  if (kept.length === intent.actions.length) return intent;
+
+  // Dropping every action would turn a real attempt into a no-op, so whatever
+  // the player was actually doing is preserved as an interaction in the place
+  // they are already standing.
+  if (kept.length === 0) {
+    const first = intent.actions[0];
+    return {
+      ...intent,
+      actions: [
+        {
+          ...(first as ActionIntent['actions'][number]),
+          verb: 'interact',
+          targets: (first?.targets ?? []).filter((t) => t.entityType !== 'location'),
+        },
+      ],
+    };
+  }
+
+  return { ...intent, actions: kept };
 }

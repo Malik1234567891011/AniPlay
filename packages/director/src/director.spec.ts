@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { LAUNCH_CATALOG, NINTH_ARCHIVE as STORY } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG, NINTH_ARCHIVE as STORY, TIDEWALL } from '@aniplay/test-fixtures';
 import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
+import { ActionIntent } from '@aniplay/contracts';
 import { createInitialState, deriveTurnSeed, resolveIntent } from '@aniplay/engine';
+import { stripInventedTravel } from './entity-resolution.js';
 import { OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
 import { RuleBasedIntentParser } from './parser.js';
 import { RuleBasedDirector } from './director.js';
@@ -61,6 +63,75 @@ const contextFor = (state: GameState, actionText: string, turnId = 't1') => {
 };
 
 // ---------------------------------------------------------------------------
+
+describe('a turn never moves a player who did not ask to move', () => {
+  const PLAYER = { entityType: 'player' as const, entityId: 'player' };
+
+  // Built through the contract so the shape is exactly what a parser returns.
+  const intentWith = (text: string, actions: unknown[]) =>
+    ActionIntent.parse({
+      schemaVersion: '1.0',
+      intentId: 'int_test',
+      rawAction: text,
+      actions,
+      dialogue: [],
+      unsafeOrMetaRequests: [],
+      confidence: 0.9,
+      ambiguities: [],
+    });
+
+  const travelTo = (locationId: string, text: string) =>
+    intentWith(text, [
+      {
+        verb: 'travel',
+        actor: PLAYER,
+        targets: [{ entityType: 'location', entityId: locationId, displayName: locationId }],
+        method: text,
+        declaredOutcome: null,
+        timeIntent: 'NOW',
+      },
+    ]);
+
+  it('drops travel the player never asked for', () => {
+    // The live failure: "I take the front rank" was parsed as a request to walk
+    // to the wall, and the beat was then written about a place the player had
+    // never gone.
+    const text = 'I take the front rank and ask Odalys to put me against Hollis in the yard.';
+    const stripped = stripInventedTravel(travelTo('wall_walk', text), { story: TIDEWALL, text });
+
+    expect(stripped.actions.every((a) => a.verb !== 'travel')).toBe(true);
+    // The attempt survives as something that happens where they are standing.
+    expect(stripped.actions).toHaveLength(1);
+    expect(stripped.actions[0]?.verb).toBe('interact');
+  });
+
+  it('keeps travel when the player used movement language', () => {
+    const text = 'I head up the stair to the wall.';
+    const kept = stripInventedTravel(travelTo('wall_walk', text), { story: TIDEWALL, text });
+    expect(kept.actions[0]?.verb).toBe('travel');
+  });
+
+  it('keeps travel when the player named the destination', () => {
+    const text = 'The Wall Walk, now, before she gets there.';
+    const kept = stripInventedTravel(travelTo('wall_walk', text), { story: TIDEWALL, text });
+    expect(kept.actions[0]?.verb).toBe('travel');
+  });
+
+  it('leaves everything else alone', () => {
+    const text = 'I hit him.';
+    const intent = intentWith(text, [
+      {
+        verb: 'attack',
+        actor: PLAYER,
+        targets: [{ entityType: 'npc', entityId: 'hollis', displayName: 'Hollis' }],
+        method: text,
+        declaredOutcome: null,
+        timeIntent: 'NOW',
+      },
+    ]);
+    expect(stripInventedTravel(intent, { story: TIDEWALL, text })).toEqual(intent);
+  });
+});
 
 describe('model gateway selection (spec §31.4)', () => {
   it('uses whichever provider key is actually configured', () => {
