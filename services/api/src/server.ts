@@ -467,6 +467,19 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       });
     }
 
+    // An archetype the world does not have used to be accepted silently, and
+    // `createInitialState` then built a character with no proficiencies at all
+    // — every skill zero, no starting ability, no standing. The run looked
+    // normal and was quietly crippled, which is the worst kind of wrong: a
+    // typo in a client produces a bad game rather than an error.
+    const chosen = parsed.data.identity.archetypeId;
+    if (chosen !== null && !story.archetypes.some((a) => a.id === chosen)) {
+      return sendError(reply, 400, 'INVALID_REQUEST', 'That is not one of this world’s backgrounds.', {
+        archetypeId: chosen,
+        available: story.archetypes.map((a) => a.id),
+      });
+    }
+
     const sessionId = `sess_${crypto.randomUUID()}`;
     const state = createInitialState({ sessionId, story, identity: parsed.data.identity });
 

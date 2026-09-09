@@ -1,7 +1,7 @@
 import type { EncounterState, GameState, StateMutation, StoryVersion } from '@aniplay/contracts';
 import { attributeModifier, resolveCheck } from './check.js';
 import type { SeededRng } from './rng.js';
-import { advanceTurnOrder, qualitativeHealth } from './combat.js';
+import { advanceTurnOrder, surrenderedFlag, qualitativeHealth } from './combat.js';
 
 /**
  * Spec §13.3 — the other side of the round.
@@ -205,6 +205,18 @@ export function resolveNpcTurns(
           subjectId: 'session',
           reasonCode: 'NPC_SURRENDER',
           payload: { participantId: character.id, downed: true },
+        });
+        // Surrender ends the encounter, which used to reset the person who
+        // surrendered to full health — so the "choice with consequences" this
+        // beat promises the player was not actually available to them. The
+        // flag outlives the encounter, so somebody who has given up stays
+        // somebody who has given up.
+        mutations.push({
+          mutationId: nextMutationId(),
+          type: 'FLAG_SET',
+          subjectId: character.id,
+          reasonCode: 'NPC_SURRENDER',
+          payload: { flag: surrenderedFlag(character.id), value: true },
         });
         observableFacts.push(`${character.name} is done. They put their hands up.`);
         privateFacts.push({

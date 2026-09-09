@@ -148,6 +148,41 @@ describe('bootstrap and catalog', () => {
     }
   });
 
+  it('refuses an archetype the world does not have', async () => {
+    // This used to be accepted silently, and createInitialState built a
+    // character with every skill at zero. The run looked normal and was
+    // crippled — a client typo produced a bad game instead of an error.
+    const response = await app.inject({
+      method: 'POST',
+      url: '/v1/stories/story_ninth_archive/sessions',
+      headers: auth,
+      payload: {
+        identity: {
+          displayName: 'Sora', pronouns: 'they/them', ageBand: null,
+          archetypeId: 'arch_does_not_exist', worldKnowsAboutYou: '',
+          advanced: {}, portraitAssetId: null,
+        },
+      },
+    });
+    expect(response.statusCode).toBe(400);
+    expect(response.json().details.available).toContain('arch_scholar');
+  });
+
+  it('still allows no archetype at all', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/v1/stories/story_ninth_archive/sessions',
+      headers: auth,
+      payload: {
+        identity: {
+          displayName: 'Sora', pronouns: 'they/them', ageBand: null,
+          archetypeId: null, worldKnowsAboutYou: '', advanced: {}, portraitAssetId: null,
+        },
+      },
+    });
+    expect(response.statusCode).toBe(201);
+  });
+
   it('searches across title, tags, premise, and cast', async () => {
     for (const query of ['ninth', 'mystery', 'Mira', 'ward']) {
       const response = await app.inject({ method: 'GET', url: `/v1/search?q=${query}` });

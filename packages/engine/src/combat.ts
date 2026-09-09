@@ -313,6 +313,20 @@ export function deadFlag(characterId: string): string {
   return `dead:${characterId}`;
 }
 
+/**
+ * Somebody who has stopped fighting and said so.
+ *
+ * Outlives the encounter deliberately. Surrender ends the encounter, and while
+ * that state lived only on the participant it meant the person who gave up was
+ * restored to full health the moment the fight object was cleared — so the
+ * scene where a player stands over somebody who has surrendered, which the
+ * engine explicitly tells the writer is "a choice with consequences", could
+ * not actually be played.
+ */
+export function surrenderedFlag(characterId: string): string {
+  return `surrendered:${characterId}`;
+}
+
 export function isAlive(state: GameState, characterId: string): boolean {
   return state.characters.find((c) => c.characterId === characterId)?.alive ?? true;
 }
@@ -334,13 +348,24 @@ export function lethalMutations(
   state: GameState,
   story: StoryVersion,
   characterId: string,
-  options: { deliberate: boolean },
+  options: { deliberate: boolean; incomingDamage?: number },
   nextMutationId: () => string,
 ): StateMutation[] {
   if (!isAlive(state, characterId)) return [];
 
   const participant = state.encounter?.participants.find((p) => p.entityId === characterId);
-  const down = participant ? participant.downed || participant.health <= 0 : false;
+
+  // Counting the blow that is landing right now, not only the state before it.
+  //
+  // This is why nobody could be killed. The check ran during resolution, which
+  // sees the world *before* the attack applies, so the target was never
+  // already down — and by the time they were, commit had seen no enemy
+  // standing, declared victory and ended the encounter, which reset them to
+  // full health for the next attack. A player could take somebody to two hit
+  // points forever and never finish them.
+  const after = participant ? participant.health - (options.incomingDamage ?? 0) : Number.POSITIVE_INFINITY;
+  const surrendered = Boolean(state.flags[surrenderedFlag(characterId)]);
+  const down = surrendered || (participant ? participant.downed || after <= 0 : false);
 
   const lethalWorld = story.rules.defeatMode === 'LETHAL';
   const kills = lethalWorld ? down : down && options.deliberate;

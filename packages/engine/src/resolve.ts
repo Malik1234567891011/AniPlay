@@ -1298,7 +1298,13 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
     const finishing = /\b(finish|kill|end (?:him|her|them)|do not stop|keep going|make sure)\b/i.test(
       `${action.method} ${action.declaredOutcome ?? ''}`,
     );
-    const lethal = lethalMutations(state, story, character.id, { deliberate: finishing }, nextMutationId);
+    const lethal = lethalMutations(
+      state,
+      story,
+      character.id,
+      { deliberate: finishing, incomingDamage: damage },
+      nextMutationId,
+    );
     if (lethal.length > 0) {
       mutations.push(...lethal);
       observableFacts.push(`${character.name} does not get up.`);

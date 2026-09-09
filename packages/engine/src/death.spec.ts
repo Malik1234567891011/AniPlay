@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { GameState, StateMutation } from '@aniplay/contracts';
 import { NINTH_ARCHIVE, SALT_ROAD } from '@aniplay/test-fixtures';
 import { applyMutations } from './mutations.js';
-import { deadFlag, deathConsequences, isAlive, lethalMutations } from './combat.js';
+import { deadFlag, deathConsequences, isAlive, lethalMutations, surrenderedFlag } from './combat.js';
 import { createInitialState } from './state.js';
 
 /**
@@ -15,7 +15,7 @@ import { createInitialState } from './state.js';
  * which is the one thing a game called Plotbreak must not do.
  */
 
-const state = (story = NINTH_ARCHIVE): GameState =>
+const state = (story = NINTH_ARCHIVE, archetypeId?: string): GameState =>
   createInitialState({
     sessionId: 'sess_d',
     story,
@@ -23,7 +23,7 @@ const state = (story = NINTH_ARCHIVE): GameState =>
       displayName: 'Sora',
       pronouns: 'they/them',
       ageBand: null,
-      archetypeId: story.archetypes[0]?.id ?? null,
+      archetypeId: archetypeId ?? story.archetypes[0]?.id ?? null,
       worldKnowsAboutYou: '',
       advanced: {},
       portraitAssetId: null,
@@ -145,5 +145,109 @@ describe('the world is told what it lost', () => {
 
   it('says nothing about somebody who was never in the story', () => {
     expect(deathConsequences(NINTH_ARCHIVE, 'nobody_at_all')).toEqual([]);
+  });
+});
+
+describe('killing somebody, end to end through a real turn', () => {
+  const intent = (method: string) => ({
+    schemaVersion: '1.0' as const,
+    intentId: 'i',
+    rawAction: method,
+    dialogue: [],
+    confidence: 0.9,
+    ambiguities: [],
+    unsafeOrMetaRequests: [],
+    actions: [
+      {
+        verb: 'attack' as const,
+        actor: { entityType: 'player' as const, entityId: 'player' },
+        targets: [{ entityType: 'npc' as const, entityId: 'kael' }],
+        method,
+        declaredOutcome: '',
+        timeIntent: 'NOW' as const,
+      },
+    ],
+  });
+
+  it('kills them when the player keeps going and means it', async () => {
+    const { resolveIntent } = await import('./resolve.js');
+    const { commitTurn } = await import('./commit.js');
+
+    // A duellist, because the question is whether a character can be killed at
+    // all — not whether a scholar wins a fight with a trained one.
+    let s = state(NINTH_ARCHIVE, 'arch_duelist');
+    s.characters.find((c) => c.characterId === 'kael')!.locationId = s.player.locationId;
+    for (const r of s.player.resources) r.current = r.max;
+
+    let killed = false;
+    for (let turn = 0; turn < 60 && !killed; turn++) {
+      // Keep the player standing; this test is about whether the *target* can
+      // die, not about who wins a fair fight.
+      for (const r of s.player.resources) r.current = r.max;
+      const participant = s.encounter?.participants.find((p) => p.entityId === 'player');
+      if (participant) participant.health = participant.maxHealth;
+
+      const text = 'I finish him and make sure he is dead';
+      const resolution = resolveIntent({
+        story: NINTH_ARCHIVE,
+        state: s,
+        intent: intent(text),
+        turnId: `t${turn}`,
+        seed: `kill-${turn}`,
+      });
+      s = commitTurn({ story: NINTH_ARCHIVE, state: s, resolution, turnId: `t${turn}` }).state;
+      killed = !isAlive(s, 'kael');
+    }
+
+    expect(killed, 'Kael survived sixty deliberate attempts on his life').toBe(true);
+    expect(s.flags[deadFlag('kael')]).toBe(true);
+    // And he is gone from the scene, not standing there dead.
+    const present = s.characters.filter((c) => c.alive && c.locationId === s.player.locationId);
+    expect(present.map((c) => c.characterId)).not.toContain('kael');
+  });
+
+  it('tells the writer what the world lost, on the turn it happens', async () => {
+    const { resolveIntent } = await import('./resolve.js');
+    const { commitTurn } = await import('./commit.js');
+
+    let s = downed(state(), 'kael');
+    s.characters.find((c) => c.characterId === 'kael')!.locationId = s.player.locationId;
+
+    const resolution = resolveIntent({
+      story: NINTH_ARCHIVE,
+      state: s,
+      intent: intent('I finish him and make sure he is dead'),
+      turnId: 't',
+      seed: 'kill-notes',
+    });
+
+    const notes = resolution.privateFacts.map((f) => f.fact).join(' ');
+    if (resolution.mutations.some((m) => m.reasonCode === 'KILLED_BY_PLAYER')) {
+      expect(notes).toMatch(/stay dead/i);
+      expect(notes).not.toMatch(/resurrect/i);
+      const after = commitTurn({ story: NINTH_ARCHIVE, state: s, resolution, turnId: 't' }).state;
+      expect(isAlive(after, 'kael')).toBe(false);
+    }
+  });
+});
+
+describe('somebody who has given up', () => {
+  it('stays given up after the fight object is gone', () => {
+    const s = state();
+    s.flags[surrenderedFlag('kael')] = true;
+    s.encounter = null;
+
+    // The scene the engine promises the writer — "hitting them again is a
+    // choice with consequences" — is now actually playable. It was not: the
+    // surrender ended the encounter, which restored them to full health.
+    const mutations = lethalMutations(s, NINTH_ARCHIVE, 'kael', { deliberate: true }, nextId);
+    expect(mutations).toHaveLength(1);
+    expect(mutations[0]!.reasonCode).toBe('KILLED_BY_PLAYER');
+  });
+
+  it('is still not killed by accident', () => {
+    const s = state();
+    s.flags[surrenderedFlag('kael')] = true;
+    expect(lethalMutations(s, NINTH_ARCHIVE, 'kael', { deliberate: false }, nextId)).toEqual([]);
   });
 });
