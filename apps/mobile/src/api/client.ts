@@ -130,7 +130,7 @@ export class ApiClient {
     path: string,
     body?: unknown,
     extraHeaders: Record<string, string> = {},
-    { retryOnExpiry = true } = {},
+    { retryOnExpiry = true, useToken }: { retryOnExpiry?: boolean; useToken?: string } = {},
   ): Promise<T> {
     const headers: Record<string, string> = {
       accept: 'application/json',
@@ -138,7 +138,10 @@ export class ApiClient {
       ...extraHeaders,
     };
     if (body !== undefined) headers['content-type'] = 'application/json';
-    const token = await this.#authorization();
+    // A retry already has the token the renewal produced. Asking the provider
+    // again would spend a second refresh, and GoTrue rotates refresh tokens,
+    // so the second ask can invalidate the first answer.
+    const token = useToken ?? (await this.#authorization());
     if (token) headers.authorization = `Bearer ${token}`;
 
     let response: Response;
@@ -166,12 +169,36 @@ export class ApiClient {
       // The server distinguishes an expired token from a bad one precisely so
       // this can happen: renew and retry once, silently. A player mid-scene
       // should never be shown a sign-in wall because a token aged out.
-      if (response.status === 401 && error.code === 'TOKEN_EXPIRED' && retryOnExpiry) {
+      //
+      // UNAUTHENTICATED is in here for the same reason. It means we sent no
+      // token at all, which now has a real recovery — the auth store will sign
+      // in as a guest on demand — so the right response is to ask it again and
+      // send the request rather than to put "start a guest session first" in
+      // front of somebody who is trying to press Enter on a character.
+      const recoverable = error.code === 'TOKEN_EXPIRED' || error.code === 'UNAUTHENTICATED';
+      if (response.status === 401 && recoverable && retryOnExpiry) {
         this.#token = null;
         const renewed = await this.#authorization();
         if (renewed) {
-          return this.#request<T>(method, path, body, extraHeaders, { retryOnExpiry: false });
+          return this.#request<T>(method, path, body, extraHeaders, {
+            retryOnExpiry: false,
+            useToken: renewed,
+          });
         }
+      }
+
+      // A development build talking to a server that has real auth turned on
+      // sends a `guest_…` token that server will never accept, and every screen
+      // in the app then shows the same unexplained 401. Name it, because the
+      // fix is a restart of the dev server and nothing in the app itself.
+      if (response.status === 401 && token?.startsWith('guest_')) {
+        throw new ApiError(
+          401,
+          'AUTH_NOT_CONFIGURED',
+          'This build has no sign-in configuration, and the server requires one. ' +
+            'Restart the dev server so it picks up EXPO_PUBLIC_SUPABASE_URL and ' +
+            'EXPO_PUBLIC_SUPABASE_ANON_KEY.',
+        );
       }
 
       throw new ApiError(

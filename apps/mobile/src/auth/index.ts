@@ -126,20 +126,44 @@ export class AuthStore {
     return this.#inFlight;
   }
 
+  /**
+   * Refresh, or — failing that — become a guest.
+   *
+   * The second half matters more than the first. `restore()` runs once at
+   * launch, and if its anonymous sign-in failed for any reason (a cold start
+   * that beat the network, a DNS blip, a build whose config arrived late) the
+   * app had no identity and no way to acquire one, because every later token
+   * request bailed out on the missing refresh token. The player then hit a 401
+   * on the first thing they tried and every thing after it, for the whole life
+   * of the process, with the only fix being to kill the app.
+   *
+   * There is no state in which having no identity is correct: a guest is what
+   * somebody with no account is, so if we do not have one, get one here.
+   */
   async #renew(): Promise<string | null> {
+    if (!this.#client) return null;
+
     const refreshToken =
       this.#session?.refreshToken ?? (await SecureStore.getItemAsync(KEYS.refreshToken).catch(() => null));
-    if (!refreshToken || !this.#client) return this.#session?.accessToken ?? null;
-    try {
-      await this.#adopt(await this.#client.refresh(refreshToken));
-      return this.#session?.accessToken ?? null;
-    } catch (error) {
-      // Offline: keep the token we have. It may still be inside its window, and
-      // signing someone out because the network blinked is the wrong answer.
-      if (error instanceof AuthError && error.code === 'OFFLINE') {
+
+    if (refreshToken) {
+      try {
+        await this.#adopt(await this.#client.refresh(refreshToken));
         return this.#session?.accessToken ?? null;
+      } catch (error) {
+        // Offline: keep the token we have. It may still be inside its window,
+        // and signing someone out because the network blinked is wrong.
+        if (error instanceof AuthError && error.code === 'OFFLINE') {
+          return this.#session?.accessToken ?? null;
+        }
+        await this.#clear();
       }
-      await this.#clear();
+    }
+
+    try {
+      await this.#adopt(await this.#client.signInAnonymously());
+      return this.#session?.accessToken ?? null;
+    } catch {
       return null;
     }
   }

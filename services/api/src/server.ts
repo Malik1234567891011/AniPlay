@@ -402,7 +402,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
   app.post<{ Params: { storyId: string } }>('/v1/stories/:storyId/sessions', async (request, reply) => {
     const user = await resolveUser(ctx, request);
-    if (!user) return sendError(reply, 401, 'UNAUTHENTICATED', 'Start a guest session first.');
+    if (!user) return sendError(reply, 401, 'UNAUTHENTICATED', 'We could not confirm who you are. Check your connection and try again.');
 
     const story = await ctx.repo.getStoryByStoryId(request.params.storyId);
     if (!story) return sendError(reply, 404, 'NOT_FOUND', 'That world does not exist.');

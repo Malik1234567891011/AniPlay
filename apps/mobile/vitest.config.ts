@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 /**
@@ -8,8 +9,14 @@ import { defineConfig } from 'vitest/config';
  * testable in node and are not pretended to be.
  */
 export default defineConfig({
+  resolve: {
+    // `react-native` is Flow-typed source node cannot parse. See the stub.
+    alias: {
+      'react-native': fileURLToPath(new URL('./src/test/react-native.stub.ts', import.meta.url)),
+    },
+  },
   test: {
-    include: ['src/auth/**/*.spec.ts', 'src/store/**/*.spec.ts'],
+    include: ['src/api/**/*.spec.ts', 'src/auth/**/*.spec.ts', 'src/store/**/*.spec.ts'],
     environment: 'node',
   },
 });
