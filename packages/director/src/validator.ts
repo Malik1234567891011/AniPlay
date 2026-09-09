@@ -56,6 +56,29 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
         return;
       }
 
+      // The player says what the player said, and nothing else. A writer given
+      // "I look around and take it in" will otherwise put it in their mouth as
+      // a line of dialogue, which is the player being ventriloquised with their
+      // own stage direction.
+      if (block.speakerId === 'player') {
+        const spoken = context.playerDialogue.map((line) => normalizeSpeech(line.text));
+        const said = normalizeSpeech(block.text);
+        if (spoken.length === 0 || !spoken.some((line) => line.includes(said) || said.includes(line))) {
+          // UNSUPPORTED_STATE rather than a new code: the prose is asserting
+          // something the resolution does not contain, which is exactly what
+          // that code is for, and ai_contracts.json is the authority on the
+          // enum.
+          push(
+            'UNSUPPORTED_STATE',
+            'ERROR',
+            spoken.length === 0
+              ? 'The player did not say anything aloud this turn. Narrate the action instead of quoting it.'
+              : 'The player is quoted saying something they did not say.',
+            index,
+          );
+        }
+      }
+
       // --- DEAD_ENTITY_SPEAKS ---
       const runtime = state.characters.find((c) => c.characterId === block.speakerId);
       if (runtime && !runtime.alive) {
@@ -338,4 +361,9 @@ function bareName(name: string): string {
   const lower = name.toLowerCase();
   const stripped = lower.replace(/^the\s+/, '');
   return `(?:the )?${escapeRegex(stripped)}`;
+}
+
+/** Speech compared on words, not punctuation or case. */
+function normalizeSpeech(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
 }

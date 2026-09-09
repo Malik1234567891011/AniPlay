@@ -2,7 +2,7 @@
   "name": "aniplay",
   "private": true,
   "version": "0.1.0",
-  "description": "Project ANIMA — anime roleplay RPG. The model interprets intent. The game engine determines truth. The AI director makes truth entertaining.",
+  "description": "Project ANIMA \u2014 anime roleplay RPG. The model interprets intent. The game engine determines truth. The AI director makes truth entertaining.",
   "engines": {
     "node": ">=22"
   },
@@ -18,7 +18,9 @@
     "lint": "npm run lint --workspaces --if-present",
     "api": "npm run dev -w @aniplay/api",
     "mobile": "npm run start -w @aniplay/mobile",
-    "clean": "rm -rf packages/*/dist services/*/dist node_modules/.cache"
+    "clean": "rm -rf packages/*/dist services/*/dist node_modules/.cache",
+    "smoke": "tsx infra/scripts/smoke.ts",
+    "art": "tsx infra/scripts/generate-art.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

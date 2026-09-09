@@ -651,6 +651,72 @@ describe('memory facts read as English', () => {
   });
 });
 
+describe('the player is never ventriloquised', () => {
+  const validate = (blocks: unknown[], spoken: string[]) => {
+    const state = baseState();
+    const context = buildTurnContext({
+      story: STORY,
+      state,
+      resolution: resolveIntent({
+        story: STORY,
+        state,
+        intent: parse('I look around and take it in.', state),
+        turnId: 't_vent',
+        seed: 'vent',
+      }),
+      tier: 'VIVID',
+      memories: [],
+      recentTurns: [],
+      actionText: 'I look around and take it in.',
+      playerDialogue: spoken.map((text) => ({
+        speaker: { entityType: 'player' as const, entityId: 'player' },
+        text,
+        visibility: 'GROUP' as const,
+      })),
+    });
+
+    return validateNarrative({
+      context,
+      turn: {
+        schemaVersion: '1.0',
+        turnId: 't_vent',
+        sceneSummary: 'A gate.',
+        blocks: blocks as never,
+        stateDeltaPresentation: [],
+        endStatePrompt: 'What now?',
+      } as never,
+    });
+  };
+
+  it('rejects the player being quoted saying nothing they said', () => {
+    // Found by the smoke sweep: "I look around and take it in" came back as a
+    // line of the player's dialogue. That is the player's own stage direction
+    // read aloud in their voice.
+    const report = validate(
+      [{ type: 'DIALOGUE', speakerId: 'player', text: 'I look around and take it in.', visibility: 'GROUP', voiceEligible: false }],
+      [],
+    );
+    expect(report.valid).toBe(false);
+    expect(report.violations.map((v) => v.description).join(' ')).toMatch(/did not say anything aloud/i);
+  });
+
+  it('accepts what they actually said', () => {
+    const report = validate(
+      [{ type: 'DIALOGUE', speakerId: 'player', text: '"What does the red light mean?"', visibility: 'GROUP', voiceEligible: false }],
+      ['What does the red light mean?'],
+    );
+    expect(report.valid).toBe(true);
+  });
+
+  it('leaves narration of the same action alone', () => {
+    const report = validate(
+      [{ type: 'NARRATION', speakerId: null, text: 'You look around and take it in.', visibility: 'GROUP', voiceEligible: false }],
+      [],
+    );
+    expect(report.valid).toBe(true);
+  });
+});
+
 describe('memory retrieval (spec §17.6)', () => {
   const facts: MemoryFact[] = [
     {

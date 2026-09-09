@@ -296,6 +296,8 @@ const WRITER_POLICY = [
   'If a check failed, the attempt failed. Never write an NPC complying after a failed attempt.',
   'Never grant items, levels, or knowledge that is not in the mutations.',
   'Characters have their own goals and may disagree with the player.',
+  'The player says only what is in `playerSpeech`. If it is empty they said nothing aloud, so narrate',
+  'what they did rather than quoting their own sentence back as a line of dialogue.',
   '',
   'Show the specific thing the player did, using their own nouns.',
   'If they handed over a letter, a letter changes hands on the page. If they named a person,',
@@ -359,6 +361,9 @@ export class ModelWriter implements Writer {
               name: c.name,
               pronouns: c.pronouns,
             })),
+            // Exactly what the player said aloud. Empty means they said
+            // nothing, and their action is narrated rather than quoted.
+            playerSpeech: context.playerDialogue.map((line) => line.text),
             observableFacts: context.resolution.observableFacts,
             constraints: context.resolution.privateFacts,
           },

@@ -53,6 +53,18 @@ offline with no keys at all. Put `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in a
 model instead; `MODEL_PROVIDER` picks between them if both are set. The same
 `OPENAI_API_KEY` drives image generation (`npx tsx infra/scripts/generate-art.ts`).
 
+## Checking it
+
+```bash
+npm run typecheck && npm run lint && npm test
+npm run smoke     # plays every world against a running API and reports what looks wrong
+```
+
+`smoke` is the one that finds the interesting failures — unrequested movement,
+absent characters given lines, engine internals reaching the client — because it
+exercises the whole pipeline against whichever model provider is configured.
+Unit tests pin the rules; this plays the game.
+
 ## Docs
 
 - [`docs/architecture.md`](docs/architecture.md) — turn pipeline and package boundaries
