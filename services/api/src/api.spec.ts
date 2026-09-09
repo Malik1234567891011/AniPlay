@@ -109,7 +109,7 @@ describe('bootstrap and catalog', () => {
     expect(raw).not.toContain('hiddenDrives');
     expect(raw).not.toContain('erasure order that removed');
     for (const member of detail.json().cast) {
-      expect(Object.keys(member)).toEqual(['id', 'name', 'role', 'portrait', 'publicTraits']);
+      expect(Object.keys(member)).toEqual(['id', 'name', 'role', 'cardBlurb', 'portrait', 'publicTraits']);
     }
   });
 

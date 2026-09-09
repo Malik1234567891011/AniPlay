@@ -8,6 +8,7 @@ import type {
   Visibility,
 } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
+import { detectWorldAuthoring, resolveCharacterMention } from './entity-resolution.js';
 
 /**
  * Spec §17.1 step 5 — freeform text becomes a structured `ActionIntent`.
@@ -32,7 +33,17 @@ export interface IntentParser {
 /** Ordered longest-phrase-first so "use ability" beats "use". */
 const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
   { verb: 'travel', patterns: [/\b(go|head|walk|travel|move|return|climb|descend|enter|leave|exit)\s+(to|into|for|toward|towards|back|up|down|out|in)\b/i, /\b(go|head|travel)\s+to\b/i] },
-  { verb: 'attack', patterns: [/\b(attack|strike|hit|punch|stab|swing at|fight|lunge at|shove|tackle)\b/i] },
+  {
+    verb: 'attack',
+    patterns: [
+      /\b(attack|strike|hit|punch|stab|slash|swing at|fight|lunge at|shove|tackle|headbutt|kick)\b/i,
+      // How people actually phrase violence.
+      /\b(beat|batter|pummel|thrash|clobber|deck|floor|jump|throttle|strangle|choke)\b/i,
+      /\bbeat (?:the )?(?:shit|hell|crap|life|daylights) out of\b/i,
+      /\b(lay into|wail on|rough up|beat up|knock out|take a swing at|go for|set upon)\b/i,
+      /\b(kill|murder|stab|shoot|execute|finish off)\b/i,
+    ],
+  },
   { verb: 'defend', patterns: [/\b(defend|block|parry|brace|guard|shield myself|dodge)\b/i] },
   { verb: 'persuade', patterns: [/\b(persuade|convince|reason with|plead|appeal to|talk .* into|beg|argue)\b/i] },
   { verb: 'deceive', patterns: [/\b(lie|deceive|bluff|mislead|pretend|claim|feign|make up)\b/i] },
@@ -78,6 +89,44 @@ export class RuleBasedIntentParser implements IntentParser {
     const raw = text.trim().slice(0, 4000);
 
     const unsafeOrMetaRequests = META_PATTERNS.filter((m) => m.pattern.test(raw)).map((m) => m.label);
+
+    // Spec §3.2 — the player may attempt anything and author nothing. A sentence
+    // that decides an NPC's behaviour is converted into the action the player
+    // actually has, or refused outright when there is no action inside it.
+    const authoring = detectWorldAuthoring(raw, story, state);
+    if (authoring.detected) {
+      unsafeOrMetaRequests.push(
+        authoring.reinterpretation === 'REQUEST' ? 'world_authoring_request' : 'world_authoring',
+      );
+
+      if (authoring.reinterpretation === 'REQUEST' && authoring.subjectCharacterId) {
+        const character = story.characters.find((c) => c.id === authoring.subjectCharacterId);
+        return {
+          schemaVersion: '1.0',
+          intentId,
+          rawAction: raw,
+          dialogue: [],
+          actions: [
+            {
+              verb: 'persuade',
+              actor: { entityType: 'player', entityId: 'player' },
+              targets: [
+                { entityType: 'npc', entityId: authoring.subjectCharacterId, displayName: character?.name },
+              ],
+              method: raw.slice(0, 240),
+              // Recorded, never honoured: the engine decides whether they agree.
+              declaredOutcome: authoring.claim,
+              timeIntent: 'NOW',
+            },
+          ],
+          confidence: 0.7,
+          ambiguities: [
+            `Read as a request rather than a fact: ${character?.name ?? 'they'} decides whether to agree.`,
+          ],
+          unsafeOrMetaRequests,
+        };
+      }
+    }
 
     const { dialogue, remainder } = extractDialogue(raw, state, story);
     const clauses = splitClauses(remainder || raw);
@@ -244,12 +293,23 @@ function resolveTargets(clause: string, context: ParseContext): IntentAction['ta
   const lower = clause.toLowerCase();
   const targets: IntentAction['targets'] = [];
 
-  // NPCs — match anyone in the cast, present or not. Presence is the engine's
-  // call; the parser's job is to say who was meant.
+  // NPCs — exact first, then a tolerated near-match. Presence is the engine's
+  // call; the parser's job is to say who was meant, including when the player
+  // mistyped the name.
   for (const character of story.characters) {
     const first = character.name.split(/\s+/)[0]!.toLowerCase();
     if (lower.includes(character.name.toLowerCase()) || new RegExp(`\\b${escapeRegex(first)}\\b`, 'i').test(lower)) {
       targets.push({ entityType: 'npc', entityId: character.id, displayName: character.name });
+    }
+  }
+
+  if (targets.length === 0) {
+    const resolved = resolveCharacterMention(clause, story, state);
+    if (resolved) {
+      const character = story.characters.find((c) => c.id === resolved.characterId);
+      if (character) {
+        targets.push({ entityType: 'npc', entityId: character.id, displayName: character.name });
+      }
     }
   }
 

@@ -839,3 +839,222 @@ describe('narrative clarity (comprehension, not word count)', () => {
     }
   });
 });
+
+/**
+ * Player agency: the player states intent, the engine decides what happens.
+ *
+ * Each case here is a way the system previously let narration stand in for a
+ * state change, or let the player author something that belongs to the world.
+ */
+describe('player agency and action resolution', () => {
+  const attackState = () => {
+    const state = baseState();
+    // Kael is at the gate at 08:10 alongside the player.
+    return state;
+  };
+
+  it('CASE 1: resolves a misspelled name and does not grant the declared victory', async () => {
+    const state = attackState();
+    const result = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I beat the shit out of Kaela',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-1',
+    });
+
+    // Kaela → Kael, because Kael is present and no Kaela exists.
+    const action = result.intent.actions[0]!;
+    expect(action.verb).toBe('attack');
+    expect(action.targets[0]?.entityId).toBe('kael');
+
+    // An attempt, not an outcome: the engine rolled for it.
+    expect(result.resolution.checks[0]?.label).toContain('Kael');
+
+    // The world actually changed.
+    const types = result.resolution.mutations.map((m) => m.type);
+    expect(types).toContain('ENCOUNTER_START');
+    expect(types).toContain('RELATIONSHIP_DELTA');
+
+    // Kael remembers it, durably and privately to him.
+    const memory = result.newMemories.find((m) => m.predicate === 'was_attacked_by_player');
+    expect(memory).toBeDefined();
+    expect(memory!.importance).toBe(1);
+    expect(memory!.visibility).toBe('NPC_PRIVATE');
+
+    // Relationship moved hard, not by a polite point or two.
+    const trust = result.state.relationships.find((r) => r.characterId === 'kael')!.trust;
+    expect(trust).toBeLessThan(baseState().relationships.find((r) => r.characterId === 'kael')!.trust);
+  });
+
+  it('CASE 1b: never invents a character from a misspelling', async () => {
+    const result = await runTurn({
+      story: STORY, state: baseState(), memories: [], recentTurns: [],
+      actionText: 'I attack Zorbulax the Undying',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-1b',
+    });
+    const known = new Set(STORY.characters.map((c) => c.id));
+    for (const action of result.intent.actions) {
+      for (const target of action.targets) expect(known.has(target.entityId) || target.entityType !== 'npc').toBe(true);
+    }
+    expect(result.resolution.mutations.some((m) => m.type === 'ENCOUNTER_START')).toBe(false);
+  });
+
+  it('CASE 2: does not kill someone who is not present', async () => {
+    const result = await runTurn({
+      story: STORY, state: baseState(), memories: [], recentTurns: [],
+      actionText: 'I kill the headmaster',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-2',
+    });
+    expect(result.resolution.normalizedActions[0]).toMatchObject({ status: 'REJECTED' });
+    expect(result.resolution.mutations.some((m) => m.type === 'ENCOUNTER_START')).toBe(false);
+    for (const character of result.state.characters) expect(character.alive).toBe(true);
+  });
+
+  it('CASE 3: the player cannot author an NPC decision', async () => {
+    const state = baseState();
+    // Put Mira in the room so the refusal is about authorship, not absence.
+    state.characters.find((c) => c.characterId === 'mira')!.locationId = state.player.locationId;
+
+    const result = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'Mira gives me the archive key.',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-3',
+    });
+
+    // Reinterpreted as the action the player actually has: asking.
+    expect(result.intent.unsafeOrMetaRequests).toContain('world_authoring_request');
+    expect(result.intent.actions[0]?.verb).toBe('persuade');
+    // The claim is recorded, never honoured.
+    expect(result.intent.actions[0]?.declaredOutcome).toBeTruthy();
+    // No key appears in the inventory.
+    expect(result.state.player.inventory.some((e) => e.itemId === 'stack_key')).toBe(false);
+  });
+
+  it('CASE 4: asking is a real social action resolved against her state', async () => {
+    const state = baseState();
+    state.characters.find((c) => c.characterId === 'mira')!.locationId = state.player.locationId;
+
+    const result = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I ask Mira for the archive key.',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-4',
+    });
+
+    expect(result.intent.actions[0]?.targets[0]?.entityId).toBe('mira');
+    expect(result.resolution.normalizedActions[0]).not.toMatchObject({ status: 'REJECTED' });
+    // She still does not simply hand it over.
+    expect(result.state.player.inventory.some((e) => e.itemId === 'stack_key')).toBe(false);
+  });
+
+  it('CASE 5: public violence is witnessed and propagates', async () => {
+    const state = baseState();
+    // Put a second person in the room to witness it.
+    state.characters.find((c) => c.characterId === 'bram')!.locationId = state.player.locationId;
+
+    const result = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I attack Kael',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-5',
+    });
+
+    const reasons = result.resolution.mutations.map((m) => m.reasonCode);
+    expect(reasons).toContain('WITNESSED_VIOLENCE');
+    expect(reasons).toContain('PUBLIC_VIOLENCE');
+
+    // The witness remembers, and their own view of the player moved.
+    expect(result.newMemories.some((m) => m.predicate === 'witnessed_violence')).toBe(true);
+    const bram = result.state.relationships.find((r) => r.characterId === 'bram')!;
+    expect(bram.fear).toBeGreaterThan(0);
+
+    // Suspicion rose, so the cost is visible to the player.
+    const suspicion = result.state.player.resources.find((r) => r.id === 'suspicion')!;
+    expect(suspicion.current).toBeGreaterThan(15);
+  });
+
+  it('CASE 5b: stale conversation options disappear after an attack', async () => {
+    let state = baseState();
+    const first = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I attack Kael', qualityTier: 'VIVID', turnId: 't1', seed: 'agency-5b',
+    });
+    state = first.state;
+
+    // The screenshot bug: "Ask Kael about the gate log." after a fistfight.
+    expect(first.resolution.newOpportunities).not.toContain('speak_to:kael');
+    expect(first.plan.suggestedActions.some((s) => /ask kael about/i.test(s.text))).toBe(false);
+
+    const next = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I look around', qualityTier: 'VIVID', turnId: 't2', seed: 'agency-5c',
+    });
+    expect(next.resolution.newOpportunities).not.toContain('speak_to:kael');
+  });
+
+  it('CASE 6: losing a fight is allowed and the story continues', async () => {
+    let state = baseState();
+    const opening = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I attack Kael', qualityTier: 'VIVID', turnId: 't1', seed: 'agency-6',
+    });
+    state = opening.state;
+
+    // Drive the player down; The Ninth Archive is FAIL_FORWARD, not lethal.
+    const player = state.encounter!.participants.find((p) => p.entityId === 'player')!;
+    player.health = 0;
+    player.downed = true;
+
+    const result = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I keep swinging', qualityTier: 'VIVID', turnId: 't2', seed: 'agency-6b',
+    });
+
+    expect(result.commit.defeat.occurred).toBe(true);
+    expect(result.state.flags.player_dead).toBeUndefined();
+    expect(result.state.player.statuses.some((s) => s.id === 'wounded')).toBe(true);
+    expect(result.report.valid).toBe(true);
+  });
+
+  it('a partial success always states a concrete cost', async () => {
+    // Sweep seeds until a SUCCESS_WITH_COST turns up, then assert it cost something.
+    let found = false;
+    for (let i = 0; i < 60 && !found; i++) {
+      const result = await runTurn({
+        story: STORY, state: baseState(), memories: [], recentTurns: [],
+        actionText: 'I try to slip past him unnoticed',
+        qualityTier: 'VIVID', turnId: `t${i}`, seed: `cost-${i}`,
+      });
+      if (result.resolution.checks[0]?.outcome !== 'SUCCESS_WITH_COST') continue;
+      found = true;
+
+      // Something measurable changed, and the prose names it.
+      const costly = result.resolution.mutations.some(
+        (m) => m.type === 'RESOURCE_DELTA' || m.type === 'STATUS_ADD',
+      );
+      expect(costly).toBe(true);
+      expect(result.narrative.blocks.map((b) => b.text).join(' ')).not.toContain(
+        'takes something from you on the way past',
+      );
+    }
+    expect(found).toBe(true);
+  });
+
+  it('CASE 7: a narration failure never re-rolls the resolved action', async () => {
+    const state = baseState();
+    const seed = 'idempotent-narration';
+
+    const good = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I read the ward above the gate', qualityTier: 'VIVID', turnId: 't1', seed,
+    });
+
+    // Re-running the identical (story, state, intent, seed) reproduces the exact
+    // resolution, which is what lets narration be retried without re-rolling.
+    const replay = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I read the ward above the gate', qualityTier: 'VIVID', turnId: 't1', seed,
+    });
+
+    expect(replay.resolution).toEqual(good.resolution);
+    expect(replay.resolution.checks[0]?.keptRoll).toBe(good.resolution.checks[0]?.keptRoll);
+    expect(replay.state.player.resources).toEqual(good.state.player.resources);
+  });
+});

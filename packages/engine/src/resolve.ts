@@ -643,6 +643,12 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
 
   const observableFacts: string[] = [];
 
+  if (check.outcome === 'SUCCESS_WITH_COST') {
+    const cost = concreteCost(args, nextMutationId, `PARTIAL:${action.verb}`);
+    mutations.push(...cost.mutations);
+    observableFacts.push(`${character.name} gives ground, and ${cost.description}.`);
+  }
+
   const privateFacts: PrivateFact[] = [];
   if (!isSuccess(check.outcome)) {
     privateFacts.push({
@@ -770,6 +776,48 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
     allowsPartial: false,
   });
 
+  // Spec §14.2 — being attacked changes how someone feels about you, whether or
+  // not the blow lands. This is the part that was missing: prose described a
+  // fight while the relationship stayed exactly as it was.
+  for (const [dimension, amount] of [
+    ['fear', 10],
+    ['trust', -25],
+    ['respect', -10],
+    ['affection', -20],
+    ['rivalry', 15],
+  ] as const) {
+    const clamped = clampRelationshipDelta(state, story, {
+      characterId: character.id,
+      dimension,
+      delta: amount,
+      // Violence is a major event, so it is allowed to move a relationship far.
+      severity: 'MAJOR',
+      reasonCode: 'attack',
+    });
+    if (clamped.appliedDelta !== 0) {
+      mutations.push({
+        mutationId: nextMutationId(),
+        type: 'RELATIONSHIP_DELTA',
+        subjectId: character.id,
+        reasonCode: 'ATTACKED_BY_PLAYER',
+        payload: { dimension, amount: clamped.appliedDelta },
+      });
+    }
+  }
+
+  // A durable flag, so nothing downstream can treat this as an ordinary chat.
+  mutations.push({
+    mutationId: nextMutationId(),
+    type: 'FLAG_SET',
+    subjectId: 'session',
+    reasonCode: 'ATTACKED_BY_PLAYER',
+    payload: { flag: `attacked:${character.id}`, value: true },
+  });
+
+  const witness = witnessConsequences(args, nextMutationId, character.name);
+  mutations.push(...witness.mutations);
+  observableFacts.push(...witness.facts);
+
   if (isSuccess(check.outcome)) {
     const base = 4 + attributeModifier(effectiveAttribute(state, story, attribute));
     const damage = check.outcome === 'CRITICAL_SUCCESS' ? base * 2 : base;
@@ -781,17 +829,56 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
       payload: { participantId: character.id, healthDelta: -damage },
     });
     observableFacts.push(`Your strike lands on ${character.name}.`);
+
+    // Spec §12.5 — a partial success costs something the player can name.
+    if (check.outcome === 'SUCCESS_WITH_COST') {
+      const cost = concreteCost(args, nextMutationId, 'ATTACK_COST');
+      mutations.push(...cost.mutations);
+      observableFacts.push(`${character.name} gets a hit in first, and ${cost.description}.`);
+    }
   } else {
     observableFacts.push(`Your strike misses ${character.name}.`);
+
+    // Spec §11 — failing to land a blow is not free. The target hits back.
+    const counter = character.combatant?.damage ?? 3;
+    const health = story.resources.find((r) => r.id === 'health');
+    if (health) {
+      mutations.push({
+        mutationId: nextMutationId(),
+        type: 'RESOURCE_DELTA',
+        subjectId: 'player',
+        reasonCode: 'COUNTERATTACK',
+        payload: { resourceId: health.id, amount: -counter },
+      });
+      observableFacts.push(`${character.name} answers, and it costs you ${counter} ${health.name}.`);
+    }
+    mutations.push({
+      mutationId: nextMutationId(),
+      type: 'ENCOUNTER_UPDATE',
+      subjectId: 'session',
+      reasonCode: 'COUNTERATTACK',
+      payload: { participantId: 'player', healthDelta: -counter },
+    });
   }
 
   return {
     checks: [check],
     mutations,
     observableFacts,
-    privateFacts: encounterJustStarted
-      ? [{ visibility: 'SELF', fact: 'This is the opening exchange. Establish stakes and position.' }]
-      : [],
+    privateFacts: [
+      ...(encounterJustStarted
+        ? [{ visibility: 'SELF', fact: 'This is the opening exchange. Establish stakes and position.' }]
+        : []),
+      {
+        visibility: 'SELF',
+        fact:
+          `${character.name} has now been attacked by the player and will not behave as though the previous ` +
+          'conversation is still happening. They are hostile, defending themselves, or calling for help.',
+      },
+      ...(witness.witnessIds.length > 0
+        ? [{ visibility: 'SELF' as const, fact: `Witnessed by: ${witness.witnessIds.join(', ')}. They react.` }]
+        : []),
+    ],
     timeCategory: 'INSTANT',
     normalized: { verb: 'attack', targetId: character.id, status: 'RESOLVED', outcome: check.outcome },
   };
@@ -885,6 +972,15 @@ function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
   // The check reveal module carries the outcome; duplicating it in prose reads
   // like a rules readout (§10.6).
   const observableFacts: string[] = [];
+  const mutations: StateMutation[] = [];
+
+  // Spec §12.5 — a partial success must cost something nameable.
+  if (check.outcome === 'SUCCESS_WITH_COST') {
+    const cost = concreteCost(args, args.nextMutationId, `PARTIAL:${action.verb}`);
+    mutations.push(...cost.mutations);
+    observableFacts.push(`You get there, and ${cost.description}.`);
+  }
+
   const privateFacts: PrivateFact[] = isSuccess(check.outcome)
     ? []
     : [
@@ -896,11 +992,157 @@ function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
 
   return {
     checks: [check],
-    mutations: [],
+    mutations,
     observableFacts,
     privateFacts,
     timeCategory: VERB_TIME[action.verb] ?? 'BRIEF',
     normalized: { verb: action.verb, status: 'RESOLVED', outcome: check.outcome },
+  };
+}
+
+/**
+ * Spec §12.5 — a partial success has to cost something the player can name.
+ *
+ * "Success with cost" with no stated cost is the worst of both worlds: it reads
+ * as a penalty and changes nothing. This emits a real mutation so the delta chip
+ * beside the prose says what was actually paid.
+ */
+function concreteCost(
+  args: ResolveActionArgs,
+  nextMutationId: () => string,
+  reasonCode: string,
+): { mutations: StateMutation[]; description: string } {
+  const { story, state } = args;
+
+  // Prefer a resource the world actually tracks and the player currently has.
+  const spendable = story.resources
+    .filter((r) => r.polarity === 'GOOD_HIGH' && r.id !== 'health')
+    .map((r) => ({ def: r, current: state.player.resources.find((x) => x.id === r.id)?.current ?? 0 }))
+    .filter((r) => r.current > 2)
+    .sort((a, b) => a.def.displayPriority - b.def.displayPriority)[0];
+
+  if (spendable) {
+    const amount = Math.max(1, Math.round(spendable.def.max * 0.1));
+    return {
+      mutations: [
+        {
+          mutationId: nextMutationId(),
+          type: 'RESOURCE_DELTA',
+          subjectId: 'player',
+          reasonCode,
+          payload: { resourceId: spendable.def.id, amount: -amount },
+        },
+      ],
+      description: `it costs you ${amount} ${spendable.def.name}`,
+    };
+  }
+
+  // Nothing spendable: an ascending resource like Suspicion takes the hit.
+  const ascending = story.resources.find((r) => r.polarity === 'GOOD_LOW');
+  if (ascending) {
+    const amount = Math.max(1, Math.round(ascending.max * 0.08));
+    return {
+      mutations: [
+        {
+          mutationId: nextMutationId(),
+          type: 'RESOURCE_DELTA',
+          subjectId: 'player',
+          reasonCode,
+          payload: { resourceId: ascending.id, amount },
+        },
+      ],
+      description: `${ascending.name} rises by ${amount}`,
+    };
+  }
+
+  // Last resort: a visible status, so the cost is still nameable.
+  return {
+    mutations: [
+      {
+        mutationId: nextMutationId(),
+        type: 'STATUS_ADD',
+        subjectId: 'player',
+        reasonCode,
+        payload: {
+          id: 'shaken',
+          label: 'Shaken',
+          kind: 'DEBUFF',
+          durationMinutes: 60,
+          description: 'That took more out of you than it should have.',
+        },
+      },
+    ],
+    description: 'it leaves you shaken',
+  };
+}
+
+/**
+ * Spec §29 / §15.3 — violence in front of people has consequences beyond the
+ * two people involved. Witnesses are whoever else is in the room.
+ */
+function witnessConsequences(
+  args: ResolveActionArgs,
+  nextMutationId: () => string,
+  targetName: string,
+): { mutations: StateMutation[]; facts: string[]; witnessIds: string[] } {
+  const { story, state, action } = args;
+
+  const targetId = action.targets.find((t) => t.entityType === 'npc')?.entityId;
+  const witnesses = charactersPresent(state).filter((c) => c.characterId !== targetId);
+  if (witnesses.length === 0) return { mutations: [], facts: [], witnessIds: [] };
+
+  const mutations: StateMutation[] = [];
+  const names: string[] = [];
+
+  for (const witness of witnesses) {
+    const character = story.characters.find((c) => c.id === witness.characterId);
+    if (!character) continue;
+    names.push(character.name);
+
+    // Watching someone be attacked moves fear and trust, in that order.
+    mutations.push({
+      mutationId: nextMutationId(),
+      type: 'RELATIONSHIP_DELTA',
+      subjectId: character.id,
+      reasonCode: 'WITNESSED_VIOLENCE',
+      payload: { dimension: 'fear', amount: 6 },
+    });
+    mutations.push({
+      mutationId: nextMutationId(),
+      type: 'RELATIONSHIP_DELTA',
+      subjectId: character.id,
+      reasonCode: 'WITNESSED_VIOLENCE',
+      payload: { dimension: 'trust', amount: -4 },
+    });
+  }
+
+  // Institutional standing, where the world models one.
+  for (const faction of story.factions) {
+    mutations.push({
+      mutationId: nextMutationId(),
+      type: 'FACTION_DELTA',
+      subjectId: faction.id,
+      reasonCode: 'PUBLIC_VIOLENCE',
+      payload: { amount: -8 },
+    });
+    break;
+  }
+
+  const suspicion = story.resources.find((r) => r.polarity === 'GOOD_LOW');
+  if (suspicion) {
+    mutations.push({
+      mutationId: nextMutationId(),
+      type: 'RESOURCE_DELTA',
+      subjectId: 'player',
+      reasonCode: 'PUBLIC_VIOLENCE',
+      payload: { resourceId: suspicion.id, amount: 20 },
+    });
+  }
+
+  return {
+    mutations,
+    facts: [`${names.join(' and ')} saw you attack ${targetName}.`],
+    witnessIds: witnesses.map((w) => w.characterId),
   };
 }
 
@@ -986,7 +1228,23 @@ function buildOpportunities(state: GameState, story: StoryVersion): string[] {
 
   for (const present of charactersPresent(state)) {
     const character = story.characters.find((c) => c.id === present.characterId);
-    if (character) opportunities.push(`speak_to:${character.id}`);
+    if (!character) continue;
+
+    // Someone you just attacked, or who is fighting you, is not available for a
+    // conversation. Offering "ask them about the gate log" after a fistfight is
+    // the continuity bug this guards against.
+    const attacked = state.flags[`attacked:${character.id}`] === true;
+    const inFight = state.encounter?.participants.some(
+      (p) => p.entityId === character.id && p.team === 'ENEMY' && !p.downed,
+    );
+    const downed = state.encounter?.participants.some((p) => p.entityId === character.id && p.downed);
+
+    if (downed) continue;
+    if (attacked || inFight) {
+      opportunities.push(`confront:${character.id}`);
+      continue;
+    }
+    opportunities.push(`speak_to:${character.id}`);
   }
 
   const origin = story.locations.find((l) => l.id === state.player.locationId);

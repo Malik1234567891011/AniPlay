@@ -101,12 +101,13 @@ export class TemplateWriter implements Writer {
           const speakerId = plan.speakerOrder[npcLinesSoFar];
           const character = context.presentCharacters.find((c) => c.def.id === speakerId);
           if (character) {
+            const line = dialogueLine(character, context, rng, usedLines);
             blocks.push({
-              type: 'DIALOGUE',
-              speakerId: character.def.id,
-              text: dialogueLine(character, context, rng, usedLines),
+              type: line.isSpeech ? 'DIALOGUE' : 'NARRATION',
+              speakerId: line.isSpeech ? character.def.id : null,
+              text: line.text,
               visibility: 'GROUP',
-              voiceEligible: character.def.voiceId !== null,
+              voiceEligible: line.isSpeech && character.def.voiceId !== null,
             });
           }
           break;
@@ -171,38 +172,26 @@ export function renderableFacts(context: TurnContext): string[] {
  */
 function checkSentence(context: TurnContext, rng: SeededRng): string {
   const check = context.resolution.checks[0]!;
-  const attempt = check.label.toLowerCase();
 
-  const templates: Record<string, string[]> = {
+  // The attempt is named as its own clause. Splicing the label into a sentence
+  // produced things like "the strike kael ostrand comes to nothing", because
+  // labels are verb phrases, not nouns.
+  const outcomes: Record<string, string[]> = {
     CRITICAL_SUCCESS: [
-      `The ${attempt} lands better than it had any right to.`,
-      `The ${attempt} works, and then keeps working.`,
+      'It lands better than it had any right to.',
+      'It works, and then keeps working.',
     ],
-    CLEAN_SUCCESS: [`The ${attempt} works.`, `The ${attempt} goes through without trouble.`],
-    SUCCESS: [
-      `The ${attempt} works, barely. You feel how close it was.`,
-      `The ${attempt} holds. You would not want to try it twice.`,
-    ],
-    SUCCESS_WITH_COST: [
-      `The ${attempt} works, and it costs you.`,
-      `The ${attempt} gets you there, and you pay for it on the way through.`,
-    ],
-    FAILURE: [
-      `The ${attempt} does not work.`,
-      `The ${attempt} comes to nothing.`,
-    ],
-    COMPLICATION: [
-      `The ${attempt} fails, and it fails loudly.`,
-      `The ${attempt} comes apart, and someone notices that you tried.`,
-    ],
+    CLEAN_SUCCESS: ['It works.', 'It goes through without trouble.'],
+    SUCCESS: ['It works, barely. You feel how close it was.', 'It holds. You would not want to try that twice.'],
+    SUCCESS_WITH_COST: ['It works, and it costs you.', 'It gets you there, and you pay on the way through.'],
+    FAILURE: ['It does not work.', 'It comes to nothing.'],
+    COMPLICATION: ['It fails, and it fails loudly.', 'It comes apart, and someone notices that you tried.'],
   };
 
-  const base = rng.pick(templates[check.outcome] ?? templates.FAILURE!);
+  const base = `${check.label}. ${rng.pick(outcomes[check.outcome] ?? outcomes.FAILURE!)}`;
 
   // Spec §10.6 — the maths only appears when the story opts into it.
-  return context.story.rules.revealExactDc
-    ? `${base} (${check.label} · ${outcomeLabel(check.outcome)})`
-    : base;
+  return context.story.rules.revealExactDc ? `${base} (${outcomeLabel(check.outcome)})` : base;
 }
 
 function transitionSentence(context: TurnContext, rng: SeededRng): string {
@@ -227,7 +216,14 @@ function narrationSentence(context: TurnContext, rng: SeededRng): string {
   // writer, not prose — rendering one would show the player a stage instruction.
   const facts = renderableFacts(context);
   if (facts.length > 0) {
-    parts.push(facts.slice(0, 2).join(' '));
+    // A fact that explains a number on a chip must never be the one that gets
+    // trimmed: "-5 Health" with no stated cause is exactly the failure this
+    // whole pass is about.
+    const explainsACost = (fact: string): boolean => /\bcosts? you\b|\brises by\b|\bleaves you\b/i.test(fact);
+    const ordered = [...facts].sort(
+      (a, b) => Number(explainsACost(b)) - Number(explainsACost(a)),
+    );
+    parts.push(ordered.slice(0, 3).join(' '));
   }
 
   if (parts.length === 0) {
@@ -264,19 +260,68 @@ function narrationSentence(context: TurnContext, rng: SeededRng): string {
  * Picks the authored voice sample that best fits the moment, so NPC dialogue
  * stays in the voice the creator wrote rather than drifting into generic warmth.
  */
+interface SpokenOrObserved {
+  readonly text: string;
+  /** False when the line describes a reaction rather than quoting one. */
+  readonly isSpeech: boolean;
+}
+
 function dialogueLine(
   character: PresentCharacterContext,
   context: TurnContext,
   rng: SeededRng,
   used: Set<string>,
-): string {
+): SpokenOrObserved {
   const samples = character.def.voiceSamples;
   if (samples.length === 0) {
-    return `${character.def.name} looks at you and decides not to answer.`;
+    return { text: `${character.def.name} looks at you and decides not to answer.`, isSpeech: false };
   }
 
   const failed = context.resolution.checks.some((c) => !isSuccess(c.outcome));
   const hostile = character.relationship.rivalry > 40 || character.relationship.fear > 50;
+
+  // After violence, an authored voice sample written for an ordinary scene is
+  // actively wrong — a quartermaster's running joke does not survive watching a
+  // fistfight. When nothing in their repertoire fits, describe the reaction
+  // instead of quoting a line that contradicts the moment.
+  const violence = context.resolution.mutations.some(
+    (m) => m.reasonCode === 'ATTACKED_BY_PLAYER' || m.reasonCode === 'WITNESSED_VIOLENCE',
+  );
+  if (violence) {
+    const firstName = character.def.name.split(/\s+/)[0]!;
+    const wasAttacked = context.resolution.mutations.some(
+      (m) => m.reasonCode === 'ATTACKED_BY_PLAYER' && m.subjectId === character.def.id,
+    );
+
+    // The person who was hit gets a line, because they are in the exchange.
+    // Everyone else is a bystander, and a bystander quoting their usual patter
+    // reads as though the fight is not happening.
+    if (!wasAttacked) {
+      // The story declares each character's pronouns; a described reaction has
+      // to use them.
+      const possessive = possessivePronoun(character.def.pronouns);
+      return {
+        text: rng.pick([
+          `${firstName} is on ${possessive} feet and backing away.`,
+          `${firstName} says nothing at all, which is worse.`,
+          `${firstName} is already moving toward the door.`,
+        ]),
+        isSpeech: false,
+      };
+    }
+
+    // An authored line that is already a command fits a fight exactly.
+    const commands = samples.filter((line) =>
+      /\b(do not move|don't move|stop|get back|enough|stay (?:down|there))\b/i.test(line),
+    );
+    if (commands.length > 0) {
+      const unused = commands.filter((l) => !used.has(l));
+      const chosen = rng.pick(unused.length > 0 ? unused : commands);
+      used.add(chosen);
+      return { text: chosen, isSpeech: true };
+    }
+    return { text: `${firstName} has stopped talking.`, isSpeech: false };
+  }
 
   const scored = samples.map((line) => {
     let score = 0;
@@ -294,7 +339,22 @@ function dialogueLine(
   const candidates = scored.filter((s) => s.score === best).map((s) => s.line);
   const chosen = rng.pick(candidates);
   used.add(chosen);
-  return chosen;
+  return { text: chosen, isSpeech: true };
+}
+
+/** "she/her" → "her", "they/them" → "their". Falls back to they/them. */
+function possessivePronoun(pronouns: string): string {
+  const subject = pronouns.split('/')[0]?.trim().toLowerCase();
+  switch (subject) {
+    case 'he':
+      return 'his';
+    case 'she':
+      return 'her';
+    case 'it':
+      return 'its';
+    default:
+      return 'their';
+  }
 }
 
 function sceneSummary(context: TurnContext): string {
@@ -349,17 +409,9 @@ function buildDeltas(context: TurnContext): StateDeltaPresentation[] {
         });
         break;
       }
-      case 'RELATIONSHIP_DELTA': {
-        const character = context.story.characters.find((c) => c.id === mutation.subjectId);
-        const amount = Number(p.amount ?? 0);
-        if (!character || amount === 0) break;
-        deltas.push({
-          mutationId: mutation.mutationId,
-          label: `${character.name.split(' ')[0]} ${amount > 0 ? 'warms' : 'cools'}`,
-          priority: 4,
-        });
+      case 'RELATIONSHIP_DELTA':
+        // Aggregated below: one chip per person, not one per dimension.
         break;
-      }
       case 'FACTION_DELTA': {
         const faction = context.story.factions.find((f) => f.id === mutation.subjectId);
         if (!faction) break;
@@ -380,6 +432,47 @@ function buildDeltas(context: TurnContext): StateDeltaPresentation[] {
       default:
         break;
     }
+  }
+
+  // Spec §10.7 — one chip per person, describing the change a player would
+  // actually notice. A single attack moves five dimensions at once, and five
+  // chips that disagree with each other ("Kael warms", "Kael cools") is worse
+  // than no chip at all.
+  const byCharacter = new Map<string, { mutationId: string; totals: Record<string, number> }>();
+  for (const mutation of context.resolution.mutations) {
+    if (mutation.type !== 'RELATIONSHIP_DELTA') continue;
+    const p = mutation.payload as { dimension?: string; amount?: number };
+    const amount = Number(p.amount ?? 0);
+    if (amount === 0 || !p.dimension) continue;
+
+    const entry = byCharacter.get(mutation.subjectId) ?? {
+      mutationId: mutation.mutationId,
+      totals: {} as Record<string, number>,
+    };
+    entry.totals[p.dimension] = (entry.totals[p.dimension] ?? 0) + amount;
+    byCharacter.set(mutation.subjectId, entry);
+  }
+
+  for (const [characterId, entry] of byCharacter) {
+    const character = context.story.characters.find((c) => c.id === characterId);
+    if (!character) continue;
+    const firstName = character.name.split(' ')[0]!;
+    const { trust = 0, affection = 0, respect = 0, fear = 0, rivalry = 0 } = entry.totals;
+
+    // Report the dimension that moved most, because that is what the player
+    // would actually perceive.
+    const label =
+      fear >= 5 && fear >= rivalry
+        ? `${firstName} is afraid of you`
+        : rivalry >= 5
+          ? `${firstName} turns on you`
+          : trust + affection + respect <= -6
+            ? `${firstName} closes off`
+            : trust + affection + respect >= 4
+              ? `${firstName} warms to you`
+              : `${firstName} reconsiders you`;
+
+    deltas.push({ mutationId: entry.mutationId, label, priority: 4 });
   }
 
   return deltas.sort((a, b) => a.priority - b.priority).slice(0, 8);

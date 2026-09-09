@@ -296,6 +296,29 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
 
   // 1. Whoever is in the room and most relevant.
   const speaker = context.presentCharacters[0];
+
+  // After violence the only social move available is a confrontation, and it
+  // has to read like one.
+  const confront = opportunities.find((o) => o.startsWith('confront:'));
+  if (confront) {
+    const character = context.presentCharacters.find((c) => c.def.id === confront.slice('confront:'.length));
+    if (character) {
+      const firstName = character.def.name.split(/\s+/)[0]!;
+      push({
+        text: `Back off and let ${firstName} decide what happens next.`,
+        intentHint: `wait:${character.def.id}`,
+        risk: 'RISKY',
+        resourceCostLabel: null,
+      });
+      push({
+        text: `Keep going at ${firstName}.`,
+        intentHint: `attack:${character.def.id}`,
+        risk: 'EXTREME',
+        resourceCostLabel: null,
+      });
+    }
+  }
+
   if (speaker && opportunities.includes(`speak_to:${speaker.def.id}`)) {
     const firstName = speaker.def.name.split(/\s+/)[0]!;
     const topic = speaker.def.topics[0];
@@ -516,20 +539,67 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
     }
   }
 
+  // Spec §17.6 — violence is exactly the kind of event that must stay
+  // retrievable. Without this, the relationship numbers move but nothing in the
+  // NPC's own memory records *why*, and the reason decays out of the context
+  // window within a few turns.
   for (const mutation of resolution.mutations) {
-    if (mutation.type === 'RELATIONSHIP_DELTA') {
-      const character = context.story.characters.find((c) => c.id === mutation.subjectId);
-      const amount = (mutation.payload as { amount?: number }).amount ?? 0;
-      if (character && Math.abs(amount) >= 2) {
+    if (mutation.reasonCode !== 'ATTACKED_BY_PLAYER' || mutation.type !== 'FLAG_SET') continue;
+    const flag = String((mutation.payload as { flag?: string }).flag ?? '');
+    const characterId = flag.startsWith('attacked:') ? flag.slice('attacked:'.length) : null;
+    const character = context.story.characters.find((c) => c.id === characterId);
+    if (!character) continue;
+
+    proposals.push({
+      subjectId: character.id,
+      predicate: 'was_attacked_by_player',
+      value: `${context.player.name} attacked ${character.name} at ${context.scene.locationName}, ${context.scene.worldTimeLabel}.`,
+      // NPC_PRIVATE so it is retrieved for them specifically, and importance 1
+      // so recency decay never drops it out of their context.
+      visibility: 'NPC_PRIVATE',
+      importance: 1,
+      sourceEventIds: [mutation.mutationId],
+    });
+  }
+
+  for (const mutation of resolution.mutations) {
+    if (mutation.reasonCode === 'WITNESSED_VIOLENCE' && mutation.type === 'RELATIONSHIP_DELTA') {
+      const witness = context.story.characters.find((c) => c.id === mutation.subjectId);
+      if (witness) {
         proposals.push({
-          subjectId: character.id,
-          predicate: amount > 0 ? 'warmed_toward_player' : 'cooled_toward_player',
-          value: mutation.reasonCode,
-          visibility: 'PAIR_PRIVATE',
-          importance: Math.min(0.9, 0.4 + Math.abs(amount) / 20),
+          subjectId: witness.id,
+          predicate: 'witnessed_violence',
+          value: `${witness.name} saw ${context.player.name} attack someone at ${context.scene.locationName}.`,
+          visibility: 'NPC_PRIVATE',
+          importance: 0.9,
           sourceEventIds: [mutation.mutationId],
         });
       }
+    }
+  }
+
+  for (const mutation of resolution.mutations) {
+    if (mutation.type === 'RELATIONSHIP_DELTA') {
+      const character = context.story.characters.find((c) => c.id === mutation.subjectId);
+      const payload = mutation.payload as { amount?: number; dimension?: string };
+      const amount = payload.amount ?? 0;
+      const dimension = payload.dimension ?? '';
+      if (!character || Math.abs(amount) < 2) continue;
+
+      // fear and rivalry rising are hostile movements even though the number
+      // goes up. Treating any positive delta as warmth recorded "Kael warmed
+      // toward the player" immediately after the player attacked him.
+      const hostileDimension = dimension === 'fear' || dimension === 'rivalry';
+      const warmer = hostileDimension ? amount < 0 : amount > 0;
+
+      proposals.push({
+        subjectId: character.id,
+        predicate: warmer ? 'warmed_toward_player' : 'cooled_toward_player',
+        value: mutation.reasonCode,
+        visibility: 'PAIR_PRIVATE',
+        importance: Math.min(0.9, 0.4 + Math.abs(amount) / 20),
+        sourceEventIds: [mutation.mutationId],
+      });
     }
     if (mutation.type === 'QUEST_TRANSITION') {
       proposals.push({

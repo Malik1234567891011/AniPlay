@@ -146,7 +146,20 @@ export function materializeProposals(
   state: GameState,
   turnId: string,
 ): MemoryFact[] {
-  return proposals.map((proposal, index) => ({
+  // Spec §17.6 — retrieval is a budget. A single dramatic turn can produce a
+  // dozen proposals, many of them the same fact about the same person, and
+  // storing all of them crowds out the ones that matter.
+  const seen = new Set<string>();
+  const deduped = proposals.filter((proposal) => {
+    const key = `${proposal.subjectId}:${proposal.predicate}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  const ranked = [...deduped].sort((a, b) => b.importance - a.importance).slice(0, 6);
+
+  return ranked.map((proposal, index) => ({
     factId: `fact_${turnId}_${index}`,
     subjectId: proposal.subjectId,
     predicate: proposal.predicate,
