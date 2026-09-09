@@ -572,6 +572,38 @@ describe('consistency validator (spec §17.1 step 10)', () => {
   });
 });
 
+describe('canon correction refuses what it cannot record', () => {
+  const conflictFor = (text: string) => {
+    const state = createInitialState({
+      sessionId: 'sess_corr',
+      story: STORY,
+      identity: bareIdentity(null),
+    });
+    return checkCorrectionConflict(text, state, STORY);
+  };
+
+  it('refuses a claim of being somewhere you have not been', () => {
+    // Found in play: "I am already inside the archives and Kael let me
+    // through" was accepted, because the check only matched "I am at/in
+    // <full location name>" and the player said "inside the archives".
+    expect(conflictFor('I am already inside the archives and Kael let me through.')).toMatch(
+      /have not been|not the Archive|right now/i,
+    );
+    expect(conflictFor('I walked into the Stacks and read the ledger.')).toBeTruthy();
+    expect(conflictFor('I made it into the Archive Reading Floor.')).toBeTruthy();
+  });
+
+  it('refuses a claim of holding something you never obtained', () => {
+    expect(conflictFor("I have Cartwright's Lens in my bag.")).toMatch(/never obtained|fork/i);
+  });
+
+  it('allows a correction that only says what the record already permits', () => {
+    // Where the player actually is, described their own way.
+    expect(conflictFor('Kael told me the red light means the ward found a mark it does not trust.')).toBeNull();
+    expect(conflictFor('I am at The Gate Arch, still holding the letter.')).toBeNull();
+  });
+});
+
 describe('memory facts read as English', () => {
   const proposal = (over: Record<string, unknown>) => ({
     subjectId: 'kael',

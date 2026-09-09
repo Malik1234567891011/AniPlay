@@ -272,11 +272,31 @@ export function checkCorrectionConflict(
   }
 
   for (const location of story.locations) {
-    const bare = location.name.toLowerCase().replace(/^the\s+/, '');
-    // `i'm` has no space before the contraction, so the alternation has to sit
-    // tight against the pronoun rather than after a space.
-    const claimsHere = new RegExp(`\\bi(?:'m| am) (?:at|in) (?:the )?${escapeRegex(bare)}`).test(lower);
-    if (claimsHere && state.player.locationId !== location.id) {
+    // A place answers to its full name, its name without the article, and its
+    // short name — "the archives" has to hit "Archive Reading Floor".
+    const aliases = [location.name, location.name.replace(/^[Tt]he\s+/, ''), location.shortName]
+      .filter((alias) => alias.length > 2)
+      .map((alias) => alias.toLowerCase());
+
+    const claimsHere = aliases.some((alias) =>
+      // `i'm` has no space before the contraction, so the alternation has to
+      // sit tight against the pronoun rather than after a space. The
+      // prepositions are wide on purpose: "already inside the archives" is the
+      // same claim as "I am in the Archive Reading Floor", and only one of
+      // them used to be caught. "past" is deliberately absent — it usually
+      // means the opposite of being there, and a false refusal is worse than a
+      // generous acceptance.
+      new RegExp(
+        `\\bi(?:'m| am| was| have been| got| made it| walked| went)\\b[^.]{0,24}\\b(?:at|in|into|inside|within|through|to)\\b (?:the )?${escapeRegex(alias)}`,
+      ).test(lower),
+    );
+
+    if (!claimsHere) continue;
+
+    if (!state.discoveredLocationIds.includes(location.id)) {
+      return `You have not been to ${location.name} in this branch. A correction records what happened, not what could have — but you can fork the timeline from a point where it might have.`;
+    }
+    if (state.player.locationId !== location.id) {
       const current = story.locations.find((l) => l.id === state.player.locationId);
       return `You are at ${current?.name ?? 'somewhere else'} right now, not ${location.name}. Travel there instead, and the record will follow.`;
     }

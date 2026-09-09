@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Pressable, ScrollView, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { TimelineEntry, WorldSheetResponse } from '@aniplay/contracts';
 import {
@@ -97,7 +97,12 @@ export function WorldSheetScreen({
           {tab === 'relationships' ? <Relationships sheet={sheet} /> : null}
           {tab === 'map' ? <MapTab sheet={sheet} /> : null}
           {tab === 'timeline' ? (
-            <Timeline entries={timeline} sessionId={sessionId} navigation={navigation} />
+            <Timeline
+              entries={timeline}
+              sessionId={sessionId}
+              navigation={navigation}
+              onRefresh={setTimeline}
+            />
           ) : null}
         </ScrollView>
       )}
@@ -541,13 +546,41 @@ function Timeline({
   entries,
   sessionId,
   navigation,
+  onRefresh,
 }: {
   entries: TimelineEntry[];
   sessionId: string;
   navigation: RootNavigation;
+  onRefresh: (entries: TimelineEntry[]) => void;
 }): React.JSX.Element {
   const [forking, setForking] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  // WS-08 / §11.8 — the id being corrected, and what the player says it was.
+  const [correcting, setCorrecting] = useState<string | null>(null);
+  const [correction, setCorrection] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const submitCorrection = (factId: string): void => {
+    const text = correction.trim();
+    if (text.length === 0) return;
+    setSubmitting(true);
+    void api
+      .correctCanon(sessionId, factId, text)
+      .then((response) => {
+        if (response.accepted) {
+          setCorrecting(null);
+          setCorrection('');
+          setNotice('Fixed. That is what the story remembers now.');
+          void api.timeline(sessionId).then((r) => onRefresh(r.entries));
+        } else {
+          // §11.8 — a correction that contradicts authoritative state is
+          // refused with the reason, not silently dropped.
+          setNotice(response.conflictExplanation ?? 'That contradicts something the engine already decided.');
+        }
+      })
+      .catch(() => setNotice('That did not go through. Nothing was changed.'))
+      .finally(() => setSubmitting(false));
+  };
 
   if (entries.length === 0) {
     return <EmptyState title="Nothing recorded yet" body="Everything that becomes canon will be listed here." />;
@@ -575,8 +608,26 @@ function Timeline({
               ) : null}
             </Row>
             <Txt variant="bodyCompact">{entry.text}</Txt>
-            <Row gap={spacing.md} style={{ marginTop: spacing.xs }}>
+            <Row gap={spacing.md} style={{ marginTop: spacing.xs, flexWrap: 'wrap' }}>
               {entry.pinned ? <Chip label="Pinned canon" tone="accent" /> : null}
+              {/* WS-08 — the engine's own decisions are not opinions, so only
+                  generated canon carries this. It is free: a contradiction the
+                  system produced is not something to charge for. */}
+              {entry.correctable ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={`This is wrong: ${entry.text}`}
+                  onPress={() => {
+                    setNotice(null);
+                    setCorrection(correcting === entry.id ? '' : entry.text);
+                    setCorrecting(correcting === entry.id ? null : entry.id);
+                  }}
+                >
+                  <Txt variant="caption" color={colors.text.secondary}>
+                    {correcting === entry.id ? 'Cancel' : 'This is wrong'}
+                  </Txt>
+                </Pressable>
+              ) : null}
               {entry.forkable ? (
                 <Pressable
                   accessibilityRole="button"
@@ -609,9 +660,45 @@ function Timeline({
                 </Pressable>
               ) : null}
             </Row>
+
+            {correcting === entry.id ? (
+              <Stack gap={spacing.sm} style={{ marginTop: spacing.sm }}>
+                <TextInput
+                  value={correction}
+                  onChangeText={setCorrection}
+                  multiline
+                  maxLength={400}
+                  autoFocus
+                  placeholder="What actually happened?"
+                  placeholderTextColor={colors.text.muted}
+                  accessibilityLabel="What actually happened"
+                  style={{
+                    minHeight: 76,
+                    padding: spacing.md,
+                    borderRadius: radius.control,
+                    backgroundColor: colors.bg.raised,
+                    color: colors.text.primary,
+                    fontSize: 16,
+                    textAlignVertical: 'top',
+                  }}
+                />
+                <Button
+                  label="Fix it"
+                  size="medium"
+                  loading={submitting}
+                  loadingLabel="Checking…"
+                  disabled={correction.trim().length === 0}
+                  onPress={() => submitCorrection(entry.id)}
+                />
+              </Stack>
+            ) : null}
           </Card>
         ))}
 
+      <Txt variant="micro" color={colors.text.muted}>
+        Correcting is free. It changes what the story remembers, never what the engine decided — a
+        correction that contradicts the record is refused with the reason.
+      </Txt>
       <Txt variant="micro" color={colors.text.muted}>
         Forking copies this world at the chosen moment. The original branch is never destroyed.
       </Txt>
