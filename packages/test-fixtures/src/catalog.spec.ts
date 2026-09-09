@@ -1,0 +1,101 @@
+import { describe, expect, it } from 'vitest';
+import { LAUNCH_CATALOG } from './index.js';
+
+/**
+ * Is this a game, or an AI chat with statistics drawn around it?
+ *
+ * These are the structural half of that question — the half a test can answer
+ * without playing. A world that fails one of them can still produce good prose;
+ * it just cannot produce two runs that differ.
+ */
+describe('every launch world', () => {
+  for (const story of LAUNCH_CATALOG) {
+    describe(story.title, () => {
+      const steps = story.quests.flatMap((quest) =>
+        quest.steps.map((step) => ({ quest: quest.id, step })),
+      );
+      const routes = steps.flatMap(({ quest, step }) =>
+        (step.succeedWhenAny ?? []).map((route) => ({ quest, step: step.id, route })),
+      );
+
+      it('has more than one way through', () => {
+        // A world where every step has exactly one predicate is the same run
+        // for everybody, however well it is written.
+        expect(routes.length, 'no branching steps at all').toBeGreaterThanOrEqual(3);
+      });
+
+      it('never offers a route nobody could take', () => {
+        const grantable = new Set([
+          ...story.archetypes.flatMap((a) => a.startingAbilities),
+          ...story.abilities.filter((a) => a.unlockedByDefault).map((a) => a.id),
+          ...story.quests.flatMap((q) => q.steps.flatMap((s) => s.rewards.abilities)),
+        ]);
+        const obtainable = new Set([
+          ...story.archetypes.flatMap((a) => a.startingItems.map((i) => i.itemId)),
+          ...story.rules.startingItems.map((i) => i.itemId),
+          ...story.quests.flatMap((q) => q.steps.flatMap((s) => s.rewards.items.map((i) => i.itemId))),
+          ...story.locations.flatMap((l) => l.takeableItems.map((i) => i.itemId)),
+        ]);
+
+        for (const { quest, step, route } of routes) {
+          const where = `${quest}/${step}/${route.routeId}`;
+          for (const flag of route.predicate.flagsSet) {
+            if (!flag.startsWith('used:')) continue;
+            const abilityId = flag.slice('used:'.length);
+            expect(grantable.has(abilityId), `${where} needs ${abilityId}, which nobody can have`).toBe(true);
+          }
+          for (const itemId of route.predicate.hasItems) {
+            expect(obtainable.has(itemId), `${where} needs ${itemId}, which nothing gives out`).toBe(true);
+          }
+        }
+      });
+
+      it('never demands the thing it is about to hand you', () => {
+        for (const { quest, step } of steps) {
+          const granted = new Set(step.rewards.items.map((i) => i.itemId));
+          const demanded = [
+            ...(step.succeedWhen?.hasItems ?? []),
+            ...(step.succeedWhenAny ?? []).flatMap((r) => r.predicate.hasItems),
+          ];
+          for (const itemId of demanded) {
+            expect(
+              granted.has(itemId),
+              `${quest}/${step.id} can only be finished by someone who already has the ${itemId} it awards`,
+            ).toBe(false);
+          }
+        }
+      });
+
+      it('gives every archetype something the rules can see', () => {
+        for (const archetype of story.archetypes) {
+          const total =
+            Object.keys(archetype.attributeBonus).length +
+            Object.keys(archetype.skillProficiencies).length +
+            archetype.startingAbilities.length +
+            archetype.startingItems.length;
+          expect(total, `${archetype.id} grants nothing`).toBeGreaterThan(0);
+        }
+      });
+
+      it('leaves something worth taking somewhere in the world', () => {
+        if (story.items.length === 0) return;
+        const takeable = story.locations.flatMap((l) => l.takeableItems);
+        expect(takeable.length, 'nothing anywhere can be picked up or stolen').toBeGreaterThan(0);
+        for (const entry of takeable) {
+          expect(story.items.some((item) => item.id === entry.itemId), entry.itemId).toBe(true);
+          if (entry.ownerId) {
+            expect(story.characters.some((c) => c.id === entry.ownerId), entry.ownerId).toBe(true);
+          }
+        }
+      });
+
+      it('closes something when a route is taken, at least somewhere', () => {
+        // A choice that costs nothing is not a choice. Not every route needs to
+        // shut a door, but a world where none of them ever does has no branches
+        // that matter.
+        if (routes.length === 0) return;
+        expect(routes.some(({ route }) => route.closesFlags.length > 0)).toBe(true);
+      });
+    });
+  }
+});

@@ -416,6 +416,10 @@ describe('quests (spec §15.1)', () => {
     const state = baseState();
     expect(state.quests.find((q) => q.questId === 'q_red_ward')?.currentStepId).toBe('step_gate');
 
+    // The gate is four routes now, and the cheapest of them is having actually
+    // dealt with Kael and then walked through. Being in the Commons is no
+    // longer, on its own, having got past him.
+    state.flags['spoke:kael'] = true;
     state.player.locationId = 'commons';
     const transitions = advanceQuests(state, STORY);
     expect(transitions.some((t) => t.reasonCode === 'STEP_ADVANCED')).toBe(true);
@@ -776,7 +780,10 @@ describe('commitTurn', () => {
 
   it('grants quest rewards through the validated path when a step completes', () => {
     const state = baseState();
-    state.flags.met_mira = true;
+    // Past the gate, and the archivist has actually been spoken to. Both steps
+    // are routed now, so the flags are what the routes themselves set.
+    state.flags['spoke:kael'] = true;
+    state.flags['spoke:mira'] = true;
     state.player.locationId = 'commons';
     const resolution = resolveIntent({
       story: STORY,
@@ -786,7 +793,7 @@ describe('commitTurn', () => {
       seed: 's',
     });
     const result = commitTurn({ story: STORY, state, resolution, turnId: 't1' });
-    expect(result.state.flags.archive_known).toBe(true);
+    expect(result.state.flags.through_the_gate).toBe(true);
     expect(result.state.player.xp).toBeGreaterThan(0);
   });
 

@@ -249,6 +249,14 @@ const raw = {
       id: 'staff_cabins',
       takeableItems: [
         { itemId: 'good_wine', qty: 1, ownerId: null, aka: ['wine', 'the bottle'] },
+        // Four pages in Juno's handwriting, in Juno's bag, addressed to the
+        // player. Taking it is how a run gets the worst version of the truth.
+        {
+          itemId: 'the_letter',
+          qty: 1,
+          ownerId: 'juno',
+          aka: ['letter', 'the letter', 'their bag', 'juno’s bag', 'the envelope'],
+        },
       ],
       name: 'The Staff Cabins',
       shortName: 'Cabins',
@@ -871,6 +879,22 @@ const raw = {
               },
               setsFlags: ['knows_about_september', 'juno_chose_to_tell_you', 'juno_told_you_why'],
               closesFlags: [],
+            },
+            {
+              routeId: 'why_from_being_given_it',
+              label: 'Juno gave you the letter',
+              predicate: {
+                flagsSet: ['spoke:juno'],
+                flagsUnset: ['juno_cornered_publicly'],
+                hasItems: [],
+                atLocation: null,
+                completedEvents: [],
+                minRelationship: [{ characterId: 'juno', dimension: 'trust', value: 45 }],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+              },
+              setsFlags: ['knows_about_september', 'juno_chose_to_tell_you', 'was_given_the_letter'],
+              closesFlags: ['juno_knows_you_read_it'],
             },
             {
               routeId: 'why_from_cass',
