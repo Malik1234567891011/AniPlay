@@ -62,18 +62,23 @@ import type { SessionRecord, StorySignals } from './repo/types.js';
  * durable lives in the repository (§32.1).
  */
 
-const GENRES = [
-  { id: 'magic_academy', label: 'Magic academy' },
-  { id: 'romance', label: 'Romance' },
-  { id: 'dark_fantasy', label: 'Dark fantasy' },
-  { id: 'isekai', label: 'Isekai' },
-  { id: 'mystery', label: 'Mystery' },
-  { id: 'supernatural', label: 'Supernatural' },
-  { id: 'rivalry', label: 'Rivalry' },
-  { id: 'adventure', label: 'Adventure' },
-  { id: 'sci_fi', label: 'Sci-fi' },
-  { id: 'cozy', label: 'Cozy' },
-];
+/**
+ * The taste vocabulary, derived from what the catalog actually contains.
+ *
+ * It used to be a hand-written list including Isekai, Sci-fi and Cozy, none of
+ * which any world is tagged with — so a player could pick three things and be
+ * shown nothing related to any of them. An option with nothing behind it is
+ * worse than a shorter list.
+ */
+async function genresFrom(repo: AppContext['repo']): Promise<Array<{ id: string; label: string }>> {
+  const counts = new Map<string, number>();
+  for (const story of await repo.listStories()) {
+    for (const tag of story.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+  return [...counts]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([label]) => ({ id: label.toLowerCase().replace(/[^a-z0-9]+/g, '_'), label }));
+}
 
 const CONTENT_DESCRIPTORS: ContentDescriptor[] = [
   'FANTASY_VIOLENCE',
@@ -138,7 +143,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       })),
       defaultQualityTier: DEFAULT_QUALITY_TIER,
       contentDescriptors: CONTENT_DESCRIPTORS,
-      genres: GENRES,
+      genres: await genresFrom(ctx.repo),
       minSupportedAppVersion: '1.0.0',
       maintenance: { active: false, message: null },
       profile: user
@@ -157,8 +162,12 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
   // --- Discover (§33.2) ---
 
-  app.get('/v1/discover', async (request) => {
+  app.get<{ Querystring: { tastes?: string } }>('/v1/discover', async (request) => {
     const user = await optionalUser(ctx, request);
+    const tastes = (request.query.tastes ?? '')
+      .split(',')
+      .map((tag) => tag.trim().toLowerCase())
+      .filter(Boolean);
     const stories = await ctx.repo.listStories();
     const saved = user ? await ctx.repo.getSaves(user.userId) : [];
     const hidden = user ? await ctx.repo.getHidden(user.userId) : [];
@@ -177,7 +186,35 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       rails.push({ id: 'hero', title: 'Featured', kind: 'HERO', subtitle: null, stories: [ranked[0]] });
     }
     if (ranked.length > 0) {
-      rails.push({ id: 'for_you', title: 'For you', kind: 'FOR_YOU', subtitle: 'Based on what you picked', stories: ranked });
+      // "Based on what you picked" was the same array as Trending, in the same
+      // order, and the tastes the onboarding collected were never sent
+      // anywhere. Either the rail means something or it should not say that.
+      const matched = (summary: (typeof ranked)[number]): string[] =>
+        stories
+          .find((s) => s.storyId === summary.storyId)
+          ?.tags.filter((tag) => tastes.includes(tag.toLowerCase())) ?? [];
+
+      const forYou =
+        tastes.length > 0
+          ? [...ranked]
+              .filter((s) => matched(s).length > 0)
+              .sort((a, b) => matched(b).length - matched(a).length)
+          : [];
+
+      // Named as the catalog spells them, not as the query did.
+      const because = [...new Set(forYou.flatMap(matched))].slice(0, 3);
+
+      rails.push(
+        forYou.length > 0
+          ? {
+              id: 'for_you',
+              title: 'For you',
+              kind: 'FOR_YOU',
+              subtitle: `Because you picked ${because.join(', ')}`,
+              stories: forYou,
+            }
+          : { id: 'for_you', title: 'Everything', kind: 'FOR_YOU', subtitle: null, stories: ranked },
+      );
       rails.push({ id: 'trending', title: 'Trending now', kind: 'TRENDING', subtitle: null, stories: ranked });
       rails.push({
         id: 'new',

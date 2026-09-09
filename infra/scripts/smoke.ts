@@ -189,6 +189,7 @@ async function main(): Promise<void> {
     let anyInventoryMoved = false;
     let anyCheckRan = false;
     let anyAbilityUsed = false;
+    let triedToStealSomewhereWithSomething = false;
 
     const probes = quick ? probesFor(story).slice(0, 5) : probesFor(story);
 
@@ -406,6 +407,12 @@ async function main(): Promise<void> {
         }
       }
 
+      // A theft is only evidence about theft if there was something to take.
+      if (probe.intent === 'theft') {
+        const here = story.locations.find((l) => l.id === previous.locationId);
+        if ((here?.takeableItems ?? []).length > 0) triedToStealSomewhereWithSomething = true;
+      }
+
       previous = detail.scene;
       previousSheet = sheet;
     }
@@ -418,10 +425,14 @@ async function main(): Promise<void> {
         note('(run)', 'NO_RELATIONSHIP_MOVEMENT', 'nobody felt differently about the player all run');
       }
       if (story.quests.length > 0 && !anyQuestMoved) {
-        note('(run)', 'NO_QUEST_MOVEMENT', 'no objective responded to anything the player did');
+        const waiting = story.quests
+          .filter((q) => q.startsActive)
+          .map((q) => `${q.id}: ${q.steps[0]?.playerCopy ?? ''}`)
+          .join(' | ');
+        note('(run)', 'NO_QUEST_MOVEMENT', `no objective responded to anything the player did. Waiting on — ${waiting}`);
       }
-      if (story.items.length > 0 && !anyInventoryMoved) {
-        note('(run)', 'NO_INVENTORY_MOVEMENT', 'the player stole something and carried nothing away');
+      if (triedToStealSomewhereWithSomething && !anyInventoryMoved) {
+        note('(run)', 'NO_INVENTORY_MOVEMENT', 'the player took something from a room that had something');
       }
       void anyAbilityUsed;
       void previousSheet;

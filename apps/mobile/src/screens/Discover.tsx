@@ -39,7 +39,7 @@ import type { RootNavigation } from '../navigation.jsx';
  * a premium storefront, not a feed of chatbot cards.
  */
 export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
-  const { wallet, refreshWallet, offline } = useStore();
+  const { wallet, refreshWallet, offline, tastes } = useStore();
   const [data, setData] = useState<DiscoverResponse | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,13 +47,13 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
 
   const load = useCallback(async () => {
     try {
-      setData(await api.discover());
+      setData(await api.discover(tastes));
       setError(null);
       void refreshWallet();
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : 'Could not load worlds.');
     }
-  }, [refreshWallet]);
+  }, [refreshWallet, tastes]);
 
   useEffect(() => {
     void load();

@@ -1192,3 +1192,55 @@ describe('input moderation', () => {
     expect(await ctx.repo.listTurns(sessionId)).toHaveLength(1);
   });
 });
+
+/**
+ * OB-03 / §7.4 — "For you" has to be for you.
+ *
+ * The rail said "Based on what you picked" and was the same array as
+ * Trending, in the same order, while the tastes onboarding collected were
+ * stored on the device and sent nowhere.
+ */
+describe('taste-aware discover', () => {
+  const rail = (body: { rails: Array<{ id: string }> }, id: string) =>
+    body.rails.find((r) => r.id === id) as {
+      id: string;
+      title: string;
+      subtitle: string | null;
+      stories: Array<{ storyId: string }>;
+    };
+
+  it('offers only tastes the catalog can answer', async () => {
+    const bootstrap = (await app.inject({ method: 'GET', url: '/v1/bootstrap' })).json();
+    const stories = await ctx.repo.listStories();
+    const authored = new Set(stories.flatMap((s) => s.tags));
+    expect(bootstrap.genres.length).toBeGreaterThan(0);
+    for (const genre of bootstrap.genres) {
+      expect(authored.has(genre.label), `${genre.label} matches no world`).toBe(true);
+    }
+  });
+
+  it('puts what you picked first, and says why', async () => {
+    const response = await app.inject({ method: 'GET', url: '/v1/discover?tastes=Romance' });
+    const forYou = rail(response.json(), 'for_you');
+
+    expect(forYou.subtitle).toContain('Romance');
+    expect(forYou.stories.length).toBeGreaterThan(0);
+    const stories = await ctx.repo.listStories();
+    for (const summary of forYou.stories) {
+      const story = stories.find((s) => s.storyId === summary.storyId)!;
+      expect(story.tags, `${story.title} is in a Romance rail`).toContain('Romance');
+    }
+  });
+
+  it('does not claim to be personalised when nothing was picked', async () => {
+    const forYou = rail((await app.inject({ method: 'GET', url: '/v1/discover' })).json(), 'for_you');
+    expect(forYou.subtitle).toBeNull();
+    expect(forYou.title).not.toBe('For you');
+  });
+
+  it('hides nothing — an unmatched taste still leaves the catalog reachable', async () => {
+    const body = (await app.inject({ method: 'GET', url: '/v1/discover?tastes=Cozy' })).json();
+    const all = await ctx.repo.listStories();
+    expect(rail(body, 'trending').stories).toHaveLength(all.length);
+  });
+});

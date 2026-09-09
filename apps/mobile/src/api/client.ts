@@ -191,8 +191,10 @@ export class ApiClient {
     return this.#request('GET', '/v1/bootstrap');
   }
 
-  discover(): Promise<DiscoverResponse> {
-    return this.#request('GET', '/v1/discover');
+  /** Tastes ride along rather than being stored, so this works signed out. */
+  discover(tastes: readonly string[] = []): Promise<DiscoverResponse> {
+    const query = tastes.length > 0 ? `?tastes=${encodeURIComponent(tastes.join(','))}` : '';
+    return this.#request('GET', `/v1/discover${query}`);
   }
 
   search(query: string): Promise<{ results: StorySummary[] }> {

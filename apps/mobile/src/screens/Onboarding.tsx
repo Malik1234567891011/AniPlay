@@ -112,13 +112,13 @@ export function AgeGateScreen(): React.JSX.Element {
 
 /** OB-03 — optional, skippable, one screen. Must not delay play (§6.2). */
 export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Element {
-  const { setTastes } = useStore();
+  const { setTastes, bootstrap } = useStore();
   const [picked, setPicked] = useState<string[]>([]);
 
-  const genres = [
-    'Magic academy', 'Romance', 'Dark fantasy', 'Isekai', 'Mystery',
-    'Supernatural', 'Rivalry', 'Adventure', 'Sci-fi', 'Cozy',
-  ];
+  // From the catalog, not from a hand-written list. The old one offered
+  // Isekai, Sci-fi and Cozy, and no world is tagged with any of them — three
+  // picks could return nothing at all.
+  const genres = (bootstrap?.genres ?? []).map((genre) => genre.label);
 
   const toggle = (genre: string): void => {
     setPicked((current) =>
@@ -141,7 +141,8 @@ export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Eleme
         <Stack gap={spacing.sm} style={{ paddingTop: spacing.xxxl }}>
           <Txt variant="display">Pick anything you'd actually play.</Txt>
           <Txt variant="body" color={colors.text.secondary}>
-            Up to five. You can change your mind later, and skipping is fine.
+            Up to five. This decides what the top of Discover shows you — nothing is hidden either way, and
+            you can change it whenever you like. Skipping is fine.
           </Txt>
         </Stack>
 
