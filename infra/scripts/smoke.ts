@@ -388,7 +388,8 @@ async function main(): Promise<void> {
 
       // --- Memory ----------------------------------------------------------
 
-      if (probe.intent === 'return' && violenceAgainst.size > 0) {
+      const attackedAndPresent = [...violenceAgainst].some((id) => present.has(id) || wasPresent.has(id));
+      if (probe.intent === 'return' && attackedAndPresent) {
         const remembered =
           /\b(hit|struck|attack|hurt|said|told|called|humiliat|angry|furious|forgave|forgive|wary|trust)\b/i.test(
             prose,

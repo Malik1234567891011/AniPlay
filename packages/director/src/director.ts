@@ -240,6 +240,16 @@ function dialogueInstruction(character: PresentCharacterContext, context: TurnCo
     `Their goal right now: ${character.def.goals[0] ?? 'get on with their day'}.`,
   ];
 
+  // The thing an NPC is most likely to be written as having forgotten, stated
+  // as an instruction rather than left in a list of retrieved facts for the
+  // writer to notice. Turns later, and in a different room, this still holds.
+  if (context.state.flags[`attacked:${character.def.id}`]) {
+    parts.push(
+      `The player attacked ${character.def.name} earlier. They have not forgotten and do not behave as ` +
+        'though it did not happen. This governs their first line, whatever else is going on.',
+    );
+  }
+
   if (character.def.boundaries.length > 0) {
     parts.push(`They will not: ${character.def.boundaries.join('; ')}.`);
   }

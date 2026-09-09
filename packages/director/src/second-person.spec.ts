@@ -46,3 +46,76 @@ describe('narratesPlayerInThirdPerson', () => {
     expect(narratesPlayerInThirdPerson('You lunge forward.', 'Robin Vale')).toBe(false);
   });
 });
+
+/**
+ * The two problems that share the NAME_IDENTITY_DRIFT code are not the same
+ * repair: the player narrated in third person is rewritten, and a block spoken
+ * by somebody who does not exist is dropped. Clearing the code wholesale after
+ * the rewrite kept `speakerId: "narrator"` in the turn.
+ */
+describe('repairing voice without swallowing an unknown speaker', () => {
+  it('rewrites the one and drops the other', async () => {
+    const { NINTH_ARCHIVE } = await import('@aniplay/test-fixtures');
+    const { createInitialState, resolveIntent } = await import('@aniplay/engine');
+    const { RuleBasedIntentParser } = await import('./parser.js');
+    const { buildTurnContext } = await import('./context.js');
+    const { validateNarrative, repairNarrative } = await import('./validator.js');
+
+    const state = createInitialState({
+      sessionId: 's',
+      story: NINTH_ARCHIVE,
+      identity: {
+        displayName: 'Robin Vale',
+        pronouns: 'they/them',
+        ageBand: null,
+        archetypeId: null,
+        worldKnowsAboutYou: '',
+        advanced: {},
+        portraitAssetId: null,
+      },
+    });
+    const intent = new RuleBasedIntentParser().parseSync('I look around', {
+      story: NINTH_ARCHIVE,
+      state,
+      intentId: 'i',
+    });
+    const resolution = resolveIntent({ story: NINTH_ARCHIVE, state, intent, turnId: 't', seed: 's' });
+    const context = buildTurnContext({
+      story: NINTH_ARCHIVE,
+      state,
+      resolution,
+      tier: 'VIVID',
+      memories: [],
+      recentTurns: [],
+      actionText: 'I look around',
+      playerDialogue: [],
+    });
+
+    const turn = {
+      schemaVersion: '1.0' as const,
+      sceneSummary: 'x',
+      blocks: [
+        {
+          type: 'NARRATION' as const,
+          speakerId: 'narrator',
+          text: 'The light over the arch is red.',
+          visibility: 'GROUP' as const,
+          voiceEligible: false,
+        },
+        {
+          type: 'NARRATION' as const,
+          speakerId: null,
+          text: 'Robin steps under the arch.',
+          visibility: 'GROUP' as const,
+          voiceEligible: false,
+        },
+      ],
+      stateDeltaPresentation: [],
+      endStatePrompt: 'x',
+    };
+
+    const repaired = repairNarrative(turn, validateNarrative({ context, turn }), 'Robin Vale');
+    expect(repaired.blocks.some((b) => b.speakerId === 'narrator')).toBe(false);
+    expect(repaired.blocks.map((b) => b.text).join(' ')).toContain('You step under the arch');
+  });
+});

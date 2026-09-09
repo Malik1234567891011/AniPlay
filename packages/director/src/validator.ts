@@ -325,10 +325,13 @@ export function repairNarrative(
   // pronoun would cost the player the beat. Do this before anything is dropped.
   let repaired = turn;
   if (playerName) {
+    // Only the voice ones. `NAME_IDENTITY_DRIFT` also covers a block spoken by
+    // somebody who does not exist, and that block has to be *dropped* — filtering
+    // the whole code out here quietly kept `speakerId: "narrator"` in the turn.
+    const isVoice = (v: ConsistencyViolation): boolean =>
+      v.code === 'NAME_IDENTITY_DRIFT' && v.description.includes('instead of "you"');
     const voiceErrors = new Set(
-      report.violations
-        .filter((v) => v.code === 'NAME_IDENTITY_DRIFT' && typeof v.blockIndex === 'number')
-        .map((v) => v.blockIndex as number),
+      report.violations.filter((v) => isVoice(v) && typeof v.blockIndex === 'number').map((v) => v.blockIndex as number),
     );
     if (voiceErrors.size > 0) {
       repaired = {
@@ -339,9 +342,7 @@ export function repairNarrative(
       };
       report = {
         ...report,
-        violations: report.violations.filter(
-          (v) => !(v.code === 'NAME_IDENTITY_DRIFT' && voiceErrors.has(v.blockIndex as number)),
-        ),
+        violations: report.violations.filter((v) => !isVoice(v)),
       };
     }
   }
