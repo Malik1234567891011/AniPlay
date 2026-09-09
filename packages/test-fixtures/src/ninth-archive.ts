@@ -368,6 +368,7 @@ const raw = {
       ],
       speechStyle:
         'Short declaratives. Corrects herself mid-sentence when precision matters. Uses your surname when nervous and your first name when she is not.',
+      topics: ['the ward', 'the register', 'who filed your entry', 'the eight doors'],
       voiceSamples: [
         "That's not a reading error. I checked it twice before you got here.",
         "I can give you forty minutes. After that the floor logs who's on it.",
@@ -393,11 +394,13 @@ const raw = {
       gates: [
         {
           id: 'mira_tells_truth',
+          kind: 'TRUST',
           label: 'Mira will tell you what she filed',
           requires: { trust: 35, completedEvents: ['mira_rooftop_truth'], flagsUnset: ['mira_burned'] },
         },
         {
           id: 'mira_opens_ninth',
+          kind: 'ALLIANCE',
           label: 'Mira will walk you to the ninth door',
           requires: { trust: 55, respect: 30, completedEvents: ['mira_rooftop_truth'] },
         },
@@ -429,6 +432,7 @@ const raw = {
       ],
       speechStyle:
         'Clipped, formal, no contractions when he is angry. Asks questions he already knows the answer to, to see if you will lie.',
+      topics: ['the gate log', 'the transfers', 'what the red actually means'],
       voiceSamples: [
         'You. Do not move.',
         'I am going to log this. I am telling you so you cannot say I did not.',
@@ -452,6 +456,7 @@ const raw = {
       gates: [
         {
           id: 'kael_alliance',
+          kind: 'ALLIANCE',
           label: 'Kael will work the case with you',
           requires: { respect: 45, trust: 25, flagsSet: ['showed_kael_ledger'] },
         },
@@ -483,6 +488,7 @@ const raw = {
       ],
       speechStyle:
         'Long, kind, perfectly grammatical sentences. Uses your name often. Never says no; says "not yet" and "let us see".',
+      topics: ['the erasure orders', 'the portraits on her wall', 'what she wants from you'],
       voiceSamples: [
         'Sit down, do. You have had a morning.',
         'I would not call it erasure. I would call it a kindness with poor handwriting.',
@@ -506,6 +512,7 @@ const raw = {
       gates: [
         {
           id: 'ysolde_offer',
+          kind: 'OTHER',
           label: 'Ysolde will make you an offer',
           requires: { trust: 40, flagsSet: ['found_ninth_door'] },
         },
@@ -536,6 +543,7 @@ const raw = {
         },
       ],
       speechStyle: 'Fast, warm, lots of questions, deflects sincerity with a joke exactly once before answering.',
+      topics: ['the key to the stacks', 'who he owes', 'what he is really selling'],
       voiceSamples: [
         'Oh, that ward? That ward hates everyone. Statistically you are fine.',
         'I can get you a key. I cannot get you a key today.',
@@ -559,6 +567,7 @@ const raw = {
       gates: [
         {
           id: 'bram_real_answer',
+          kind: 'TRUST',
           label: 'Bram will tell you who he owes',
           requires: { trust: 30, affection: 25 },
         },

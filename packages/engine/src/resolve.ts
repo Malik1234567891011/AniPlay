@@ -11,25 +11,18 @@ import type {
   StoryVersion,
 } from '@aniplay/contracts';
 import { SeededRng } from './rng.js';
-import {
-  attributeModifier,
-  dcBandLabel,
-  isSuccess,
-  outcomeLabel,
-  resolveCheck,
-  DC_BANDS,
-} from './check.js';
+import { attributeModifier, isSuccess, resolveCheck, DC_BANDS } from './check.js';
 import {
   charactersPresent,
   countItem,
   effectiveAttribute,
-  effectiveModifier,
   equipmentSkillModifier,
   getRelationship,
 } from './state.js';
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
 import { buildEncounter, canSpend, newTurnEconomy, spend, type ActionWeight, type TurnEconomy } from './combat.js';
+import { applyMutations, validateMutations } from './mutations.js';
 
 /**
  * Spec §32.4 `resolveIntent` — the deterministic core.
@@ -213,6 +206,11 @@ export function resolveIntent(options: ResolveOptions): Resolution {
     });
   }
 
+  // Opportunities describe what the player can do *next*, so they are computed
+  // against the world as this turn leaves it — otherwise a turn that moves you
+  // would offer the exits of the room you just left.
+  const projected = projectState(state, story, mutations);
+
   return {
     schemaVersion: '1.0',
     turnId,
@@ -224,9 +222,23 @@ export function resolveIntent(options: ResolveOptions): Resolution {
     observableFacts,
     privateFacts,
     timeAdvancedMinutes: totalMinutes,
-    newOpportunities: buildOpportunities(state, story),
+    newOpportunities: buildOpportunities(projected, story),
     rngSeedHash: rng.seedHash,
   };
+}
+
+/**
+ * Applies this turn's mutations to a throwaway copy so callers can see the world
+ * as the turn leaves it. Presentation-only: `commitTurn` remains the sole path
+ * to durable state.
+ */
+export function projectState(
+  state: GameState,
+  story: StoryVersion,
+  mutations: readonly StateMutation[],
+): GameState {
+  const { accepted } = validateMutations(mutations, state, story);
+  return applyMutations(state, story, accepted);
 }
 
 // ---------------------------------------------------------------------------
@@ -260,6 +272,7 @@ function resolveAction(args: ResolveActionArgs): ActionOutcome {
     case 'rest':
       return resolveRest(args);
     case 'speak':
+      return resolveSpeak(args);
     case 'wait':
       return resolveFreeAction(args);
     default:
@@ -267,13 +280,24 @@ function resolveAction(args: ResolveActionArgs): ActionOutcome {
   }
 }
 
-/** Emits a rejection that the writer must narrate in fiction, never as an error. */
-function refusal(action: IntentAction, reason: string, playerFacing: string): ActionOutcome {
+/**
+ * Emits a rejection the writer must narrate in fiction, never as an error.
+ *
+ * `inWorld` is a fact any observer could perceive and is safe to render.
+ * `directive` is an instruction to the writer and must never reach the player,
+ * which is why the two are separate fields rather than one blended string.
+ */
+function refusal(
+  action: IntentAction,
+  reason: string,
+  inWorld: string,
+  directive: string,
+): ActionOutcome {
   return {
     checks: [],
     mutations: [],
-    observableFacts: [],
-    privateFacts: [{ visibility: 'SELF', fact: playerFacing }],
+    observableFacts: [inWorld],
+    privateFacts: [{ visibility: 'SELF', fact: directive }],
     timeCategory: 'INSTANT',
     overrideMinutes: 0,
     normalized: { verb: action.verb, status: 'REJECTED', reason },
@@ -288,14 +312,16 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     return refusal(
       action,
       'UNKNOWN_ABILITY',
-      `You reach for a power you do not have. Narrate the attempt failing to catch, without naming game systems.`,
+      'You reach for something that is not yours to reach for, and nothing answers.',
+      'The player invoked a power that does not exist in this world. Narrate the reach and the silence. Do not name game systems.',
     );
   }
   if (!state.player.abilities.includes(ability.id)) {
     return refusal(
       action,
       'ABILITY_LOCKED',
-      `${ability.name} is beyond you right now. Narrate the reach and the shortfall.`,
+      `${ability.name} is beyond you. The shape of it is there; the skill is not.`,
+      `${ability.name} is not unlocked. Narrate the shortfall. Do not let it work.`,
     );
   }
 
@@ -304,7 +330,8 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     return refusal(
       action,
       'ABILITY_ON_COOLDOWN',
-      `${ability.name} has not settled since you last used it. Narrate it refusing to answer yet.`,
+      `${ability.name} has not settled since you last used it.`,
+      `${ability.name} is on cooldown. Narrate it refusing to answer yet.`,
     );
   }
 
@@ -315,7 +342,8 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
       return refusal(
         action,
         'INSUFFICIENT_RESOURCE',
-        `You lack the ${def?.name ?? cost.resourceId} for ${ability.name}. Narrate the power guttering out.`,
+        `You do not have the ${(def?.name ?? cost.resourceId).toLowerCase()} left for ${ability.name}.`,
+        'The cost could not be paid. Narrate the power guttering out before it forms.',
       );
     }
   }
@@ -358,8 +386,12 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
       allowsPartial: true,
     });
     checks.push(check);
+    // Perceptual, not mechanical: the check module already carries the outcome,
+    // and prose that reads like a rules readout breaks the fiction.
     observableFacts.push(
-      `${ability.name} resolves as ${outcomeLabel(check.outcome).toLowerCase()} against a ${dcBandLabel(dc).toLowerCase()} difficulty.`,
+      isSuccess(check.outcome)
+        ? `${ability.name} takes hold.`
+        : `${ability.name} slips away from you.`,
     );
 
     if (!isSuccess(check.outcome)) {
@@ -404,14 +436,16 @@ function resolveItemUse(args: ResolveActionArgs): ActionOutcome {
     return refusal(
       action,
       'UNKNOWN_ITEM',
-      'You reach for something you are not carrying. Narrate the empty hand.',
+      'You reach for something you are not carrying.',
+      'The named item does not exist in this world. Narrate the empty hand. Do not invent it.',
     );
   }
   if (countItem(state, item.id) <= 0) {
     return refusal(
       action,
       'ITEM_NOT_HELD',
-      `You do not have ${item.name}. Narrate the absence, do not invent one.`,
+      `You do not have ${item.name}.`,
+      `The player does not hold ${item.name}. Narrate the absence. Do not put it in their hand.`,
     );
   }
 
@@ -472,7 +506,8 @@ function resolveTravel(args: ResolveActionArgs): ActionOutcome {
     return refusal(
       action,
       'UNKNOWN_LOCATION',
-      'That place is not somewhere you can reach from here. Narrate the player reconsidering.',
+      'There is nowhere by that name to go from here.',
+      'The destination does not exist. Narrate the player reconsidering.',
     );
   }
   if (destination.id === state.player.locationId) {
@@ -492,14 +527,16 @@ function resolveTravel(args: ResolveActionArgs): ActionOutcome {
     return refusal(
       action,
       'NO_ROUTE',
-      `There is no direct way from here to ${destination.name}. Narrate the obstacle, in fiction.`,
+      `There is no way to ${destination.name} from here.`,
+      'No authored route exists. Narrate the obstacle in fiction; do not teleport the player.',
     );
   }
   if (edge.lockedByFlag && !state.flags[edge.lockedByFlag]) {
     return refusal(
       action,
       'ROUTE_LOCKED',
-      `The way to ${destination.name} is closed to you for now. Narrate what blocks it.`,
+      `The way to ${destination.name} is closed to you.`,
+      'The route is locked behind a flag the player has not set. Narrate what blocks it.',
     );
   }
 
@@ -535,7 +572,8 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
     return refusal(
       action,
       'UNKNOWN_TARGET',
-      'There is no one here to say that to. Narrate the words landing on empty air.',
+      'There is no one here to say that to.',
+      'The target does not exist. Narrate the words landing on empty air.',
     );
   }
 
@@ -544,7 +582,8 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
     return refusal(
       action,
       'TARGET_ABSENT',
-      `${character.name} is not here. Narrate the absence rather than inventing their presence.`,
+      `${character.name} is not here.`,
+      `${character.name} is not in this location. Narrate the absence. Do not give them a line.`,
     );
   }
 
@@ -602,9 +641,7 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
     if (clamped.clampReason) clampNotes.push(`${dimension}: ${clamped.clampReason}`);
   }
 
-  const observableFacts = [
-    `${character.name} reacts to being ${action.verb === 'persuade' ? 'persuaded' : action.verb === 'deceive' ? 'deceived' : 'threatened'}: ${outcomeLabel(check.outcome).toLowerCase()}.`,
-  ];
+  const observableFacts: string[] = [];
 
   const privateFacts: PrivateFact[] = [];
   if (!isSuccess(check.outcome)) {
@@ -678,12 +715,18 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
   const target = action.targets.find((t) => t.entityType === 'npc');
   const character = story.characters.find((c) => c.id === target?.entityId);
   if (!character) {
-    return refusal(action, 'UNKNOWN_TARGET', 'There is no one there to strike. Narrate the swing meeting air.');
+    return refusal(
+      action,
+      'UNKNOWN_TARGET',
+      'There is no one there to strike.',
+      'The target does not exist. Narrate the swing meeting air.',
+    );
   }
   if (!story.rules.allowsCombat) {
     return refusal(
       action,
       'COMBAT_DISABLED',
+      'Whatever you were about to do, you do not do it.',
       'This world does not resolve conflicts with violence. Narrate the impulse and what stops it.',
     );
   }
@@ -780,6 +823,32 @@ function resolveRest(args: ResolveActionArgs): ActionOutcome {
   };
 }
 
+/**
+ * Speaking is free, but only to someone who is actually here. Addressing an
+ * absent NPC is refused so the writer cannot conjure them into the room.
+ */
+function resolveSpeak(args: ResolveActionArgs): ActionOutcome {
+  const { story, state, action } = args;
+  const target = action.targets.find((t) => t.entityType === 'npc');
+
+  if (target) {
+    const character = story.characters.find((c) => c.id === target.entityId);
+    const present = charactersPresent(state).some((c) => c.characterId === target.entityId);
+    if (character && !present) {
+      const runtime = state.characters.find((c) => c.characterId === character.id);
+      const whereabouts = story.locations.find((l) => l.id === runtime?.locationId);
+      return refusal(
+        action,
+        'TARGET_ABSENT',
+        `${character.name} is not here.`,
+        `${character.name} is${whereabouts ? ` at ${whereabouts.name}` : ' elsewhere'} at this hour. Narrate the absence. Do not put them in the scene or give them a line.`,
+      );
+    }
+  }
+
+  return resolveFreeAction(args);
+}
+
 function resolveFreeAction(args: ResolveActionArgs): ActionOutcome {
   const { action } = args;
   return {
@@ -813,7 +882,9 @@ function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
     allowsPartial: PARTIAL_CAPABLE.has(action.verb),
   });
 
-  const observableFacts = [`${labelForVerb(action.verb)}: ${outcomeLabel(check.outcome).toLowerCase()}.`];
+  // The check reveal module carries the outcome; duplicating it in prose reads
+  // like a rules readout (§10.6).
+  const observableFacts: string[] = [];
   const privateFacts: PrivateFact[] = isSuccess(check.outcome)
     ? []
     : [

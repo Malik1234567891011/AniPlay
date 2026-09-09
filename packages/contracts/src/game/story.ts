@@ -152,6 +152,11 @@ export const RelationshipGate = z
   .object({
     id: z.string(),
     label: z.string(),
+    /**
+     * What the gate permits. The consistency validator keys off this rather than
+     * the gate's id, so protection does not depend on how a creator named it.
+     */
+    kind: z.enum(['ROMANCE', 'TRUST', 'ALLIANCE', 'OTHER']).default('OTHER'),
     requires: z
       .object({
         trust: z.number().int().optional(),
@@ -195,6 +200,12 @@ export const CharacterDef = z
       )
       .default([]),
     speechStyle: z.string().default(''),
+    /**
+     * Noun phrases this character can be asked about, used verbatim in suggested
+     * actions ("Ask Mira about the ward."). Authored rather than derived, because
+     * text assembled from quest copy is rarely grammatical.
+     */
+    topics: z.array(z.string()).default([]),
     /** Short, quotable lines the writer may draw on to keep voice stable. */
     voiceSamples: z.array(z.string()).default([]),
     appearance: z.string().default(''),
