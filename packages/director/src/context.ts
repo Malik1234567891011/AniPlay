@@ -10,6 +10,7 @@ import type {
 } from '@aniplay/contracts';
 import { QUALITY_TIERS } from '@aniplay/contracts';
 import {
+  abandonedObjectiveNote,
   charactersPresent,
   crewFlag,
   crewRoster,
@@ -84,6 +85,11 @@ export interface TurnContext {
 
   // Layer 4 — objectives and standing.
   readonly objective: string | null;
+  /**
+   * Present when the authored trajectory and the actual one have come apart.
+   * Not an instruction to herd the player back — the opposite.
+   */
+  readonly abandonedObjective: string | null;
   readonly activeQuests: Array<{ id: string; title: string; step: string; directorNotes: string }>;
   readonly factions: Array<{ name: string; rank: string; reputation: number }>;
 
@@ -303,6 +309,8 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
         .map((bond) => story.characters.find((c) => c.id === bond.characterId)?.name ?? bond.characterId),
     })),
     objective: topObjective(state, story),
+    // §16.8 — set when the player has walked away from the authored thread.
+    abandonedObjective: abandonedObjectiveNote(state, story),
     activeQuests,
     factions: state.factions.map((f) => ({
       name: story.factions.find((d) => d.id === f.factionId)?.name ?? f.factionId,

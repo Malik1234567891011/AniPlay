@@ -118,6 +118,10 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   // just authored something rather than attempted it. A declarative sentence
   // about themselves or their past is theirs to state; the world adapts to it
   // instead of rolling a die against it.
+  if (context.abandonedObjective) {
+    context.resolution.privateFacts.push({ visibility: 'SELF', fact: context.abandonedObjective });
+  }
+
   const canon = classifyClaim(actionText, { story, state, turnIndex: state.turnIndex });
   const canonNote = directorNoteFor(canon, story);
   if (canonNote) {

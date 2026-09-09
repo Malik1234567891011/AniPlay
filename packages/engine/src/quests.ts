@@ -361,3 +361,62 @@ export function topObjective(state: GameState, story: StoryVersion): string | nu
   const step = top.def.steps.find((s) => s.id === top.progress.currentStepId);
   return step?.playerCopy ?? top.def.summary;
 }
+
+/**
+ * Whether the player has walked away from what the story wanted.
+ *
+ * Spec §16.8 — the objective strip is an instruction, and an instruction that
+ * has stopped being relevant is the game telling a player to go back to the
+ * content. A run that left the academy still read "Get past Kael at the gate";
+ * one that quit the basketball team still read "Show Coach Torakawa one thing
+ * you can actually do".
+ *
+ * Deliberately observational rather than punitive. It does not fail the quest
+ * or hide it — the player may well go back, and deciding for them is the same
+ * mistake from the other side. It reports that the authored trajectory and the
+ * actual one have come apart, so the director can plan for the story the player
+ * is in rather than the one that was written.
+ */
+export function objectiveIsAbandoned(state: GameState, story: StoryVersion): boolean {
+  const active = state.quests.find((p) => p.status === 'ACTIVE');
+  if (!active) return false;
+  const def = story.quests.find((q) => q.id === active.questId);
+  if (!def) return false;
+
+  // A quest with no place attached cannot be walked away from.
+  const places = def.involvedLocationIds;
+  if (places.length === 0) return false;
+
+  const here = state.player.locationId;
+  if (places.includes(here)) return false;
+
+  // Still one move away is not abandonment; it is being on the way.
+  const adjacent = story.locations.find((l) => l.id === here)?.connections.map((c) => c.to) ?? [];
+  if (places.some((p) => adjacent.includes(p))) return false;
+
+  return true;
+}
+
+/**
+ * What the director should be told when the two trajectories have parted.
+ *
+ * Never an instruction to herd the player back. The authored content is
+ * pressure, characters, facts and possibilities — not a route that has to be
+ * restored.
+ */
+export function abandonedObjectiveNote(state: GameState, story: StoryVersion): string | null {
+  if (!objectiveIsAbandoned(state, story)) return null;
+
+  const active = state.quests.find((p) => p.status === 'ACTIVE');
+  const def = story.quests.find((q) => q.id === active?.questId);
+  if (!def) return null;
+
+  return (
+    `The player has left what this story was about. The active objective — "${def.title}" — is somewhere ` +
+    'they are not, and they have shown no sign of going back. Do not steer them toward it, do not have ' +
+    'anyone summon them, and do not invent a reason they must return. Play the story they are actually in: ' +
+    'where they are now, who is here, what this costs them, and what happens next because of the choice ' +
+    'they made. The people and pressures from the old thread still exist and may come and find them, on ' +
+    'their own terms, later.'
+  );
+}
