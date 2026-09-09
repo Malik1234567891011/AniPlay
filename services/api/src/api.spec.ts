@@ -364,6 +364,65 @@ describe('wallet (spec §20.7, §20.8)', () => {
   });
 });
 
+describe('forking (spec §11.7, §20.10)', () => {
+  it('gives the branch the history that led to it', async () => {
+    const { sessionId, revision } = await startSession();
+    await playTurn(sessionId, revision, 'I show Kael the acceptance letter.');
+
+    const before = await ctx.wallet.getBalance(GUEST);
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/forks`,
+      headers: auth,
+      payload: { atTurnIndex: 1 },
+    });
+
+    expect(response.statusCode).toBe(201);
+    const forkId = response.json().session.sessionId as string;
+    expect(await ctx.wallet.getBalance(GUEST)).toBe(before - response.json().creditsCharged);
+
+    // A fork with no transcript opens on an empty screen in the middle of a
+    // story, which reads as starting over rather than branching.
+    const branch = await app.inject({ method: 'GET', url: `/v1/sessions/${forkId}`, headers: auth });
+    expect(branch.json().recentTurns.length).toBeGreaterThan(0);
+
+    // Its turns belong to it, and are not the parent's records under another name.
+    for (const turn of branch.json().recentTurns) {
+      expect(turn.sessionId).toBe(forkId);
+    }
+    const parentTurnIds = new Set(
+      (await ctx.repo.listTurns(sessionId)).map((turn) => turn.turnId),
+    );
+    for (const turn of await ctx.repo.listTurns(forkId)) {
+      expect(parentTurnIds.has(turn.turnId)).toBe(false);
+    }
+
+    // And the original is untouched.
+    const original = await app.inject({ method: 'GET', url: `/v1/sessions/${sessionId}`, headers: auth });
+    expect(original.statusCode).toBe(200);
+    expect(original.json().recentTurns.length).toBeGreaterThan(0);
+  });
+
+  it('charges nothing when the player cannot afford it', async () => {
+    const { sessionId } = await startSession();
+    // Spend the wallet down below the fork price.
+    const balance = await ctx.wallet.getBalance(GUEST);
+    await ctx.wallet.chargeFork(GUEST, sessionId, balance);
+
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/forks`,
+      headers: auth,
+      payload: { atTurnIndex: 0 },
+    });
+
+    expect(response.statusCode).toBe(402);
+    expect(response.json().code).toBe('INSUFFICIENT_CREDITS');
+    expect(response.json().details.shortfall).toBeGreaterThan(0);
+    expect(await ctx.wallet.getBalance(GUEST)).toBe(0);
+  });
+});
+
 describe('turns (spec §17.3, §17.4)', () => {
   it('never sends a player the numbers their world hides (spec §12.7)', async () => {
     const { sessionId, revision } = await startSession();

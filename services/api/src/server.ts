@@ -545,9 +545,24 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       await ctx.repo.createSession(record, forked);
       await ctx.repo.appendMemories(newSessionId, await ctx.repo.listMemories(session.sessionId));
 
+      // Spec §11.7 — a fork is the same run taking a different turn from here,
+      // so it inherits everything up to the fork point. Without the transcript
+      // the branch opens with an empty screen in the middle of a story and
+      // reads as starting over, which is not what was paid for.
+      const inherited = (await ctx.repo.listTurns(session.sessionId))
+        .filter((turn) => turn.turnIndex <= record.forkedAtTurnIndex!)
+        .map((turn, index) => ({
+          ...turn,
+          // New ids: a turn is addressed globally, and two sessions cannot
+          // share one record.
+          turnId: `turn_${newSessionId.slice(-8)}_${index}`,
+          sessionId: newSessionId,
+        }));
+      for (const turn of inherited) await ctx.repo.appendTurn(turn);
+
       void reply.code(201);
       return {
-        session: toSessionSummary(record, story, forked, 0),
+        session: toSessionSummary(record, story, forked, inherited.length),
         creditsCharged: cost,
       };
     },

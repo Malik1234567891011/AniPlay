@@ -587,11 +587,17 @@ function Timeline({
                     void api
                       .forkSession(sessionId, entry.turnIndex)
                       .then((response) => navigation.replace('Session', { sessionId: response.session.sessionId }))
+                      // Spec §10.8 — say what happened and what to do about it.
+                      // "Could not fork right now" tells the player neither.
                       .catch((error) =>
                         setNotice(
                           error?.code === 'INSUFFICIENT_CREDITS'
-                            ? 'You need 120 credits to fork this timeline.'
-                            : 'Could not fork right now.',
+                            ? `You need ${error.shortfall ?? 120} more credits to fork this timeline.`
+                            : error?.code === 'OFFLINE'
+                              ? "You're offline. The fork will work once you reconnect."
+                              : error?.code === 'NOT_FOUND'
+                                ? 'This run is no longer on the server. Nothing was charged.'
+                                : 'The fork did not go through, and you were not charged. Try again in a moment.',
                         ),
                       )
                       .finally(() => setForking(false));
