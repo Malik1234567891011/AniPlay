@@ -319,6 +319,35 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
     }
   }
 
+  // Somebody the player just hurt, without hitting them. An insult, a threat or
+  // a flat refusal moves a relationship, and the very next thing offered should
+  // not read as though the previous line never happened.
+  const strained = resolution.mutations.find(
+    (mutation) =>
+      mutation.type === 'RELATIONSHIP_DELTA' &&
+      String(mutation.reasonCode).startsWith('SOCIAL:') &&
+      Number((mutation.payload as { amount?: number }).amount ?? 0) < 0 &&
+      context.presentCharacters.some((c) => c.def.id === mutation.subjectId),
+  );
+  if (strained) {
+    const character = context.presentCharacters.find((c) => c.def.id === strained.subjectId);
+    if (character && opportunities.includes(`speak_to:${character.def.id}`)) {
+      const firstName = character.def.name.split(/\s+/)[0]!;
+      push({
+        text: `Take it back to ${firstName}.`,
+        intentHint: `persuade:${character.def.id}`,
+        risk: 'RISKY',
+        resourceCostLabel: null,
+      });
+      push({
+        text: `Leave it where you left it.`,
+        intentHint: `wait:${character.def.id}`,
+        risk: 'SAFE',
+        resourceCostLabel: null,
+      });
+    }
+  }
+
   if (speaker && opportunities.includes(`speak_to:${speaker.def.id}`)) {
     const firstName = speaker.def.name.split(/\s+/)[0]!;
     const topic = speaker.def.topics[0];

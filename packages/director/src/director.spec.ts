@@ -2062,3 +2062,23 @@ describe('naming the cost', () => {
     expect(prose).not.toMatch(/takes something from you|success with a cost/i);
   });
 });
+
+/**
+ * B — suggestions come from the world as it is now.
+ *
+ * The failure this guards against: hurting somebody and then being offered the
+ * conversation that was planned before you did.
+ */
+describe('suggestions after a hostile turn', () => {
+  it('acknowledges the person you just went after', () => {
+    const state = baseState();
+    const context = contextFor(state, 'I tell Kael he is a fraud and I am done pretending otherwise.', 'hostile');
+    const plan = new RuleBasedDirector().planSync(context);
+    const texts = plan.suggestedActions.map((s) => s.text.toLowerCase());
+
+    // The relationship moved, so the options are about that, not about the
+    // gate log.
+    expect(context.resolution.mutations.some((m) => m.type === 'RELATIONSHIP_DELTA')).toBe(true);
+    expect(texts.some((text) => /take it back|leave it where/.test(text))).toBe(true);
+  });
+});
