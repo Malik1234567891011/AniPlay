@@ -146,15 +146,17 @@ export function CharacterCard({
           onPress={onOpen}
         >
           {hasPortrait ? (
+            // Native 2:3, so the drawing the player paid for is not cropped on
+            // the one screen that exists to show it.
             <Image
               source={{ uri: `${character.portraitUrl}?v=${version}` }}
-              style={{ width: 104, height: 130, borderRadius: radius.card, backgroundColor: colors.bg.raised }}
+              style={{ width: 136, height: 204, borderRadius: radius.card, backgroundColor: colors.bg.raised }}
               resizeMode="cover"
             />
           ) : (
             <StoryArt
               seed={character.sessionId}
-              style={{ width: 104, height: 130, borderRadius: radius.card, alignItems: 'center', justifyContent: 'center' }}
+              style={{ width: 136, height: 204, borderRadius: radius.card, alignItems: 'center', justifyContent: 'center' }}
             >
               <Txt variant="micro" color={colors.text.muted} center style={{ padding: spacing.sm }}>
                 No portrait yet
