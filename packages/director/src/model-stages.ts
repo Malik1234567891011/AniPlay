@@ -267,14 +267,7 @@ export class ModelDirector implements Director {
         [...opportunities].some((o) => s.intentHint.includes(o.split(':')[1] ?? o)),
       );
 
-      return {
-        ...result.value,
-        wordBudget: config.wordBudget,
-        suggestedActions: (suggestedActions.length > 0
-          ? suggestedActions
-          : this.#fallback.planSync(context).suggestedActions
-        ).map(withRisk),
-      };
+      return reconcilePlan(result.value, this.#fallback.planSync(context), context, suggestedActions);
     } catch (error) {
       if (error instanceof ModelGatewayError) return this.#fallback.planSync(context);
       throw error;
@@ -489,4 +482,61 @@ function reconcileDeltas(context: TurnContext, turn: NarrativeTurn): NarrativeTu
   const covered = new Set(kept.map((delta) => delta.mutationId));
 
   return [...kept, ...derived.filter((delta) => !covered.has(delta.mutationId))].slice(0, 8);
+}
+
+
+/**
+ * Merges what the engine knows for certain into what the model imagined.
+ *
+ * The bug this exists for, stated once so it is not rediscovered a fourth
+ * time: `ModelDirector` returned `{ ...result.value }`. Everything the
+ * rule-based director computes deterministically was therefore present only in
+ * the fallback, which in production runs solely when the model errors. Four
+ * separate guarantees were silently dead in the shipped path:
+ *
+ *   memoryProposals   including the importance-1 record of the player having
+ *                     attacked somebody, which is why the adversarial sweep
+ *                     kept reporting FORGOT_VIOLENCE
+ *   wordBudget        the event-driven budget, replaced by the flat per-tier
+ *                     constant it was built to fix
+ *   mediaPlan         the hero-image cadence, including whether a frame is
+ *                     allowed at all
+ *   arcUpdates        pacing, computed from state rather than guessed
+ *
+ * The shape of the fix matters more than the fix: anything the engine can
+ * decide from state is not the model's to decide, and merging is how that stays
+ * true when someone adds the next stage.
+ */
+export function reconcilePlan(
+  fromModel: BeatPlan,
+  fromRules: BeatPlan,
+  context: TurnContext,
+  filteredSuggestions: BeatPlan['suggestedActions'],
+): BeatPlan {
+  // Union, keyed on subject+predicate, with the engine's version winning: the
+  // model may notice things the rules do not, but it may not drop what the
+  // rules insist on.
+  const key = (proposal: BeatPlan['memoryProposals'][number]): string =>
+    `${proposal.subjectId}:${proposal.predicate}`;
+  const merged = new Map(fromModel.memoryProposals.map((p) => [key(p), p]));
+  for (const proposal of fromRules.memoryProposals) merged.set(key(proposal), proposal);
+
+  return {
+    ...fromModel,
+    // The model chooses the shot and the staging; the engine chooses whether a
+    // frame happens at all, which is a cost and cadence decision.
+    mediaPlan: {
+      ...fromModel.mediaPlan,
+      heroImage: fromRules.mediaPlan.heroImage.eligible
+        ? { ...fromModel.mediaPlan.heroImage, eligible: true, reason: fromRules.mediaPlan.heroImage.reason }
+        : fromRules.mediaPlan.heroImage,
+    },
+    memoryProposals: [...merged.values()],
+    arcUpdates: fromRules.arcUpdates,
+    wordBudget: fromRules.wordBudget,
+    suggestedActions: (filteredSuggestions.length > 0
+      ? filteredSuggestions
+      : fromRules.suggestedActions
+    ).map(withRisk),
+  };
 }
