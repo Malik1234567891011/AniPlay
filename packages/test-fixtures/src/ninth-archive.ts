@@ -1021,52 +1021,67 @@ const raw = {
     {
       id: 'arch_scholar',
       name: 'Arcane Scholar',
+      role: 'Magic and research',
+      summary:
+        'You work out what a thing is before you touch it. Best at reading wards, spotting traps and knowing what you are looking at.',
+      playstyle: ['Investigation', 'Magical knowledge', 'Careful'],
       blurb: 'You read the ward before you touch it. Usually.',
       attributeBonus: { mind: 2, arcana: 1 },
       skillProficiencies: { arcana_lore: 2, investigation: 2, warding: 1 },
-      startingItems: [
-        { itemId: 'ward_chalk', qty: 2 },
-      ],
+      startingItems: [{ itemId: 'ward_chalk', qty: 2 }],
       startingAbilities: [],
     },
     {
       id: 'arch_thief',
       name: 'Quiet Hands',
+      role: 'Stealth',
+      summary:
+        'You go where you are not allowed and are not seen doing it. The only background here that starts with a technique.',
+      playstyle: ['Stealth', 'Fast', 'Starts with a technique'],
       blurb: 'You have never been caught, which is not the same as never having done it.',
       attributeBonus: { agility: 3 },
       skillProficiencies: { stealth: 3, sleight: 2, deception: 1 },
-      startingItems: [
-        { itemId: 'bramble_tonic', qty: 1 },
-      ],
+      startingItems: [{ itemId: 'bramble_tonic', qty: 1 }],
       startingAbilities: ['veilstep'],
     },
     {
       id: 'arch_orator',
       name: 'Silver Tongue',
+      role: 'Social',
+      summary:
+        'You talk your way past rules everyone else obeys. Best presence in the school and nothing at all to fall back on if talking fails.',
+      playstyle: ['Persuasion', 'Talks past trouble', 'Physically weak'],
       blurb: 'Rules are written by people, and people can be talked to.',
       attributeBonus: { presence: 3 },
       skillProficiencies: { persuasion: 3, deception: 1, composure: 2 },
-      startingItems: [
-        { itemId: 'ward_chalk', qty: 1 },
-      ],
+      startingItems: [{ itemId: 'ward_chalk', qty: 1 }],
       startingAbilities: [],
     },
     {
       id: 'arch_duelist',
       name: 'Gate Duelist',
+      role: 'Melee',
+      summary:
+        'You would rather not fight, and you are the best here at it. Strength, nerve, and the ability to still be standing afterwards.',
+      playstyle: ['Direct', 'Physical', 'Intimidating'],
       blurb: 'You would rather not. You are very good at it anyway.',
       attributeBonus: { might: 2, resolve: 1 },
       skillProficiencies: { athletics: 3, intimidation: 2, composure: 1 },
-      startingItems: [
-        { itemId: 'bramble_tonic', qty: 2 },
-      ],
+      startingItems: [{ itemId: 'bramble_tonic', qty: 2 }],
       startingAbilities: [],
     },
   ],
   setupFields: [
     { id: 'displayName', label: 'What do they call you?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'e.g. Malik Sarrow' },
     { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. he/him' },
-    { id: 'archetype', label: 'How did you get this far?', kind: 'ARCHETYPE', required: false },
+    {
+      id: 'archetype',
+      label: 'How do you get things done?',
+      helpText:
+        'Your background: how you got into the Archive and what you were already good at when you arrived. It sets your attributes, your training and what you carry, which decides which checks come easily and which you will be sweating. It is fixed for this run.',
+      kind: 'ARCHETYPE',
+      required: false,
+    },
     {
       id: 'worldKnowsAboutYou',
       label: 'What should the world know about you?',

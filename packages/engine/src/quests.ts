@@ -280,6 +280,15 @@ export function rewardMutationsFor(
         payload: { itemId: item.itemId, quantity: item.qty },
       });
     }
+    for (const abilityId of step.rewards.abilities) {
+      mutations.push({
+        mutationId: nextMutationId(),
+        type: 'ABILITY_UNLOCK',
+        subjectId: 'player',
+        reasonCode: `QUEST_REWARD:${transition.questId}`,
+        payload: { abilityId },
+      });
+    }
     for (const flag of step.rewards.flags) {
       mutations.push({
         mutationId: nextMutationId(),

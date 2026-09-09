@@ -1179,7 +1179,11 @@ const raw = {
   archetypes: [
     {
       id: 'arch_warrior',
-      name: 'Warrior — the Iron March',
+      name: 'Warrior',
+      role: 'Heavy melee',
+      summary:
+        'Armour, a big weapon, and eventually something enormous to ride. You break charges and hold ground nobody else can hold.',
+      playstyle: ['Front line', 'Strongest', 'Mounted'],
       blurb: 'Heavy armour, heavy weapons, and eventually something enormous to ride. You are the part of the line that does not move.',
       attributeBonus: { might: 3, resolve: 1 },
       skillProficiencies: { warfare: 3, blades: 2, riding: 2, endurance: 1 },
@@ -1188,7 +1192,11 @@ const raw = {
     },
     {
       id: 'arch_rogue',
-      name: 'Rogue — the Silent Rank',
+      name: 'Rogue',
+      role: 'Stealth and blades',
+      summary:
+        'Fast, quiet, and never quite alone — an animal attaches itself to you and can be sent into places you cannot go.',
+      playstyle: ['Stealth', 'Fast blades', 'Animal companion'],
       blurb: 'Fast blades, dark ground, and an animal that picks you rather than the other way round.',
       attributeBonus: { agility: 3, mind: 1 },
       skillProficiencies: { blades: 2, stealth: 3, beastlore: 2, insight: 1 },
@@ -1197,7 +1205,11 @@ const raw = {
     },
     {
       id: 'arch_archer',
-      name: 'Archer — the Longwatch',
+      name: 'Archer',
+      role: 'Ranged attacker',
+      summary:
+        'You fight from distance and height, hold a shot until it is worth taking, and mark targets so everyone else hits them too.',
+      playstyle: ['Ranged', 'Precise', 'Sets others up'],
       blurb: 'Range, height, and the discipline to hold a shot. The great bows on the spurs are crewed, and one day commanded, by people who started here.',
       attributeBonus: { agility: 2, mind: 2 },
       skillProficiencies: { archery: 3, insight: 2, endurance: 1, command: 1 },
@@ -1206,7 +1218,11 @@ const raw = {
     },
     {
       id: 'arch_sorcerer',
-      name: 'Sorcerer — the Bright Hall',
+      name: 'Sorcerer',
+      role: 'Elemental magic',
+      summary:
+        'You bind one element now and a second if you live long enough, and you can leave a working running after you have walked away from it.',
+      playstyle: ['Magic damage', 'Controls ground', 'Physically frail'],
       blurb: 'One element bound now, a second if you live long enough, and a working that keeps running after you walk away.',
       attributeBonus: { arcana: 3, mind: 1 },
       skillProficiencies: { sorcery: 3, insight: 2, endurance: 1 },
@@ -1215,7 +1231,11 @@ const raw = {
     },
     {
       id: 'arch_healer',
-      name: 'Healer — the Stillhand',
+      name: 'Healer',
+      role: 'Healing — and the reverse of it',
+      summary:
+        'You hold people together, and the same grip run backwards takes a body apart. You keep a squad alive and you are genuinely dangerous at arm’s length.',
+      playstyle: ['Keeps people alive', 'Lethal up close', 'Everyone wants you'],
       blurb: 'You hold people together, and the same grip run backwards takes something apart. Nobody on this wall is frightened of the Iron March.',
       attributeBonus: { arcana: 2, presence: 1, resolve: 1 },
       skillProficiencies: { mending: 3, insight: 2, endurance: 1, command: 1 },
@@ -1226,7 +1246,14 @@ const raw = {
   setupFields: [
     { id: 'displayName', label: 'What name is on the roll?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'e.g. Rell Calloway' },
     { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. they/them' },
-    { id: 'archetype', label: 'What did the testing place you as?', kind: 'ARCHETYPE', required: true },
+    {
+      id: 'archetype',
+      label: 'Choose your class',
+      helpText:
+        'This is the biggest decision on this screen. Your class sets your attributes, training, starting techniques and kit — and several problems later in the story can only be solved by the class that has the right tool for them. It is fixed for this run.',
+      kind: 'ARCHETYPE',
+      required: true,
+    },
     {
       id: 'worldKnowsAboutYou',
       label: 'What does the wall already know about you?',

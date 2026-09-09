@@ -511,43 +511,54 @@ const raw = {
     {
       id: 'arch_courier',
       name: 'Courier',
+      role: 'Endurance',
+      summary:
+        'You have carried worse, further, for stranger people. Toughest of the three and the best supplied — you keep going after the crossing starts taking things.',
+      playstyle: ['Hard to wear down', 'Steady under pressure', 'Best supplied'],
       blurb: 'You have carried worse for stranger people. Usually not this far.',
       attributeBonus: { might: 1, resolve: 2 },
       skillProficiencies: { endurance: 3, composure: 2 },
-      startingItems: [
-        { itemId: 'canteen', qty: 2 },
-        { itemId: 'salt_veil', qty: 1 },
-      ],
+      startingItems: [{ itemId: 'canteen', qty: 2 }, { itemId: 'salt_veil', qty: 1 }],
       startingAbilities: [],
     },
     {
       id: 'arch_surveyor',
       name: 'Surveyor',
+      role: 'Navigation and observation',
+      summary:
+        'You read ground for a living. You find the route, notice what is wrong with it first, and know where the water is. Physically the weakest.',
+      playstyle: ['Navigation', 'Notices everything', 'Physically weak'],
       blurb: 'You read ground for a living. The flats are just very boring ground.',
       attributeBonus: { mind: 3 },
       skillProficiencies: { navigation: 3, survival: 2, perception: 2 },
-      startingItems: [
-        { itemId: 'canteen', qty: 1 },
-      ],
+      startingItems: [{ itemId: 'canteen', qty: 1 }],
       startingAbilities: [],
     },
     {
       id: 'arch_outrider',
       name: 'Outrider',
+      role: 'Armed escort',
+      summary:
+        'You have guarded a caravan and lost one. The only trade here that can properly fight, and the one people expect to stand in front.',
+      playstyle: ['Fights well', 'Alert', 'Blade-trained'],
       blurb: 'You were paid to protect a caravan once. It went badly and you learned a lot.',
       attributeBonus: { might: 2, agility: 1 },
       skillProficiencies: { blades: 3, perception: 2, endurance: 1 },
-      startingItems: [
-        { itemId: 'canteen', qty: 1 },
-        { itemId: 'salt_veil', qty: 1 },
-      ],
+      startingItems: [{ itemId: 'canteen', qty: 1 }, { itemId: 'salt_veil', qty: 1 }],
       startingAbilities: [],
     },
   ],
   setupFields: [
     { id: 'displayName', label: 'What name is on the contract?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'e.g. Dax Oro' },
     { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. they/them' },
-    { id: 'archetype', label: 'What did you do before this?', kind: 'ARCHETYPE', required: false },
+    {
+      id: 'archetype',
+      label: 'What did you do before this?',
+      helpText:
+        'Your old trade. It sets your attributes, your training and the kit you walk onto the flats carrying, which decides which crossing problems are easy for you and which ones nearly kill you. Fixed for this run.',
+      kind: 'ARCHETYPE',
+      required: false,
+    },
     {
       id: 'worldKnowsAboutYou',
       label: 'Why did she pick you?',

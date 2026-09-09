@@ -358,8 +358,14 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
         )
       : 'SAFE';
 
+    // Name the target. "Ember Palm — heat carried in the hand" is a glossary
+    // entry; "Use Ember Palm on Tam" is a thing the player is about to do.
+    const target =
+      ability.targetRule === 'SELF' || ability.targetRule === 'NONE' ? null : context.presentCharacters[0];
+    const opener = target ? `Use ${ability.name} on ${target.def.name.split(/\s+/)[0]}` : `Use ${ability.name}`;
+
     push({
-      text: `${ability.name} — ${lowerFirst(ability.description.replace(/\.$/, ''))}.`.slice(0, 180),
+      text: `${opener} — ${lowerFirst(ability.description.replace(/\.$/, ''))}.`.slice(0, 180),
       intentHint: `use_ability:${ability.id}`,
       risk,
       resourceCostLabel: costLabel,

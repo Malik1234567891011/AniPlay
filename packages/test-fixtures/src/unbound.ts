@@ -786,6 +786,81 @@ const raw = {
   ],
   quests: [
     {
+      id: 'q_the_opening',
+      title: 'Something You Were Not Taught',
+      summary: 'Your eyes did something at the wrong moment and you would like to know what.',
+      kind: 'SIDE',
+      startsActive: true,
+      involvedCharacterIds: ['sera', 'auber', 'tam'],
+      involvedLocationIds: ['river_stair', 'kiln_yard', 'night_market'],
+      knownRewardCopy: 'Whatever that was, on purpose, next time.',
+      steps: [
+        {
+          id: 'step_awaken_the_opening',
+          playerCopy: 'Find out what happened behind your eyes — and get it to happen again.',
+          directorNotes:
+            'This is the only way into the Quiet Opening, and it is deliberately reachable three different ways: ' +
+            'through a real fight, through someone who has seen it before, or through reading traces until the ' +
+            'pattern is obvious. A player who started with no lean needs this. A player who has a lean can still ' +
+            'take it and is unusual for having done so. Never hand it over; make them go and get it.',
+          succeedWhenAny: [
+            {
+              routeId: 'opening_under_pressure',
+              label: 'It happened in a fight and you kept it',
+              predicate: {
+                flagsSet: ['attacked:tam'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: null,
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              setsFlags: ['opening_awakened', 'opening_by_force', 'tam_saw_your_eyes'],
+              closesFlags: ['opening_quietly'],
+            },
+            {
+              routeId: 'opening_shown',
+              label: 'Someone who has seen it before showed you',
+              predicate: {
+                flagsSet: ['spoke:sera', 'visited:river_stair'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: null,
+                completedEvents: [],
+                minRelationship: [{ characterId: 'sera', dimension: 'trust', value: 25 }],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              setsFlags: ['opening_awakened', 'opening_quietly', 'sera_taught_you'],
+              closesFlags: ['opening_by_force'],
+            },
+            {
+              routeId: 'opening_read',
+              label: 'You read your way to it',
+              predicate: {
+                flagsSet: ['used:read_trace', 'spoke:auber'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: null,
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              setsFlags: ['opening_awakened', 'opening_quietly', 'auber_knows_you_can'],
+              closesFlags: [],
+            },
+          ],
+          rewards: { xp: 70, items: [], flags: [], abilities: ['quiet_opening'] },
+        },
+      ],
+    },
+    {
       id: 'q_probation',
       title: 'A Guest With a Slip',
       summary: 'Turn a probation into a place, before the year’s assessment decides for you.',
@@ -1026,7 +1101,11 @@ const raw = {
   archetypes: [
     {
       id: 'lean_ember',
-      name: 'Ember lean — forward and hot',
+      name: 'Ember',
+      role: 'Fire affinity — aggressive',
+      summary:
+        'Close range and heavy. You drive heat through whatever you hit, and you are strong enough to be standing where that matters.',
+      playstyle: ['Aggressive', 'Close range', 'Highest damage'],
       blurb: 'Your breath runs hot and wants to go through things. Closest to how the Kiln already trains, which is its own problem.',
       attributeBonus: { might: 2, arcana: 1 },
       skillProficiencies: { hand_forms: 3, breathwork: 2, endurance: 1 },
@@ -1035,7 +1114,11 @@ const raw = {
     },
     {
       id: 'lean_tide',
-      name: 'Tide lean — around and back',
+      name: 'Tide',
+      role: 'Water affinity — counter-fighter',
+      summary:
+        'You take the force arriving at you and send it somewhere else. Strongest when you let the other person commit first.',
+      playstyle: ['Counter-attacking', 'Redirects force', 'Quick'],
       blurb: 'Your breath prefers to redirect rather than meet. Very hard to teach, very hard to fight.',
       attributeBonus: { agility: 2, resolve: 1 },
       skillProficiencies: { stillness: 3, breathwork: 2, blade_forms: 1 },
@@ -1044,7 +1127,11 @@ const raw = {
     },
     {
       id: 'lean_stone',
-      name: 'Stone lean — down and set',
+      name: 'Stone',
+      role: 'Earth affinity — defensive',
+      summary:
+        'You root yourself and become very hard to move, knock down or get past. Slow, durable, and the last one standing.',
+      playstyle: ['Defensive', 'Hard to move', 'Outlasts people'],
       blurb: 'Your breath sinks. You are slower than everyone and considerably harder to remove.',
       attributeBonus: { resolve: 2, might: 1 },
       skillProficiencies: { stillness: 3, endurance: 2, hand_forms: 1 },
@@ -1053,7 +1140,11 @@ const raw = {
     },
     {
       id: 'lean_gale',
-      name: 'Gale lean — sideways and gone',
+      name: 'Gale',
+      role: 'Wind affinity — mobility',
+      summary:
+        'You move first and from further away. Fastest lean, and the only one that starts able to attack at range.',
+      playstyle: ['Fast', 'Evasive', 'Fights at range'],
       blurb: 'Your breath moves you before it moves anything else. Distance is a thing you decide.',
       attributeBonus: { agility: 3 },
       skillProficiencies: { breathwork: 2, thrown_forms: 2, stealth: 2 },
@@ -1062,7 +1153,11 @@ const raw = {
     },
     {
       id: 'lean_none',
-      name: 'No lean yet',
+      name: 'Unsettled',
+      role: 'No affinity yet — hardest start',
+      summary:
+        'You start with no technique at all and the sharpest mind of the five. Your first one is something you awaken during the story rather than pick here — and it is not one of the other four.',
+      playstyle: ['Hard early game', 'Study and observation', 'Build decided in play'],
       blurb: 'Nothing has settled. Rare, awkward, and the reason some people end up with a shape nobody has seen before.',
       attributeBonus: { mind: 2, arcana: 1 },
       skillProficiencies: { reading: 2, lore: 2, breathwork: 1 },
@@ -1073,7 +1168,14 @@ const raw = {
   setupFields: [
     { id: 'displayName', label: 'What name is on the slip?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'e.g. Ilan Oyan-Reth' },
     { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. she/her' },
-    { id: 'archetype', label: 'Which way does your breath lean?', kind: 'ARCHETYPE', required: false },
+    {
+      id: 'archetype',
+      label: 'Choose a breath style',
+      helpText:
+        'Breathwork is how people fight here: you push your breath into a shape, and the shape decides what you can do with it. Your lean is the shape yours settles into — it sets your attributes, your training and your first technique. You keep it for the whole story, but you can learn techniques from any lean later by being taught them.',
+      kind: 'ARCHETYPE',
+      required: false,
+    },
     {
       id: 'worldKnowsAboutYou',
       label: 'What do people already say about you?',

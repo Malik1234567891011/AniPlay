@@ -1137,7 +1137,11 @@ const raw = {
   archetypes: [
     {
       id: 'arch_open',
-      name: 'You say the thing',
+      name: 'Direct',
+      role: 'Says it out loud',
+      summary:
+        'You tell people what you feel, early and without a plan. It lands or it does not, and either way the situation moves.',
+      playstyle: ['Honest', 'Moves things fast', 'Costly when it misses'],
       blurb: 'You have never successfully sat on a feeling. It goes well about half the time.',
       attributeBonus: { resolve: 2, presence: 1 },
       skillProficiencies: { candour: 3, warmth: 2, composure: 1 },
@@ -1146,7 +1150,11 @@ const raw = {
     },
     {
       id: 'arch_careful',
-      name: 'You wait and watch',
+      name: 'Observant',
+      role: 'Reads people',
+      summary:
+        'You work out what is going on between other people before anybody tells you. Sharpest read in the building, and the slowest to actually do anything about it.',
+      playstyle: ['Reads people', 'Discreet', 'Slow to commit'],
       blurb: 'You will know what is going on in this building before anyone tells you anything.',
       attributeBonus: { mind: 3 },
       skillProficiencies: { read_people: 3, discretion: 2, composure: 1 },
@@ -1155,7 +1163,11 @@ const raw = {
     },
     {
       id: 'arch_warm',
-      name: 'People tell you things',
+      name: 'Warm',
+      role: 'People confide in you',
+      summary:
+        'You are who everybody ends up talking to on the back steps. You hear everything first, and you carry a lot that is not yours.',
+      playstyle: ['Trusted', 'Hears everything', 'Pulled every direction'],
       blurb: 'You are the one everybody ends up talking to on the back steps. It is a lot of other people’s weight.',
       attributeBonus: { presence: 2, mind: 1 },
       skillProficiencies: { warmth: 3, read_people: 2, discretion: 1 },
@@ -1164,7 +1176,11 @@ const raw = {
     },
     {
       id: 'arch_fun',
-      name: 'You are why the night kept going',
+      name: 'The Instigator',
+      role: 'Starts things',
+      summary:
+        'You are why the night kept going. You make things happen that would not have happened, and you are the easiest person here to get in trouble.',
+      playstyle: ['Makes things happen', 'Quick and physical', 'Gets caught'],
       blurb: 'Boats at 2am, the good playlist, everybody in the lake. Also very easy to get sent home.',
       attributeBonus: { agility: 2, presence: 1 },
       skillProficiencies: { mischief: 3, music: 2, swimming: 1 },
@@ -1173,7 +1189,11 @@ const raw = {
     },
     {
       id: 'arch_worker',
-      name: 'You would rather be busy',
+      name: 'The Grafter',
+      role: 'Works instead of talking',
+      summary:
+        'Work is easier than this. You are the best on the floor, which at this lake buys you more real standing than charm does.',
+      playstyle: ['Competent', 'Well respected', 'Avoids hard talks'],
       blurb: 'Work is easier than this. Being the best on the floor turns out to be worth more here than charm.',
       attributeBonus: { agility: 2, resolve: 1 },
       skillProficiencies: { service: 3, cooking: 2, composure: 1 },
@@ -1184,7 +1204,14 @@ const raw = {
   setupFields: [
     { id: 'displayName', label: 'What is on your lanyard?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'e.g. Robin Ayoade' },
     { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. she/her' },
-    { id: 'archetype', label: 'What are you like with people?', kind: 'ARCHETYPE', required: false },
+    {
+      id: 'archetype',
+      label: 'What are you like with people?',
+      helpText:
+        'There is no combat in this story, so this is your whole toolkit: it decides which social approaches come easily to you — saying it out loud, reading the room, being the person people confide in, starting things, or working instead of talking. Everyone at the lake reacts to it. Fixed for this run.',
+      kind: 'ARCHETYPE',
+      required: false,
+    },
     {
       id: 'worldKnowsAboutYou',
       label: 'What do people here remember about you?',

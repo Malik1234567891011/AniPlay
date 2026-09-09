@@ -9,7 +9,7 @@ import {
   StateMutation,
   SuggestedAction,
 } from '../ai/index.js';
-import { ContentDescriptor, StorySummary, StoryVersion } from '../game/story.js';
+import { ArchetypeDef, ContentDescriptor, StorySummary, StoryVersion } from '../game/story.js';
 import { LedgerEntry, QualityTier, StoreOffer, WalletSummary } from '../game/economy.js';
 import {
   EncounterState,
@@ -127,6 +127,26 @@ export const SearchFilters = z
   .strict();
 export type SearchFilters = z.infer<typeof SearchFilters>;
 
+/**
+ * An archetype as the setup screen needs it: the option's own copy plus what
+ * choosing it actually gives you, resolved to names on the server.
+ *
+ * Derived rather than authored. A card that lists its own effects by hand goes
+ * stale the first time somebody edits a stat block, and a player who is told
+ * one thing and given another has been lied to by a screen.
+ */
+export const SetupArchetype = ArchetypeDef.extend({
+  grants: z
+    .object({
+      attributes: z.array(z.string()),
+      skills: z.array(z.string()),
+      abilities: z.array(z.string()),
+      items: z.array(z.string()),
+    })
+    .strict(),
+}).strict();
+export type SetupArchetype = z.infer<typeof SetupArchetype>;
+
 export const StoryDetailResponse = z
   .object({
     story: StorySummary,
@@ -158,7 +178,7 @@ export const StoryDetailResponse = z
     related: z.array(StorySummary),
     activeSessionId: z.string().nullable(),
     setupFields: StoryVersion.shape.setupFields,
-    archetypes: StoryVersion.shape.archetypes,
+    archetypes: z.array(SetupArchetype),
   })
   .strict();
 export type StoryDetailResponse = z.infer<typeof StoryDetailResponse>;

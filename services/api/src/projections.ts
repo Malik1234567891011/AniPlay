@@ -1,3 +1,4 @@
+import { archetypeGrants } from '@aniplay/contracts';
 import type {
   ContinueCard,
   GameEvent,
@@ -117,7 +118,12 @@ export function toStoryDetail(
     related,
     activeSessionId,
     setupFields: story.setupFields,
-    archetypes: story.archetypes,
+    // What each option gives you is derived from the option, never restated by
+    // hand, so the card cannot drift away from the stat block it describes.
+    archetypes: story.archetypes.map((archetype) => ({
+      ...archetype,
+      grants: archetypeGrants(story, archetype),
+    })),
   };
 }
 

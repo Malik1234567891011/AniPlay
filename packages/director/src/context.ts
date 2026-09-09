@@ -62,6 +62,18 @@ export interface TurnContext {
     readonly name: string;
     readonly pronouns: string;
     readonly about: string;
+    /** The archetype's name, so the prose knows what kind of person this is. */
+    readonly archetype: string | null;
+    /** What the player wrote about how they look, if they wrote anything. */
+    readonly appearance: string;
+    /**
+     * Every other setup answer, as question and answer in plain words.
+     *
+     * Option ids mean nothing to a writer, so a chosen option is resolved to
+     * its label here. Without this the advanced questions were collected,
+     * stored, and read by nothing.
+     */
+    readonly setupAnswers: ReadonlyArray<{ question: string; answer: string }>;
     readonly resources: Array<{ id: string; name: string; current: number; max: number; polarity: string }>;
     readonly statuses: string[];
     readonly inventoryNames: string[];
@@ -222,6 +234,22 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
       name: state.player.identity.displayName,
       pronouns: state.player.identity.pronouns,
       about: state.player.identity.worldKnowsAboutYou,
+      // Setup asks four questions and the screen promises the world will use
+      // the answers. Only two of them were reaching the prose.
+      archetype:
+        story.archetypes.find((a) => a.id === state.player.identity.archetypeId)?.name ??
+        state.player.identity.advanced.customArchetype ??
+        null,
+      appearance: state.player.identity.advanced.appearance ?? '',
+      setupAnswers: Object.entries(state.player.identity.advanced)
+        .filter(([id]) => id !== 'appearance' && id !== 'customArchetype')
+        .flatMap(([id, value]) => {
+          if (!value) return [];
+          const field = story.setupFields.find((f) => f.id === id);
+          if (!field) return [];
+          const answer = field.options.find((o) => o.id === value)?.label ?? value;
+          return [{ question: field.label, answer }];
+        }),
       resources: state.player.resources.map((r) => {
         const def = story.resources.find((d) => d.id === r.id);
         return {

@@ -551,6 +551,10 @@ const raw = {
     {
       id: 'arch_technician',
       name: 'The Technician',
+      role: 'Backstage craft',
+      summary:
+        'You know how the show is actually built. Best under pressure and best with anything technical; worst at being looked at.',
+      playstyle: ['Practical', 'Steady nerve', 'Not a performer'],
       blurb: 'You are not the most watchable person here. You are the most reliable.',
       attributeBonus: { mind: 2, resolve: 1 },
       skillProficiencies: { stagecraft: 3, composure: 2, insight: 1 },
@@ -560,6 +564,10 @@ const raw = {
     {
       id: 'arch_natural',
       name: 'The Natural',
+      role: 'Stage presence',
+      summary:
+        'You are who the room looks at. Highest presence in the company, and nothing whatsoever to fall back on when charm is not the answer.',
+      playstyle: ['Commands a room', 'Physical performer', 'One trick'],
       blurb: 'It has always come easily, which is its own kind of problem.',
       attributeBonus: { presence: 3 },
       skillProficiencies: { performance: 3, movement: 2 },
@@ -569,19 +577,28 @@ const raw = {
     {
       id: 'arch_diplomat',
       name: 'The Diplomat',
+      role: 'Social',
+      summary:
+        'You read a room and quietly fix it. Best with people, which in this building is most of what goes wrong.',
+      playstyle: ['Persuasion', 'Reads people', 'Well-rounded'],
       blurb: 'You have never been the best in the room. You have often been the reason it worked.',
       attributeBonus: { presence: 2, mind: 1 },
       skillProficiencies: { persuasion: 3, insight: 2, deception: 1 },
-      startingItems: [
-        { itemId: 'throat_tincture', qty: 1 },
-      ],
+      startingItems: [{ itemId: 'throat_tincture', qty: 1 }],
       startingAbilities: [],
     },
   ],
   setupFields: [
     { id: 'displayName', label: 'What is on the cast list?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'e.g. Ines Halloway' },
     { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. she/her' },
-    { id: 'archetype', label: 'What got you this far?', kind: 'ARCHETYPE', required: false },
+    {
+      id: 'archetype',
+      label: 'What kind of theatre person are you?',
+      helpText:
+        'What you were already good at when the company took you on. It sets your attributes and training, so it decides which scenes you sail through and which ones you have to survive. Fixed for this run.',
+      kind: 'ARCHETYPE',
+      required: false,
+    },
     {
       id: 'worldKnowsAboutYou',
       label: 'What does the company already say about you?',

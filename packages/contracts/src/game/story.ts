@@ -363,9 +363,18 @@ export const QuestStepDef = z
         xp: z.number().int().default(0),
         items: z.array(z.object({ itemId: z.string(), qty: z.number().int() }).strict()).default([]),
         flags: z.array(z.string()).default([]),
+        /**
+         * Abilities taught by finishing this step.
+         *
+         * The point of the field is that a build is not settled at character
+         * creation. A player who starts with no technique has to be able to
+         * acquire one by playing, or the option to start without one is a trap
+         * dressed as a choice.
+         */
+        abilities: z.array(z.string()).default([]),
       })
       .strict()
-      .default({ xp: 0, items: [], flags: [] }),
+      .default({ xp: 0, items: [], flags: [], abilities: [] }),
   })
   .strict();
 export type QuestStepDef = z.infer<typeof QuestStepDef>;
@@ -399,10 +408,40 @@ export const StoryPromiseDef = z
   .strict();
 export type StoryPromiseDef = z.infer<typeof StoryPromiseDef>;
 
+/**
+ * A build option the player picks before they know the world.
+ *
+ * Spec §9.2 — the copy is two layers and they are separate fields on purpose,
+ * because one field always ends up doing both jobs badly. Layer 1 (`name`,
+ * `role`, `summary`, `playstyle`) says what this is and what it does for you,
+ * in words a player who has read nothing can act on. Layer 2 (`blurb`) is the
+ * world's voice, and it is never responsible for communicating layer 1.
+ *
+ * What the option *grants* is not authored at all. It is derived from
+ * `startingAbilities`, `skillProficiencies` and `startingItems`, so the card
+ * cannot promise something the engine does not hand over.
+ */
 export const ArchetypeDef = z
   .object({
     id: z.string(),
-    name: z.string(),
+    /** The option's name, on its own. "Ember", not "Ember lean — forward and hot". */
+    name: z.string().max(28),
+    /**
+     * What kind of thing this is, in ordinary words. Two to four of them:
+     * "Fire affinity", "Heavy melee", "Support and healing".
+     */
+    role: z.string().max(40),
+    /**
+     * One sentence a new player can act on: what it does for you in play.
+     * Plain English. No invented nouns that the screen has not already glossed.
+     */
+    summary: z.string().max(220),
+    /**
+     * Two to four scannable tags, so four cards can be compared at a glance.
+     * "Aggressive", "Close range", "Hard to move".
+     */
+    playstyle: z.array(z.string().max(24)).min(2).max(4),
+    /** Layer 2. The world's voice. Never the only place meaning appears. */
     blurb: z.string(),
     attributeBonus: z.record(AttributeKey, z.number().int()).default({}),
     skillProficiencies: z.record(z.string(), z.number().int().min(0).max(5)).default({}),
@@ -469,6 +508,14 @@ export const CharacterSetupField = z
     id: z.string(),
     label: z.string(),
     kind: z.enum(['TEXT', 'CHOICE', 'ARCHETYPE']),
+    /**
+     * Shown once above the options, before the player is asked to choose.
+     *
+     * A build choice is unanswerable until the player knows what system they
+     * are choosing inside of. This is the sentence that establishes it —
+     * what the thing is, and what picking one will change.
+     */
+    helpText: z.string().default(''),
     required: z.boolean().default(false),
     advanced: z.boolean().default(false),
     maxLength: z.number().int().default(300),
@@ -545,3 +592,60 @@ export const StorySummary = z
   })
   .strict();
 export type StorySummary = z.infer<typeof StorySummary>;
+
+/**
+ * What choosing this option actually gives you, read off the option itself.
+ *
+ * Deliberately derived rather than authored. A hand-written "you start with
+ * Ember Palm" line drifts the moment the ability list changes, and the drift is
+ * invisible — the card keeps promising something the engine stopped handing
+ * over. Same reasoning as the asset keys.
+ */
+export interface ArchetypeGrants {
+  /** Ability names, in the order the option lists them. */
+  readonly abilities: string[];
+  /** Skills this option is trained in, best first, as "Name (Skilled)". */
+  readonly skills: string[];
+  /** Attributes it raises, best first, as "Might +3". */
+  readonly attributes: string[];
+  /** Item names and counts. */
+  readonly items: string[];
+}
+
+/** Spec §12.4 — proficiency 0–5. */
+const PROFICIENCY_LABELS = ['Untrained', 'Novice', 'Practised', 'Skilled', 'Expert', 'Legendary'];
+
+const ATTRIBUTE_LABELS: Record<string, string> = {
+  might: 'Might',
+  agility: 'Agility',
+  mind: 'Mind',
+  presence: 'Presence',
+  resolve: 'Resolve',
+  arcana: 'Arcana',
+};
+
+export function archetypeGrants(story: StoryVersion, archetype: ArchetypeDef): ArchetypeGrants {
+  const abilities = archetype.startingAbilities
+    .map((id) => story.abilities.find((a) => a.id === id)?.name)
+    .filter((name): name is string => !!name);
+
+  const skills = Object.entries(archetype.skillProficiencies)
+    .filter(([, level]) => level > 0)
+    .sort(([, a], [, b]) => b - a)
+    .map(([id, level]) => {
+      const name = story.skills.find((s) => s.id === id)?.name ?? id;
+      return `${name} (${PROFICIENCY_LABELS[Math.min(level, 5)]})`;
+    });
+
+  const attributes = Object.entries(archetype.attributeBonus)
+    .filter(([, value]) => typeof value === 'number' && value !== 0)
+    .sort(([, a], [, b]) => (b as number) - (a as number))
+    .map(([key, value]) => `${ATTRIBUTE_LABELS[key] ?? key} +${value}`);
+
+  const items = archetype.startingItems.map((entry) => {
+    const name = story.items.find((i) => i.id === entry.itemId)?.name ?? entry.itemId;
+    return entry.qty > 1 ? `${name} ×${entry.qty}` : name;
+  });
+
+  return { abilities, skills, attributes, items };
+}

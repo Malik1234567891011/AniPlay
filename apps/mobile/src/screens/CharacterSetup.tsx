@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { StoryDetailResponse } from '@aniplay/contracts';
+import type { SetupArchetype, StoryDetailResponse } from '@aniplay/contracts';
 import {
   Button,
   Card,
@@ -59,6 +59,7 @@ export function CharacterSetupScreen({
   }, [storyId]);
 
   const archetype = detail?.archetypes.find((a) => a.id === archetypeId) ?? null;
+  const archetypeField = detail?.setupFields.find((f) => f.kind === 'ARCHETYPE') ?? null;
   const usingCustomArchetype = archetypeId === CUSTOM;
   const canStart = displayName.trim().length > 0 && !starting;
 
@@ -147,7 +148,19 @@ export function CharacterSetupScreen({
 
           {(detail?.archetypes.length ?? 0) > 0 ? (
             <Stack gap={spacing.md}>
-              <Txt variant="h3">How did you get this far?</Txt>
+              {/*
+                The heading and the explainer come from the story, because the
+                screen has to say what the system is before it asks you to pick
+                inside it. A question on its own is not an explanation.
+              */}
+              <Stack gap={spacing.xs}>
+                <Txt variant="h3">{archetypeField?.label ?? 'What kind of character are you?'}</Txt>
+                {archetypeField?.helpText ? (
+                  <Txt variant="bodyCompact" color={colors.text.secondary}>
+                    {archetypeField.helpText}
+                  </Txt>
+                ) : null}
+              </Stack>
               <Stack gap={spacing.sm}>
                 {detail?.archetypes.map((option) => {
                   const selected = archetypeId === option.id;
@@ -156,18 +169,37 @@ export function CharacterSetupScreen({
                       key={option.id}
                       accessibilityRole="radio"
                       accessibilityState={{ selected }}
-                      accessibilityLabel={`${option.name}. ${option.blurb}`}
+                      accessibilityLabel={`${option.name}. ${option.role}. ${option.summary}`}
                       onPress={() => setArchetypeId(selected ? null : option.id)}
                     >
                       <Card
                         style={{
                           borderColor: selected ? colors.accent.primary : colors.border.subtle,
-                          gap: spacing.xs,
+                          gap: spacing.sm,
                         }}
                       >
-                        <Txt variant="bodyStrong" color={selected ? colors.accent.primary : colors.text.primary}>
-                          {option.name}
+                        {/* Layer 1: what this is, in words that need no lore. */}
+                        <Row style={{ gap: spacing.sm, alignItems: 'baseline', flexWrap: 'wrap' }}>
+                          <Txt variant="bodyStrong" color={selected ? colors.accent.primary : colors.text.primary}>
+                            {option.name}
+                          </Txt>
+                          <Txt variant="caption" color={colors.text.muted}>
+                            {option.role}
+                          </Txt>
+                        </Row>
+                        <Txt variant="bodyCompact" color={colors.text.primary}>
+                          {option.summary}
                         </Txt>
+                        <Row style={{ gap: spacing.xs, flexWrap: 'wrap' }}>
+                          {option.playstyle.map((tag) => (
+                            <Chip key={tag} label={tag} />
+                          ))}
+                        </Row>
+
+                        {/* What it actually does, only once you are looking at it. */}
+                        {selected ? <GrantList grants={option.grants} /> : null}
+
+                        {/* Layer 2: the world's voice. Never carrying the meaning. */}
                         <Txt variant="caption" color={colors.text.secondary}>
                           {option.blurb}
                         </Txt>
@@ -192,8 +224,9 @@ export function CharacterSetupScreen({
                     <Txt variant="bodyStrong" color={usingCustomArchetype ? colors.accent.primary : colors.text.primary}>
                       Something else
                     </Txt>
-                    <Txt variant="caption" color={colors.text.secondary}>
-                      Write your own background instead of picking one.
+                    <Txt variant="bodyCompact" color={colors.text.primary}>
+                      Describe your own background instead. The world takes it as canon — but it grants no
+                      stats, skills or techniques, so you start with none of the packages above.
                     </Txt>
                   </Card>
                 </Pressable>
@@ -246,9 +279,12 @@ export function CharacterSetupScreen({
               {advancedFields.map((field) =>
                 field.kind === 'CHOICE' ? (
                   <Stack key={field.id} gap={spacing.sm}>
-                    <Txt variant="caption" color={colors.text.secondary}>
-                      {field.label}
-                    </Txt>
+                    <Txt variant="bodyCompact">{field.label}</Txt>
+                    {field.helpText ? (
+                      <Txt variant="caption" color={colors.text.secondary}>
+                        {field.helpText}
+                      </Txt>
+                    ) : null}
                     <Row gap={spacing.sm} style={{ flexWrap: 'wrap' }}>
                       {field.options.map((option) => (
                         <Chip
@@ -355,6 +391,48 @@ export function CharacterSetupScreen({
         </SafeAreaView>
       </KeyboardAvoidingView>
     </SafeAreaView>
+  );
+}
+
+/**
+ * What choosing this option actually gives you.
+ *
+ * Only under the selected card. Four cards each showing a stat block is a
+ * spreadsheet; one card showing its own is an answer to "and what does that
+ * mean for me". The strings arrive already resolved from the server so the
+ * screen has no opinion about how a proficiency is spelled.
+ */
+function GrantList({ grants }: { grants: SetupArchetype['grants'] }): React.JSX.Element | null {
+  const lines: Array<[string, string[]]> = [
+    ['Starts with', grants.abilities],
+    ['Better at', grants.skills],
+    ['Attributes', grants.attributes],
+    ['Carries', grants.items],
+  ];
+  const shown = lines.filter(([, values]) => values.length > 0);
+  if (shown.length === 0) return null;
+
+  return (
+    <Stack
+      gap={spacing.xs}
+      style={{
+        borderTopWidth: 1,
+        borderTopColor: colors.border.subtle,
+        paddingTop: spacing.sm,
+        marginTop: spacing.xs,
+      }}
+    >
+      {shown.map(([label, values]) => (
+        <Row key={label} style={{ gap: spacing.sm, alignItems: 'flex-start' }}>
+          <Txt variant="caption" color={colors.text.muted} style={{ width: 82 }}>
+            {label}
+          </Txt>
+          <Txt variant="caption" color={colors.text.secondary} style={{ flex: 1 }}>
+            {values.join(' · ')}
+          </Txt>
+        </Row>
+      ))}
+    </Stack>
   );
 }
 

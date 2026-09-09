@@ -8,6 +8,7 @@ import type { ModelGateway, ModelMessage } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { stripInventedTravel, stripSubstitutedPeople } from './entity-resolution.js';
 import { NARRATIVE_CLARITY_RULES } from './narrative-clarity.js';
+import { CHOICE_CLARITY_RULES } from './choice-clarity.js';
 import { RuleBasedIntentParser, type IntentParser, type ParseContext } from './parser.js';
 import { RuleBasedDirector, type Director } from './director.js';
 import { TemplateWriter, type Writer } from './writer.js';
@@ -196,6 +197,10 @@ const DIRECTOR_POLICY = [
   'reveal a fact to an NPC who cannot know it, or charge credits.',
   'Every suggested action must correspond to an entry in resolution.newOpportunities.',
   'Pace by state, not by turn count. Do not force a cliffhanger.',
+  '',
+  'Suggested actions are buttons, not prose. Each one says plainly what the player would be doing and,',
+  'where it matters, to whom — "Ask Renna who signed for you", not "Pursue the question of the signature".',
+  CHOICE_CLARITY_RULES,
 ].join(' ');
 
 export class ModelDirector implements Director {
@@ -343,6 +348,12 @@ export class ModelWriter implements Writer {
             scene: context.scene,
             playerName: context.player.name,
             playerPronouns: context.player.pronouns,
+            // Who the player said they were at setup. The world was told it
+            // would use this; until it reaches the writer, it does not.
+            playerIs: context.player.archetype,
+            playerAppearance: context.player.appearance,
+            worldKnowsAboutPlayer: context.player.about,
+            playerSetupAnswers: context.player.setupAnswers,
             speakers: context.presentCharacters.map((c) => ({
               id: c.def.id,
               name: c.def.name,
