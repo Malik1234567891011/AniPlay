@@ -14,6 +14,17 @@ import { retrieveMemories, lexicalSimilarity, checkCorrectionConflict, applyCorr
 
 const parser = new RuleBasedIntentParser();
 
+/** Setup with nothing filled in but the required name. */
+const bareIdentity = (archetypeId: string | null) => ({
+  displayName: 'Nobody',
+  pronouns: 'they/them',
+  ageBand: null,
+  archetypeId,
+  worldKnowsAboutYou: '',
+  advanced: {},
+  portraitAssetId: null,
+});
+
 const baseState = (overrides: Partial<GameState> = {}): GameState => ({
   ...createInitialState({
     sessionId: 'sess_test',
@@ -784,7 +795,7 @@ describe('every launch world is playable', () => {
       const state = createInitialState({
         sessionId: 'sess_bare',
         story: world,
-        identity: { displayName: 'Nobody', pronouns: 'they/them', archetypeId: null, advanced: {} },
+        identity: bareIdentity(null),
       });
 
       expect(world.rules.startingItems.length, `${world.title} startingItems`).toBeGreaterThan(0);
@@ -803,7 +814,7 @@ describe('every launch world is playable', () => {
     const state = createInitialState({
       sessionId: 'sess_arch',
       story: world,
-      identity: { displayName: 'Somebody', pronouns: 'they/them', archetypeId: archetype.id, advanced: {} },
+      identity: bareIdentity(archetype.id),
     });
 
     // One entry per item, never two rows for the same thing.
