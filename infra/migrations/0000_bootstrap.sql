@@ -20,12 +20,24 @@ BEGIN
 END
 $$;
 
-CREATE TABLE IF NOT EXISTS auth.users (
-  id                 uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  email              text,
-  is_anonymous       boolean NOT NULL DEFAULT false,
-  created_at         timestamptz NOT NULL DEFAULT now()
-);
+-- `CREATE TABLE IF NOT EXISTS` is not enough: Postgres checks CREATE on the
+-- schema before it checks whether the table is already there, and on Supabase
+-- the `postgres` role has no CREATE on `auth`. So the existence check has to
+-- happen first, in code we control.
+DO $$
+BEGIN
+  IF to_regclass('auth.users') IS NULL THEN
+    EXECUTE $tbl$
+      CREATE TABLE auth.users (
+        id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        email        text,
+        is_anonymous boolean NOT NULL DEFAULT false,
+        created_at   timestamptz NOT NULL DEFAULT now()
+      )
+    $tbl$;
+  END IF;
+END
+$$;
 
 -- Supabase exposes the caller's user id to Row Level Security through this.
 -- The API connects as the service role and enforces ownership in code, so
