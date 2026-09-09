@@ -13,13 +13,15 @@ const raw = {
   storyId: 'story_understudy',
   version: 1,
   title: 'The Understudy',
-  fantasyLabel: 'You know every line. Nobody knows you.',
-  hook: 'Six weeks to opening. You are second cast for a role you have already made yours.',
+  fantasyLabel: 'You know the part. You are second choice.',
+  hook: 'You are the understudy for the lead. Opening night is in six weeks, and the director does not recast.',
   premise:
-    'The Verrine Company takes eleven students a year and gives ten of them nothing. You are the understudy for Ysra — the part every graduating class is remembered by — behind a lead who is better than you in exactly one way and worse in four. ' +
-    'Six weeks until opening. The director is not interested in fairness, the lead is not interested in you, and the company keeps a book of who is owed what. ' +
-    'You cannot outwork this. You can be the person the room turns to when something goes wrong, and you can make sure something goes wrong that is not your fault. ' +
-    'Every rehearsal is a chance to be seen. Every favour is a debt with a name on it. Nobody in this building throws a punch, and it is the most dangerous place you have ever been.',
+    'You are a drama student at the Verrine Company, and you are the understudy for the lead role in this year\'s production. Understudy means you learn the whole part and you do not perform it. You go on only if the lead cannot. ' +
+    'The lead is Talia Renn. She is better than you at one thing and worse at four, and everybody in the building knows it, including her. Opening night is in six weeks and the date never moves. ' +
+    'You cannot simply out-rehearse her, because the director does not recast after the third week and he has never broken that rule. So the only way in is to become the person the room turns to when something goes wrong. ' +
+    'That means favours. The company keeps a book of who owes what, in the director\'s handwriting, and it is read out loud at the end of term. Getting help puts your name in it. So does helping someone else. ' +
+    'So you have six weeks to make yourself necessary. That means being the person who fixes things when they go wrong, and it means collecting favours you will have to pay for later. ' +
+    'Nobody in this building will ever raise their voice at you. It is still the most dangerous place you have worked.',
   creatorId: 'creator_official',
   creatorName: 'ANIMA Studio',
   official: true,
@@ -30,7 +32,7 @@ const raw = {
   contentDescriptors: ['ROMANCE', 'PSYCHOLOGICAL_THEMES', 'MORAL_AMBIGUITY'],
   intensity: 'MODERATE',
   creatorNote:
-    'No fights, no magic, no dice you can brute force. The only resource that matters is what other people are willing to say about you when you are not in the room.',
+    'No fights and no magic. The only thing you are really managing is what people say about you when you are not in the room.',
   rules: {
     defeatMode: 'FAIL_FORWARD',
     progressionMode: 'MILESTONE',
@@ -239,6 +241,8 @@ const raw = {
       id: 'talia',
       name: 'Talia Renn',
       role: 'First cast, Ysra',
+      cardBlurb:
+        "The lead you are understudying. She is not your enemy, and she is not going to hand you the part.",
       pronouns: 'she/her',
       publicTraits: ['Gracious', 'Immaculate', 'Never late'],
       hiddenDrives: [
@@ -304,6 +308,8 @@ const raw = {
       id: 'oswin',
       name: 'Oswin Deare',
       role: 'Director',
+      cardBlurb:
+        "The director. He decides whether you go on, and he has never recast anyone after week three.",
       pronouns: 'he/him',
       publicTraits: ['Blunt', 'Fair in his own terms', 'Bored of talent'],
       hiddenDrives: [
@@ -362,6 +368,8 @@ const raw = {
       id: 'marta',
       name: 'Marta Voss',
       role: 'Wardrobe mistress',
+      cardBlurb:
+        "Wardrobe. She hears every conversation in this building, including the ones about you, and repeats almost none of them.",
       pronouns: 'she/her',
       publicTraits: ['Unimpressed', 'Kind in a hurry', 'Hears everything'],
       hiddenDrives: [
@@ -573,14 +581,15 @@ const raw = {
     },
   ],
   opening:
-    'Oswin stops the run-through eleven minutes in, which is nine minutes later than yesterday.\n\n' +
-    '"From the top of the scene." He does not look up from his pencil. "Renn, sit. Understudy, stand in."\n\n' +
-    'Nine people turn to watch you cross the tape. Talia sits without a word and arranges her hands in her lap, and you cannot tell from her face whether this is a kindness or the first move in something.\n\n' +
-    'You have the line. You have had the line since February.',
+    'The director stops the run-through eleven minutes in. Yesterday he made it to twenty.\n\n' +
+    '"From the top of the scene." He does not look up from his notes. "Renn, sit down. Understudy, stand in."\n\n' +
+    'That is you. Nine people turn to watch you walk to your mark, which is the first time this month anyone in this room has looked directly at you.\n\n' +
+    'Talia sits without a word and folds her hands in her lap. You cannot tell from her face whether she is being generous or whether this is the opening move of something.\n\n' +
+    'You know the line. You have known it since February.',
   openingSuggestions: [
-    'Take the scene from the top and play it exactly as I always have.',
-    'Ask Oswin what he actually wants from this beat.',
-    'Catch Talia’s eye before I start.',
+    'Play the scene exactly the way I have been rehearsing it alone.',
+    'Ask the director what he actually wants from this moment.',
+    'Catch Talia’s eye before I begin.',
   ],
   publishedAt: '2026-08-20T09:00:00.000Z',
 };

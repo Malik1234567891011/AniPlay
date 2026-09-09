@@ -6,6 +6,7 @@ import {
 } from '@aniplay/contracts';
 import type { ModelGateway, ModelMessage } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
+import { NARRATIVE_CLARITY_RULES } from './narrative-clarity.js';
 import { RuleBasedIntentParser, type IntentParser, type ParseContext } from './parser.js';
 import { RuleBasedDirector, type Director } from './director.js';
 import { TemplateWriter, type Writer } from './writer.js';
@@ -159,6 +160,8 @@ function referencesUnknownEntity(intent: ActionIntent, context: ParseContext): b
 
 const DIRECTOR_POLICY = [
   'You are the director of an interactive story. The dice have already been rolled and the state has already changed.',
+  'Beat instructions you write are read by a writer who follows them literally, so an instruction that asks for',
+  'atmosphere without naming the concrete event produces prose the player cannot parse. Always name the event.',
   'You decide how to present what happened and what opportunities to surface next. You never change an outcome.',
   'You may not: change a check result, create inventory, set relationship numbers, teleport anyone, resurrect anyone,',
   'reveal a fact to an NPC who cannot know it, or charge credits.',
@@ -259,9 +262,12 @@ const WRITER_POLICY = [
   'Everything in the resolution has already happened. Do not change it, soften it, or add to it.',
   'If a check failed, the attempt failed. Never write an NPC complying after a failed attempt.',
   'Never grant items, levels, or knowledge that is not in the mutations.',
-  'Short, concrete, sensory. No therapy language, no constant praise, no smirking, no ellipsis tics.',
   'Characters have their own goals and may disagree with the player.',
-].join(' ');
+  '',
+  'The player must always be able to say what literally just happened. Mystery is not knowing WHY;',
+  'confusion is not knowing WHAT. Write mystery, never confusion. Specifically:',
+  `- ${NARRATIVE_CLARITY_RULES}`,
+].join('\n');
 
 export class ModelWriter implements Writer {
   readonly #gateway: ModelGateway;

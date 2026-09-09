@@ -6,5 +6,6 @@ export * from './context.js';
 export * from './director.js';
 export * from './writer.js';
 export * from './validator.js';
+export * from './narrative-clarity.js';
 export * from './pipeline.js';
 export * from './model-stages.js';

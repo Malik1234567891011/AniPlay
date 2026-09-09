@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, FlatList, View } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { StoryDetailResponse } from '@aniplay/contracts';
 import {
   Button,
@@ -51,8 +51,19 @@ export function StoryDetailScreen({
   route: RootRoute<'StoryDetail'>;
 }): React.JSX.Element {
   const { storyId } = route.params;
+  const insets = useSafeAreaInsets();
   const [detail, setDetail] = useState<StoryDetailResponse | null>(null);
   const [saved, setSaved] = useState(false);
+
+  // The key art is deliberately edge-to-edge under the status bar. Once the page
+  // scrolls past it, body content would otherwise run under the clock unclipped,
+  // so a scrim fades in to give the status bar something opaque to sit on.
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrimOpacity = scrollY.interpolate({
+    inputRange: [0, 160, 220],
+    outputRange: [0, 0, 1],
+    extrapolate: 'clamp',
+  });
 
   useEffect(() => {
     void api.storyDetail(storyId).then((response) => {
@@ -79,7 +90,13 @@ export function StoryDetailScreen({
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg.base }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: spacing.giant }}>
+      <Animated.ScrollView
+        contentContainerStyle={{ paddingBottom: spacing.giant }}
+        scrollEventThrottle={16}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: true,
+        })}
+      >
         <StoryArt seed={story.storyId} uri={story.keyArt} style={{ width: '100%', aspectRatio: 4 / 3 }} />
 
         <SafeAreaView edges={['top']} style={{ position: 'absolute', left: GUTTER, right: GUTTER }}>
@@ -172,14 +189,20 @@ export function StoryDetailScreen({
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={{ gap: spacing.lg }}
                 renderItem={({ item }) => (
-                  <View style={{ width: 108, gap: spacing.xs }}>
-                    <CharacterPortrait name={item.name} uri={item.portrait} size={108} />
-                    <Txt variant="caption" numberOfLines={1}>
+                  <View style={{ width: 148, gap: spacing.xs }}>
+                    <CharacterPortrait name={item.name} uri={item.portrait} size={148} />
+                    <Txt variant="bodyCompact" numberOfLines={1}>
                       {item.name}
                     </Txt>
-                    <Txt variant="micro" color={colors.text.muted} numberOfLines={2}>
-                      {item.role}
+                    {/* Story function leads; the job title is secondary. */}
+                    <Txt variant="caption" color={colors.text.secondary} numberOfLines={4}>
+                      {item.cardBlurb || item.role}
                     </Txt>
+                    {item.cardBlurb ? (
+                      <Txt variant="micro" color={colors.text.muted} numberOfLines={1}>
+                        {item.role}
+                      </Txt>
+                    ) : null}
                   </View>
                 )}
               />
@@ -232,7 +255,20 @@ export function StoryDetailScreen({
             </Stack>
           ) : null}
         </Stack>
-      </ScrollView>
+      </Animated.ScrollView>
+
+      <Animated.View
+        pointerEvents="none"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: insets.top,
+          backgroundColor: colors.bg.base,
+          opacity: scrimOpacity,
+        }}
+      />
     </View>
   );
 }

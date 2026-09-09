@@ -59,7 +59,10 @@ export function StoryCoverCard({
   const cover = (
     <StoryArt
       seed={story.storyId}
-      title={story.title}
+      // Falls back to the deterministic placeholder when a world has no
+      // generated cover yet, so a new creator world still looks intentional.
+      uri={story.coverImage}
+      title={story.coverImage ? undefined : story.title}
       style={{
         width: '100%',
         aspectRatio: isHero ? 16 / 10 : isRow ? 1 : 2 / 3,

@@ -745,3 +745,97 @@ describe('generated art stays in sync with the stories that declare it', () => {
     }
   });
 });
+
+describe('narrative clarity (comprehension, not word count)', () => {
+  it('every launch world passes the clarity standard', async () => {
+    const { checkStoryClarity } = await import('./narrative-clarity.js');
+
+    for (const world of LAUNCH_CATALOG) {
+      const report = checkStoryClarity(world);
+      const errors = report.issues.filter((i) => i.severity === 'ERROR');
+      expect(
+        errors,
+        `${world.title}:\n${errors.map((e) => `  ${e.code}: ${e.message}`).join('\n')}`,
+      ).toEqual([]);
+    }
+  });
+
+  it('a premise answers all six questions a new reader has', async () => {
+    const { checkNarrativeClarity } = await import('./narrative-clarity.js');
+
+    for (const world of LAUNCH_CATALOG) {
+      const report = checkNarrativeClarity(world.premise, { story: world, kind: 'premise' });
+      const missing = report.issues.filter((i) => i.code.startsWith('MISSING_'));
+      expect(missing.map((m) => m.code), world.title).toEqual([]);
+    }
+  });
+
+  it('catches the failure mode this checker exists for', async () => {
+    const { checkNarrativeClarity } = await import('./narrative-clarity.js');
+
+    // The original Verath premise: sophisticated-sounding, and impossible to
+    // parse on a first read.
+    const before =
+      'Verath Academy keeps eight archives and admits to eight archives. On your first morning the ' +
+      'gate ward reads your sigil, finds nothing, and turns red anyway — the colour reserved for marks ' +
+      'that were deliberately unwritten. Someone took your name out of the record and left the shape of ' +
+      'it behind — a hole where a student used to be.';
+
+    const report = checkNarrativeClarity(before, { story: STORY, kind: 'premise' });
+    expect(report.passed).toBe(false);
+    const codes = report.issues.map((i) => i.code);
+    // No stated objective, and metaphor doing the work of plain sentences.
+    expect(codes).toContain('MISSING_OBJECTIVE');
+    expect(codes).toContain('METAPHOR_CARRIES_EXPOSITION');
+  });
+
+  it('flags an invented term used before its function is given', async () => {
+    const { checkNarrativeClarity } = await import('./narrative-clarity.js');
+    const report = checkNarrativeClarity(
+      'You walk to The Stacks. You need to get in before anyone notices you are missing.',
+      { story: STORY, kind: 'premise' },
+    );
+    expect(report.issues.some((i) => i.code === 'UNEXPLAINED_TERM' || i.code === 'ABSTRACT_OPENING')).toBe(true);
+  });
+
+  it('does not penalise a long premise for being long', async () => {
+    const { checkNarrativeClarity } = await import('./narrative-clarity.js');
+    // Every launch premise is well over 100 words and all of them pass.
+    for (const world of LAUNCH_CATALOG) {
+      const report = checkNarrativeClarity(world.premise, { story: world, kind: 'premise' });
+      expect(report.wordCount, world.title).toBeGreaterThan(100);
+      expect(report.passed, world.title).toBe(true);
+    }
+  });
+
+  it('gives every character a card blurb about story function, not a job title', () => {
+    for (const world of LAUNCH_CATALOG) {
+      for (const character of world.characters) {
+        expect(character.cardBlurb.length, `${world.title}/${character.id}`).toBeGreaterThan(20);
+        // A blurb that is just the role restated adds nothing.
+        expect(character.cardBlurb.toLowerCase()).not.toBe(character.role.toLowerCase());
+        // It should say something about the player's situation.
+        expect(
+          /\byou\b|\byour\b/i.test(character.cardBlurb),
+          `${world.title}/${character.id}: "${character.cardBlurb}"`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('keeps the check reveal specific to the attempt', () => {
+    const writer = new TemplateWriter();
+    const director = new RuleBasedDirector();
+    const context = contextFor(baseState(), 'I try to steal the key from the desk');
+    const turn = writer.writeSync(context, director.planSync(context));
+    const prose = turn.blocks.map((b) => b.text).join(' ');
+
+    // "It works, and it takes something from you on the way past" could describe
+    // any action at all. The reveal must name what was attempted.
+    expect(prose).not.toContain('takes something from you on the way past');
+    if (context.resolution.checks.length > 0) {
+      const label = context.resolution.checks[0]!.label.toLowerCase();
+      expect(prose.toLowerCase()).toContain(label);
+    }
+  });
+});

@@ -8,9 +8,11 @@ import {
   Pressable,
   ScrollView,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import type {
   NarrativeBlock,
   QualityTier,
@@ -500,7 +502,14 @@ export function SessionScreen({
   );
 }
 
-/** Spec §10.2 B — location background, up to three portraits, an objective strip. */
+/**
+ * Spec §10.2 B — the stage.
+ *
+ * 35–48% of usable screen height, so it reads as a stage rather than a header
+ * strip. Portraits stand on the floor of the frame the way a visual novel
+ * composites them, and the HUD sits on a gradient scrim because white text over
+ * arbitrary generated art is otherwise unreadable half the time.
+ */
 function Stage({
   scene,
   sessionId,
@@ -510,11 +519,44 @@ function Stage({
   sessionId: string;
   navigation: RootNavigation;
 }): React.JSX.Element {
+  const { height } = useWindowDimensions();
+  const stageHeight = Math.round(Math.max(240, Math.min(height * 0.4, 380)));
+
   return (
-    <View style={{ height: 220 }}>
-      <StoryArt seed={scene.locationId} uri={scene.stageImage} style={{ ...StyleSheetAbsolute }}>
-        <View />
-      </StoryArt>
+    <View style={{ height: stageHeight, backgroundColor: colors.bg.elevated }}>
+      <StoryArt seed={scene.locationId} uri={scene.stageImage} style={StyleSheetAbsolute} />
+
+      {/* Characters stand on the floor of the frame, above the HUD. */}
+      <View
+        style={{
+          position: 'absolute',
+          left: GUTTER,
+          right: GUTTER,
+          bottom: 96,
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          gap: spacing.md,
+        }}
+      >
+        {scene.presentCharacters.map((character) => (
+          <CharacterPortrait
+            key={character.id}
+            name={character.name}
+            uri={character.portrait}
+            size={Math.min(96, (stageHeight - 150) / 1.25)}
+            speaking={character.speaking}
+            expression={character.expression}
+          />
+        ))}
+      </View>
+
+      {/* Scrim: generated art is unpredictable, so the HUD brings its own contrast. */}
+      <LinearGradient
+        colors={['transparent', 'rgba(11,13,18,0.55)', 'rgba(11,13,18,0.95)']}
+        locations={[0, 0.55, 1]}
+        style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 150 }}
+        pointerEvents="none"
+      />
 
       <View
         accessible
@@ -524,29 +566,9 @@ function Stage({
             ? `${scene.presentCharacters.map((c) => c.name).join(' and ')} present.`
             : 'Nobody else here.'
         }`}
-        style={{ flex: 1, justifyContent: 'flex-end', padding: GUTTER, gap: spacing.md }}
+        style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: GUTTER, gap: spacing.md }}
       >
-        <Row gap={spacing.md} style={{ position: 'absolute', bottom: 74, left: GUTTER }}>
-          {scene.presentCharacters.map((character) => (
-            <CharacterPortrait
-              key={character.id}
-              name={character.name}
-              uri={character.portrait}
-              size={64}
-              speaking={character.speaking}
-              expression={character.expression}
-            />
-          ))}
-        </Row>
-
-        {/* Encounter HUD — qualitative only, never over the art (§13.4, §13.5). */}
-        {scene.encounter ? (
-          <View style={{ position: 'absolute', top: spacing.md, left: GUTTER, right: GUTTER }}>
-            <Chip label={scene.encounter.objective} tone="danger" />
-          </View>
-        ) : null}
-
-        <Row gap={spacing.lg} style={{ justifyContent: 'flex-start' }}>
+        <Row gap={spacing.xl} style={{ flexWrap: 'wrap' }}>
           {scene.resources.map((resource) => (
             <ResourceBar key={resource.id} {...resource} />
           ))}
@@ -559,6 +581,13 @@ function Stage({
           />
         ) : null}
       </View>
+
+      {/* Encounter HUD — qualitative only, never over the character art (§13.4). */}
+      {scene.encounter ? (
+        <View style={{ position: 'absolute', top: spacing.md, left: GUTTER, right: GUTTER }}>
+          <Chip label={scene.encounter.objective} tone="danger" />
+        </View>
+      ) : null}
     </View>
   );
 }

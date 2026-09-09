@@ -139,6 +139,8 @@ export const StoryDetailResponse = z
           id: z.string(),
           name: z.string(),
           role: z.string(),
+          /** Story function and relationship to the player. Leads the card. */
+          cardBlurb: z.string(),
           portrait: z.string().nullable(),
           publicTraits: z.array(z.string()),
         })

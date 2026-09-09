@@ -17,13 +17,14 @@ const raw = {
   storyId: 'story_ninth_archive',
   version: 1,
   title: 'The Ninth Archive',
-  fantasyLabel: 'Your sigil was erased. It still burns.',
-  hook: 'The Academy deleted your mark from its records. The Archive did not get the message.',
+  fantasyLabel: 'The school says you were never admitted.',
+  hook: 'Your school record has been deleted. You are still standing at the gate, holding your acceptance letter.',
   premise:
-    'Verath Academy keeps eight archives and admits to eight archives. On your first morning the gate ward reads your sigil, finds nothing, and turns red anyway — the colour reserved for marks that were deliberately unwritten. ' +
-    'Someone took your name out of the record and left the shape of it behind. ' +
-    'The prefect who stops you would very much like to know why. The archive assistant who covers for you already knows more than she says. The Warden who signs the erasure orders is unfailingly kind to you, which is the most alarming thing about her. ' +
-    'You have a term to find the ninth archive before the Wards finish learning your face. Read the wrong shelf and the building tells on you. Read the right one and you find out who paid to make you a rumour.',
+    'Verath Academy keeps a magical record for every student it admits. The record lives in the archives, and the spell on the front gate checks it each morning to decide who is allowed inside. ' +
+    'On your first day the gate searches for your record and finds nothing. According to Verath, you were never admitted. ' +
+    'This is impossible. You have an acceptance letter, a room, and a timetable. So either the Academy made a mistake it has never made before, or somebody deliberately removed you from the record. ' +
+    'The gate turns red, which is the signal for a student who should be stopped. A prefect named Kael is ordered to investigate you. An archive assistant named Mira quietly covers for you, and clearly knows more than she says. The Warden who signs off on record changes is extremely kind to you, which is the part that worries you most. ' +
+    'You have a term to find out who erased you and why, before the gate stops treating it as an error and starts treating you as an intruder. Students here are never expelled. They are transferred, and the transfers do not arrive anywhere.',
   creatorId: 'creator_official',
   creatorName: 'ANIMA Studio',
   official: true,
@@ -34,7 +35,7 @@ const raw = {
   contentDescriptors: ['FANTASY_VIOLENCE', 'PSYCHOLOGICAL_THEMES', 'MORAL_AMBIGUITY', 'ROMANCE'],
   intensity: 'MODERATE',
   creatorNote:
-    'A mystery you can lose. Getting caught is a story branch, not a restart — the Wards remember you, and so do the people who saw.',
+    'A mystery you are allowed to lose. Getting caught does not restart the story. It changes it: the gate remembers, and so do the people who watched it happen.',
   rules: {
     defeatMode: 'FAIL_FORWARD',
     progressionMode: 'MILESTONE',
@@ -341,6 +342,8 @@ const raw = {
       id: 'mira',
       name: 'Mira Senn',
       role: 'Archive assistant, third year',
+      cardBlurb:
+        "The archivist who quietly covers for you at the gate, and clearly knows more than she is saying.",
       pronouns: 'she/her',
       publicTraits: ['Precise', 'Overworked', 'Quietly funny'],
       hiddenDrives: [
@@ -415,6 +418,8 @@ const raw = {
       id: 'kael',
       name: 'Kael Ostrand',
       role: 'Gate prefect, fifth year',
+      cardBlurb:
+        "The prefect who stopped you. He has been told to investigate you, and he intends to do it properly.",
       pronouns: 'he/him',
       publicTraits: ['Rigid', 'Fair', 'Extremely tired of being right'],
       hiddenDrives: [
@@ -475,6 +480,8 @@ const raw = {
       id: 'ysolde',
       name: 'Warden Ysolde Farrow',
       role: 'Warden of Records',
+      cardBlurb:
+        "The teacher who signs off on record changes. She is unfailingly kind to you, which is the worrying part.",
       pronouns: 'she/her',
       publicTraits: ['Warm', 'Unhurried', 'Remembers everything about you'],
       hiddenDrives: [
@@ -535,6 +542,8 @@ const raw = {
       id: 'bram',
       name: 'Bram Ketch',
       role: 'Second year, unofficial quartermaster',
+      cardBlurb:
+        "A second-year who can get you almost anything, for a price he will name later.",
       pronouns: 'he/him',
       publicTraits: ['Cheerful', 'Transactional', 'Genuinely fond of you'],
       hiddenDrives: [
@@ -846,8 +855,8 @@ const raw = {
     },
   ],
   setupFields: [
-    { id: 'displayName', label: 'What do they call you?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'Your name' },
-    { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'they/them' },
+    { id: 'displayName', label: 'What do they call you?', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'e.g. Malik Sarrow' },
+    { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. he/him' },
     { id: 'archetype', label: 'How did you get this far?', kind: 'ARCHETYPE', required: false },
     {
       id: 'worldKnowsAboutYou',
@@ -855,7 +864,7 @@ const raw = {
       kind: 'TEXT',
       required: false,
       maxLength: 300,
-      placeholder: 'One thing Verath has already heard about you.',
+      placeholder: 'e.g. I transferred in a term late and nobody will say who signed for me.',
     },
     {
       id: 'origin',
@@ -875,18 +884,19 @@ const raw = {
       kind: 'TEXT',
       advanced: true,
       maxLength: 200,
-      placeholder: 'A scar, a coat, a way of standing.',
+      placeholder: 'e.g. Short, dark hair cut badly by myself, a coat two sizes too big.',
     },
   ],
   opening:
-    'The ward above the gate reads eleven students without comment. It reads you and turns red — the silent red, the one reserved for marks that were taken out of the register on purpose.\n\n' +
-    'The queue behind you stops. Ahead, a prefect with an immaculate sash looks up from his log, and you watch him decide that today is going to be about you.\n\n' +
+    'The gate spell reads eleven students ahead of you and lets all eleven through. Then it reads you, searches the Academy records for your name, and finds nothing at all.\n\n' +
+    'The light above the arch turns red. Red means stop this one.\n\n' +
+    'The queue behind you goes quiet. A prefect looks up from his logbook, and you can see him decide that his morning is now about you.\n\n' +
     '"You." Kael Ostrand does not raise his voice. "Do not move."\n\n' +
-    'Behind him, a small dark-haired archivist glances at the ward, then at you, and very deliberately does not say what she just saw.',
+    'Behind him, a small dark-haired archivist glances at the red light, then at you, and says nothing at all about what she just saw.',
   openingSuggestions: [
-    'Stand still and let Kael log it.',
-    'Ask the archivist what the red actually means.',
-    'Walk through the gate anyway.',
+    'Stand still and let Kael write it up.',
+    'Show him the acceptance letter.',
+    'Ask the archivist what the red light means.',
   ],
   publishedAt: '2026-08-14T09:00:00.000Z',
 };

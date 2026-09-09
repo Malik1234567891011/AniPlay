@@ -160,50 +160,49 @@ export function renderableFacts(context: TurnContext): string[] {
 
 // --- Sentence construction -------------------------------------------------
 
+/**
+ * The check reveal.
+ *
+ * Templates here used to be interchangeable — "it works, and it takes something
+ * from you on the way past" describes opening a door, telling a lie, and losing
+ * a fistfight equally well, which means it describes nothing. Each line now
+ * names the attempt, and the concrete cost is carried by the delta chips beside
+ * it rather than left as "something".
+ */
 function checkSentence(context: TurnContext, rng: SeededRng): string {
   const check = context.resolution.checks[0]!;
-  const succeeded = isSuccess(check.outcome);
+  const attempt = check.label.toLowerCase();
 
   const templates: Record<string, string[]> = {
     CRITICAL_SUCCESS: [
-      'It works better than it should. For a moment everything lines up.',
-      'Clean. Cleaner than you had any right to expect.',
-      'It lands exactly where you wanted it, and then a little further.',
+      `The ${attempt} lands better than it had any right to.`,
+      `The ${attempt} works, and then keeps working.`,
     ],
-    CLEAN_SUCCESS: [
-      'It holds. Whatever you were reaching for, you have it.',
-      'It works, without drama.',
-      'The thing gives, and you are through.',
-    ],
+    CLEAN_SUCCESS: [`The ${attempt} works.`, `The ${attempt} goes through without trouble.`],
     SUCCESS: [
-      'It works. Barely, and you feel the margin.',
-      'Just enough. You would not want to do that twice.',
-      'It holds — for now.',
+      `The ${attempt} works, barely. You feel how close it was.`,
+      `The ${attempt} holds. You would not want to try it twice.`,
     ],
     SUCCESS_WITH_COST: [
-      'It works, and it takes something from you on the way past.',
-      'You get what you wanted. It is not free.',
-      'It gives, but not without leaving a mark.',
+      `The ${attempt} works, and it costs you.`,
+      `The ${attempt} gets you there, and you pay for it on the way through.`,
     ],
     FAILURE: [
-      'It does not take. Whatever you reached for stays out of reach.',
-      'Nothing. The moment closes without you in it.',
-      'It slides away from you, and does not come back.',
+      `The ${attempt} does not work.`,
+      `The ${attempt} comes to nothing.`,
     ],
     COMPLICATION: [
-      'It fails, and the failure is loud.',
-      'Not only does it not work — something notices that you tried.',
-      'It comes apart, and takes the quiet with it.',
+      `The ${attempt} fails, and it fails loudly.`,
+      `The ${attempt} comes apart, and someone notices that you tried.`,
     ],
   };
 
   const base = rng.pick(templates[check.outcome] ?? templates.FAILURE!);
 
-  // Spec §10.6 — the exact maths only appears when the story allows it.
-  if (context.story.rules.revealExactDc) {
-    return `${base} (${check.label} · ${outcomeLabel(check.outcome)})`;
-  }
-  return succeeded ? base : base;
+  // Spec §10.6 — the maths only appears when the story opts into it.
+  return context.story.rules.revealExactDc
+    ? `${base} (${check.label} · ${outcomeLabel(check.outcome)})`
+    : base;
 }
 
 function transitionSentence(context: TurnContext, rng: SeededRng): string {

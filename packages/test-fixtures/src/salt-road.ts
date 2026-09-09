@@ -14,12 +14,14 @@ const raw = {
   version: 1,
   title: 'The Salt Road',
   fantasyLabel: 'Eleven days of road. Nine days of water.',
-  hook: 'You are carrying something across the flats that three other people want, and the water will not stretch.',
+  hook: 'You are paid to carry a locked case across the desert. You have nine days of water and eleven days of walking.',
   premise:
-    'The salt flats between Ossun and the coast take eleven days on foot and there is water at four places, none of them reliable. ' +
-    'You are carrying a sealed case for a woman who paid in advance and did not say what is in it, alongside a guide who has done this route nine times, a pilgrim who should not be out here, and a man who joined at the second well and has never once been asleep when you woke up. ' +
-    'The flats do not have monsters. They have distance, arithmetic, and the fact that four people drink faster than one. ' +
-    'Every day you choose a pace and a route, and every choice spends water you cannot get back. Out here dying is permanent, and the road does not care whose fault it was.',
+    'A woman paid you in advance to carry a locked case on foot from the town of Ossun to the coast. She would not say what is inside it. ' +
+    'The route crosses eleven days of salt flats. There is drinkable water at four wells along the way, and the third one is unreliable — some years it holds, some years it is dry. You are carrying nine days of water. ' +
+    'So you are two days short before you take a single step, which means the third well has to hold. Four people also drink faster than one, and you are not walking alone. ' +
+    'Ferrow is the guide, and she has made this crossing nine times. Sabe is a pilgrim who packed badly and will not turn back. Oren joined at the second well, is good company, and has never once been asleep when you woke up. ' +
+    'Nothing hunts you out here. There are no monsters on the flats. The danger is distance and arithmetic, and the fact that every choice about pace and route spends water you cannot get back. ' +
+    'If you run out, you die, and that is permanent. The road does not care whose fault it was.',
   creatorId: 'creator_official',
   creatorName: 'ANIMA Studio',
   official: true,
@@ -30,7 +32,7 @@ const raw = {
   contentDescriptors: ['FANTASY_VIOLENCE', 'PERMANENT_DEATH', 'MORAL_AMBIGUITY', 'PSYCHOLOGICAL_THEMES'],
   intensity: 'INTENSE',
   creatorNote:
-    'Death is permanent here, and that is the point. The flats are not cruel; they are indifferent, and indifference is harder to argue with.',
+    'Death here is permanent, and that is the point. The desert is not out to get you. It simply does not care, which turns out to be harder to argue with.',
   rules: {
     defeatMode: 'LETHAL',
     progressionMode: 'MILESTONE',
@@ -252,6 +254,8 @@ const raw = {
       id: 'ferrow',
       name: 'Ferrow',
       role: 'Guide, nine crossings',
+      cardBlurb:
+        "Your guide. She has crossed nine times and will tell you the truth about the water even when you would rather she did not.",
       pronouns: 'she/her',
       publicTraits: ['Flat-voiced', 'Exact', 'Does not reassure'],
       hiddenDrives: [
@@ -306,6 +310,8 @@ const raw = {
       id: 'oren',
       name: 'Oren',
       role: 'Joined at the second well',
+      cardBlurb:
+        "He joined the group at the second well. Good company, useful, and always awake before you are.",
       pronouns: 'he/him',
       publicTraits: ['Easy company', 'Helpful', 'Never asleep first'],
       hiddenDrives: [
@@ -360,6 +366,8 @@ const raw = {
       id: 'sabe',
       name: 'Sabe',
       role: 'Pilgrim',
+      cardBlurb:
+        "A pilgrim walking to the coast. Badly equipped, cheerful about it, and drinking the same water you are.",
       pronouns: 'they/them',
       publicTraits: ['Cheerful', 'Badly equipped', 'Absolutely certain'],
       hiddenDrives: [
@@ -549,14 +557,14 @@ const raw = {
     },
   ],
   opening:
-    'The road goes white about a mile out, and stays white for eleven days.\n\n' +
-    'Ferrow checks your canteens without asking, one by one, and does the arithmetic out loud so nobody can pretend later that they did not hear it.\n\n' +
-    '"Nine days of water. Eleven days of road." She hands the last canteen back. "There are four wells. The third one is a question mark. Anyone who wants to go home should do it from here, because from the first well it is the same distance either way."\n\n' +
-    'Behind you, the pilgrim shoulders a pack a third too heavy and grins at nobody.',
+    'The road out of Ossun turns white about a mile ahead, and it stays white for eleven days.\n\n' +
+    'Your guide checks everyone\'s water before you leave. She counts it out loud so that nobody can claim later that they did not hear the numbers.\n\n' +
+    '"Nine days of water. Eleven days of road." Ferrow hands your canteen back. "There are four wells. The third one is a maybe. Anyone who wants to go home should turn round here, because past the first well it is the same distance either way."\n\n' +
+    'Behind you the pilgrim shoulders a pack that is far too heavy for them and grins at nobody in particular.',
   openingSuggestions: [
     'Ask Ferrow what happens if the third well is dry.',
-    'Check the pilgrim’s pack before we leave.',
-    'Shoulder the case and start walking.',
+    'Go through the pilgrim’s pack before we leave.',
+    'Pick up the case and start walking.',
   ],
   publishedAt: '2026-08-27T09:00:00.000Z',
 };

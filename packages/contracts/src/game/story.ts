@@ -179,6 +179,16 @@ export const CharacterDef = z
     id: z.string(),
     name: z.string(),
     role: z.string(),
+    /**
+     * One line for the cast carousel: what this person does *to the player's
+     * situation*, not their job title.
+     *
+     * "Archive assistant, third year" tells a new player nothing about why they
+     * should care. "The archivist who covers for you at the gate, and clearly
+     * knows more than she is saying" tells them the story function and the hook
+     * in the same breath — without spoiling anything they should discover.
+     */
+    cardBlurb: z.string().default(''),
     pronouns: z.string().default('they/them'),
     publicTraits: z.array(z.string()).default([]),
     hiddenDrives: z.array(z.string()).default([]),

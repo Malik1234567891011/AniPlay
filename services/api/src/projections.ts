@@ -100,6 +100,8 @@ export function toStoryDetail(
       id: c.id,
       name: c.name,
       role: c.role,
+      // The blurb leads on the card; the role stays available underneath it.
+      cardBlurb: c.cardBlurb,
       portrait: resolveAssetUrl(c.portrait),
       publicTraits: c.publicTraits,
     })),
