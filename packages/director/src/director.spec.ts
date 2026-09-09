@@ -13,6 +13,7 @@ import {
   commitTurn,
   createInitialState,
   deriveTurnSeed,
+  firedFlag,
   evaluatePredicate,
   resolveIntent,
 } from '@aniplay/engine';
@@ -1155,6 +1156,13 @@ describe('every authored gate can actually be reached', () => {
           for (const flag of route.setsFlags) flags.add(flag);
         }
       }
+    }
+    // The world's own timetable is a source of flags too: an event that fires
+    // at a fixed hour is exactly how a story records that something happened
+    // without the player having caused it.
+    for (const event of world.worldEvents) {
+      flags.add(firedFlag(event.id));
+      for (const flag of event.setsFlags) flags.add(flag);
     }
     return flags;
   };

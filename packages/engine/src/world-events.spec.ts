@@ -280,3 +280,112 @@ describe('paying for an ability', () => {
     expect(strain ?? breath, 'the ability should have cost something').toBeDefined();
   });
 });
+
+/** In a world that starts again, dying is how most weeks end. */
+describe('dying inside a loop', () => {
+  it('sends the clock to midnight rather than inventing a second ending', async () => {
+    const { NINTH_ARCHIVE } = await import('@aniplay/test-fixtures');
+    const looping = {
+      ...NINTH_ARCHIVE,
+      rules: {
+        ...NINTH_ARCHIVE.rules,
+        loop: {
+          startWorldMinute: 480,
+          endWorldMinute: 10_080,
+          persistentFlagPrefixes: ['knows:'],
+          echoRetention: 0,
+          echoThreshold: 40,
+          resetCopy: '',
+        },
+      },
+    };
+
+    const state = baseState();
+    state.worldMinute = 3_000;
+    state.flags['knows:the_code'] = true;
+    // A fight the player is losing badly.
+    state.encounter = {
+      encounterId: 'enc_1',
+      objective: 'Survive',
+      round: 1,
+      participants: [
+        {
+          entityId: 'player',
+          kind: 'PLAYER',
+          team: 'ALLY',
+          initiative: 10,
+          health: 0,
+          maxHealth: 30,
+          statuses: [],
+          zoneId: 'z',
+          downed: true,
+        },
+        {
+          entityId: 'kael',
+          kind: 'NPC',
+          team: 'ENEMY',
+          initiative: 8,
+          health: 20,
+          maxHealth: 20,
+          statuses: [],
+          zoneId: 'z',
+          downed: false,
+        },
+      ],
+      zones: [{ id: 'z', label: 'The arch', adjacentTo: [] }],
+      activeEntityId: 'kael',
+      turnOrder: ['kael', 'player'],
+      environmentalAffordances: [],
+      escapeCondition: 'Get through the arch.',
+      surrenderAllowed: true,
+    };
+
+    const { commitTurn } = await import('./commit.js');
+    const { resolveIntent } = await import('./resolve.js');
+    const { RuleBasedIntentParser } = await import('@aniplay/director');
+    const intent = new RuleBasedIntentParser().parseSync('I wait.', {
+      story: looping,
+      state,
+      intentId: 'i',
+    });
+    const resolution = resolveIntent({ story: looping, state, intent, turnId: 't', seed: 's' });
+    const result = commitTurn({ story: looping, state, resolution, turnId: 't' });
+
+    expect(result.defeat.occurred).toBe(true);
+    expect(result.loopReset.occurred).toBe(true);
+    expect(result.state.worldMinute).toBe(480);
+    // And the one thing that crosses still crossed.
+    expect(result.state.flags['knows:the_code']).toBe(true);
+  });
+});
+
+/** A turn that crosses two days has to let Tuesday cause Friday. */
+describe('one event causing another inside the same turn', () => {
+  it('fires an event gated on a flag an earlier event in the same span set', () => {
+    const story = worldWith(
+      event({ id: 'theft', atWorldMinute: 600, setsFlags: ['page_gone'], cancelledByFlags: [] }),
+      event({
+        id: 'row',
+        atWorldMinute: 900,
+        setsFlags: [],
+        cancelledByFlags: [],
+        requiresFlags: ['page_gone'],
+      }),
+    );
+
+    // One long turn covering both. Without in-sweep causality the row never
+    // happens, and only ever when the player happened to wait a long time.
+    const fired = fireWorldEvents(baseState(), story, 500, 1000, nextId).fired;
+    expect(fired.map((f) => f.def.id)).toEqual(['theft', 'row']);
+  });
+
+  it('and does not fire it when the first one was cancelled', () => {
+    const story = worldWith(
+      event({ id: 'theft', atWorldMinute: 600, setsFlags: ['page_gone'], cancelledByFlags: ['stopped'] }),
+      event({ id: 'row', atWorldMinute: 900, setsFlags: [], cancelledByFlags: [], requiresFlags: ['page_gone'] }),
+    );
+    const state = baseState();
+    state.flags.stopped = true;
+    expect(fireWorldEvents(state, story, 500, 1000, nextId).fired).toHaveLength(0);
+  });
+});

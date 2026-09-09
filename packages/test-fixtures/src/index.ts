@@ -6,6 +6,7 @@ import { TIDEWALL as TIDEWALL_RAW } from './tidewall.js';
 import { UNBOUND as UNBOUND_RAW } from './unbound.js';
 import { NINE_WEEKS as NINE_WEEKS_RAW } from './nine-weeks.js';
 import { RED_MOON as RED_MOON_RAW } from './red-moon.js';
+import { SEVEN_DAYS as SEVEN_DAYS_RAW } from './seven-days.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -16,6 +17,7 @@ export const TIDEWALL = withDerivedAssetKeys(TIDEWALL_RAW);
 export const UNBOUND = withDerivedAssetKeys(UNBOUND_RAW);
 export const NINE_WEEKS = withDerivedAssetKeys(NINE_WEEKS_RAW);
 export const RED_MOON = withDerivedAssetKeys(RED_MOON_RAW);
+export const SEVEN_DAYS = withDerivedAssetKeys(SEVEN_DAYS_RAW);
 
 /**
  * The official launch catalog.
@@ -38,4 +40,5 @@ export const LAUNCH_CATALOG = [
   UNBOUND,
   NINE_WEEKS,
   RED_MOON,
+  SEVEN_DAYS,
 ] as const;

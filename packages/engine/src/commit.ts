@@ -101,6 +101,12 @@ export function commitTurn(options: CommitOptions): CommitResult {
       state = applyMutations(state, story, mutations);
       accepted.push(...mutations);
       defeat = { occurred: true, narrativeHint };
+
+      // In a world that starts again, dying is how most weeks end. The clock
+      // goes to midnight and the reset below does the rest, so death and
+      // running out of time are the same event rather than two systems that
+      // have to agree with each other.
+      if (story.rules.loop) state.worldMinute = story.rules.loop.endWorldMinute;
     } else if (outcome === 'PLAYER_VICTORY') {
       const end: StateMutation = {
         mutationId: nextMutationId(),

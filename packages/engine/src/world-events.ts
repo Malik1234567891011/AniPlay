@@ -60,11 +60,21 @@ export function fireWorldEvents(
     .filter((event) => event.atWorldMinute > from && event.atWorldMinute <= to)
     .sort((a, b) => a.atWorldMinute - b.atWorldMinute);
 
+  // Flags set by an event earlier in this same span. A turn that crosses two
+  // days has to let Tuesday cause Friday: without this, an event gated on
+  // another event's flag silently never fires whenever both fall inside one
+  // turn, which is exactly what waiting out a long stretch does.
+  const setThisSweep = new Set<string>();
+  const isSet = (flag: string): boolean => Boolean(state.flags[flag]) || setThisSweep.has(flag);
+
   for (const event of due) {
-    if (state.flags[firedFlag(event.id)]) continue;
+    if (isSet(firedFlag(event.id))) continue;
     // The player already changed this. That is the reward for knowing.
-    if (event.cancelledByFlags.some((flag) => state.flags[flag])) continue;
-    if (!event.requiresFlags.every((flag) => state.flags[flag])) continue;
+    if (event.cancelledByFlags.some(isSet)) continue;
+    if (!event.requiresFlags.every(isSet)) continue;
+
+    setThisSweep.add(firedFlag(event.id));
+    for (const flag of event.setsFlags) setThisSweep.add(flag);
 
     const witnessed = event.locationId === null || event.locationId === playerLocationId;
     fired.push({ def: event, witnessed });
