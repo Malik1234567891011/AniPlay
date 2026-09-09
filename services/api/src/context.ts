@@ -4,6 +4,7 @@ import { createGatewayFromEnv, ModelDirector, ModelIntentParser, ModelWriter, cr
 import { createMediaGatewayFromEnv } from '@aniplay/director';
 import { JobQueue, registerHandlers } from '@aniplay/worker';
 import { MemoryRepository } from './repo/memory.js';
+import { createStoreVerifierFromEnv, type StoreVerifier } from './store-verifier.js';
 import type { Repository, UserRecord } from './repo/types.js';
 import { WalletService } from './wallet.js';
 
@@ -48,6 +49,12 @@ export interface AppContext {
    * player from reading a finished turn or composing the next one.
    */
   readonly jobs: JobQueue;
+  /**
+   * Spec §33.5 — decides whether a claimed purchase really happened. The route
+   * credits nothing this has not approved, so a client cannot mint credits by
+   * posting a transaction id it made up.
+   */
+  readonly storeVerifier: StoreVerifier;
 }
 
 export function createAppContext(overrides: Partial<AppContext> = {}): AppContext {
@@ -90,6 +97,7 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
     pipeline,
     modelProvider: overrides.modelProvider ?? gateway?.name ?? null,
     jobs,
+    storeVerifier: overrides.storeVerifier ?? createStoreVerifierFromEnv(config),
   };
 }
 

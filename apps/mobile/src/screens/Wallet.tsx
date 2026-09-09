@@ -19,7 +19,7 @@ import {
   radius,
   spacing,
 } from '@aniplay/ui';
-import { api } from '../api/client.js';
+import { ApiError, api } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
@@ -37,7 +37,7 @@ export function WalletScreen({
   route: RootRoute<'Wallet'>;
 }): React.JSX.Element {
   const shortfall = route.params?.shortfall ?? null;
-  const { refreshWallet } = useStore();
+  const { refreshWallet, setBalance } = useStore();
 
   const [wallet, setWallet] = useState<WalletSummary | null>(null);
   const [offers, setOffers] = useState<StoreOffer[]>([]);
@@ -50,7 +50,11 @@ export function WalletScreen({
     const response = await api.wallet();
     setWallet(response.wallet);
     setOffers(response.offers);
-  }, []);
+    // The header pill reads from the shared store. Opening the wallet is
+    // exactly the moment the two must not disagree, so this one fetch feeds
+    // both rather than leaving a stale pill behind an accurate sheet.
+    setBalance(response.wallet.balance);
+  }, [setBalance]);
 
   useEffect(() => {
     void load();
@@ -72,9 +76,51 @@ export function WalletScreen({
           ? 'That purchase was already credited.'
           : `${formatCredits(result.credited)} credits added.`,
       );
+    } catch (error) {
+      haptic('error');
+      // Spec §3.8 — never tell a player they were not charged unless we know
+      // it. A verification outage means the store may well have taken the
+      // money and we simply cannot confirm it yet.
+      const code = error instanceof ApiError ? error.code : 'UNKNOWN';
+      setNotice(
+        code === 'STORE_VERIFICATION_UNAVAILABLE'
+          ? 'We could not reach the store to confirm that purchase. If you were charged, tap Restore purchases in a few minutes and your credits will appear.'
+          : code === 'PURCHASE_NOT_VERIFIED'
+            ? 'The store could not confirm that purchase, so no credits were added. If you were charged, tap Restore purchases.'
+            : 'That purchase did not go through. You have not been charged.',
+      );
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  /**
+   * Spec §20.6 — `Restore purchases`.
+   *
+   * Credits are consumables, so this is not the usual "unlock what you own"
+   * button. It is the fix for the one bad case: the store charged and our
+   * reconciliation did not finish. Production passes the platform's own
+   * transaction list; with no native store module attached the list is empty
+   * and the honest answer is that there is nothing to restore.
+   */
+  const restore = async (): Promise<void> => {
+    setBusy('restore');
+    setNotice(null);
+    try {
+      const result = await api.restorePurchases();
+      await load();
+      await refreshWallet();
+      if (result.restored > 0) {
+        haptic('success');
+        setNotice(`${formatCredits(result.creditsRestored)} credits restored.`);
+      } else if (result.verified > 0) {
+        setNotice('Everything the store has on file is already on your balance.');
+      } else {
+        setNotice('No purchases to restore on this account.');
+      }
     } catch {
       haptic('error');
-      setNotice('That purchase did not go through. You have not been charged.');
+      setNotice('We could not reach the store. Nothing changed — try again shortly.');
     } finally {
       setBusy(null);
     }
@@ -106,6 +152,19 @@ export function WalletScreen({
         </IconButton>
       </Row>
 
+      {/* Pinned, not inline. The controls that produce these are spread down a
+          page taller than the screen — Restore sits at the very bottom — so a
+          notice in the scroll flow is a confirmation the player never sees. */}
+      {notice ? (
+        // Announced, not just shown: a player using VoiceOver gets the result
+        // of a purchase or a restore without hunting for it.
+        <View accessibilityLiveRegion="polite" style={{ paddingHorizontal: GUTTER, paddingTop: spacing.md }}>
+          <Card>
+            <Txt variant="bodyCompact">{notice}</Txt>
+          </Card>
+        </View>
+      ) : null}
+
       <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl, paddingBottom: spacing.giant }}>
         {/* WL-03 — the exact shortfall, never a vague "not enough". */}
         {shortfall ? (
@@ -127,7 +186,12 @@ export function WalletScreen({
               BALANCE
             </Txt>
             {/* Spec §26.10 — the wallet always shows the full number. */}
-            <Txt variant="display">{wallet.balance.toLocaleString()}</Txt>
+            <Row gap={spacing.sm} align="baseline">
+              <Txt variant="display">{wallet.balance.toLocaleString()}</Txt>
+              <Txt variant="body" color={colors.text.muted}>
+                credits
+              </Txt>
+            </Row>
             {wallet.reserved > 0 ? (
               <Txt variant="caption" color={colors.text.muted}>
                 {wallet.reserved} held by a turn in flight
@@ -135,12 +199,6 @@ export function WalletScreen({
             ) : null}
           </Stack>
         )}
-
-        {notice ? (
-          <Card>
-            <Txt variant="bodyCompact">{notice}</Txt>
-          </Card>
-        ) : null}
 
         {wallet?.dailyClaimAvailable ? (
           <Button
@@ -203,6 +261,16 @@ export function WalletScreen({
             Prices shown are US reference prices. Your store will show your local price and confirm before
             any payment.
           </Txt>
+          {/* Spec §20.6 — required, and the only way back from a charge whose
+              reconciliation did not land. */}
+          <Button
+            label="Restore purchases"
+            variant="tertiary"
+            loading={busy === 'restore'}
+            loadingLabel="Checking with the store…"
+            disabled={busy !== null && busy !== 'restore'}
+            onPress={() => void restore()}
+          />
         </Stack>
 
         <Divider />

@@ -5,6 +5,8 @@ import type {
   DiscoverResponse,
   LedgerResponse,
   MeResponse,
+  PurchaseRestoreResponse,
+  PurchaseSyncRequest,
   QualityTier,
   SessionDetailResponse,
   SessionSummary,
@@ -379,6 +381,20 @@ export class ApiClient {
       '/v1/store/purchases/sync',
       { productId, storeTransactionId, platform: 'SANDBOX', receipt: null },
     );
+  }
+
+  /**
+   * Spec §20.6 — `Restore purchases`.
+   *
+   * `transactions` comes from the platform's own record of what this account
+   * bought. Production fills it from StoreKit / Play Billing; with no native
+   * store module attached it is empty, and an empty restore correctly reports
+   * that there is nothing to recover rather than inventing something.
+   */
+  restorePurchases(transactions: PurchaseSyncRequest[] = []) {
+    return this.#request<PurchaseRestoreResponse>('POST', '/v1/store/purchases/restore', {
+      transactions,
+    });
   }
 
   // --- Account and safety ---

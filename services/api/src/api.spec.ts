@@ -8,6 +8,7 @@ import { createAppContext, loadConfig } from './context.js';
 import { MemoryRepository } from './repo/memory.js';
 import { WalletService } from './wallet.js';
 import type { AppContext } from './context.js';
+import { NoVerifierError, createStoreVerifierFromEnv } from './store-verifier.js';
 import type { TurnStreamHub } from './stream.js';
 
 type Server = FastifyInstance & { ctx: AppContext; hub: TurnStreamHub };
@@ -28,6 +29,9 @@ function makeContext(now: () => Date = () => new Date()): AppContext {
     modelProvider: null,
     // No handlers registered, so media jobs are inert in tests.
     jobs: new JobQueue(),
+    // The real selection logic, so the tests exercise platform dispatch and
+    // not a hand-picked verifier that always answers.
+    storeVerifier: createStoreVerifierFromEnv(loadConfig({ PORT: '4000' } as NodeJS.ProcessEnv), {} as NodeJS.ProcessEnv),
   };
 }
 
@@ -246,7 +250,12 @@ describe('wallet (spec §20.7, §20.8)', () => {
   it('reconciles a store purchase exactly once per transaction id', async () => {
     await app.inject({ method: 'GET', url: '/v1/wallet', headers: auth });
     const before = await ctx.wallet.getBalance(GUEST);
-    const payload = { productId: 'crd_10000', storeTransactionId: 'txn_abc', platform: 'SANDBOX', receipt: null };
+    const payload = {
+      productId: 'crd_10000',
+      storeTransactionId: 'sandbox_txn_abc',
+      platform: 'SANDBOX',
+      receipt: null,
+    };
 
     const first = await app.inject({ method: 'POST', url: '/v1/store/purchases/sync', headers: auth, payload });
     expect(first.json().credited).toBe(10_300);
@@ -257,6 +266,78 @@ describe('wallet (spec §20.7, §20.8)', () => {
     expect(replay.json().credited).toBe(0);
 
     expect(await ctx.wallet.getBalance(GUEST)).toBe(before + 10_300);
+  });
+
+  it('refuses a purchase the store cannot confirm (spec §33.5)', async () => {
+    // The body is well-formed and the product is real. The only thing wrong
+    // with it is that no store ever saw it, which is the whole point.
+    await app.inject({ method: 'GET', url: '/v1/wallet', headers: auth });
+    const before = await ctx.wallet.getBalance(GUEST);
+    const response = await app.inject({
+      method: 'POST',
+      url: '/v1/store/purchases/sync',
+      headers: auth,
+      payload: { productId: 'crd_50000', storeTransactionId: 'i-just-made-this-up', platform: 'SANDBOX', receipt: null },
+    });
+
+    expect(response.statusCode).toBe(402);
+    expect(response.json().code).toBe('PURCHASE_NOT_VERIFIED');
+    expect(await ctx.wallet.getBalance(GUEST)).toBe(before);
+  });
+
+  it('refuses rather than credits when no verifier covers the platform', async () => {
+    await app.inject({ method: 'GET', url: '/v1/wallet', headers: auth });
+    const before = await ctx.wallet.getBalance(GUEST);
+    const response = await app.inject({
+      method: 'POST',
+      url: '/v1/store/purchases/sync',
+      headers: auth,
+      payload: { productId: 'crd_50000', storeTransactionId: '2000000123456789', platform: 'APP_STORE', receipt: null },
+    });
+
+    // 503, not 402: the purchase may be real, we just cannot check it yet.
+    expect(response.statusCode).toBe(503);
+    expect(response.json().code).toBe('STORE_VERIFICATION_UNAVAILABLE');
+    expect(await ctx.wallet.getBalance(GUEST)).toBe(before);
+  });
+
+  it('keys reconciliation on the store id, not the one the client sent', async () => {
+    // Same underlying sandbox transaction, posted twice. A client that
+    // reshapes its own id must not get paid twice for one purchase.
+    await app.inject({ method: 'GET', url: '/v1/wallet', headers: auth });
+    const before = await ctx.wallet.getBalance(GUEST);
+    const send = (storeTransactionId: string) =>
+      app.inject({
+        method: 'POST',
+        url: '/v1/store/purchases/sync',
+        headers: auth,
+        payload: { productId: 'crd_2000', storeTransactionId, platform: 'SANDBOX', receipt: null },
+      });
+
+    await send('sandbox_one_purchase');
+    const replay = await send('sandbox_one_purchase');
+
+    expect(replay.json().duplicate).toBe(true);
+    expect(await ctx.wallet.getBalance(GUEST)).toBe(before + 2_000);
+  });
+
+  it('never ships a sandbox verifier in production', async () => {
+    const verifier = createStoreVerifierFromEnv(
+      { port: 4000, host: '0.0.0.0', environment: 'production', baseUrl: 'https://example.test' },
+      {} as NodeJS.ProcessEnv,
+    );
+
+    // No store credentials and no sandbox fallback: nothing can be verified,
+    // so nothing can be credited. That is the correct failure.
+    await expect(
+      verifier.verify({
+        productId: 'crd_50000',
+        storeTransactionId: 'sandbox_free_money',
+        platform: 'SANDBOX',
+        receipt: null,
+        userId: GUEST,
+      }),
+    ).rejects.toThrow(NoVerifierError);
   });
 });
 

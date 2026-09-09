@@ -548,6 +548,31 @@ export const PurchaseSyncRequest = z
   .strict();
 export type PurchaseSyncRequest = z.infer<typeof PurchaseSyncRequest>;
 
+/**
+ * Spec §20.6 — `Restore purchases`.
+ *
+ * The client asks the platform for the transactions it holds for this account
+ * and posts them all. Each one is verified and reconciled independently, so a
+ * purchase the store took but our reconciliation missed comes back, and one
+ * that was already credited is simply a duplicate.
+ */
+export const PurchaseRestoreRequest = z
+  .object({ transactions: z.array(PurchaseSyncRequest).max(100) })
+  .strict();
+export type PurchaseRestoreRequest = z.infer<typeof PurchaseRestoreRequest>;
+
+export const PurchaseRestoreResponse = z
+  .object({
+    /** Transactions the store confirmed. */
+    verified: z.number().int(),
+    /** Of those, the ones that had not been credited yet. */
+    restored: z.number().int(),
+    creditsRestored: z.number().int(),
+    balance: z.number().int(),
+  })
+  .strict();
+export type PurchaseRestoreResponse = z.infer<typeof PurchaseRestoreResponse>;
+
 // --- Safety (§33.8) --------------------------------------------------------
 
 export const ReportReason = z.enum([

@@ -6,6 +6,7 @@ import {
   DEFAULT_QUALITY_TIER,
   FIRST_PURCHASE_OFFER,
   FORK_COST_CREDITS,
+  PurchaseRestoreRequest,
   PurchaseSyncRequest,
   QUALITY_TIERS,
   STORE_OFFERS,
@@ -28,6 +29,7 @@ import {
   sendError,
   type AppContext,
 } from './context.js';
+import { NoVerifierError } from './store-verifier.js';
 import { TurnStreamHub, formatSse } from './stream.js';
 import {
   StaleRevisionError,
@@ -736,16 +738,125 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const parsed = PurchaseSyncRequest.safeParse(request.body);
     if (!parsed.success) return sendError(reply, 400, 'INVALID_REQUEST', 'Purchase payload is malformed.');
 
+    // Spec §33.5 — the store decides whether money moved, not the caller. This
+    // endpoint grants credits, so an unverified body is worth nothing here.
+    let verdict;
+    try {
+      verdict = await ctx.storeVerifier.verify({
+        productId: parsed.data.productId,
+        storeTransactionId: parsed.data.storeTransactionId,
+        platform: parsed.data.platform,
+        receipt: parsed.data.receipt,
+        userId: user.userId,
+      });
+    } catch (error) {
+      if (error instanceof NoVerifierError) {
+        // Nothing can check this platform right now. Refusing is the only safe
+        // answer, and 503 tells the client the purchase is still theirs to
+        // retry rather than lost.
+        request.log.error({ platform: parsed.data.platform }, 'no store verifier configured');
+        return sendError(
+          reply,
+          503,
+          'STORE_VERIFICATION_UNAVAILABLE',
+          'We cannot confirm purchases right now. Your purchase is safe — reopen the wallet shortly and it will be applied.',
+        );
+      }
+      throw error;
+    }
+
+    if (!verdict.valid) {
+      request.log.warn(
+        { userId: user.userId, platform: parsed.data.platform, reason: verdict.reason },
+        'purchase verification failed',
+      );
+      return verdict.retryable
+        ? sendError(
+            reply,
+            503,
+            'STORE_VERIFICATION_UNAVAILABLE',
+            'We could not reach the store to confirm that purchase. Your purchase is safe — try again shortly.',
+          )
+        : sendError(
+            reply,
+            402,
+            'PURCHASE_NOT_VERIFIED',
+            'The store could not confirm that purchase. If you were charged, contact support and nothing will be lost.',
+          );
+    }
+
     const result = await ctx.wallet.reconcilePurchase(
       user.userId,
-      parsed.data.productId,
-      parsed.data.storeTransactionId,
+      // What the store says was bought, not what the client claimed.
+      verdict.productId,
+      verdict.originalTransactionId,
       parsed.data.platform,
     );
 
     return {
       credited: result.credited,
       duplicate: result.duplicate,
+      balance: await ctx.wallet.getBalance(user.userId),
+    };
+  });
+
+  /**
+   * Spec §20.6 — `Restore purchases`.
+   *
+   * Credits are consumable, so this is not the App Store's "restore
+   * non-consumables" flow. It is the recovery path for the case that actually
+   * hurts: the store charged, and reconciliation did not finish. Every
+   * transaction the client's platform still holds gets re-verified and
+   * re-reconciled; anything already credited comes back as a duplicate and
+   * changes nothing.
+   */
+  app.post('/v1/store/purchases/restore', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+
+    const parsed = PurchaseRestoreRequest.safeParse(request.body);
+    if (!parsed.success) return sendError(reply, 400, 'INVALID_REQUEST', 'Restore payload is malformed.');
+
+    let verified = 0;
+    let restored = 0;
+    let creditsRestored = 0;
+
+    for (const transaction of parsed.data.transactions) {
+      let verdict;
+      try {
+        verdict = await ctx.storeVerifier.verify({
+          productId: transaction.productId,
+          storeTransactionId: transaction.storeTransactionId,
+          platform: transaction.platform,
+          receipt: transaction.receipt,
+          userId: user.userId,
+        });
+      } catch (error) {
+        if (error instanceof NoVerifierError) continue;
+        throw error;
+      }
+
+      // One bad or unverifiable entry must not abandon the rest: a restore that
+      // gives up halfway is worse than one that reports what it managed.
+      if (!verdict.valid) continue;
+      verified += 1;
+
+      const result = await ctx.wallet.reconcilePurchase(
+        user.userId,
+        verdict.productId,
+        verdict.originalTransactionId,
+        transaction.platform,
+      );
+      if (!result.duplicate && result.credited > 0) {
+        restored += 1;
+        creditsRestored += result.credited;
+      }
+    }
+
+    return {
+      verified,
+      restored,
+      creditsRestored,
       balance: await ctx.wallet.getBalance(user.userId),
     };
   });
