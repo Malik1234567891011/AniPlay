@@ -534,17 +534,37 @@ function resolveItemUse(args: ResolveActionArgs): ActionOutcome {
   };
 }
 
+/** "the Commons", "the Commons or the Library", "A, B, or C". */
+function formatList(items: readonly string[]): string {
+  if (items.length <= 1) return items[0] ?? '';
+  if (items.length === 2) return `${items[0]} or ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, or ${items.at(-1)}`;
+}
+
 function resolveTravel(args: ResolveActionArgs): ActionOutcome {
   const { story, state, action, nextMutationId } = args;
 
   const target = action.targets.find((t) => t.entityType === 'location');
   const destination = story.locations.find((l) => l.id === target?.entityId);
   if (!destination) {
+    // Name the exits that do exist. "Nowhere by that name" tells the player
+    // nothing and leaves the writer with nothing true to say, which is how a
+    // beat ends up inventing a reason the way out is closed.
+    const here = story.locations.find((l) => l.id === state.player.locationId);
+    const exits = (here?.connections ?? [])
+      .map((edge) => story.locations.find((l) => l.id === edge.to)?.name)
+      .filter((name): name is string => !!name);
+
     return refusal(
       action,
       'UNKNOWN_LOCATION',
-      'There is nowhere by that name to go from here.',
-      'The destination does not exist. Narrate the player reconsidering.',
+      exits.length > 0
+        ? `From ${here?.name ?? 'here'} you can only go to ${formatList(exits)}.`
+        : `There is no way out of ${here?.name ?? 'here'} yet.`,
+      exits.length > 0
+        ? `The destination does not exist. The only ways out are: ${exits.join(', ')}. ` +
+          'Narrate the player reconsidering and name a real one. Invent no barrier and no new rule.'
+        : 'The destination does not exist. Narrate the player reconsidering. Invent no barrier and no new rule.',
     );
   }
   if (destination.id === state.player.locationId) {

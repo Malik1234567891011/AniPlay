@@ -195,7 +195,9 @@ export class ModelDirector implements Director {
           state: directorPayload(context),
           task:
             `Produce a BeatPlan with schemaVersion "1.0" and wordBudget ${config.wordBudget}. ` +
-            'Choose the dramatic focus, order the beats, pick who speaks first, and offer at most three suggested actions drawn only from newOpportunities.',
+            'Choose the dramatic focus, order the beats, pick who speaks first, and offer at most three suggested actions drawn only from newOpportunities. ' +
+            'The focus must be a response to what this player actually did, not to the outcome band in the abstract.',
+          untrustedUserText: context.playerAction,
         }),
         { maxTokens: 3000, temperature: 0.8, timeoutMs: 12_000 },
       );
@@ -264,6 +266,17 @@ const WRITER_POLICY = [
   'Never grant items, levels, or knowledge that is not in the mutations.',
   'Characters have their own goals and may disagree with the player.',
   '',
+  'Show the specific thing the player did, using their own nouns.',
+  'If they handed over a letter, a letter changes hands on the page. If they named a person,',
+  'that person is addressed by name. A beat that would read the same for any other action',
+  'is the wrong beat, however good the prose is. The player must recognise their own move in it.',
+  'Do not quote their sentence back at them, and do not narrate an action they did not take.',
+  '',
+  'When something did not happen, the reason is already in the world.',
+  'Give the reason the resolution gives, or let a character give it. Never invent a new rule to',
+  'explain it — no barrier that was not there, no power nobody has, no physics the world lacks.',
+  'A road the player cannot take is a road that leads somewhere else, or a person standing in it.',
+  '',
   'The player must always be able to say what literally just happened. Mystery is not knowing WHY;',
   'confusion is not knowing WHAT. Write mystery, never confusion. Specifically:',
   `- ${NARRATIVE_CLARITY_RULES}`,
@@ -311,7 +324,11 @@ export class ModelWriter implements Writer {
           },
           task:
             `Write the beat as a NarrativeTurn with schemaVersion "1.0", at most ${plan.wordBudget} words across all blocks. ` +
-            'Use only speakerIds from `speakers`. Set voiceEligible true on dialogue blocks.',
+            'Use only speakerIds from `speakers`. Set voiceEligible true on dialogue blocks. ' +
+            'The beat must show what the player attempted, in their own terms, before it shows the result.',
+          // What they typed, through the untrusted channel: it tells the writer
+          // which nouns belong on the page, and nothing else.
+          untrustedUserText: context.playerAction,
         }),
         { maxTokens: 2000, temperature: 0.9, timeoutMs: 15_000 },
       );

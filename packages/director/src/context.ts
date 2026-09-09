@@ -95,6 +95,17 @@ export interface TurnContext {
 
   /** The player's own parsed speech, so the writer can open the beat with it. */
   readonly playerDialogue: readonly IntentDialogue[];
+
+  /**
+   * What the player actually typed, verbatim.
+   *
+   * The engine decides the outcome and the beat plan describes it, but neither
+   * carries the specific thing the player did — so a beat written from the plan
+   * alone reads as a reply to some generic attempt. "I hand Kael my acceptance
+   * letter" came back as prose that never mentioned a letter. Untrusted input:
+   * it reaches the model through the untrusted channel, never as instructions.
+   */
+  readonly playerAction: string;
 }
 
 export interface BuildContextOptions {
@@ -250,6 +261,7 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
       promises,
     },
     resolution,
+    playerAction: actionText,
     playerDialogue: options.playerDialogue ?? [],
   };
 }

@@ -429,6 +429,47 @@ describe('quests (spec §15.1)', () => {
 });
 
 describe('resolveIntent (spec §12.1 determinism)', () => {
+  it('names the real exits when the destination does not exist', () => {
+    const state = baseState();
+    const result = resolveIntent({
+      story: STORY,
+      state,
+      intent: intent([
+        {
+          verb: 'travel',
+          actor: player,
+          // Nothing in the world is called this. The old refusal said only
+          // "there is nowhere by that name", which told the player nothing and
+          // left the writer with nothing true to say — so a live turn invented
+          // a magical barrier to explain why the player could not leave.
+          targets: [{ entityType: 'location', entityId: 'down_the_hill' }],
+          method: 'walk back down the hill',
+          declaredOutcome: null,
+          timeIntent: 'NOW',
+        },
+      ]),
+      turnId: 't_exits',
+      seed: 'seed-exits',
+    });
+
+    const here = STORY.locations.find((l) => l.id === state.player.locationId)!;
+    const exits = here.connections
+      .map((edge) => STORY.locations.find((l) => l.id === edge.to)?.name)
+      .filter((name): name is string => !!name);
+    expect(exits.length).toBeGreaterThan(0);
+
+    const observable = result.observableFacts.join(' ');
+    for (const exit of exits) expect(observable).toContain(exit);
+
+    // The writer is told not to invent a way to explain the refusal.
+    const priv = result.privateFacts.map((f) => f.fact).join(' ');
+    expect(priv).toMatch(/Invent no barrier and no new rule/);
+
+    // A refusal still costs no world time.
+    expect(result.timeAdvancedMinutes).toBe(0);
+  });
+
+
   it('produces byte-identical resolutions from the same seed', () => {
     const state = baseState();
     const i = intent([
