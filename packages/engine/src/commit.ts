@@ -13,6 +13,7 @@ import { encounterOutcome, defeatMutations } from './combat.js';
 import { charactersPresent, locationForSchedule } from './state.js';
 import type { FiredWorldEvent } from './world-events.js';
 import { echoDirectorNotes, loopShouldReset, resetLoop, type LoopResetResult } from './loop.js';
+import { departuresFromMutations, type CrewDeparture } from './crew.js';
 
 /**
  * Spec §32.4 `commitTurn` — the single transaction that turns a `Resolution`
@@ -36,6 +37,8 @@ export interface CommitResult {
   readonly worldEventFacts: { observable: string[]; private: string[] };
   /** Set on the turn a looping world started again. */
   readonly loopReset: { occurred: boolean; loopNumber: number; directorNotes: string[] };
+  /** Anybody who stopped being crew this turn. Spec §14.7. */
+  readonly crewDepartures: CrewDeparture[];
 }
 
 export interface CommitOptions {
@@ -179,6 +182,8 @@ export function commitTurn(options: CommitOptions): CommitResult {
       loopNumber: loop?.loopNumber ?? 1,
       directorNotes: loop ? echoDirectorNotes(story, loop.echoes) : [],
     },
+    // Decided during resolution, so the beat the player reads contains them.
+    crewDepartures: departuresFromMutations(story, accepted),
   };
 }
 

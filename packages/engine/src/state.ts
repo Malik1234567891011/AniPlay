@@ -12,6 +12,7 @@ import type {
   StoryVersion,
 } from '@aniplay/contracts';
 import { ATTRIBUTE_KEYS } from '@aniplay/contracts';
+import { crewSkillModifier } from './crew.js';
 import { attributeModifier } from './check.js';
 
 /** Construction and read helpers for the authoritative session snapshot. */
@@ -258,6 +259,22 @@ export function equipmentSkillModifier(
   return mod;
 }
 
+/**
+ * Everything outside the player's own training that moves a roll: what they
+ * are carrying, and who is standing next to them.
+ *
+ * Crew belong in the same number as equipment deliberately. A companion whose
+ * contribution lived in its own display would be a claim about the fiction; a
+ * companion inside the check modifier is the reason the roll succeeded.
+ */
+export function supportSkillModifier(
+  state: GameState,
+  story: StoryVersion,
+  skillId: string | null,
+): number {
+  return equipmentSkillModifier(state, story, skillId) + crewSkillModifier(state, story, skillId);
+}
+
 export function effectiveModifier(
   state: GameState,
   story: StoryVersion,
@@ -267,7 +284,7 @@ export function effectiveModifier(
   return (
     attributeModifier(effectiveAttribute(state, story, attribute)) +
     (skillId ? (state.player.skills[skillId] ?? 0) : 0) +
-    equipmentSkillModifier(state, story, skillId)
+    supportSkillModifier(state, story, skillId)
   );
 }
 

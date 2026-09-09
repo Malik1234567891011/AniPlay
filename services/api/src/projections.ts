@@ -17,6 +17,7 @@ import type {
 import {
   attributeModifier,
   charactersPresent,
+  crewRoster,
   dcBandLabel,
   formatCheckMath,
   formatDeadline,
@@ -173,6 +174,14 @@ export function toSceneState(story: StoryVersion, state: GameState): SessionScen
     objective: topObjective(state, story),
     resources: visibleResources(story, state),
     encounter: state.encounter,
+    // Whoever is sailing with the player, in the order they came aboard.
+    crew: crewRoster(state, story).map((member) => ({
+      id: member.def.id,
+      name: member.def.name,
+      station: member.companion.station,
+      mood: member.moodLabel,
+      portrait: resolveAssetUrl(member.def.portrait),
+    })),
   };
 }
 

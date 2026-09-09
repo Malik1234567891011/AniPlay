@@ -7,6 +7,7 @@ import { UNBOUND as UNBOUND_RAW } from './unbound.js';
 import { NINE_WEEKS as NINE_WEEKS_RAW } from './nine-weeks.js';
 import { RED_MOON as RED_MOON_RAW } from './red-moon.js';
 import { SEVEN_DAYS as SEVEN_DAYS_RAW } from './seven-days.js';
+import { BLACKWAKE as BLACKWAKE_RAW } from './blackwake.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -18,6 +19,7 @@ export const UNBOUND = withDerivedAssetKeys(UNBOUND_RAW);
 export const NINE_WEEKS = withDerivedAssetKeys(NINE_WEEKS_RAW);
 export const RED_MOON = withDerivedAssetKeys(RED_MOON_RAW);
 export const SEVEN_DAYS = withDerivedAssetKeys(SEVEN_DAYS_RAW);
+export const BLACKWAKE = withDerivedAssetKeys(BLACKWAKE_RAW);
 
 /**
  * The official launch catalog.
@@ -30,7 +32,9 @@ export const SEVEN_DAYS = withDerivedAssetKeys(SEVEN_DAYS_RAW);
  * freedom where half the abilities are awakened rather than chosen, and Nine
  * Weeks is a romance with no combat at all where the romance can genuinely fail,
  * and Red Moon Brigade is a monster hunt where the meter that makes you strong
- * is the same one that stops you being a person.
+ * is the same one that stops you being a person, and Seven Days to Midnight is
+ * a week that restarts where the only thing you keep is what you found out, and
+ * Blackwake is an ocean where the crew are people who can leave.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -41,4 +45,5 @@ export const LAUNCH_CATALOG = [
   NINE_WEEKS,
   RED_MOON,
   SEVEN_DAYS,
+  BLACKWAKE,
 ] as const;

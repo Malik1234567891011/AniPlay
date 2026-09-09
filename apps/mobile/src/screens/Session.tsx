@@ -690,6 +690,22 @@ export function SessionScreen({
  * composites them, and the HUD sits on a gradient scrim because white text over
  * arbitrary generated art is otherwise unreadable half the time.
  */
+/**
+ * How a crew member's mood reads on the stage.
+ *
+ * The words come from the engine (`moodLabel`), so this is only the colour. A
+ * deliberately small vocabulary: a player glancing at the strip should be able
+ * to tell "somebody is about to leave" from "everybody is fine" without
+ * reading, and should get no more precision than that.
+ */
+const CREW_MOOD_TONE: Record<string, 'neutral' | 'success' | 'warning' | 'danger'> = {
+  'with you': 'success',
+  steady: 'neutral',
+  restless: 'warning',
+  unhappy: 'warning',
+  'about to walk': 'danger',
+};
+
 function Stage({
   scene,
   sessionId,
@@ -815,6 +831,21 @@ function Stage({
             objective={scene.objective}
             onPress={() => navigation.navigate('WorldSheet', { sessionId, tab: 'quests' })}
           />
+        ) : null}
+
+        {/* Who is with you, and how that is going. A word, not a bar: the
+            player should be able to see that their gunner is unhappy at a
+            glance, and go and do something about it, without a number. */}
+        {scene.crew.length > 0 ? (
+          <Row gap={spacing.sm} style={{ flexWrap: 'wrap' }}>
+            {scene.crew.map((member) => (
+              <Chip
+                key={member.id}
+                label={`${member.name} · ${member.mood}`}
+                tone={CREW_MOOD_TONE[member.mood] ?? 'neutral'}
+              />
+            ))}
+          </Row>
         ) : null}
       </View>
 

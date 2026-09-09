@@ -303,6 +303,125 @@ export const RelationshipGate = z
   .strict();
 export type RelationshipGate = z.infer<typeof RelationshipGate>;
 
+/**
+ * How one crew member feels about another.
+ *
+ * Without this a crew is a list of stat bonuses that happen to have faces. The
+ * value is a small signed number rather than the five-dimension relationship
+ * block because nobody needs to model an NPC's romantic history with another
+ * NPC — what matters mechanically is whether these two can work the same deck.
+ */
+export const CompanionBond = z
+  .object({
+    characterId: z.string(),
+    /** −3 will not sail with them, +3 followed them here. */
+    value: z.number().int().min(-3).max(3),
+    /** One line the director may draw on. Never shown raw. */
+    note: z.string().default(''),
+  })
+  .strict();
+export type CompanionBond = z.infer<typeof CompanionBond>;
+
+/**
+ * A condition under which this person stops being yours.
+ *
+ * Authored, checked every turn, and never a surprise: `warningCopy` fires one
+ * step before `departureCopy` does. A companion who can only ever be gained is
+ * a possession, and the whole point of a crew is that they are not.
+ */
+export const CompanionDeparture = z
+  .object({
+    id: z.string(),
+    /** All present conditions must hold. */
+    when: z
+      .object({
+        moraleAtMost: z.number().int().nullable().default(null),
+        trustAtMost: z.number().int().nullable().default(null),
+        flagsSet: z.array(z.string()).default([]),
+        flagsUnset: z.array(z.string()).default([]),
+        /** Their own goal went unanswered past this hour. */
+        afterWorldMinute: z.number().int().nullable().default(null),
+      })
+      .strict(),
+    /** Shown while it is still avoidable. */
+    warningCopy: z.string().default(''),
+    /** Shown on the turn they go. */
+    departureCopy: z.string(),
+    /** Where they end up. Null leaves them off the board. */
+    toLocationId: z.string().nullable().default(null),
+    setsFlags: z.array(z.string()).default([]),
+    /** They do not merely leave — they take something or tell someone. */
+    betrayal: z.boolean().default(false),
+  })
+  .strict();
+export type CompanionDeparture = z.infer<typeof CompanionDeparture>;
+
+/**
+ * Spec §14.7 — an NPC who can travel with the player.
+ *
+ * The design constraint this exists to enforce: a companion is a relationship
+ * with running costs, not an item with a portrait. They have to be earned
+ * (`joinsWhen`), they cost something to keep (`upkeepPerDay`, morale drift),
+ * they do something the player cannot (`grantsSkills`, scaled by how they are
+ * feeling), they want something of their own (`wantsQuestId`), they have
+ * opinions about each other (`bonds`), and they can go (`leavesWhen`).
+ *
+ * Every one of those is state the engine owns, so a story cannot claim a crew
+ * matters without it actually mattering.
+ */
+export const CompanionDef = z
+  .object({
+    /** What they do aboard: "Navigator", "Gunner", "Surgeon". */
+    station: z.string().max(40),
+    /** One line for the roster: why they are worth the trouble. */
+    summary: z.string().max(220).default(''),
+    /** What has to be true before they will come. */
+    joinsWhen: z
+      .object({
+        flagsSet: z.array(z.string()).default([]),
+        flagsUnset: z.array(z.string()).default([]),
+        hasItems: z.array(z.string()).default([]),
+        minTrust: z.number().int().nullable().default(null),
+        minRespect: z.number().int().nullable().default(null),
+        minFactionReputation: z
+          .array(z.object({ factionId: z.string(), value: z.number().int() }).strict())
+          .default([]),
+        /** Somebody already aboard vouched for them. */
+        companionsAboard: z.array(z.string()).default([]),
+      })
+      .strict()
+      .default({}),
+    /** Said when the player asks and the answer is no. Must name the reason. */
+    refusalCopy: z.string(),
+    /** Said when they come aboard. */
+    acceptCopy: z.string(),
+    /** Their contribution to the player's rolls, scaled by morale. */
+    grantsSkills: z.record(z.string(), z.number().int()).default({}),
+    /** Their own goal, which becomes live once they are aboard. */
+    wantsQuestId: z.string().nullable().default(null),
+    startingMorale: z.number().int().min(0).max(100).default(55),
+    /** Where they drift on their own, per day aboard. */
+    moraleDriftPerDay: z.number().default(0),
+    /** How they take the things the player does. */
+    reactions: z
+      .array(
+        z
+          .object({
+            flag: z.string(),
+            morale: z.number().int(),
+            note: z.string().default(''),
+          })
+          .strict(),
+      )
+      .default([]),
+    bonds: z.array(CompanionBond).default([]),
+    leavesWhen: z.array(CompanionDeparture).default([]),
+    /** What feeding them costs, per day. */
+    upkeepPerDay: z.number().min(0).default(0),
+  })
+  .strict();
+export type CompanionDef = z.infer<typeof CompanionDef>;
+
 /** Spec §14.4 — structured NPC contract. Deliberately not one giant prose prompt. */
 export const CharacterDef = z
   .object({
@@ -389,6 +508,8 @@ export const CharacterDef = z
       resolve: 10,
       arcana: 10,
     }),
+    /** Set when this person can sail with you. Spec §14.7. */
+    companion: CompanionDef.nullable().default(null),
     combatant: z
       .object({
         health: z.number().int().min(1),

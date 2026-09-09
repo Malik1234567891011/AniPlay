@@ -288,6 +288,10 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
     player: context.player,
     objective: context.objective,
     activeQuests: context.activeQuests,
+    // Who is travelling with the player, so the plan can put them in the scene
+    // and use them. A companion the director is never told about is a portrait
+    // in a sidebar.
+    crew: context.crew,
     // Public-facing NPC data plus only the facts each may know.
     presentCharacters: context.presentCharacters.map((c) => ({
       id: c.def.id,
@@ -383,6 +387,10 @@ export class ModelWriter implements Writer {
             playerAppearance: context.player.appearance,
             worldKnowsAboutPlayer: context.player.about,
             playerSetupAnswers: context.player.setupAnswers,
+            // Companions are on the deck whether or not the schedule put them
+            // in the room, and how they are taking it is the difference between
+            // a crew and a list of names.
+            crew: context.crew,
             speakers: context.presentCharacters.map((c) => ({
               id: c.def.id,
               name: c.def.name,

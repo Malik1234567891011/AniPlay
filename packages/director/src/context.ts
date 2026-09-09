@@ -11,6 +11,8 @@ import type {
 import { QUALITY_TIERS } from '@aniplay/contracts';
 import {
   charactersPresent,
+  crewFlag,
+  crewRoster,
   formatWorldTime,
   relationshipLabel,
   topObjective,
@@ -84,6 +86,23 @@ export interface TurnContext {
   readonly objective: string | null;
   readonly activeQuests: Array<{ id: string; title: string; step: string; directorNotes: string }>;
   readonly factions: Array<{ name: string; rank: string; reputation: number }>;
+
+  /**
+   * Who travels with the player, and how that is going. Spec §14.7.
+   *
+   * Companions are not a subset of `presentCharacters`: they are the people who
+   * are there in every scene whether they were scheduled to be or not, and the
+   * writer has to know that a navigator who has stopped correcting you is still
+   * on the deck. Empty in every world that has no companions at all.
+   */
+  readonly crew: ReadonlyArray<{
+    readonly id: string;
+    readonly name: string;
+    readonly station: string;
+    readonly mood: string;
+    /** Their opinions of each other, where they are strong enough to matter. */
+    readonly frictionWith: readonly string[];
+  }>;
 
   // Layer 5 — who is on stage, and what they may know.
   readonly presentCharacters: readonly PresentCharacterContext[];
@@ -268,6 +287,15 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
         (id) => story.abilities.find((a) => a.id === id)?.name ?? id,
       ),
     },
+    crew: crewRoster(state, story).map((member) => ({
+      id: member.def.id,
+      name: member.def.name,
+      station: member.companion.station,
+      mood: member.moodLabel,
+      frictionWith: member.companion.bonds
+        .filter((bond) => bond.value <= -2 && Boolean(state.flags[crewFlag(bond.characterId)]))
+        .map((bond) => story.characters.find((c) => c.id === bond.characterId)?.name ?? bond.characterId),
+    })),
     objective: topObjective(state, story),
     activeQuests,
     factions: state.factions.map((f) => ({

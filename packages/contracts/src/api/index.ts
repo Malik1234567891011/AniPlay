@@ -250,6 +250,27 @@ export const SessionSceneState = z
         .strict(),
     ),
     encounter: EncounterState.nullable(),
+    /**
+     * Who is travelling with the player. Spec §14.7.
+     *
+     * `mood` is deliberately a word rather than the morale number: the player
+     * should be able to tell that their gunner is unhappy without being shown a
+     * bar, and the number is the engine's business. Empty in worlds with no
+     * companions, which is most of them.
+     */
+    crew: z
+      .array(
+        z
+          .object({
+            id: z.string(),
+            name: z.string(),
+            station: z.string(),
+            mood: z.string(),
+            portrait: z.string().nullable(),
+          })
+          .strict(),
+      )
+      .default([]),
   })
   .strict();
 export type SessionSceneState = z.infer<typeof SessionSceneState>;

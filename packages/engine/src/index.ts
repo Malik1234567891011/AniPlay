@@ -11,4 +11,5 @@ export * from './progression.js';
 export * from './resolve.js';
 export * from './world-events.js';
 export * from './loop.js';
+export * from './crew.js';
 export * from './commit.js';

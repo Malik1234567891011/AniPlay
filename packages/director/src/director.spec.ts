@@ -13,7 +13,10 @@ import {
   commitTurn,
   createInitialState,
   deriveTurnSeed,
+  crewFlag,
+  departedFlag,
   firedFlag,
+  moraleFlag,
   evaluatePredicate,
   resolveIntent,
 } from '@aniplay/engine';
@@ -1163,6 +1166,19 @@ describe('every authored gate can actually be reached', () => {
     for (const event of world.worldEvents) {
       flags.add(firedFlag(event.id));
       for (const flag of event.setsFlags) flags.add(flag);
+    }
+    // And the crew system writes its own: membership, morale, and whatever a
+    // departure records about itself. A story that gates on having a navigator
+    // aboard is gating on something the engine genuinely produces.
+    for (const character of world.characters) {
+      const companion = character.companion;
+      if (!companion) continue;
+      flags.add(crewFlag(character.id));
+      flags.add(moraleFlag(character.id));
+      flags.add(departedFlag(character.id));
+      for (const rule of companion.leavesWhen) {
+        for (const flag of rule.setsFlags) flags.add(flag);
+      }
     }
     return flags;
   };

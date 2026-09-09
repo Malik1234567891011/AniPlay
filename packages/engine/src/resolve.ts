@@ -17,11 +17,12 @@ import {
   charactersPresent,
   countItem,
   effectiveAttribute,
-  equipmentSkillModifier,
+  supportSkillModifier,
   getRelationship,
 } from './state.js';
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
 import { fireWorldEvents } from './world-events.js';
+import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
 import { buildEncounter, canSpend, newTurnEconomy, spend, type ActionWeight, type TurnEconomy } from './combat.js';
 import { resolveNpcTurns } from './npc-turns.js';
@@ -275,6 +276,16 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   observableFacts.push(...world.observableFacts);
   privateFacts.push(...world.privateFacts.map((fact: string) => ({ visibility: 'SELF' as const, fact })));
 
+  // And then the people who chose to be here decide whether they still do.
+  // Same reasoning as the world events above: a navigator walking off the ship
+  // is the loudest thing that happens in the turn, and it has to be in the
+  // paragraph the player reads rather than turning up silently in the roster.
+  const afterWorld = projectState(state, story, mutations);
+  const crew = updateCrew(afterWorld, story, totalMinutes, nextMutationId);
+  mutations.push(...crew.mutations);
+  observableFacts.push(...crew.observableFacts);
+  privateFacts.push(...crew.privateFacts.map((fact: string) => ({ visibility: 'SELF' as const, fact })));
+
   // Opportunities describe what the player can do *next*, so they are computed
   // against the world as this turn leaves it — otherwise a turn that moves you
   // would offer the exits of the room you just left.
@@ -417,6 +428,30 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     );
   }
 
+  // Spec §14.7 — who you are asking is settled before any dice, because
+  // offering a berth to somebody who does not sail is a misunderstanding, not
+  // a roll the player can fail and retry.
+  if (ability.tags.includes('recruit')) {
+    const targetId = action.targets[0]?.entityId ?? null;
+    const target = targetId ? story.characters.find((c) => c.id === targetId) : null;
+    if (!target || !target.companion) {
+      return refusal(
+        action,
+        'TARGET_UNAVAILABLE',
+        'There is nobody here you could offer that to.',
+        'The offer had no one to land on. Narrate it as words that did not get said.',
+      );
+    }
+    if (isAboard(state, target.id)) {
+      return refusal(
+        action,
+        'ALREADY_TRUE',
+        `${target.name} already sails with you.`,
+        'Narrate the misstep briefly and lightly. Do not repeat the recruitment scene.',
+      );
+    }
+  }
+
   const cooldownUntil = state.player.abilityCooldowns[ability.id] ?? 0;
   if (cooldownUntil > state.worldMinute) {
     return refusal(
@@ -502,7 +537,7 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
       attributeScore: effectiveAttribute(state, story, ability.check.attribute),
       skillId: ability.check.skillId,
       skillProficiency: ability.check.skillId ? (state.player.skills[ability.check.skillId] ?? 0) : 0,
-      equipmentModifier: equipmentSkillModifier(state, story, ability.check.skillId),
+      equipmentModifier: supportSkillModifier(state, story, ability.check.skillId),
       statusModifier: 0,
       situationalModifier: 0,
       dc,
@@ -519,6 +554,33 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     );
 
     if (!isSuccess(check.outcome)) {
+      // A botched offer is still an offer somebody heard. "Offer a Berth slips
+      // away from you" is the system talking; the person's own no is the scene,
+      // and it is the same no they would give on a good roll they do not meet
+      // the conditions for.
+      if (ability.tags.includes('recruit')) {
+        const target = story.characters.find((c) => c.id === action.targets[0]?.entityId);
+        if (target?.companion) {
+          observableFacts.length = 0;
+          observableFacts.push(`${target.name} says no. ${target.companion.refusalCopy}`);
+          return {
+            checks,
+            mutations,
+            observableFacts,
+            privateFacts: [
+              {
+                visibility: 'SELF',
+                fact:
+                  `The offer came out badly and ${target.name} turned it down. Write it as an ` +
+                  'awkward ask, not as a power failing. They can be asked again.',
+              },
+            ],
+            timeCategory: 'INSTANT',
+            normalized: { verb: 'use_ability', abilityId: ability.id, status: 'FAILED', outcome: check.outcome },
+          };
+        }
+      }
+
       return {
         checks,
         mutations,
@@ -537,11 +599,40 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     observableFacts.push(`${ability.name} takes hold exactly as intended.`);
   }
 
+  // Spec §14.7 — an ability tagged `recruit` is an offer, and the answer is
+  // the companion's to give. Rolling well is how you get asked seriously; it
+  // is not how you get a yes. Everything the person actually needs before they
+  // will sail with you lives in `joinsWhen`, and if it is unmet they say so in
+  // their own words rather than the offer silently doing nothing.
+  const privateFacts: PrivateFact[] = [];
+  if (ability.tags.includes('recruit')) {
+    const target = story.characters.find((c) => c.id === action.targets[0]?.entityId)!;
+    const verdict = recruitCheck(state, story, target.id);
+    if (verdict.ok) {
+      mutations.push(...recruitMutations(story, target.id, nextMutationId));
+      observableFacts.push(`${target.name} signs on. ${verdict.copy}`);
+      privateFacts.push({
+        visibility: 'SELF',
+        fact:
+          `${target.name} has joined the crew as ${target.companion?.station ?? 'crew'}. ` +
+          'Write the moment they agree. They keep their own opinions; this is not a purchase.',
+      });
+    } else {
+      observableFacts.push(`${target.name} says no. ${verdict.copy}`);
+      privateFacts.push({
+        visibility: 'SELF',
+        fact:
+          `${target.name} refused. The reasons, which they may give some of: ${verdict.unmet.join(' ')} ` +
+          'Do not have them change their mind inside this beat.',
+      });
+    }
+  }
+
   return {
     checks,
     mutations,
     observableFacts,
-    privateFacts: [],
+    privateFacts,
     timeCategory: 'INSTANT',
     normalized: {
       verb: 'use_ability',
@@ -797,7 +888,7 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
     skillProficiency: skill ? (state.player.skills[skill] ?? 0) : 0,
-    equipmentModifier: equipmentSkillModifier(state, story, skill),
+    equipmentModifier: supportSkillModifier(state, story, skill),
     dc,
     advantageLevel: advantageFor(args),
     allowsPartial: true,
@@ -1057,7 +1148,7 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
     skillProficiency: skill ? (state.player.skills[skill] ?? 0) : 0,
-    equipmentModifier: equipmentSkillModifier(state, story, skill),
+    equipmentModifier: supportSkillModifier(state, story, skill),
     dc,
     advantageLevel: advantageFor(args),
     allowsPartial: false,
@@ -1273,7 +1364,7 @@ function resolveSteal(args: ResolveActionArgs): ActionOutcome {
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
     skillProficiency: skill ? (state.player.skills[skill] ?? 0) : 0,
-    equipmentModifier: equipmentSkillModifier(state, story, skill),
+    equipmentModifier: supportSkillModifier(state, story, skill),
     // Doing it in front of the person it belongs to is a different problem.
     dc: DC_BANDS.HARD + situationalDc(args) + (ownerPresent ? 4 : 0),
     advantageLevel: advantageFor(args),
@@ -1523,7 +1614,7 @@ function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
     skillProficiency: skill ? (state.player.skills[skill] ?? 0) : 0,
-    equipmentModifier: equipmentSkillModifier(state, story, skill),
+    equipmentModifier: supportSkillModifier(state, story, skill),
     dc,
     advantageLevel: advantageFor(args),
     allowsPartial: PARTIAL_CAPABLE.has(action.verb),
