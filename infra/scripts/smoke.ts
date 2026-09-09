@@ -289,10 +289,15 @@ async function main(): Promise<void> {
       for (const character of story.characters) {
         const firstName = character.name.split(/\s+/)[0]!;
         if (firstName.length < 4) continue;
-        const speaking = new RegExp(`${firstName}[^.!?]{0,40}?[“"][^“”"]{12,}[”"]`);
-        if (speaking.test(narration)) {
-          note(action, 'NARRATION_AS_DIALOGUE', matched(narration, speaking));
-        }
+        const speaking = new RegExp(`${firstName}[^.!?]{0,40}?[“"]([^“”"]{12,})[”"]`);
+        const found = speaking.exec(narration);
+        if (!found) continue;
+        // A quote that is the player's own sentence is them being reported, not
+        // somebody being ventriloquised.
+        const words = (found[1] ?? '').toLowerCase().split(/\W+/).filter((w) => w.length > 3);
+        const echoesPlayer =
+          words.length > 0 && words.filter((w) => action.toLowerCase().includes(w)).length / words.length > 0.5;
+        if (!echoesPlayer) note(action, 'NARRATION_AS_DIALOGUE', matched(narration, speaking));
       }
 
       // The same sentence twice across a run reads as a machine, not a world.
@@ -368,8 +373,11 @@ async function main(): Promise<void> {
 
       // An attack or a public humiliation that moves nothing is a world that
       // does not care what you do to the people in it.
-      const targetPresent = previous.presentCharacters.length > 0 || present.size > 0;
-      if ((probe.intent === 'violence' || probe.intent === 'insult') && targetPresent && deltas.length === 0) {
+      // Only aggression that reached somebody. The probe wanders, and a swing
+      // at an empty yard correctly changes nothing.
+      const named = story.characters.find((c) => action.includes(c.name.split(/\s+/)[0]!));
+      const reachedThem = Boolean(named && (present.has(named.id) || wasPresent.has(named.id)));
+      if ((probe.intent === 'violence' || probe.intent === 'insult') && reachedThem && deltas.length === 0) {
         note(action, 'NO_CONSEQUENCE', 'aggression changed nothing the player can see');
       }
       if (probe.intent === 'violence') {
@@ -402,10 +410,12 @@ async function main(): Promise<void> {
       // --- Impossible things -----------------------------------------------
 
       if (probe.intent === 'impossible') {
-        // The world may refuse. It may not quietly grant it.
-        if (/\byou (?:rise|lift|float|soar|hover|fly)\b/i.test(prose)) {
-          note(action, 'IMPOSSIBLE_GRANTED', matched(prose, /\byou (?:rise|lift|float|soar|hover|fly)\b/i));
-        }
+        // The world may refuse. It may not quietly grant. "You lift your arms
+        // and imagine floating" is the refusal working; "you rise above the
+        // yard" is not.
+        const granted =
+          /\byou (?:rise|lift off|float|soar|hover|fly|leave the ground)\b(?![^.]*\b(?:imagine|almost|nothing|do not|does not|cannot)\b)/i;
+        if (granted.test(prose)) note(action, 'IMPOSSIBLE_GRANTED', matched(prose, granted));
       }
 
       // A theft is only evidence about theft if there was something to take.
