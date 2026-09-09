@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CONTRACT_VERSION } from '@aniplay/contracts';
-import { createGatewayFromEnv, ModelDirector, ModelIntentParser, ModelWriter, createDefaultPipeline, type TurnPipelineDeps } from '@aniplay/director';
+import { createGatewayFromEnv, createModerator, ModelDirector, ModelIntentParser, ModelWriter, createDefaultPipeline, type Moderator, type TurnPipelineDeps } from '@aniplay/director';
 import { createMediaGatewayFromEnv } from '@aniplay/director';
 import { JobQueue, registerHandlers } from '@aniplay/worker';
 import { MemoryRepository } from './repo/memory.js';
@@ -93,6 +93,11 @@ export interface AppContext {
    * in production (§6.4).
    */
   readonly auth: TokenVerifier;
+  /**
+   * Spec §29.1 layer 3 — runs on what the player typed, before anything is
+   * reserved or generated, so a blocked turn costs nothing.
+   */
+  readonly moderator: Moderator;
 }
 
 /**
@@ -155,6 +160,7 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
     jobs,
     storeVerifier: overrides.storeVerifier ?? createStoreVerifierFromEnv(config),
     auth: overrides.auth ?? createTokenVerifierFromEnv(config),
+    moderator: overrides.moderator ?? createModerator(gateway),
   };
 }
 

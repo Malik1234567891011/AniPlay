@@ -37,6 +37,7 @@ import {
 import { NoVerifierError } from './store-verifier.js';
 import { TurnStreamHub, formatSse } from './stream.js';
 import {
+  ContentBlockedError,
   StaleRevisionError,
   submitTurn,
   InsufficientCreditsError,
@@ -685,6 +686,15 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
           balance: error.balance,
           shortfall: error.shortfall,
         });
+      }
+      if (error instanceof ContentBlockedError) {
+        // Spec §29.2 — redirect rather than lecture, and never charge. Nothing
+        // was reserved, so there is nothing to release.
+        request.log.warn(
+          { userId: user.userId, categories: error.categories },
+          'turn blocked by input moderation',
+        );
+        return sendError(reply, 422, 'CONTENT_BLOCKED', error.message);
       }
       if (error instanceof StaleRevisionError) {
         return sendError(reply, 409, 'STALE_REVISION', 'This story moved on while you were away.', {

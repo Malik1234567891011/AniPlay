@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { GRANT_DAILY, GRANT_NEW_USER, QUALITY_TIERS } from '@aniplay/contracts';
-import { createDefaultPipeline } from '@aniplay/director';
+import { createDefaultPipeline, RuleBasedModerator } from '@aniplay/director';
 import { JobQueue } from '@aniplay/worker';
 import { buildServer } from './server.js';
 import { assertProductionReady, createAppContext, loadConfig } from './context.js';
@@ -38,6 +38,9 @@ function makeContext(now: () => Date = () => new Date()): AppContext {
     // The development verifier: the token is the user id. Production cannot
     // select it, which `assertProductionReady` and the auth tests both pin.
     auth: new DevTokenVerifier(),
+    // The narrow floor, with no provider behind it: the same thing a build
+    // with no keys ships with.
+    moderator: new RuleBasedModerator(),
     // The real selection logic, so the tests exercise platform dispatch and
     // not a hand-picked verifier that always answers.
     storeVerifier: createStoreVerifierFromEnv(loadConfig({ PORT: '4000' } as NodeJS.ProcessEnv), {} as NodeJS.ProcessEnv),
@@ -1151,5 +1154,41 @@ describe('pinning canon', () => {
       payload: { pinned: true },
     });
     expect(response.statusCode).toBe(404);
+  });
+});
+
+/** Spec §29.1 layer 3 — moderation of what the player typed. */
+describe('input moderation', () => {
+  it('lets the game be the game', async () => {
+    const { sessionId, revision } = await startSession();
+    const { response } = await playTurn(sessionId, revision, 'I hit Kael as hard as I can.');
+    expect(response.statusCode).toBe(202);
+  });
+
+  it('refuses what no fiction makes acceptable, and charges nothing for it', async () => {
+    const { sessionId, revision } = await startSession();
+    const before = await ctx.wallet.getBalance(GUEST);
+
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/turns`,
+      headers: { ...auth, 'idempotency-key': crypto.randomUUID() },
+      payload: {
+        actionText: 'I undress the twelve year old.',
+        qualityTier: 'VIVID',
+        sessionRevision: revision,
+        selectedSuggestionId: null,
+        voicePreferred: false,
+      },
+    });
+
+    expect(response.statusCode).toBe(422);
+    expect(response.json().code).toBe('CONTENT_BLOCKED');
+    // §29.2 — inside the fiction, never a policy readout.
+    expect(response.json().message).not.toMatch(/policy|violation|prohibited/i);
+    // Nothing was reserved, so nothing was spent and the world did not move.
+    expect(await ctx.wallet.getBalance(GUEST)).toBe(before);
+    expect((await ctx.repo.getState(sessionId))!.revision).toBe(revision);
+    expect(await ctx.repo.listTurns(sessionId)).toHaveLength(1);
   });
 });

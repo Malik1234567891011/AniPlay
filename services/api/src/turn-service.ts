@@ -62,6 +62,20 @@ export interface AcceptedTurn {
   readonly completion: Promise<void>;
 }
 
+/**
+ * The action was refused before anything happened. Nothing was reserved, no
+ * state moved, and the message is the one the player sees.
+ */
+export class ContentBlockedError extends Error {
+  constructor(
+    override readonly message: string,
+    readonly categories: readonly string[],
+  ) {
+    super(message);
+    this.name = 'ContentBlockedError';
+  }
+}
+
 export async function submitTurn(args: SubmitTurnArgs): Promise<AcceptedTurn> {
   const { ctx, hub, user, session, story, actionText, qualityTier, clientRevision } = args;
 
@@ -73,6 +87,16 @@ export async function submitTurn(args: SubmitTurnArgs): Promise<AcceptedTurn> {
   if (clientRevision !== state.revision) {
     const turns = await ctx.repo.listTurns(session.sessionId);
     throw new StaleRevisionError(state.revision, turns.at(-1)?.turnId ?? null);
+  }
+
+  // Spec §29.1 layer 3 / §29.2. Before the reserve, so a refusal costs the
+  // player nothing, and before the parser, so nothing is generated from it.
+  const verdict = await ctx.moderator.check(actionText);
+  if (verdict.flagged) {
+    throw new ContentBlockedError(
+      verdict.playerFacingMessage ?? 'That takes the story somewhere it cannot go. Try something else.',
+      verdict.categories,
+    );
   }
 
   const turnId = `turn_${crypto.randomUUID()}`;
