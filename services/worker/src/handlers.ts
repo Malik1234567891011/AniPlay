@@ -41,6 +41,17 @@ export interface HeroImageJob {
   readonly presentCharacterIds: readonly string[];
   readonly shotType: string;
   readonly sceneFacts: readonly string[];
+  /**
+   * The player as they are at this moment. Spec §19.6 — a frame of a bleeding
+   * protagonist in a burned room used to show a clean one in an intact one,
+   * because none of this was sent.
+   */
+  readonly player?: {
+    readonly appearance?: string;
+    readonly condition?: string;
+    readonly carrying?: readonly string[];
+  };
+  readonly timeOfDay?: string;
 }
 
 export interface HandlerDeps {
@@ -87,6 +98,8 @@ export function registerHandlers(queue: JobQueue, deps: HandlerDeps): void {
         shotType: payload.shotType,
         turnId: payload.turnId,
         sceneFacts: payload.sceneFacts,
+        player: payload.player,
+        timeOfDay: payload.timeOfDay,
       });
 
       const asset = await deps.media.generateImage(spec);

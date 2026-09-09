@@ -378,6 +378,31 @@ describe('rule-based intent parser', () => {
   });
 });
 
+/** A minimal committed turn, for tests that only care about one field of it. */
+function turnRecord(): TurnRecord {
+  return {
+    turnId: 't',
+    sessionId: 's',
+    turnIndex: 0,
+    actionText: 'something',
+    intent: null,
+    resolution: null,
+    beatPlan: null,
+    narrative: null,
+    blocks: [],
+    checks: [],
+    suggestedActions: [],
+    sceneSummary: 'a scene',
+    heroImageUrl: null,
+    stageImageUrl: null,
+    qualityTier: 'VIVID',
+    creditsCharged: 0,
+    violations: [],
+    repaired: false,
+    createdAt: new Date(0).toISOString(),
+  } as unknown as TurnRecord;
+}
+
 describe('director beat planning', () => {
   const director = new RuleBasedDirector();
 
@@ -409,22 +434,79 @@ describe('director beat planning', () => {
     expect(plan.suggestedActions.some((s) => s.intentHint === 'use_ability:veilstep')).toBe(false);
   });
 
-  it('withholds hero frames on tiers that do not include them', () => {
+  it('gives every tier hero frames, and the tier sets how often', () => {
+    // Spec §19.6 — this used to be a tier gate, and the default tier is VIVID,
+    // which had frames switched off. For the default player, a product that
+    // calls itself Playable Anime never showed an image during play.
     const state = baseState();
     const intent = parse('Attack Kael', state);
     const resolution = resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 's' });
 
-    for (const [tier, expected] of [
-      ['QUICK', false],
-      ['VIVID', false],
-      ['CINEMATIC', true],
-      ['APEX', true],
-    ] as const) {
+    for (const tier of ['QUICK', 'VIVID', 'CINEMATIC', 'APEX'] as const) {
       const context = buildTurnContext({
         story: STORY, state, resolution, tier, memories: [], recentTurns: [], actionText: 'Attack Kael',
       });
-      expect(director.planSync(context).mediaPlan.heroImage.eligible, tier).toBe(expected);
+      expect(director.planSync(context).mediaPlan.heroImage.eligible, tier).toBe(true);
     }
+  });
+
+  it('does not put a frame on every turn of a dramatic run', () => {
+    // Eligibility had no memory, so a stretch of good turns produced an image
+    // on every one of them — which is how images stop meaning anything.
+    const state = baseState();
+    const intent = parse('Attack Kael', state);
+    const resolution = resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 's' });
+
+    const withGap = (turnsSince: number) => {
+      const recentTurns = Array.from({ length: turnsSince + 1 }, (_, i) => ({
+        ...turnRecord(),
+        heroImageUrl: i === 0 ? 'https://example.test/frame.png' : null,
+      }));
+      const context = buildTurnContext({
+        story: STORY, state, resolution, tier: 'CINEMATIC', memories: [],
+        recentTurns, actionText: 'Attack Kael',
+      });
+      return director.planSync(context).mediaPlan.heroImage;
+    };
+
+    // One turn after a frame, an ordinary dramatic beat waits.
+    expect(withGap(1).eligible).toBe(false);
+    expect(withGap(1).reason).toMatch(/moment ago|turns since/i);
+    // Well clear of it, the same beat earns one.
+    expect(withGap(9).eligible).toBe(true);
+  });
+
+  it('lets a landmark jump the queue, but never twice running', () => {
+    const state = baseState();
+    const intent = parse('Attack Kael', state);
+    const base = resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 's' });
+    const death = {
+      ...base,
+      mutations: [
+        ...base.mutations,
+        { mutationId: 'm', type: 'FLAG_SET' as const, subjectId: 'kael', reasonCode: 'KILLED_BY_PLAYER', payload: {} },
+      ],
+    };
+
+    const at = (turnsSince: number) => {
+      const recentTurns = Array.from({ length: turnsSince + 1 }, (_, i) => ({
+        ...turnRecord(),
+        heroImageUrl: i === 0 ? 'https://example.test/frame.png' : null,
+      }));
+      return director.planSync(
+        buildTurnContext({
+          story: STORY, state, resolution: death, tier: 'VIVID', memories: [],
+          recentTurns, actionText: 'Attack Kael',
+        }),
+      ).mediaPlan.heroImage;
+    };
+
+    // Three turns after the last frame is well short of VIVID's ten, and a
+    // death still earns one.
+    expect(at(3).eligible).toBe(true);
+    expect(at(3).reason).toMatch(/landmark/i);
+    // Back to back is still refused. Even a death gets one frame.
+    expect(at(1).eligible).toBe(false);
   });
 
   it('scales the word budget by tier but never the outcome', () => {

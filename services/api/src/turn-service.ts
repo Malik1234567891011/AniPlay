@@ -1,6 +1,6 @@
-import type { QualityTier, StoryVersion, TurnRecord } from '@aniplay/contracts';
+import type { GameState, QualityTier, StoryVersion, TurnRecord } from '@aniplay/contracts';
 import { QUALITY_TIERS } from '@aniplay/contracts';
-import { deriveTurnSeed, outcomeLabel, formatCheckMath, dcBandLabel } from '@aniplay/engine';
+import { dayPart, deriveTurnSeed, outcomeLabel, formatCheckMath, dcBandLabel } from '@aniplay/engine';
 import { runTurn } from '@aniplay/director';
 import type { AppContext } from './context.js';
 import { toSceneState } from './projections.js';
@@ -245,6 +245,18 @@ async function processTurn(
           presentCharacterIds: result.plan.mediaPlan.activeCharacterIds,
           shotType: result.plan.mediaPlan.heroImage.shotType,
           sceneFacts: result.resolution.observableFacts,
+          // What the player looks like and how they are doing, so the frame is
+          // of this run rather than of the world in general.
+          player: {
+            appearance: result.state.player.identity.advanced.appearance ?? undefined,
+            condition: playerCondition(result.state),
+            carrying: result.state.player.inventory
+              .filter((e) => e.equipped)
+              .map((e) => story.items.find((i) => i.id === e.itemId)?.name)
+              .filter((n): n is string => !!n)
+              .slice(0, 3),
+          },
+          timeOfDay: dayPart(result.state.worldMinute),
         },
         // Keyed on the turn, so a retried commit never generates twice.
         `hero:${turnId}`,
@@ -304,3 +316,19 @@ async function processTurn(
 }
 
 export { InsufficientCreditsError };
+
+
+/**
+ * How hurt the player is, as a word.
+ *
+ * An image prompt should never carry a number: "12 health" means nothing to a
+ * model, and the point is what the picture shows.
+ */
+function playerCondition(state: GameState): string {
+  const health = state.player.resources.find((r) => r.id === 'health' || r.id === 'hp');
+  if (!health || health.max === 0) return 'unhurt';
+  const ratio = health.current / health.max;
+  if (ratio > 0.75) return 'unhurt';
+  if (ratio > 0.4) return 'hurt';
+  return 'badly hurt';
+}

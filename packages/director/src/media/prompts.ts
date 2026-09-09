@@ -493,6 +493,17 @@ export function playerPortraitPrompt(input: PlayerPortraitInput): ImagePromptSpe
  * Spec §19.1 tier 2 — a hero frame for a beat that earned one. Built from the
  * validated scene, never from the generated prose.
  */
+/**
+ * Spec §19.6 — a frame from the player's own anime.
+ *
+ * The point of it is that it is *this* story, so it has to carry the state the
+ * story is actually in. The first version passed name and appearance and
+ * stopped there — no `visualHook`, which is the one detail the whole character
+ * system exists to keep stable, and no pronouns, which is how Blackwake's
+ * navigator came back as a man on her own cover. Nothing about the player
+ * either, so a hero frame of a bleeding protagonist in a burned room showed a
+ * clean one in an intact one.
+ */
 export function heroFramePrompt(input: {
   story: StoryVersion;
   locationId: string;
@@ -500,6 +511,16 @@ export function heroFramePrompt(input: {
   shotType: string;
   turnId: string;
   sceneFacts: readonly string[];
+  /** How the player looks right now, and how they are doing. */
+  player?: {
+    appearance?: string;
+    /** "unhurt" | "hurt" | "badly hurt" — a word, never a number. */
+    condition?: string;
+    /** Anything visible they are carrying or wearing. */
+    carrying?: readonly string[];
+  };
+  /** Rough hour, so a night scene is not lit like an afternoon. */
+  timeOfDay?: string;
 }): ImagePromptSpec {
   const location = input.story.locations.find((l) => l.id === input.locationId);
 
@@ -513,6 +534,27 @@ export function heroFramePrompt(input: {
     MOMENT: 'A quiet, held beat. Intimate framing, shallow focus.',
   };
 
+  // Everything that keeps a face the same face across a whole run.
+  const cast = input.presentCharacters.map((c) =>
+    compose([
+      `${c.name}, ${presentation(c.pronouns)}: ${c.appearance}`,
+      c.visualHook ? `Must be visible and unchanged: ${c.visualHook}.` : null,
+    ]),
+  );
+
+  const player = input.player;
+  const playerLine = player
+    ? compose([
+        'The player character is in this shot and their face is deliberately not fixed — keep it turned,',
+        'obscured, at the edge of frame, or seen from behind, so the viewer can be them.',
+        player.appearance ? `What is fixed about them: ${player.appearance}.` : null,
+        player.condition && player.condition !== 'unhurt' ? `They are ${player.condition}: show it.` : null,
+        player.carrying && player.carrying.length > 0
+          ? `Visibly carrying or wearing: ${player.carrying.join(', ')}.`
+          : null,
+      ])
+    : null;
+
   return {
     assetKey: heroFrameAssetKey(input.turnId),
     kind: 'HERO_FRAME',
@@ -525,11 +567,17 @@ export function heroFramePrompt(input: {
       STYLE_SPINE,
       framing[input.shotType] ?? framing.MOMENT,
       location?.artDirection,
-      input.presentCharacters.length > 0
-        ? `Characters present: ${input.presentCharacters.map((c) => `${c.name} (${c.appearance})`).join('; ')}.`
+      cast.length > 0 ? `Characters present. ${cast.join(' ')}` : null,
+      playerLine,
+      input.timeOfDay ? `Time of day: ${input.timeOfDay}.` : null,
+      // The scene facts are the authoritative record of what just happened, so
+      // they lead rather than decorate: this frame is of that, not of the room.
+      input.sceneFacts.length > 0
+        ? `This frame is of this moment specifically: ${input.sceneFacts.slice(0, 3).join(' ')}`
         : null,
-      input.sceneFacts.length > 0 ? `What is happening: ${input.sceneFacts.slice(0, 2).join(' ')}` : null,
       `Mood: ${input.story.rules.toneGuide}`,
+      'These are established characters with existing reference art. Match face, hair, age, build and ' +
+        'costume identity exactly.',
       NEGATIVES,
     ]),
   };

@@ -497,41 +497,13 @@ function buildMediaPlan(context: TurnContext, beatType: BeatType): MediaPlan {
     expressions[character.def.id] = pickExpression(character, context);
   }
 
-  const heroWorthy =
-    beatType === 'REVEAL' ||
-    beatType === 'CLIFFHANGER' ||
-    resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS') ||
-    resolution.mutations.some((m) => m.type === 'ENCOUNTER_START') ||
-    // Arriving somewhere for the first time earns a frame. This used to test
-    // the discovered list on projected state, where the arrival has already
-    // been recorded, so the condition could never be true.
-    firstVisit;
-
-  const shotType = !heroWorthy
-    ? ('NONE' as const)
-    : beatType === 'COMBAT'
-      ? ('ACTION' as const)
-      : locationChanged
-        ? ('ESTABLISHING' as const)
-        : context.presentCharacters.length >= 2
-          ? ('TWO_SHOT' as const)
-          : beatType === 'REVEAL'
-            ? ('REVEAL' as const)
-            : ('MOMENT' as const);
+  const hero = heroImageDecision(context, beatType, { locationChanged, firstVisit });
 
   return {
     stageAction: locationChanged ? 'CHANGE_LOCATION' : expressionsChanged(expressions) ? 'CHANGE_VARIANT' : 'KEEP',
     activeCharacterIds: context.presentCharacters.slice(0, 3).map((c) => c.def.id),
     expressions,
-    heroImage: {
-      eligible: heroWorthy && config.heroImageEligible,
-      reason: !config.heroImageEligible
-        ? `${config.label} does not include hero frames`
-        : heroWorthy
-          ? `${beatType} beat earns a frame`
-          : 'Ordinary beat; the persistent stage covers it',
-      shotType: heroWorthy && config.heroImageEligible ? shotType : 'NONE',
-    },
+    heroImage: hero,
     voice: context.presentCharacters
       .filter((c) => c.def.voiceId)
       .map((c, index) => ({ blockIndex: index + 1, voiceId: c.def.voiceId! })),
@@ -868,4 +840,101 @@ export function beatBudget(context: TurnContext, tierBudget: number): number {
 
   const budget = Math.round(tierBudget * Math.max(0.5, Math.min(2.4, weight)));
   return Math.max(30, Math.min(220, budget));
+}
+
+
+// --- When a frame from your anime appears ----------------------------------
+
+/**
+ * Spec §19.6 — image cadence.
+ *
+ * Two things were wrong. Hero frames were gated on quality tier, and the
+ * default tier is VIVID, which had them switched off — so for the default
+ * player, a product that calls itself Playable Anime never showed a single
+ * image during play. And eligibility was a per-turn predicate with no memory,
+ * so on the tiers that did have them a run of dramatic turns produced a
+ * dramatic image every turn, which is how images stop meaning anything and
+ * start costing a fortune.
+ *
+ * So: every tier gets frames, and the tier sets how often rather than whether.
+ * A rhythm with a floor between frames, and a short list of things important
+ * enough to ignore the floor — the moments a sports anime would cut to a still
+ * of somebody's face.
+ */
+
+/** Minimum turns between ordinary frames, by tier. */
+const HERO_SPACING: Record<string, number> = {
+  QUICK: 14,
+  VIVID: 10,
+  CINEMATIC: 6,
+  APEX: 4,
+};
+
+/** Nothing overrides the floor twice running. Even a death gets one frame. */
+const HERO_HARD_FLOOR = 2;
+
+export function heroImageDecision(
+  context: TurnContext,
+  beatType: BeatType,
+  scene: { locationChanged: boolean; firstVisit: boolean },
+): MediaPlan['heroImage'] {
+  const { resolution, tier } = context;
+  const since = context.turnsSinceHeroImage;
+  const reason = (code: string): boolean => resolution.mutations.some((m) => m.reasonCode.startsWith(code));
+
+  // Moments a story would cut to a still of. These skip the spacing rule,
+  // because "the rival finally shows up" does not wait for a cooldown.
+  const landmark =
+    reason('KILLED_BY_PLAYER') ||
+    reason('CREW_DEPARTED') ||
+    reason('CREW_BETRAYAL') ||
+    reason('UNDERTAKING_BEGUN') ||
+    reason('ABILITY_UNLOCK') ||
+    reason('CONTEST_RESULT') ||
+    beatType === 'CLIFFHANGER' ||
+    scene.firstVisit ||
+    // Meeting somebody important for the first time.
+    context.presentCharacters.some((c) => !context.state.flags[`met:${c.def.id}`] && c.def.cardBlurb !== '');
+
+  const notable =
+    beatType === 'REVEAL' ||
+    resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS') ||
+    resolution.mutations.some((m) => m.type === 'ENCOUNTER_START') ||
+    resolution.mutations.some((m) => m.type === 'QUEST_TRANSITION');
+
+  const spacing = HERO_SPACING[tier] ?? 10;
+  const spacedOut = since === null || since >= spacing;
+  const floorClear = since === null || since >= HERO_HARD_FLOOR;
+
+  const eligible = landmark ? floorClear : notable && spacedOut;
+
+  if (!eligible) {
+    return {
+      eligible: false,
+      reason:
+        since !== null && since < HERO_HARD_FLOOR
+          ? 'A frame appeared a moment ago; the stage carries this one.'
+          : landmark || notable
+            ? `Worth a frame, but only ${since} turns since the last one.`
+            : 'Ordinary beat; the persistent stage covers it.',
+      shotType: 'NONE',
+    };
+  }
+
+  const shotType: MediaPlan['heroImage']['shotType'] =
+    beatType === 'COMBAT'
+      ? 'ACTION'
+      : scene.locationChanged
+        ? 'ESTABLISHING'
+        : context.presentCharacters.length >= 2
+          ? 'TWO_SHOT'
+          : beatType === 'REVEAL'
+            ? 'REVEAL'
+            : 'MOMENT';
+
+  return {
+    eligible: true,
+    reason: landmark ? `${beatType} beat is a landmark and earns a frame` : `${beatType} beat earns a frame`,
+    shotType,
+  };
 }

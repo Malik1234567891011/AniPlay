@@ -110,6 +110,12 @@ export interface TurnContext {
   // Layer 6 — the last few turns only.
   readonly recentTurns: readonly { actionText: string | null; sceneSummary: string }[];
 
+  /**
+   * How many turns since the last hero frame, or null if there has never been
+   * one. Spec §19.6 — image cadence is a rhythm, not a per-turn coin flip.
+   */
+  readonly turnsSinceHeroImage: number | null;
+
   // Layer 7 — retrieved canon.
   readonly retrievedFacts: readonly ScoredFact[];
 
@@ -305,6 +311,7 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
     })),
     presentCharacters,
     // Spec §17.5 layer 6 — the last 2–4 turns, never the whole history.
+    turnsSinceHeroImage: turnsSinceHeroImage(recentTurns),
     recentTurns: recentTurns.slice(-4).map((t) => ({
       actionText: t.actionText,
       sceneSummary: t.sceneSummary,
@@ -329,4 +336,19 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
  */
 export function estimateTokens(value: unknown): number {
   return Math.ceil(JSON.stringify(value).length / 4);
+}
+
+
+/**
+ * Turns since a hero frame last appeared.
+ *
+ * Read off the turn log rather than kept as state, because the log is the
+ * record of what the player actually saw — a frame that failed to generate
+ * should not count as one they were shown.
+ */
+function turnsSinceHeroImage(recentTurns: readonly TurnRecord[]): number | null {
+  for (let i = recentTurns.length - 1; i >= 0; i--) {
+    if (recentTurns[i]?.heroImageUrl) return recentTurns.length - 1 - i;
+  }
+  return null;
 }
