@@ -1,0 +1,501 @@
+import type {
+  ContinueCard,
+  GameEvent,
+  GameState,
+  MemoryFact,
+  SessionSceneState,
+  SessionSummary,
+  StoryDetailResponse,
+  StorySummary,
+  StoryVersion,
+  TimelineEntry,
+  TurnRecord,
+  WorldSheetResponse,
+} from '@aniplay/contracts';
+import {
+  attributeModifier,
+  charactersPresent,
+  formatDeadline,
+  formatWorldTime,
+  proficiencyLabel,
+  relationshipLabel,
+  topObjective,
+  dayNumber,
+} from '@aniplay/engine';
+import type { SessionRecord, StorySignals } from './repo/types.js';
+
+/**
+ * Read models. Authoritative state lives in `GameState`; these shape it into
+ * exactly what a screen needs, so the client never has to derive game rules.
+ */
+
+/** Plain-language attribute copy for the World Sheet (spec §11.2). */
+const ATTRIBUTE_COPY: Record<string, { name: string; plain: string }> = {
+  might: { name: 'Might', plain: 'Force, endurance, and raw physical power. Shoving a door, holding a line.' },
+  agility: { name: 'Agility', plain: 'Speed, precision, and reflex. Moving quietly, moving fast, not being seen.' },
+  mind: { name: 'Mind', plain: 'Analysis, memory, and technical knowledge. Noticing what is missing from a page.' },
+  presence: { name: 'Presence', plain: 'Persuasion, command, and performance. Being believed, or being feared.' },
+  resolve: { name: 'Resolve', plain: 'Willpower and composure. Not flinching when it matters.' },
+  arcana: { name: 'Arcana', plain: 'Attunement to the extraordinary. Reading a ward, bending one.' },
+};
+
+export function toStorySummary(
+  story: StoryVersion,
+  signals: StorySignals,
+  saved: boolean,
+): StorySummary {
+  const badges: Array<'NEW' | 'TRENDING' | 'OFFICIAL'> = [];
+  if (story.official) badges.push('OFFICIAL');
+  if (signals.runs > 5000) badges.push('TRENDING');
+
+  return {
+    storyId: story.storyId,
+    storyVersionId: story.id,
+    title: story.title,
+    fantasyLabel: story.fantasyLabel,
+    hook: story.hook,
+    creatorName: story.creatorName,
+    official: story.official,
+    coverImage: story.coverImage,
+    keyArt: story.keyArt,
+    tags: story.tags,
+    mechanicsChips: story.mechanicsChips,
+    contentDescriptors: story.contentDescriptors,
+    intensity: story.intensity,
+    runs: signals.runs,
+    likes: signals.likes,
+    saved,
+    badges,
+    updatedAt: story.publishedAt ?? new Date().toISOString(),
+  };
+}
+
+export function toStoryDetail(
+  story: StoryVersion,
+  signals: StorySignals,
+  saved: boolean,
+  related: StorySummary[],
+  activeSessionId: string | null,
+): StoryDetailResponse {
+  return {
+    story: toStorySummary(story, signals, saved),
+    premise: story.premise,
+    creatorNote: story.creatorNote,
+    opening: story.opening,
+    // Spec §8.2 item 9 — public traits only. Hidden drives never ship to a client.
+    cast: story.characters.map((c) => ({
+      id: c.id,
+      name: c.name,
+      role: c.role,
+      portrait: c.portrait,
+      publicTraits: c.publicTraits,
+    })),
+    stats: {
+      runs: signals.runs,
+      medianDepthLabel: story.quests.length > 3 ? 'Open-ended' : 'Episodic',
+      intensity: story.intensity,
+      updatedAt: story.publishedAt ?? new Date().toISOString(),
+    },
+    related,
+    activeSessionId,
+    setupFields: story.setupFields,
+    archetypes: story.archetypes,
+  };
+}
+
+export function toSessionSummary(record: SessionRecord, story: StoryVersion, state: GameState, turnCount: number): SessionSummary {
+  return {
+    sessionId: record.sessionId,
+    storyId: record.storyId,
+    storyVersionId: record.storyVersionId,
+    title: story.title,
+    coverImage: story.coverImage,
+    revision: state.revision,
+    turnCount,
+    status: record.status,
+    createdAt: record.createdAt,
+    lastPlayedAt: record.lastPlayedAt,
+    displayName: record.displayName,
+    forkedFromSessionId: record.forkedFromSessionId,
+    forkedAtTurnIndex: record.forkedAtTurnIndex,
+  };
+}
+
+export function toSceneState(story: StoryVersion, state: GameState): SessionSceneState {
+  const location = story.locations.find((l) => l.id === state.player.locationId);
+
+  return {
+    locationId: state.player.locationId,
+    locationName: location?.name ?? state.player.locationId,
+    stageImage: location?.stageImage ?? null,
+    worldTimeLabel: formatWorldTime(state.worldMinute),
+    worldMinute: state.worldMinute,
+    dayNumber: dayNumber(state.worldMinute),
+    presentCharacters: charactersPresent(state)
+      .map((runtime) => {
+        const def = story.characters.find((c) => c.id === runtime.characterId);
+        if (!def) return null;
+        return {
+          id: def.id,
+          name: def.name,
+          portrait: def.portrait,
+          expression: 'neutral',
+          speaking: false,
+        };
+      })
+      .filter((c): c is NonNullable<typeof c> => c !== null)
+      // Spec §10.2 B — the stage carries at most three portraits.
+      .slice(0, 3),
+    objective: topObjective(state, story),
+    resources: visibleResources(story, state),
+    encounter: state.encounter,
+  };
+}
+
+/** Spec §12.8 — 1–4 visible resources in normal UI, by display priority. */
+function visibleResources(story: StoryVersion, state: GameState): SessionSceneState['resources'] {
+  return state.player.resources
+    .map((r) => {
+      const def = story.resources.find((d) => d.id === r.id);
+      if (!def || !def.visible) return null;
+      return {
+        id: r.id,
+        name: def.name,
+        current: r.current,
+        max: r.max,
+        color: def.color,
+        polarity: def.polarity,
+        priority: def.displayPriority,
+      };
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null)
+    .sort((a, b) => a.priority - b.priority)
+    .slice(0, 4)
+    .map(({ priority: _priority, ...rest }) => rest);
+}
+
+export function toWorldSheet(
+  story: StoryVersion,
+  state: GameState,
+  memories: readonly MemoryFact[],
+  events: readonly GameEvent[],
+  showAdvancedRelationshipStats: boolean,
+): WorldSheetResponse {
+  const location = story.locations.find((l) => l.id === state.player.locationId);
+
+  return {
+    overview: {
+      locationName: location?.name ?? state.player.locationId,
+      worldTimeLabel: formatWorldTime(state.worldMinute),
+      chapterLabel: `Episode ${state.arc.episode}`,
+      topObjective: topObjective(state, story),
+      resources: visibleResources(story, state),
+      statuses: state.player.statuses,
+      relationshipHighlights: [...state.relationships]
+        .filter((r) => r.lastChangedTurn >= 0)
+        .sort((a, b) => b.lastChangedTurn - a.lastChangedTurn)
+        .slice(0, 3)
+        .map((r) => ({
+          characterId: r.characterId,
+          name: story.characters.find((c) => c.id === r.characterId)?.name ?? r.characterId,
+          label: relationshipLabel(r),
+        })),
+      recentEvents: memories
+        .filter((f) => f.supersededByFactId === null)
+        .slice(-5)
+        .map((f) => f.text),
+    },
+
+    character: {
+      identity: state.player.identity,
+      level: state.player.level,
+      xp: state.player.xp,
+      progressionMode: story.rules.progressionMode,
+      milestones: state.player.milestones,
+      attributes: Object.entries(state.player.attributes).map(([key, value]) => ({
+        key,
+        name: ATTRIBUTE_COPY[key]?.name ?? key,
+        value,
+        modifier: attributeModifier(value),
+        plainLanguage: ATTRIBUTE_COPY[key]?.plain ?? '',
+      })),
+      skills: story.skills.map((skill) => ({
+        id: skill.id,
+        name: skill.name,
+        attribute: ATTRIBUTE_COPY[skill.attribute]?.name ?? skill.attribute,
+        proficiency: state.player.skills[skill.id] ?? 0,
+        proficiencyLabel: proficiencyLabel(state.player.skills[skill.id] ?? 0),
+      })),
+      abilities: state.player.abilities
+        .map((id) => {
+          const def = story.abilities.find((a) => a.id === id);
+          if (!def) return null;
+          const cooldownUntil = state.player.abilityCooldowns[id] ?? 0;
+          return {
+            id: def.id,
+            name: def.name,
+            description: def.description,
+            costLabel: def.costs
+              .map((c) => `${c.amount} ${story.resources.find((r) => r.id === c.resourceId)?.name ?? c.resourceId}`)
+              .join(' · '),
+            cooldownRemaining: Math.max(0, cooldownUntil - state.worldMinute),
+          };
+        })
+        .filter((a): a is NonNullable<typeof a> => a !== null),
+      statuses: state.player.statuses,
+      factions: state.factions.map((f) => ({
+        factionId: f.factionId,
+        name: story.factions.find((d) => d.id === f.factionId)?.name ?? f.factionId,
+        reputation: f.reputation,
+        rankLabel: f.rankLabel,
+      })),
+      canonFacts: memories
+        .filter((f) => f.supersededByFactId === null && (f.pinned || f.importance >= 0.7))
+        .map((f) => f.text)
+        .slice(0, 12),
+    },
+
+    inventory: state.player.inventory
+      .map((entry) => {
+        const def = story.items.find((i) => i.id === entry.itemId);
+        if (!def) return null;
+        const effects: string[] = [];
+        for (const [key, value] of Object.entries(def.attributeModifiers)) {
+          effects.push(`${value > 0 ? '+' : ''}${value} ${ATTRIBUTE_COPY[key]?.name ?? key}`);
+        }
+        for (const [skillId, value] of Object.entries(def.skillModifiers)) {
+          const name = story.skills.find((s) => s.id === skillId)?.name ?? skillId;
+          effects.push(`${value > 0 ? '+' : ''}${value} ${name}`);
+        }
+        if (def.consumable) {
+          const resource = story.resources.find((r) => r.id === def.consumable!.resourceId);
+          effects.push(`Restores ${def.consumable.amount} ${resource?.name ?? def.consumable.resourceId}`);
+        }
+        return {
+          entryId: entry.entryId,
+          itemId: entry.itemId,
+          name: entry.instanceName ?? def.name,
+          quantity: entry.quantity,
+          equipped: entry.equipped,
+          equipSlot: def.equipSlot,
+          rarity: def.rarity,
+          icon: def.icon,
+          effects,
+          description: def.description,
+          loreText: def.loreText,
+          canUse: def.consumable !== null,
+          canEquip: def.equipSlot !== null,
+        };
+      })
+      .filter((i): i is NonNullable<typeof i> => i !== null),
+
+    quests: state.quests
+      .filter((p) => p.status !== 'UNAVAILABLE')
+      .map((progress) => {
+        const def = story.quests.find((q) => q.id === progress.questId);
+        if (!def) return null;
+        const step = def.steps.find((s) => s.id === progress.currentStepId);
+        return {
+          questId: def.id,
+          title: def.title,
+          summary: def.summary,
+          status: progress.status,
+          // Spec §11.4 — mystery worlds may hide steps the player has not reached.
+          currentStepCopy: step && !step.hiddenUntilEntered ? step.playerCopy : null,
+          deadlineLabel: formatDeadline(state.worldMinute, step?.deadlineWorldMinute ?? null),
+          rewardCopy: def.knownRewardCopy,
+          involvedNames: def.involvedCharacterIds.map(
+            (id) => story.characters.find((c) => c.id === id)?.name ?? id,
+          ),
+        };
+      })
+      .filter((q): q is NonNullable<typeof q> => q !== null),
+
+    // Spec §11.5 — sorted by recent relevance, not by highest romance.
+    relationships: [...state.relationships]
+      .sort((a, b) => b.lastChangedTurn - a.lastChangedTurn)
+      .map((rel) => {
+        const def = story.characters.find((c) => c.id === rel.characterId);
+        return {
+          characterId: rel.characterId,
+          name: def?.name ?? rel.characterId,
+          portrait: def?.portrait ?? null,
+          label: relationshipLabel(rel),
+          lastInteractionTurn: rel.lastChangedTurn,
+          // Numbers are sent only when the player asked to see them.
+          dimensions: showAdvancedRelationshipStats
+            ? {
+                trust: rel.trust,
+                affection: rel.affection,
+                respect: rel.respect,
+                fear: rel.fear,
+                rivalry: rel.rivalry,
+              }
+            : { trust: 0, affection: 0, respect: 0, fear: 0, rivalry: 0 },
+        };
+      }),
+
+    map: {
+      currentLocationId: state.player.locationId,
+      nodes: story.locations
+        .filter((l) => state.discoveredLocationIds.includes(l.id))
+        .map((l) => {
+          const here = story.locations.find((x) => x.id === state.player.locationId);
+          const edge = here?.connections.find((c) => c.to === l.id);
+          const locked = !!edge?.lockedByFlag && !state.flags[edge.lockedByFlag];
+          return {
+            id: l.id,
+            name: l.name,
+            discovered: true,
+            current: l.id === state.player.locationId,
+            hasQuest: state.quests.some(
+              (p) =>
+                (p.status === 'ACTIVE' || p.status === 'BLOCKED') &&
+                story.quests.find((q) => q.id === p.questId)?.involvedLocationIds.includes(l.id),
+            ),
+            locked,
+            lockReason: locked ? 'Closed to you for now.' : null,
+            travelMinutes: edge?.travelMinutes ?? null,
+            position: l.mapPosition,
+          };
+        }),
+      edges: story.locations
+        .filter((l) => state.discoveredLocationIds.includes(l.id))
+        .flatMap((l) =>
+          l.connections
+            .filter((c) => state.discoveredLocationIds.includes(c.to))
+            .map((c) => ({ from: l.id, to: c.to })),
+        ),
+    },
+  };
+}
+
+/** Spec §11.7 — the canon memory inspector, grouped and chronological. */
+export function toTimeline(
+  story: StoryVersion,
+  events: readonly GameEvent[],
+  memories: readonly MemoryFact[],
+  turns: readonly TurnRecord[],
+): TimelineEntry[] {
+  const entries: TimelineEntry[] = [];
+
+  for (const fact of memories) {
+    if (fact.supersededByFactId !== null) continue;
+    entries.push({
+      id: fact.factId,
+      group: 'CANON',
+      turnIndex: fact.createdAtTurn,
+      worldTimeLabel: formatWorldTime(fact.createdAtWorldMinute),
+      text: fact.text,
+      pinned: fact.pinned,
+      // Only generated canon is correctable; engine events are not opinions.
+      correctable: true,
+      forkable: false,
+    });
+  }
+
+  for (const event of events) {
+    const group = groupForEvent(event.type);
+    if (!group) continue;
+    entries.push({
+      id: event.eventId,
+      group,
+      turnIndex: turns.find((t) => t.turnId === event.turnId)?.turnIndex ?? 0,
+      worldTimeLabel: formatWorldTime(event.worldMinute),
+      text: describeEvent(story, event),
+      pinned: false,
+      correctable: false,
+      forkable: true,
+    });
+  }
+
+  for (const turn of turns) {
+    if (!turn.actionText) continue;
+    entries.push({
+      id: `turn_${turn.turnId}`,
+      group: 'CHOICE',
+      turnIndex: turn.turnIndex,
+      worldTimeLabel: '',
+      text: turn.actionText,
+      pinned: false,
+      correctable: false,
+      forkable: true,
+    });
+  }
+
+  return entries.sort((a, b) => a.turnIndex - b.turnIndex || a.id.localeCompare(b.id));
+}
+
+function groupForEvent(type: string): TimelineEntry['group'] | null {
+  switch (type) {
+    case 'QUEST_TRANSITION':
+      return 'QUEST';
+    case 'RELATIONSHIP_DELTA':
+      return 'RELATIONSHIP';
+    case 'ITEM_ADD':
+    case 'ITEM_REMOVE':
+    case 'ABILITY_UNLOCK':
+      return 'ITEM';
+    case 'LOCATION_CHANGE':
+    case 'ENCOUNTER_START':
+    case 'ENCOUNTER_END':
+    case 'LEVEL_CHANGE':
+      return 'WORLD';
+    default:
+      return null;
+  }
+}
+
+function describeEvent(story: StoryVersion, event: GameEvent): string {
+  const p = event.payload as Record<string, unknown>;
+  switch (event.type) {
+    case 'QUEST_TRANSITION': {
+      const quest = story.quests.find((q) => q.id === event.subjectId);
+      return `${quest?.title ?? event.subjectId} → ${String(p.to ?? p.status ?? 'updated')}`;
+    }
+    case 'RELATIONSHIP_DELTA': {
+      const character = story.characters.find((c) => c.id === event.subjectId);
+      const amount = Number(p.amount ?? 0);
+      return `${character?.name ?? event.subjectId}: ${String(p.dimension)} ${amount > 0 ? '+' : ''}${amount}`;
+    }
+    case 'ITEM_ADD':
+    case 'ITEM_REMOVE': {
+      const item = story.items.find((i) => i.id === p.itemId);
+      return `${event.type === 'ITEM_ADD' ? 'Gained' : 'Lost'} ${item?.name ?? String(p.itemId)}`;
+    }
+    case 'LOCATION_CHANGE': {
+      const location = story.locations.find((l) => l.id === p.locationId);
+      return `Moved to ${location?.name ?? String(p.locationId)}`;
+    }
+    case 'ABILITY_UNLOCK': {
+      const ability = story.abilities.find((a) => a.id === p.abilityId);
+      return `Learned ${ability?.name ?? String(p.abilityId)}`;
+    }
+    case 'ENCOUNTER_START':
+      return 'A fight began';
+    case 'ENCOUNTER_END':
+      return 'The fight ended';
+    case 'LEVEL_CHANGE':
+      return p.milestoneId ? `Milestone: ${String(p.milestoneId)}` : `Reached level ${String(p.level)}`;
+    default:
+      return event.type;
+  }
+}
+
+export function toContinueCard(
+  record: SessionRecord,
+  story: StoryVersion,
+  state: GameState,
+  turns: readonly TurnRecord[],
+): ContinueCard {
+  return {
+    sessionId: record.sessionId,
+    storyId: record.storyId,
+    title: story.title,
+    coverImage: story.coverImage,
+    lastPlayedAt: record.lastPlayedAt,
+    turnCount: turns.length,
+    currentObjective: topObjective(state, story),
+    recapLine: turns.at(-1)?.sceneSummary.split('\n')[0] ?? null,
+  };
+}
