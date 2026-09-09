@@ -14,6 +14,7 @@ import type {
   WalletSummary,
 } from '@aniplay/contracts';
 import { api, ApiError } from '../api/client.js';
+import { auth, AuthError } from '../auth/index.js';
 
 /**
  * App-wide state.
@@ -24,7 +25,6 @@ import { api, ApiError } from '../api/client.js';
  */
 
 const STORAGE_KEYS = {
-  token: 'aniplay.token',
   ageVerified: 'aniplay.ageVerified',
   tastes: 'aniplay.tastes',
   quality: 'aniplay.qualityTier',
@@ -33,8 +33,12 @@ const STORAGE_KEYS = {
 
 export interface AppState {
   ready: boolean;
-  token: string | null;
+  /** The signed-in account's id, or the anonymous one standing in for it. */
+  userId: string | null;
+  email: string | null;
   isGuest: boolean;
+  /** False in a build with no Supabase project, where sign-in cannot work. */
+  authConfigured: boolean;
   ageVerified: boolean;
   onboardingComplete: boolean;
   tastes: string[];
@@ -45,9 +49,15 @@ export interface AppState {
 }
 
 type Action =
-  | { type: 'HYDRATED'; token: string | null; ageVerified: boolean; tastes: string[]; quality: QualityTier | null }
+  | {
+      type: 'HYDRATED';
+      identity: { userId: string; email: string | null; isGuest: boolean } | null;
+      ageVerified: boolean;
+      tastes: string[];
+      quality: QualityTier | null;
+    }
   | { type: 'BOOTSTRAPPED'; bootstrap: BootstrapResponse }
-  | { type: 'SET_TOKEN'; token: string; isGuest: boolean }
+  | { type: 'IDENTITY'; identity: { userId: string; email: string | null; isGuest: boolean } | null }
   | { type: 'SET_AGE_VERIFIED' }
   | { type: 'SET_TASTES'; tastes: string[] }
   | { type: 'SET_WALLET'; wallet: WalletSummary }
@@ -57,8 +67,10 @@ type Action =
 
 const initialState: AppState = {
   ready: false,
-  token: null,
+  userId: null,
+  email: null,
   isGuest: true,
+  authConfigured: auth.configured,
   ageVerified: false,
   onboardingComplete: false,
   tastes: [],
@@ -74,8 +86,9 @@ function reducer(state: AppState, action: Action): AppState {
       return {
         ...state,
         ready: true,
-        token: action.token,
-        isGuest: action.token?.startsWith('guest_') ?? true,
+        userId: action.identity?.userId ?? null,
+        email: action.identity?.email ?? null,
+        isGuest: action.identity?.isGuest ?? true,
         ageVerified: action.ageVerified,
         onboardingComplete: action.ageVerified,
         tastes: action.tastes,
@@ -89,8 +102,13 @@ function reducer(state: AppState, action: Action): AppState {
         qualityTier: state.qualityTier ?? action.bootstrap.defaultQualityTier,
         offline: false,
       };
-    case 'SET_TOKEN':
-      return { ...state, token: action.token, isGuest: action.isGuest };
+    case 'IDENTITY':
+      return {
+        ...state,
+        userId: action.identity?.userId ?? null,
+        email: action.identity?.email ?? null,
+        isGuest: action.identity?.isGuest ?? true,
+      };
     case 'SET_AGE_VERIFIED':
       return { ...state, ageVerified: true, onboardingComplete: true };
     case 'SET_TASTES':
@@ -107,6 +125,11 @@ function reducer(state: AppState, action: Action): AppState {
 }
 
 export interface AppStore extends AppState {
+  /** Spec §6.4 — no password is ever created. */
+  sendEmailCode(email: string): Promise<void>;
+  verifyEmailCode(email: string, code: string): Promise<void>;
+  signInWithApple(): Promise<void>;
+  signOut(): Promise<void>;
   confirmAge(): Promise<void>;
   setTastes(tastes: string[]): Promise<void>;
   setQualityTier(tier: QualityTier): Promise<void>;
@@ -129,24 +152,21 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
     if (hydrating.current) return;
     hydrating.current = true;
 
+    // Every request asks the auth store for a token, so one that expired while
+    // the app was backgrounded is renewed rather than sent and rejected.
+    api.setTokenProvider(() => auth.accessToken());
+
     void (async () => {
-      const [token, ageVerified, tastes, quality] = await Promise.all([
-        AsyncStorage.getItem(STORAGE_KEYS.token),
+      const [identity, ageVerified, tastes, quality] = await Promise.all([
+        auth.restore(),
         AsyncStorage.getItem(STORAGE_KEYS.ageVerified),
         AsyncStorage.getItem(STORAGE_KEYS.tastes),
         AsyncStorage.getItem(STORAGE_KEYS.quality),
       ]);
 
-      let resolved = token;
-      if (!resolved) {
-        resolved = `guest_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
-        await AsyncStorage.setItem(STORAGE_KEYS.token, resolved);
-      }
-      api.setToken(resolved);
-
       dispatch({
         type: 'HYDRATED',
-        token: resolved,
+        identity,
         ageVerified: ageVerified === 'true',
         tastes: tastes ? (JSON.parse(tastes) as string[]) : [],
         quality: (quality as QualityTier | null) ?? null,
@@ -160,6 +180,67 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
         }
       }
     })();
+  }, []);
+
+  /**
+   * Signing in upgrades the guest in place rather than creating a second
+   * account and merging it: the guest already *is* a Supabase user, and
+   * `guest-migrate` reconciles the older device-local case (§6.5).
+   */
+  const adopt = useCallback(async (identity: { userId: string; email: string | null; isGuest: boolean }) => {
+    dispatch({ type: 'IDENTITY', identity });
+    try {
+      dispatch({ type: 'BOOTSTRAPPED', bootstrap: await api.bootstrap() });
+    } catch {
+      // The identity is real either way; the shelf can refill on the next screen.
+    }
+  }, []);
+
+  const sendEmailCode = useCallback(async (email: string) => {
+    await auth.sendEmailCode(email);
+  }, []);
+
+  const verifyEmailCode = useCallback(
+    async (email: string, code: string) => {
+      const previous = auth.identity;
+      const identity = await auth.verifyEmailCode(email, code);
+      if (previous?.isGuest && previous.userId !== identity.userId) {
+        await api.migrateGuest(previous.userId, identity.email ?? 'Player').catch(() => undefined);
+      }
+      await adopt(identity);
+    },
+    [adopt],
+  );
+
+  const signInWithApple = useCallback(async () => {
+    const previous = auth.identity;
+    // Imported lazily: the module touches native Apple APIs at load, and
+    // Android and the web build have no business paying for that.
+    const apple = await import('expo-apple-authentication');
+    if (!(await apple.isAvailableAsync())) {
+      throw new AuthError('Sign in with Apple is not available on this device.', 'UNAVAILABLE');
+    }
+    const credential = await apple.signInAsync({
+      requestedScopes: [apple.AppleAuthenticationScope.EMAIL, apple.AppleAuthenticationScope.FULL_NAME],
+    });
+    if (!credential.identityToken) {
+      throw new AuthError('Apple did not return a sign-in token. Try again.', 'NO_IDENTITY_TOKEN');
+    }
+    const identity = await auth.signInWithIdToken('apple', credential.identityToken);
+    if (previous?.isGuest && previous.userId !== identity.userId) {
+      await api.migrateGuest(previous.userId, identity.email ?? 'Player').catch(() => undefined);
+    }
+    await adopt(identity);
+  }, [adopt]);
+
+  const signOut = useCallback(async () => {
+    await auth.signOut();
+    dispatch({ type: 'IDENTITY', identity: auth.identity });
+    try {
+      dispatch({ type: 'BOOTSTRAPPED', bootstrap: await api.bootstrap() });
+    } catch {
+      // Signed out is still a usable state; Discover works for a guest.
+    }
   }, []);
 
   const confirmAge = useCallback(async () => {
@@ -219,6 +300,10 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
   const value = useMemo<AppStore>(
     () => ({
       ...state,
+      sendEmailCode,
+      verifyEmailCode,
+      signInWithApple,
+      signOut,
       confirmAge,
       setTastes,
       setQualityTier,
@@ -228,7 +313,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
       saveDraft,
       loadDraft,
     }),
-    [state, confirmAge, setTastes, setQualityTier, refreshWallet, setBalance, refreshBootstrap, saveDraft, loadDraft],
+    [state, sendEmailCode, verifyEmailCode, signInWithApple, signOut, confirmAge, setTastes, setQualityTier, refreshWallet, setBalance, refreshBootstrap, saveDraft, loadDraft],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

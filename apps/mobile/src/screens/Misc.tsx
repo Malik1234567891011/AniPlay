@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Switch, TextInput, View } from 'react-native';
+import { Platform, ScrollView, Switch, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Button,
@@ -24,34 +24,75 @@ import type { RootNavigation, RootRoute } from '../navigation.jsx';
 /**
  * AU-01 — the sign-in sheet.
  *
- * Spec §6.3 — only shown when the player reaches something that genuinely needs
- * an account, and the copy explains the value rather than demanding a signup.
+ * Spec §6.3 — shown only when the player reaches something that genuinely needs
+ * an account, and the copy says what they get rather than demanding a signup.
+ * §6.4 — Sign in with Apple or an emailed code. No password is ever created.
+ *
+ * Every button here does the thing it says. A provider that is not configured
+ * in this build is not shown, because a button that silently does nothing is
+ * worse than one that is missing.
  */
 export function SignInScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
-  const { token } = useStore();
+  const { authConfigured, isGuest, email: signedInEmail, sendEmailCode, verifyEmailCode, signInWithApple } =
+    useStore();
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [codeSent, setCodeSent] = useState(false);
+  const [appleAvailable, setAppleAvailable] = useState(false);
 
-  const signIn = async (provider: string): Promise<void> => {
-    setBusy(provider);
+  useEffect(() => {
+    if (Platform.OS !== 'ios' || !authConfigured) return;
+    void import('expo-apple-authentication')
+      .then((apple) => apple.isAvailableAsync())
+      .then(setAppleAvailable)
+      .catch(() => setAppleAvailable(false));
+  }, [authConfigured]);
+
+  const run = async (key: string, work: () => Promise<void>): Promise<void> => {
+    setBusy(key);
+    setError(null);
     try {
-      // Production hands off to Sign in with Apple, Google, or an email OTP and
-      // exchanges the result for a session token. The migration call below is
-      // the part that matters to the player: their guest run comes with them.
-      const guestId = token ?? '';
-      const result = await api.migrateGuest(guestId, 'Player');
-      setNotice(
-        result.migrated
-          ? `Signed in. ${result.sessionsMoved} world${result.sessionsMoved === 1 ? '' : 's'} came with you.`
-          : 'Signed in.',
-      );
-      setTimeout(() => navigation.goBack(), 900);
-    } catch {
-      setNotice('Could not sign in just now.');
+      await work();
+    } catch (caught) {
+      // Apple's own sheet reports a cancel as an error; a player who changed
+      // their mind has not hit a problem and should not be told they have.
+      const code = (caught as { code?: string })?.code;
+      if (code !== 'ERR_REQUEST_CANCELED') {
+        setError(caught instanceof Error ? caught.message : 'Could not sign in just now.');
+      }
     } finally {
       setBusy(null);
     }
   };
+
+  const finish = (): void => {
+    setNotice('Signed in. Everything you have played came with you.');
+    setTimeout(() => navigation.goBack(), 900);
+  };
+
+  if (!isGuest) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
+        <Row style={{ paddingHorizontal: GUTTER, justifyContent: 'flex-end' }}>
+          <IconButton label="Close" onPress={() => navigation.goBack()}>
+            <Txt variant="h3">✕</Txt>
+          </IconButton>
+        </Row>
+        <Stack gap={spacing.lg} style={{ padding: GUTTER, flex: 1, justifyContent: 'center' }}>
+          <Txt variant="display">You're signed in</Txt>
+          <Txt variant="body" color={colors.text.secondary}>
+            {signedInEmail
+              ? `This device is signed in as ${signedInEmail}. Your worlds are saved and will be waiting on any device you sign in on.`
+              : 'Your worlds are saved and will be waiting on any device you sign in on.'}
+          </Txt>
+          <Button label="Done" onPress={() => navigation.goBack()} />
+        </Stack>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
@@ -61,7 +102,10 @@ export function SignInScreen({ navigation }: { navigation: RootNavigation }): Re
         </IconButton>
       </Row>
 
-      <Stack gap={spacing.xxl} style={{ padding: GUTTER, flex: 1, justifyContent: 'center' }}>
+      <ScrollView
+        contentContainerStyle={{ padding: GUTTER, gap: spacing.xxl, flexGrow: 1, justifyContent: 'center' }}
+        keyboardShouldPersistTaps="handled"
+      >
         <Stack gap={spacing.sm}>
           <Txt variant="display">Save this world</Txt>
           <Txt variant="body" color={colors.text.secondary}>
@@ -70,29 +114,108 @@ export function SignInScreen({ navigation }: { navigation: RootNavigation }): Re
           </Txt>
         </Stack>
 
-        <Stack gap={spacing.md}>
-          <Button
-            label="Continue with Apple"
-            loading={busy === 'apple'}
-            loadingLabel="Signing in…"
-            onPress={() => void signIn('apple')}
-          />
-          <Button
-            label="Continue with Google"
-            variant="secondary"
-            loading={busy === 'google'}
-            loadingLabel="Signing in…"
-            onPress={() => void signIn('google')}
-          />
-          <Button
-            label="Use an email code"
-            variant="secondary"
-            loading={busy === 'email'}
-            loadingLabel="Sending…"
-            onPress={() => void signIn('email')}
-          />
-        </Stack>
+        {!authConfigured ? (
+          <Card>
+            <Txt variant="bodyCompact">
+              This build has no sign-in configured, so you are playing as a guest on this device. Your
+              worlds are saved on the server and will still be here next time you open the app.
+            </Txt>
+          </Card>
+        ) : (
+          <Stack gap={spacing.md}>
+            {appleAvailable ? (
+              <Button
+                label="Continue with Apple"
+                loading={busy === 'apple'}
+                loadingLabel="Signing in…"
+                onPress={() =>
+                  void run('apple', async () => {
+                    await signInWithApple();
+                    finish();
+                  })
+                }
+              />
+            ) : null}
 
+            {!codeSent ? (
+              <Stack gap={spacing.sm}>
+                <Txt variant="caption" color={colors.text.secondary}>
+                  Or get a six-digit code by email. No password to create.
+                </Txt>
+                <TextInput
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder="you@example.com"
+                  placeholderTextColor={colors.text.muted}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  textContentType="emailAddress"
+                  accessibilityLabel="Email address"
+                  style={signInInputStyle}
+                />
+                <Button
+                  label="Email me a code"
+                  variant={appleAvailable ? 'secondary' : 'primary'}
+                  disabled={!/.+@.+\..+/.test(email.trim())}
+                  loading={busy === 'send'}
+                  loadingLabel="Sending…"
+                  onPress={() =>
+                    void run('send', async () => {
+                      await sendEmailCode(email);
+                      setCodeSent(true);
+                      setNotice(`Code sent to ${email.trim()}. It expires in a few minutes.`);
+                    })
+                  }
+                />
+              </Stack>
+            ) : (
+              <Stack gap={spacing.sm}>
+                <Txt variant="caption" color={colors.text.secondary}>
+                  Enter the six-digit code sent to {email.trim()}.
+                </Txt>
+                <TextInput
+                  value={code}
+                  onChangeText={setCode}
+                  placeholder="123456"
+                  placeholderTextColor={colors.text.muted}
+                  keyboardType="number-pad"
+                  textContentType="oneTimeCode"
+                  maxLength={8}
+                  accessibilityLabel="Six-digit code"
+                  style={signInInputStyle}
+                />
+                <Button
+                  label="Sign in"
+                  disabled={code.trim().length < 6}
+                  loading={busy === 'verify'}
+                  loadingLabel="Signing in…"
+                  onPress={() =>
+                    void run('verify', async () => {
+                      await verifyEmailCode(email, code);
+                      finish();
+                    })
+                  }
+                />
+                <Button
+                  label="Use a different email"
+                  variant="tertiary"
+                  onPress={() => {
+                    setCodeSent(false);
+                    setCode('');
+                    setNotice(null);
+                  }}
+                />
+              </Stack>
+            )}
+          </Stack>
+        )}
+
+        {error ? (
+          <Txt variant="bodyCompact" color={colors.semantic.danger}>
+            {error}
+          </Txt>
+        ) : null}
         {notice ? (
           <Card>
             <Txt variant="bodyCompact">{notice}</Txt>
@@ -104,10 +227,21 @@ export function SignInScreen({ navigation }: { navigation: RootNavigation }): Re
         <Txt variant="micro" color={colors.text.muted} center>
           No password to create. We never post anything on your behalf.
         </Txt>
-      </Stack>
+      </ScrollView>
     </SafeAreaView>
   );
 }
+
+const signInInputStyle = {
+  backgroundColor: colors.bg.raised,
+  borderRadius: radius.control,
+  borderWidth: 1,
+  borderColor: colors.border.subtle,
+  color: colors.text.primary,
+  paddingHorizontal: spacing.md,
+  paddingVertical: spacing.md,
+  fontSize: 16,
+} as const;
 
 /** SF-01 — the report sheet: reason plus an optional hide. */
 export function ReportScreen({

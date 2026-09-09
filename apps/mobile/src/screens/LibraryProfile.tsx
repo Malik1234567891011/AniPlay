@@ -202,7 +202,7 @@ function SessionCard({
 
 /** PR-01 / PR-02 — public and private cleanly separated. */
 export function ProfileScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
-  const { wallet, isGuest, refreshWallet } = useStore();
+  const { wallet, isGuest, refreshWallet, signOut } = useStore();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [characters, setCharacters] = useState<PlayerCharacterCard[]>([]);
 
@@ -255,9 +255,27 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
               />
             </>
           ) : (
-            <Txt variant="caption" color={colors.text.secondary}>
-              {me?.email ?? me?.handle}
-            </Txt>
+            <>
+              <Txt variant="caption" color={colors.text.secondary}>
+                {me?.email ?? me?.handle}
+              </Txt>
+              <Button
+                label="Sign out"
+                variant="tertiary"
+                full={false}
+                style={{ alignSelf: 'flex-start', marginTop: spacing.sm }}
+                onPress={() =>
+                  Alert.alert(
+                    'Sign out?',
+                    'Your worlds stay saved to your account. Sign back in on any device to pick them up.',
+                    [
+                      { text: 'Stay signed in', style: 'cancel' },
+                      { text: 'Sign out', onPress: () => void signOut() },
+                    ],
+                  )
+                }
+              />
+            </>
           )}
         </Card>
 

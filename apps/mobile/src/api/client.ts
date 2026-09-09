@@ -89,6 +89,11 @@ export interface TurnStreamHandlers {
 export class ApiClient {
   #baseUrl: string;
   #token: string | null = null;
+  /**
+   * Asked for a token before every request, so an access token that expired
+   * while the app was backgrounded is renewed rather than sent and rejected.
+   */
+  #tokenProvider: (() => Promise<string | null>) | null = null;
 
   constructor(baseUrl = defaultBaseUrl()) {
     this.#baseUrl = baseUrl.replace(/\/$/, '');
@@ -102,7 +107,21 @@ export class ApiClient {
     this.#token = token;
   }
 
+  /** Installed once at boot by the auth store. */
+  setTokenProvider(provider: (() => Promise<string | null>) | null): void {
+    this.#tokenProvider = provider;
+  }
+
   get token(): string | null {
+    return this.#token;
+  }
+
+  async #authorization(): Promise<string | null> {
+    if (this.#tokenProvider) {
+      const token = await this.#tokenProvider();
+      this.#token = token;
+      return token;
+    }
     return this.#token;
   }
 
@@ -111,6 +130,7 @@ export class ApiClient {
     path: string,
     body?: unknown,
     extraHeaders: Record<string, string> = {},
+    { retryOnExpiry = true } = {},
   ): Promise<T> {
     const headers: Record<string, string> = {
       accept: 'application/json',
@@ -118,7 +138,8 @@ export class ApiClient {
       ...extraHeaders,
     };
     if (body !== undefined) headers['content-type'] = 'application/json';
-    if (this.#token) headers.authorization = `Bearer ${this.#token}`;
+    const token = await this.#authorization();
+    if (token) headers.authorization = `Bearer ${token}`;
 
     let response: Response;
     try {
@@ -141,6 +162,18 @@ export class ApiClient {
 
     if (!response.ok) {
       const error = (parsed ?? {}) as { code?: string; message?: string; details?: Record<string, unknown> };
+
+      // The server distinguishes an expired token from a bad one precisely so
+      // this can happen: renew and retry once, silently. A player mid-scene
+      // should never be shown a sign-in wall because a token aged out.
+      if (response.status === 401 && error.code === 'TOKEN_EXPIRED' && retryOnExpiry) {
+        this.#token = null;
+        const renewed = await this.#authorization();
+        if (renewed) {
+          return this.#request<T>(method, path, body, extraHeaders, { retryOnExpiry: false });
+        }
+      }
+
       throw new ApiError(
         response.status,
         error.code ?? 'UNKNOWN',
