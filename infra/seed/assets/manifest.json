@@ -644,5 +644,746 @@
       "latencyMs": 40133,
       "createdAt": "2026-09-09T05:55:14.902Z"
     }
+  },
+  "story_tidewall/cover": {
+    "assetKey": "story_tidewall/cover",
+    "file": "story_tidewall/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Tidewall: Your sister died holding the wall.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f9d04306-789c-47cb-a7c5-58628932b564",
+      "promptHash": "70904aa2a2b6c320eb775cc0ea9bf89b",
+      "seed": "sv_tidewall_1:cover:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 22190,
+      "createdAt": "2026-09-09T08:52:46.425Z"
+    }
+  },
+  "story_tidewall/stage_muster_yard": {
+    "assetKey": "story_tidewall/stage_muster_yard",
+    "file": "story_tidewall/stage_muster_yard.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Muster Yard: Forty paces of frozen sand between the barracks and the wall stair, raked flat every morning by whoever came last to breakfast.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d09e8c9c-cae6-4ca3-90db-8cf6efdedfe8",
+      "promptHash": "2adea621cbcd0d3abf622df777f83307",
+      "seed": "sv_tidewall_1:loc:muster_yard:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 26438,
+      "createdAt": "2026-09-09T08:52:50.686Z"
+    }
+  },
+  "story_tidewall/key": {
+    "assetKey": "story_tidewall/key",
+    "file": "story_tidewall/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Tidewall",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f78c7489-cdcb-4dce-9643-00dd8917069d",
+      "promptHash": "27b1eaa678a9292d65f200b1d72484ef",
+      "seed": "sv_tidewall_1:key:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 29331,
+      "createdAt": "2026-09-09T08:52:53.578Z"
+    }
+  },
+  "story_tidewall/stage_wall_walk": {
+    "assetKey": "story_tidewall/stage_wall_walk",
+    "file": "story_tidewall/stage_wall_walk.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Wall Walk: The top of the Tidewall, wide enough for three abreast and nothing else, running east and west until it stops being a wall and starts being weather.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "002bcce5-7540-44d2-908d-54adc613653e",
+      "promptHash": "9d482419bb501466be0f65e9e6134e0e",
+      "seed": "sv_tidewall_1:loc:wall_walk:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 25495,
+      "createdAt": "2026-09-09T08:53:11.928Z"
+    }
+  },
+  "story_tidewall/stage_beast_lines": {
+    "assetKey": "story_tidewall/stage_beast_lines",
+    "file": "story_tidewall/stage_beast_lines.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Animal Lines: Pens, perches and a long roofed run where the orders keep everything they ride, fly, or answer to.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f715a448-b271-4efd-9107-c06ec5f34939",
+      "promptHash": "af202d5be2bf26a18aedba43322b71c7",
+      "seed": "sv_tidewall_1:loc:beast_lines:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 26365,
+      "createdAt": "2026-09-09T08:53:17.059Z"
+    }
+  },
+  "story_tidewall/stage_bright_hall": {
+    "assetKey": "story_tidewall/stage_bright_hall",
+    "file": "story_tidewall/stage_bright_hall.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Bright Hall: A drum-shaped stone room sunk below the yard where the sorcerers of the wall bind their first element and argue about the second.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aba08c4c-9753-428f-9233-db2ecd88f289",
+      "promptHash": "6fd753e856a3dc18dcdfa7e36cb27fcf",
+      "seed": "sv_tidewall_1:loc:bright_hall:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 18341,
+      "createdAt": "2026-09-09T08:53:30.274Z"
+    }
+  },
+  "story_tidewall/stage_stillhand_tent": {
+    "assetKey": "story_tidewall/stage_stillhand_tent",
+    "file": "story_tidewall/stage_stillhand_tent.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Stillhand Tents: Six canvas halls behind the yard, lit day and night, where the wall’s wounded are sorted by how long they have.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9c102993-552d-47aa-864a-f1beffa61b79",
+      "promptHash": "49e3d04ced9518762e821576414608da",
+      "seed": "sv_tidewall_1:loc:stillhand_tent:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 45682,
+      "createdAt": "2026-09-09T08:53:39.267Z"
+    }
+  },
+  "story_tidewall/stage_eleventh_gate": {
+    "assetKey": "story_tidewall/stage_eleventh_gate",
+    "file": "story_tidewall/stage_eleventh_gate.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Eleventh Gate: A gatehouse and a low crossing where the ground comes up to meet the wall, which is why the tide chose it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "df8d3057-2503-4456-8eb1-b56cfe102b62",
+      "promptHash": "f31f509edb6099cbb36a5c0778d4a5ed",
+      "seed": "sv_tidewall_1:loc:eleventh_gate:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 22950,
+      "createdAt": "2026-09-09T08:53:53.230Z"
+    }
+  },
+  "story_tidewall/odalys": {
+    "assetKey": "story_tidewall/odalys",
+    "file": "story_tidewall/odalys.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Drillmaster Odalys Verne, Drillmaster of the intake",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "57304f49-f4d3-405a-91b8-82446cedf371",
+      "promptHash": "d0184086f225859cdaa05b5d2298e804",
+      "seed": "odalys-verne-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 19487,
+      "createdAt": "2026-09-09T08:53:58.762Z"
+    }
+  },
+  "story_tidewall/stage_longwatch_post": {
+    "assetKey": "story_tidewall/stage_longwatch_post",
+    "file": "story_tidewall/stage_longwatch_post.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Longwatch Post: A stone spur pushed out from the wall so archers can see along the face of it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ae99b95f-fb06-459a-842b-3ef3550f7fe8",
+      "promptHash": "393cd8d0a8686c6f08c1df25a50cc72a",
+      "seed": "sv_tidewall_1:loc:longwatch_post:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 53833,
+      "createdAt": "2026-09-09T08:54:10.898Z"
+    }
+  },
+  "story_tidewall/bec": {
+    "assetKey": "story_tidewall/bec",
+    "file": "story_tidewall/bec.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bec Tarrow, Longwatch archer, survivor of the eleventh gate",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3a6deaf7-3ba6-49de-859c-bbf942d10b72",
+      "promptHash": "8f27c95a6dafc3e66e0954d9f558ff3f",
+      "seed": "bec-tarrow-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20849,
+      "createdAt": "2026-09-09T08:54:14.087Z"
+    }
+  },
+  "story_tidewall/ansett": {
+    "assetKey": "story_tidewall/ansett",
+    "file": "story_tidewall/ansett.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Commander Sabel Ansett, Commander of the eastern run",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4835c397-5f17-40e3-af47-0a9338aaaf3b",
+      "promptHash": "ba3b779f3e5b9bceae565ba4aa303e83",
+      "seed": "sabel-ansett-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 23636,
+      "createdAt": "2026-09-09T08:54:34.541Z"
+    }
+  },
+  "story_tidewall/hollis": {
+    "assetKey": "story_tidewall/hollis",
+    "file": "story_tidewall/hollis.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hollis Ferrant, Stillhand recruit, first on the roll",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "03686fe1-9b32-4f11-87db-f224b9dfebd0",
+      "promptHash": "15c90aa17fa6ce13833facbf9b4e3b1d",
+      "seed": "hollis-ferrant-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40734,
+      "createdAt": "2026-09-09T08:54:39.500Z"
+    }
+  },
+  "story_unbound/cover": {
+    "assetKey": "story_unbound/cover",
+    "file": "story_unbound/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Unbound: Your school was dissolved. You were not.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bae4edf7-3a3f-467b-a423-2fbb4b333355",
+      "promptHash": "9fc7a42a17a271e6f4391c1ab8414fc4",
+      "seed": "sv_unbound_1:cover:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 30607,
+      "createdAt": "2026-09-09T08:55:20.881Z"
+    }
+  },
+  "story_unbound/stage_kiln_yard": {
+    "assetKey": "story_unbound/stage_kiln_yard",
+    "file": "story_unbound/stage_kiln_yard.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Kiln Yard: A walled square of packed red earth behind the Kiln’s furnaces, warm even before sunrise.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8579a0cd-0813-4253-91a5-f57e0db1de39",
+      "promptHash": "0e9fbd490395e43f145a66553ad873d1",
+      "seed": "sv_unbound_1:loc:kiln_yard:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41780,
+      "createdAt": "2026-09-09T08:55:32.066Z"
+    }
+  },
+  "story_unbound/key": {
+    "assetKey": "story_unbound/key",
+    "file": "story_unbound/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Unbound",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8e217a14-03b3-4170-87fb-4bcbb74a0b07",
+      "promptHash": "fb99e905064c8a6d77bea75e3214faab",
+      "seed": "sv_unbound_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 45412,
+      "createdAt": "2026-09-09T08:55:35.697Z"
+    }
+  },
+  "story_unbound/stage_river_stair": {
+    "assetKey": "story_unbound/stage_river_stair",
+    "file": "story_unbound/stage_river_stair.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The River Stair: Ninety wide stone steps from the upper city down to the water, where students from all five schools pass each other twice a day and pretend not to look.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "75d2a531-8dd9-46bc-8cb6-49dc5bb6653f",
+      "promptHash": "0a50deb0c136ba7b6e6b3f3a80300549",
+      "seed": "sv_unbound_1:loc:river_stair:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 28645,
+      "createdAt": "2026-09-09T08:55:49.533Z"
+    }
+  },
+  "story_unbound/stage_contract_office": {
+    "assetKey": "story_unbound/stage_contract_office",
+    "file": "story_unbound/stage_contract_office.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Contract Office: A long counter, five queues, and a board of work the schools have agreed to let students take.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "95557278-4cc9-4c18-9b52-09fcdfb26b9b",
+      "promptHash": "78fe2d912b9c529daef7cf2bb86192a5",
+      "seed": "sv_unbound_1:loc:contract_office:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43754,
+      "createdAt": "2026-09-09T08:56:15.826Z"
+    }
+  },
+  "story_unbound/stage_night_market": {
+    "assetKey": "story_unbound/stage_night_market",
+    "file": "story_unbound/stage_night_market.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Night Market: Four streets of awnings along the water that only open after dark, selling food, salt, and the occasional thing a school would confiscate.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "841e31b9-0f0a-4e24-ba95-cc797fb3c296",
+      "promptHash": "79e10f2938cc9b636a54f6477a72be9f",
+      "seed": "sv_unbound_1:loc:night_market:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43822,
+      "createdAt": "2026-09-09T08:56:19.533Z"
+    }
+  },
+  "story_unbound/stage_oyan_house": {
+    "assetKey": "story_unbound/stage_oyan_house",
+    "file": "story_unbound/stage_oyan_house.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Oyan House: Your old school, doors sealed with a Concord band and a wax stamp, everything still inside it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bbf3e976-0e97-4024-81a3-8d5b206978e6",
+      "promptHash": "a6606c247b44d0071e1e7f3dc289818f",
+      "seed": "sv_unbound_1:loc:oyan_house:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40544,
+      "createdAt": "2026-09-09T08:56:30.084Z"
+    }
+  },
+  "story_unbound/stage_concord_hall": {
+    "assetKey": "story_unbound/stage_concord_hall",
+    "file": "story_unbound/stage_concord_hall.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Concord Hall: Where five schools that would rather not agree do it in writing anyway.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "13f0ada4-7679-470c-8c0c-f13e5d80dbe2",
+      "promptHash": "7da7465fdca728ec9edd002504cc4036",
+      "seed": "sv_unbound_1:loc:concord_hall:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 28019,
+      "createdAt": "2026-09-09T08:56:43.851Z"
+    }
+  },
+  "story_unbound/renna": {
+    "assetKey": "story_unbound/renna",
+    "file": "story_unbound/renna.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Renna Vosk, Kiln instructor, holds your probation",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "351ac6ba-2fb5-4816-be37-07d98724d70a",
+      "promptHash": "172efd604836fdd0f4a043ee4e5233fa",
+      "seed": "renna-vosk-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 17439,
+      "createdAt": "2026-09-09T08:56:47.526Z"
+    }
+  },
+  "story_unbound/stage_confinement_house": {
+    "assetKey": "story_unbound/stage_confinement_house",
+    "file": "story_unbound/stage_confinement_house.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Confinement House: Three rooms behind the Concord where people awaiting a ruling are kept comfortably and absolutely.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ec9eb1d0-0dbb-4372-854b-958d0437dd7e",
+      "promptHash": "ece83eb40129ef2b69669dd8e7daffbd",
+      "seed": "sv_unbound_1:loc:confinement_house:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 28682,
+      "createdAt": "2026-09-09T08:56:48.219Z"
+    }
+  },
+  "story_unbound/auber": {
+    "assetKey": "story_unbound/auber",
+    "file": "story_unbound/auber.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reader Auber Kell, Concord reader, took the Oyan ruling",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "22accea6-a5d0-40e4-86cf-4f02a1eedc73",
+      "promptHash": "1468e29eb9584b0422de2acb354d9626",
+      "seed": "auber-kell-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 17729,
+      "createdAt": "2026-09-09T08:57:05.959Z"
+    }
+  },
+  "story_unbound/sera": {
+    "assetKey": "story_unbound/sera",
+    "file": "story_unbound/sera.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Ilm, Oyan student, sent to the Long Quiet",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d31171e9-8ecc-4952-a701-0196e224224b",
+      "promptHash": "f9a7515f79bc35d09683cfa81b6326d2",
+      "seed": "sera-ilm-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 21018,
+      "createdAt": "2026-09-09T08:57:08.553Z"
+    }
+  },
+  "story_unbound/tam": {
+    "assetKey": "story_unbound/tam",
+    "file": "story_unbound/tam.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tam Ashgrove, Kiln full student, third year",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9e1b604f-dadd-4b2d-a5f5-ddb8bfc5db9e",
+      "promptHash": "edd57df5ae8242fc83eef76cffb6e4f5",
+      "seed": "tam-ashgrove-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 36815,
+      "createdAt": "2026-09-09T08:57:20.677Z"
+    }
+  },
+  "story_nine_weeks/cover": {
+    "assetKey": "story_nine_weeks/cover",
+    "file": "story_nine_weeks/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Nine Weeks: You came back. So did they.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0f617ce1-b1c2-42d8-bd75-13d61e86e80f",
+      "promptHash": "a695d610badca8864ff779c18bc7d892",
+      "seed": "sv_nine_weeks_1:cover:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 30249,
+      "createdAt": "2026-09-09T08:57:55.801Z"
+    }
+  },
+  "story_nine_weeks/stage_staff_cabins": {
+    "assetKey": "story_nine_weeks/stage_staff_cabins",
+    "file": "story_nine_weeks/stage_staff_cabins.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Staff Cabins: Six timber cabins behind the car park, four bunks each, a shared bathroom with one good shower.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cfc239fe-e8f2-47f4-9831-ec9658ebc2e6",
+      "promptHash": "e4a2b12dd79329613891f2c125b1f244",
+      "seed": "sv_nine_weeks_1:loc:staff_cabins:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 45000,
+      "createdAt": "2026-09-09T08:58:10.564Z"
+    }
+  },
+  "story_nine_weeks/key": {
+    "assetKey": "story_nine_weeks/key",
+    "file": "story_nine_weeks/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Nine Weeks",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bfbaa116-5e0a-4fdf-b8af-2df5dd483057",
+      "promptHash": "fc10496a36ee636ff626ad12e0a63e52",
+      "seed": "sv_nine_weeks_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 48616,
+      "createdAt": "2026-09-09T08:58:14.180Z"
+    }
+  },
+  "story_nine_weeks/stage_kitchen": {
+    "assetKey": "story_nine_weeks/stage_kitchen",
+    "file": "story_nine_weeks/stage_kitchen.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Kitchen: Hot, loud, and the actual centre of this building.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9ab1c0ce-e86c-4203-b1e2-9059012642e6",
+      "promptHash": "25adc5438bfee24676b313869803c80a",
+      "seed": "sv_nine_weeks_1:loc:kitchen:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 28388,
+      "createdAt": "2026-09-09T08:58:24.196Z"
+    }
+  },
+  "story_nine_weeks/stage_back_steps": {
+    "assetKey": "story_nine_weeks/stage_back_steps",
+    "file": "story_nine_weeks/stage_back_steps.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Back Steps: Four concrete steps between the kitchen door and the bins, facing the pines.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "274e7a0a-1a9a-40cd-bce2-e06f758daefb",
+      "promptHash": "d7dfbb176ce2ffe8639e163ae66d59ad",
+      "seed": "sv_nine_weeks_1:loc:back_steps:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 21625,
+      "createdAt": "2026-09-09T08:58:35.811Z"
+    }
+  },
+  "story_nine_weeks/stage_the_dock": {
+    "assetKey": "story_nine_weeks/stage_the_dock",
+    "file": "story_nine_weeks/stage_the_dock.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Dock: Boards out over the water, four boats tied up, and the only place on the property where you can be seen by everyone and overheard by nobody.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "daee7d17-f62c-4904-8a01-e73e8c7e8611",
+      "promptHash": "969418a3d88d73d96accb27a4c0f15d1",
+      "seed": "sv_nine_weeks_1:loc:the_dock:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 14987,
+      "createdAt": "2026-09-09T08:58:39.188Z"
+    }
+  },
+  "story_nine_weeks/stage_town_road": {
+    "assetKey": "story_nine_weeks/stage_town_road",
+    "file": "story_nine_weeks/stage_town_road.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Road Into Town: Twenty minutes of tarmac with no lights on it, walked at two in the morning by people who wanted twenty minutes of not being at work.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "db5382b9-6492-43ee-a0a6-d5d8f5dfcd27",
+      "promptHash": "5dde4525c90ccaa3e37acbaff56c09d0",
+      "seed": "sv_nine_weeks_1:loc:town_road:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16682,
+      "createdAt": "2026-09-09T08:58:52.504Z"
+    }
+  },
+  "story_nine_weeks/stage_longhouse_bar": {
+    "assetKey": "story_nine_weeks/stage_longhouse_bar",
+    "file": "story_nine_weeks/stage_longhouse_bar.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Longhouse Bar: A long room with the lake down one whole side and a small stage at the end that gets used more nights than not.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ae3d6e2b-aa14-4eb1-8799-b3af50a61292",
+      "promptHash": "e40ad5a73d2a9d17aa3b797c0868dc7f",
+      "seed": "sv_nine_weeks_1:loc:longhouse_bar:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44373,
+      "createdAt": "2026-09-09T08:58:54.944Z"
+    }
+  },
+  "story_nine_weeks/stage_the_point": {
+    "assetKey": "story_nine_weeks/stage_the_point",
+    "file": "story_nine_weeks/stage_the_point.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Point: A shingle spit on the far shore with one dead tree on it, twenty minutes across the water and out of sight of the whole property.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4885cee5-2b76-4f21-92b4-11947fba891c",
+      "promptHash": "bd9e4038824d84a7485fb33456643642",
+      "seed": "sv_nine_weeks_1:loc:the_point:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16459,
+      "createdAt": "2026-09-09T08:58:55.657Z"
+    }
+  },
+  "story_nine_weeks/teo": {
+    "assetKey": "story_nine_weeks/teo",
+    "file": "story_nine_weeks/teo.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Teo Sandoval, Kitchen, first season",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "47e27dae-3bb0-43ed-bf9a-3c299cd2b354",
+      "promptHash": "6566c9d4a53488a14f8039feb36381c3",
+      "seed": "teo-sandoval-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16243,
+      "createdAt": "2026-09-09T08:59:11.197Z"
+    }
+  },
+  "story_nine_weeks/juno": {
+    "assetKey": "story_nine_weeks/juno",
+    "file": "story_nine_weeks/juno.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, Bar staff, second season",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d7a96917-d5c0-45bf-967c-09b26adf1234",
+      "promptHash": "6e20917f4f40bab528d3a90d18025096",
+      "seed": "juno-vale-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 19210,
+      "createdAt": "2026-09-09T08:59:11.721Z"
+    }
+  },
+  "story_nine_weeks/nadia": {
+    "assetKey": "story_nine_weeks/nadia",
+    "file": "story_nine_weeks/nadia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nadia Okonkwo, Head of house, fourth season",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f86c9e2a-cc10-4201-864c-a0096ab67306",
+      "promptHash": "f2f9f872ecf35760c93dfbba1d6b266d",
+      "seed": "nadia-okonkwo-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 22897,
+      "createdAt": "2026-09-09T08:59:18.564Z"
+    }
+  },
+  "story_nine_weeks/cass": {
+    "assetKey": "story_nine_weeks/cass",
+    "file": "story_nine_weeks/cass.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Cass Reyner, Bar staff, third season",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0500f52b-7d91-49a8-b7bd-e005f6fcba8a",
+      "promptHash": "656630483eafceebc14d5780cbea80f1",
+      "seed": "cass-reyner-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 19366,
+      "createdAt": "2026-09-09T08:59:30.568Z"
+    }
   }
 }

@@ -18,3 +18,8 @@ android/
 # Generated art masters — regenerable via infra/scripts/generate-art.ts.
 # The optimized .webp derivatives are committed; the PNGs are not.
 infra/seed/assets/**/*.png
+
+# Runtime-generated media: a hero frame belongs to one turn and a portrait to
+# one player, so neither is seed content. Both are regenerated on demand.
+infra/seed/assets/hero/
+infra/seed/assets/player/
