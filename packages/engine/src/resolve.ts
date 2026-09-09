@@ -22,6 +22,7 @@ import {
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
 import { buildEncounter, canSpend, newTurnEconomy, spend, type ActionWeight, type TurnEconomy } from './combat.js';
+import { resolveNpcTurns } from './npc-turns.js';
 import { applyMutations, validateMutations } from './mutations.js';
 
 /**
@@ -230,6 +231,16 @@ export function resolveIntent(options: ResolveOptions): Resolution {
       reasonCode: 'ACTION_TIME_COST',
       payload: { minutes: totalMinutes },
     });
+  }
+
+  // Spec §13.3 — the other side of the round. Enemies act after the player,
+  // against the same dice, from the same seeded stream.
+  const afterPlayer = projectState(state, story, mutations);
+  if (afterPlayer.encounter) {
+    const npcTurns = resolveNpcTurns(story, afterPlayer, rng, nextMutationId);
+    mutations.push(...npcTurns.mutations);
+    observableFacts.push(...npcTurns.observableFacts);
+    privateFacts.push(...(npcTurns.privateFacts as PrivateFact[]));
   }
 
   // Opportunities describe what the player can do *next*, so they are computed
@@ -864,27 +875,8 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
     }
   } else {
     observableFacts.push(`Your strike misses ${character.name}.`);
-
-    // Spec §11 — failing to land a blow is not free. The target hits back.
-    const counter = character.combatant?.damage ?? 3;
-    const health = story.resources.find((r) => r.id === 'health');
-    if (health) {
-      mutations.push({
-        mutationId: nextMutationId(),
-        type: 'RESOURCE_DELTA',
-        subjectId: 'player',
-        reasonCode: 'COUNTERATTACK',
-        payload: { resourceId: health.id, amount: -counter },
-      });
-      observableFacts.push(`${character.name} answers, and it costs you ${counter} ${health.name}.`);
-    }
-    mutations.push({
-      mutationId: nextMutationId(),
-      type: 'ENCOUNTER_UPDATE',
-      subjectId: 'session',
-      reasonCode: 'COUNTERATTACK',
-      payload: { participantId: 'player', healthDelta: -counter },
-    });
+    // No counterattack here: the target gets a real turn of their own once the
+    // player's action resolves, and hitting back twice for one miss is wrong.
   }
 
   return {

@@ -424,7 +424,7 @@ const raw = {
     {
       id: 'q_delivery',
       title: 'The Delivery',
-      summary: 'Get the case to the coast. Eleven days of road, nine days of water.',
+      summary: 'Carry the sealed case you were paid to deliver all the way to the coast. Eleven days of walking, nine days of water.',
       kind: 'MAIN',
       startsActive: true,
       involvedCharacterIds: ['ferrow', 'oren', 'sabe'],

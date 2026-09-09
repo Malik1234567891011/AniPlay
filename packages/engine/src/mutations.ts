@@ -384,7 +384,11 @@ function applyOne(state: GameState, story: StoryVersion, mutation: StateMutation
     case 'ENCOUNTER_START': {
       const encounter = p.encounter;
       if (encounter && typeof encounter === 'object') {
-        state.encounter = encounter as GameState['encounter'];
+        // Cloned, not aliased. Storing the payload object directly means every
+        // later ENCOUNTER_UPDATE edits the mutation itself, so replaying the
+        // same mutation list — which `projectState` and `commitTurn` both do —
+        // compounds damage and silently kills the player.
+        state.encounter = structuredClone(encounter) as GameState['encounter'];
       }
       return;
     }

@@ -743,7 +743,7 @@ const raw = {
     {
       id: 'lead_rooftop',
       title: 'Someone Goes Up There',
-      summary: 'A folded coat behind a chimney on the leads. Someone uses this roof daily.',
+      summary: 'Someone leaves a folded coat behind a chimney on the flat roof above the lecture hall. They are up there most days.',
       kind: 'LEAD',
       startsActive: false,
       involvedCharacterIds: ['mira'],

@@ -6,6 +6,7 @@ export * from './relationships.js';
 export * from './quests.js';
 export * from './mutations.js';
 export * from './combat.js';
+export * from './npc-turns.js';
 export * from './progression.js';
 export * from './resolve.js';
 export * from './commit.js';

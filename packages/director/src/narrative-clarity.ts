@@ -125,14 +125,28 @@ function sentences(text: string): string[] {
  * nouns this world introduces. Drawn from the story's own definitions rather
  * than a fixed list, so it works for any world including creator-made ones.
  */
+/**
+ * Words a story may use as an entity name that a reader already knows.
+ *
+ * A resource called "Water" or "Health", or a location called "Stage", is
+ * ordinary English. Flagging those as unexplained jargon is noise that trains
+ * authors to ignore the checker.
+ */
+const ORDINARY_ENGLISH = new Set([
+  'water', 'health', 'stamina', 'focus', 'energy', 'stage', 'gate', 'commons',
+  'debt', 'standing', 'strain', 'suspicion', 'map', 'key', 'coat', 'road',
+  'wardrobe', 'office', 'stacks', 'archives', 'archive', 'rooftop', 'room',
+]);
+
 export function inventedVocabulary(story: StoryVersion): string[] {
   const terms = new Set<string>();
 
   const add = (value: string): void => {
     const trimmed = value.trim();
-    // Multi-word names are matched whole; single words must look invented
-    // (capitalised mid-sentence) rather than being ordinary English.
-    if (trimmed.length > 2) terms.add(trimmed);
+    if (trimmed.length <= 2) return;
+    // A single ordinary word is not jargon even when a story uses it as a name.
+    if (!trimmed.includes(' ') && ORDINARY_ENGLISH.has(trimmed.toLowerCase())) return;
+    terms.add(trimmed);
   };
 
   for (const item of story.items) add(item.name);

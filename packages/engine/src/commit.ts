@@ -112,7 +112,12 @@ export function commitTurn(options: CommitOptions): CommitResult {
 
   state.turnIndex += 1;
   state.revision += 1;
-  state.arc = advanceArc(state, questTransitions.length > 0, resolution.checks.length > 0);
+  state.arc = advanceArc(
+    state,
+    questTransitions.length > 0,
+    resolution.checks.length > 0,
+    sceneBroken(resolution),
+  );
   state.rngCursor = resolution.checks.reduce((sum, check) => sum + check.rolls.length, state.rngCursor);
 
   const events = buildEvents(state, turnId, accepted, questTransitions, now);
@@ -135,6 +140,25 @@ function applySchedules(state: GameState, story: StoryVersion): void {
 }
 
 /**
+ * Spec §16.5 — a turn that fundamentally changes the scene.
+ *
+ * The director plans a beat expecting the scene it was given. When the player
+ * starts a fight, walks out, or gets someone killed, continuing that plan is
+ * how a story ends up ignoring what the player just did. This flags the turn so
+ * pacing re-plans rather than resuming its script.
+ */
+function sceneBroken(resolution: Resolution): boolean {
+  return resolution.mutations.some(
+    (m) =>
+      m.type === 'ENCOUNTER_START' ||
+      m.type === 'ENCOUNTER_END' ||
+      m.type === 'LOCATION_CHANGE' ||
+      m.reasonCode === 'ATTACKED_BY_PLAYER' ||
+      m.reasonCode === 'NPC_CALLED_FOR_HELP',
+  );
+}
+
+/**
  * Spec §16.5 — pacing is state, not a timer. Episodes advance through a shape
  * and reset at a rest beat, so cliffhangers are not fired every N turns.
  */
@@ -142,8 +166,18 @@ function advanceArc(
   state: GameState,
   questMoved: boolean,
   hadCheck: boolean,
+  broken = false,
 ): GameState['arc'] {
   const arc = { ...state.arc, turnsInEpisode: state.arc.turnsInEpisode + 1 };
+
+  // A broken scene jumps straight to consequence and spikes tension. The
+  // previous plan is abandoned rather than resumed, which is the difference
+  // between a story that reacts and a screenplay that ignores you.
+  if (broken) {
+    arc.pacingStage = 'CONSEQUENCE';
+    arc.tensionScore = Math.min(1, arc.tensionScore + 0.35);
+    return arc;
+  }
 
   const tensionDelta = (questMoved ? 0.12 : 0) + (hadCheck ? 0.06 : -0.04);
   arc.tensionScore = Math.max(0, Math.min(1, arc.tensionScore + tensionDelta));

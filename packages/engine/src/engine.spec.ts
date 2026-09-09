@@ -17,6 +17,7 @@ import { advanceQuests, evaluatePredicate, topObjective } from './quests.js';
 import { resolveIntent } from './resolve.js';
 import { commitTurn } from './commit.js';
 import { qualitativeHealth } from './combat.js';
+import { chooseNpcAction } from './npc-turns.js';
 import { formatWorldTime, dayNumber } from './clock.js';
 
 const baseState = (): GameState =>
@@ -934,5 +935,141 @@ describe('property: engine invariants hold across many random turns', () => {
       return state;
     };
     expect(run()).toEqual(run());
+  });
+});
+
+describe('NPC turns (spec §13.3 — the other side of the round)', () => {
+  const fight = (seed: string, turns = 1) => {
+    let state = baseState();
+    let last;
+    for (let i = 0; i < turns; i++) {
+      const resolution = resolveIntent({
+        story: STORY,
+        state,
+        intent: intent([
+          { verb: 'attack', actor: player, targets: [{ entityType: 'npc', entityId: 'kael' }], method: 'swing', declaredOutcome: null, timeIntent: 'NOW' },
+        ]),
+        turnId: `t${i}`,
+        seed: `${seed}-${i}`,
+      });
+      last = commitTurn({ story: STORY, state, resolution, turnId: `t${i}` });
+      state = last.state;
+      if (!state.encounter) break;
+    }
+    return { state, commit: last! };
+  };
+
+  it('gives the enemy a turn with the same dice the player uses', () => {
+    let sawEnemyAction = false;
+    for (let i = 0; i < 12 && !sawEnemyAction; i++) {
+      const state = baseState();
+      const resolution = resolveIntent({
+        story: STORY, state,
+        intent: intent([
+          { verb: 'attack', actor: player, targets: [{ entityType: 'npc', entityId: 'kael' }], method: 'swing', declaredOutcome: null, timeIntent: 'NOW' },
+        ]),
+        turnId: 't', seed: `npc-${i}`,
+      });
+      if (resolution.mutations.some((m) => m.reasonCode.startsWith('NPC_'))) sawEnemyAction = true;
+    }
+    expect(sawEnemyAction).toBe(true);
+  });
+
+  it('does not apply damage twice for a single missed swing', () => {
+    const state = baseState();
+    const resolution = resolveIntent({
+      story: STORY, state,
+      intent: intent([
+        { verb: 'attack', actor: player, targets: [{ entityType: 'npc', entityId: 'kael' }], method: 'swing', declaredOutcome: null, timeIntent: 'NOW' },
+      ]),
+      turnId: 't', seed: 'double-damage',
+    });
+    // The old stopgap counterattack plus a real NPC turn hit the player twice.
+    expect(resolution.mutations.filter((m) => m.reasonCode === 'COUNTERATTACK')).toHaveLength(0);
+    const playerHits = resolution.mutations.filter(
+      (m) => m.type === 'RESOURCE_DELTA' && m.subjectId === 'player' && (m.payload as { resourceId?: string }).resourceId === 'health',
+    );
+    expect(playerHits.length).toBeLessThanOrEqual(1);
+  });
+
+  it('keeps the encounter alive across rounds', () => {
+    // The aliasing bug made ENCOUNTER_START share a reference with its payload,
+    // so replaying mutations compounded damage and ended the fight instantly.
+    const { state } = fight('survive', 2);
+    expect(state.encounter).not.toBeNull();
+    const health = state.player.resources.find((r) => r.id === 'health')!;
+    expect(health.current).toBeGreaterThan(0);
+  });
+
+  it('lets an authored role drive tactics rather than a model', () => {
+    const state = baseState();
+    const resolution = resolveIntent({
+      story: STORY, state,
+      intent: intent([
+        { verb: 'attack', actor: player, targets: [{ entityType: 'npc', entityId: 'kael' }], method: 'swing', declaredOutcome: null, timeIntent: 'NOW' },
+      ]),
+      turnId: 't', seed: 'tactics',
+    });
+    const committed = commitTurn({ story: STORY, state, resolution, turnId: 't' }).state;
+
+    // Kael is a prefect; hurt him and he escalates procedurally, not physically.
+    const hurt = structuredClone(committed);
+    const kael = hurt.encounter!.participants.find((p) => p.entityId === 'kael')!;
+    kael.health = Math.floor(kael.maxHealth * 0.5);
+
+    expect(chooseNpcAction(STORY, hurt.encounter!, 'kael')).toBe('CALL_FOR_HELP');
+    // Once help is coming, they stop shouting and fight or withdraw.
+    expect(chooseNpcAction(STORY, hurt.encounter!, 'kael', true)).not.toBe('CALL_FOR_HELP');
+  });
+
+  it('surrenders rather than fighting to the death when the story allows it', () => {
+    const state = baseState();
+    const resolution = resolveIntent({
+      story: STORY, state,
+      intent: intent([
+        { verb: 'attack', actor: player, targets: [{ entityType: 'npc', entityId: 'kael' }], method: 'swing', declaredOutcome: null, timeIntent: 'NOW' },
+      ]),
+      turnId: 't', seed: 'surrender',
+    });
+    const committed = commitTurn({ story: STORY, state, resolution, turnId: 't' }).state;
+
+    const nearlyDown = structuredClone(committed);
+    const kael = nearlyDown.encounter!.participants.find((p) => p.entityId === 'kael')!;
+    kael.health = 1;
+    expect(chooseNpcAction(STORY, nearlyDown.encounter!, 'kael')).toBe('SURRENDER');
+  });
+});
+
+describe('scene invalidation (spec §16.5)', () => {
+  it('abandons the planned beat when the player breaks the scene', () => {
+    const state = baseState();
+    state.arc.pacingStage = 'CHOICES';
+    state.arc.tensionScore = 0.3;
+
+    const resolution = resolveIntent({
+      story: STORY, state,
+      intent: intent([
+        { verb: 'attack', actor: player, targets: [{ entityType: 'npc', entityId: 'kael' }], method: 'swing', declaredOutcome: null, timeIntent: 'NOW' },
+      ]),
+      turnId: 't', seed: 'broken-scene',
+    });
+    const committed = commitTurn({ story: STORY, state, resolution, turnId: 't' }).state;
+
+    // The director does not resume a plan that assumed a conversation.
+    expect(committed.arc.pacingStage).toBe('CONSEQUENCE');
+    expect(committed.arc.tensionScore).toBeGreaterThan(0.3);
+  });
+
+  it('leaves pacing alone for an ordinary turn', () => {
+    const state = baseState();
+    state.arc.pacingStage = 'CHOICES';
+
+    const resolution = resolveIntent({
+      story: STORY, state,
+      intent: intent([{ verb: 'inspect', actor: player, targets: [], method: 'look', declaredOutcome: null, timeIntent: 'NOW' }]),
+      turnId: 't', seed: 'ordinary',
+    });
+    const committed = commitTurn({ story: STORY, state, resolution, turnId: 't' }).state;
+    expect(committed.arc.pacingStage).not.toBe('CONSEQUENCE');
   });
 });
