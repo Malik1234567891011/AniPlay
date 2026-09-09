@@ -3,7 +3,13 @@ import { z } from 'zod';
 import { LAUNCH_CATALOG, NINE_WEEKS, NINTH_ARCHIVE as STORY, TIDEWALL } from '@aniplay/test-fixtures';
 import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
 import { ActionIntent } from '@aniplay/contracts';
-import { commitTurn, createInitialState, deriveTurnSeed, resolveIntent } from '@aniplay/engine';
+import {
+  commitTurn,
+  createInitialState,
+  deriveTurnSeed,
+  evaluatePredicate,
+  resolveIntent,
+} from '@aniplay/engine';
 import { stripInventedTravel } from './entity-resolution.js';
 import { OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
 import { RuleBasedIntentParser } from './parser.js';
@@ -1091,6 +1097,81 @@ describe('every authored gate can actually be reached', () => {
     expect(result.state.flags[`visited:${STORY.rules.startingLocationId}`]).toBe(true);
     // Someone who is not in the scene is not met.
     expect(result.state.flags['met:ysolde']).toBeUndefined();
+  });
+});
+
+describe('two builds do not get the same story', () => {
+  const roleStep = TIDEWALL.quests
+    .find((q) => q.id === 'q_the_roll')!
+    .steps.find((s) => s.id === 'step_earn_a_place')!;
+
+  /** Puts the world into the state that build would actually reach. */
+  const stateFor = (archetypeId: string, mutate: (s: GameState) => void): GameState => {
+    const state = createInitialState({
+      sessionId: `sess_${archetypeId}`,
+      story: TIDEWALL,
+      identity: { ...bareIdentity(archetypeId) },
+    });
+    state.flags['known_to_odalys'] = true;
+    state.flags['spoke:odalys'] = true;
+    mutate(state);
+    return state;
+  };
+
+  const routeTaken = (state: GameState): string | null => {
+    for (const route of roleStep.succeedWhenAny) {
+      if (evaluatePredicate(route.predicate, state)) return route.routeId;
+    }
+    return null;
+  };
+
+  const withFaction = (state: GameState, factionId: string, value: number): void => {
+    const faction = state.factions.find((f) => f.factionId === factionId);
+    if (faction) faction.reputation = value;
+  };
+
+  it('routes a warrior through the yard and a healer through the tents', () => {
+    const warrior = stateFor('arch_warrior', (s) => {
+      s.flags['used:break_charge'] = true;
+      withFaction(s, 'faction_iron_march', 30);
+    });
+    const healer = stateFor('arch_healer', (s) => {
+      s.flags['used:thread'] = true;
+      s.player.locationId = 'stillhand_tent';
+      withFaction(s, 'faction_stillhand', 30);
+    });
+
+    expect(routeTaken(warrior)).toBe('route_march');
+    expect(routeTaken(healer)).toBe('route_stillhand');
+  });
+
+  it('closes what the route chosen costs you', () => {
+    const march = roleStep.succeedWhenAny.find((r) => r.routeId === 'route_march')!;
+    const stillhand = roleStep.succeedWhenAny.find((r) => r.routeId === 'route_stillhand')!;
+
+    // Winning the yard shuts the Silent Rank and a second bound element; a
+    // Stillhand who kept someone alive never gets credit for the yard.
+    expect(march.closesFlags).toContain('silent_rank_trust');
+    expect(stillhand.closesFlags).toContain('won_the_yard');
+    expect(march.setsFlags).not.toEqual(stillhand.setsFlags);
+  });
+
+  it('leaves a route open for a recruit who took no order at all', () => {
+    const unclassed = stateFor('', (s) => {
+      const rel = s.relationships.find((r) => r.characterId === 'odalys');
+      if (rel) rel.respect = 45;
+    });
+    // No class ability used, no order standing — and still a way onto the list.
+    expect(routeTaken(unclassed)).toBe('route_useful');
+  });
+
+  it('cannot be taken with the wrong build, because the abilities are class-locked', () => {
+    // A Stillhand has no Breaking Charge to have used, so the warrior route is
+    // not merely unlikely for them — it is unreachable.
+    const healer = TIDEWALL.archetypes.find((a) => a.id === 'arch_healer')!;
+    expect(healer.startingAbilities).not.toContain('break_charge');
+    const warrior = TIDEWALL.archetypes.find((a) => a.id === 'arch_warrior')!;
+    expect(warrior.startingAbilities).not.toContain('thread');
   });
 });
 
