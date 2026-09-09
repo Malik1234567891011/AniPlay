@@ -72,6 +72,10 @@ export function WorldSheetScreen({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        // A horizontal ScrollView is still a flex child, and as a direct child
+        // of a flex:1 column it grows to fill the height — which put ~230pt of
+        // dead space between these tabs and the panel below them.
+        style={{ flexGrow: 0 }}
         contentContainerStyle={{ paddingHorizontal: GUTTER, paddingVertical: spacing.md, gap: spacing.sm }}
       >
         {TABS.map((id) => (

@@ -43,6 +43,10 @@ const raw = {
     revealCheckMath: false,
     allowsCombat: true,
     allowsRomance: true,
+    startingItems: [
+      { itemId: 'sigil_pendant', qty: 1 },
+      { itemId: 'acceptance_letter', qty: 1 },
+    ],
     startingLocationId: 'gate_arch',
     startWorldMinute: 8 * 60 + 10,
     hardCanon: [
@@ -107,6 +111,18 @@ const raw = {
     },
   ],
   items: [
+    {
+      id: 'acceptance_letter',
+      name: 'Acceptance Letter',
+      tags: ['quest', 'document'],
+      questItem: true,
+      droppable: false,
+      description:
+        'One page, Academy seal, your name in ink. The only object in the world that says you belong here.',
+      loreText:
+        'Two signatures at the bottom. One is the Warden. The other has been countersigned so heavily you cannot read it.',
+      icon: 'letter',
+    },
     {
       id: 'sigil_pendant',
       name: 'Unwritten Sigil',
@@ -947,7 +963,6 @@ const raw = {
       attributeBonus: { mind: 2, arcana: 1 },
       skillProficiencies: { arcana_lore: 2, investigation: 2, warding: 1 },
       startingItems: [
-        { itemId: 'sigil_pendant', qty: 1 },
         { itemId: 'ward_chalk', qty: 2 },
       ],
       startingAbilities: [],
@@ -959,7 +974,6 @@ const raw = {
       attributeBonus: { agility: 3 },
       skillProficiencies: { stealth: 3, sleight: 2, deception: 1 },
       startingItems: [
-        { itemId: 'sigil_pendant', qty: 1 },
         { itemId: 'bramble_tonic', qty: 1 },
       ],
       startingAbilities: ['veilstep'],
@@ -971,7 +985,6 @@ const raw = {
       attributeBonus: { presence: 3 },
       skillProficiencies: { persuasion: 3, deception: 1, composure: 2 },
       startingItems: [
-        { itemId: 'sigil_pendant', qty: 1 },
         { itemId: 'ward_chalk', qty: 1 },
       ],
       startingAbilities: [],
@@ -983,7 +996,6 @@ const raw = {
       attributeBonus: { might: 2, resolve: 1 },
       skillProficiencies: { athletics: 3, intimidation: 2, composure: 1 },
       startingItems: [
-        { itemId: 'sigil_pendant', qty: 1 },
         { itemId: 'bramble_tonic', qty: 2 },
       ],
       startingAbilities: [],

@@ -431,6 +431,18 @@ export const StoryRules = z
     allowsRomance: z.boolean().default(true),
     startingLocationId: z.string(),
     startWorldMinute: z.number().int().min(0).default(8 * 60),
+    /**
+     * What every player carries because the fiction says so, whatever
+     * background they chose — or chose not to choose.
+     *
+     * An archetype's `startingItems` is what that background adds. The item the
+     * premise depends on is a fact about the world: The Salt Road's sealed case
+     * is the job, and a player who skipped the archetype step was setting out
+     * across eleven days of desert without it.
+     */
+    startingItems: z
+      .array(z.object({ itemId: z.string(), qty: z.number().int().min(1) }).strict())
+      .default([]),
     /** In-fiction rules the director may never contradict. */
     hardCanon: z.array(z.string()).default([]),
     toneGuide: z.string().default(''),

@@ -40,6 +40,10 @@ const raw = {
     revealCheckMath: true,
     allowsCombat: true,
     allowsRomance: false,
+    startingItems: [
+      { itemId: 'sealed_case', qty: 1 },
+      { itemId: 'canteen', qty: 1 },
+    ],
     startingLocationId: 'ossun_gate',
     startWorldMinute: 5 * 60,
     hardCanon: [
@@ -511,7 +515,6 @@ const raw = {
       attributeBonus: { might: 1, resolve: 2 },
       skillProficiencies: { endurance: 3, composure: 2 },
       startingItems: [
-        { itemId: 'sealed_case', qty: 1 },
         { itemId: 'canteen', qty: 2 },
         { itemId: 'salt_veil', qty: 1 },
       ],
@@ -524,7 +527,6 @@ const raw = {
       attributeBonus: { mind: 3 },
       skillProficiencies: { navigation: 3, survival: 2, perception: 2 },
       startingItems: [
-        { itemId: 'sealed_case', qty: 1 },
         { itemId: 'canteen', qty: 1 },
       ],
       startingAbilities: [],
@@ -536,7 +538,6 @@ const raw = {
       attributeBonus: { might: 2, agility: 1 },
       skillProficiencies: { blades: 3, perception: 2, endurance: 1 },
       startingItems: [
-        { itemId: 'sealed_case', qty: 1 },
         { itemId: 'canteen', qty: 1 },
         { itemId: 'salt_veil', qty: 1 },
       ],

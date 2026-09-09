@@ -40,6 +40,7 @@ const raw = {
     revealCheckMath: false,
     allowsCombat: false,
     allowsRomance: true,
+    startingItems: [{ itemId: 'annotated_sides', qty: 1 }],
     startingLocationId: 'rehearsal_room',
     startWorldMinute: 9 * 60,
     hardCanon: [
@@ -542,7 +543,7 @@ const raw = {
       blurb: 'You are not the most watchable person here. You are the most reliable.',
       attributeBonus: { mind: 2, resolve: 1 },
       skillProficiencies: { stagecraft: 3, composure: 2, insight: 1 },
-      startingItems: [{ itemId: 'annotated_sides', qty: 1 }],
+      startingItems: [],
       startingAbilities: [],
     },
     {
@@ -551,7 +552,7 @@ const raw = {
       blurb: 'It has always come easily, which is its own kind of problem.',
       attributeBonus: { presence: 3 },
       skillProficiencies: { performance: 3, movement: 2 },
-      startingItems: [{ itemId: 'annotated_sides', qty: 1 }],
+      startingItems: [],
       startingAbilities: [],
     },
     {
@@ -561,7 +562,6 @@ const raw = {
       attributeBonus: { presence: 2, mind: 1 },
       skillProficiencies: { persuasion: 3, insight: 2, deception: 1 },
       startingItems: [
-        { itemId: 'annotated_sides', qty: 1 },
         { itemId: 'throat_tincture', qty: 1 },
       ],
       startingAbilities: [],

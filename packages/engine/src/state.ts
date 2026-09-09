@@ -44,10 +44,18 @@ export function createInitialState({ sessionId, story, identity }: CreateStateOp
     max: r.max,
   }));
 
-  const inventory: InventoryEntry[] = (archetype?.startingItems ?? []).map((entry, index) => ({
-    entryId: `inv_${index}_${entry.itemId}`,
-    itemId: entry.itemId,
-    quantity: entry.qty,
+  // The world's own starting kit first, then whatever the background adds.
+  // Stacked by item, so a background that also grants the world item ends up
+  // with two of them rather than two entries for the same thing.
+  const startingQuantities = new Map<string, number>();
+  for (const entry of [...story.rules.startingItems, ...(archetype?.startingItems ?? [])]) {
+    startingQuantities.set(entry.itemId, (startingQuantities.get(entry.itemId) ?? 0) + entry.qty);
+  }
+
+  const inventory: InventoryEntry[] = [...startingQuantities].map(([itemId, quantity], index) => ({
+    entryId: `inv_${index}_${itemId}`,
+    itemId,
+    quantity,
     equipped: false,
     instanceName: null,
   }));

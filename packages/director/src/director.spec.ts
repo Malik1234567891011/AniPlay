@@ -774,6 +774,47 @@ describe('every launch world is playable', () => {
     expect(lethal.contentDescriptors).toContain('PERMANENT_DEATH');
   });
 
+  it('gives a player what the premise says they are carrying, archetype or not', () => {
+    for (const world of LAUNCH_CATALOG) {
+      // Skipping the background is allowed — only the name is required — so a
+      // player who skips it must still hold whatever the story hands out. The
+      // Salt Road's whole job is a sealed case, and it used to live only in the
+      // archetype lists, so a no-archetype run set out across the flats
+      // without it.
+      const state = createInitialState({
+        sessionId: 'sess_bare',
+        story: world,
+        identity: { displayName: 'Nobody', pronouns: 'they/them', archetypeId: null, advanced: {} },
+      });
+
+      expect(world.rules.startingItems.length, `${world.title} startingItems`).toBeGreaterThan(0);
+      for (const entry of world.rules.startingItems) {
+        const held = state.player.inventory.find((i) => i.itemId === entry.itemId);
+        expect(held?.quantity, `${world.title}: ${entry.itemId}`).toBe(entry.qty);
+        // And it has to be a real item, not a dangling id.
+        expect(world.items.some((i) => i.id === entry.itemId), `${world.title}: ${entry.itemId} defined`).toBe(true);
+      }
+    }
+  });
+
+  it('stacks a background grant on top of the world kit rather than duplicating it', () => {
+    const world = LAUNCH_CATALOG.find((w) => w.archetypes.length > 0)!;
+    const archetype = world.archetypes[0]!;
+    const state = createInitialState({
+      sessionId: 'sess_arch',
+      story: world,
+      identity: { displayName: 'Somebody', pronouns: 'they/them', archetypeId: archetype.id, advanced: {} },
+    });
+
+    // One entry per item, never two rows for the same thing.
+    const ids = state.player.inventory.map((i) => i.itemId);
+    expect(new Set(ids).size).toBe(ids.length);
+
+    for (const entry of [...world.rules.startingItems, ...archetype.startingItems]) {
+      expect(ids).toContain(entry.itemId);
+    }
+  });
+
   it('meets the §43.1 content bar in every world', () => {
     for (const world of LAUNCH_CATALOG) {
       expect(world.fantasyLabel.length, world.title).toBeLessThanOrEqual(42);
