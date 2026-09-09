@@ -1,0 +1,615 @@
+import { z } from 'zod';
+import {
+  CheckResult,
+  ConsistencyViolation,
+  MediaPlan,
+  NarrativeBlock,
+  StateDeltaPresentation,
+  StateMutation,
+  SuggestedAction,
+} from '../ai/index.js';
+import { ContentDescriptor, StorySummary, StoryVersion } from '../game/story.js';
+import { LedgerEntry, QualityTier, StoreOffer, WalletSummary } from '../game/economy.js';
+import {
+  EncounterState,
+  FactionState,
+  GameEvent,
+  MemoryFact,
+  PlayerIdentity,
+  QuestProgress,
+  RelationshipState,
+  ResourceState,
+  StatusEffect,
+} from '../game/state.js';
+
+/** Spec §33 — the `/v1` REST surface. */
+
+export const API_VERSION = 'v1';
+export const CONTRACT_VERSION = '1.0.0';
+
+// --- Bootstrap (§33.1) -----------------------------------------------------
+
+export const FeatureFlags = z
+  .object({
+    coopBeta: z.boolean().default(false),
+    animationBeta: z.boolean().default(false),
+    voicePlayback: z.boolean().default(true),
+    heroImages: z.boolean().default(true),
+    offScreenEvents: z.boolean().default(false),
+    creatorPublishing: z.boolean().default(true),
+    pushNotifications: z.boolean().default(false),
+  })
+  .strict();
+export type FeatureFlags = z.infer<typeof FeatureFlags>;
+
+export const QualityTierInfo = z
+  .object({
+    id: QualityTier,
+    label: z.string(),
+    costCredits: z.number().int(),
+    promise: z.string(),
+    heroImageEligible: z.boolean(),
+  })
+  .strict();
+export type QualityTierInfo = z.infer<typeof QualityTierInfo>;
+
+export const BootstrapResponse = z
+  .object({
+    featureFlags: FeatureFlags,
+    qualityTiers: z.array(QualityTierInfo),
+    defaultQualityTier: QualityTier,
+    contentDescriptors: z.array(ContentDescriptor),
+    genres: z.array(z.object({ id: z.string(), label: z.string() }).strict()),
+    minSupportedAppVersion: z.string(),
+    maintenance: z
+      .object({ active: z.boolean(), message: z.string().nullable() })
+      .strict(),
+    profile: z
+      .object({
+        userId: z.string(),
+        displayName: z.string(),
+        handle: z.string(),
+        isGuest: z.boolean(),
+        avatarUrl: z.string().nullable(),
+        ageVerified: z.boolean(),
+      })
+      .strict()
+      .nullable(),
+    wallet: WalletSummary.nullable(),
+  })
+  .strict();
+export type BootstrapResponse = z.infer<typeof BootstrapResponse>;
+
+// --- Discover / catalog (§33.2) --------------------------------------------
+
+export const DiscoverRail = z
+  .object({
+    id: z.string(),
+    title: z.string(),
+    kind: z.enum(['HERO', 'CONTINUE', 'FOR_YOU', 'TRENDING', 'NEW', 'GENRE', 'FOLLOWING']),
+    subtitle: z.string().nullable().default(null),
+    stories: z.array(StorySummary),
+  })
+  .strict();
+export type DiscoverRail = z.infer<typeof DiscoverRail>;
+
+export const ContinueCard = z
+  .object({
+    sessionId: z.string(),
+    storyId: z.string(),
+    title: z.string(),
+    coverImage: z.string().nullable(),
+    lastPlayedAt: z.string(),
+    turnCount: z.number().int(),
+    currentObjective: z.string().nullable(),
+    recapLine: z.string().nullable(),
+  })
+  .strict();
+export type ContinueCard = z.infer<typeof ContinueCard>;
+
+export const DiscoverResponse = z
+  .object({
+    rails: z.array(DiscoverRail),
+    continueCards: z.array(ContinueCard),
+  })
+  .strict();
+export type DiscoverResponse = z.infer<typeof DiscoverResponse>;
+
+export const SearchFilters = z
+  .object({
+    genres: z.array(z.string()).default([]),
+    romance: z.enum(['ANY', 'YES', 'NO']).default('ANY'),
+    combat: z.enum(['ANY', 'YES', 'NO']).default('ANY'),
+    source: z.enum(['ANY', 'OFFICIAL', 'COMMUNITY']).default('ANY'),
+    intensity: z.array(z.enum(['LIGHT', 'MODERATE', 'INTENSE'])).default([]),
+  })
+  .strict();
+export type SearchFilters = z.infer<typeof SearchFilters>;
+
+export const StoryDetailResponse = z
+  .object({
+    story: StorySummary,
+    premise: z.string(),
+    creatorNote: z.string(),
+    opening: z.string(),
+    /** Cast carousel. Public traits only — never hidden drives. */
+    cast: z.array(
+      z
+        .object({
+          id: z.string(),
+          name: z.string(),
+          role: z.string(),
+          portrait: z.string().nullable(),
+          publicTraits: z.array(z.string()),
+        })
+        .strict(),
+    ),
+    stats: z
+      .object({
+        runs: z.number().int(),
+        medianDepthLabel: z.string(),
+        intensity: z.string(),
+        updatedAt: z.string(),
+      })
+      .strict(),
+    related: z.array(StorySummary),
+    activeSessionId: z.string().nullable(),
+    setupFields: StoryVersion.shape.setupFields,
+    archetypes: StoryVersion.shape.archetypes,
+  })
+  .strict();
+export type StoryDetailResponse = z.infer<typeof StoryDetailResponse>;
+
+// --- Sessions (§33.3) ------------------------------------------------------
+
+export const CreateSessionRequest = z
+  .object({
+    identity: PlayerIdentity,
+    /** Present when the player took the fast path and skipped advanced setup. */
+    usedQuickSetup: z.boolean().default(true),
+  })
+  .strict();
+export type CreateSessionRequest = z.infer<typeof CreateSessionRequest>;
+
+export const SessionSummary = z
+  .object({
+    sessionId: z.string(),
+    storyId: z.string(),
+    storyVersionId: z.string(),
+    title: z.string(),
+    coverImage: z.string().nullable(),
+    revision: z.number().int(),
+    turnCount: z.number().int(),
+    status: z.enum(['ACTIVE', 'COMPLETED', 'ARCHIVED']),
+    createdAt: z.string(),
+    lastPlayedAt: z.string(),
+    displayName: z.string(),
+    forkedFromSessionId: z.string().nullable(),
+    forkedAtTurnIndex: z.number().int().nullable(),
+  })
+  .strict();
+export type SessionSummary = z.infer<typeof SessionSummary>;
+
+/** Everything the session screen needs to render the stage on load. */
+export const SessionSceneState = z
+  .object({
+    locationId: z.string(),
+    locationName: z.string(),
+    stageImage: z.string().nullable(),
+    worldTimeLabel: z.string(),
+    worldMinute: z.number().int(),
+    dayNumber: z.number().int(),
+    presentCharacters: z.array(
+      z
+        .object({
+          id: z.string(),
+          name: z.string(),
+          portrait: z.string().nullable(),
+          expression: z.string(),
+          speaking: z.boolean(),
+        })
+        .strict(),
+    ),
+    objective: z.string().nullable(),
+    resources: z.array(
+      z
+        .object({
+          id: z.string(),
+          name: z.string(),
+          current: z.number(),
+          max: z.number(),
+          color: z.string().nullable(),
+          polarity: z.enum(['GOOD_HIGH', 'GOOD_LOW']),
+        })
+        .strict(),
+    ),
+    encounter: EncounterState.nullable(),
+  })
+  .strict();
+export type SessionSceneState = z.infer<typeof SessionSceneState>;
+
+export const TurnRecord = z
+  .object({
+    turnId: z.string(),
+    sessionId: z.string(),
+    turnIndex: z.number().int(),
+    /** Null on the opening turn, which the player did not author. */
+    actionText: z.string().nullable(),
+    qualityTier: QualityTier,
+    creditsCharged: z.number().int(),
+    sceneSummary: z.string(),
+    blocks: z.array(NarrativeBlock),
+    checks: z.array(CheckResult),
+    stateDeltas: z.array(StateDeltaPresentation),
+    mutations: z.array(StateMutation),
+    suggestions: z.array(SuggestedAction),
+    endStatePrompt: z.string(),
+    mediaPlan: MediaPlan.nullable(),
+    heroImageUrl: z.string().nullable(),
+    revisionAfter: z.number().int(),
+    createdAt: z.string(),
+    /** Present when a repair pass ran. Surfaced only in creator/debug trace. */
+    repairViolations: z.array(ConsistencyViolation).default([]),
+  })
+  .strict();
+export type TurnRecord = z.infer<typeof TurnRecord>;
+
+export const SessionDetailResponse = z
+  .object({
+    session: SessionSummary,
+    scene: SessionSceneState,
+    recentTurns: z.array(TurnRecord),
+    suggestions: z.array(SuggestedAction),
+    /** Spec §16.6 — shown when returning after >8h. */
+    recap: z
+      .object({ bullets: z.array(z.string()), objective: z.string().nullable() })
+      .strict()
+      .nullable(),
+    revision: z.number().int(),
+  })
+  .strict();
+export type SessionDetailResponse = z.infer<typeof SessionDetailResponse>;
+
+// --- World Sheet (§11) -----------------------------------------------------
+
+export const WorldSheetResponse = z
+  .object({
+    overview: z
+      .object({
+        locationName: z.string(),
+        worldTimeLabel: z.string(),
+        chapterLabel: z.string(),
+        topObjective: z.string().nullable(),
+        resources: SessionSceneState.shape.resources,
+        statuses: z.array(StatusEffect),
+        relationshipHighlights: z.array(
+          z.object({ characterId: z.string(), name: z.string(), label: z.string() }).strict(),
+        ),
+        recentEvents: z.array(z.string()),
+      })
+      .strict(),
+    character: z
+      .object({
+        identity: PlayerIdentity,
+        level: z.number().int(),
+        xp: z.number().int(),
+        progressionMode: z.enum(['LEVEL', 'MILESTONE']),
+        milestones: z.array(z.string()),
+        attributes: z.array(
+          z
+            .object({
+              key: z.string(),
+              name: z.string(),
+              value: z.number().int(),
+              modifier: z.number().int(),
+              plainLanguage: z.string(),
+            })
+            .strict(),
+        ),
+        skills: z.array(
+          z
+            .object({
+              id: z.string(),
+              name: z.string(),
+              attribute: z.string(),
+              proficiency: z.number().int(),
+              proficiencyLabel: z.string(),
+            })
+            .strict(),
+        ),
+        abilities: z.array(
+          z
+            .object({
+              id: z.string(),
+              name: z.string(),
+              description: z.string(),
+              costLabel: z.string(),
+              cooldownRemaining: z.number().int(),
+            })
+            .strict(),
+        ),
+        statuses: z.array(StatusEffect),
+        factions: z.array(
+          z
+            .object({ factionId: z.string(), name: z.string(), reputation: z.number().int(), rankLabel: z.string() })
+            .strict(),
+        ),
+        canonFacts: z.array(z.string()),
+      })
+      .strict(),
+    inventory: z.array(
+      z
+        .object({
+          entryId: z.string(),
+          itemId: z.string(),
+          name: z.string(),
+          quantity: z.number().int(),
+          equipped: z.boolean(),
+          equipSlot: z.string().nullable(),
+          rarity: z.string().nullable(),
+          icon: z.string().nullable(),
+          effects: z.array(z.string()),
+          description: z.string(),
+          loreText: z.string(),
+          canUse: z.boolean(),
+          canEquip: z.boolean(),
+        })
+        .strict(),
+    ),
+    quests: z.array(
+      z
+        .object({
+          questId: z.string(),
+          title: z.string(),
+          summary: z.string(),
+          status: QuestProgress.shape.status,
+          currentStepCopy: z.string().nullable(),
+          deadlineLabel: z.string().nullable(),
+          rewardCopy: z.string(),
+          involvedNames: z.array(z.string()),
+        })
+        .strict(),
+    ),
+    relationships: z.array(
+      z
+        .object({
+          characterId: z.string(),
+          name: z.string(),
+          portrait: z.string().nullable(),
+          label: z.string(),
+          lastInteractionTurn: z.number().int(),
+          dimensions: z
+            .object({
+              trust: z.number().int(),
+              affection: z.number().int(),
+              respect: z.number().int(),
+              fear: z.number().int(),
+              rivalry: z.number().int(),
+            })
+            .strict(),
+        })
+        .strict(),
+    ),
+    map: z
+      .object({
+        currentLocationId: z.string(),
+        nodes: z.array(
+          z
+            .object({
+              id: z.string(),
+              name: z.string(),
+              discovered: z.boolean(),
+              current: z.boolean(),
+              hasQuest: z.boolean(),
+              locked: z.boolean(),
+              lockReason: z.string().nullable(),
+              travelMinutes: z.number().int().nullable(),
+              position: z.object({ x: z.number(), y: z.number() }).strict(),
+            })
+            .strict(),
+        ),
+        edges: z.array(z.object({ from: z.string(), to: z.string() }).strict()),
+      })
+      .strict(),
+  })
+  .strict();
+export type WorldSheetResponse = z.infer<typeof WorldSheetResponse>;
+
+export const TimelineEntry = z
+  .object({
+    id: z.string(),
+    group: z.enum(['CANON', 'CHOICE', 'RELATIONSHIP', 'QUEST', 'ITEM', 'WORLD']),
+    turnIndex: z.number().int(),
+    worldTimeLabel: z.string(),
+    text: z.string(),
+    pinned: z.boolean(),
+    correctable: z.boolean(),
+    forkable: z.boolean(),
+  })
+  .strict();
+export type TimelineEntry = z.infer<typeof TimelineEntry>;
+
+export const TimelineResponse = z
+  .object({ entries: z.array(TimelineEntry) })
+  .strict();
+export type TimelineResponse = z.infer<typeof TimelineResponse>;
+
+export const CanonCorrectionRequest = z
+  .object({
+    factId: z.string(),
+    correctedText: z.string().max(400),
+  })
+  .strict();
+export type CanonCorrectionRequest = z.infer<typeof CanonCorrectionRequest>;
+
+export const CanonCorrectionResponse = z
+  .object({
+    accepted: z.boolean(),
+    /** Populated when the correction contradicts authoritative state (§11.8 step 5). */
+    conflictExplanation: z.string().nullable(),
+    offerFork: z.boolean(),
+    fact: MemoryFact.nullable(),
+  })
+  .strict();
+export type CanonCorrectionResponse = z.infer<typeof CanonCorrectionResponse>;
+
+// --- Turns (§33.4) ---------------------------------------------------------
+
+export const SubmitTurnRequest = z
+  .object({
+    actionText: z.string().min(1).max(2000),
+    qualityTier: QualityTier,
+    sessionRevision: z.number().int(),
+    selectedSuggestionId: z.string().nullable().default(null),
+    voicePreferred: z.boolean().default(false),
+  })
+  .strict();
+export type SubmitTurnRequest = z.infer<typeof SubmitTurnRequest>;
+
+export const SubmitTurnResponse = z
+  .object({
+    turnId: z.string(),
+    reservedCredits: z.number().int(),
+    balanceAfterReserve: z.number().int(),
+    acceptedRevision: z.number().int(),
+    streamUrl: z.string(),
+    streamToken: z.string(),
+  })
+  .strict();
+export type SubmitTurnResponse = z.infer<typeof SubmitTurnResponse>;
+
+/** Spec §17.9 — SSE event names. Every event carries turnId + sequence. */
+export const TurnStreamEventName = z.enum([
+  'turn.accepted',
+  'check.started',
+  'check.resolved',
+  'text.delta',
+  'state.delta',
+  'turn.completed',
+  'media.queued',
+  'media.completed',
+  'turn.failed',
+]);
+export type TurnStreamEventName = z.infer<typeof TurnStreamEventName>;
+
+export const TurnStreamEvent = z.object({
+  event: TurnStreamEventName,
+  turnId: z.string(),
+  sequence: z.number().int(),
+  sessionRevision: z.number().int().nullable().optional(),
+  data: z.record(z.unknown()),
+});
+export type TurnStreamEvent = z.infer<typeof TurnStreamEvent>;
+
+export const InsufficientCreditsError = z
+  .object({
+    code: z.literal('INSUFFICIENT_CREDITS'),
+    required: z.number().int(),
+    balance: z.number().int(),
+    shortfall: z.number().int(),
+  })
+  .strict();
+export type InsufficientCreditsError = z.infer<typeof InsufficientCreditsError>;
+
+export const StaleRevisionError = z
+  .object({
+    code: z.literal('STALE_REVISION'),
+    currentRevision: z.number().int(),
+    latestTurnId: z.string().nullable(),
+  })
+  .strict();
+export type StaleRevisionError = z.infer<typeof StaleRevisionError>;
+
+// --- Wallet / store (§33.5) ------------------------------------------------
+
+export const WalletResponse = z
+  .object({
+    wallet: WalletSummary,
+    offers: z.array(StoreOffer),
+  })
+  .strict();
+export type WalletResponse = z.infer<typeof WalletResponse>;
+
+export const LedgerResponse = z
+  .object({ entries: z.array(LedgerEntry), nextCursor: z.string().nullable() })
+  .strict();
+export type LedgerResponse = z.infer<typeof LedgerResponse>;
+
+export const PurchaseSyncRequest = z
+  .object({
+    productId: z.string(),
+    /** Store transaction id. Reconciliation is idempotent on this. §33.5. */
+    storeTransactionId: z.string(),
+    platform: z.enum(['APP_STORE', 'PLAY_STORE', 'SANDBOX']),
+    receipt: z.string().nullable().default(null),
+  })
+  .strict();
+export type PurchaseSyncRequest = z.infer<typeof PurchaseSyncRequest>;
+
+// --- Safety (§33.8) --------------------------------------------------------
+
+export const ReportReason = z.enum([
+  'SEXUAL_CONTENT_INVOLVING_MINORS',
+  'HARASSMENT',
+  'HATE',
+  'VIOLENCE_THREAT',
+  'SELF_HARM',
+  'IP_VIOLATION',
+  'IMPERSONATION',
+  'SPAM',
+  'BROKEN_OR_INCONSISTENT',
+  'OTHER',
+]);
+export type ReportReason = z.infer<typeof ReportReason>;
+
+export const CreateReportRequest = z
+  .object({
+    targetType: z.enum(['STORY', 'TURN', 'USER', 'MEDIA', 'COMMENT']),
+    targetId: z.string(),
+    reason: ReportReason,
+    details: z.string().max(1000).default(''),
+    alsoHide: z.boolean().default(false),
+  })
+  .strict();
+export type CreateReportRequest = z.infer<typeof CreateReportRequest>;
+
+// --- Account (§33.9) -------------------------------------------------------
+
+export const MeResponse = z
+  .object({
+    userId: z.string(),
+    displayName: z.string(),
+    handle: z.string(),
+    email: z.string().nullable(),
+    isGuest: z.boolean(),
+    avatarUrl: z.string().nullable(),
+    ageVerified: z.boolean(),
+    createdAt: z.string(),
+    settings: z
+      .object({
+        showAdvancedRelationshipStats: z.boolean(),
+        showCheckMath: z.boolean(),
+        reduceMotion: z.boolean(),
+        voiceAutoplay: z.boolean(),
+        hapticsEnabled: z.boolean(),
+        defaultQualityTier: QualityTier,
+        contentFilters: z.array(ContentDescriptor),
+      })
+      .strict(),
+    stats: z
+      .object({ storiesPlayed: z.number().int(), turnsPlayed: z.number().int(), worldsCreated: z.number().int() })
+      .strict(),
+  })
+  .strict();
+export type MeResponse = z.infer<typeof MeResponse>;
+
+export const ApiError = z
+  .object({
+    code: z.string(),
+    message: z.string(),
+    details: z.record(z.unknown()).optional(),
+  })
+  .strict();
+export type ApiError = z.infer<typeof ApiError>;
+
+export type { GameEvent, MemoryFact, RelationshipState, FactionState, ResourceState };

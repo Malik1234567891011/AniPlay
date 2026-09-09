@@ -1,0 +1,27 @@
+{
+  "name": "aniplay",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Project ANIMA — anime roleplay RPG. The model interprets intent. The game engine determines truth. The AI director makes truth entertaining.",
+  "engines": { "node": ">=22" },
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "api": "npm run dev -w @aniplay/api",
+    "mobile": "npm run start -w @aniplay/mobile",
+    "clean": "rm -rf packages/*/dist services/*/dist node_modules/.cache"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2",
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.8"
+  }
+}
