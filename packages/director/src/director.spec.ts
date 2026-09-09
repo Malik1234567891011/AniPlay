@@ -2082,3 +2082,108 @@ describe('suggestions after a hostile turn', () => {
     expect(texts.some((text) => /take it back|leave it where/.test(text))).toBe(true);
   });
 });
+
+/**
+ * The world may refuse. It may not quietly grant.
+ *
+ * "I fly up into the air and look down at the whole place" rolled a generic
+ * check, succeeded, and the writer described the player flying — correctly,
+ * because narrating a success is its job. The engine has to be what says no.
+ */
+describe('things the world does not do', () => {
+  const attempt = (text: string) => {
+    const state = baseState();
+    const intent = parse(text, state);
+    return resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 'nope' });
+  };
+
+  it('refuses flight rather than rolling for it', () => {
+    const resolution = attempt('I fly up into the air and look down at the whole place from above.');
+    expect(resolution.checks).toHaveLength(0);
+    expect(resolution.observableFacts.join(' ')).toMatch(/feet stay/i);
+    // And the writer is told not to lift them, even briefly.
+    expect(resolution.privateFacts.map((f) => f.fact).join(' ')).toMatch(/do not lift them/i);
+  });
+
+  it('refuses the other physics this world does not have', () => {
+    for (const text of [
+      'I teleport to the rooftop.',
+      'I go back in time to before the ward turned red.',
+      'I resurrect the dead student.',
+      'I read his mind.',
+    ]) {
+      expect(attempt(text).checks, text).toHaveLength(0);
+    }
+  });
+
+  it('does not refuse the things this world does do', () => {
+    for (const text of [
+      'I look down at the yard from the window.',
+      'I hide behind the shelves.',
+      'I climb the scaffolding to get a better view.',
+      'I jump over the barrier.',
+      'I take a running leap at the gap.',
+    ]) {
+      const resolution = attempt(text);
+      const refused = resolution.normalizedActions.some(
+        (a) => (a as { status?: string }).status === 'REJECTED' && (a as { reason?: string }).reason === 'IMPOSSIBLE',
+      );
+      expect(refused, text).toBe(false);
+    }
+  });
+});
+
+/**
+ * B — the writer has to know what the person in front of the player is
+ * carrying. The director already did; the writer did not, so an NPC could be
+ * attacked and greet the player two scenes later as though nothing had.
+ */
+describe('what the writer is told about who is on stage', () => {
+  it('sends each speaker what they know and how they feel', async () => {
+    let sent = '';
+    const gateway = {
+      name: 'test',
+      generateStructured: async (_role: string, _schema: unknown, messages: { content: string }[]) => {
+        sent = messages.map((m) => m.content).join('\n');
+        throw new ModelGatewayError('stop here', 'PROVIDER_ERROR', false);
+      },
+      streamText: async function* () {},
+      embed: async () => [],
+      moderate: async () => ({ flagged: false, categories: [], playerFacingMessage: null }),
+    };
+
+    // Hit Kael, then come back and talk to him.
+    let state = baseState();
+    const attack = await runTurn({
+      story: STORY,
+      state,
+      memories: [],
+      recentTurns: [],
+      actionText: 'I hit Kael.',
+      qualityTier: 'VIVID',
+      turnId: 'a1',
+      seed: 's1',
+    });
+    state = attack.state;
+
+    await runTurn({
+      story: STORY,
+      state,
+      memories: attack.newMemories,
+      recentTurns: [],
+      actionText: 'I ask Kael whether he is still angry.',
+      qualityTier: 'VIVID',
+      turnId: 'a2',
+      seed: 's2',
+      deps: {
+        parser: new RuleBasedIntentParser(),
+        director: new RuleBasedDirector(),
+        writer: new ModelWriter(gateway as never),
+      },
+    });
+
+    expect(sent).toContain('feelsAboutYou');
+    // And what he is carrying about it reached the prompt, not just the numbers.
+    expect(sent.toLowerCase()).toMatch(/attacked/);
+  });
+});

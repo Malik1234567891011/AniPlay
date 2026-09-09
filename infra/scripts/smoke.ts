@@ -305,7 +305,9 @@ async function main(): Promise<void> {
 
       // A big answer to a small question, and a small answer to a big one.
       if (prose.length > 2200) note(action, 'OVERLONG', `${prose.length} characters`);
-      if (probe.intent === 'violence' && prose.length < 200) {
+      // QUICK's promise is a short beat, so the bar is what would read as
+      // dismissive at any tier rather than what would be thin at CINEMATIC.
+      if (probe.intent === 'violence' && prose.length < 120) {
         note(action, 'UNDERWEIGHT', `violence answered in ${prose.length} characters`);
       }
 
@@ -365,7 +367,8 @@ async function main(): Promise<void> {
 
       // An attack or a public humiliation that moves nothing is a world that
       // does not care what you do to the people in it.
-      if ((probe.intent === 'violence' || probe.intent === 'insult') && deltas.length === 0) {
+      const targetPresent = previous.presentCharacters.length > 0 || present.size > 0;
+      if ((probe.intent === 'violence' || probe.intent === 'insult') && targetPresent && deltas.length === 0) {
         note(action, 'NO_CONSEQUENCE', 'aggression changed nothing the player can see');
       }
       if (probe.intent === 'violence') {

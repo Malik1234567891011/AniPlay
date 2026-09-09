@@ -1319,8 +1319,65 @@ function formatDuration(minutes: number): string {
 }
 
 /** Everything without a bespoke handler still gets a real, seeded check. */
+/**
+ * Things the world does not do, however the sentence is phrased.
+ *
+ * A generic check has no opinion about what is being attempted, so "I fly up
+ * into the air and look down at the whole place" rolled, succeeded, and the
+ * writer — correctly following a successful resolution — described the player
+ * flying. The engine has to be the one that says no, because the writer's job
+ * on a success is to narrate it.
+ *
+ * Deliberately a short list of capabilities rather than a content filter. Each
+ * one is a physics the world does not model at all; anything a story *does*
+ * model reaches this through an ability and never gets here.
+ */
+const IMPOSSIBLE: Array<{ pattern: RegExp; inWorld: string; directive: string }> = [
+  {
+    pattern: /\b(fly|flying|fly up|take off|soar|hover|levitate|float up|lift (?:myself|off))\b/i,
+    inWorld: 'Your feet stay where they are.',
+    directive:
+      'The player cannot fly and nothing here can make them. Narrate the impulse and the ground. ' +
+      'Do not lift them off it, not even briefly, not even in a metaphor the prose then treats as real.',
+  },
+  {
+    pattern: /\b(teleport|blink to|phase through|walk through the wall|materiali[sz]e)\b/i,
+    inWorld: 'You are still standing exactly where you were.',
+    directive: 'Nothing here moves a body without moving it. Narrate the attempt and the unmoved room.',
+  },
+  {
+    pattern: /\b(go back in time|rewind|undo (?:the|what)|travel back to (?:yesterday|last))\b/i,
+    inWorld: 'It already happened.',
+    directive: 'Time does not run backwards here. Narrate the wish and the fact that it is a wish.',
+  },
+  {
+    pattern: /\b(resurrect|bring (?:him|her|them|\w+) back to life|raise the dead|revive the dead)\b/i,
+    inWorld: 'They stay dead.',
+    directive: 'Death is not reversible in this world. Narrate the attempt and what it costs to make it.',
+  },
+  {
+    pattern: /\b(read (?:his|her|their|\w+'s) mind|mind[- ]read|see the future|predict what will happen)\b/i,
+    inWorld: 'You get nothing but a face.',
+    directive: 'Nobody here reads minds. Narrate the player watching, and what watching actually tells them.',
+  },
+];
+
 function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
   const { story, state, action, rng } = args;
+
+  // Unless the player has a technique for it, in which case they used the wrong
+  // words for something they can genuinely do, and it belongs on that path.
+  const claimed = `${action.method} ${action.declaredOutcome ?? ''}`;
+  for (const impossible of IMPOSSIBLE) {
+    if (!impossible.pattern.test(claimed)) continue;
+    const covered = state.player.abilities.some((abilityId) => {
+      const ability = story.abilities.find((a) => a.id === abilityId);
+      if (!ability) return false;
+      return impossible.pattern.test(`${ability.name} ${ability.description} ${ability.affordances.join(' ')}`);
+    });
+    if (covered) break;
+    return refusal(action, 'IMPOSSIBLE', impossible.inWorld, impossible.directive);
+  }
 
   const attribute = VERB_ATTRIBUTE[action.verb] ?? 'mind';
   const skill = pickSkillFor(story, action.verb);

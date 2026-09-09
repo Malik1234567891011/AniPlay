@@ -61,15 +61,21 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
     if (block.text.trim().length === 0) push('FORMAT', 'ERROR', 'Empty block.', index);
     if (block.text.length > 1200) push('FORMAT', 'ERROR', 'Block exceeds 1200 characters.', index);
 
-    if (block.type === 'DIALOGUE') {
-      if (!block.speakerId) {
-        push('FORMAT', 'ERROR', 'Dialogue block has no speaker.', index);
-        return;
-      }
+    // A speaker id has to name somebody real whatever the block is. Narration
+    // arriving as `speakerId: "narrator"` was reaching the client and rendering
+    // as a character called Narrator saying things.
+    if (block.speakerId) {
       const known =
         block.speakerId === 'player' || story.characters.some((c) => c.id === block.speakerId);
       if (!known) {
         push('NAME_IDENTITY_DRIFT', 'ERROR', `Unknown speaker "${block.speakerId}".`, index);
+        return;
+      }
+    }
+
+    if (block.type === 'DIALOGUE') {
+      if (!block.speakerId) {
+        push('FORMAT', 'ERROR', 'Dialogue block has no speaker.', index);
         return;
       }
 

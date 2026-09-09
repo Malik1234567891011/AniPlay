@@ -389,6 +389,13 @@ export class ModelWriter implements Writer {
               pronouns: c.def.pronouns,
               speechStyle: c.def.speechStyle,
               voiceSamples: c.def.voiceSamples,
+              // What this person is carrying about the player, and how they
+              // feel about them. The director had both and the writer — the
+              // thing that actually produces the words — had neither, so a
+              // player could attack somebody, walk away, come back, and be
+              // greeted as though none of it had happened.
+              knows: c.knownMemories.map((m) => m.fact.text),
+              feelsAboutYou: { ...c.relationship, label: c.relationshipLabel },
               mustNotReveal: c.def.secrets
                 .filter((s) => !c.revealableSecrets.some((r) => r.id === s.id))
                 .map((s) => s.id),
@@ -411,6 +418,8 @@ export class ModelWriter implements Writer {
             `Write the beat as a NarrativeTurn with schemaVersion "1.0", at most ${plan.wordBudget} words across all blocks. ` +
             'Use only speakerIds from `speakers`. Set voiceEligible true on dialogue blocks. ' +
             'Use each person\u2019s own pronouns from `cast`, present or not. ' +
+            'Each speaker carries `knows` and `feelsAboutYou`. Somebody the player attacked, lied to or ' +
+            'humiliated does not greet them as though it never happened, however many scenes ago it was. ' +
             'The beat must show what the player attempted, in their own terms, before it shows the result.',
           // What they typed, through the untrusted channel: it tells the writer
           // which nouns belong on the page, and nothing else.
