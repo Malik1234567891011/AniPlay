@@ -319,6 +319,11 @@ function resolveAction(args: ResolveActionArgs): ActionOutcome {
     case 'persuade':
     case 'deceive':
     case 'threaten':
+    // Refusing someone to their face, and putting yourself behind them, are
+    // social acts with consequences. Routed here so they move a relationship
+    // rather than passing through as free conversation.
+    case 'oppose':
+    case 'help':
       return resolveSocial(args);
     case 'attack':
       return resolveAttack(args);
@@ -326,6 +331,8 @@ function resolveAction(args: ResolveActionArgs): ActionOutcome {
       return resolveRest(args);
     case 'speak':
       return resolveSpeak(args);
+    case 'steal':
+      return resolveSteal(args);
     case 'wait':
       return resolveWait(args);
     default:
@@ -676,12 +683,14 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
     if (action.verb === 'persuade') dc -= Math.round((rel.trust + rel.affection) / 40);
     if (action.verb === 'deceive') dc += Math.round(rel.trust / 25);
     if (action.verb === 'threaten') dc -= Math.round(rel.fear / 30) - Math.round(rel.respect / 40);
+    if (action.verb === 'help') dc -= Math.round((rel.trust + rel.affection) / 30);
+    if (action.verb === 'oppose') dc -= Math.round(rel.respect / 30);
   }
   dc = Math.max(6, Math.min(28, dc));
 
   const check = resolveCheck(rng, {
     checkId: `chk_${action.verb}_${character.id}_${state.turnIndex}`,
-    label: `${action.verb === 'persuade' ? 'Persuade' : action.verb === 'deceive' ? 'Deceive' : 'Intimidate'} ${character.name}`,
+    label: `${SOCIAL_LABEL[action.verb] ?? 'Persuade'} ${character.name}`,
     attribute,
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
@@ -754,6 +763,15 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
   };
 }
 
+/** How a social attempt is named to the player. Never the raw verb. */
+const SOCIAL_LABEL: Record<string, string> = {
+  persuade: 'Persuade',
+  deceive: 'Deceive',
+  threaten: 'Intimidate',
+  oppose: 'Stand up to',
+  help: 'Side with',
+};
+
 /** Which dimensions a social outcome may move, and by how much before clamping. */
 function socialDeltasFor(
   verb: string,
@@ -788,6 +806,27 @@ function socialDeltasFor(
             ['rivalry', bad ? 5 : 2],
             ['respect', -2],
           ];
+    // Standing your ground earns respect whether or not it works, and costs
+    // warmth either way. Nobody is neutral about being refused.
+    case 'oppose':
+      return good
+        ? [
+            ['respect', strong ? 4 : 2],
+            ['affection', -2],
+            ['rivalry', 2],
+          ]
+        : [
+            ['rivalry', bad ? 4 : 2],
+            ['affection', -1],
+          ];
+    // Taking someone's side, in front of people, and meaning it.
+    case 'help':
+      return good
+        ? [
+            ['affection', strong ? 5 : 3],
+            ['trust', strong ? 4 : 2],
+          ]
+        : [['affection', bad ? -2 : 1]];
     default:
       return [];
   }
@@ -1034,6 +1073,140 @@ function resolveRest(args: ResolveActionArgs): ActionOutcome {
     privateFacts: [],
     timeCategory: 'REST',
     normalized: { verb: 'rest', status: 'RESOLVED' },
+  };
+}
+
+/**
+ * Taking something that is not yours.
+ *
+ * The verb used to run a generic check and add nothing: the prose described a
+ * pocketed ledger and the inventory stayed empty, which is the world
+ * contradicting itself somewhere the player can see. Now it takes a real item
+ * out of the room, and if the room has nothing worth taking it says so instead
+ * of rolling dice over nothing.
+ */
+function resolveSteal(args: ResolveActionArgs): ActionOutcome {
+  const { story, state, action, rng, nextMutationId } = args;
+
+  const here = story.locations.find((l) => l.id === state.player.locationId);
+  const available = (here?.takeableItems ?? []).filter(
+    (entry) => !state.flags[`taken:${state.player.locationId}:${entry.itemId}`],
+  );
+
+  if (available.length === 0) {
+    const named = (here?.takeableItems ?? []).length > 0;
+    return refusal(
+      action,
+      'NOTHING_TO_TAKE',
+      named
+        ? 'Whatever was worth taking here is already gone.'
+        : 'There is nothing here worth putting in a pocket.',
+      'Nothing in this place is takeable. Narrate the player looking, and finding nothing worth the risk. ' +
+        'Do not invent an object and do not let them leave with anything.',
+    );
+  }
+
+  // What the player named, if they named anything. Otherwise the most valuable
+  // thing here, because "the most valuable thing in reach" is a real sentence
+  // players type and the room already knows what that is.
+  const namedItemId = action.targets.find((target) => target.entityType === 'item')?.entityId;
+  const spoken = `${action.method} ${action.declaredOutcome ?? ''}`.toLowerCase();
+  const chosen =
+    available.find((entry) => entry.itemId === namedItemId) ??
+    available.find((entry) =>
+      [story.items.find((i) => i.id === entry.itemId)?.name ?? '', ...entry.aka]
+        .filter(Boolean)
+        .some((label) => spoken.includes(label.toLowerCase())),
+    ) ??
+    // "The most valuable thing in reach" — a quest item outranks a trinket,
+    // and the author's own ordering decides the rest.
+    [...available].sort(
+      (a, b) =>
+        Number(story.items.find((i) => i.id === b.itemId)?.questItem ?? false) -
+        Number(story.items.find((i) => i.id === a.itemId)?.questItem ?? false),
+    )[0]!;
+
+  const item = story.items.find((i) => i.id === chosen.itemId);
+  const owner = chosen.ownerId ? story.characters.find((c) => c.id === chosen.ownerId) : null;
+  const ownerPresent =
+    owner !== null && charactersPresent(state).some((runtime) => runtime.characterId === owner?.id);
+
+  const skill = pickSkillFor(story, 'steal');
+  const attribute: AttributeKey = 'agility';
+  const check = resolveCheck(rng, {
+    checkId: `chk_steal_${chosen.itemId}_${state.turnIndex}`,
+    label: `Take ${item?.name ?? 'it'}`,
+    attribute,
+    attributeScore: effectiveAttribute(state, story, attribute),
+    skillId: skill,
+    skillProficiency: skill ? (state.player.skills[skill] ?? 0) : 0,
+    equipmentModifier: equipmentSkillModifier(state, story, skill),
+    // Doing it in front of the person it belongs to is a different problem.
+    dc: DC_BANDS.HARD + situationalDc(args) + (ownerPresent ? 4 : 0),
+    advantageLevel: advantageFor(args),
+    allowsPartial: true,
+  });
+
+  const mutations: StateMutation[] = [];
+  const observableFacts: string[] = [];
+  const privateFacts: PrivateFact[] = [];
+
+  if (isSuccess(check.outcome)) {
+    mutations.push({
+      mutationId: nextMutationId(),
+      type: 'ITEM_ADD',
+      subjectId: 'player',
+      reasonCode: 'STOLEN',
+      payload: { itemId: chosen.itemId, quantity: chosen.qty },
+    });
+    // The room does not restock. Taking it once takes it.
+    mutations.push({
+      mutationId: nextMutationId(),
+      type: 'FLAG_SET',
+      subjectId: 'session',
+      reasonCode: 'STOLEN',
+      payload: { flag: `taken:${state.player.locationId}:${chosen.itemId}`, value: true },
+    });
+    observableFacts.push(`${item?.name ?? 'It'} is in your coat now.`);
+
+    // Seen doing it is the interesting half. A partial success is exactly that.
+    if (check.outcome === 'SUCCESS_WITH_COST' || ownerPresent) {
+      const witness = witnessConsequences(args, nextMutationId, item?.name ?? 'something');
+      mutations.push(...witness.mutations);
+      observableFacts.push(...witness.facts);
+      mutations.push({
+        mutationId: nextMutationId(),
+        type: 'FLAG_SET',
+        subjectId: 'session',
+        reasonCode: 'THEFT_SEEN',
+        payload: { flag: `seen_taking:${chosen.itemId}`, value: true },
+      });
+      privateFacts.push({
+        visibility: 'SELF',
+        fact: `The theft was noticed. Whoever is present knows what just went into the player's coat.`,
+      });
+    }
+  } else {
+    observableFacts.push(`${item?.name ?? 'It'} stays exactly where it was.`);
+    privateFacts.push({
+      visibility: 'SELF',
+      fact: `The attempt failed. The player does not have ${item?.name ?? 'the item'}. Do not narrate them carrying it away.`,
+    });
+    if (ownerPresent && owner) {
+      privateFacts.push({
+        visibility: 'SELF',
+        fact: `${owner.name} was standing right there. They saw the attempt, whether or not they say so.`,
+      });
+    }
+  }
+
+  return {
+    checks: [check],
+    mutations,
+    observableFacts,
+    privateFacts,
+    timeCategory: 'BRIEF',
+    normalized: { verb: 'steal', targetId: chosen.itemId, status: 'RESOLVED', outcome: check.outcome },
   };
 }
 

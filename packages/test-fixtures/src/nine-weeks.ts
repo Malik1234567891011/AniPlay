@@ -247,6 +247,9 @@ const raw = {
   locations: [
     {
       id: 'staff_cabins',
+      takeableItems: [
+        { itemId: 'good_wine', qty: 1, ownerId: null, aka: ['wine', 'the bottle'] },
+      ],
       name: 'The Staff Cabins',
       shortName: 'Cabins',
       description:
@@ -264,6 +267,9 @@ const raw = {
     },
     {
       id: 'kitchen',
+      takeableItems: [
+        { itemId: 'shift_swap', qty: 1, ownerId: null, aka: ['swap', 'the shift sheet', 'the rota'] },
+      ],
       name: 'The Kitchen',
       shortName: 'Kitchen',
       description:

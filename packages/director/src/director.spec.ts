@@ -893,7 +893,10 @@ describe('full pipeline', () => {
         turnId: `adv${i}`, seed: deriveTurnSeed('adv-root', i),
       });
 
-      expect(result.report.valid, `turn ${i}: ${text.slice(0, 40)}`).toBe(true);
+      expect(
+        result.report.valid,
+        `turn ${i}: ${text.slice(0, 40)} :: ${JSON.stringify(result.report.violations)}`,
+      ).toBe(true);
       expect(result.narrative.blocks.length).toBeGreaterThan(0);
 
       // No adversarial input may produce an item, a level, or credits.
@@ -1880,5 +1883,86 @@ describe('reconciling the change strip', () => {
     expect(shown).not.toContain('kael_notes_your_outburst');
     // Everything the engine actually did is still reported.
     for (const delta of buildDeltas(context)) expect(shown).toContain(delta.mutationId);
+  });
+});
+
+/**
+ * Words aimed at a person land on them.
+ *
+ * An insult used to parse as `speak` and resolve to nothing: the prose
+ * described a public humiliation and the world recorded that two people had
+ * had a conversation.
+ */
+describe('speech with consequences', () => {
+  const play = (text: string) => {
+    const state = baseState();
+    const intent = parse(text, state);
+    return {
+      intent,
+      resolution: resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 'seed' }),
+    };
+  };
+
+  it('reads contempt as a hostile move, not as conversation', () => {
+    const { intent, resolution } = play('I tell Kael he is a fraud and I am done pretending otherwise.');
+    expect(intent.actions[0]!.verb).toBe('threaten');
+    expect(resolution.mutations.some((m) => m.type === 'RELATIONSHIP_DELTA')).toBe(true);
+  });
+
+  it('reads a flat refusal as standing your ground', () => {
+    const { intent, resolution } = play('I refuse Kael. I am not doing this and nobody is going to make me.');
+    expect(intent.actions[0]!.verb).toBe('oppose');
+    // Standing up to someone costs warmth and earns something, either way.
+    expect(resolution.checks.length).toBeGreaterThan(0);
+    expect(resolution.mutations.some((m) => m.type === 'RELATIONSHIP_DELTA')).toBe(true);
+  });
+
+  it('leaves an ordinary remark as an ordinary remark', () => {
+    const { intent } = play('I say hello to Kael.');
+    expect(['speak', 'interact', 'custom']).toContain(intent.actions[0]!.verb);
+  });
+});
+
+/**
+ * Taking something has to actually take it.
+ *
+ * `steal` used to run a check and add nothing, so the prose described a
+ * pocketed ledger while the inventory stayed empty — the world contradicting
+ * itself somewhere the player can see.
+ */
+describe('theft', () => {
+  const stealFrom = (locationId: string, text: string) => {
+    const state = { ...baseState(), player: { ...baseState().player, locationId } };
+    const intent = parse(text, state);
+    return resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 'take' });
+  };
+
+  it('puts a real item in the player’s hands, or says why not', () => {
+    const resolution = stealFrom('gate_arch', 'I steal the chalk.');
+    expect(resolution.checks).toHaveLength(1);
+    const added = resolution.mutations.filter((m) => m.type === 'ITEM_ADD');
+    const failed = resolution.privateFacts.some((f) => f.fact.includes('does not have'));
+    // One or the other, never a check that resolved into nothing at all.
+    expect(added.length > 0 || failed).toBe(true);
+    for (const mutation of added) {
+      const itemId = (mutation.payload as { itemId?: string }).itemId;
+      expect(STORY.items.some((item) => item.id === itemId)).toBe(true);
+    }
+  });
+
+  it('refuses where there is nothing worth taking, instead of rolling over nothing', () => {
+    const bare = STORY.locations.find((l) => (l.takeableItems ?? []).length === 0);
+    expect(bare, 'the fixture should still have a location with nothing in it').toBeDefined();
+    const resolution = stealFrom(bare!.id, 'I take the most valuable thing in reach.');
+    expect(resolution.checks).toHaveLength(0);
+    expect(resolution.observableFacts.join(' ')).toMatch(/nothing here worth|already gone/i);
+  });
+
+  it('never conjures an item the world does not contain', () => {
+    const resolution = stealFrom('gate_arch', 'I steal the crown of the sun king.');
+    for (const mutation of resolution.mutations.filter((m) => m.type === 'ITEM_ADD')) {
+      const itemId = (mutation.payload as { itemId?: string }).itemId;
+      expect(STORY.items.some((item) => item.id === itemId)).toBe(true);
+    }
   });
 });

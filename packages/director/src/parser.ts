@@ -57,15 +57,49 @@ const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
   { verb: 'defend', patterns: [/\b(defend|block|parry|brace|guard|shield myself|dodge)\b/i] },
   { verb: 'persuade', patterns: [/\b(persuade|convince|reason with|plead|appeal to|talk .* into|beg|argue)\b/i] },
   { verb: 'deceive', patterns: [/\b(lie|deceive|bluff|mislead|pretend|claim|feign|make up)\b/i] },
-  { verb: 'threaten', patterns: [/\b(threaten|intimidate|menace|warn|scare|frighten)\b/i] },
-  { verb: 'steal', patterns: [/\b(steal|pickpocket|swipe|lift|pilfer|palm|take .*'s)\b/i] },
+  {
+    verb: 'threaten',
+    // Contempt aimed at a person is a social move with consequences, not
+    // conversation. Without these an insult parsed as `speak`, which resolves
+    // to nothing at all: the prose described a humiliation and the world
+    // recorded that two people had chatted.
+    patterns: [
+      /\b(threaten|intimidate|menace|warn|scare|frighten)\b/i,
+      /\b(insult|humiliate|mock|sneer|belittle|berate)\b/i,
+      // "you're a fraud", "he is a liar", "they have always been useless" —
+      // however the player phrases contempt, it is aimed at somebody.
+      /\b(?:you|he|she|they|it)(?:'s|'re|s)?\s+(?:is|are|was|were|have|has|had)?\s*(?:always been\s+)?(?:a |an )?(?:fraud|liar|coward|joke|disgrace|pathetic|useless|worthless|nothing|a waste)\b/i,
+      /\bcall(?:ed|ing)? (?:him|her|them|\w+) (?:a |an )?(?:fraud|liar|coward|cheat|joke)\b/i,
+      /\bi never wanted (?:you|him|her|them|\w+) (?:here|around)\b/i,
+    ],
+  },
+  {
+    verb: 'steal',
+    patterns: [
+      /\b(steal|pickpocket|swipe|pilfer|palm|take .*'s)\b/i,
+      // How people actually phrase it. "take" alone is too common to claim —
+      // "take the note", "take it from the top" — so it only counts when it
+      // ends up somewhere it should not be.
+      /\b(pocket|help myself to|make off with|walk off with|slip .* into my)\b/i,
+      /\btake\b[^.]{0,60}\b(?:and )?(?:put|slip|slide|stuff|shove) (?:it|them) in(?:to)? my\b/i,
+      /\btake the most valuable\b/i,
+    ],
+  },
   { verb: 'hide', patterns: [/\b(hide|sneak|slip past|creep|conceal myself|stay out of sight|duck behind)\b/i] },
   { verb: 'inspect', patterns: [/\b(look|inspect|examine|study|search|read|check|investigate|observe|scan|watch|listen)\b/i] },
   { verb: 'use_item', patterns: [/\b(use|drink|eat|apply|wear|equip|wield|draw|unsheathe|consume)\b/i] },
   { verb: 'use_ability', patterns: [/\b(cast|invoke|channel|weave|summon)\b/i] },
   { verb: 'rest', patterns: [/\b(rest|sleep|nap|wait out|recover|take a break|turn in)\b/i] },
   { verb: 'help', patterns: [/\b(help|assist|aid|support|cover for)\b/i] },
-  { verb: 'oppose', patterns: [/\b(resist|refuse|oppose|stand against|hold firm|deny)\b/i] },
+  {
+    verb: 'oppose',
+    patterns: [
+      /\b(resist|refuse|oppose|stand against|hold firm|deny)\b/i,
+      /\bi am not doing (?:this|that|it)\b/i,
+      /\bnobody is going to make me\b/i,
+      /\bi will not\b/i,
+    ],
+  },
   { verb: 'wait', patterns: [/\b(wait|hold|stay put|do nothing|say nothing|stand still)\b/i] },
   { verb: 'interact', patterns: [/\b(open|close|push|pull|turn|touch|pick up|grab|take|unlock|knock|write|draw)\b/i] },
   { verb: 'speak', patterns: [/\b(say|tell|ask|talk|speak|reply|answer|greet|whisper|shout|call out)\b/i] },

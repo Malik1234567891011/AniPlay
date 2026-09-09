@@ -167,9 +167,16 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
       `\\b(your|you (?:draw|take out|produce|pull out|hold|carry|use|raise)|from your (?:pocket|bag|coat))[^.]{0,40}${escapeRegex(name)}`,
       'i',
     );
-    if (claimsPossession.test(fullText)) {
-      push('INVENTORY_CONTRADICTION', 'ERROR', `Prose has the player using ${item.name}, which they do not hold.`);
+    const match = claimsPossession.exec(fullText);
+    if (!match) continue;
+
+    // "You reach for your knife and it is not there" is prose about *not*
+    // having it, which is the opposite of the contradiction this looks for.
+    const sentence = sentenceAround(fullText, match.index);
+    if (/\b(not|n't|without|nothing|empty|fails?|failed|cannot|can't|gone|missing|no longer)\b/i.test(sentence)) {
+      continue;
     }
+    push('INVENTORY_CONTRADICTION', 'ERROR', `Prose has the player using ${item.name}, which they do not hold.`);
   }
 
   // --- LOCATION_CONTRADICTION ---
@@ -295,6 +302,13 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
  * Offending blocks are removed rather than rewritten, because dropping a bad
  * sentence is always safe and rewriting one might not be.
  */
+/** The sentence a match sits inside, so a negation nearby can be seen. */
+function sentenceAround(text: string, index: number): string {
+  const start = Math.max(0, text.lastIndexOf('.', index) + 1, text.lastIndexOf('\n', index) + 1);
+  const dot = text.indexOf('.', index);
+  return text.slice(start, dot === -1 ? text.length : dot + 1);
+}
+
 export function repairNarrative(
   turn: NarrativeTurn,
   report: ConsistencyReport,

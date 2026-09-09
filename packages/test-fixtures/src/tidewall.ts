@@ -342,6 +342,9 @@ const raw = {
   locations: [
     {
       id: 'muster_yard',
+      takeableItems: [
+        { itemId: 'field_kit', qty: 1, ownerId: null, aka: ['kit', 'a field kit'] },
+      ],
       name: 'The Muster Yard',
       shortName: 'Yard',
       description:
@@ -409,6 +412,9 @@ const raw = {
     },
     {
       id: 'bright_hall',
+      takeableItems: [
+        { itemId: 'ward_salt', qty: 2, ownerId: null, aka: ['salt', 'ward salt', 'the jars'] },
+      ],
       name: 'The Bright Hall',
       shortName: 'Hall',
       description:

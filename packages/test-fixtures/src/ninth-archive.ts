@@ -238,6 +238,9 @@ const raw = {
   locations: [
     {
       id: 'gate_arch',
+      takeableItems: [
+        { itemId: 'ward_chalk', qty: 1, ownerId: null, aka: ['chalk', 'the box of chalk'] },
+      ],
       name: 'The Gate Arch',
       shortName: 'Gate',
       description:
@@ -251,6 +254,9 @@ const raw = {
     },
     {
       id: 'commons',
+      takeableItems: [
+        { itemId: 'bramble_tonic', qty: 1, ownerId: null, aka: ['tonic', 'a bottle'] },
+      ],
       name: 'The Commons',
       shortName: 'Commons',
       description:
@@ -302,6 +308,9 @@ const raw = {
     },
     {
       id: 'archive_stacks',
+      takeableItems: [
+        { itemId: 'stack_key', qty: 1, ownerId: 'bram', aka: ['key', 'the ring of keys', 'the stack key'] },
+      ],
       name: 'The Stacks',
       shortName: 'Stacks',
       description:

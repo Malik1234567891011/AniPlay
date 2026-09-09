@@ -201,7 +201,10 @@ async function main(): Promise<void> {
           `/v1/sessions/${sessionId}/turns`,
           {
             actionText: action,
-            qualityTier: 'VIVID',
+            // The cheap tier, so a sweep is about the world rather than about
+            // how far a new account's grant stretches. That it does not stretch
+            // to sixteen VIVID turns is worth knowing separately.
+            qualityTier: 'QUICK',
             sessionRevision: revision,
             selectedSuggestionId: null,
             voicePreferred: false,
@@ -231,7 +234,7 @@ async function main(): Promise<void> {
 
       const prose: string = turn.blocks.map((b: any) => b.text).join(' ');
       const narration: string = turn.blocks
-        .filter((b: any) => b.kind !== 'DIALOGUE')
+        .filter((b: any) => b.type !== 'DIALOGUE')
         .map((b: any) => b.text)
         .join(' ');
       const present = new Set(detail.scene.presentCharacters.map((c: any) => c.id));
@@ -272,20 +275,23 @@ async function main(): Promise<void> {
         note(action, 'PLAYER_IN_THIRD_PERSON', matched(narration, /\bRobin\b/));
       }
 
-      // A character the world just said was absent cannot be in this beat.
-      for (const absent of previous.presentCharacters.length === 0 ? [] : story.characters) {
+      // A check may not be rolled against somebody who is not in the room.
+      for (const absent of story.characters) {
         if (present.has(absent.id) || wasPresent.has(absent.id)) continue;
-        const firstName = absent.name.split(/\s+/)[0]!;
-        if (firstName.length < 4) continue;
-        if (new RegExp(`\\b${firstName}\\b`).test(prose) && turn.checks.some((c: any) => new RegExp(firstName).test(String(c.label)))) {
+        if (turn.checks.some((c: any) => String(c.label ?? '').includes(absent.name))) {
           note(action, 'ABSENT_TARGET_RESOLVED', `a check was rolled against ${absent.name}, who is not here`);
         }
       }
 
       // Narration must not put words in the player's mouth. A quoted line
       // inside a narration block is the writer speaking for them.
-      if (/[“"][^“”"]{12,}[”"]/.test(narration)) {
-        note(action, 'NARRATION_AS_DIALOGUE', matched(narration, /[“"][^“”"]{12,}[”"]/));
+      for (const character of story.characters) {
+        const firstName = character.name.split(/\s+/)[0]!;
+        if (firstName.length < 4) continue;
+        const speaking = new RegExp(`${firstName}[^.!?]{0,40}?[“"][^“”"]{12,}[”"]`);
+        if (speaking.test(narration)) {
+          note(action, 'NARRATION_AS_DIALOGUE', matched(narration, speaking));
+        }
       }
 
       // The same sentence twice across a run reads as a machine, not a world.
@@ -338,14 +344,24 @@ async function main(): Promise<void> {
       // --- Consequences ----------------------------------------------------
 
       const deltas: any[] = turn.stateDeltas ?? [];
-      if (deltas.some((d) => /relationship/i.test(String(d.kind ?? d.label ?? '')))) {
-        anyRelationshipMoved = true;
+
+      // Measured against the sheet, not the presentation strip: a delta label
+      // is prose, and what we need to know is whether the world moved.
+      const fingerprint = (s: any): Record<string, string> => ({
+        relationships: JSON.stringify(s?.relationships ?? []),
+        quests: JSON.stringify(s?.quests ?? []),
+        inventory: JSON.stringify(s?.inventory ?? []),
+      });
+      if (previousSheet) {
+        const before = fingerprint(previousSheet);
+        const now = fingerprint(sheet);
+        if (before.relationships !== now.relationships) anyRelationshipMoved = true;
+        if (before.quests !== now.quests) anyQuestMoved = true;
+        if (before.inventory !== now.inventory) anyInventoryMoved = true;
       }
-      if (deltas.some((d) => /quest|objective/i.test(String(d.kind ?? d.label ?? '')))) anyQuestMoved = true;
-      if (deltas.some((d) => /item|inventory/i.test(String(d.kind ?? d.label ?? '')))) {
-        anyInventoryMoved = true;
+      if (turn.checks.some((c: any) => /ability|technique|use /i.test(String(c.label ?? '')))) {
+        anyAbilityUsed = true;
       }
-      if (/\bability|technique\b/i.test(String(turn.sceneSummary ?? ''))) anyAbilityUsed = true;
 
       // An attack or a public humiliation that moves nothing is a world that
       // does not care what you do to the people in it.

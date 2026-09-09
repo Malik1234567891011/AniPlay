@@ -177,6 +177,9 @@ const raw = {
   locations: [
     {
       id: 'ossun_gate',
+      takeableItems: [
+        { itemId: 'canteen', qty: 1, ownerId: null, aka: ['canteen', 'water', 'a full canteen'] },
+      ],
       name: 'Ossun Gate',
       shortName: 'Ossun',
       description:
@@ -190,6 +193,9 @@ const raw = {
     },
     {
       id: 'first_well',
+      takeableItems: [
+        { itemId: 'salt_veil', qty: 1, ownerId: null, aka: ['veil', 'a salt veil'] },
+      ],
       name: 'The First Well',
       shortName: 'First well',
       description:
@@ -207,6 +213,9 @@ const raw = {
     },
     {
       id: 'the_wrecks',
+      takeableItems: [
+        { itemId: 'guide_map', qty: 1, ownerId: null, aka: ['map', 'the guide map', 'the charts'] },
+      ],
       name: 'The Wrecks',
       shortName: 'Wrecks',
       description:

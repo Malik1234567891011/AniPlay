@@ -318,6 +318,9 @@ const raw = {
   locations: [
     {
       id: 'kiln_yard',
+      takeableItems: [
+        { itemId: 'wrapped_blade', qty: 1, ownerId: null, aka: ['blade', 'the wrapped blade'] },
+      ],
       name: 'The Kiln Yard',
       shortName: 'Kiln',
       description:
@@ -369,6 +372,9 @@ const raw = {
     },
     {
       id: 'night_market',
+      takeableItems: [
+        { itemId: 'trace_glass', qty: 1, ownerId: null, aka: ['glass', 'the trace glass', 'the lens'] },
+      ],
       name: 'The Night Market',
       shortName: 'Market',
       description:
@@ -382,6 +388,9 @@ const raw = {
     },
     {
       id: 'oyan_house',
+      takeableItems: [
+        { itemId: 'river_salt', qty: 1, ownerId: null, aka: ['salt', 'river salt'] },
+      ],
       name: 'Oyan House',
       shortName: 'Oyan',
       description:

@@ -137,6 +137,42 @@ const raw = {
   ],
   abilities: [
     {
+      id: 'run_it_again',
+      name: 'Run It Again',
+      tags: ['stagecraft', 'technician'],
+      description: 'Reset the room and take it from a specific line, so everyone gets the second chance you set up.',
+      affordances: ['run it again', 'take it from the top', 'reset the scene', 'go again from my line'],
+      costs: [{ resourceId: 'stamina', amount: 4 }],
+      cooldownMinutes: 60,
+      targetRule: 'NONE',
+      check: { attribute: 'mind', skillId: 'stagecraft', baseDc: 13 },
+      unlockedByDefault: false,
+    },
+    {
+      id: 'take_the_stage',
+      name: 'Take the Stage',
+      tags: ['performance', 'natural'],
+      description: 'Step into the light and hold it. Whatever else was happening in the room stops happening.',
+      affordances: ['take the stage', 'step into the light', 'do it now', 'show them', 'perform it'],
+      costs: [{ resourceId: 'stamina', amount: 5 }],
+      cooldownMinutes: 90,
+      targetRule: 'NONE',
+      check: { attribute: 'presence', skillId: 'performance', baseDc: 14 },
+      unlockedByDefault: false,
+    },
+    {
+      id: 'have_a_word',
+      name: 'Have a Word',
+      tags: ['social', 'diplomat'],
+      description: 'Get one person alone for ninety seconds and change what they were about to do.',
+      affordances: ['have a word', 'pull them aside', 'talk to them privately', 'get them alone'],
+      costs: [{ resourceId: 'stamina', amount: 3 }],
+      cooldownMinutes: 45,
+      targetRule: 'SINGLE',
+      check: { attribute: 'presence', skillId: 'persuasion', baseDc: 13 },
+      unlockedByDefault: false,
+    },
+    {
       id: 'read_the_room',
       name: 'Read the Room',
       tags: ['social'],
@@ -164,6 +200,9 @@ const raw = {
   locations: [
     {
       id: 'rehearsal_room',
+      takeableItems: [
+        { itemId: 'annotated_sides', qty: 1, ownerId: 'talia', aka: ['sides', 'the script', 'her script', 'the annotated pages'] },
+      ],
       name: 'Rehearsal Room Two',
       shortName: 'Rehearsal',
       description:
@@ -180,6 +219,9 @@ const raw = {
     },
     {
       id: 'green_room',
+      takeableItems: [
+        { itemId: 'throat_tincture', qty: 1, ownerId: null, aka: ['tincture', 'the bottle'] },
+      ],
       name: 'The Green Room',
       shortName: 'Green room',
       description:
@@ -225,6 +267,9 @@ const raw = {
     },
     {
       id: 'directors_office',
+      takeableItems: [
+        { itemId: 'company_book', qty: 1, ownerId: 'oswin', aka: ['book', 'the ledger', 'the company book'] },
+      ],
       name: "The Director's Office",
       shortName: 'Office',
       description:
@@ -558,8 +603,8 @@ const raw = {
       blurb: 'You are not the most watchable person here. You are the most reliable.',
       attributeBonus: { mind: 2, resolve: 1 },
       skillProficiencies: { stagecraft: 3, composure: 2, insight: 1 },
-      startingItems: [],
-      startingAbilities: [],
+      startingItems: [{ itemId: 'annotated_sides', qty: 1 }],
+      startingAbilities: ['run_it_again'],
     },
     {
       id: 'arch_natural',
@@ -571,8 +616,8 @@ const raw = {
       blurb: 'It has always come easily, which is its own kind of problem.',
       attributeBonus: { presence: 3 },
       skillProficiencies: { performance: 3, movement: 2 },
-      startingItems: [],
-      startingAbilities: [],
+      startingItems: [{ itemId: 'throat_tincture', qty: 1 }],
+      startingAbilities: ['take_the_stage'],
     },
     {
       id: 'arch_diplomat',
@@ -585,7 +630,7 @@ const raw = {
       attributeBonus: { presence: 2, mind: 1 },
       skillProficiencies: { persuasion: 3, insight: 2, deception: 1 },
       startingItems: [{ itemId: 'throat_tincture', qty: 1 }],
-      startingAbilities: [],
+      startingAbilities: ['have_a_word'],
     },
   ],
   setupFields: [

@@ -132,6 +132,29 @@ export const LocationDef = z
     discoveredByDefault: z.boolean().default(false),
     mapPosition: z.object({ x: z.number(), y: z.number() }).strict().default({ x: 0, y: 0 }),
     ambientSfx: z.array(z.string()).default([]),
+    /**
+     * What is lying around here that a player could take.
+     *
+     * Without this, `steal` resolved to a check and nothing else: the prose
+     * said you pocketed something and your inventory stayed empty, which is the
+     * world contradicting itself in the player's own bag. If a place has
+     * nothing listed, there is nothing here worth taking, and the attempt is
+     * refused in those words rather than rolled and silently voided.
+     */
+    takeableItems: z
+      .array(
+        z
+          .object({
+            itemId: z.string(),
+            qty: z.number().int().min(1).default(1),
+            /** Whose it is. Taking it in front of them is a different act. */
+            ownerId: z.string().nullable().default(null),
+            /** How the player would refer to it before they know its name. */
+            aka: z.array(z.string()).default([]),
+          })
+          .strict(),
+      )
+      .default([]),
   })
   .strict();
 export type LocationDef = z.infer<typeof LocationDef>;

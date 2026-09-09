@@ -73,6 +73,14 @@ const PARSER_POLICY = [
   'Only reference entity ids that appear in the provided state. Never invent an id.',
   'Record any outcome the player asserted in declaredOutcome — the engine will decide whether it happens.',
   'Split genuinely sequential actions into separate entries, at most 8.',
+  '',
+  'Choosing the verb decides whether anything happens at all, because `speak` resolves to no consequence.',
+  'Words aimed at a person are almost never `speak`. Contempt, an insult, a public humiliation or a threat',
+  'is `threaten`. Refusing someone, or standing your ground against them, is `oppose`. Taking someone’s side',
+  'is `help`. Flattery, flirtation, an apology, or anything asking a person to do or feel something is',
+  '`persuade`. A lie is `deceive`. Reserve `speak` for talk that asks nothing of anyone — a greeting, a',
+  'remark, an answer to a question. Telling someone they are a fraud in front of the whole room is not a',
+  'greeting.',
 ].join(' ');
 
 export class ModelIntentParser implements IntentParser {
