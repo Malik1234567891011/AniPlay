@@ -231,3 +231,52 @@ describe('the loop', () => {
     expect(resetLoop(state, NINTH_ARCHIVE).state).toBe(state);
   });
 });
+
+/**
+ * What an ability costs you, and which way that moves the number.
+ *
+ * Spending 8 Breath leaves you with less of it. Costing 12 Strain leaves you
+ * with more. Subtracting in both cases meant the most dangerous techniques in
+ * a world were quietly reducing the meter that was the reason not to use them.
+ */
+describe('paying for an ability', () => {
+  it('moves an ascending cost the way the fiction means it', async () => {
+    const { UNBOUND } = await import('@aniplay/test-fixtures');
+    const { resolveIntent } = await import('./resolve.js');
+    const { RuleBasedIntentParser } = await import('@aniplay/director');
+
+    const state = createInitialState({
+      sessionId: 's',
+      story: UNBOUND,
+      identity: {
+        displayName: 'Robin',
+        pronouns: 'they/them',
+        ageBand: null,
+        // Starts with the Quiet Opening's sibling; any Strain-costing trait.
+        archetypeId: 'lean_gale',
+        worldKnowsAboutYou: '',
+        advanced: {},
+        portraitAssetId: null,
+      },
+    });
+    state.player.abilities.push('the_unnamed_form');
+
+    const intent = new RuleBasedIntentParser().parseSync('I use the unnamed form on Tam.', {
+      story: UNBOUND,
+      state,
+      intentId: 'i',
+    });
+    const resolution = resolveIntent({ story: UNBOUND, state, intent, turnId: 't', seed: 's' });
+
+    const strain = resolution.mutations.find(
+      (m) => m.type === 'RESOURCE_DELTA' && (m.payload as { resourceId?: string }).resourceId === 'strain',
+    );
+    const breath = resolution.mutations.find(
+      (m) => m.type === 'RESOURCE_DELTA' && (m.payload as { resourceId?: string }).resourceId === 'breath',
+    );
+
+    if (strain) expect(Number((strain.payload as { amount: number }).amount)).toBeGreaterThan(0);
+    if (breath) expect(Number((breath.payload as { amount: number }).amount)).toBeLessThan(0);
+    expect(strain ?? breath, 'the ability should have cost something').toBeDefined();
+  });
+});

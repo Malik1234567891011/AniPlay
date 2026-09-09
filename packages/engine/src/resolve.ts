@@ -427,10 +427,39 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     );
   }
 
+  // A cost is what the thing takes out of you, and which direction that moves
+  // the number depends on what the number is. Spending 8 Breath leaves you with
+  // less; costing 12 Strain leaves you with more of it. Subtracting in both
+  // cases meant a world's most dangerous techniques were quietly *reducing*
+  // the meter that was supposed to be the reason not to use them.
   for (const cost of ability.costs) {
     const resource = state.player.resources.find((r) => r.id === cost.resourceId);
     const def = story.resources.find((r) => r.id === cost.resourceId);
-    if (!resource || resource.current < cost.amount) {
+    if (!resource) {
+      return refusal(
+        action,
+        'INSUFFICIENT_RESOURCE',
+        `You do not have what ${ability.name} asks for.`,
+        'The cost could not be paid. Narrate the power guttering out before it forms.',
+      );
+    }
+
+    if (def?.polarity === 'GOOD_LOW') {
+      // No headroom left is its own kind of refusal: you are already as far
+      // gone as this world lets you get and still come back.
+      if (resource.current + cost.amount > resource.max) {
+        return refusal(
+          action,
+          'INSUFFICIENT_RESOURCE',
+          `There is no room left in you for ${ability.name}.`,
+          `${def.name} is already at its limit. Narrate the attempt and the body refusing it. ` +
+            'Do not let the ability work.',
+        );
+      }
+      continue;
+    }
+
+    if (resource.current < cost.amount) {
       return refusal(
         action,
         'INSUFFICIENT_RESOURCE',
@@ -440,13 +469,16 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     }
   }
 
-  const mutations: StateMutation[] = ability.costs.map((cost) => ({
-    mutationId: nextMutationId(),
-    type: 'RESOURCE_DELTA' as const,
-    subjectId: 'player',
-    reasonCode: `ABILITY_COST:${ability.id}`,
-    payload: { resourceId: cost.resourceId, amount: -cost.amount },
-  }));
+  const mutations: StateMutation[] = ability.costs.map((cost) => {
+    const ascending = story.resources.find((r) => r.id === cost.resourceId)?.polarity === 'GOOD_LOW';
+    return {
+      mutationId: nextMutationId(),
+      type: 'RESOURCE_DELTA' as const,
+      subjectId: 'player',
+      reasonCode: `ABILITY_COST:${ability.id}`,
+      payload: { resourceId: cost.resourceId, amount: ascending ? cost.amount : -cost.amount },
+    };
+  });
 
   if (ability.cooldownMinutes > 0) {
     mutations.push({
