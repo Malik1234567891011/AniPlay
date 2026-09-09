@@ -183,12 +183,21 @@ function checkSentence(context: TurnContext, rng: SeededRng): string {
     ],
     CLEAN_SUCCESS: ['It works.', 'It goes through without trouble.'],
     SUCCESS: ['It works, barely. You feel how close it was.', 'It holds. You would not want to try that twice.'],
-    SUCCESS_WITH_COST: ['It works, and it costs you.', 'It gets you there, and you pay on the way through.'],
+    SUCCESS_WITH_COST: ['It works, and you pay for it.', 'It gets you there, and it takes its price on the way.'],
     FAILURE: ['It does not work.', 'It comes to nothing.'],
     COMPLICATION: ['It fails, and it fails loudly.', 'It comes apart, and someone notices that you tried.'],
   };
 
-  const base = `${check.label}. ${rng.pick(outcomes[check.outcome] ?? outcomes.FAILURE!)}`;
+  let base = `${check.label}. ${rng.pick(outcomes[check.outcome] ?? outcomes.FAILURE!)}`;
+
+  // The engine already worked out what the price was. Saying "it costs you"
+  // when "it costs you 3 Focus" is sitting right there is the beat withholding
+  // the one thing the player needs to act on.
+  if (check.outcome === 'SUCCESS_WITH_COST') {
+    const priced = context.resolution.observableFacts.find((fact) => /\bit costs you\b/i.test(fact));
+    const cost = priced?.match(/it costs you [^.,]+/i)?.[0];
+    if (cost) base = `${check.label}. It works, and ${cost.toLowerCase()}.`;
+  }
 
   // Spec §10.6 — the maths only appears when the story opts into it.
   return context.story.rules.revealExactDc ? `${base} (${outcomeLabel(check.outcome)})` : base;

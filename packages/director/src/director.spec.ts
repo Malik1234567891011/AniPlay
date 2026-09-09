@@ -23,7 +23,7 @@ import { RuleBasedDirector } from './director.js';
 import { ModelWriter } from './model-stages.js';
 import { TemplateWriter, buildDeltas } from './writer.js';
 import { validateNarrative, repairNarrative } from './validator.js';
-import { buildTurnContext } from './context.js';
+import { buildTurnContext, type TurnContext } from './context.js';
 import { runTurn, buildRecap } from './pipeline.js';
 import {
   retrieveMemories,
@@ -1964,5 +1964,46 @@ describe('theft', () => {
       const itemId = (mutation.payload as { itemId?: string }).itemId;
       expect(STORY.items.some((item) => item.id === itemId)).toBe(true);
     }
+  });
+});
+
+/**
+ * "It works, but it takes something from you" describes a consequence without
+ * containing one. The engine already knows what the price was.
+ */
+describe('naming the cost', () => {
+  it('says what a partial success actually cost', () => {
+    const state = baseState();
+    const context = contextFor(state, 'I look around', 'cost_turn');
+    const priced: TurnContext = {
+      ...context,
+      resolution: {
+        ...context.resolution,
+        checks: [
+          {
+            checkId: 'c1',
+            label: 'Force the door',
+            attribute: 'might',
+            skill: null,
+            dc: 14,
+            rolls: [11],
+            keptRoll: 11,
+            modifier: 2,
+            total: 13,
+            margin: -1,
+            outcome: 'SUCCESS_WITH_COST',
+            advantageLevel: 0,
+          },
+        ],
+        observableFacts: ['You get there, and it costs you 3 Focus.'],
+      },
+    };
+
+    const plan = new RuleBasedDirector().planSync(priced);
+    const turn = new TemplateWriter().writeSync(priced, plan);
+    const prose = turn.blocks.map((b) => b.text).join(' ');
+
+    expect(prose).toContain('3 Focus');
+    expect(prose).not.toMatch(/takes something from you|success with a cost/i);
   });
 });

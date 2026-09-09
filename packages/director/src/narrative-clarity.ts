@@ -369,4 +369,11 @@ export const NARRATIVE_CLARITY_RULES = [
   'Withhold why, never what. The reader may not know who did it or why; they must always know what literally happened.',
   'Write like a good anime, not like prestige fantasy. Avoid em-dash pile-ups, "not X but Y", relentless ominous abstraction, and sentences whose purpose is to sound profound.',
   'Length is not the problem. A long clear passage is better than a short confusing one.',
+  'Name the cost. If something was lost, say what: the hours, the water, the person’s trust, the door that '
+    + 'is now shut. "It works, but it takes something from you", "success with a cost", "something shifts '
+    + 'between you", "the air changes" — these describe a consequence without containing one, and a player '
+    + 'cannot act on them. If you cannot name what changed, nothing changed, and the beat should say so.',
+  'Do not write filler where an event happened. "For a long moment, nothing" and "the silence stretches" '
+    + 'are what you write when the turn was quiet. On a turn that resolved a check or moved the world they '
+    + 'are the beat refusing to report itself.',
 ].join('\n- ');
