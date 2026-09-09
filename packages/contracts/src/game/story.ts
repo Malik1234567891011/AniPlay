@@ -703,3 +703,71 @@ export function archetypeGrants(story: StoryVersion, archetype: ArchetypeDef): A
 
   return { abilities, skills, attributes, items, standing };
 }
+
+/**
+ * What an ability does, in ordinary words, derived from what it is.
+ *
+ * The same two-layer rule the setup screen follows (see `ArchetypeGrants`):
+ * "Heat carried in the hand and put into something at the moment of contact"
+ * is good writing and does not tell a player in a fight whether it hits one
+ * person or the room, or what it costs, or whether it can fail. That comes
+ * from the ability's own shape rather than from a second authored string,
+ * because a hand-written effect line goes stale the first time somebody
+ * changes the target rule.
+ */
+export function abilityEffect(story: StoryVersion, ability: AbilityDef): string {
+  // A tag if one says what this is, otherwise the skill it rolls, which is the
+  // world's own word for the same thing — "Stealth", "Mending", "Riding".
+  const skillName = story.skills.find((s) => s.id === ability.check?.skillId)?.name;
+  const kind =
+    ABILITY_KIND.find((entry) => ability.tags.includes(entry.tag))?.label ?? skillName ?? 'Technique';
+
+  const target = {
+    SELF: 'on yourself',
+    SINGLE: 'on one target',
+    MULTI: 'on several targets',
+    AREA: 'across the area',
+    NONE: '',
+  }[ability.targetRule];
+
+  const cost = ability.costs
+    .map((entry) => {
+      const resource = story.resources.find((r) => r.id === entry.resourceId);
+      return `${entry.amount} ${resource?.name ?? entry.resourceId}`;
+    })
+    .join(' and ');
+
+  // Whether it can fail is the thing a player most needs and is least told.
+  const certainty = ability.check
+    ? `rolls ${story.skills.find((s) => s.id === ability.check?.skillId)?.name ?? ATTRIBUTE_LABELS[ability.check.attribute] ?? 'a check'}`
+    : 'always works';
+
+  const parts = [
+    [kind, target].filter(Boolean).join(' '),
+    certainty,
+    cost ? `costs ${cost}` : 'costs nothing',
+    ability.cooldownMinutes > 0 ? `once every ${formatMinutes(ability.cooldownMinutes)}` : null,
+  ].filter(Boolean);
+
+  return `${parts.join(' · ')}.`;
+}
+
+/** Ordered: the first tag that matches wins, so "ember, offensive" is an attack. */
+const ABILITY_KIND: Array<{ tag: string; label: string }> = [
+  { tag: 'offensive', label: 'Attack' },
+  { tag: 'combat', label: 'Attack' },
+  { tag: 'defensive', label: 'Defence' },
+  { tag: 'movement', label: 'Movement' },
+  { tag: 'healing', label: 'Healing' },
+  { tag: 'social', label: 'Social' },
+  { tag: 'sight', label: 'Perception' },
+  { tag: 'survival', label: 'Survival' },
+  { tag: 'stagecraft', label: 'Craft' },
+  { tag: 'utility', label: 'Utility' },
+];
+
+function formatMinutes(minutes: number): string {
+  if (minutes < 60) return `${minutes} minutes`;
+  const hours = minutes / 60;
+  return hours === 1 ? 'hour' : `${Number.isInteger(hours) ? hours : hours.toFixed(1)} hours`;
+}

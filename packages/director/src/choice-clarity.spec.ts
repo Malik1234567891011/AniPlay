@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
 import type { ArchetypeDef, CharacterSetupField, StoryVersion } from '@aniplay/contracts';
-import { archetypeGrants } from '@aniplay/contracts';
+import { abilityEffect, archetypeGrants } from '@aniplay/contracts';
 import { checkChoiceClarity, checkStoryChoiceClarity } from './choice-clarity.js';
 
 /**
@@ -92,4 +92,25 @@ describe('the checker itself', () => {
     const report = checkChoiceClarity(story as StoryVersion, field, story.archetypes);
     expect(report.passed).toBe(true);
   });
+});
+
+/**
+ * An ability in combat is a choice card too, and "heat carried in the hand and
+ * put into something at the moment of contact" does not tell a player whether
+ * it hits one person or the room, what it costs, or whether it can fail.
+ */
+describe('what an ability says it does', () => {
+  for (const story of LAUNCH_CATALOG) {
+    it(`${story.title} — every ability states its own shape`, () => {
+      for (const ability of story.abilities) {
+        const effect = abilityEffect(story, ability);
+        // Whether it can fail is the thing most needed and least told.
+        expect(effect, ability.id).toMatch(/rolls |always works/);
+        // And what it costs, either way.
+        expect(effect, ability.id).toMatch(/costs /);
+        // Layer 1 never leans on the world's own vocabulary to carry meaning.
+        expect(effect.length, ability.id).toBeLessThan(120);
+      }
+    });
+  }
 });

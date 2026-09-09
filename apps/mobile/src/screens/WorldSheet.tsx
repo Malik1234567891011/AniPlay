@@ -274,6 +274,10 @@ function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
                   </Txt>
                 ) : null}
               </Row>
+              {/* What it does, then what it is. The description is good
+                  writing and does not tell you whether it hits one person or
+                  the room, or what it costs, or whether it can fail. */}
+              <Txt variant="caption">{ability.effect}</Txt>
               <Txt variant="caption" color={colors.text.secondary}>
                 {ability.description}
               </Txt>

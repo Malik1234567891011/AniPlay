@@ -414,6 +414,9 @@ export const WorldSheetResponse = z
             .object({
               id: z.string(),
               name: z.string(),
+              /** Layer 1: what it does, derived from what it is. */
+              effect: z.string(),
+              /** Layer 2: the world's own words for it. */
               description: z.string(),
               costLabel: z.string(),
               cooldownRemaining: z.number().int(),

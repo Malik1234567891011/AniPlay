@@ -1,4 +1,4 @@
-import { archetypeGrants } from '@aniplay/contracts';
+import { abilityEffect, archetypeGrants } from '@aniplay/contracts';
 import type {
   ContinueCard,
   GameEvent,
@@ -258,6 +258,7 @@ export function toWorldSheet(
           return {
             id: def.id,
             name: def.name,
+            effect: abilityEffect(story, def),
             description: def.description,
             costLabel: def.costs
               .map((c) => `${c.amount} ${story.resources.find((r) => r.id === c.resourceId)?.name ?? c.resourceId}`)
