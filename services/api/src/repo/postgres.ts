@@ -78,9 +78,34 @@ export class PostgresRepository implements Repository {
     await this.#pool.end();
   }
 
-  /** Exposed for the health check, so a bad DATABASE_URL fails at boot. */
+  /**
+   * Fails at boot rather than on the first player's first request.
+   *
+   * Checks the schema is actually there, not merely that the database answers:
+   * pointing at an empty Postgres is a much easier mistake than pointing at a
+   * wrong one, and it produces a 500 on the first turn instead of a message
+   * saying what to run.
+   */
   async ping(): Promise<void> {
     await this.#pool.query('SELECT 1');
+
+    const { rows } = await this.#pool.query<{ present: boolean }>(
+      `SELECT to_regclass('public.story_sessions') IS NOT NULL AS present`,
+    );
+    if (!rows[0]?.present) {
+      throw new Error(
+        'DATABASE_URL points at a database with no schema. Run `npm run migrate` against it first.',
+      );
+    }
+
+    const { rows: catalog } = await this.#pool.query<{ count: string }>(
+      `SELECT count(*)::text AS count FROM story_versions`,
+    );
+    if (catalog[0]?.count === '0') {
+      throw new Error(
+        'The database has the schema but no worlds. Run `npm run migrate` to seed the official catalog.',
+      );
+    }
   }
 
   async #tx<T>(fn: (client: PoolClient) => Promise<T>): Promise<T> {
