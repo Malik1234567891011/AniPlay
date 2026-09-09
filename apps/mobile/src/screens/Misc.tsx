@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, Switch, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Button,
@@ -160,7 +160,9 @@ export function ReportScreen({
         </IconButton>
       </Row>
 
-      <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl }}>
+      {/* The reasons alone are taller than the screen, so the submit button
+          needs room to clear the bottom edge rather than resting on it. */}
+      <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl, paddingBottom: spacing.giant }}>
         <Txt variant="bodyCompact" color={colors.text.secondary}>
           What's wrong with this {targetType.toLowerCase()}?
         </Txt>
@@ -196,12 +198,20 @@ export function ReportScreen({
           }}
         />
 
-        <Chip
-          label="Also hide this from my recommendations"
-          selected={alsoHide}
-          onPress={() => setAlsoHide((v) => !v)}
-          style={{ paddingVertical: spacing.md }}
-        />
+        {/* A switch, not another chip. Rendered as one it read as a ninth
+            reason in the same list, when it is a separate choice about the
+            reporter's own feed. */}
+        <Row style={{ justifyContent: 'space-between', gap: spacing.lg }}>
+          <Txt variant="bodyCompact" style={{ flex: 1 }}>
+            Also hide this from my recommendations
+          </Txt>
+          <Switch
+            value={alsoHide}
+            onValueChange={setAlsoHide}
+            accessibilityLabel="Also hide this from my recommendations"
+            trackColor={{ false: colors.bg.raised, true: colors.accent.primary }}
+          />
+        </Row>
 
         <Button
           label="Submit report"
