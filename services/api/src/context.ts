@@ -37,6 +37,36 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   return { port, host, environment, baseUrl };
 }
 
+/**
+ * Refuses to start a production process that is still wearing its development
+ * clothes.
+ *
+ * `readAuth` below treats the bearer token as the user id, which is fine for
+ * local work and catastrophic in front of real users: anyone could send another
+ * account's id and become them. It is the kind of thing that ships by accident
+ * exactly once, so production has to name a real auth provider or not boot.
+ */
+export function assertProductionReady(
+  config: AppConfig,
+  env: NodeJS.ProcessEnv = process.env,
+): void {
+  if (config.environment !== 'production') return;
+
+  const missing: string[] = [];
+  if (!env.SUPABASE_JWT_SECRET && !env.AUTH_JWKS_URL) {
+    missing.push('SUPABASE_JWT_SECRET or AUTH_JWKS_URL (bearer tokens are unverified without one)');
+  }
+  if (!env.DATABASE_URL) {
+    missing.push('DATABASE_URL (the in-memory repository loses every session on restart)');
+  }
+
+  if (missing.length > 0) {
+    throw new Error(
+      `Refusing to start in production without:\n  - ${missing.join('\n  - ')}`,
+    );
+  }
+}
+
 export interface AppContext {
   readonly config: AppConfig;
   readonly repo: Repository;
@@ -112,6 +142,12 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
  * Supabase Auth behind the same `requireUser`/`optionalUser` interface.
  */
 const GUEST_PREFIX = 'guest_';
+
+/**
+ * A token is a user id here, and nothing verifies it. `assertProductionReady`
+ * is what stops that reaching production; this comment is what stops someone
+ * reading the function and assuming it authenticates anything.
+ */
 
 export interface AuthedUser {
   readonly userId: string;

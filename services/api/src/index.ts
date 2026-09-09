@@ -1,7 +1,17 @@
 import { buildServer } from './server.js';
-import { loadConfig } from './context.js';
+import { assertProductionReady, loadConfig } from './context.js';
 
 const config = loadConfig();
+
+// Before anything binds a port: a production process with development auth
+// would hand every account to anyone who knows a user id.
+try {
+  assertProductionReady(config);
+} catch (error) {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
+}
+
 const app = buildServer({ logger: true });
 
 app

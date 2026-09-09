@@ -1,6 +1,6 @@
 import { createReadStream } from 'node:fs';
 import { access, readFile, stat, mkdir, writeFile } from 'node:fs/promises';
-import { dirname, join, normalize, resolve } from 'node:path';
+import { dirname, join, normalize, resolve, sep } from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import type { GameState, StoryVersion } from '@aniplay/contracts';
 import {
@@ -45,8 +45,10 @@ export function registerMediaRoutes(app: FastifyInstance, ctx: AppContext): void
     const requested = request.params['*'] ?? '';
 
     // Path traversal guard: the resolved path must stay inside the asset root.
+    // Compared with the separator attached, because a bare prefix test also
+    // accepts a sibling directory whose name merely starts with the root's.
     const candidate = resolve(ASSET_ROOT, normalize(requested).replace(/^(\.\.[/\\])+/, ''));
-    if (!candidate.startsWith(ASSET_ROOT)) {
+    if (candidate !== ASSET_ROOT && !candidate.startsWith(`${ASSET_ROOT}${sep}`)) {
       return sendError(reply, 400, 'INVALID_PATH', 'Bad asset path.');
     }
 
@@ -159,9 +161,26 @@ export function registerMediaRoutes(app: FastifyInstance, ctx: AppContext): void
 
         // Spec §9.3 — the accepted portrait becomes the stable reference, and
         // mechanical traits are untouched by it.
-        const nextState = structuredClone(state);
-        nextState.player.identity.portraitAssetId = spec.assetKey;
-        await ctx.repo.saveState(session.sessionId, state.revision, nextState);
+        //
+        // Generation takes tens of seconds, so a turn can easily commit while
+        // it runs and move the revision on. The optimistic write would then
+        // fail and the player would be charged for a portrait that never
+        // attached, so this re-reads and re-applies the one field it owns.
+        // Retrying is safe precisely because the portrait key conflicts with
+        // nothing else in the state.
+        let attached = false;
+        for (let attempt = 0; attempt < 5 && !attached; attempt += 1) {
+          const current = attempt === 0 ? state : await ctx.repo.getState(session.sessionId);
+          if (!current) break;
+          const nextState = structuredClone(current);
+          nextState.player.identity.portraitAssetId = spec.assetKey;
+          attached = await ctx.repo.saveState(session.sessionId, current.revision, nextState);
+        }
+        if (!attached) {
+          // The image exists and is returned either way; what did not stick is
+          // the reference, so charging for it would be charging for nothing.
+          throw new MediaGatewayError('could not attach portrait to session', 'PROVIDER_ERROR', true);
+        }
 
         await ctx.wallet.finalize(reservation, 'MEDIA_FINALIZE');
 

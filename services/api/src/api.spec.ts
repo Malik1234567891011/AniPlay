@@ -4,7 +4,7 @@ import { GRANT_DAILY, GRANT_NEW_USER, QUALITY_TIERS } from '@aniplay/contracts';
 import { createDefaultPipeline } from '@aniplay/director';
 import { JobQueue } from '@aniplay/worker';
 import { buildServer } from './server.js';
-import { createAppContext, loadConfig } from './context.js';
+import { assertProductionReady, createAppContext, loadConfig } from './context.js';
 import { MemoryRepository } from './repo/memory.js';
 import { WalletService } from './wallet.js';
 import type { AppContext } from './context.js';
@@ -319,6 +319,29 @@ describe('wallet (spec §20.7, §20.8)', () => {
 
     expect(replay.json().duplicate).toBe(true);
     expect(await ctx.wallet.getBalance(GUEST)).toBe(before + 2_000);
+  });
+
+  it('will not start in production with development auth (spec §6.3)', () => {
+    const production = { port: 4000, host: '0.0.0.0', environment: 'production' as const, baseUrl: 'https://x.test' };
+
+    // The bearer token is the user id and nothing verifies it. That is fine
+    // locally and a total account takeover in front of real users, so the
+    // process has to refuse rather than serve.
+    expect(() => assertProductionReady(production, {} as NodeJS.ProcessEnv)).toThrow(/SUPABASE_JWT_SECRET/);
+    expect(() =>
+      assertProductionReady(production, { AUTH_JWKS_URL: 'https://x.test/jwks' } as NodeJS.ProcessEnv),
+    ).toThrow(/DATABASE_URL/);
+    expect(() =>
+      assertProductionReady(production, {
+        AUTH_JWKS_URL: 'https://x.test/jwks',
+        DATABASE_URL: 'postgres://x',
+      } as NodeJS.ProcessEnv),
+    ).not.toThrow();
+
+    // Development is unaffected; the whole point is that it stays runnable.
+    expect(() =>
+      assertProductionReady({ ...production, environment: 'dev' }, {} as NodeJS.ProcessEnv),
+    ).not.toThrow();
   });
 
   it('never ships a sandbox verifier in production', async () => {
