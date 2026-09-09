@@ -136,6 +136,8 @@ const ORDINARY_ENGLISH = new Set([
   'water', 'health', 'stamina', 'focus', 'energy', 'stage', 'gate', 'commons',
   'debt', 'standing', 'strain', 'suspicion', 'map', 'key', 'coat', 'road',
   'wardrobe', 'office', 'stacks', 'archives', 'archive', 'rooftop', 'room',
+  'breath', 'forms', 'form', 'vigor', 'blight', 'wall', 'yard', 'lines',
+  'tents', 'hall', 'post', 'kiln', 'wire', 'thread', 'sight', 'letter',
 ]);
 
 export function inventedVocabulary(story: StoryVersion): string[] {
