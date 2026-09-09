@@ -100,6 +100,7 @@ export function WorldSheetScreen({
             <Timeline
               entries={timeline}
               sessionId={sessionId}
+              storyTitle={sheet?.overview.chapterLabel ?? 'AniPlay'}
               navigation={navigation}
               onRefresh={setTimeline}
             />
@@ -545,11 +546,13 @@ function MapTab({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
 function Timeline({
   entries,
   sessionId,
+  storyTitle,
   navigation,
   onRefresh,
 }: {
   entries: TimelineEntry[];
   sessionId: string;
+  storyTitle: string;
   navigation: RootNavigation;
   onRefresh: (entries: TimelineEntry[]) => void;
 }): React.JSX.Element {
@@ -671,6 +674,23 @@ function Timeline({
                   </Txt>
                 </Pressable>
               ) : null}
+              {/* WS-07 — share the moment, spoiler-safe, from where it sits. */}
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Share: ${entry.text}`}
+                onPress={() =>
+                  navigation.navigate('Share', {
+                    storyTitle,
+                    actionText: entry.group === 'CHOICE' ? entry.text : null,
+                    sceneText: entry.text,
+                    heroImageUrl: null,
+                  })
+                }
+              >
+                <Txt variant="caption" color={colors.text.secondary}>
+                  Share
+                </Txt>
+              </Pressable>
               {entry.forkable ? (
                 <Pressable
                   accessibilityRole="button"

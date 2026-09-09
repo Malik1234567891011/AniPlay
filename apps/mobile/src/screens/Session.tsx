@@ -653,6 +653,16 @@ export function SessionScreen({
             setShowTurnMenu(false);
             navigation.navigate('WorldSheet', { sessionId, tab: 'timeline' });
           }}
+          onShare={() => {
+            setShowTurnMenu(false);
+            navigation.navigate('Share', {
+              storyTitle: detail?.session.title ?? '',
+              actionText: latest.actionText ?? null,
+              sceneText: latest.blocks.map((block) => block.text).join(' '),
+              heroImageUrl: latest.heroImageUrl ?? null,
+              displayName: detail?.session.displayName ?? '',
+            });
+          }}
           onClose={() => setShowTurnMenu(false)}
         />
       ) : null}
@@ -880,6 +890,7 @@ function TurnMenu({
   rephrasing,
   onEdit,
   onReport,
+  onShare,
   onClose,
 }: {
   actionText: string;
@@ -890,6 +901,7 @@ function TurnMenu({
   rephrasing: boolean;
   onEdit: () => void;
   onReport: () => void;
+  onShare: () => void;
   onClose: () => void;
 }): React.JSX.Element {
   return (
@@ -926,6 +938,13 @@ function TurnMenu({
         <Button label="Put it back in the composer" variant="secondary" onPress={onEdit} />
         <Txt variant="micro" color={colors.text.muted}>
           Change the wording and send when you are ready. Costs nothing until you do.
+        </Txt>
+      </Stack>
+
+      <Stack gap={spacing.sm}>
+        <Button label="Share this moment" variant="secondary" onPress={onShare} />
+        <Txt variant="micro" color={colors.text.muted}>
+          Makes a card on your phone. You choose what it says and where it goes.
         </Txt>
       </Stack>
 

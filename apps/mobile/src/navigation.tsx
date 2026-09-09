@@ -14,6 +14,7 @@ import { WorldSheetScreen } from './screens/WorldSheet.jsx';
 import { WalletScreen } from './screens/Wallet.jsx';
 import { LibraryScreen, ProfileScreen } from './screens/LibraryProfile.jsx';
 import { CreateScreen, ReportHistoryScreen, ReportScreen, SignInScreen } from './screens/Misc.jsx';
+import { ShareScreen } from './screens/Share.jsx';
 import { CharactersScreen } from './screens/Characters.jsx';
 
 /**
@@ -39,6 +40,14 @@ export type RootParamList = {
   Wallet: { shortfall?: number } | undefined;
   SignIn: undefined;
   Create: undefined;
+  /** SH-01 — everything the card needs is passed in, so it composes offline. */
+  Share: {
+    storyTitle: string;
+    actionText: string | null;
+    sceneText: string;
+    heroImageUrl?: string | null;
+    displayName?: string;
+  };
   Report: { targetType: string; targetId: string };
   Characters: undefined;
   ReportHistory: undefined;
@@ -146,6 +155,7 @@ export function Navigation(): React.JSX.Element {
           <Stack.Screen name="Wallet" component={WalletScreen as never} />
           <Stack.Screen name="SignIn" component={SignInScreen as never} />
           <Stack.Screen name="Create" component={CreateScreen as never} />
+          <Stack.Screen name="Share" component={ShareScreen as never} options={{ presentation: 'modal' }} />
           <Stack.Screen name="Report" component={ReportScreen as never} />
           <Stack.Screen name="ReportHistory" component={ReportHistoryScreen as never} />
           <Stack.Screen name="Characters" component={CharactersScreen as never} />
