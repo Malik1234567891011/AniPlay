@@ -6,7 +6,7 @@ import {
 } from '@aniplay/contracts';
 import type { ModelGateway, ModelMessage } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
-import { stripInventedTravel } from './entity-resolution.js';
+import { stripInventedTravel, stripSubstitutedPeople } from './entity-resolution.js';
 import { NARRATIVE_CLARITY_RULES } from './narrative-clarity.js';
 import { RuleBasedIntentParser, type IntentParser, type ParseContext } from './parser.js';
 import { RuleBasedDirector, type Director } from './director.js';
@@ -132,7 +132,10 @@ export class ModelIntentParser implements IntentParser {
       // A model will occasionally read a mention of a place as a request to go
       // there. Moving a player who did not ask to move is the same failure as
       // ignoring one who did.
-      const grounded = stripInventedTravel(result.value, { story, text });
+      const grounded = stripSubstitutedPeople(stripInventedTravel(result.value, { story, text }), {
+        story,
+        text,
+      });
       return { ...grounded, rawAction: text.slice(0, 4000) };
     } catch (error) {
       if (error instanceof ModelGatewayError) return this.#fallback.parseSync(text, context);

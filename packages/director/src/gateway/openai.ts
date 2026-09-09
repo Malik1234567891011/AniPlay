@@ -128,7 +128,7 @@ export class OpenAiGateway implements ModelGateway {
 
   async generateStructured<T>(
     role: ModelRole,
-    schema: z.ZodType<T>,
+    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
     messages: readonly ModelMessage[],
     options?: GenerateOptions,
   ): Promise<StructuredResult<T>> {

@@ -61,7 +61,7 @@ export const ActionIntent = z
     actions: z.array(IntentAction).min(1).max(8),
     confidence: z.number().min(0).max(1),
     ambiguities: z.array(z.string()),
-    unsafeOrMetaRequests: z.array(z.string()).optional(),
+    unsafeOrMetaRequests: z.array(z.string()).default([]),
   })
   .strict();
 export type ActionIntent = z.infer<typeof ActionIntent>;

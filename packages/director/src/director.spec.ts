@@ -10,7 +10,7 @@ import {
   evaluatePredicate,
   resolveIntent,
 } from '@aniplay/engine';
-import { stripInventedTravel } from './entity-resolution.js';
+import { stripInventedTravel, stripSubstitutedPeople } from './entity-resolution.js';
 import { OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
 import { RuleBasedIntentParser } from './parser.js';
 import { RuleBasedDirector } from './director.js';
@@ -1360,6 +1360,94 @@ describe('player agency and action resolution', () => {
     expect(result.resolution.normalizedActions[0]).toMatchObject({ status: 'REJECTED' });
     expect(result.resolution.mutations.some((m) => m.type === 'ENCOUNTER_START')).toBe(false);
     for (const character of result.state.characters) expect(character.alive).toBe(true);
+  });
+
+  it('CASE 2b: "keep fighting" means the person you are already fighting', async () => {
+    // Found in play: a Breaking Charge landed on Hollis, and the next turn's
+    // "I keep fighting" was narrated as a swing through empty air while Hollis
+    // was standing in the scene.
+    const state = baseState();
+    state.flags['engaged:kael'] = true;
+
+    const result = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I keep fighting.',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-2b',
+    });
+
+    expect(result.resolution.normalizedActions[0]).not.toMatchObject({ status: 'REJECTED' });
+    expect(result.resolution.observableFacts.join(' ')).toContain('Kael');
+  });
+
+  it('CASE 2c: it does not redirect a named stranger at whoever is handy', async () => {
+    // The same fallback must never rescue "I attack Zorbulax" by pointing it
+    // at the one person who happens to be present.
+    const state = baseState();
+    state.flags['engaged:kael'] = true;
+
+    const result = await runTurn({
+      story: STORY, state, memories: [], recentTurns: [],
+      actionText: 'I attack Zorbulax the Undying.',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-2c',
+    });
+
+    expect(result.resolution.mutations.some((m) => m.type === 'ENCOUNTER_START')).toBe(false);
+    for (const character of result.state.characters) expect(character.alive).toBe(true);
+  });
+
+  it('CASE 2d: a model parser may not substitute a person the player did not name', () => {
+    // Found in play against the live model: mid-fight, "I attack Zorbulax the
+    // Undying" came back as an attack on Hollis, and the beat narrated "not at
+    // Zorbulax, who isn't here, but at Hollis Ferrant".
+    const text = 'I attack Zorbulax the Undying.';
+    const substituted = ActionIntent.parse({
+      schemaVersion: '1.0',
+      intentId: 'int_sub',
+      rawAction: text,
+      actions: [
+        {
+          verb: 'attack',
+          actor: { entityType: 'player', entityId: 'player' },
+          targets: [{ entityType: 'npc', entityId: 'hollis', displayName: 'Hollis Ferrant' }],
+          method: text,
+          declaredOutcome: null,
+          timeIntent: 'NOW',
+        },
+      ],
+      dialogue: [],
+      unsafeOrMetaRequests: [],
+      confidence: 0.9,
+      ambiguities: [],
+    });
+
+    const cleaned = stripSubstitutedPeople(substituted, { story: TIDEWALL, text });
+    expect(cleaned.actions[0]?.targets).toHaveLength(0);
+    expect(cleaned.unsafeOrMetaRequests).toContain('unresolved_target');
+  });
+
+  it('CASE 2e: leaves a person the player actually named alone', () => {
+    const text = 'I attack Hollis.';
+    const named = ActionIntent.parse({
+      schemaVersion: '1.0',
+      intentId: 'int_named',
+      rawAction: text,
+      actions: [
+        {
+          verb: 'attack',
+          actor: { entityType: 'player', entityId: 'player' },
+          targets: [{ entityType: 'npc', entityId: 'hollis', displayName: 'Hollis Ferrant' }],
+          method: text,
+          declaredOutcome: null,
+          timeIntent: 'NOW',
+        },
+      ],
+      dialogue: [],
+      unsafeOrMetaRequests: [],
+      confidence: 0.9,
+      ambiguities: [],
+    });
+
+    expect(stripSubstitutedPeople(named, { story: TIDEWALL, text })).toEqual(named);
   });
 
   it('CASE 3: the player cannot author an NPC decision', async () => {

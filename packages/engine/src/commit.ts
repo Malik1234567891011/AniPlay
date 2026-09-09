@@ -140,6 +140,7 @@ export function commitTurn(options: CommitOptions): CommitResult {
  * - `met:<characterId>`      the player has shared a scene with them
  * - `spoke:<characterId>`    the player addressed them
  * - `attacked:<characterId>` set at resolution time
+ * - `engaged:<characterId>`  the player is in a fight with them right now
  * - `visited:<locationId>`   the player has stood there
  * - `used:<abilityId>`       the player used it
  * - `inspected:<entityId>`   the player examined it, and the place they did it
@@ -164,7 +165,16 @@ function recordObservations(state: GameState, story: StoryVersion, resolution: R
     const verb = typeof action.verb === 'string' ? action.verb : '';
     const targets = Array.isArray(action.targets) ? action.targets : [];
 
-    if (verb === 'use_ability' && typeof action.abilityId === 'string') set(`used:${action.abilityId}`);
+    const abilityId = typeof action.abilityId === 'string' ? action.abilityId : null;
+    if (verb === 'use_ability' && abilityId) set(`used:${abilityId}`);
+
+    // Whoever the player is currently in it with, so "keep fighting" on the
+    // next turn knows who that means without being told again.
+    const hostile =
+      verb === 'attack' ||
+      (verb === 'use_ability' &&
+        !!abilityId &&
+        (story.abilities.find((a) => a.id === abilityId)?.tags ?? []).includes('offensive'));
 
     // Examining anything here counts as having looked at the place, which is
     // what "read your own entry in the register" actually needs to know.
@@ -175,6 +185,7 @@ function recordObservations(state: GameState, story: StoryVersion, resolution: R
       if (typeof id !== 'string') continue;
       if (verb === 'inspect') set(`inspected:${id}`);
       if (SPEAKING.has(verb) && characterIds.has(id)) set(`spoke:${id}`);
+      if (hostile && characterIds.has(id)) set(`engaged:${id}`);
     }
   }
 }

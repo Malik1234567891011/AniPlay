@@ -282,3 +282,89 @@ export function stripInventedTravel(
 
   return { ...intent, actions: kept };
 }
+
+// --- Named but not present ------------------------------------------------
+
+/**
+ * Whether the clause named a person the world does not contain.
+ *
+ * The engine needs to tell "I keep fighting" from "I attack Zorbulax the
+ * Undying". Both arrive with no resolved target, but the first should carry on
+ * against whoever the player is already fighting and the second must be
+ * refused — quietly redirecting a named stranger at whoever happens to be in
+ * the room is the same failure as inventing them.
+ */
+export function namesSomeoneUnknown(clause: string, story: StoryVersion): boolean {
+  const known = story.characters.flatMap((c) => [c.name.toLowerCase(), c.name.split(/\s+/)[0]!.toLowerCase()]);
+  const words = clause.split(/\s+/);
+
+  for (let index = 0; index < words.length; index += 1) {
+    const word = words[index]!.replace(/[^A-Za-z'-]/g, '');
+    if (word.length < 3) continue;
+    // A capitalised word that is not the first in the clause reads as a name.
+    const isName = index > 0 && /^[A-Z]/.test(word);
+    // "the headmaster", "the warden" — a definite role nobody here holds.
+    const isRole =
+      words[index - 1]?.toLowerCase() === 'the' && /^[a-z]+$/.test(word) && ROLE_WORDS.test(word);
+    if (!isName && !isRole) continue;
+    if (known.some((name) => name.includes(word.toLowerCase()) || word.toLowerCase().includes(name))) {
+      continue;
+    }
+    return true;
+  }
+  return false;
+}
+
+/** Words that read as "a specific person by their position". */
+const ROLE_WORDS =
+  /^(headmaster|headmistress|principal|warden|commander|captain|master|mistress|director|manager|owner|king|queen|prince|princess|lord|lady|chief|boss|sergeant|general|professor|doctor|nurse|priest|abbot|mayor|sheriff|guard|guards|prefect|prefects|drillmaster|instructor|reader|clerk|barman|barmaid|chef)$/i;
+
+/**
+ * Stops a model parser substituting a person the player did not name.
+ *
+ * Found in play: "I attack Zorbulax the Undying" mid-fight came back as an
+ * attack on Hollis, and the beat cheerfully narrated "not at Zorbulax, who
+ * isn't here, but at Hollis Ferrant". Resolving a misspelling of someone
+ * present is correct; resolving a stranger into whoever is handy is the same
+ * failure as inventing them, arrived at from the other side.
+ *
+ * Only fires when the sentence actually named somebody the world does not
+ * contain, so pronouns and continuations are untouched.
+ */
+export function stripSubstitutedPeople(
+  intent: ActionIntent,
+  options: { readonly story: StoryVersion; readonly text: string },
+): ActionIntent {
+  const { story, text } = options;
+  if (!namesSomeoneUnknown(text, story)) return intent;
+
+  const lower = text.toLowerCase();
+  const namedInText = (characterId: string): boolean => {
+    const character = story.characters.find((c) => c.id === characterId);
+    if (!character) return false;
+    const first = character.name.split(/\s+/)[0]!.toLowerCase();
+    return lower.includes(character.name.toLowerCase()) || lower.includes(first);
+  };
+
+  const actions = intent.actions.map((action) => ({
+    ...action,
+    targets: action.targets.filter(
+      (target) => target.entityType !== 'npc' || namedInText(target.entityId),
+    ),
+  }));
+
+  // Marked whether or not a substitution had to be removed. A model that
+  // correctly declines to target anyone still leaves an action with no person
+  // in it, and the engine must not then continue it against whoever the player
+  // happens to be fighting.
+  const unresolved = actions.some((a) => !a.targets.some((t) => t.entityType === 'npc'));
+  if (!unresolved && actions.every((a, i) => a.targets.length === intent.actions[i]!.targets.length)) {
+    return intent;
+  }
+
+  return {
+    ...intent,
+    actions,
+    unsafeOrMetaRequests: [...new Set([...intent.unsafeOrMetaRequests, 'unresolved_target'])],
+  };
+}

@@ -73,9 +73,14 @@ export interface ModerationResult {
 export interface ModelGateway {
   readonly name: string;
 
+  /**
+   * `T` binds to the schema's *output* type. With `.default()` the input and
+   * output types differ, and inferring from the input made guaranteed fields
+   * come back as possibly undefined at every call site.
+   */
   generateStructured<T>(
     role: ModelRole,
-    schema: z.ZodType<T>,
+    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
     messages: readonly ModelMessage[],
     options?: GenerateOptions,
   ): Promise<StructuredResult<T>>;

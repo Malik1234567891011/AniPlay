@@ -48,6 +48,7 @@ const intent = (actions: ActionIntent['actions'], dialogue: ActionIntent['dialog
   actions,
   confidence: 0.9,
   ambiguities: [],
+  unsafeOrMetaRequests: [],
 });
 
 const player = { entityType: 'player' as const, entityId: 'player' };

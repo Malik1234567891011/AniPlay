@@ -8,7 +8,12 @@ import type {
   Visibility,
 } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
-import { detectOutOfScope, detectWorldAuthoring, resolveCharacterMention } from './entity-resolution.js';
+import {
+  detectOutOfScope,
+  detectWorldAuthoring,
+  namesSomeoneUnknown,
+  resolveCharacterMention,
+} from './entity-resolution.js';
 
 /**
  * Spec §17.1 step 5 — freeform text becomes a structured `ActionIntent`.
@@ -42,6 +47,11 @@ const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
       /\bbeat (?:the )?(?:shit|hell|crap|life|daylights) out of\b/i,
       /\b(lay into|wail on|rough up|beat up|knock out|take a swing at|go for|set upon)\b/i,
       /\b(kill|murder|stab|shoot|execute|finish off)\b/i,
+      // Continuations. A player mid-fight says "keep going", not "I attack
+      // Kael for the third time", and the engine resolves who that means.
+      /\b(fights?|fighting|swinging|swings)\b/i,
+      /\b(keep|carry on|press|continue)\s+(going|at it|fighting|the attack|attacking|pressing)\b/i,
+      /\bagain\b.*\b(hit|swing|strike)\b|\b(hit|swing|strike)\b.*\bagain\b/i,
     ],
   },
   { verb: 'defend', patterns: [/\b(defend|block|parry|brace|guard|shield myself|dodge)\b/i] },
@@ -160,6 +170,14 @@ export class RuleBasedIntentParser implements IntentParser {
         ambiguities.push('No recognised verb; treated as a freeform attempt.');
       }
     }
+
+    // An action that resolved no person, in a sentence that clearly named one,
+    // has to be distinguishable from one that named nobody at all. The engine
+    // continues a fight for the second and refuses the first.
+    const missedSomeone = actions.some(
+      (a) => !a.targets.some((target) => target.entityType === 'npc') && namesSomeoneUnknown(a.method, story),
+    );
+    if (missedSomeone) unsafeOrMetaRequests.push('unresolved_target');
 
     return {
       schemaVersion: '1.0',

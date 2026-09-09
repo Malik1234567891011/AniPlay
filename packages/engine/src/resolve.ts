@@ -1,6 +1,7 @@
 import type {
   AbilityDef,
   ActionIntent,
+  CharacterDef,
   AttributeKey,
   CheckResult,
   GameState,
@@ -196,6 +197,7 @@ export function resolveIntent(options: ResolveOptions): Resolution {
       nextMutationId,
       economy,
       weight,
+      namedUnknownPerson: intent.unsafeOrMetaRequests?.includes('unresolved_target') ?? false,
     });
 
     checks.push(...outcome.checks);
@@ -293,6 +295,8 @@ export function projectState(
 // ---------------------------------------------------------------------------
 
 interface ResolveActionArgs {
+  /** The player named a person the world does not contain (§17.1 step 5). */
+  readonly namedUnknownPerson?: boolean;
   readonly story: StoryVersion;
   readonly state: GameState;
   readonly action: IntentAction;
@@ -789,17 +793,68 @@ function socialDeltasFor(
   }
 }
 
+/**
+ * Who "keep fighting" means.
+ *
+ * A player who has already swung at someone standing in front of them should
+ * not have to name them again every turn. Without this, "I keep fighting"
+ * resolved to no target and the beat was written about an empty yard while the
+ * opponent was still in the scene.
+ *
+ * Only ever resolves to someone actually present, and only when there is no
+ * ambiguity about who is meant.
+ */
+function continuingOpponent(args: ResolveActionArgs): CharacterDef | null {
+  const { story, state } = args;
+  // They named somebody. That it was nobody real is the answer, not an
+  // invitation to pick someone else.
+  if (args.namedUnknownPerson) return null;
+  const present = charactersPresent(state).map((runtime) => runtime.characterId);
+
+  // Mid-encounter, it is whoever the encounter is with.
+  const inEncounter = (state.encounter?.participants ?? [])
+    .filter((participant) => participant.kind === 'NPC' && !participant.downed)
+    .map((participant) => participant.entityId)
+    .filter((id) => present.includes(id));
+  if (inEncounter.length === 1) {
+    return story.characters.find((c) => c.id === inEncounter[0]) ?? null;
+  }
+
+  // Otherwise, the person already engaged who has not left. Deliberately not
+  // "the only person in the room": a player who names somebody the world does
+  // not contain must be refused, never quietly redirected at whoever is handy.
+  const engaged = present.filter(
+    (id) => state.flags[`engaged:${id}`] || state.flags[`attacked:${id}`],
+  );
+  if (engaged.length === 1) {
+    return story.characters.find((c) => c.id === engaged[0]) ?? null;
+  }
+
+  return null;
+}
+
 function resolveAttack(args: ResolveActionArgs): ActionOutcome {
   const { story, state, action, rng, nextMutationId } = args;
 
   const target = action.targets.find((t) => t.entityType === 'npc');
-  const character = story.characters.find((c) => c.id === target?.entityId);
+  const character = target
+    ? (story.characters.find((c) => c.id === target.entityId) ?? null)
+    : continuingOpponent(args);
+
   if (!character) {
+    const here = charactersPresent(state)
+      .map((runtime) => story.characters.find((c) => c.id === runtime.characterId)?.name)
+      .filter((name): name is string => !!name);
+
     return refusal(
       action,
       'UNKNOWN_TARGET',
-      'There is no one there to strike.',
-      'The target does not exist. Narrate the swing meeting air.',
+      here.length > 0
+        ? `${formatList(here)} ${here.length === 1 ? 'is' : 'are'} here. You would have to say which.`
+        : 'There is no one here to strike.',
+      here.length > 0
+        ? 'The player did not say who. Narrate them checking themselves, and name who is actually in front of them.'
+        : 'Nobody is present. Narrate the impulse and the empty room. Do not invent a target.',
     );
   }
   if (!story.rules.allowsCombat) {
