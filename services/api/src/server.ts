@@ -215,6 +215,9 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
     const results: RankedEntry[] = [];
     for (const story of stories) {
+      // Deliberately not filtered by the hide list: hiding is about what gets
+      // recommended, and a player typing a story's name is asking for that
+      // story, not being offered it.
       // Spec §7.5 — title, creator, tags, premise, character names, mechanics.
       const haystack = [
         story.title,
@@ -243,9 +246,15 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const saved = user ? await ctx.repo.getSaves(user.userId) : [];
     const signals = await ctx.repo.getSignals(story.storyId);
 
+    // "Hide this from my recommendations" has to mean everywhere a
+    // recommendation appears, not only the Discover rails. A story the player
+    // just reported and hid was still being offered two taps later.
+    const hidden = user ? await ctx.repo.getHidden(user.userId) : [];
+
     const related: StorySummary[] = [];
     for (const other of await ctx.repo.listStories()) {
       if (other.storyId === story.storyId) continue;
+      if (hidden.includes(other.storyId)) continue;
       const otherSignals = await ctx.repo.getSignals(other.storyId);
       related.push(toStorySummary(other, otherSignals, saved.includes(other.storyId)));
     }
