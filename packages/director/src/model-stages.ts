@@ -141,23 +141,43 @@ export class ModelIntentParser implements IntentParser {
   }
 }
 
+/**
+ * Rejects an intent that names something the world does not contain.
+ *
+ * Checks the id against the collection its `entityType` claims, not against one
+ * flat set of every id. A flat check passes `{entityType: 'location', entityId:
+ * 'teo'}` — Teo exists, just not as a place — and the engine then resolves a
+ * travel to a destination that cannot be found and refuses the whole turn. That
+ * is what "I go over and introduce myself" was doing: a mislabelled person.
+ */
 function referencesUnknownEntity(intent: ActionIntent, context: ParseContext): boolean {
   const { story } = context;
-  const known = new Set<string>([
-    'player',
-    ...story.characters.map((c) => c.id),
-    ...story.locations.map((l) => l.id),
-    ...story.items.map((i) => i.id),
-    ...story.abilities.map((a) => a.id),
-    ...story.quests.map((q) => q.id),
-    ...story.factions.map((f) => f.id),
-  ]);
+
+  const byType: Record<string, ReadonlySet<string>> = {
+    player: new Set(['player']),
+    npc: new Set(story.characters.map((c) => c.id)),
+    location: new Set(story.locations.map((l) => l.id)),
+    item: new Set(story.items.map((i) => i.id)),
+    ability: new Set(story.abilities.map((a) => a.id)),
+    quest: new Set(story.quests.map((q) => q.id)),
+    faction: new Set(story.factions.map((f) => f.id)),
+  };
+
+  // `environment` is deliberately open: a door, the rain, the fire.
+  const unknown = (ref: { entityType: string; entityId: string }): boolean => {
+    if (ref.entityType === 'environment') return false;
+    const allowed = byType[ref.entityType];
+    return !allowed || !allowed.has(ref.entityId);
+  };
+
+  const abilities = byType.ability as ReadonlySet<string>;
+  const items = byType.item as ReadonlySet<string>;
 
   for (const action of intent.actions) {
-    if (!known.has(action.actor.entityId)) return true;
-    if (action.targets.some((t) => !known.has(t.entityId))) return true;
-    if (action.abilityId && !known.has(action.abilityId)) return true;
-    if (action.itemId && !known.has(action.itemId)) return true;
+    if (unknown(action.actor)) return true;
+    if (action.targets.some(unknown)) return true;
+    if (action.abilityId && !abilities.has(action.abilityId)) return true;
+    if (action.itemId && !items.has(action.itemId)) return true;
   }
   return false;
 }

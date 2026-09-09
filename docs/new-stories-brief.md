@@ -1,5 +1,10 @@
 # Three new launch worlds — requirements
 
+**Status: built.** The Tidewall (`tidewall.ts`), The Unbound
+(`unbound.ts`) and Nine Weeks (`nine-weeks.ts`) are in `LAUNCH_CATALOG` and
+pass the §43.1 content bar and the clarity checks. This file stays as the
+source of the requirements they were built against.
+
 Recorded 2026-09-09 from a direct product brief. These are **additions**. The
 three existing worlds (The Ninth Archive, The Understudy, The Salt Road) are not
 to be replaced, reworded, or removed, and their art is locked.

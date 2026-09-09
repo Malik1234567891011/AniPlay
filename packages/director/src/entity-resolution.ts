@@ -232,7 +232,16 @@ export function stripInventedTravel(
   options: { readonly story: StoryVersion; readonly text: string },
 ): ActionIntent {
   const { story, text } = options;
-  if (MOVEMENT_VERBS.test(text)) return intent;
+  const isRealLocation = (id: string): boolean => story.locations.some((l) => l.id === id);
+
+  // Travel to somewhere that is not a place can only ever produce a refusal, so
+  // it is dropped whatever the player said.
+  const impossible = intent.actions.some(
+    (a) =>
+      (a.verb === 'travel' || a.verb === 'move') &&
+      !a.targets.some((t) => t.entityType === 'location' && isRealLocation(t.entityId)),
+  );
+  if (MOVEMENT_VERBS.test(text) && !impossible) return intent;
 
   const lower = text.toLowerCase();
   const names = (locationId: string): string[] => {
@@ -243,9 +252,12 @@ export function stripInventedTravel(
 
   const kept = intent.actions.filter((action) => {
     if (action.verb !== 'travel' && action.verb !== 'move') return true;
-    const destination = action.targets.find((t) => t.entityType === 'location');
+    const destination = action.targets.find(
+      (t) => t.entityType === 'location' && isRealLocation(t.entityId),
+    );
     if (!destination) return false;
     // The player naming the place is enough on its own.
+    if (MOVEMENT_VERBS.test(text)) return true;
     return names(destination.entityId).some((name) => lower.includes(name.toLowerCase()));
   });
 

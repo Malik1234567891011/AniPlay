@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { LAUNCH_CATALOG, NINTH_ARCHIVE as STORY, TIDEWALL } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG, NINE_WEEKS, NINTH_ARCHIVE as STORY, TIDEWALL } from '@aniplay/test-fixtures';
 import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
 import { ActionIntent } from '@aniplay/contracts';
 import { createInitialState, deriveTurnSeed, resolveIntent } from '@aniplay/engine';
@@ -115,6 +115,16 @@ describe('a turn never moves a player who did not ask to move', () => {
     const text = 'The Wall Walk, now, before she gets there.';
     const kept = stripInventedTravel(travelTo('wall_walk', text), { story: TIDEWALL, text });
     expect(kept.actions[0]?.verb).toBe('travel');
+  });
+
+  it('drops travel to something that is not a place', () => {
+    // The live failure: the model labelled a person as a location, so the
+    // engine looked for a room called "teo", found none, and refused the whole
+    // turn with a list of exits. Movement language does not rescue it — there
+    // is nowhere to go.
+    const text = 'I go over and introduce myself to the person with Juno.';
+    const stripped = stripInventedTravel(travelTo('teo', text), { story: NINE_WEEKS, text });
+    expect(stripped.actions.every((a) => a.verb !== 'travel')).toBe(true);
   });
 
   it('leaves everything else alone', () => {
