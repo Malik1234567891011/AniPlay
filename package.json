@@ -20,7 +20,8 @@
     "mobile": "npm run start -w @aniplay/mobile",
     "clean": "rm -rf packages/*/dist services/*/dist node_modules/.cache",
     "smoke": "tsx infra/scripts/smoke.ts",
-    "art": "tsx infra/scripts/generate-art.ts"
+    "art": "tsx infra/scripts/generate-art.ts",
+    "brand": "tsx infra/scripts/generate-brand.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
