@@ -908,7 +908,6 @@ describe('relationship labels say something', () => {
         ...c.startingRelationship,
         unlockedGates: [],
         lastChangedTurn: -1,
-        recentEventKinds: [],
       }),
     }));
 
@@ -930,7 +929,6 @@ describe('relationship labels say something', () => {
         rivalry: 0,
         unlockedGates: [],
         lastChangedTurn: -1,
-        recentEventKinds: [],
         ...over,
       } as Parameters<typeof relationshipLabel>[0]);
 
