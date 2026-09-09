@@ -19,7 +19,7 @@ import {
   radius,
   spacing,
 } from '@aniplay/ui';
-import { api, type PlayerCharacterCard } from '../api/client.js';
+import { ApiError, api, type PlayerCharacterCard } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import type { RootNavigation } from '../navigation.jsx';
 
@@ -30,13 +30,24 @@ import type { RootNavigation } from '../navigation.jsx';
 export function LibraryScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
   const [sessions, setSessions] = useState<SessionSummary[] | null>(null);
   const [managing, setManaging] = useState<SessionSummary | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
       const response = await api.listSessions();
       setSessions(response.sessions);
-    } catch {
-      setSessions([]);
+      setError(null);
+    } catch (caught) {
+      // Not `setSessions([])`. A request that failed is not a library with
+      // nothing in it, and telling somebody with ten runs "No worlds yet"
+      // reads as "your saves are gone".
+      setError(
+        caught instanceof ApiError && caught.code === 'OFFLINE'
+          ? "You're offline. Your worlds are safe — they live on the server, not on this phone."
+          : caught instanceof ApiError
+            ? caught.message
+            : 'We could not load your worlds just now. Nothing has been lost.',
+      );
     }
   }, []);
 
@@ -54,7 +65,14 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
         <Txt variant="h1">Library</Txt>
       </Row>
 
-      {sessions && sessions.length === 0 ? (
+      {error && !sessions ? (
+        <EmptyState
+          title="Couldn't load your library"
+          body={error}
+          actionLabel="Try again"
+          onAction={() => void load()}
+        />
+      ) : sessions && sessions.length === 0 ? (
         <EmptyState
           title="No worlds yet"
           body="Anything you start shows up here, with your progress saved."

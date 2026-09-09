@@ -51,7 +51,16 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
       setError(null);
       void refreshWallet();
     } catch (caught) {
-      setError(caught instanceof ApiError ? caught.message : 'Could not load worlds.');
+      // Spec §10.8 — which failure it was decides what the player should do
+      // about it. "We couldn't reach the catalog" covers being offline, the
+      // server being down and the server refusing, and helps with none of them.
+      setError(
+        caught instanceof ApiError && caught.code === 'OFFLINE'
+          ? "You're offline. Worlds you have already started still open from your Library."
+          : caught instanceof ApiError
+            ? caught.message
+            : 'Could not load worlds.',
+      );
     }
   }, [refreshWallet, tastes]);
 
@@ -106,7 +115,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
         {error && !data ? (
           <EmptyState
             title="Nothing loaded"
-            body="We couldn't reach the catalog just now."
+            body={error}
             actionLabel="Try again"
             onAction={() => void load()}
           />
