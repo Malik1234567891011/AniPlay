@@ -5,6 +5,7 @@ import type {
 } from '@aniplay/contracts';
 import { countItem, isSuccess } from '@aniplay/engine';
 import type { TurnContext } from './context.js';
+import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { narratesPlayerInThirdPerson, toSecondPerson } from './second-person.js';
 
 /**
@@ -34,6 +35,20 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
   ): void => {
     violations.push({ code, severity, description, blockIndex });
   };
+
+  // --- FOURTH WALL ---
+  // Spec §16.9 — nobody in the story knows there is a story. Caught in the
+  // wild from a seventeen-year-old on a basketball court: "Robin, this isn't a
+  // game where you can…". One line like that costs more than a dozen good
+  // paragraphs earn.
+  for (const hit of findFourthWallBreaks(turn.blocks, story)) {
+    push(
+      'SAFETY',
+      'ERROR',
+      `Stepped outside the fiction: "${hit.phrase}". ${fourthWallRepairNote([hit])}`,
+      hit.blockIndex,
+    );
+  }
 
   // --- VOICE ---
   // The player is "you" in narration, everywhere, always. A writer that reaches

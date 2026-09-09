@@ -20,6 +20,8 @@ import { repairNarrative, validateNarrative } from './validator.js';
 import { materializeProposals } from './memory.js';
 import { classifyClaim, directorNoteFor, proposalFor } from './player-canon.js';
 import { detectOutOfScope } from './entity-resolution.js';
+import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
+import { expandElliptical } from './elliptical.js';
 
 /**
  * Spec §17.1 — the turn pipeline, steps 4 through 12.
@@ -84,9 +86,20 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   const clock = createClock(timings);
 
   // Step 5 — intent parsing.
+  //
+  // "Again." is expanded into the sentence it means *before* any parser sees
+  // it, so both of them get it. Putting this inside a parser would have put it
+  // in exactly one, which is the mistake this codebase has now made three
+  // times.
   clock.start('parse');
-  const parsed = await deps.parser.parse(actionText, { story, state, intentId: `int_${turnId}` });
-  const intent = annotateScope(parsed, actionText);
+  const ellipsis = expandElliptical(actionText, options.recentTurns, story);
+  const parsed = await deps.parser.parse(ellipsis.text, { story, state, intentId: `int_${turnId}` });
+  const intent = annotateScope(
+    ellipsis.expanded && ellipsis.note
+      ? { ...parsed, rawAction: actionText, ambiguities: [...parsed.ambiguities, ellipsis.note] }
+      : parsed,
+    ellipsis.text,
+  );
   clock.end('parse');
 
   // Step 7 — the deterministic engine. This is where outcomes are decided.
@@ -148,6 +161,40 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     narrative = repairNarrative(narrative, report, context.player.name);
     report = validateNarrative({ context, turn: narrative });
     repaired = true;
+  }
+
+  // Spec §16.9 — a fourth-wall break is the one violation worth paying a second
+  // model call for. The deterministic repair can only drop the block, and the
+  // offending line is usually carrying the answer to what the player just
+  // tried: deleting "this isn't a game where you can fly" leaves them with no
+  // reply at all, which is worse than the break. So it is rewritten in-world
+  // instead, once, and only when one is actually present — which is rare.
+  const breaks = findFourthWallBreaks(narrative.blocks, story);
+  if (breaks.length > 0) {
+    const note = fourthWallRepairNote(breaks);
+    const rewritten = await deps.writer
+      .write(
+        {
+          ...context,
+          resolution: {
+            ...context.resolution,
+            privateFacts: [...context.resolution.privateFacts, { visibility: 'SELF', fact: note }],
+          },
+        },
+        plan,
+      )
+      .catch(() => null);
+
+    // Only accept the rewrite if it actually fixed it. A second break is a
+    // reason to fall back to dropping the block, not to try a third time.
+    if (rewritten && findFourthWallBreaks(rewritten.blocks, story).length === 0) {
+      narrative = rewritten;
+      repaired = true;
+    } else {
+      narrative = { ...narrative, blocks: narrative.blocks.filter((_, i) => !breaks.some((b) => b.blockIndex === i)) };
+      repaired = true;
+    }
+    report = validateNarrative({ context, turn: narrative });
   }
   clock.end('validate');
 
