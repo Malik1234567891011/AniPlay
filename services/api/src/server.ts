@@ -12,6 +12,7 @@ import {
   STORE_OFFERS,
   SubmitTurnRequest,
   type ContentDescriptor,
+  type ContinueCard,
   type DiscoverRail,
   type StorySummary,
 } from '@aniplay/contracts';
@@ -54,6 +55,7 @@ import {
   toTimeline,
   toWorldSheet,
 } from './projections.js';
+import { availableCategories, categoriesFor, searchCatalog } from './catalog-taxonomy.js';
 import { registerMediaRoutes } from './media-routes.js';
 import type { SessionRecord, StorySignals } from './repo/types.js';
 
@@ -72,14 +74,40 @@ import type { SessionRecord, StorySignals } from './repo/types.js';
  * shown nothing related to any of them. An option with nothing behind it is
  * worse than a shorter list.
  */
-async function genresFrom(repo: AppContext['repo']): Promise<Array<{ id: string; label: string }>> {
-  const counts = new Map<string, number>();
-  for (const story of await repo.listStories()) {
-    for (const tag of story.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+/**
+ * The player's own runs, newest first.
+ *
+ * Spec §7.2 item 3 — this only ever renders when there is genuinely something
+ * to continue, so it is built here and the client decides nothing.
+ */
+function labelFor(categories: readonly { id: string; label: string }[], id: string): string {
+  return categories.find((c) => c.id === id)?.label ?? id;
+}
+
+async function continueCardsFor(
+  ctx: AppContext,
+  user: { userId: string } | null,
+): Promise<ContinueCard[]> {
+  if (!user) return [];
+  const cards: ContinueCard[] = [];
+  for (const session of (await ctx.repo.listSessions(user.userId)).slice(0, 5)) {
+    const story = await ctx.repo.getStoryVersion(session.storyVersionId);
+    const state = await ctx.repo.getState(session.sessionId);
+    if (!story || !state || session.status === 'ARCHIVED') continue;
+    const turns = await ctx.repo.listTurns(session.sessionId);
+    cards.push(toContinueCard(session, story, state, turns));
   }
-  return [...counts]
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .map(([label]) => ({ id: label.toLowerCase().replace(/[^a-z0-9]+/g, '_'), label }));
+  return cards;
+}
+
+/**
+ * The browse vocabulary, for clients that ask at boot.
+ *
+ * Previously this returned every author tag ordered by frequency: 25 entries
+ * for 9 worlds, most of them used exactly once. That is metadata, not a menu.
+ */
+async function genresFrom(repo: AppContext['repo']): Promise<Array<{ id: string; label: string }>> {
+  return availableCategories(await repo.listStories()).map(({ id, label }) => ({ id, label }));
 }
 
 const CONTENT_DESCRIPTORS: ContentDescriptor[] = [
@@ -210,15 +238,26 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
   // --- Discover (§33.2) ---
 
-  app.get<{ Querystring: { tastes?: string } }>('/v1/discover', async (request) => {
+  app.get<{ Querystring: { tastes?: string; category?: string } }>('/v1/discover', async (request) => {
     const user = await optionalUser(ctx, request);
     const tastes = (request.query.tastes ?? '')
       .split(',')
       .map((tag) => tag.trim().toLowerCase())
       .filter(Boolean);
-    const stories = await ctx.repo.listStories();
+    const category = request.query.category?.trim() || null;
+
+    const allStories = await ctx.repo.listStories();
     const saved = user ? await ctx.repo.getSaves(user.userId) : [];
     const hidden = user ? await ctx.repo.getHidden(user.userId) : [];
+
+    // The browse rail is built from the whole catalog, not from the filtered
+    // view — otherwise selecting "Sports" would leave you with only "Sports"
+    // to select, and no way back.
+    const categories = availableCategories(allStories);
+
+    const stories = category
+      ? allStories.filter((story) => categoriesFor(story).includes(category))
+      : allStories;
 
     const entries: RankedEntry[] = [];
     for (const story of stories) {
@@ -228,105 +267,119 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     }
 
     const ranked = rankStories(entries);
-
     const rails: DiscoverRail[] = [];
+
+    // A page is not a template to be filled. With nine worlds, four rails of
+    // the same nine worlds is not abundance, it is the same shelf repeated —
+    // so each rail below only appears when it has something the others do not,
+    // and a filtered view collapses to a single honest grid.
+    const enough = (n: number): boolean => ranked.length >= n;
+
+    if (category) {
+      const label = categories.find((c) => c.id === category)?.label ?? category;
+      if (ranked.length > 0) {
+        rails.push({ id: 'category', title: label, kind: 'GENRE', subtitle: null, stories: ranked });
+      }
+      return { rails, continueCards: await continueCardsFor(ctx, user), categories, activeCategory: category };
+    }
+
     if (ranked[0]) {
       rails.push({ id: 'hero', title: 'Featured', kind: 'HERO', subtitle: null, stories: [ranked[0]] });
     }
-    if (ranked.length > 0) {
-      // "Based on what you picked" was the same array as Trending, in the same
-      // order, and the tastes the onboarding collected were never sent
-      // anywhere. Either the rail means something or it should not say that.
-      const matched = (summary: (typeof ranked)[number]): string[] =>
-        stories
-          .find((s) => s.storyId === summary.storyId)
-          ?.tags.filter((tag) => tastes.includes(tag.toLowerCase())) ?? [];
 
-      const forYou =
-        tastes.length > 0
-          ? [...ranked]
-              .filter((s) => matched(s).length > 0)
-              .sort((a, b) => matched(b).length - matched(a).length)
-          : [];
+    // Tastes the onboarding actually collected, spent on the one rail that
+    // claims to use them. Without a match this rail is absent rather than
+    // silently becoming a second copy of Trending under a personal-sounding name.
+    //
+    // Matched against categories, not raw tags, so the words the onboarding
+    // asked in are the words the browse rail uses and the words search
+    // understands. One vocabulary the player can learn once.
+    const matched = (summary: (typeof ranked)[number]): string[] => {
+      const story = allStories.find((s) => s.storyId === summary.storyId);
+      if (!story) return [];
+      return categoriesFor(story)
+        .filter((id) => tastes.includes(id) || tastes.includes(labelFor(categories, id).toLowerCase()))
+        .map((id) => labelFor(categories, id));
+    };
 
-      // Named as the catalog spells them, not as the query did.
+    const forYou =
+      tastes.length > 0
+        ? [...ranked].filter((s) => matched(s).length > 0).sort((a, b) => matched(b).length - matched(a).length)
+        : [];
+
+    if (forYou.length > 1) {
       const because = [...new Set(forYou.flatMap(matched))].slice(0, 3);
-
-      rails.push(
-        forYou.length > 0
-          ? {
-              id: 'for_you',
-              title: 'For you',
-              kind: 'FOR_YOU',
-              subtitle: `Because you picked ${because.join(', ')}`,
-              stories: forYou,
-            }
-          : { id: 'for_you', title: 'Everything', kind: 'FOR_YOU', subtitle: null, stories: ranked },
-      );
-      rails.push({ id: 'trending', title: 'Trending now', kind: 'TRENDING', subtitle: null, stories: ranked });
       rails.push({
-        id: 'new',
-        title: 'New worlds',
-        kind: 'NEW',
-        subtitle: null,
-        // Spec §7.4 — 15–20% of inventory is reserved for exploration, so new
-        // worlds are not permanently buried by incumbents.
-        stories: [...ranked].reverse().slice(0, Math.max(1, Math.ceil(ranked.length * 0.2))),
+        id: 'for_you',
+        title: 'For you',
+        kind: 'FOR_YOU',
+        subtitle: `Because you picked ${because.join(', ')}`,
+        stories: forYou,
       });
     }
 
-    const continueCards = [];
-    if (user) {
-      for (const session of (await ctx.repo.listSessions(user.userId)).slice(0, 5)) {
-        const story = await ctx.repo.getStoryVersion(session.storyVersionId);
-        const state = await ctx.repo.getState(session.sessionId);
-        if (!story || !state || session.status === 'ARCHIVED') continue;
-        const turns = await ctx.repo.listTurns(session.sessionId);
-        continueCards.push(toContinueCard(session, story, state, turns));
-      }
-      if (continueCards.length > 0) {
-        rails.splice(1, 0, {
-          id: 'continue',
-          title: 'Continue',
-          kind: 'CONTINUE',
-          subtitle: null,
-          stories: [],
-        });
-      }
+    // Trending is only a claim worth making when there is real play behind it.
+    const played = ranked.filter((s) => s.runs > 0);
+    if (played.length >= 3) {
+      rails.push({ id: 'trending', title: 'Trending now', kind: 'TRENDING', subtitle: null, stories: played });
     }
 
-    return { rails, continueCards };
+    const newest = [...ranked].reverse().slice(0, Math.max(1, Math.ceil(ranked.length * 0.3)));
+    if (enough(6) && newest.length >= 2) {
+      rails.push({ id: 'new', title: 'New on Plotbreak', kind: 'NEW', subtitle: null, stories: newest });
+    }
+
+    // Everything, always, as the floor of the page — a grid rather than
+    // another horizontal rail, so the catalog is browsable rather than
+    // sampled. This is the rail that makes the page feel like a catalog.
+    rails.push({
+      id: 'all',
+      title: 'All worlds',
+      kind: 'GENRE',
+      subtitle: null,
+      stories: ranked,
+    });
+
+    return { rails, continueCards: await continueCardsFor(ctx, user), categories, activeCategory: null };
   });
 
-  app.get<{ Querystring: { q?: string } }>('/v1/search', async (request) => {
+  app.get<{ Querystring: { q?: string; category?: string } }>('/v1/search', async (request) => {
     const user = await optionalUser(ctx, request);
     const saved = user ? await ctx.repo.getSaves(user.userId) : [];
-    const query = (request.query.q ?? '').trim().toLowerCase();
-    const stories = await ctx.repo.listStories();
+    const query = (request.query.q ?? '').trim();
+    const category = request.query.category?.trim() || null;
+
+    // Deliberately not filtered by the hide list: hiding is about what gets
+    // recommended, and a player typing a story's name is asking for that
+    // story, not being offered it.
+    let stories = await ctx.repo.listStories();
+    if (category) stories = stories.filter((story) => categoriesFor(story).includes(category));
+
+    // Spec §7.5 — title, creator, tags, premise, character names, mechanics.
+    // Scored and token-based rather than one substring test over a joined
+    // blob, so "magic school" reaches a world tagged "Magic academy" and
+    // "basketball" reaches one tagged Sports whose premise never says the word.
+    const hits = searchCatalog(stories, query);
+    const order = new Map(hits.map((hit, index) => [hit.storyId, index]));
 
     const results: RankedEntry[] = [];
     for (const story of stories) {
-      // Deliberately not filtered by the hide list: hiding is about what gets
-      // recommended, and a player typing a story's name is asking for that
-      // story, not being offered it.
-      // Spec §7.5 — title, creator, tags, premise, character names, mechanics.
-      const haystack = [
-        story.title,
-        story.creatorName,
-        story.premise,
-        story.hook,
-        ...story.tags,
-        ...story.mechanicsChips,
-        ...story.characters.map((c) => c.name),
-      ]
-        .join(' ')
-        .toLowerCase();
-      if (query.length > 0 && !haystack.includes(query)) continue;
+      if (!order.has(story.storyId)) continue;
       const signals = await ctx.repo.getSignals(story.storyId);
       results.push({ summary: toStorySummary(story, signals, saved.includes(story.storyId)), signals });
     }
 
-    return { results: rankStories(results) };
+    // An empty query is a browse, so it ranks by the catalog's own signals. A
+    // real query ranks by how well it matched, which the signals must not
+    // override — the most popular world is not the answer to "pirates".
+    const ranked =
+      query.length === 0
+        ? rankStories(results)
+        : results
+            .map((entry) => entry.summary)
+            .sort((a, b) => (order.get(a.storyId) ?? 0) - (order.get(b.storyId) ?? 0));
+
+    return { results: ranked };
   });
 
   app.get<{ Params: { storyId: string } }>('/v1/stories/:storyId', async (request, reply) => {

@@ -110,10 +110,30 @@ export const ContinueCard = z
   .strict();
 export type ContinueCard = z.infer<typeof ContinueCard>;
 
+/**
+ * A browse category, with how many worlds are actually in it.
+ *
+ * The count is not decoration — it is what lets the client refuse to render a
+ * category that would open onto an empty screen, which is the fastest way to
+ * make a small catalog feel padded.
+ */
+export const DiscoverCategory = z
+  .object({
+    id: z.string(),
+    label: z.string(),
+    count: z.number().int().min(0),
+  })
+  .strict();
+export type DiscoverCategory = z.infer<typeof DiscoverCategory>;
+
 export const DiscoverResponse = z
   .object({
     rails: z.array(DiscoverRail),
     continueCards: z.array(ContinueCard),
+    /** The browse rail. Derived from the catalog, never authored. */
+    categories: z.array(DiscoverCategory).default([]),
+    /** Echoed back so the client can tell which filter produced this page. */
+    activeCategory: z.string().nullable().default(null),
   })
   .strict();
 export type DiscoverResponse = z.infer<typeof DiscoverResponse>;

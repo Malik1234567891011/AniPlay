@@ -5,6 +5,7 @@ import { createDefaultPipeline, RuleBasedModerator } from '@aniplay/director';
 import { JobQueue } from '@aniplay/worker';
 import { buildServer } from './server.js';
 import { assertProductionReady, createAppContext, loadConfig } from './context.js';
+import { categoriesFor } from './catalog-taxonomy.js';
 import { MemoryRepository } from './repo/memory.js';
 import { WalletService } from './wallet.js';
 import type { TurnRecord } from '@aniplay/contracts';
@@ -1213,18 +1214,28 @@ describe('taste-aware discover', () => {
       stories: Array<{ storyId: string }>;
     };
 
-  it('offers only tastes the catalog can answer', async () => {
+  it('offers only categories the catalog can answer', async () => {
+    // A category that opens onto an empty screen is the fastest way to make a
+    // small catalog feel padded, so the vocabulary is derived from the shelf.
     const bootstrap = (await app.inject({ method: 'GET', url: '/v1/bootstrap' })).json();
     const stories = await ctx.repo.listStories();
-    const authored = new Set(stories.flatMap((s) => s.tags));
     expect(bootstrap.genres.length).toBeGreaterThan(0);
     for (const genre of bootstrap.genres) {
-      expect(authored.has(genre.label), `${genre.label} matches no world`).toBe(true);
+      const inIt = stories.filter((s) => categoriesFor(s).includes(genre.id));
+      expect(inIt.length, `${genre.label} matches no world`).toBeGreaterThan(0);
     }
   });
 
+  it('speaks one vocabulary — browse, taste and search agree', async () => {
+    const bootstrap = (await app.inject({ method: 'GET', url: '/v1/bootstrap' })).json();
+    const discover = (await app.inject({ method: 'GET', url: '/v1/discover' })).json();
+    expect(discover.categories.map((c: { id: string }) => c.id)).toEqual(
+      bootstrap.genres.map((g: { id: string }) => g.id),
+    );
+  });
+
   it('puts what you picked first, and says why', async () => {
-    const response = await app.inject({ method: 'GET', url: '/v1/discover?tastes=Romance' });
+    const response = await app.inject({ method: 'GET', url: '/v1/discover?tastes=romance' });
     const forYou = rail(response.json(), 'for_you');
 
     expect(forYou.subtitle).toContain('Romance');
@@ -1232,20 +1243,52 @@ describe('taste-aware discover', () => {
     const stories = await ctx.repo.listStories();
     for (const summary of forYou.stories) {
       const story = stories.find((s) => s.storyId === summary.storyId)!;
-      expect(story.tags, `${story.title} is in a Romance rail`).toContain('Romance');
+      expect(categoriesFor(story), `${story.title} is in a Romance rail`).toContain('romance');
     }
   });
 
   it('does not claim to be personalised when nothing was picked', async () => {
-    const forYou = rail((await app.inject({ method: 'GET', url: '/v1/discover' })).json(), 'for_you');
-    expect(forYou.subtitle).toBeNull();
-    expect(forYou.title).not.toBe('For you');
+    const body = (await app.inject({ method: 'GET', url: '/v1/discover' })).json();
+    // Absent, rather than present under a personal-sounding name with the same
+    // contents as every other rail.
+    expect(rail(body, 'for_you')).toBeUndefined();
+    expect(body.rails.some((r: { id: string }) => r.id === 'all')).toBe(true);
   });
 
   it('hides nothing — an unmatched taste still leaves the catalog reachable', async () => {
-    const body = (await app.inject({ method: 'GET', url: '/v1/discover?tastes=Cozy' })).json();
+    const body = (await app.inject({ method: 'GET', url: '/v1/discover?tastes=cozy' })).json();
     const all = await ctx.repo.listStories();
-    expect(rail(body, 'trending').stories).toHaveLength(all.length);
+    expect(rail(body, 'all').stories).toHaveLength(all.length);
+  });
+
+  it('filters to a category, and keeps the whole rail selectable', async () => {
+    const body = (await app.inject({ method: 'GET', url: '/v1/discover?category=romance' })).json();
+    const stories = await ctx.repo.listStories();
+
+    expect(body.activeCategory).toBe('romance');
+    expect(body.rails.every((r: { stories: unknown[] }) => r.stories.length > 0)).toBe(true);
+    const shown = body.rails.flatMap((r: { stories: Array<{ storyId: string }> }) => r.stories);
+    expect(shown.length).toBeGreaterThan(0);
+    for (const summary of shown) {
+      const story = stories.find((s) => s.storyId === summary.storyId)!;
+      expect(categoriesFor(story), story.title).toContain('romance');
+    }
+    // The rail itself is always the whole vocabulary, or a filter is a trapdoor.
+    expect(body.categories.length).toBe(
+      (await app.inject({ method: 'GET', url: '/v1/discover' })).json().categories.length,
+    );
+  });
+
+  it('never offers a category that would open onto nothing', async () => {
+    const body = (await app.inject({ method: 'GET', url: '/v1/discover' })).json();
+    for (const category of body.categories) {
+      const filtered = (
+        await app.inject({ method: 'GET', url: `/v1/discover?category=${category.id}` })
+      ).json();
+      const count = filtered.rails.flatMap((r: { stories: unknown[] }) => r.stories).length;
+      expect(count, `${category.label} is empty`).toBeGreaterThan(0);
+      expect(count).toBe(category.count);
+    }
   });
 });
 

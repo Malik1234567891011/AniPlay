@@ -21,10 +21,11 @@ import {
   keyArtPrompt,
   locationPrompt,
   MediaGatewayError,
-  STYLE_SPINE_VERSION,
   type GeneratedAsset,
   type ImagePromptSpec,
 } from '@aniplay/director';
+import { coverAssetKey } from '@aniplay/contracts';
+import { compositeTitle } from './cover-title.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const ASSET_DIR = join(ROOT, 'infra/seed/assets');
@@ -80,11 +81,15 @@ async function main(): Promise<void> {
 
   const args = process.argv.slice(2);
   const force = args.includes('--force');
+  // Proving what a run would touch matters more than usual here: the rule is
+  // that finished covers are never regenerated, and "I checked the code" is a
+  // worse guarantee than a list of exactly which files would be written.
+  const dryRun = args.includes('--dry-run');
   const only = args.find((a) => a.startsWith('--only='))?.slice('--only='.length) ?? null;
   const concurrency = Number(args.find((a) => a.startsWith('--concurrency='))?.slice('--concurrency='.length) ?? 3);
 
-  const gateway = createMediaGatewayFromEnv();
-  if (!gateway) {
+  const gateway = dryRun ? null : createMediaGatewayFromEnv();
+  if (!gateway && !dryRun) {
     console.error('No OPENAI_API_KEY configured. Set it in .env — the app falls back to placeholder art without it.');
     process.exit(1);
   }
@@ -104,7 +109,7 @@ async function main(): Promise<void> {
     ? (JSON.parse(await readFile(MANIFEST, 'utf8')) as Record<string, ManifestEntry>)
     : {};
 
-  console.log(`${filtered.length} assets planned · concurrency ${concurrency} · style ${STYLE_SPINE_VERSION}`);
+  console.log(`${filtered.length} assets planned · concurrency ${concurrency}`);
 
   let generated = 0;
   let skipped = 0;
@@ -115,16 +120,40 @@ async function main(): Promise<void> {
     const file = `${spec.assetKey}.png`;
     const path = join(ASSET_DIR, file);
 
-    if (!force && (await exists(path)) && manifest[spec.assetKey]?.styleVersion === STYLE_SPINE_VERSION) {
+    // Against the spec's own direction, not a global. Bumping the cover
+    // standard for new worlds must never mark a finished asset stale — that is
+    // the difference between "new worlds get the new look" and "everything is
+    // silently regenerated overnight".
+    if (!force && (await exists(path)) && manifest[spec.assetKey]?.styleVersion === spec.styleVersion) {
       skipped++;
       return;
     }
 
+    if (dryRun) {
+      generated++;
+      console.log(`  · would write ${spec.assetKey} (${spec.kind}, ${spec.styleVersion})`);
+      return;
+    }
+
     try {
-      const asset = await gateway.generateImage(spec);
+      let asset = await gateway!.generateImage(spec);
+
+      // The art reserved a quiet band; the wordmark goes on here rather than
+      // being spelled by a model that cannot spell.
+      if (spec.titleSafeArea) {
+        const story = LAUNCH_CATALOG.find((s) => coverAssetKey(s.storyId) === spec.assetKey);
+        if (story) {
+          const plated = await compositeTitle(Buffer.from(asset.bytes), {
+            title: story.title,
+            kicker: story.fantasyLabel,
+            safeTop: spec.titleSafeArea.top,
+          });
+          asset = { ...asset, bytes: plated.bytes, width: plated.width, height: plated.height };
+        }
+      }
 
       // Spec §19.5 — nothing reaches a player without passing acceptance.
-      const check = await gateway.moderateMedia(asset);
+      const check = await gateway!.moderateMedia(asset);
       if (!check.approved) {
         failed++;
         console.error(`  ✗ ${spec.assetKey} — rejected: ${check.reason}`);
@@ -141,7 +170,7 @@ async function main(): Promise<void> {
         alt: spec.alt,
         width: asset.width,
         height: asset.height,
-        styleVersion: STYLE_SPINE_VERSION,
+        styleVersion: spec.styleVersion,
         provenance: asset.provenance,
       };
       await writeFile(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -159,7 +188,9 @@ async function main(): Promise<void> {
   });
 
   console.log(
-    `\nDone. ${generated} generated, ${skipped} already current, ${failed} failed. Approx cost $${costUsd.toFixed(2)}.`,
+    dryRun
+      ? `\nDry run. ${generated} would be written, ${skipped} already current and untouched.`
+      : `\nDone. ${generated} generated, ${skipped} already current, ${failed} failed. Approx cost $${costUsd.toFixed(2)}.`,
   );
   if (failed > 0) process.exitCode = 1;
 }
