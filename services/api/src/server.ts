@@ -669,8 +669,15 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   app.get<{ Params: { turnId: string }; Querystring: { token?: string } }>(
     '/v1/turns/:turnId/stream',
     async (request, reply) => {
-      const auth = readAuth(request);
-      if (!auth) return sendError(reply, 401, 'UNAUTHENTICATED', 'Sign in to continue.');
+      const auth = await readAuth(ctx, request);
+      if (auth.kind !== 'OK') {
+        return sendError(
+          reply,
+          401,
+          auth.kind === 'EXPIRED' ? 'TOKEN_EXPIRED' : 'UNAUTHENTICATED',
+          'Sign in to continue.',
+        );
+      }
 
       const token = request.query.token ?? '';
       const { turnId } = request.params;
@@ -686,7 +693,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
         if (!reply.raw.writableEnded) reply.raw.write(chunk);
       };
 
-      const result = hub.subscribe(turnId, token, auth.userId, (event) => {
+      const result = hub.subscribe(turnId, token, auth.user.userId, (event) => {
         write(formatSse(event));
         if (event.event === 'turn.completed' || event.event === 'turn.failed') {
           reply.raw.end();
@@ -1006,20 +1013,24 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   app.post<{ Body: { guestUserId?: string; email?: string; displayName?: string } }>(
     '/v1/auth/guest-migrate',
     async (request, reply) => {
-      const auth = readAuth(request);
-      if (!auth) return sendError(reply, 401, 'UNAUTHENTICATED', 'Provide the new account token.');
-      if (auth.isGuest) {
+      const auth = await readAuth(ctx, request);
+      if (auth.kind === 'EXPIRED') {
+        return sendError(reply, 401, 'TOKEN_EXPIRED', 'Your session expired. Sign in again.');
+      }
+      if (auth.kind !== 'OK') {
+        return sendError(reply, 401, 'UNAUTHENTICATED', 'Provide the new account token.');
+      }
+      if (auth.user.isGuest) {
         return sendError(reply, 400, 'INVALID_REQUEST', 'Authenticate first, then migrate.');
       }
 
       const guestUserId = request.body?.guestUserId;
-      let user = await ctx.repo.getUser(auth.userId);
+      let user = await ctx.repo.getUser(auth.user.userId);
       if (!user) {
-        user = newUserRecord(auth.userId, false);
-        user.email = request.body?.email ?? null;
-        user.displayName = request.body?.displayName ?? 'Player';
+        user = newUserRecord(auth.user.userId, false, auth.user.email ?? request.body?.email ?? null);
+        if (request.body?.displayName) user.displayName = request.body.displayName;
         await ctx.repo.createUser(user);
-        await ctx.wallet.grantNewUser(auth.userId);
+        await ctx.wallet.grantNewUser(auth.user.userId);
       }
 
       if (!guestUserId) return { migrated: false, sessionsMoved: 0 };
@@ -1032,13 +1043,13 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
       const sessions = await ctx.repo.listSessions(guestUserId);
       for (const session of sessions) {
-        await ctx.repo.updateSession(session.sessionId, { userId: auth.userId } as Partial<SessionRecord>);
+        await ctx.repo.updateSession(session.sessionId, { userId: auth.user.userId } as Partial<SessionRecord>);
       }
 
       // Spec §6.5 — grants migrate; purchases are never duplicated. A guest
       // cannot have purchased, so only the new-user grant is in play, and the
       // new account already received its own.
-      await ctx.repo.updateUser(auth.userId, { migratedFromGuestId: guestUserId });
+      await ctx.repo.updateUser(auth.user.userId, { migratedFromGuestId: guestUserId });
       await ctx.repo.deleteUser(guestUserId);
 
       return { migrated: true, sessionsMoved: sessions.length };

@@ -4,6 +4,8 @@ import { createGatewayFromEnv, ModelDirector, ModelIntentParser, ModelWriter, cr
 import { createMediaGatewayFromEnv } from '@aniplay/director';
 import { JobQueue, registerHandlers } from '@aniplay/worker';
 import { MemoryRepository } from './repo/memory.js';
+import { PostgresRepository } from './repo/postgres.js';
+import { createTokenVerifierFromEnv, type TokenVerifier, type VerifiedToken } from './auth.js';
 import { createStoreVerifierFromEnv, type StoreVerifier } from './store-verifier.js';
 import type { Repository, UserRecord } from './repo/types.js';
 import { WalletService } from './wallet.js';
@@ -85,11 +87,35 @@ export interface AppContext {
    * posting a transaction id it made up.
    */
   readonly storeVerifier: StoreVerifier;
+  /**
+   * Decides whether a bearer token is real and whose it is. Supabase Auth in
+   * production; a token-is-the-user-id stub locally, which cannot be selected
+   * in production (§6.4).
+   */
+  readonly auth: TokenVerifier;
+}
+
+/**
+ * Postgres when DATABASE_URL names one, the in-process store otherwise.
+ *
+ * The in-process store is a legitimate mode — it is what makes `npm run api`
+ * work with no infrastructure, and what the unit tests run against — but it
+ * loses every session when the process exits, so production is not allowed to
+ * reach it (`assertProductionReady`).
+ */
+export function createRepositoryFromEnv(env: NodeJS.ProcessEnv = process.env): Repository {
+  const url = env.DATABASE_URL;
+  if (!url) return new MemoryRepository();
+  return new PostgresRepository({
+    connectionString: url,
+    ssl: /supabase|amazonaws|render|neon/.test(url),
+    maxConnections: Number(env.DATABASE_POOL_MAX ?? 10),
+  });
 }
 
 export function createAppContext(overrides: Partial<AppContext> = {}): AppContext {
   const config = overrides.config ?? loadConfig();
-  const repo = overrides.repo ?? new MemoryRepository();
+  const repo = overrides.repo ?? createRepositoryFromEnv();
   const wallet = overrides.wallet ?? new WalletService(repo);
 
   // Spec §31.4 — the gateway is selected by environment. With no key the
@@ -128,6 +154,7 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
     modelProvider: overrides.modelProvider ?? gateway?.name ?? null,
     jobs,
     storeVerifier: overrides.storeVerifier ?? createStoreVerifierFromEnv(config),
+    auth: overrides.auth ?? createTokenVerifierFromEnv(config),
   };
 }
 
@@ -143,55 +170,80 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
  */
 const GUEST_PREFIX = 'guest_';
 
-/**
- * A token is a user id here, and nothing verifies it. `assertProductionReady`
- * is what stops that reaching production; this comment is what stops someone
- * reading the function and assuming it authenticates anything.
- */
-
 export interface AuthedUser {
   readonly userId: string;
   readonly isGuest: boolean;
+  readonly email: string | null;
 }
 
-export function readAuth(request: FastifyRequest): AuthedUser | null {
+export type AuthOutcome =
+  | { readonly kind: 'ANONYMOUS' }
+  | { readonly kind: 'EXPIRED' }
+  | { readonly kind: 'INVALID' }
+  | { readonly kind: 'OK'; readonly user: AuthedUser };
+
+/**
+ * Reads and verifies the bearer token.
+ *
+ * An absent token is anonymous, not an error: browsing and story detail work
+ * signed out (§6.3). A present token that does not verify is an error, and an
+ * expired one is distinguished from a forged one so the client knows to refresh
+ * rather than to sign the player out.
+ */
+export async function readAuth(ctx: AppContext, request: FastifyRequest): Promise<AuthOutcome> {
   const header = request.headers.authorization;
-  if (!header?.startsWith('Bearer ')) return null;
+  if (!header?.startsWith('Bearer ')) return { kind: 'ANONYMOUS' };
   const token = header.slice('Bearer '.length).trim();
-  if (token.length === 0) return null;
-  return { userId: token, isGuest: token.startsWith(GUEST_PREFIX) };
+  if (token.length === 0) return { kind: 'ANONYMOUS' };
+
+  const result = await ctx.auth.verify(token);
+  if (!result.ok) return { kind: result.reason };
+  return { kind: 'OK', user: toAuthedUser(result.token) };
+}
+
+function toAuthedUser(token: VerifiedToken): AuthedUser {
+  return {
+    userId: token.userId,
+    // Supabase marks anonymous sessions; the dev verifier uses the prefix.
+    isGuest: token.isGuest || token.userId.startsWith(GUEST_PREFIX),
+    email: token.email,
+  };
 }
 
 export async function optionalUser(ctx: AppContext, request: FastifyRequest): Promise<UserRecord | null> {
-  const auth = readAuth(request);
-  if (!auth) return null;
-  return ctx.repo.getUser(auth.userId);
+  const auth = await readAuth(ctx, request);
+  if (auth.kind !== 'OK') return null;
+  return ctx.repo.getUser(auth.user.userId);
 }
 
 /**
- * Resolves the caller, creating the record on first sight of a guest token so a
- * guest can play without a round-trip to a signup screen.
+ * Resolves the caller, creating the profile the first time a verified token
+ * arrives so a player never waits on a separate provisioning round trip.
+ *
+ * The record is created from claims the verifier vouched for, never from
+ * anything the client asserted about itself.
  */
 export async function resolveUser(ctx: AppContext, request: FastifyRequest): Promise<UserRecord | null> {
-  const auth = readAuth(request);
-  if (!auth) return null;
+  const auth = await readAuth(ctx, request);
+  if (auth.kind !== 'OK') return null;
 
-  const existing = await ctx.repo.getUser(auth.userId);
+  const existing = await ctx.repo.getUser(auth.user.userId);
   if (existing) return existing;
-  if (!auth.isGuest) return null;
 
-  const user = newUserRecord(auth.userId, true);
+  const user = newUserRecord(auth.user.userId, auth.user.isGuest, auth.user.email);
   await ctx.repo.createUser(user);
-  await ctx.wallet.grantNewUser(auth.userId);
+  await ctx.wallet.grantNewUser(auth.user.userId);
   return user;
 }
 
-export function newUserRecord(userId: string, isGuest: boolean): UserRecord {
+export function newUserRecord(userId: string, isGuest: boolean, email: string | null = null): UserRecord {
   return {
     userId,
-    displayName: isGuest ? 'Guest' : 'Player',
-    handle: userId.slice(0, 12),
-    email: null,
+    displayName: isGuest ? 'Guest' : (email?.split('@')[0] ?? 'Player'),
+    // Unique per account: a handle collision between two players is a bug the
+    // database would report as a constraint violation at signup.
+    handle: `${isGuest ? 'guest' : 'player'}_${userId.replace(/-/g, '').slice(0, 12)}`,
+    email,
     isGuest,
     avatarUrl: null,
     ageVerified: false,
@@ -215,6 +267,22 @@ export async function requireUser(
   request: FastifyRequest,
   reply: FastifyReply,
 ): Promise<UserRecord | null> {
+  const auth = await readAuth(ctx, request);
+
+  // An expired token is a different problem from a bad one, and the client can
+  // fix it silently by refreshing. Saying so is the difference between a
+  // seamless refresh and signing a player out mid-scene.
+  if (auth.kind === 'EXPIRED') {
+    await reply
+      .code(401)
+      .send({ code: 'TOKEN_EXPIRED', message: 'Your session expired. Signing you back in.' });
+    return null;
+  }
+  if (auth.kind === 'INVALID') {
+    await reply.code(401).send({ code: 'UNAUTHENTICATED', message: 'Sign in to continue.' });
+    return null;
+  }
+
   const user = await resolveUser(ctx, request);
   if (!user) {
     await reply.code(401).send({ code: 'UNAUTHENTICATED', message: 'Sign in to continue.' });

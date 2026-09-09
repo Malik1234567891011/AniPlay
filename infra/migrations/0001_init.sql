@@ -16,8 +16,7 @@
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
--- Spec §17.6 — memory retrieval blends semantic similarity with other signals.
-CREATE EXTENSION IF NOT EXISTS "vector";
+-- 0000_bootstrap.sql has already installed pgvector, or stood in for it.
 
 -- ---------------------------------------------------------------------------
 -- Identity (§34.1)
@@ -64,14 +63,17 @@ CREATE TABLE creator_profiles (
 -- ---------------------------------------------------------------------------
 
 CREATE TABLE stories (
-  story_id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  story_id           text PRIMARY KEY DEFAULT gen_random_uuid()::text,
   slug               text UNIQUE NOT NULL,
-  creator_id         uuid NOT NULL REFERENCES profiles (user_id),
+  -- Null for the official catalog, which ships with the app and belongs to
+  -- nobody. A player-made world must name its author.
+  creator_id         uuid REFERENCES profiles (user_id),
   official           boolean NOT NULL DEFAULT false,
   -- Points at the version Discover should surface. Null until first publish.
-  published_version_id uuid,
+  published_version_id text,
   status             text NOT NULL DEFAULT 'DRAFT'
                        CHECK (status IN ('DRAFT','IN_REVIEW','PUBLISHED','UNLISTED','REMOVED')),
+  CONSTRAINT stories_creator_required CHECK (official OR creator_id IS NOT NULL),
   deleted_at         timestamptz,
   created_at         timestamptz NOT NULL DEFAULT now(),
   updated_at         timestamptz NOT NULL DEFAULT now()
@@ -80,8 +82,8 @@ CREATE TABLE stories (
 -- Spec §31.6 — a published version is immutable. Editing means publishing a new
 -- one; live sessions stay pinned to the version they started on (§35.3).
 CREATE TABLE story_versions (
-  story_version_id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  story_id           uuid NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
+  story_version_id   text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  story_id           text NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
   version            integer NOT NULL,
   -- The whole authored definition, validated against the StoryVersion contract
   -- before insert. Kept as one document because it is read whole and never
@@ -111,20 +113,20 @@ CREATE TABLE story_tags (
 );
 
 CREATE TABLE story_version_tags (
-  story_version_id   uuid NOT NULL REFERENCES story_versions (story_version_id) ON DELETE CASCADE,
+  story_version_id   text NOT NULL REFERENCES story_versions (story_version_id) ON DELETE CASCADE,
   tag                text NOT NULL REFERENCES story_tags (tag),
   PRIMARY KEY (story_version_id, tag)
 );
 
 -- Generated art and audio. Spec §32.6 — provenance is stored on every asset.
 CREATE TABLE media_assets (
-  asset_id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  asset_id           text PRIMARY KEY DEFAULT gen_random_uuid()::text,
   asset_key          text UNIQUE NOT NULL,
   kind               text NOT NULL
                        CHECK (kind IN ('COVER','KEY_ART','LOCATION_STAGE','CHARACTER_PORTRAIT',
                                        'PLAYER_PORTRAIT','HERO_FRAME','VOICE_LINE','ANIMATION')),
   owner_user_id      uuid REFERENCES profiles (user_id) ON DELETE SET NULL,
-  story_version_id   uuid REFERENCES story_versions (story_version_id) ON DELETE CASCADE,
+  story_version_id   text REFERENCES story_versions (story_version_id) ON DELETE CASCADE,
   url                text NOT NULL,
   width              integer,
   height             integer,
@@ -150,19 +152,19 @@ CREATE INDEX media_assets_owner_idx ON media_assets (owner_user_id);
 -- ---------------------------------------------------------------------------
 
 CREATE TABLE story_sessions (
-  session_id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id         text PRIMARY KEY DEFAULT gen_random_uuid()::text,
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
-  story_id           uuid NOT NULL REFERENCES stories (story_id),
+  story_id           text NOT NULL REFERENCES stories (story_id),
   -- Pinned at creation and never changed without an explicit, validated
   -- migration the player opted into (§35.3).
-  story_version_id   uuid NOT NULL REFERENCES story_versions (story_version_id),
+  story_version_id   text NOT NULL REFERENCES story_versions (story_version_id),
   display_name       text NOT NULL,
   status             text NOT NULL DEFAULT 'ACTIVE'
                        CHECK (status IN ('ACTIVE','COMPLETED','ARCHIVED')),
   -- Spec §12.1 — the root seed. Never leaves the server; clients see its hash.
   session_seed       text NOT NULL,
   branch_key         text NOT NULL DEFAULT 'main',
-  forked_from_session_id uuid REFERENCES story_sessions (session_id) ON DELETE SET NULL,
+  forked_from_session_id text REFERENCES story_sessions (session_id) ON DELETE SET NULL,
   forked_at_turn_index integer,
   -- Optimistic concurrency (§17.4). Every commit bumps this.
   revision           integer NOT NULL DEFAULT 0,
@@ -177,8 +179,8 @@ CREATE INDEX story_sessions_story_idx ON story_sessions (story_id);
 -- Spec §35.1/§35.2 — snapshots exist for fast load. The event log is the truth;
 -- a snapshot is a cache of it at a revision.
 CREATE TABLE session_snapshots (
-  snapshot_id        uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  snapshot_id        text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   revision           integer NOT NULL,
   state              jsonb NOT NULL,
   created_at         timestamptz NOT NULL DEFAULT now(),
@@ -188,8 +190,8 @@ CREATE TABLE session_snapshots (
 CREATE INDEX session_snapshots_latest_idx ON session_snapshots (session_id, revision DESC);
 
 CREATE TABLE turns (
-  turn_id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  turn_id            text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   turn_index         integer NOT NULL,
   -- Null on the authored opening turn, which the player did not write.
   action_text        text,
@@ -201,8 +203,13 @@ CREATE TABLE turns (
   mutations          jsonb NOT NULL DEFAULT '[]',
   state_deltas       jsonb NOT NULL DEFAULT '[]',
   suggestions        jsonb NOT NULL DEFAULT '[]',
+  -- The line the client shows under the beat, asking what you do next.
+  end_state_prompt   text NOT NULL DEFAULT '',
   media_plan         jsonb,
-  hero_asset_id      uuid REFERENCES media_assets (asset_id) ON DELETE SET NULL,
+  hero_asset_id      text REFERENCES media_assets (asset_id) ON DELETE SET NULL,
+  -- Denormalised from the asset so replaying a timeline is one query. An image
+  -- generated after the turn committed is attached here (§17.2).
+  hero_image_url     text,
   -- Spec §12.1 — the audit handle. The seed itself is derived, never stored raw.
   rng_seed_hash      text NOT NULL,
   revision_after     integer NOT NULL,
@@ -215,9 +222,9 @@ CREATE INDEX turns_session_idx ON turns (session_id, turn_index DESC);
 
 -- Spec §35.1 — append-only. There is deliberately no UPDATE or DELETE policy.
 CREATE TABLE game_events (
-  event_id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
-  turn_id            uuid REFERENCES turns (turn_id) ON DELETE CASCADE,
+  event_id           text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  turn_id            text REFERENCES turns (turn_id) ON DELETE CASCADE,
   sequence           integer NOT NULL,
   type               text NOT NULL,
   subject_id         text NOT NULL,
@@ -233,8 +240,8 @@ CREATE INDEX game_events_turn_idx ON game_events (turn_id);
 -- Spec §17.6 — retrieval filters by visibility *before* ranking, so an NPC's
 -- prompt can never contain something they were not told.
 CREATE TABLE memory_facts (
-  fact_id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  fact_id            text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   subject_id         text NOT NULL,
   predicate          text NOT NULL,
   value              jsonb,
@@ -248,10 +255,13 @@ CREATE TABLE memory_facts (
   corrected_by_player boolean NOT NULL DEFAULT false,
   created_at_turn    integer NOT NULL,
   created_at_world_minute integer NOT NULL,
-  source_event_ids   uuid[] NOT NULL DEFAULT '{}',
+  source_event_ids   text[] NOT NULL DEFAULT '{}',
   -- A superseded fact is history, not canon. Retrieval excludes it.
-  superseded_by_fact_id uuid REFERENCES memory_facts (fact_id) ON DELETE SET NULL,
-  embedding          vector(1536),
+  superseded_by_fact_id text REFERENCES memory_facts (fact_id) ON DELETE SET NULL,
+  -- Unconstrained here so the column exists with or without pgvector; the
+  -- dimension and the ANN index are applied together below, only when the real
+  -- extension is present.
+  embedding          public.vector,
   created_at         timestamptz NOT NULL DEFAULT now()
 );
 
@@ -260,13 +270,20 @@ CREATE INDEX memory_facts_session_idx ON memory_facts (session_id)
 CREATE INDEX memory_facts_subject_idx ON memory_facts (session_id, subject_id);
 -- IVFFlat needs data before it is worth building; created here so the shape is
 -- documented, and rebuilt by the analytics rollup once rows exist.
-CREATE INDEX memory_facts_embedding_idx ON memory_facts
-  USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'vector') THEN
+    EXECUTE 'ALTER TABLE memory_facts ALTER COLUMN embedding TYPE vector(1536)';
+    EXECUTE $ix$CREATE INDEX memory_facts_embedding_idx ON memory_facts
+      USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);$ix$;
+  END IF;
+END
+$$;
 
 -- Materialised runtime state. The snapshot is authoritative; these exist so the
 -- World Sheet and quest predicates can be queried without loading a blob.
 CREATE TABLE relationship_states (
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   character_id       text NOT NULL,
   trust              smallint NOT NULL DEFAULT 0 CHECK (trust BETWEEN -100 AND 100),
   affection          smallint NOT NULL DEFAULT 0 CHECK (affection BETWEEN -100 AND 100),
@@ -280,7 +297,7 @@ CREATE TABLE relationship_states (
 );
 
 CREATE TABLE quest_progress (
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   quest_id           text NOT NULL,
   status             text NOT NULL
                        CHECK (status IN ('UNAVAILABLE','DISCOVERED','ACTIVE','BLOCKED',
@@ -293,7 +310,7 @@ CREATE TABLE quest_progress (
 
 CREATE TABLE inventory_entries (
   entry_id           text NOT NULL,
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   item_id            text NOT NULL,
   quantity           integer NOT NULL CHECK (quantity > 0),
   equipped           boolean NOT NULL DEFAULT false,
@@ -302,7 +319,7 @@ CREATE TABLE inventory_entries (
 );
 
 CREATE TABLE resource_states (
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   resource_id        text NOT NULL,
   current            real NOT NULL,
   max                real NOT NULL,
@@ -310,7 +327,7 @@ CREATE TABLE resource_states (
 );
 
 CREATE TABLE faction_states (
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   faction_id         text NOT NULL,
   reputation         smallint NOT NULL DEFAULT 0 CHECK (reputation BETWEEN -100 AND 100),
   rank_label         text NOT NULL DEFAULT '',
@@ -318,8 +335,8 @@ CREATE TABLE faction_states (
 );
 
 CREATE TABLE encounters (
-  encounter_id       uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  encounter_id       text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   objective          text NOT NULL,
   round              integer NOT NULL DEFAULT 1,
   active_entity_id   text NOT NULL,
@@ -330,7 +347,7 @@ CREATE TABLE encounters (
 );
 
 CREATE TABLE encounter_participants (
-  encounter_id       uuid NOT NULL REFERENCES encounters (encounter_id) ON DELETE CASCADE,
+  encounter_id       text NOT NULL REFERENCES encounters (encounter_id) ON DELETE CASCADE,
   entity_id          text NOT NULL,
   kind               text NOT NULL CHECK (kind IN ('PLAYER','NPC')),
   team               text NOT NULL CHECK (team IN ('ALLY','ENEMY','NEUTRAL')),
@@ -347,8 +364,11 @@ CREATE TABLE encounter_participants (
 -- ---------------------------------------------------------------------------
 
 CREATE TABLE wallet_accounts (
-  account_id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id            uuid UNIQUE NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
+  account_id         text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  -- Nullable, and deliberately: the ledger below outlives the profile. A
+  -- privacy deletion detaches the account and leaves the financial record
+  -- standing until the retention purge takes it (§30).
+  user_id            uuid UNIQUE REFERENCES profiles (user_id) ON DELETE SET NULL,
   created_at         timestamptz NOT NULL DEFAULT now()
 );
 
@@ -356,8 +376,8 @@ CREATE TABLE wallet_accounts (
 -- Append-only: no UPDATE, no DELETE, retained through account deletion for
 -- financial audit and purged separately (§30).
 CREATE TABLE wallet_ledger (
-  entry_id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  account_id         uuid NOT NULL REFERENCES wallet_accounts (account_id),
+  entry_id           text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  account_id         text NOT NULL REFERENCES wallet_accounts (account_id),
   type               text NOT NULL CHECK (type IN (
                        'PURCHASE','BONUS','DAILY_GRANT','NEW_USER_GRANT',
                        'TURN_RESERVE','TURN_FINALIZE','TURN_RELEASE',
@@ -380,8 +400,8 @@ CREATE INDEX wallet_ledger_account_idx ON wallet_ledger (account_id, created_at 
 CREATE INDEX wallet_ledger_reference_idx ON wallet_ledger (reference_id);
 
 CREATE TABLE purchase_transactions (
-  transaction_id     uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  account_id         uuid NOT NULL REFERENCES wallet_accounts (account_id),
+  transaction_id     text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  account_id         text NOT NULL REFERENCES wallet_accounts (account_id),
   platform           text NOT NULL CHECK (platform IN ('APP_STORE','PLAY_STORE','SANDBOX')),
   -- Spec §33.5 — reconciliation is idempotent on the platform transaction id.
   store_transaction_id text NOT NULL,
@@ -398,7 +418,7 @@ CREATE TABLE purchase_transactions (
 );
 
 CREATE TABLE daily_grants (
-  account_id         uuid NOT NULL REFERENCES wallet_accounts (account_id) ON DELETE CASCADE,
+  account_id         text NOT NULL REFERENCES wallet_accounts (account_id) ON DELETE CASCADE,
   -- Server day boundary, UTC. One row per account per day makes the grant
   -- exactly-once without relying on clock comparisons.
   server_day         date NOT NULL,
@@ -408,7 +428,7 @@ CREATE TABLE daily_grants (
 );
 
 CREATE TABLE promo_redemptions (
-  account_id         uuid NOT NULL REFERENCES wallet_accounts (account_id) ON DELETE CASCADE,
+  account_id         text NOT NULL REFERENCES wallet_accounts (account_id) ON DELETE CASCADE,
   promo_code         text NOT NULL,
   amount             integer NOT NULL,
   created_at         timestamptz NOT NULL DEFAULT now(),
@@ -419,9 +439,9 @@ CREATE TABLE promo_redemptions (
 CREATE TABLE idempotency_keys (
   key                text PRIMARY KEY,
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
-  session_id         uuid REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  session_id         text REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   request_hash       text NOT NULL,
-  turn_id            uuid,
+  turn_id            text,
   status             text NOT NULL DEFAULT 'IN_PROGRESS'
                        CHECK (status IN ('IN_PROGRESS','COMPLETED','FAILED')),
   response_body      jsonb,
@@ -434,23 +454,37 @@ CREATE INDEX idempotency_keys_created_idx ON idempotency_keys (created_at);
 -- Social and discovery (§34.4)
 -- ---------------------------------------------------------------------------
 
+-- Live counters the discovery ranking reads. The offline rollup in
+-- story_quality_rollups is the analytical view of the same activity; this is
+-- the one a request can afford to read.
+CREATE TABLE story_signals (
+  story_id           text PRIMARY KEY REFERENCES stories (story_id) ON DELETE CASCADE,
+  runs               integer NOT NULL DEFAULT 0,
+  likes              integer NOT NULL DEFAULT 0,
+  saves              integer NOT NULL DEFAULT 0,
+  hides              integer NOT NULL DEFAULT 0,
+  reports            integer NOT NULL DEFAULT 0,
+  impressions        integer NOT NULL DEFAULT 0,
+  updated_at         timestamptz NOT NULL DEFAULT now()
+);
+
 CREATE TABLE story_saves (
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
-  story_id           uuid NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
+  story_id           text NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
   created_at         timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (user_id, story_id)
 );
 
 CREATE TABLE story_likes (
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
-  story_id           uuid NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
+  story_id           text NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
   created_at         timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (user_id, story_id)
 );
 
 CREATE TABLE story_hides (
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
-  story_id           uuid NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
+  story_id           text NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
   created_at         timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (user_id, story_id)
 );
@@ -464,7 +498,7 @@ CREATE TABLE creator_follows (
 
 CREATE TABLE story_impressions (
   impression_id      bigserial PRIMARY KEY,
-  story_id           uuid NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
+  story_id           text NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
   user_id            uuid REFERENCES profiles (user_id) ON DELETE SET NULL,
   surface            text NOT NULL,
   created_at         timestamptz NOT NULL DEFAULT now()
@@ -475,8 +509,9 @@ CREATE INDEX story_impressions_story_idx ON story_impressions (story_id, created
 -- Spec §7.4 — computed offline over 1d/7d/30d/lifetime windows with Bayesian
 -- shrinkage. The read path never recomputes this.
 CREATE TABLE story_quality_rollups (
-  story_id           uuid NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
-  window             text NOT NULL CHECK (window IN ('1d','7d','30d','lifetime')),
+  story_id           text NOT NULL REFERENCES stories (story_id) ON DELETE CASCADE,
+  -- `window` is reserved in Postgres.
+  window_span        text NOT NULL CHECK (window_span IN ('1d','7d','30d','lifetime')),
   qualified_start_rate real NOT NULL DEFAULT 0,
   turn_10_rate       real NOT NULL DEFAULT 0,
   d1_story_return    real NOT NULL DEFAULT 0,
@@ -492,16 +527,16 @@ CREATE TABLE story_quality_rollups (
   runs               integer NOT NULL DEFAULT 0,
   score              real NOT NULL DEFAULT 0,
   computed_at        timestamptz NOT NULL DEFAULT now(),
-  PRIMARY KEY (story_id, window)
+  PRIMARY KEY (story_id, window_span)
 );
 
 CREATE TABLE share_artifacts (
-  artifact_id        uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  artifact_id        text PRIMARY KEY DEFAULT gen_random_uuid()::text,
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
-  session_id         uuid REFERENCES story_sessions (session_id) ON DELETE SET NULL,
-  turn_id            uuid REFERENCES turns (turn_id) ON DELETE SET NULL,
+  session_id         text REFERENCES story_sessions (session_id) ON DELETE SET NULL,
+  turn_id            text REFERENCES turns (turn_id) ON DELETE SET NULL,
   kind               text NOT NULL CHECK (kind IN ('RECAP','HERO_IMAGE','TIMELINE')),
-  asset_id           uuid REFERENCES media_assets (asset_id) ON DELETE SET NULL,
+  asset_id           text REFERENCES media_assets (asset_id) ON DELETE SET NULL,
   hide_display_name  boolean NOT NULL DEFAULT false,
   spoiler_title      text,
   created_at         timestamptz NOT NULL DEFAULT now()
@@ -512,7 +547,7 @@ CREATE TABLE share_artifacts (
 -- ---------------------------------------------------------------------------
 
 CREATE TABLE reports (
-  report_id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  report_id          text PRIMARY KEY DEFAULT gen_random_uuid()::text,
   reporter_user_id   uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
   target_type        text NOT NULL CHECK (target_type IN ('STORY','TURN','USER','MEDIA','COMMENT')),
   target_id          text NOT NULL,
@@ -534,7 +569,7 @@ CREATE TABLE blocks (
 );
 
 CREATE TABLE moderation_cases (
-  case_id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  case_id            text PRIMARY KEY DEFAULT gen_random_uuid()::text,
   subject_type       text NOT NULL,
   subject_id         text NOT NULL,
   severity           text NOT NULL CHECK (severity IN ('LOW','MEDIUM','HIGH','CRITICAL')),
@@ -546,8 +581,8 @@ CREATE TABLE moderation_cases (
 );
 
 CREATE TABLE moderation_actions (
-  action_id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  case_id            uuid NOT NULL REFERENCES moderation_cases (case_id) ON DELETE CASCADE,
+  action_id          text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  case_id            text NOT NULL REFERENCES moderation_cases (case_id) ON DELETE CASCADE,
   actor_user_id      uuid NOT NULL REFERENCES profiles (user_id),
   action             text NOT NULL,
   notes              text NOT NULL DEFAULT '',
@@ -558,8 +593,8 @@ CREATE TABLE moderation_actions (
 -- are measured rather than assumed.
 CREATE TABLE model_invocations (
   invocation_id      bigserial PRIMARY KEY,
-  turn_id            uuid REFERENCES turns (turn_id) ON DELETE CASCADE,
-  session_id         uuid REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  turn_id            text REFERENCES turns (turn_id) ON DELETE CASCADE,
+  session_id         text REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   role               text NOT NULL,
   provider           text NOT NULL,
   model              text NOT NULL,
@@ -577,7 +612,7 @@ CREATE INDEX model_invocations_turn_idx ON model_invocations (turn_id);
 CREATE INDEX model_invocations_cost_idx ON model_invocations (created_at, role);
 
 CREATE TABLE generation_costs (
-  turn_id            uuid PRIMARY KEY REFERENCES turns (turn_id) ON DELETE CASCADE,
+  turn_id            text PRIMARY KEY REFERENCES turns (turn_id) ON DELETE CASCADE,
   quality_tier       text NOT NULL,
   text_cost_usd      numeric(10,6) NOT NULL DEFAULT 0,
   image_cost_usd     numeric(10,6) NOT NULL DEFAULT 0,
@@ -607,8 +642,8 @@ CREATE INDEX admin_audit_log_subject_idx ON admin_audit_log (subject_type, subje
 -- ---------------------------------------------------------------------------
 
 CREATE TABLE coop_rooms (
-  room_id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  room_id            text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
   host_user_id       uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
   invite_token       text UNIQUE NOT NULL,
   status             text NOT NULL DEFAULT 'LOBBY'
@@ -619,7 +654,7 @@ CREATE TABLE coop_rooms (
 );
 
 CREATE TABLE coop_room_members (
-  room_id            uuid NOT NULL REFERENCES coop_rooms (room_id) ON DELETE CASCADE,
+  room_id            text NOT NULL REFERENCES coop_rooms (room_id) ON DELETE CASCADE,
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
   ready              boolean NOT NULL DEFAULT false,
   joined_at          timestamptz NOT NULL DEFAULT now(),
@@ -627,8 +662,8 @@ CREATE TABLE coop_room_members (
 );
 
 CREATE TABLE coop_windows (
-  window_id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  room_id            uuid NOT NULL REFERENCES coop_rooms (room_id) ON DELETE CASCADE,
+  window_id          text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  room_id            text NOT NULL REFERENCES coop_rooms (room_id) ON DELETE CASCADE,
   turn_index         integer NOT NULL,
   opens_at           timestamptz NOT NULL,
   closes_at          timestamptz NOT NULL,
@@ -636,8 +671,8 @@ CREATE TABLE coop_windows (
 );
 
 CREATE TABLE coop_intents (
-  intent_id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  window_id          uuid NOT NULL REFERENCES coop_windows (window_id) ON DELETE CASCADE,
+  intent_id          text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  window_id          text NOT NULL REFERENCES coop_windows (window_id) ON DELETE CASCADE,
   user_id            uuid NOT NULL REFERENCES profiles (user_id) ON DELETE CASCADE,
   action_text        text NOT NULL,
   submitted_at       timestamptz NOT NULL DEFAULT now(),
@@ -646,9 +681,9 @@ CREATE TABLE coop_intents (
 
 -- Spec §28.7 — whispers and private reveals are scoped, not broadcast.
 CREATE TABLE private_events (
-  private_event_id   uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id         uuid NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
-  turn_id            uuid REFERENCES turns (turn_id) ON DELETE CASCADE,
+  private_event_id   text PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id         text NOT NULL REFERENCES story_sessions (session_id) ON DELETE CASCADE,
+  turn_id            text REFERENCES turns (turn_id) ON DELETE CASCADE,
   visibility         text NOT NULL,
   audience_user_ids  uuid[] NOT NULL DEFAULT '{}',
   content            jsonb NOT NULL,

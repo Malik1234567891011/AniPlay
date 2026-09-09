@@ -8,6 +8,8 @@ import { assertProductionReady, createAppContext, loadConfig } from './context.j
 import { MemoryRepository } from './repo/memory.js';
 import { WalletService } from './wallet.js';
 import type { AppContext } from './context.js';
+import { createHmac } from 'node:crypto';
+import { DevTokenVerifier, SupabaseJwtVerifier } from './auth.js';
 import { NoVerifierError, createStoreVerifierFromEnv } from './store-verifier.js';
 import type { TurnStreamHub } from './stream.js';
 
@@ -29,6 +31,9 @@ function makeContext(now: () => Date = () => new Date()): AppContext {
     modelProvider: null,
     // No handlers registered, so media jobs are inert in tests.
     jobs: new JobQueue(),
+    // The development verifier: the token is the user id. Production cannot
+    // select it, which `assertProductionReady` and the auth tests both pin.
+    auth: new DevTokenVerifier(),
     // The real selection logic, so the tests exercise platform dispatch and
     // not a hand-picked verifier that always answers.
     storeVerifier: createStoreVerifierFromEnv(loadConfig({ PORT: '4000' } as NodeJS.ProcessEnv), {} as NodeJS.ProcessEnv),
@@ -835,5 +840,168 @@ describe('quality tiers do not buy better outcomes (spec §20.3)', () => {
 
     // Same seed, same action, four prices — one outcome.
     expect(new Set(outcomes.values()).size).toBe(1);
+  });
+});
+
+/**
+ * Authentication and ownership at the route level.
+ *
+ * The verifier's own tests prove a token is checked correctly; these prove the
+ * API acts on the answer — that an expired token is distinguishable from a
+ * forged one, that a forged one buys nothing, and that a valid token for the
+ * wrong account cannot reach another player's run.
+ */
+describe('authenticated requests', () => {
+  const SECRET = 'route-level-signing-secret';
+  const NOW = Date.UTC(2026, 5, 1, 9, 0, 0);
+  const ALICE = '11111111-0000-4000-8000-000000000001';
+  const BOB = '22222222-0000-4000-8000-000000000002';
+
+  const seg = (value: object | Buffer): string =>
+    (Buffer.isBuffer(value) ? value : Buffer.from(JSON.stringify(value), 'utf8'))
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+  function token(sub: string, { expired = false, secret = SECRET } = {}): string {
+    const input = `${seg({ alg: 'HS256', typ: 'JWT' })}.${seg({
+      sub,
+      aud: 'authenticated',
+      exp: Math.floor(NOW / 1000) + (expired ? -60 : 3600),
+    })}`;
+    return `${input}.${seg(createHmac('sha256', secret).update(input).digest())}`;
+  }
+
+  let secured: Server;
+
+  beforeEach(() => {
+    const base = makeContext();
+    secured = buildServer({
+      ctx: {
+        ...base,
+        auth: new SupabaseJwtVerifier({
+          hmacSecret: SECRET,
+          expectedAudience: 'authenticated',
+          now: () => NOW,
+        }),
+      },
+    }) as Server;
+  });
+
+  afterEach(async () => {
+    await secured.close();
+  });
+
+  const bearer = (value: string): Record<string, string> => ({ authorization: `Bearer ${value}` });
+
+  async function sessionFor(who: string): Promise<string> {
+    const response = await secured.inject({
+      method: 'POST',
+      url: '/v1/stories/story_ninth_archive/sessions',
+      headers: bearer(token(who)),
+      payload: {
+        identity: {
+          displayName: 'Someone',
+          pronouns: 'they/them',
+          ageBand: null,
+          archetypeId: 'arch_scholar',
+          worldKnowsAboutYou: '',
+          advanced: {},
+          portraitAssetId: null,
+        },
+        usedQuickSetup: true,
+      },
+    });
+    expect(response.statusCode).toBe(201);
+    return response.json().session.sessionId;
+  }
+
+  it('creates the profile on the first verified request', async () => {
+    const response = await secured.inject({ method: 'GET', url: '/v1/me', headers: bearer(token(ALICE)) });
+    expect(response.statusCode).toBe(200);
+    expect(response.json().userId).toBe(ALICE);
+  });
+
+  it('refuses an unsigned request to anything that owns state', async () => {
+    const response = await secured.inject({ method: 'GET', url: '/v1/me' });
+    expect(response.statusCode).toBe(401);
+    expect(response.json().code).toBe('UNAUTHENTICATED');
+  });
+
+  it('refuses a token this project did not sign', async () => {
+    const response = await secured.inject({
+      method: 'GET',
+      url: '/v1/me',
+      headers: bearer(token(ALICE, { secret: 'attacker' })),
+    });
+    expect(response.statusCode).toBe(401);
+    expect(response.json().code).toBe('UNAUTHENTICATED');
+  });
+
+  it('tells the client an expired token is expired, so it can refresh instead of signing out', async () => {
+    const response = await secured.inject({
+      method: 'GET',
+      url: '/v1/me',
+      headers: bearer(token(ALICE, { expired: true })),
+    });
+    expect(response.statusCode).toBe(401);
+    expect(response.json().code).toBe('TOKEN_EXPIRED');
+  });
+
+  it('will not let one account read another account’s run', async () => {
+    const aliceSession = await sessionFor(ALICE);
+
+    const asBob = await secured.inject({
+      method: 'GET',
+      url: `/v1/sessions/${aliceSession}`,
+      headers: bearer(token(BOB)),
+    });
+    // Reported as missing rather than forbidden: a 403 confirms the id exists.
+    expect(asBob.statusCode).toBe(404);
+
+    const asAlice = await secured.inject({
+      method: 'GET',
+      url: `/v1/sessions/${aliceSession}`,
+      headers: bearer(token(ALICE)),
+    });
+    expect(asAlice.statusCode).toBe(200);
+  });
+
+  it('will not let one account play another account’s run', async () => {
+    const aliceSession = await sessionFor(ALICE);
+    const response = await secured.inject({
+      method: 'POST',
+      url: `/v1/sessions/${aliceSession}/turns`,
+      headers: { ...bearer(token(BOB)), 'idempotency-key': 'k1' },
+      payload: { actionText: 'I take the ledger.', qualityTier: 'QUICK', clientRevision: 0 },
+    });
+    expect(response.statusCode).toBe(404);
+  });
+
+  it('will not let one account delete another account’s run', async () => {
+    const aliceSession = await sessionFor(ALICE);
+    const response = await secured.inject({
+      method: 'DELETE',
+      url: `/v1/sessions/${aliceSession}`,
+      headers: bearer(token(BOB)),
+    });
+    expect(response.statusCode).toBe(404);
+    expect(
+      (await secured.inject({ method: 'GET', url: `/v1/sessions/${aliceSession}`, headers: bearer(token(ALICE)) }))
+        .statusCode,
+    ).toBe(200);
+  });
+
+  it('accepts the deletion request only for the account that asked', async () => {
+    await secured.inject({ method: 'GET', url: '/v1/me', headers: bearer(token(ALICE)) });
+    const response = await secured.inject({
+      method: 'POST',
+      url: '/v1/account/deletion-request',
+      headers: bearer(token(ALICE)),
+    });
+    expect(response.statusCode).toBeLessThan(300);
+    const me = await secured.inject({ method: 'GET', url: '/v1/me', headers: bearer(token(ALICE)) });
+    expect(me.json().deletionRequestedAt).not.toBeNull();
   });
 });

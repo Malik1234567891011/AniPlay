@@ -11,14 +11,16 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@aniplay/contracts": "*",
-    "@aniplay/engine": "*",
-    "@aniplay/director": "*",
-    "@aniplay/test-fixtures": "*",
-    "fastify": "^5.2.0",
-    "zod": "^3.24.1",
-    "@aniplay/worker": "*",
+    "@aniplay/analytics": "*",
     "@aniplay/config": "*",
-    "@aniplay/analytics": "*"
+    "@aniplay/contracts": "*",
+    "@aniplay/director": "*",
+    "@aniplay/engine": "*",
+    "@aniplay/test-fixtures": "*",
+    "@aniplay/worker": "*",
+    "@types/pg": "^8.23.1",
+    "fastify": "^5.2.0",
+    "pg": "^8.23.0",
+    "zod": "^3.24.1"
   }
 }

@@ -1,0 +1,51 @@
+-- Bootstrap the two things Supabase provides that a bare Postgres does not.
+--
+-- On a Supabase project both of these already exist and every statement here is
+-- a no-op. On a local cluster — which is what the persistence tests run
+-- against — they are what makes 0001 applicable at all. Keeping the difference
+-- in one file means the real schema has no "if we are local" branches in it.
+
+BEGIN;
+
+-- Supabase Auth owns this schema and this table. The FK from `profiles` is what
+-- ties a player row to an actual credential, so it has to exist before 0001.
+CREATE SCHEMA IF NOT EXISTS auth;
+
+CREATE TABLE IF NOT EXISTS auth.users (
+  id                 uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email              text,
+  is_anonymous       boolean NOT NULL DEFAULT false,
+  created_at         timestamptz NOT NULL DEFAULT now()
+);
+
+-- Supabase exposes the caller's user id to Row Level Security through this
+-- function. The API connects as the service role and enforces ownership in
+-- code, so locally it only has to exist for the policies in 0001 to compile.
+CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid
+  LANGUAGE sql STABLE
+  AS $$ SELECT nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+
+-- pgvector is enabled on Supabase and is usually absent locally. Semantic
+-- memory retrieval degrades to lexical similarity without it, which the
+-- director already handles, so an unavailable extension must not stop the rest
+-- of the schema from being created.
+DO $$
+BEGIN
+  CREATE EXTENSION IF NOT EXISTS "vector";
+EXCEPTION WHEN OTHERS THEN
+  RAISE NOTICE 'pgvector unavailable; memory embeddings will be stored as float arrays';
+END
+$$;
+
+-- The `vector` type has to exist for 0001 to parse whether or not the extension
+-- loaded. A domain over real[] is close enough for everything except the
+-- ivfflat index, which 0001 creates conditionally.
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'vector') THEN
+    EXECUTE 'CREATE DOMAIN public.vector AS real[]';
+  END IF;
+END
+$$;
+
+COMMIT;

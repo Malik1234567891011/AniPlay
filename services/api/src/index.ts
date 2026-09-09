@@ -1,5 +1,6 @@
 import { buildServer } from './server.js';
 import { assertProductionReady, loadConfig } from './context.js';
+import { PostgresRepository } from './repo/postgres.js';
 
 const config = loadConfig();
 
@@ -14,11 +15,26 @@ try {
 
 const app = buildServer({ logger: true });
 
-app
-  .listen({ port: config.port, host: config.host })
+// A database that is unreachable should stop the process here, not on the first
+// player's first turn.
+const ready =
+  app.ctx.repo instanceof PostgresRepository
+    ? app.ctx.repo.ping().catch((error: unknown) => {
+        app.log.error(error, 'Cannot reach DATABASE_URL');
+        process.exit(1);
+      })
+    : Promise.resolve();
+
+ready
+  .then(() => app.listen({ port: config.port, host: config.host }))
   .then(() => {
     app.log.info(
-      { environment: config.environment, modelProvider: app.ctx.modelProvider ?? 'rule-based' },
+      {
+        environment: config.environment,
+        modelProvider: app.ctx.modelProvider ?? 'rule-based',
+        persistence: app.ctx.repo instanceof PostgresRepository ? 'postgres' : 'in-process',
+        auth: app.ctx.auth.name,
+      },
       'ANIMA API listening',
     );
   })
