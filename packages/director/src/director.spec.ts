@@ -668,6 +668,14 @@ describe('every launch world is playable', () => {
       expect(world.opening.split(/\s+/).length, `${world.title} opening`).toBeGreaterThanOrEqual(50);
       expect(world.opening.split(/\s+/).length, `${world.title} opening`).toBeLessThanOrEqual(150);
       expect(world.premise.split(/\s+/).length, `${world.title} premise`).toBeGreaterThanOrEqual(100);
+      // A 200-word premise is the last thing a player reads before committing.
+      // Shipped as one block it is a wall, so every one of them is authored in
+      // paragraphs and the detail screen renders the breaks.
+      const paragraphs = world.premise.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
+      expect(paragraphs.length, `${world.title} premise paragraphs`).toBeGreaterThanOrEqual(3);
+      for (const paragraph of paragraphs) {
+        expect(paragraph.split(/\s+/).length, `${world.title} premise paragraph`).toBeLessThanOrEqual(70);
+      }
       expect(world.promises.length, `${world.title} promises`).toBeGreaterThanOrEqual(3);
       expect(world.characters.length, `${world.title} cast`).toBeGreaterThanOrEqual(3);
       expect(world.openingSuggestions.length).toBe(3);

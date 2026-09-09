@@ -86,7 +86,7 @@ export interface ButtonProps extends Omit<PressableProps, 'style' | 'children'> 
   label: string;
   /** Copy shown while `loading`. Never replace the label with a bare spinner. */
   loadingLabel?: string;
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'danger';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'danger' | 'dangerQuiet';
   size?: 'large' | 'medium';
   loading?: boolean;
   full?: boolean;
@@ -130,6 +130,8 @@ export function Button({
     secondary: { bg: colors.bg.raised, fg: colors.text.primary, border: colors.border.subtle },
     tertiary: { bg: 'transparent', fg: colors.text.secondary, border: 'transparent' },
     danger: { bg: colors.semantic.danger, fg: colors.text.onAccent, border: 'transparent' },
+    // Reads as destructive without competing with the screen's real primary.
+    dangerQuiet: { bg: 'transparent', fg: colors.semantic.danger, border: colors.semantic.danger },
   }[variant];
 
   return (
@@ -405,4 +407,27 @@ export function Stack({
   style?: StyleProp<ViewStyle>;
 }): React.JSX.Element {
   return <View style={[{ gap }, style]}>{children}</View>;
+}
+
+// --- Text helpers ----------------------------------------------------------
+
+/**
+ * Splits authored prose into paragraphs.
+ *
+ * Long-form copy (a premise, a creator note, a recap) is authored with blank
+ * lines between thoughts. React Native will render a raw `\n\n` as a bare line
+ * break, which reads as an accident rather than a paragraph, so callers map
+ * this over their own `Stack` and get real spacing between them.
+ *
+ * Tolerant on purpose: single newlines, trailing whitespace and empty
+ * paragraphs from a creator's text field all collapse away rather than
+ * producing a gap with nothing in it.
+ */
+export function toParagraphs(text: string): string[] {
+  const paragraphs = text
+    .split(/\n\s*\n/)
+    .map((part) => part.replace(/\s+/g, ' ').trim())
+    .filter((part) => part.length > 0);
+  // A single unbroken string is still one paragraph, never zero.
+  return paragraphs.length > 0 ? paragraphs : [];
 }

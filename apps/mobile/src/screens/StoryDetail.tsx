@@ -19,6 +19,7 @@ import {
   GUTTER,
   radius,
   spacing,
+  toParagraphs,
 } from '@aniplay/ui';
 import { api } from '../api/client.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
@@ -174,9 +175,16 @@ export function StoryDetailScreen({
 
           <Stack gap={spacing.md}>
             <Txt variant="h3">The premise</Txt>
-            <Txt variant="body" color={colors.text.secondary} serif>
-              {detail.premise}
-            </Txt>
+            {/* A premise is 200+ words and it is the one thing a player reads
+                before committing. Rendered as one block it is a wall nobody
+                finishes, so the authored paragraph breaks get real spacing. */}
+            <Stack gap={spacing.md}>
+              {toParagraphs(detail.premise).map((paragraph, index) => (
+                <Txt key={index} variant="body" color={colors.text.secondary} serif>
+                  {paragraph}
+                </Txt>
+              ))}
+            </Stack>
           </Stack>
 
           {detail.cast.length > 0 ? (

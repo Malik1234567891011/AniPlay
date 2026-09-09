@@ -16,10 +16,10 @@ const raw = {
   fantasyLabel: 'You know the part. You are second choice.',
   hook: 'You are the understudy for the lead. Opening night is in six weeks, and the director does not recast.',
   premise:
-    'You are a drama student at the Verrine Company, and you are the understudy for the lead role in this year\'s production. Understudy means you learn the whole part and you do not perform it. You go on only if the lead cannot. ' +
-    'The lead is Talia Renn. She is better than you at one thing and worse at four, and everybody in the building knows it, including her. Opening night is in six weeks and the date never moves. ' +
-    'You cannot simply out-rehearse her, because the director does not recast after the third week and he has never broken that rule. So the only way in is to become the person the room turns to when something goes wrong. ' +
-    'That means favours. The company keeps a book of who owes what, in the director\'s handwriting, and it is read out loud at the end of term. Getting help puts your name in it. So does helping someone else. ' +
+    'You are a drama student at the Verrine Company, and you are the understudy for the lead role in this year\'s production. Understudy means you learn the whole part and you do not perform it. You go on only if the lead cannot.\n\n' +
+    'The lead is Talia Renn. She is better than you at one thing and worse at four, and everybody in the building knows it, including her. Opening night is in six weeks and the date never moves.\n\n' +
+    'You cannot simply out-rehearse her, because the director does not recast after the third week and he has never broken that rule. So the only way in is to become the person the room turns to when something goes wrong.\n\n' +
+    'That means favours. The company keeps a book of who owes what, in the director\'s handwriting, and it is read out loud at the end of term. Getting help puts your name in it. So does helping someone else.\n\n' +
     'So you have six weeks to make yourself necessary. That means being the person who fixes things when they go wrong, and it means collecting favours you will have to pay for later. ' +
     'Nobody in this building will ever raise their voice at you. It is still the most dangerous place you have worked.',
   creatorId: 'creator_official',

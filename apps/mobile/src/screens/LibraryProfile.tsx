@@ -368,9 +368,14 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
         {/* PR-03 — deletion is available from inside the app (§23.3). */}
         <Stack gap={spacing.md}>
           <Txt variant="h3">Account</Txt>
+          {/* Spec §25.8 — one primary per region, and an irreversible action is
+              not it. Deletion stays easy to find and hard to hit by accident:
+              a plain destructive row, then a confirmation that says what goes. */}
           <Button
             label="Delete account"
-            variant="danger"
+            variant="dangerQuiet"
+            full={false}
+            style={{ alignSelf: 'flex-start' }}
             hapticKind="warning"
             onPress={() =>
               Alert.alert(

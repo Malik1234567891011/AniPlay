@@ -16,10 +16,10 @@ const raw = {
   fantasyLabel: 'Eleven days of road. Nine days of water.',
   hook: 'You are paid to carry a locked case across the desert. You have nine days of water and eleven days of walking.',
   premise:
-    'A woman paid you in advance to carry a locked case on foot from the town of Ossun to the coast. She would not say what is inside it. ' +
-    'The route crosses eleven days of salt flats. There is drinkable water at four wells along the way, and the third one is unreliable — some years it holds, some years it is dry. You are carrying nine days of water. ' +
-    'So you are two days short before you take a single step, which means the third well has to hold. Four people also drink faster than one, and you are not walking alone. ' +
-    'Ferrow is the guide, and she has made this crossing nine times. Sabe is a pilgrim who packed badly and will not turn back. Oren joined at the second well, is good company, and has never once been asleep when you woke up. ' +
+    'A woman paid you in advance to carry a locked case on foot from the town of Ossun to the coast. She would not say what is inside it.\n\n' +
+    'The route crosses eleven days of salt flats. There is drinkable water at four wells along the way, and the third one is unreliable — some years it holds, some years it is dry. You are carrying nine days of water.\n\n' +
+    'So you are two days short before you take a single step, which means the third well has to hold. Four people also drink faster than one, and you are not walking alone.\n\n' +
+    'Ferrow is the guide, and she has made this crossing nine times. Sabe is a pilgrim who packed badly and will not turn back. Oren joined at the second well, is good company, and has never once been asleep when you woke up.\n\n' +
     'Nothing hunts you out here. There are no monsters on the flats. The danger is distance and arithmetic, and the fact that every choice about pace and route spends water you cannot get back. ' +
     'If you run out, you die, and that is permanent. The road does not care whose fault it was.',
   creatorId: 'creator_official',
