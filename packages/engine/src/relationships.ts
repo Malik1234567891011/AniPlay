@@ -220,6 +220,11 @@ export function isGateSatisfied(
   for (const flag of req.flagsUnset) {
     if (state.flags[flag]) return false;
   }
+  for (const itemId of req.hasItems) {
+    if (!state.player.inventory.some((entry) => entry.itemId === itemId && entry.quantity > 0)) {
+      return false;
+    }
+  }
   return true;
 }
 

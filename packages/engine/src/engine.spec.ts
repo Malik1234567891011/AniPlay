@@ -375,7 +375,9 @@ describe('relationships (spec §14.2, §14.3)', () => {
     rel.trust = 90; // thresholds alone are not enough
     expect(isGateSatisfied(gate, rel, state)).toBe(false);
 
-    state.completedEventIds.push('mira_rooftop_truth');
+    // The gate now hangs off the flag the rooftop payoff awards, because
+    // nothing in the engine ever recorded an event called `mira_rooftop_truth`.
+    state.flags.mira_trusts_you = true;
     expect(isGateSatisfied(gate, rel, state)).toBe(true);
 
     state.flags.mira_burned = true; // a flagsUnset requirement re-closes it
@@ -395,13 +397,13 @@ describe('relationships (spec §14.2, §14.3)', () => {
 describe('quests (spec §15.1)', () => {
   it('evaluates every predicate clause', () => {
     const state = baseState();
-    expect(evaluatePredicate({ flagsSet: ['nope'], flagsUnset: [], hasItems: [], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null }, state)).toBe(false);
+    expect(evaluatePredicate({ flagsSet: ['nope'], flagsUnset: [], hasItems: [], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null, afterWorldMinute: null }, state)).toBe(false);
 
     state.flags.yes = true;
-    expect(evaluatePredicate({ flagsSet: ['yes'], flagsUnset: [], hasItems: [], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null }, state)).toBe(true);
+    expect(evaluatePredicate({ flagsSet: ['yes'], flagsUnset: [], hasItems: [], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null, afterWorldMinute: null }, state)).toBe(true);
 
-    expect(evaluatePredicate({ flagsSet: [], flagsUnset: [], hasItems: ['sigil_pendant'], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null }, state)).toBe(true);
-    expect(evaluatePredicate({ flagsSet: [], flagsUnset: [], hasItems: ['ledger_page'], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null }, state)).toBe(false);
+    expect(evaluatePredicate({ flagsSet: [], flagsUnset: [], hasItems: ['sigil_pendant'], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null, afterWorldMinute: null }, state)).toBe(true);
+    expect(evaluatePredicate({ flagsSet: [], flagsUnset: [], hasItems: ['ledger_page'], atLocation: null, completedEvents: [], minRelationship: [], minFactionReputation: [], beforeWorldMinute: null, afterWorldMinute: null }, state)).toBe(false);
   });
 
   it('advances the opening quest when the player reaches the commons', () => {

@@ -469,7 +469,7 @@ const raw = {
       involvedCharacterIds: ['ferrow', 'oren'],
       involvedLocationIds: ['the_wrecks'],
       knownRewardCopy: 'Whatever is still on them, and why it is still on them.',
-      discoverWhen: { flagsSet: ['heard_about_wrecks'] },
+      discoverWhen: { flagsSet: ['spoke:ferrow'] },
       steps: [
         {
           id: 'step_reach_wrecks',

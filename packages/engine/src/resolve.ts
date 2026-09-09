@@ -202,7 +202,19 @@ export function resolveIntent(options: ResolveOptions): Resolution {
     mutations.push(...outcome.mutations);
     observableFacts.push(...outcome.observableFacts);
     privateFacts.push(...outcome.privateFacts);
-    normalizedActions.push(outcome.normalized);
+    // The normalized record says what the engine did; it has to say who it was
+    // done to as well, or nothing downstream can tell "asked Kael" from
+    // "asked". `recordObservations` reads exactly this.
+    normalizedActions.push({
+      verb: action.verb,
+      ...outcome.normalized,
+      targets: action.targets.map((target) => ({
+        entityType: target.entityType,
+        entityId: target.entityId,
+      })),
+      ...(action.abilityId ? { abilityId: action.abilityId } : {}),
+      ...(action.itemId ? { itemId: action.itemId } : {}),
+    });
 
     totalMinutes +=
       outcome.overrideMinutes ??

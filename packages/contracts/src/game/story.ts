@@ -167,6 +167,12 @@ export const RelationshipGate = z
         completedEvents: z.array(z.string()).default([]),
         flagsSet: z.array(z.string()).default([]),
         flagsUnset: z.array(z.string()).default([]),
+        /**
+         * Something the player must be carrying. "Show me the page and I will
+         * talk to you" is a normal way for a person to open up, and without
+         * this a gate can only ever be about numbers and flags.
+         */
+        hasItems: z.array(z.string()).default([]),
       })
       .strict(),
   })
@@ -311,6 +317,12 @@ export const QuestPredicate = z
       .array(z.object({ factionId: z.string(), value: z.number().int() }).strict())
       .default([]),
     beforeWorldMinute: z.number().int().nullable().default(null),
+    /**
+     * The other end of the clock. A deadline needs `beforeWorldMinute`; a
+     * season that only opens up once you are five weeks into it needs this,
+     * and without it a story can only ever be gated on running out of time.
+     */
+    afterWorldMinute: z.number().int().nullable().default(null),
   })
   .strict();
 export type QuestPredicate = z.infer<typeof QuestPredicate>;

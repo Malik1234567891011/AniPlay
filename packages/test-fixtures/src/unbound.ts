@@ -488,7 +488,7 @@ const raw = {
           id: 'renna_teaches_you',
           kind: 'TRUST',
           label: 'Renna will teach you something off the syllabus',
-          requires: { respect: 40, completedEvents: ['renna_saw_you_work'], flagsUnset: ['renna_lost_faith'] },
+          requires: { respect: 40, flagsSet: ['renna_saw_you_work'], flagsUnset: ['renna_lost_faith'] },
         },
         {
           id: 'renna_signs_you',
@@ -569,7 +569,7 @@ const raw = {
           id: 'tam_tells_you',
           kind: 'ALLIANCE',
           label: 'Tam will say what he saw on the stair',
-          requires: { trust: 50, completedEvents: ['tam_beaten_honestly'] },
+          requires: { trust: 50, respect: 35, flagsSet: ['attacked:tam'], flagsUnset: ['tam_humiliated'] },
         },
       ],
       combatant: { health: 26, defenseDc: 15, damage: 7, tags: ['student', 'showy'] },
@@ -644,7 +644,7 @@ const raw = {
           id: 'sera_stands_with_you',
           kind: 'ALLIANCE',
           label: 'Sera will say it in front of the Concord',
-          requires: { trust: 60, affection: 35, completedEvents: ['sera_told_the_truth'] },
+          requires: { trust: 60, affection: 35, flagsSet: ['spoke:sera', 'has_sealed_page'] },
         },
       ],
       combatant: { health: 20, defenseDc: 16, damage: 6, tags: ['evasive', 'quiet'] },
@@ -719,7 +719,7 @@ const raw = {
           id: 'auber_reopens',
           kind: 'ALLIANCE',
           label: 'Auber will reopen the Oyan ruling',
-          requires: { respect: 55, trust: 40, completedEvents: ['auber_shown_mismatch'] },
+          requires: { respect: 55, trust: 40, flagsSet: ['ruling_in_question'] },
         },
       ],
       combatant: null,
@@ -801,8 +801,12 @@ const raw = {
           directorNotes:
             'Renna is measuring whether the player can take a correction from a school that is not theirs. Using an ' +
             'Oyan form here is not forbidden, but it will be seen and remembered.',
-          succeedWhen: { flagsSet: ['first_shift_done'] },
-          rewards: { xp: 30, items: [{ itemId: 'wrapped_blade', qty: 1 }], flags: ['renna_saw_you_work'] },
+          succeedWhen: { flagsSet: ['spoke:renna'], atLocation: 'kiln_yard' },
+          rewards: {
+            xp: 30,
+            items: [{ itemId: 'wrapped_blade', qty: 1 }],
+            flags: ['first_shift_done', 'renna_saw_you_work'],
+          },
         },
         {
           id: 'step_earn_the_line',
@@ -816,12 +820,12 @@ const raw = {
               routeId: 'line_by_winning',
               label: 'You beat the room',
               predicate: {
-                flagsSet: ['beat_tam'],
+                flagsSet: ['attacked:tam'],
                 flagsUnset: ['tam_humiliated'],
                 hasItems: [],
-                atLocation: null,
-                completedEvents: ['tam_beaten_honestly'],
-                minRelationship: [],
+                atLocation: 'kiln_yard',
+                completedEvents: [],
+                minRelationship: [{ characterId: 'tam', dimension: 'respect', value: 35 }],
                 minFactionReputation: [],
                 beforeWorldMinute: null,
               },
@@ -832,7 +836,7 @@ const raw = {
               routeId: 'line_by_contract',
               label: 'You came back with the work done',
               predicate: {
-                flagsSet: ['contract_completed'],
+                flagsSet: ['visited:contract_office', 'spoke:renna'],
                 flagsUnset: [],
                 hasItems: [],
                 atLocation: null,
@@ -848,7 +852,7 @@ const raw = {
               routeId: 'line_by_reading',
               label: 'You made yourself the only one who could read it',
               predicate: {
-                flagsSet: ['read_a_real_trace'],
+                flagsSet: ['used:read_trace'],
                 flagsUnset: [],
                 hasItems: ['trace_glass'],
                 atLocation: null,
@@ -864,7 +868,7 @@ const raw = {
               routeId: 'line_by_awakening',
               label: 'Something opened, in front of everyone',
               predicate: {
-                flagsSet: ['opening_awakened'],
+                flagsSet: ['used:quiet_opening'],
                 flagsUnset: [],
                 hasItems: [],
                 atLocation: null,
@@ -896,8 +900,11 @@ const raw = {
           playerCopy: 'Learn what a trace actually shows, from someone who can read one.',
           directorNotes:
             'Renna can teach it. So can the market, badly and for money. Auber will not teach it and will say so politely.',
-          succeedWhen: { flagsSet: ['can_read_traces'] },
-          rewards: { xp: 40, items: [{ itemId: 'trace_glass', qty: 1 }], flags: [] },
+          succeedWhen: {
+            flagsSet: ['spoke:renna'],
+            minRelationship: [{ characterId: 'renna', dimension: 'respect', value: 25 }],
+          },
+          rewards: { xp: 40, items: [{ itemId: 'trace_glass', qty: 1 }], flags: ['can_read_traces'] },
         },
         {
           id: 'step_get_a_reading',
@@ -911,7 +918,7 @@ const raw = {
               routeId: 'reading_stair',
               label: 'You read the third one yourself, on the stair',
               predicate: {
-                flagsSet: ['read_a_real_trace'],
+                flagsSet: ['used:read_trace'],
                 flagsUnset: [],
                 hasItems: ['trace_glass'],
                 atLocation: 'river_stair',
@@ -927,11 +934,11 @@ const raw = {
               routeId: 'reading_sera',
               label: 'Sera gave you the page instead',
               predicate: {
-                flagsSet: [],
+                flagsSet: ['spoke:sera'],
                 flagsUnset: ['sera_burned'],
                 hasItems: [],
                 atLocation: null,
-                completedEvents: ['sera_told_the_truth'],
+                completedEvents: [],
                 minRelationship: [{ characterId: 'sera', dimension: 'trust', value: 45 }],
                 minFactionReputation: [],
                 beforeWorldMinute: null,
@@ -943,10 +950,10 @@ const raw = {
               routeId: 'reading_break_in',
               label: 'You went into Oyan House',
               predicate: {
-                flagsSet: ['entered_oyan_house'],
+                flagsSet: ['visited:oyan_house'],
                 flagsUnset: [],
                 hasItems: [],
-                atLocation: null,
+                atLocation: 'oyan_house',
                 completedEvents: [],
                 minRelationship: [],
                 minFactionReputation: [],
@@ -965,8 +972,11 @@ const raw = {
             'He has been waiting for this and will not act pleased about it. How the reading was obtained changes ' +
             'what he can do with it — a clean one reopens the ruling, a stolen one gets the player charged as well.',
           enterWhen: { flagsSet: ['has_own_reading'] },
-          succeedWhen: { completedEvents: ['auber_shown_mismatch'] },
-          rewards: { xp: 120, items: [], flags: ['ruling_in_question'] },
+          succeedWhen: {
+            flagsSet: ['spoke:auber', 'has_own_reading'],
+            minRelationship: [{ characterId: 'auber', dimension: 'respect', value: 30 }],
+          },
+          rewards: { xp: 120, items: [], flags: ['auber_shown_mismatch', 'ruling_in_question'] },
         },
       ],
     },

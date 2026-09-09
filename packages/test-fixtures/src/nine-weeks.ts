@@ -421,7 +421,7 @@ const raw = {
           id: 'juno_tells_you',
           kind: 'TRUST',
           label: 'Juno will tell you what happened in September',
-          requires: { trust: 45, completedEvents: ['juno_steps_conversation'], flagsUnset: ['juno_cornered_publicly'] },
+          requires: { trust: 45, flagsSet: ['juno_steps_conversation'], flagsUnset: ['juno_cornered_publicly'] },
         },
         {
           id: 'juno_chooses',
@@ -430,7 +430,7 @@ const raw = {
           requires: {
             trust: 65,
             affection: 70,
-            completedEvents: ['juno_told_teo_herself'],
+            flagsSet: ['juno_told_teo_herself'],
             flagsUnset: ['player_told_teo', 'juno_cornered_publicly'],
           },
         },
@@ -593,7 +593,7 @@ const raw = {
             trust: 70,
             affection: 60,
             respect: 55,
-            completedEvents: ['nadia_point_conversation'],
+            flagsSet: ['spoke:nadia', 'visited:the_point'],
             flagsUnset: ['nadia_saw_you_lie', 'player_chased_juno_openly'],
           },
         },
@@ -673,7 +673,7 @@ const raw = {
           requires: {
             trust: 55,
             affection: 65,
-            completedEvents: ['cass_told_the_truth'],
+            flagsSet: ['cass_told_the_truth'],
             flagsUnset: ['cass_confronted_publicly'],
           },
         },
@@ -742,8 +742,12 @@ const raw = {
           directorNotes:
             'Nadia is deciding what kind of summer you are going to be. Being good at the job is the cheapest ' +
             'currency in the building and the player should be allowed to notice that.',
-          succeedWhen: { flagsSet: ['first_service_done'] },
-          rewards: { xp: 30, items: [{ itemId: 'shift_swap', qty: 1 }], flags: ['on_the_rota'] },
+          succeedWhen: { flagsSet: ['spoke:nadia', 'visited:kitchen'] },
+          rewards: {
+            xp: 30,
+            items: [{ itemId: 'shift_swap', qty: 1 }],
+            flags: ['first_service_done', 'on_the_rota'],
+          },
         },
         {
           id: 'step_keep_the_job',
@@ -752,8 +756,12 @@ const raw = {
             'Talk is the real threat, not competence. A player who causes a scene in the bar can be excellent at the ' +
             'job and still lose their place.',
           enterWhen: { flagsSet: ['on_the_rota'] },
-          succeedWhen: { flagsSet: ['week_five_reached'], flagsUnset: ['sent_home'] },
-          rewards: { xp: 60, items: [], flags: [] },
+          succeedWhen: {
+            flagsUnset: ['sent_home'],
+            afterWorldMinute: 28 * 24 * 60,
+            minFactionReputation: [{ factionId: 'faction_house', value: 15 }],
+          },
+          rewards: { xp: 60, items: [], flags: ['week_five_reached'] },
         },
       ],
     },
@@ -773,7 +781,59 @@ const raw = {
           directorNotes:
             'Juno will not do this in the bar and will say so. The steps after service, the dock, or the road into ' +
             'town all work. Cornering them in public sets a flag that closes the best ending.',
-          succeedWhen: { completedEvents: ['juno_steps_conversation'] },
+          succeedWhenAny: [
+            {
+              routeId: 'on_the_steps',
+              label: 'The back steps after service',
+              predicate: {
+                flagsSet: ['spoke:juno'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: 'back_steps',
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              setsFlags: ['juno_steps_conversation'],
+              closesFlags: [],
+            },
+            {
+              routeId: 'on_the_dock',
+              label: 'The dock, in daylight, where everyone can see and nobody can hear',
+              predicate: {
+                flagsSet: ['spoke:juno'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: 'the_dock',
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              setsFlags: ['juno_steps_conversation'],
+              closesFlags: [],
+            },
+            {
+              routeId: 'on_the_road',
+              label: 'Twenty minutes of unlit road',
+              predicate: {
+                flagsSet: ['spoke:juno'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: 'town_road',
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              setsFlags: ['juno_steps_conversation'],
+              closesFlags: [],
+            },
+          ],
           rewards: { xp: 40, items: [], flags: [] },
         },
         {
@@ -783,22 +843,22 @@ const raw = {
             'Three ways to the same fact, and they cost different things. Juno telling you is the warmest. Cass ' +
             'admitting it is the fastest and makes him a problem later. Reading the letter without being given it ' +
             'is a real violation and Juno will treat it as one.',
-          enterWhen: { completedEvents: ['juno_steps_conversation'] },
+          enterWhen: { flagsSet: ['juno_steps_conversation'] },
           succeedWhenAny: [
             {
               routeId: 'why_from_juno',
               label: 'Juno told you themselves',
               predicate: {
-                flagsSet: [],
+                flagsSet: ['juno_steps_conversation'],
                 flagsUnset: ['juno_cornered_publicly'],
                 hasItems: [],
                 atLocation: null,
-                completedEvents: ['juno_told_you_why'],
+                completedEvents: [],
                 minRelationship: [{ characterId: 'juno', dimension: 'trust', value: 45 }],
                 minFactionReputation: [],
                 beforeWorldMinute: null,
               },
-              setsFlags: ['knows_about_september', 'juno_chose_to_tell_you'],
+              setsFlags: ['knows_about_september', 'juno_chose_to_tell_you', 'juno_told_you_why'],
               closesFlags: [],
             },
             {
@@ -809,20 +869,20 @@ const raw = {
                 flagsUnset: [],
                 hasItems: [],
                 atLocation: null,
-                completedEvents: ['cass_told_the_truth'],
+                completedEvents: [],
                 minRelationship: [{ characterId: 'cass', dimension: 'trust', value: 25 }],
                 minFactionReputation: [],
                 beforeWorldMinute: null,
               },
-              setsFlags: ['knows_about_september', 'cass_owes_you'],
+              setsFlags: ['knows_about_september', 'cass_told_the_truth', 'cass_owes_you'],
               closesFlags: ['juno_chose_to_tell_you'],
             },
             {
               routeId: 'why_from_the_letter',
               label: 'You read the letter without being given it',
               predicate: {
-                flagsSet: ['read_letter_uninvited'],
-                flagsUnset: [],
+                flagsSet: [],
+                flagsUnset: ['juno_chose_to_tell_you'],
                 hasItems: ['the_letter'],
                 atLocation: null,
                 completedEvents: [],
@@ -835,6 +895,73 @@ const raw = {
             },
           ],
           rewards: { xp: 80, items: [], flags: [] },
+        },
+        {
+          id: 'step_what_juno_does',
+          playerCopy: 'Find out what Juno is going to do about it.',
+          directorNotes:
+            'This is not the player\u2019s decision to make and the beat should never let them make it. Juno either ' +
+            'tells Teo themselves, or does not. Telling Teo on their behalf is a third thing and it costs both of them.',
+          enterWhen: { flagsSet: ['knows_about_september'] },
+          succeedWhenAny: [
+            {
+              routeId: 'juno_told_him',
+              label: 'Juno told Teo themselves',
+              predicate: {
+                flagsSet: ['spoke:juno'],
+                flagsUnset: ['player_told_teo', 'juno_cornered_publicly'],
+                hasItems: [],
+                atLocation: null,
+                completedEvents: [],
+                minRelationship: [
+                  { characterId: 'juno', dimension: 'trust', value: 55 },
+                  { characterId: 'juno', dimension: 'affection', value: 55 },
+                ],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              setsFlags: ['juno_and_teo_ended', 'juno_told_teo_herself'],
+              closesFlags: ['juno_and_teo_together'],
+            },
+            {
+              routeId: 'player_told_him',
+              label: 'You told Teo',
+              predicate: {
+                flagsSet: ['spoke:teo', 'knows_about_september'],
+                flagsUnset: ['juno_told_teo_herself'],
+                hasItems: [],
+                atLocation: null,
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: null,
+              },
+              // He finds out, and he finds out from the wrong person.
+              setsFlags: ['juno_and_teo_ended', 'player_told_teo', 'teo_found_out_from_someone_else'],
+              closesFlags: ['juno_told_teo_herself'],
+            },
+            {
+              routeId: 'nothing_changes',
+              label: 'They stayed together',
+              predicate: {
+                flagsSet: ['spoke:juno', 'spoke:teo'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: null,
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+                afterWorldMinute: 42 * 24 * 60,
+              },
+              // Not a failure. It is the most likely thing that happens.
+              setsFlags: ['juno_and_teo_together'],
+              closesFlags: ['juno_and_teo_ended'],
+            },
+          ],
+          rewards: { xp: 60, items: [], flags: [] },
         },
       ],
     },
@@ -866,7 +993,7 @@ const raw = {
                 flagsUnset: ['player_told_teo', 'juno_cornered_publicly'],
                 hasItems: [],
                 atLocation: null,
-                completedEvents: ['juno_told_teo_herself'],
+                completedEvents: [],
                 minRelationship: [
                   { characterId: 'juno', dimension: 'trust', value: 65 },
                   { characterId: 'juno', dimension: 'affection', value: 70 },
@@ -904,7 +1031,7 @@ const raw = {
                 flagsUnset: ['nadia_saw_you_lie', 'player_chased_juno_openly'],
                 hasItems: [],
                 atLocation: null,
-                completedEvents: ['nadia_point_conversation'],
+                completedEvents: [],
                 minRelationship: [
                   { characterId: 'nadia', dimension: 'trust', value: 70 },
                   { characterId: 'nadia', dimension: 'affection', value: 60 },
@@ -924,7 +1051,7 @@ const raw = {
                 flagsUnset: ['cass_confronted_publicly'],
                 hasItems: [],
                 atLocation: null,
-                completedEvents: ['cass_told_the_truth'],
+                completedEvents: [],
                 minRelationship: [
                   { characterId: 'cass', dimension: 'trust', value: 55 },
                   { characterId: 'cass', dimension: 'affection', value: 65 },

@@ -10,7 +10,7 @@ import { advanceQuests, rewardMutationsFor, type QuestTransition } from './quest
 import { levelUpMutations, milestoneMutations } from './progression.js';
 import { evaluateGates } from './relationships.js';
 import { encounterOutcome, defeatMutations } from './combat.js';
-import { locationForSchedule } from './state.js';
+import { charactersPresent, locationForSchedule } from './state.js';
 
 /**
  * Spec §32.4 `commitTurn` — the single transaction that turns a `Resolution`
@@ -56,6 +56,12 @@ export function commitTurn(options: CommitOptions): CommitResult {
   // World time has moved: regenerate resources and let NPCs follow their schedules.
   regenerateResources(state, story, minutesElapsed);
   applySchedules(state, story);
+
+  // Then record what the engine actually observed this turn, before quests are
+  // asked what has happened. Without this a quest can only ever gate on where
+  // the player is standing and what they are holding, which is why authored
+  // steps like "find the archive assistant" could never complete.
+  recordObservations(state, story, resolution);
 
   // Quests re-evaluate against settled state, then their rewards apply, then
   // progression reacts to those rewards. Two passes, not a fixed point loop.
@@ -123,6 +129,54 @@ export function commitTurn(options: CommitOptions): CommitResult {
   const events = buildEvents(state, turnId, accepted, questTransitions, now);
 
   return { state, events, questTransitions, rejectedMutations: rejected, gatesOpened, defeat };
+}
+
+/**
+ * Spec §15.1 — the world facts a quest may be written against.
+ *
+ * A deterministic engine can only gate on what it saw, so this is the whole
+ * vocabulary of what it saw, written as flags with reserved prefixes:
+ *
+ * - `met:<characterId>`      the player has shared a scene with them
+ * - `spoke:<characterId>`    the player addressed them
+ * - `attacked:<characterId>` set at resolution time
+ * - `visited:<locationId>`   the player has stood there
+ * - `used:<abilityId>`       the player used it
+ * - `inspected:<entityId>`   the player examined it, and the place they did it
+ *
+ * Authors compose these with the predicate's other fields — items, location,
+ * relationship, faction standing, world time — and with flags earlier steps
+ * award. Anything a story invents beyond that has to be produced by a step
+ * reward or a route, which the launch-catalog tests enforce.
+ */
+function recordObservations(state: GameState, story: StoryVersion, resolution: Resolution): void {
+  const set = (flag: string): void => {
+    if (!state.flags[flag]) state.flags[flag] = true;
+  };
+
+  set(`visited:${state.player.locationId}`);
+  for (const runtime of charactersPresent(state)) set(`met:${runtime.characterId}`);
+
+  const SPEAKING = new Set(['speak', 'persuade', 'deceive', 'threaten', 'help', 'oppose', 'interact', 'custom']);
+  const characterIds = new Set(story.characters.map((c) => c.id));
+
+  for (const action of resolution.normalizedActions) {
+    const verb = typeof action.verb === 'string' ? action.verb : '';
+    const targets = Array.isArray(action.targets) ? action.targets : [];
+
+    if (verb === 'use_ability' && typeof action.abilityId === 'string') set(`used:${action.abilityId}`);
+
+    // Examining anything here counts as having looked at the place, which is
+    // what "read your own entry in the register" actually needs to know.
+    if (verb === 'inspect') set(`inspected:${state.player.locationId}`);
+
+    for (const target of targets) {
+      const id = (target as { entityId?: unknown })?.entityId;
+      if (typeof id !== 'string') continue;
+      if (verb === 'inspect') set(`inspected:${id}`);
+      if (SPEAKING.has(verb) && characterIds.has(id)) set(`spoke:${id}`);
+    }
+  }
 }
 
 /** Spec §14.6 — NPCs move with the clock, without an LLM running in the background. */

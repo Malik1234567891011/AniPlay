@@ -512,7 +512,11 @@ const raw = {
           id: 'odalys_speaks_plainly',
           kind: 'TRUST',
           label: 'Odalys will tell you what she knows about the gate',
-          requires: { respect: 40, completedEvents: ['odalys_night_walk'], flagsUnset: ['odalys_lost_patience'] },
+          requires: {
+            respect: 40,
+            flagsSet: ['spoke:odalys', 'visited:wall_walk'],
+            flagsUnset: ['odalys_lost_patience'],
+          },
         },
         {
           id: 'odalys_puts_you_forward',
@@ -587,7 +591,7 @@ const raw = {
           id: 'bec_writes_it',
           kind: 'TRUST',
           label: 'Bec will put it in writing and sign it',
-          requires: { trust: 40, completedEvents: ['bec_told_privately'], flagsUnset: ['bec_pushed_too_hard'] },
+          requires: { trust: 40, flagsSet: ['bec_told_privately'], flagsUnset: ['bec_pushed_too_hard'] },
         },
         {
           id: 'bec_walks_the_wall',
@@ -668,7 +672,7 @@ const raw = {
           id: 'hollis_stands_down',
           kind: 'ALLIANCE',
           label: 'Hollis will back your name for the posting instead of their own',
-          requires: { trust: 55, respect: 50, completedEvents: ['hollis_learns_about_wren'] },
+          requires: { trust: 55, respect: 50, flagsSet: ['spoke:hollis', 'has_written_account'] },
         },
       ],
       combatant: { health: 24, defenseDc: 15, damage: 7, tags: ['healer', 'dangerous'] },
@@ -743,7 +747,7 @@ const raw = {
           id: 'ansett_opens_the_pass',
           kind: 'ALLIANCE',
           label: 'Ansett will authorise the pass',
-          requires: { respect: 50, trust: 40, completedEvents: ['ansett_reads_account'] },
+          requires: { respect: 50, trust: 40, flagsSet: ['ansett_knows_you_know'] },
         },
       ],
       combatant: { health: 44, defenseDc: 18, damage: 9, tags: ['commander', 'nonlethal'] },
@@ -842,8 +846,8 @@ const raw = {
           playerCopy: 'Get through your first drill without being sent off it.',
           directorNotes:
             'Odalys is testing whether the player can take a correction. Arguing is survivable; sulking is not.',
-          succeedWhen: { flagsSet: ['drill_passed'] },
-          rewards: { xp: 30, items: [{ itemId: 'field_kit', qty: 2 }], flags: ['known_to_odalys'] },
+          succeedWhen: { flagsSet: ['spoke:odalys'], atLocation: 'muster_yard' },
+          rewards: { xp: 30, items: [{ itemId: 'field_kit', qty: 2 }], flags: ['drill_passed', 'known_to_odalys'] },
         },
         {
           id: 'step_earn_a_place',
@@ -858,10 +862,10 @@ const raw = {
               routeId: 'route_march',
               label: 'You took the yard',
               predicate: {
-                flagsSet: ['won_the_yard'],
+                flagsSet: ['used:break_charge', 'spoke:odalys'],
                 flagsUnset: [],
                 hasItems: [],
-                atLocation: null,
+                atLocation: 'muster_yard',
                 completedEvents: [],
                 minRelationship: [],
                 minFactionReputation: [{ factionId: 'faction_iron_march', value: 25 }],
@@ -874,7 +878,7 @@ const raw = {
               routeId: 'route_rank',
               label: 'You came back with something nobody else had',
               predicate: {
-                flagsSet: ['went_over_the_wall'],
+                flagsSet: ['used:open_the_seam', 'visited:wall_walk'],
                 flagsUnset: [],
                 hasItems: [],
                 atLocation: null,
@@ -890,10 +894,10 @@ const raw = {
               routeId: 'route_longwatch',
               label: 'You earned a seat on a great bow crew',
               predicate: {
-                flagsSet: ['crewed_a_great_bow'],
+                flagsSet: ['used:held_shot'],
                 flagsUnset: [],
                 hasItems: [],
-                atLocation: null,
+                atLocation: 'longwatch_post',
                 completedEvents: [],
                 minRelationship: [],
                 minFactionReputation: [{ factionId: 'faction_longwatch', value: 25 }],
@@ -906,10 +910,10 @@ const raw = {
               routeId: 'route_hall',
               label: 'You bound your element in front of the hall',
               predicate: {
-                flagsSet: ['bound_first_element'],
+                flagsSet: ['used:first_element'],
                 flagsUnset: [],
                 hasItems: [],
-                atLocation: null,
+                atLocation: 'bright_hall',
                 completedEvents: [],
                 minRelationship: [],
                 minFactionReputation: [{ factionId: 'faction_bright_hall', value: 25 }],
@@ -922,10 +926,10 @@ const raw = {
               routeId: 'route_stillhand',
               label: 'You kept someone alive who should not have lived',
               predicate: {
-                flagsSet: ['held_a_thread'],
+                flagsSet: ['used:thread'],
                 flagsUnset: [],
                 hasItems: [],
-                atLocation: null,
+                atLocation: 'stillhand_tent',
                 completedEvents: [],
                 minRelationship: [],
                 minFactionReputation: [{ factionId: 'faction_stillhand', value: 25 }],
@@ -938,7 +942,7 @@ const raw = {
               routeId: 'route_useful',
               label: 'You made yourself impossible to leave off the list',
               predicate: {
-                flagsSet: ['yard_indispensable'],
+                flagsSet: ['spoke:odalys'],
                 flagsUnset: [],
                 hasItems: [],
                 atLocation: null,
@@ -971,8 +975,11 @@ const raw = {
           directorNotes:
             'He will not repeat it in the yard or anywhere an officer might pass. The tents late, or the lines while ' +
             'he is working, are both fine.',
-          succeedWhen: { flagsSet: ['bec_told_privately'] },
-          rewards: { xp: 40, items: [], flags: [] },
+          succeedWhen: {
+            flagsSet: ['spoke:bec'],
+            minRelationship: [{ characterId: 'bec', dimension: 'trust', value: 28 }],
+          },
+          rewards: { xp: 40, items: [], flags: ['bec_told_privately'] },
         },
         {
           id: 'step_get_signature',
@@ -986,7 +993,7 @@ const raw = {
               routeId: 'account_believed',
               label: 'He wrote it because you believed him',
               predicate: {
-                flagsSet: ['bec_believed'],
+                flagsSet: ['spoke:bec'],
                 flagsUnset: ['bec_pushed_too_hard'],
                 hasItems: [],
                 atLocation: null,
@@ -995,14 +1002,14 @@ const raw = {
                 minFactionReputation: [],
                 beforeWorldMinute: null,
               },
-              setsFlags: ['has_written_account', 'bec_owes_nothing'],
+              setsFlags: ['has_written_account', 'bec_believed', 'bec_owes_nothing'],
               closesFlags: [],
             },
             {
               routeId: 'account_traded',
               label: 'He wrote it because you got him back on a crew',
               predicate: {
-                flagsSet: ['bec_reinstated'],
+                flagsSet: ['spoke:bec'],
                 flagsUnset: [],
                 hasItems: [],
                 atLocation: null,
@@ -1018,7 +1025,7 @@ const raw = {
               routeId: 'account_forced',
               label: 'He wrote it because you would not stop',
               predicate: {
-                flagsSet: ['bec_pushed_too_hard'],
+                flagsSet: ['spoke:bec'],
                 flagsUnset: [],
                 hasItems: [],
                 atLocation: null,
@@ -1052,7 +1059,11 @@ const raw = {
           directorNotes:
             'She will read it properly. She will not be surprised by it, and a player paying attention should notice that.',
           enterWhen: { flagsSet: ['has_written_account'] },
-          succeedWhen: { completedEvents: ['ansett_reads_account'] },
+          succeedWhen: {
+            flagsSet: ['spoke:ansett'],
+            hasItems: ['proof_letter'],
+            minRelationship: [{ characterId: 'ansett', dimension: 'respect', value: 35 }],
+          },
           rewards: { xp: 90, items: [], flags: ['ansett_knows_you_know'] },
         },
         {
@@ -1083,11 +1094,11 @@ const raw = {
               routeId: 'posting_given',
               label: 'Hollis gave you theirs',
               predicate: {
-                flagsSet: [],
+                flagsSet: ['spoke:hollis', 'has_written_account'],
                 flagsUnset: ['hollis_humiliated'],
                 hasItems: [],
                 atLocation: null,
-                completedEvents: ['hollis_learns_about_wren'],
+                completedEvents: [],
                 minRelationship: [
                   { characterId: 'hollis', dimension: 'trust', value: 55 },
                   { characterId: 'hollis', dimension: 'respect', value: 50 },
@@ -1106,7 +1117,7 @@ const raw = {
                 flagsUnset: [],
                 hasItems: ['proof_letter'],
                 atLocation: null,
-                completedEvents: ['ansett_reads_account'],
+                completedEvents: ['q_the_pass:step_make_ansett_read'],
                 minRelationship: [
                   { characterId: 'ansett', dimension: 'respect', value: 50 },
                   { characterId: 'ansett', dimension: 'trust', value: 40 },

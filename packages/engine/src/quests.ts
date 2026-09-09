@@ -45,6 +45,9 @@ export function evaluatePredicate(
     const faction = state.factions.find((f) => f.factionId === req.factionId);
     if (!faction || faction.reputation < req.value) return false;
   }
+  if (predicate.afterWorldMinute !== null && state.worldMinute < predicate.afterWorldMinute) {
+    return false;
+  }
   if (predicate.beforeWorldMinute !== null && state.worldMinute >= predicate.beforeWorldMinute) {
     return false;
   }

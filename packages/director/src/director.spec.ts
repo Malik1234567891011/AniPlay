@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { LAUNCH_CATALOG, NINE_WEEKS, NINTH_ARCHIVE as STORY, TIDEWALL } from '@aniplay/test-fixtures';
 import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
 import { ActionIntent } from '@aniplay/contracts';
-import { createInitialState, deriveTurnSeed, resolveIntent } from '@aniplay/engine';
+import { commitTurn, createInitialState, deriveTurnSeed, resolveIntent } from '@aniplay/engine';
 import { stripInventedTravel } from './entity-resolution.js';
 import { OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
 import { RuleBasedIntentParser } from './parser.js';
@@ -972,6 +972,125 @@ describe('every launch world is playable', () => {
         }
       }
     }
+  });
+});
+
+describe('every authored gate can actually be reached', () => {
+  /** Flags the engine produces from what it observed. See `recordObservations`. */
+  const ENGINE_PREFIXES = ['met:', 'spoke:', 'attacked:', 'visited:', 'used:', 'inspected:', 'cooldown:', 'route:', 'closed:'];
+
+  const producibleFlags = (world: (typeof LAUNCH_CATALOG)[number]): Set<string> => {
+    const flags = new Set<string>();
+    for (const quest of world.quests) {
+      for (const step of quest.steps) {
+        for (const flag of step.rewards.flags) flags.add(flag);
+        for (const route of step.succeedWhenAny) {
+          for (const flag of route.setsFlags) flags.add(flag);
+        }
+      }
+    }
+    return flags;
+  };
+
+  /** The only event ids the engine ever records are quest step completions. */
+  const producibleEvents = (world: (typeof LAUNCH_CATALOG)[number]): Set<string> => {
+    const events = new Set<string>();
+    for (const quest of world.quests) {
+      for (const step of quest.steps) events.add(`${quest.id}:${step.id}`);
+    }
+    return events;
+  };
+
+  it('never gates on a flag nothing can set', () => {
+    // Without this the authored progression above step one is inert: a step
+    // that waits for `met_mira` waits forever, because nothing in the engine
+    // or the world ever writes that flag.
+    for (const world of LAUNCH_CATALOG) {
+      const producible = producibleFlags(world);
+      const orphans: string[] = [];
+
+      const check = (flags: readonly string[], where: string): void => {
+        for (const flag of flags) {
+          if (ENGINE_PREFIXES.some((prefix) => flag.startsWith(prefix))) continue;
+          if (producible.has(flag)) continue;
+          orphans.push(`${flag} (${where})`);
+        }
+      };
+
+      for (const quest of world.quests) {
+        if (quest.discoverWhen) check(quest.discoverWhen.flagsSet, `${quest.id}.discoverWhen`);
+        for (const step of quest.steps) {
+          if (step.enterWhen) check(step.enterWhen.flagsSet, `${quest.id}/${step.id}.enterWhen`);
+          if (step.succeedWhen) check(step.succeedWhen.flagsSet, `${quest.id}/${step.id}.succeedWhen`);
+          for (const route of step.succeedWhenAny) {
+            check(route.predicate.flagsSet, `${quest.id}/${step.id}/${route.routeId}`);
+          }
+        }
+      }
+      for (const character of world.characters) {
+        for (const gate of character.gates) check(gate.requires.flagsSet, `${character.id}/${gate.id}`);
+      }
+
+      expect(orphans, `${world.title} gates on flags nothing sets:\n  ${orphans.join('\n  ')}`).toEqual([]);
+    }
+  });
+
+  it('never gates on an event nothing completes', () => {
+    for (const world of LAUNCH_CATALOG) {
+      const producible = producibleEvents(world);
+      const orphans: string[] = [];
+
+      const check = (events: readonly string[], where: string): void => {
+        for (const event of events) {
+          if (!producible.has(event)) orphans.push(`${event} (${where})`);
+        }
+      };
+
+      for (const quest of world.quests) {
+        if (quest.discoverWhen) check(quest.discoverWhen.completedEvents, `${quest.id}.discoverWhen`);
+        for (const step of quest.steps) {
+          if (step.enterWhen) check(step.enterWhen.completedEvents, `${quest.id}/${step.id}.enterWhen`);
+          if (step.succeedWhen) check(step.succeedWhen.completedEvents, `${quest.id}/${step.id}.succeedWhen`);
+          for (const route of step.succeedWhenAny) {
+            check(route.predicate.completedEvents, `${quest.id}/${step.id}/${route.routeId}`);
+          }
+        }
+      }
+      for (const character of world.characters) {
+        for (const gate of character.gates) check(gate.requires.completedEvents, `${character.id}/${gate.id}`);
+      }
+
+      expect(orphans, `${world.title} gates on events nothing completes:\n  ${orphans.join('\n  ')}`).toEqual([]);
+    }
+  });
+
+  it('records what it observed, so a quest can be written against it', () => {
+    const state = createInitialState({
+      sessionId: 'sess_obs',
+      story: STORY,
+      identity: bareIdentity(null),
+    });
+
+    const result = commitTurn({
+      story: STORY,
+      state,
+      resolution: resolveIntent({
+        story: STORY,
+        state,
+        intent: parse('I ask Kael what the red light means.', state),
+        turnId: 't_obs',
+        seed: 'obs-seed',
+      }),
+      turnId: 't_obs',
+    });
+
+    // Present, addressed, and standing somewhere — all three are now facts the
+    // world can be written against.
+    expect(result.state.flags['met:kael']).toBe(true);
+    expect(result.state.flags['spoke:kael']).toBe(true);
+    expect(result.state.flags[`visited:${STORY.rules.startingLocationId}`]).toBe(true);
+    // Someone who is not in the scene is not met.
+    expect(result.state.flags['met:ysolde']).toBeUndefined();
   });
 });
 
