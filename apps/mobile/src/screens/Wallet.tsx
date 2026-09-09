@@ -19,9 +19,22 @@ import {
   radius,
   spacing,
 } from '@aniplay/ui';
-import { ApiError, api } from '../api/client.js';
+import { api } from '../api/client.js';
+import { Purchases } from '../store/purchases.js';
 import { useStore } from '../state/store.jsx';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
+
+/**
+ * One billing connection for the app, not one per mount of this screen.
+ *
+ * The listeners it installs are how a purchase arrives at all, including a
+ * transaction StoreKit redelivers from a previous launch, so it has to outlive
+ * the screen that opened it.
+ */
+const purchases = new Purchases({
+  sync: (request) => api.syncPurchase(request),
+  restore: (transactions) => api.restorePurchases(transactions),
+});
 
 /**
  * WL-01 / WL-02 / WL-03 — wallet and store.
@@ -45,11 +58,22 @@ export function WalletScreen({
   const [showHistory, setShowHistory] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [storePrices, setStorePrices] = useState<Record<string, string>>({});
+  const [storeUnavailable, setStoreUnavailable] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const response = await api.wallet();
     setWallet(response.wallet);
     setOffers(response.offers);
+
+    // Apple and Google are the only correct source of a price: theirs is
+    // localised, it moves with tiers, and it is what the sheet will actually
+    // charge. Our reference price is the placeholder until the store answers.
+    if (await purchases.connect()) {
+      const products = await purchases.products(response.offers.map((offer) => offer.productId));
+      setStorePrices(Object.fromEntries(products.map((product) => [product.productId, product.displayPrice])));
+    }
+    setStoreUnavailable(purchases.unavailableReason);
     // The header pill reads from the shared store. Opening the wallet is
     // exactly the moment the two must not disagree, so this one fetch feeds
     // both rather than leaving a stale pill behind an accurate sheet.
@@ -60,38 +84,51 @@ export function WalletScreen({
     void load();
   }, [load]);
 
+  /**
+   * WL-02 — buying a pack.
+   *
+   * Apple's sheet decides whether money moved; our server decides whether
+   * credits were granted; and those are not the same moment. Nothing here
+   * reports success until the server has confirmed it, and a transaction the
+   * store took is never discarded — it stays with the store and comes back on
+   * the next launch or the next Restore.
+   */
   const purchase = async (offer: StoreOffer): Promise<void> => {
     setBusy(offer.productId);
     setNotice(null);
-    try {
-      // Production routes this through RevenueCat and the native store sheet;
-      // the server then reconciles the platform transaction (§33.5). In dev the
-      // sandbox path exercises the same idempotent reconciliation.
-      const result = await api.syncPurchase(offer.productId, `sandbox_${Date.now()}`);
+
+    const outcome = await purchases.buy(offer.productId);
+
+    if (outcome.kind === 'CREDITED' || outcome.kind === 'ALREADY_CREDITED') {
       await load();
       await refreshWallet();
       haptic('success');
       setNotice(
-        result.duplicate
-          ? 'That purchase was already credited.'
-          : `${formatCredits(result.credited)} credits added.`,
+        outcome.kind === 'ALREADY_CREDITED'
+          ? 'That purchase was already on your balance.'
+          : `${formatCredits(outcome.credits)} credits added.`,
       );
-    } catch (error) {
+    } else if (outcome.kind === 'CANCELLED') {
+      // Someone who changed their mind has not hit a problem. Say nothing.
+      setNotice(null);
+    } else if (outcome.kind === 'PENDING') {
+      setNotice(
+        'That purchase is waiting for approval. Your credits will appear here as soon as it goes through.',
+      );
+    } else {
       haptic('error');
       // Spec §3.8 — never tell a player they were not charged unless we know
-      // it. A verification outage means the store may well have taken the
-      // money and we simply cannot confirm it yet.
-      const code = error instanceof ApiError ? error.code : 'UNKNOWN';
+      // it. If the store took the money and we could not confirm it, say so.
       setNotice(
-        code === 'STORE_VERIFICATION_UNAVAILABLE'
-          ? 'We could not reach the store to confirm that purchase. If you were charged, tap Restore purchases in a few minutes and your credits will appear.'
-          : code === 'PURCHASE_NOT_VERIFIED'
-            ? 'The store could not confirm that purchase, so no credits were added. If you were charged, tap Restore purchases.'
-            : 'That purchase did not go through. You have not been charged.',
+        outcome.kind === 'UNAVAILABLE'
+          ? outcome.message
+          : outcome.charged
+            ? `${outcome.message} If you were charged, tap Restore purchases in a few minutes and your credits will appear.`
+            : outcome.message,
       );
-    } finally {
-      setBusy(null);
     }
+
+    setBusy(null);
   };
 
   /**
@@ -99,15 +136,15 @@ export function WalletScreen({
    *
    * Credits are consumables, so this is not the usual "unlock what you own"
    * button. It is the fix for the one bad case: the store charged and our
-   * reconciliation did not finish. Production passes the platform's own
-   * transaction list; with no native store module attached the list is empty
-   * and the honest answer is that there is nothing to restore.
+   * reconciliation did not finish. Every transaction the platform still holds
+   * is re-verified; anything already credited comes back as a duplicate and
+   * changes nothing.
    */
   const restore = async (): Promise<void> => {
     setBusy('restore');
     setNotice(null);
     try {
-      const result = await api.restorePurchases();
+      const result = await purchases.restore();
       await load();
       await refreshWallet();
       if (result.restored > 0) {
@@ -222,7 +259,7 @@ export function WalletScreen({
               accessibilityRole="button"
               accessibilityLabel={`${formatCredits(offer.credits)} credits${
                 offer.bonusCredits ? ` plus ${offer.bonusCredits} bonus` : ''
-              }, about $${offer.referencePriceUsd.toFixed(2)}`}
+              }, ${storePrices[offer.productId] ?? `about $${offer.referencePriceUsd.toFixed(2)}`}`}
               disabled={busy !== null}
               onPress={() => void purchase(offer)}
             >
@@ -249,18 +286,28 @@ export function WalletScreen({
                       </Txt>
                     ) : null}
                   </Stack>
-                  {/* Spec §20.6 — the store shows the real localized price at purchase. */}
+                  {/* The store's own localised price once it has answered. */}
                   <Txt variant="bodyStrong" color={colors.accent.primary}>
-                    ${offer.referencePriceUsd.toFixed(2)}
+                    {storePrices[offer.productId] ?? `$${offer.referencePriceUsd.toFixed(2)}`}
                   </Txt>
                 </Row>
               </Card>
             </Pressable>
           ))}
-          <Txt variant="micro" color={colors.text.muted}>
-            Prices shown are US reference prices. Your store will show your local price and confirm before
-            any payment.
-          </Txt>
+          {storeUnavailable ? (
+            <Txt variant="micro" color={colors.semantic.warning}>
+              {storeUnavailable}
+            </Txt>
+          ) : Object.keys(storePrices).length === 0 ? (
+            <Txt variant="micro" color={colors.text.muted}>
+              Prices shown are US reference prices. Your store will show your local price and confirm before
+              any payment.
+            </Txt>
+          ) : (
+            <Txt variant="micro" color={colors.text.muted}>
+              Your store confirms the price before any payment. Credits are consumable and do not expire.
+            </Txt>
+          )}
           {/* Spec §20.6 — required, and the only way back from a charge whose
               reconciliation did not land. */}
           <Button

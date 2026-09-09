@@ -106,23 +106,33 @@ export class AppStoreVerifier implements StoreVerifier {
       return { valid: false, reason: 'Not an App Store purchase.', retryable: false };
     }
 
-    const host =
+    // Apple's two environments are separate namespaces, and which one a
+    // transaction lives in is not a property of our deployment: a TestFlight
+    // build and a sandbox tester on a production build both produce sandbox
+    // transactions. Asking one host and giving up on 404 is the bug that makes
+    // every test purchase fail, so ask the other one before concluding
+    // anything. The environment we are configured for is only the first guess.
+    const hosts =
       this.options.environment === 'PRODUCTION'
-        ? 'https://api.storekit.itunes.apple.com'
-        : 'https://api.storekit-sandbox.itunes.apple.com';
+        ? ['https://api.storekit.itunes.apple.com', 'https://api.storekit-sandbox.itunes.apple.com']
+        : ['https://api.storekit-sandbox.itunes.apple.com', 'https://api.storekit.itunes.apple.com'];
 
-    let response: Response;
-    try {
-      response = await fetch(`${host}/inApps/v1/transactions/${encodeURIComponent(input.storeTransactionId)}`, {
-        headers: { authorization: `Bearer ${await this.#token()}` },
-      });
-    } catch (error) {
-      // A network failure is not a fraudulent purchase. The player keeps their
-      // transaction and the client can retry, which is why this is retryable.
-      return { valid: false, reason: `App Store unreachable: ${String(error)}`, retryable: true };
+    let response: Response | null = null;
+    for (const host of hosts) {
+      try {
+        response = await fetch(
+          `${host}/inApps/v1/transactions/${encodeURIComponent(input.storeTransactionId)}`,
+          { headers: { authorization: `Bearer ${await this.#token()}` } },
+        );
+      } catch (error) {
+        // A network failure is not a fraudulent purchase. The player keeps
+        // their transaction and the client can retry, hence retryable.
+        return { valid: false, reason: `App Store unreachable: ${String(error)}`, retryable: true };
+      }
+      if (response.status !== 404) break;
     }
 
-    if (response.status === 404) {
+    if (!response || response.status === 404) {
       return { valid: false, reason: 'Apple has no record of that transaction.', retryable: false };
     }
     if (!response.ok) {

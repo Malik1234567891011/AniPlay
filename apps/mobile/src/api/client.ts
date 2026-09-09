@@ -408,11 +408,15 @@ export class ApiClient {
     return this.#request('POST', '/v1/wallet/daily-claim');
   }
 
-  syncPurchase(productId: string, storeTransactionId: string) {
+  /**
+   * Hands the server what the store gave us. The server asks Apple or Google
+   * directly and credits nothing this request merely claims (§33.5).
+   */
+  syncPurchase(request: PurchaseSyncRequest) {
     return this.#request<{ credited: number; duplicate: boolean; balance: number }>(
       'POST',
       '/v1/store/purchases/sync',
-      { productId, storeTransactionId, platform: 'SANDBOX', receipt: null },
+      request,
     );
   }
 

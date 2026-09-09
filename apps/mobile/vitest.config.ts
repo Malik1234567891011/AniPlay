@@ -9,7 +9,7 @@ import { defineConfig } from 'vitest/config';
  */
 export default defineConfig({
   test: {
-    include: ['src/auth/**/*.spec.ts'],
+    include: ['src/auth/**/*.spec.ts', 'src/store/**/*.spec.ts'],
     environment: 'node',
   },
 });
