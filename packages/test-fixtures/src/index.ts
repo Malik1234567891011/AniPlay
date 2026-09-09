@@ -5,6 +5,7 @@ import { SALT_ROAD as SALT_ROAD_RAW } from './salt-road.js';
 import { TIDEWALL as TIDEWALL_RAW } from './tidewall.js';
 import { UNBOUND as UNBOUND_RAW } from './unbound.js';
 import { NINE_WEEKS as NINE_WEEKS_RAW } from './nine-weeks.js';
+import { RED_MOON as RED_MOON_RAW } from './red-moon.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -14,6 +15,7 @@ export const SALT_ROAD = withDerivedAssetKeys(SALT_ROAD_RAW);
 export const TIDEWALL = withDerivedAssetKeys(TIDEWALL_RAW);
 export const UNBOUND = withDerivedAssetKeys(UNBOUND_RAW);
 export const NINE_WEEKS = withDerivedAssetKeys(NINE_WEEKS_RAW);
+export const RED_MOON = withDerivedAssetKeys(RED_MOON_RAW);
 
 /**
  * The official launch catalog.
@@ -24,7 +26,9 @@ export const NINE_WEEKS = withDerivedAssetKeys(NINE_WEEKS_RAW);
  * travel arithmetic with permanent death, and The Tidewall is a class RPG where
  * the class picks the route through every door, and The Unbound is build
  * freedom where half the abilities are awakened rather than chosen, and Nine
- * Weeks is a romance with no combat at all where the romance can genuinely fail.
+ * Weeks is a romance with no combat at all where the romance can genuinely fail,
+ * and Red Moon Brigade is a monster hunt where the meter that makes you strong
+ * is the same one that stops you being a person.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -33,4 +37,5 @@ export const LAUNCH_CATALOG = [
   TIDEWALL,
   UNBOUND,
   NINE_WEEKS,
+  RED_MOON,
 ] as const;
