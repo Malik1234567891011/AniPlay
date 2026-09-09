@@ -1,6 +1,8 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CONTRACT_VERSION } from '@aniplay/contracts';
 import { createGatewayFromEnv, ModelDirector, ModelIntentParser, ModelWriter, createDefaultPipeline, type TurnPipelineDeps } from '@aniplay/director';
+import { createMediaGatewayFromEnv } from '@aniplay/director';
+import { JobQueue, registerHandlers } from '@aniplay/worker';
 import { MemoryRepository } from './repo/memory.js';
 import type { Repository, UserRecord } from './repo/types.js';
 import { WalletService } from './wallet.js';
@@ -41,6 +43,11 @@ export interface AppContext {
   readonly pipeline: TurnPipelineDeps;
   /** Null when no provider key is configured; the rule-based path then runs. */
   readonly modelProvider: string | null;
+  /**
+   * Spec §17.8 — media is enqueued, never awaited. An image must not stop a
+   * player from reading a finished turn or composing the next one.
+   */
+  readonly jobs: JobQueue;
 }
 
 export function createAppContext(overrides: Partial<AppContext> = {}): AppContext {
@@ -61,12 +68,28 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
         }
       : createDefaultPipeline());
 
+  const jobs = overrides.jobs ?? new JobQueue();
+  if (!overrides.jobs) {
+    const media = createMediaGatewayFromEnv();
+    registerHandlers(jobs, {
+      media,
+      getStory: (storyVersionId) => repo.getStoryVersion(storyVersionId),
+      attachAsset: async ({ turnId, url }) => {
+        const turn = await repo.getTurn(turnId);
+        // The turn is already authoritative; the image only decorates it.
+        if (turn) await repo.attachHeroImage(turnId, url);
+      },
+      baseUrl: config.baseUrl,
+    });
+  }
+
   return {
     config,
     repo,
     wallet,
     pipeline,
     modelProvider: overrides.modelProvider ?? gateway?.name ?? null,
+    jobs,
   };
 }
 

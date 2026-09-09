@@ -196,6 +196,18 @@ export class MemoryRepository implements Repository {
     return this.#turnsById.get(turnId) ?? null;
   }
 
+  async attachHeroImage(turnId: string, url: string): Promise<void> {
+    const turn = this.#turnsById.get(turnId);
+    if (!turn) return;
+    const updated: TurnRecord = { ...turn, heroImageUrl: url };
+    this.#turnsById.set(turnId, updated);
+    const list = this.#turns.get(turn.sessionId) ?? [];
+    this.#turns.set(
+      turn.sessionId,
+      list.map((t) => (t.turnId === turnId ? updated : t)),
+    );
+  }
+
   async listTurns(sessionId: string): Promise<TurnRecord[]> {
     return [...(this.#turns.get(sessionId) ?? [])];
   }

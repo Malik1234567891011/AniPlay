@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { GRANT_DAILY, GRANT_NEW_USER, QUALITY_TIERS } from '@aniplay/contracts';
 import { createDefaultPipeline } from '@aniplay/director';
+import { JobQueue } from '@aniplay/worker';
 import { buildServer } from './server.js';
 import { createAppContext, loadConfig } from './context.js';
 import { MemoryRepository } from './repo/memory.js';
@@ -25,6 +26,8 @@ function makeContext(now: () => Date = () => new Date()): AppContext {
     // Pinned to the rule-based pipeline so tests never depend on a provider key.
     pipeline: createDefaultPipeline(),
     modelProvider: null,
+    // No handlers registered, so media jobs are inert in tests.
+    jobs: new JobQueue(),
   };
 }
 

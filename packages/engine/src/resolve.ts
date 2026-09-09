@@ -577,6 +577,11 @@ function resolveTravel(args: ResolveActionArgs): ActionOutcome {
     );
   }
 
+  // Whether this is the first time here has to be recorded now: by the time the
+  // director sees state, the arrival has already marked the place discovered,
+  // so it can no longer tell a first visit from a return trip.
+  const firstVisit = !state.discoveredLocationIds.includes(destination.id);
+
   return {
     checks: [],
     mutations: [
@@ -585,7 +590,7 @@ function resolveTravel(args: ResolveActionArgs): ActionOutcome {
         type: 'LOCATION_CHANGE',
         subjectId: 'player',
         reasonCode: 'TRAVEL',
-        payload: { locationId: destination.id },
+        payload: { locationId: destination.id, firstVisit },
       },
     ],
     observableFacts: [`You travel to ${destination.name}.`],

@@ -122,6 +122,11 @@ export interface Repository {
 
   // --- Turns and events ---
   appendTurn(turn: TurnRecord): Promise<void>;
+  /**
+   * Attaches generated media to an already-committed turn. Spec §17.2: once the
+   * transaction commits the turn is authoritative, so this only ever decorates.
+   */
+  attachHeroImage(turnId: string, url: string): Promise<void>;
   getTurn(turnId: string): Promise<TurnRecord | null>;
   listTurns(sessionId: string): Promise<TurnRecord[]>;
   appendEvents(events: readonly GameEvent[]): Promise<void>;

@@ -16,6 +16,9 @@
     "@aniplay/director": "*",
     "@aniplay/test-fixtures": "*",
     "fastify": "^5.2.0",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "@aniplay/worker": "*",
+    "@aniplay/config": "*",
+    "@aniplay/analytics": "*"
   }
 }

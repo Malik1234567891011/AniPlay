@@ -199,11 +199,39 @@ async function processTurn(
     // Spec §17.1 step 15 — media is enqueued, never awaited. Images must not
     // block the player from reading the turn or composing the next one (§17.8).
     if (result.plan.mediaPlan.heroImage.eligible) {
+      const job = ctx.jobs.enqueue(
+        'turn-media-image',
+        {
+          turnId,
+          sessionId: session.sessionId,
+          storyVersionId: session.storyVersionId,
+          locationId: result.state.player.locationId,
+          presentCharacterIds: result.plan.mediaPlan.activeCharacterIds,
+          shotType: result.plan.mediaPlan.heroImage.shotType,
+          sceneFacts: result.resolution.observableFacts,
+        },
+        // Keyed on the turn, so a retried commit never generates twice.
+        `hero:${turnId}`,
+      );
+
       hub.emit(turnId, 'media.queued', {
         kind: 'HERO_IMAGE',
+        jobId: job.jobId,
         shotType: result.plan.mediaPlan.heroImage.shotType,
         reason: result.plan.mediaPlan.heroImage.reason,
       });
+
+      // The turn is already committed and streamed; this only decorates it.
+      void (async () => {
+        await ctx.jobs.drain(120_000);
+        const finished = await ctx.repo.getTurn(turnId);
+        if (finished?.heroImageUrl) {
+          hub.emit(turnId, 'media.completed', {
+            kind: 'HERO_IMAGE',
+            url: finished.heroImageUrl,
+          });
+        }
+      })();
     }
 
     const balance = await ctx.wallet.getBalance(user.userId);

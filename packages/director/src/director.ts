@@ -421,7 +421,9 @@ function buildMediaPlan(context: TurnContext, beatType: BeatType): MediaPlan {
   const config = QUALITY_TIERS[context.tier];
   const { resolution, state } = context;
 
-  const locationChanged = resolution.mutations.some((m) => m.type === 'LOCATION_CHANGE');
+  const locationChange = resolution.mutations.find((m) => m.type === 'LOCATION_CHANGE');
+  const locationChanged = !!locationChange;
+  const firstVisit = (locationChange?.payload as { firstVisit?: boolean } | undefined)?.firstVisit === true;
 
   const expressions: Record<string, string> = {};
   for (const character of context.presentCharacters) {
@@ -433,7 +435,10 @@ function buildMediaPlan(context: TurnContext, beatType: BeatType): MediaPlan {
     beatType === 'CLIFFHANGER' ||
     resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS') ||
     resolution.mutations.some((m) => m.type === 'ENCOUNTER_START') ||
-    (locationChanged && !state.discoveredLocationIds.includes(context.scene.locationId));
+    // Arriving somewhere for the first time earns a frame. This used to test
+    // the discovered list on projected state, where the arrival has already
+    // been recorded, so the condition could never be true.
+    firstVisit;
 
   const shotType = !heroWorthy
     ? ('NONE' as const)

@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -61,6 +62,8 @@ import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 interface PendingTurn {
   turnId: string;
+  /** Spec §19.1 — arrives after the turn, never blocking it. */
+  heroImageUrl: string | null;
   blocks: NarrativeBlock[];
   check: {
     label: string;
@@ -95,6 +98,7 @@ export function SessionScreen({
   const [showHistory, setShowHistory] = useState(false);
   const [revision, setRevision] = useState(0);
   const [playerPortraitUrl, setPlayerPortraitUrl] = useState<string | null>(null);
+  const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
   const transcriptRef = useRef<ScrollView>(null);
@@ -175,7 +179,7 @@ export function SessionScreen({
       setBalance(accepted.balanceAfterReserve);
       setDraft('');
       void saveDraft(sessionId, '');
-      setPending({ turnId: accepted.turnId, blocks: [], check: null, deltas: [] });
+      setPending({ turnId: accepted.turnId, heroImageUrl: null, blocks: [], check: null, deltas: [] });
 
       const controller = new AbortController();
       abortRef.current = controller;
@@ -239,6 +243,14 @@ export function SessionScreen({
                 setPending(null);
               });
             }
+            if (event === 'media.completed' && typeof data.url === 'string') {
+              // The turn is already committed and read; the frame just arrives.
+              const url = data.url;
+              setPending((current) => (current ? { ...current, heroImageUrl: url } : current));
+              setTurns((current) =>
+                current.map((t) => (t.turnId === accepted.turnId ? { ...t, heroImageUrl: url } : t)),
+              );
+            }
             if (event === 'turn.failed') {
               // Spec §10.8 — keep the draft, say plainly that nothing was charged.
               haptic('error');
@@ -282,6 +294,7 @@ export function SessionScreen({
   ]);
 
   const latest = turns.at(-1);
+  const heroImageUrl = pending ? pending.heroImageUrl : (latest?.heroImageUrl ?? null);
   const visibleBlocks = pending ? pending.blocks : (latest?.blocks ?? []);
   const visibleDeltas = pending
     ? pending.deltas
@@ -375,6 +388,26 @@ export function SessionScreen({
             outcomeLabel={outcomeText(latest.checks[0].outcome)}
             math={null}
           />
+        ) : null}
+
+        {/* Spec §19.1 tier 2 — a hero frame for a beat that earned one. */}
+        {heroImageUrl ? (
+          <Pressable
+            accessibilityRole="imagebutton"
+            accessibilityLabel="Scene image. Tap to view full screen."
+            onPress={() => setFullScreenImage(heroImageUrl)}
+          >
+            <Image
+              source={{ uri: heroImageUrl }}
+              style={{
+                width: '100%',
+                aspectRatio: 3 / 2,
+                borderRadius: radius.card,
+                backgroundColor: colors.bg.elevated,
+              }}
+              resizeMode="cover"
+            />
+          </Pressable>
         ) : null}
 
         {visibleBlocks.map((block, index) => (
@@ -509,6 +542,31 @@ export function SessionScreen({
           </Row>
         </View>
       </KeyboardAvoidingView>
+
+      {/* MD-01 — full-screen media viewer. */}
+      {fullScreenImage ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Close image"
+          onPress={() => setFullScreenImage(null)}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: 'rgba(4,6,11,0.96)',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Image
+            source={{ uri: fullScreenImage }}
+            style={{ width: '100%', aspectRatio: 3 / 2 }}
+            resizeMode="contain"
+          />
+          <Txt variant="caption" color={colors.text.muted} style={{ marginTop: spacing.xl }}>
+            Tap anywhere to close
+          </Txt>
+        </Pressable>
+      ) : null}
 
       {showQuality ? (
         <QualitySheet
