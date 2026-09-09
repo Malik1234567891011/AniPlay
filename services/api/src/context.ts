@@ -124,6 +124,16 @@ export function createRepositoryFromEnv(env: NodeJS.ProcessEnv = process.env): R
   });
 }
 
+/**
+ * The last few times a model stage gave up. Read by /health, so "why has the
+ * writing gone flat" has an answer that is not a guess.
+ */
+const degradations: Array<{ role: string; code: string; at: string }> = [];
+
+export function recentDegradations(): ReadonlyArray<{ role: string; code: string; at: string }> {
+  return degradations;
+}
+
 export function createAppContext(overrides: Partial<AppContext> = {}): AppContext {
   const config = overrides.config ?? loadConfig();
   const repo = overrides.repo ?? createRepositoryFromEnv();
@@ -131,7 +141,18 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
 
   // Spec §31.4 — the gateway is selected by environment. With no key the
   // rule-based pipeline runs, which is a supported mode, not a broken one.
-  const gateway = createGatewayFromEnv();
+  // A stage that gives up and falls back to the deterministic pipeline is a
+  // supported mode, and it must never be a quiet one: the player gets the plain
+  // prose and every log line still says 200.
+  const gateway = createGatewayFromEnv(process.env, {
+    onDegraded: (role, error) => {
+      degradations.push({ role, code: error.code, at: new Date().toISOString() });
+      if (degradations.length > 50) degradations.shift();
+      console.warn(
+        `[model] ${role} degraded to the rule-based path after retries: ${error.code} — ${error.message}`,
+      );
+    },
+  });
   const pipeline =
     overrides.pipeline ??
     (gateway

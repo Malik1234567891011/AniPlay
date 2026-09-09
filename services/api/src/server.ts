@@ -24,6 +24,7 @@ import {
 } from '@aniplay/director';
 import {
   CONTRACT_HEADER,
+  recentDegradations,
   CONTRACT_VERSION,
   createAppContext,
   newUserRecord,
@@ -147,12 +148,20 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
   // --- Health ---
 
-  app.get('/health', async () => ({
-    ok: true,
-    environment: ctx.config.environment,
-    modelProvider: ctx.modelProvider ?? 'rule-based',
-    contractVersion: CONTRACT_VERSION,
-  }));
+  app.get('/health', async () => {
+    const degraded = recentDegradations();
+    return {
+      ok: true,
+      environment: ctx.config.environment,
+      modelProvider: ctx.modelProvider ?? 'rule-based',
+      contractVersion: CONTRACT_VERSION,
+      persistence: ctx.repo.constructor.name === 'PostgresRepository' ? 'postgres' : 'in-process',
+      auth: ctx.auth.name,
+      // "The writing has gone flat" should have an answer here rather than
+      // requiring somebody to guess at a provider dashboard.
+      modelDegradations: { count: degraded.length, recent: degraded.slice(-5) },
+    };
+  });
 
   // --- Bootstrap (§33.1) ---
 

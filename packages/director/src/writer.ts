@@ -196,7 +196,9 @@ function checkSentence(context: TurnContext, rng: SeededRng): string {
   if (check.outcome === 'SUCCESS_WITH_COST') {
     const priced = context.resolution.observableFacts.find((fact) => /\bit costs you\b/i.test(fact));
     const cost = priced?.match(/it costs you [^.,]+/i)?.[0];
-    if (cost) base = `${check.label}. It works, and ${cost.toLowerCase()}.`;
+    // Only the leading word, so the resource keeps its own capital: "it costs
+    // you 2 Energy", not "2 energy".
+    if (cost) base = `${check.label}. It works, and ${cost[0]!.toLowerCase()}${cost.slice(1)}.`;
   }
 
   // Spec §10.6 — the maths only appears when the story opts into it.
