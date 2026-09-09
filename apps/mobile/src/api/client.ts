@@ -434,6 +434,19 @@ export class ApiClient {
     });
   }
 
+  /**
+   * GP-04 / §20.9 — ask for the same moment in different words.
+   *
+   * The server reruns only the writer, from the resolution the turn already
+   * stored. Nothing is re-rolled, so this cannot change what happened.
+   */
+  rephraseTurn(turnId: string) {
+    return this.#request<{ turn: PlayerTurnRecord; creditsCharged: number; balance: number }>(
+      'POST',
+      `/v1/turns/${turnId}/rephrase`,
+    );
+  }
+
   // --- Account and safety ---
 
   me(): Promise<MeResponse> {

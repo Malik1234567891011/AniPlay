@@ -419,9 +419,9 @@ export class PostgresRepository implements Repository {
     await this.#pool.query(
       `INSERT INTO turns (turn_id, session_id, turn_index, action_text, quality_tier,
                           credits_charged, scene_summary, blocks, checks, mutations, state_deltas,
-                          suggestions, end_state_prompt, media_plan, hero_image_url, rng_seed_hash,
-                          revision_after, repair_violations, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
+                          suggestions, end_state_prompt, media_plan, hero_image_url, resolution,
+                          beat_plan, rng_seed_hash, revision_after, repair_violations, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
        ON CONFLICT (turn_id) DO NOTHING`,
       [
         turn.turnId,
@@ -439,11 +439,30 @@ export class PostgresRepository implements Repository {
         turn.endStatePrompt,
         turn.mediaPlan ? JSON.stringify(turn.mediaPlan) : null,
         turn.heroImageUrl,
+        turn.resolution ? JSON.stringify(turn.resolution) : null,
+        turn.beatPlan ? JSON.stringify(turn.beatPlan) : null,
         // The seed itself never leaves the server (§12.1); this is its handle.
         turn.turnId,
         turn.revisionAfter,
         JSON.stringify(turn.repairViolations),
         turn.createdAt,
+      ],
+    );
+  }
+
+  async replaceNarration(
+    turnId: string,
+    narration: { blocks: unknown; sceneSummary: string; endStatePrompt: string; stateDeltas: unknown },
+  ): Promise<void> {
+    await this.#pool.query(
+      `UPDATE turns SET blocks = $2, scene_summary = $3, end_state_prompt = $4, state_deltas = $5
+        WHERE turn_id = $1`,
+      [
+        turnId,
+        JSON.stringify(narration.blocks),
+        narration.sceneSummary,
+        narration.endStatePrompt,
+        JSON.stringify(narration.stateDeltas),
       ],
     );
   }
@@ -886,6 +905,8 @@ function toTurnRecord(row: Record<string, unknown>): TurnRecord {
     revisionAfter: row.revision_after,
     createdAt: iso(row.created_at),
     repairViolations: row.repair_violations,
+    resolution: row.resolution ?? null,
+    beatPlan: row.beat_plan ?? null,
   });
 }
 

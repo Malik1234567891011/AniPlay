@@ -210,6 +210,10 @@ CREATE TABLE turns (
   -- Denormalised from the asset so replaying a timeline is one query. An image
   -- generated after the turn committed is attached here (§17.2).
   hero_image_url     text,
+  -- Spec §20.9 — what the engine decided and how the beat was staged, kept
+  -- whole so `Rephrase narration` can rerun the prose without re-resolving.
+  resolution         jsonb,
+  beat_plan          jsonb,
   -- Spec §12.1 — the audit handle. The seed itself is derived, never stored raw.
   rng_seed_hash      text NOT NULL,
   revision_after     integer NOT NULL,

@@ -1,5 +1,6 @@
 import type {
   GameEvent,
+  NarrativeTurn,
   GameState,
   LedgerEntry,
   MemoryFact,
@@ -137,6 +138,23 @@ export interface Repository {
    * transaction commits the turn is authoritative, so this only ever decorates.
    */
   attachHeroImage(turnId: string, url: string): Promise<void>;
+  /**
+   * Spec §20.9 — `Rephrase narration` rewrites the prose of a committed turn.
+   *
+   * Deliberately narrow: it can change what the turn *says* and nothing about
+   * what the turn *did*. The mutations, checks and events stay exactly as they
+   * committed, because re-rolling behind a rewrite button is the one thing that
+   * button promises not to do.
+   */
+  replaceNarration(
+    turnId: string,
+    narration: {
+      blocks: NarrativeTurn['blocks'];
+      sceneSummary: string;
+      endStatePrompt: string;
+      stateDeltas: NarrativeTurn['stateDeltaPresentation'];
+    },
+  ): Promise<void>;
   getTurn(turnId: string): Promise<TurnRecord | null>;
   listTurns(sessionId: string): Promise<TurnRecord[]>;
   appendEvents(events: readonly GameEvent[]): Promise<void>;

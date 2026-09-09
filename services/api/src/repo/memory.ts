@@ -211,7 +211,9 @@ export class MemoryRepository implements Repository {
 
   // --- Turns and events ---
 
+  /** Insert-only, like the append-only `turns` table it stands in for. */
   async appendTurn(turn: TurnRecord): Promise<void> {
+    if (this.#turnsById.has(turn.turnId)) return;
     const list = this.#turns.get(turn.sessionId) ?? [];
     list.push(turn);
     this.#turns.set(turn.sessionId, list);
@@ -220,6 +222,25 @@ export class MemoryRepository implements Repository {
 
   async getTurn(turnId: string): Promise<TurnRecord | null> {
     return this.#turnsById.get(turnId) ?? null;
+  }
+
+  async replaceNarration(
+    turnId: string,
+    narration: {
+      blocks: TurnRecord['blocks'];
+      sceneSummary: string;
+      endStatePrompt: string;
+      stateDeltas: TurnRecord['stateDeltas'];
+    },
+  ): Promise<void> {
+    const turn = this.#turnsById.get(turnId);
+    if (!turn) return;
+    const updated: TurnRecord = { ...turn, ...narration };
+    this.#turnsById.set(turnId, updated);
+    this.#turns.set(
+      turn.sessionId,
+      (this.#turns.get(turn.sessionId) ?? []).map((t) => (t.turnId === turnId ? updated : t)),
+    );
   }
 
   async attachHeroImage(turnId: string, url: string): Promise<void> {

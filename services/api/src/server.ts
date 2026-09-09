@@ -16,7 +16,12 @@ import {
   type StorySummary,
 } from '@aniplay/contracts';
 import { createInitialState, forkState, sha256Hex } from '@aniplay/engine';
-import { applyCorrection, buildRecap, checkCorrectionConflict } from '@aniplay/director';
+import {
+  applyCorrection,
+  buildRecap,
+  checkCorrectionConflict,
+  rephraseNarration,
+} from '@aniplay/director';
 import {
   CONTRACT_HEADER,
   CONTRACT_VERSION,
@@ -383,6 +388,10 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       heroImageUrl: null,
       revisionAfter: state.revision,
       createdAt: new Date().toISOString(),
+      // The authored opening resolved nothing, so there is nothing to rephrase
+      // it against; the turn menu is not offered on it.
+      resolution: null,
+      beatPlan: null,
       repairViolations: [],
     };
     await ctx.repo.appendTurn(openingTurn);
@@ -738,6 +747,104 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const story = await ctx.repo.getStoryVersion(session.storyVersionId);
     if (!story) return sendError(reply, 500, 'SESSION_CORRUPT', 'That turn could not be loaded.');
     return toPlayerTurn(story, turn);
+  });
+
+  /**
+   * GP-04 / §20.9 — `Rephrase narration`.
+   *
+   * Reruns the writer over a turn that already happened, from the resolution
+   * and beat plan that turn stored. The engine is not called: the dice, the
+   * outcomes, the mutations and the events are exactly what they were, and only
+   * the words change. "Never silently re-roll deterministic dice when only
+   * narration is regenerated" is the rule, and the only way to keep it is to
+   * have nothing here that could roll one.
+   *
+   * Charged as a generation, except when it is repairing a defect the system
+   * produced — a turn that needed a repair pass is not something to bill for.
+   */
+  app.post<{ Params: { turnId: string } }>('/v1/turns/:turnId/rephrase', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+
+    const turn = await ctx.repo.getTurn(request.params.turnId);
+    if (!turn) return sendError(reply, 404, 'NOT_FOUND', 'That turn does not exist.');
+
+    const session = await ctx.repo.getSession(turn.sessionId);
+    if (!session || session.userId !== user.userId) {
+      return sendError(reply, 404, 'NOT_FOUND', 'That turn does not exist.');
+    }
+
+    if (!turn.resolution || !turn.beatPlan) {
+      return sendError(
+        reply,
+        409,
+        'NOT_REPHRASABLE',
+        'This moment was written before the story began, so there is nothing to say differently.',
+      );
+    }
+
+    const story = await ctx.repo.getStoryVersion(session.storyVersionId);
+    // The state the turn started from, which is what the writer saw the first
+    // time. Rephrasing against the state it produced would describe the
+    // aftermath rather than the moment.
+    const before = await ctx.repo.getStateSnapshot(session.sessionId, turn.turnIndex - 1);
+    if (!story || !before) {
+      return sendError(
+        reply,
+        409,
+        'NOT_REPHRASABLE',
+        'That moment is too far back to rewrite. Older turns are kept as they were told.',
+      );
+    }
+
+    // Free when the original needed repairing: that defect is ours.
+    const free = turn.repairViolations.length > 0;
+    const cost = free ? 0 : QUALITY_TIERS[turn.qualityTier].costCredits;
+    const reservation = cost > 0 ? await ctx.wallet.reserve(user.userId, cost, `${turn.turnId}:rephrase`) : null;
+
+    try {
+      const result = await rephraseNarration({
+        story,
+        state: before,
+        resolution: turn.resolution,
+        plan: turn.beatPlan,
+        memories: await ctx.repo.listMemories(session.sessionId),
+        recentTurns: (await ctx.repo.listTurns(session.sessionId)).filter(
+          (t) => t.turnIndex < turn.turnIndex,
+        ),
+        actionText: turn.actionText ?? '',
+        tier: turn.qualityTier,
+        // Recovered from the committed turn rather than re-parsed: re-running
+        // the parse is a model call that could decide the player said something
+        // other than what the story already records them saying.
+        playerDialogue: turn.blocks
+          .filter((block) => block.speakerId === 'player')
+          .map((block) => ({ speaker: { entityType: 'player', entityId: 'player' }, text: block.text, visibility: 'GROUP' })),
+        deps: ctx.pipeline,
+      });
+
+      await ctx.repo.replaceNarration(turn.turnId, {
+        blocks: result.narrative.blocks,
+        sceneSummary: result.narrative.sceneSummary,
+        endStatePrompt: result.narrative.endStatePrompt,
+        stateDeltas: result.narrative.stateDeltaPresentation,
+      });
+
+      if (reservation) await ctx.wallet.finalize(reservation);
+
+      const updated = await ctx.repo.getTurn(turn.turnId);
+      return {
+        turn: toPlayerTurn(story, updated ?? turn),
+        creditsCharged: cost,
+        balance: await ctx.wallet.getBalance(user.userId),
+      };
+    } catch (error) {
+      // Nothing was written, so nothing is charged. A failed rewrite must not
+      // cost a player anything.
+      if (reservation) await ctx.wallet.release(reservation, 'REPHRASE_FAILED');
+      request.log.error({ err: error, turnId: turn.turnId }, 'rephrase failed');
+      return sendError(reply, 502, 'GENERATION_FAILED', 'That could not be rewritten just now. Nothing was charged.');
+    }
   });
 
   // --- Wallet / store (§33.5) ---

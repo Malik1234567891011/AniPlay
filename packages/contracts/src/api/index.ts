@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import {
+  BeatPlan,
   CheckOutcome,
   CheckResult,
   ConsistencyViolation,
   MediaPlan,
   NarrativeBlock,
+  Resolution,
   StateDeltaPresentation,
   StateMutation,
   SuggestedAction,
@@ -273,6 +275,17 @@ export const TurnRecord = z
     createdAt: z.string(),
     /** Present when a repair pass ran. Surfaced only in creator/debug trace. */
     repairViolations: z.array(ConsistencyViolation).default([]),
+    /**
+     * What the engine decided, kept whole (§20.9).
+     *
+     * `Rephrase narration` reruns only the writer. That is only honest if the
+     * resolution it writes from is the same one — re-resolving would roll new
+     * dice behind a button that promised not to. Optional so turns recorded
+     * before this existed still load; a rephrase needs it and says so.
+     */
+    resolution: Resolution.nullable().default(null),
+    /** How the beat was staged, so a rephrase restages it identically. */
+    beatPlan: BeatPlan.nullable().default(null),
   })
   .strict();
 export type TurnRecord = z.infer<typeof TurnRecord>;

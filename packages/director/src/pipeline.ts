@@ -233,3 +233,68 @@ function createClock(sink: Record<string, number>): {
     },
   };
 }
+
+/**
+ * Spec §20.9 — `Rephrase narration`.
+ *
+ * Reruns the writer over a turn that already happened. The resolution and the
+ * beat plan are the stored ones, so nothing is re-rolled: the same dice, the
+ * same outcomes, the same mutations, different words. "Never silently re-roll
+ * deterministic dice when only narration is regenerated" is the rule, and the
+ * only way to keep it is to never call the engine here at all.
+ *
+ * The state passed in is the state the turn *started* from, which is what the
+ * writer saw the first time.
+ */
+export interface RephraseOptions {
+  readonly story: StoryVersion;
+  /** The state this turn began from, not the state it produced. */
+  readonly state: GameState;
+  readonly resolution: Resolution;
+  readonly plan: BeatPlan;
+  readonly memories: readonly MemoryFact[];
+  readonly recentTurns: readonly TurnRecord[];
+  readonly actionText: string;
+  readonly tier: QualityTier;
+  /**
+   * What the player said aloud on the original turn.
+   *
+   * Recovered from the committed turn's own player dialogue rather than
+   * re-parsed: the parse is a model call, and re-running it could decide the
+   * player said something different from what the story already records.
+   */
+  readonly playerDialogue: readonly { speaker: unknown; text: string; visibility: string }[];
+  readonly deps?: TurnPipelineDeps;
+}
+
+export interface RephraseResult {
+  readonly narrative: NarrativeTurn;
+  readonly report: ConsistencyReport;
+  readonly repaired: boolean;
+}
+
+export async function rephraseNarration(options: RephraseOptions): Promise<RephraseResult> {
+  const deps = options.deps ?? createDefaultPipeline();
+
+  const context = buildTurnContext({
+    story: options.story,
+    state: options.state,
+    resolution: options.resolution,
+    tier: options.tier,
+    memories: options.memories,
+    recentTurns: options.recentTurns,
+    actionText: options.actionText,
+    playerDialogue: options.playerDialogue as never,
+  });
+
+  let narrative = await deps.writer.write(context, options.plan);
+  let report = validateNarrative({ context, turn: narrative });
+  let repaired = false;
+  if (!report.valid) {
+    narrative = repairNarrative(narrative, report, context.player.name);
+    report = validateNarrative({ context, turn: narrative });
+    repaired = true;
+  }
+
+  return { narrative, report, repaired };
+}

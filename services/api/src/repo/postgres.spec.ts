@@ -152,6 +152,8 @@ describe.skipIf(!URL)('PostgresRepository', () => {
       revisionAfter: advanced.revision,
       createdAt: new Date().toISOString(),
       repairViolations: [],
+      resolution: null,
+      beatPlan: null,
     };
     await repo.appendTurn(turn);
     await repo.appendEvents([

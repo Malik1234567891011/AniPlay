@@ -97,6 +97,7 @@ export function SessionScreen({
   const [error, setError] = useState<{ message: string; retry: boolean } | null>(null);
   const [showQuality, setShowQuality] = useState(false);
   const [showTurnMenu, setShowTurnMenu] = useState(false);
+  const [rephrasing, setRephrasing] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [revision, setRevision] = useState(0);
   const [playerPortraitUrl, setPlayerPortraitUrl] = useState<string | null>(null);
@@ -303,6 +304,39 @@ export function SessionScreen({
   ]);
 
   const latest = turns.at(-1);
+
+  /**
+   * GP-04 — the same moment, told again.
+   *
+   * The turn is replaced in place rather than appended: nothing happened, so
+   * the timeline must not grow. If it fails, nothing was charged and the
+   * original stands.
+   */
+  const rephrase = useCallback(
+    async (turnId: string) => {
+      setRephrasing(true);
+      try {
+        const result = await api.rephraseTurn(turnId);
+        setTurns((current) => current.map((turn) => (turn.turnId === turnId ? result.turn : turn)));
+        setBalance(result.balance);
+        setShowTurnMenu(false);
+        haptic('success');
+      } catch (error) {
+        haptic('error');
+        setError({
+          message:
+            error instanceof ApiError
+              ? error.message
+              : 'That could not be rewritten just now. Nothing was charged.',
+          retry: false,
+        });
+      } finally {
+        setRephrasing(false);
+      }
+    },
+    [setBalance],
+  );
+
   const heroImageUrl = pending ? pending.heroImageUrl : (latest?.heroImageUrl ?? null);
   const visibleBlocks = pending ? pending.blocks : (latest?.blocks ?? []);
   const visibleDeltas = pending
@@ -606,6 +640,11 @@ export function SessionScreen({
             setShowTurnMenu(false);
             void send(again);
           }}
+          rephrasable={Boolean(latest.actionText)}
+          rephrasing={rephrasing}
+          onRephrase={() => {
+            void rephrase(latest.turnId);
+          }}
           onEdit={() => {
             setDraft(latest.actionText ?? '');
             setShowTurnMenu(false);
@@ -836,6 +875,9 @@ function TurnMenu({
   actionText,
   turnCost,
   onRetry,
+  onRephrase,
+  rephrasable,
+  rephrasing,
   onEdit,
   onReport,
   onClose,
@@ -843,6 +885,9 @@ function TurnMenu({
   actionText: string;
   turnCost: number;
   onRetry: () => void;
+  onRephrase: () => void;
+  rephrasable: boolean;
+  rephrasing: boolean;
   onEdit: () => void;
   onReport: () => void;
   onClose: () => void;
@@ -860,6 +905,22 @@ function TurnMenu({
           world does not rewind.
         </Txt>
       </Stack>
+
+      {rephrasable ? (
+        <Stack gap={spacing.sm}>
+          <Button
+            label={`Tell it differently · ${turnCost}`}
+            variant="secondary"
+            loading={rephrasing}
+            loadingLabel="Rewriting…"
+            onPress={onRephrase}
+          />
+          <Txt variant="micro" color={colors.text.muted}>
+            The same moment, written again. Nothing that happened changes — the same rolls, the same
+            outcome, the same consequences. Only the words are new.
+          </Txt>
+        </Stack>
+      ) : null}
 
       <Stack gap={spacing.sm}>
         <Button label="Put it back in the composer" variant="secondary" onPress={onEdit} />

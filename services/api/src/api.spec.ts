@@ -7,6 +7,7 @@ import { buildServer } from './server.js';
 import { assertProductionReady, createAppContext, loadConfig } from './context.js';
 import { MemoryRepository } from './repo/memory.js';
 import { WalletService } from './wallet.js';
+import type { TurnRecord } from '@aniplay/contracts';
 import type { AppContext } from './context.js';
 import { createHmac } from 'node:crypto';
 import { DevTokenVerifier, SupabaseJwtVerifier, devUserId } from './auth.js';
@@ -1006,5 +1007,90 @@ describe('authenticated requests', () => {
     expect(response.statusCode).toBeLessThan(300);
     const me = await secured.inject({ method: 'GET', url: '/v1/me', headers: bearer(token(ALICE)) });
     expect(me.json().deletionRequestedAt).not.toBeNull();
+  });
+});
+
+/**
+ * GP-04 / §20.9 — rewriting the words without rewriting the world.
+ *
+ * The one rule this endpoint exists to keep: "never silently re-roll
+ * deterministic dice when only narration is regenerated". These pin it.
+ */
+describe('rephrasing a turn', () => {
+  async function playedTurn(): Promise<{ sessionId: string; turn: TurnRecord }> {
+    const { sessionId, revision } = await startSession();
+    await playTurn(sessionId, revision, 'I ask Kael what the red light means.');
+    const turns = await ctx.repo.listTurns(sessionId);
+    return { sessionId, turn: turns.at(-1)! };
+  }
+
+  it('rewrites the prose and leaves every rolled outcome exactly as it was', async () => {
+    const { sessionId, turn } = await playedTurn();
+    const revisionBefore = (await ctx.repo.getState(sessionId))!.revision;
+    const eventsBefore = (await ctx.repo.listEvents(sessionId)).length;
+
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/turns/${turn.turnId}/rephrase`,
+      headers: auth,
+    });
+    expect(response.statusCode).toBe(200);
+
+    const after = await ctx.repo.getTurn(turn.turnId);
+    expect(after!.turnIndex).toBe(turn.turnIndex);
+    // Same dice, same outcomes, same mutations. Only the words may move.
+    expect(after!.checks).toEqual(turn.checks);
+    expect(after!.mutations).toEqual(turn.mutations);
+    expect(after!.revisionAfter).toBe(turn.revisionAfter);
+
+    // And the world did not advance behind the button.
+    expect((await ctx.repo.getState(sessionId))!.revision).toBe(revisionBefore);
+    expect(await ctx.repo.listEvents(sessionId)).toHaveLength(eventsBefore);
+  });
+
+  it('refuses on the opening, which resolved nothing', async () => {
+    const { sessionId } = await startSession();
+    const turns = await ctx.repo.listTurns(sessionId);
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/turns/${turns[0]!.turnId}/rephrase`,
+      headers: auth,
+    });
+    expect(response.statusCode).toBe(409);
+    expect(response.json().code).toBe('NOT_REPHRASABLE');
+  });
+
+  it('will not rephrase another account’s turn', async () => {
+    const { turn } = await playedTurn();
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/turns/${turn.turnId}/rephrase`,
+      headers: { authorization: 'Bearer guest_someone_else' },
+    });
+    expect(response.statusCode).toBe(404);
+  });
+
+  it('does not charge for rewriting a turn the system had to repair', async () => {
+    const { turn } = await playedTurn();
+    // A turn that needed repairing on the way out. That defect is ours, so
+    // rewriting it is not something to bill for.
+    const repaired: TurnRecord = {
+      ...turn,
+      turnId: `${turn.turnId}_repaired`,
+      repairViolations: [
+        { code: 'FORMAT', severity: 'ERROR', description: 'Empty block.', blockIndex: 0 },
+      ],
+    };
+    await ctx.repo.appendTurn(repaired);
+
+    const before = await ctx.wallet.getBalance(GUEST);
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/turns/${repaired.turnId}/rephrase`,
+      headers: auth,
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.json().creditsCharged).toBe(0);
+    expect(await ctx.wallet.getBalance(GUEST)).toBe(before);
   });
 });

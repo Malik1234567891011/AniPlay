@@ -177,6 +177,10 @@ async function processTurn(
       revisionAfter: result.state.revision,
       createdAt: new Date().toISOString(),
       repairViolations: result.repaired ? result.report.violations : [],
+      // Kept so `Rephrase narration` reruns the prose against the same
+      // resolution and the same staging, rather than rolling the turn again.
+      resolution: result.resolution,
+      beatPlan: result.plan,
     };
 
     await ctx.repo.appendTurn(record);

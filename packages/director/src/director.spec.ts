@@ -913,7 +913,7 @@ describe('full pipeline', () => {
         stateDeltas: result.narrative.stateDeltaPresentation, mutations: result.resolution.mutations,
         suggestions: result.plan.suggestedActions, endStatePrompt: result.narrative.endStatePrompt,
         mediaPlan: result.plan.mediaPlan, heroImageUrl: null, revisionAfter: result.state.revision,
-        createdAt: '2026-09-09T00:00:00.000Z', repairViolations: [],
+        createdAt: '2026-09-09T00:00:00.000Z', repairViolations: [], resolution: null, beatPlan: null,
       });
     }
 
@@ -929,7 +929,7 @@ describe('full pipeline', () => {
         creditsCharged: 0, sceneSummary: 'The Gate Arch, morning. Kael Ostrand is here.',
         blocks: [], checks: [], stateDeltas: [], mutations: [], suggestions: [],
         endStatePrompt: '', mediaPlan: null, heroImageUrl: null, revisionAfter: 1,
-        createdAt: '', repairViolations: [],
+        createdAt: '', repairViolations: [], resolution: null, beatPlan: null,
       },
     ]);
     expect(recap.bullets.length).toBeGreaterThan(0);
@@ -981,7 +981,7 @@ describe('writer', () => {
           turnId: 't1', sessionId: 's', turnIndex: 0, actionText: null, qualityTier: 'VIVID',
           creditsCharged: 0, sceneSummary: `The Gate Arch.\n${line}`, blocks: [], checks: [],
           stateDeltas: [], mutations: [], suggestions: [], endStatePrompt: '', mediaPlan: null,
-          heroImageUrl: null, revisionAfter: 1, createdAt: '', repairViolations: [],
+          heroImageUrl: null, revisionAfter: 1, createdAt: '', repairViolations: [], resolution: null, beatPlan: null,
         },
       ],
       actionText: 'I look around',
