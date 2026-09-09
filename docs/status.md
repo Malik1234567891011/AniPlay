@@ -170,6 +170,7 @@ be finished from inside the codebase.
 | An App Store Connect API key | Verifying purchases | `APP_STORE_KEY_ID`, `APP_STORE_ISSUER_ID`, `APP_STORE_PRIVATE_KEY`, `APP_STORE_BUNDLE_ID` |
 | Five consumable IAP products | The credit packs | Product ids `crd_2000`, `crd_10000`, `crd_20000`, `crd_50000`, `crd_first_21000` |
 | An Apple Developer team | Any build on a device | EAS credentials |
+| Model credits | Any real prose at all | `OPENAI_API_KEY` currently returns `credit_balance_exhausted`. Every stage falls back to the deterministic writer, which `/health` now reports under `modelDegradations` |
 | A published privacy policy and terms | The age gate links, and App Store review | `EXPO_PUBLIC_LEGAL_BASE_URL` — the links are hidden until it is set, rather than pointing at nothing |
 
 Until the Supabase values exist the API runs on its development verifier and the
