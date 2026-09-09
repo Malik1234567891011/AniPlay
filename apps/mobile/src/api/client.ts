@@ -5,6 +5,7 @@ import type {
   DiscoverResponse,
   LedgerResponse,
   MeResponse,
+  PlayerTurnRecord,
   PurchaseRestoreResponse,
   PurchaseSyncRequest,
   QualityTier,
@@ -14,7 +15,6 @@ import type {
   StorySummary,
   SubmitTurnResponse,
   TimelineResponse,
-  TurnRecord,
   TurnStreamEventName,
   WalletResponse,
   WorldSheetResponse,
@@ -231,7 +231,7 @@ export class ApiClient {
     );
   }
 
-  turn(turnId: string): Promise<TurnRecord> {
+  turn(turnId: string): Promise<PlayerTurnRecord> {
     return this.#request('GET', `/v1/turns/${turnId}`);
   }
 

@@ -365,6 +365,41 @@ describe('wallet (spec §20.7, §20.8)', () => {
 });
 
 describe('turns (spec §17.3, §17.4)', () => {
+  it('never sends a player the numbers their world hides (spec §12.7)', async () => {
+    const { sessionId, revision } = await startSession();
+    const { body } = await playTurn(sessionId, revision, 'I read the ward above the gate.');
+
+    // The Ninth Archive sets revealExactDc: false and revealCheckMath: false.
+    const story = await ctx.repo.getStoryVersion('sv_ninth_archive_1');
+    expect(story?.rules.revealExactDc).toBe(false);
+    expect(story?.rules.revealCheckMath).toBe(false);
+
+    // The stored record keeps everything the engine needs.
+    const stored = await ctx.repo.getTurn(body.turnId);
+    expect(stored?.checks.length ?? 0).toBeGreaterThan(0);
+    expect(typeof stored?.checks[0]?.dc).toBe('number');
+    expect(stored?.mutations.length ?? 0).toBeGreaterThan(0);
+
+    // What reaches the player does not.
+    const response = await app.inject({ method: 'GET', url: `/v1/turns/${body.turnId}`, headers: auth });
+    const turn = response.json();
+    expect(turn.checks[0].dc).toBeNull();
+    expect(turn.checks[0].math).toBeNull();
+    // A band is still allowed, and is what the card actually shows.
+    expect(turn.checks[0].difficultyLabel).toMatch(/\S/);
+    // Engine internals and creator-only trace are absent entirely.
+    expect(turn).not.toHaveProperty('mutations');
+    expect(turn).not.toHaveProperty('repairViolations');
+    expect(JSON.stringify(turn)).not.toContain('"keptRoll"');
+
+    // Session detail carries the same projection, not the raw record.
+    const detail = await app.inject({ method: 'GET', url: `/v1/sessions/${sessionId}`, headers: auth });
+    for (const recent of detail.json().recentTurns) {
+      expect(recent).not.toHaveProperty('mutations');
+      for (const check of recent.checks) expect(check.dc).toBeNull();
+    }
+  });
+
   it('plays a turn end to end and advances the revision', async () => {
     const { sessionId, revision } = await startSession();
     const { response, body } = await playTurn(sessionId, revision, 'I read the ward above the gate.');

@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { CharacterDef, StoryVersion } from '@aniplay/contracts';
 import {
   MediaGatewayError,
@@ -18,7 +19,19 @@ import type { JobContext, JobQueue } from './queue.js';
  * it is ready.
  */
 
-const ASSET_ROOT = resolve(process.cwd(), 'infra/seed/assets');
+/**
+ * The seeded asset directory, anchored to this file rather than to
+ * `process.cwd()`.
+ *
+ * npm workspace scripts run with the cwd set to the workspace, so
+ * `npm run api` resolved this to `services/worker/infra/seed/assets` — a
+ * directory that does not exist — and every generated image 404'd, while
+ * running the same entrypoint from the repo root worked. Where the repo lives
+ * relative to this module is a fixed fact; where the process was launched from
+ * is not.
+ */
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const ASSET_ROOT = process.env.ASSET_ROOT ?? resolve(REPO_ROOT, 'infra/seed/assets');
 
 export interface HeroImageJob {
   readonly turnId: string;

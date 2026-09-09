@@ -16,11 +16,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient';
 import type {
   NarrativeBlock,
+  PlayerTurnRecord,
   QualityTier,
   SessionDetailResponse,
   SessionSceneState,
   SuggestedAction,
-  TurnRecord,
 } from '@aniplay/contracts';
 import { QUALITY_TIERS } from '@aniplay/contracts';
 import {
@@ -88,7 +88,7 @@ export function SessionScreen({
 
   const [detail, setDetail] = useState<SessionDetailResponse | null>(null);
   const [scene, setScene] = useState<SessionSceneState | null>(null);
-  const [turns, setTurns] = useState<TurnRecord[]>([]);
+  const [turns, setTurns] = useState<PlayerTurnRecord[]>([]);
   const [suggestions, setSuggestions] = useState<SuggestedAction[]>([]);
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
@@ -241,6 +241,11 @@ export function SessionScreen({
                 setTurns(response.recentTurns);
                 setRevision(response.revision);
                 setPending(null);
+                // The refetch swaps the streamed blocks for the server's copy,
+                // which changes the content height and strands the reader
+                // mid-beat. Streaming had them at the bottom; put them back
+                // there once the new content has laid out.
+                requestAnimationFrame(() => transcriptRef.current?.scrollToEnd({ animated: false }));
               });
             }
             if (event === 'media.completed' && typeof data.url === 'string') {
@@ -383,10 +388,13 @@ export function SessionScreen({
         ) : latest?.checks[0] && !pending ? (
           <CheckReveal
             label={latest.checks[0].label}
-            difficulty=""
+            // The committed turn carries the band and, where the world reveals
+            // it, the arithmetic — so scrolling back does not show less than
+            // the turn showed live.
+            difficulty={latest.checks[0].difficultyLabel}
             outcome={latest.checks[0].outcome}
             outcomeLabel={outcomeText(latest.checks[0].outcome)}
-            math={null}
+            math={latest.checks[0].math}
           />
         ) : null}
 
@@ -605,7 +613,15 @@ function Stage({
   onOpenPortrait: () => void;
 }): React.JSX.Element {
   const { height } = useWindowDimensions();
-  const stageHeight = Math.round(Math.max(240, Math.min(height * 0.4, 380)));
+  const insets = useSafeAreaInsets();
+  // Spec §10.2 B — 35 to 48% of *usable* height. Measuring the whole window
+  // instead charges the transcript for the notch and the home indicator, and
+  // the transcript is the part with the story in it.
+  const usableHeight = height - insets.top - insets.bottom;
+  const stageHeight = Math.round(Math.max(240, Math.min(usableHeight * 0.4, 380)));
+  // One number for both states of the player slot, so the empty box and the
+  // finished portrait occupy exactly the same space.
+  const playerSlotWidth = Math.max(56, Math.min(76, (stageHeight - 170) / 1.25));
 
   return (
     <View style={{ height: stageHeight, backgroundColor: colors.bg.elevated }}>
@@ -647,27 +663,33 @@ function Stage({
         style={{ position: 'absolute', right: GUTTER, bottom: 96 }}
       >
         {playerPortraitUrl ? (
-          <CharacterPortrait
-            name="You"
-            uri={playerPortraitUrl}
-            size={Math.min(76, (stageHeight - 170) / 1.25)}
-          />
+          <CharacterPortrait name="You" uri={playerPortraitUrl} size={playerSlotWidth} />
         ) : (
+          // The empty slot is the same footprint as the portrait that replaces
+          // it, so nothing on the stage moves when the drawing arrives. It also
+          // has to stay readable over art we have not seen: the fill is opaque
+          // enough to sit on a lit archway, and the label is sized to the box
+          // rather than spilling out of it.
           <View
             style={{
-              width: 56,
-              height: 70,
+              width: playerSlotWidth,
+              height: playerSlotWidth * 1.25,
               borderRadius: radius.card,
               borderWidth: 1,
               borderStyle: 'dashed',
-              borderColor: colors.border.strong,
-              backgroundColor: 'rgba(11,13,18,0.6)',
+              borderColor: colors.text.secondary,
+              backgroundColor: 'rgba(11,13,18,0.82)',
               alignItems: 'center',
               justifyContent: 'center',
+              gap: 2,
+              paddingHorizontal: spacing.xs,
             }}
           >
-            <Txt variant="micro" color={colors.text.muted} center>
-              Draw{'\n'}yourself
+            <Txt variant="h3" color={colors.text.secondary}>
+              +
+            </Txt>
+            <Txt variant="micro" color={colors.text.secondary} center numberOfLines={2}>
+              Draw yourself
             </Txt>
           </View>
         )}

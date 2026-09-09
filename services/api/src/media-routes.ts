@@ -1,6 +1,7 @@
 import { createReadStream } from 'node:fs';
 import { access, readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join, normalize, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { FastifyInstance } from 'fastify';
 import type { GameState, StoryVersion } from '@aniplay/contracts';
 import {
@@ -22,7 +23,19 @@ import { InsufficientCreditsError } from './wallet.js';
  * exercising the identical URLs and the identical credit path.
  */
 
-const ASSET_ROOT = resolve(process.cwd(), 'infra/seed/assets');
+/**
+ * The seeded asset directory, anchored to this file rather than to
+ * `process.cwd()`.
+ *
+ * npm workspace scripts run with the cwd set to the workspace, so
+ * `npm run api` resolved this to `services/api/infra/seed/assets` — a
+ * directory that does not exist — and every generated image 404'd, while
+ * running the same entrypoint from the repo root worked. Where the repo lives
+ * relative to this module is a fixed fact; where the process was launched from
+ * is not.
+ */
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const ASSET_ROOT = process.env.ASSET_ROOT ?? resolve(REPO_ROOT, 'infra/seed/assets');
 
 /** Spec §20.11 sets animation at 600; a still portrait is priced well below it. */
 export const PORTRAIT_COST_CREDITS = 150;

@@ -418,7 +418,11 @@ export function ActionSuggestion({
         opacity: pressed ? 0.8 : 1,
       })}
     >
-      <Txt variant="bodyCompact" numberOfLines={3}>
+      {/* Two lines, not three. These chips sit between the story and the
+          composer, so every line they take is a line of prose the player
+          cannot see — and a skill suggestion carrying its full description
+          would otherwise run to four. */}
+      <Txt variant="bodyCompact" numberOfLines={2}>
         {text}
       </Txt>
       {meta.length > 0 ? (
@@ -508,16 +512,21 @@ export function CheckReveal({
   }, [progress]);
 
   const color = outcomeColor(outcome);
+  // A world that hides its difficulty sends an empty band, and joining on it
+  // unconditionally left the card reading "INVESTIGATE ·" with nothing after.
+  const heading = [label, difficulty].filter((part) => part.trim().length > 0);
 
   return (
     <Pressable
       accessible
-      accessibilityLabel={`${label} check, ${difficulty}. Result: ${outcomeLabel}.`}
+      accessibilityLabel={[`${label} check`, difficulty, `Result: ${outcomeLabel}.`]
+        .filter((part) => part.trim().length > 0)
+        .join(', ')}
       onPress={onSkip}
     >
       <Card style={{ borderColor: color, gap: spacing.xs }}>
         <Txt variant="micro" color={colors.text.muted}>
-          {label.toUpperCase()} · {difficulty.toUpperCase()}
+          {heading.map((part) => part.toUpperCase()).join(' · ')}
         </Txt>
         <Animated.View style={{ opacity: progress }}>
           <Txt variant="h3" color={color}>

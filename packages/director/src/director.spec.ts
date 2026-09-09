@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { z } from 'zod';
 import { LAUNCH_CATALOG, NINTH_ARCHIVE as STORY } from '@aniplay/test-fixtures';
 import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
 import { createInitialState, deriveTurnSeed, resolveIntent } from '@aniplay/engine';
+import { OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
 import { RuleBasedIntentParser } from './parser.js';
 import { RuleBasedDirector } from './director.js';
 import { TemplateWriter } from './writer.js';
@@ -48,6 +50,116 @@ const contextFor = (state: GameState, actionText: string, turnId = 't1') => {
 };
 
 // ---------------------------------------------------------------------------
+
+describe('model gateway selection (spec §31.4)', () => {
+  it('uses whichever provider key is actually configured', () => {
+    // The bug this pins: only ANTHROPIC_API_KEY was ever read, so a project
+    // configured with an OpenAI key ran the rule-based writer and said nothing
+    // about why the prose was generic.
+    expect(createGatewayFromEnv({})).toBeNull();
+    expect(createGatewayFromEnv({ OPENAI_API_KEY: 'sk-test' })?.name).toBe('openai');
+    expect(createGatewayFromEnv({ ANTHROPIC_API_KEY: 'sk-test' })?.name).toBe('anthropic');
+  });
+
+  it('lets MODEL_PROVIDER break a tie when both keys are present', () => {
+    const both = { ANTHROPIC_API_KEY: 'a', OPENAI_API_KEY: 'b' };
+    expect(createGatewayFromEnv(both)?.name).toBe('anthropic');
+    expect(createGatewayFromEnv({ ...both, MODEL_PROVIDER: 'openai' })?.name).toBe('openai');
+    expect(createGatewayFromEnv({ ...both, MODEL_PROVIDER: 'anthropic' })?.name).toBe('anthropic');
+  });
+
+  it('asks OpenAI for one forced function call and validates what comes back', async () => {
+    const schema = z.object({ beat: z.string(), tension: z.number().int() });
+    let sent: Record<string, unknown> = {};
+
+    const gateway = new OpenAiGateway({
+      apiKey: 'sk-test',
+      fetchImpl: (async (_url: string, init: RequestInit) => {
+        sent = JSON.parse(String(init.body)) as Record<string, unknown>;
+        return new Response(
+          JSON.stringify({
+            choices: [
+              { message: { tool_calls: [{ function: { arguments: '{"beat":"He logs it","tension":3}' } }] } },
+            ],
+            usage: { prompt_tokens: 100, completion_tokens: 20 },
+          }),
+          { status: 200 },
+        );
+      }) as unknown as typeof fetch,
+    });
+
+    const result = await gateway.generateStructured('writer_standard', schema, [
+      { role: 'user', content: 'write the beat' },
+    ]);
+
+    expect(result.value).toEqual({ beat: 'He logs it', tension: 3 });
+    expect((sent.tool_choice as { function: { name: string } }).function.name).toBe('emit');
+    // §20.12 — a turn's provider cost has to be real, not zero.
+    expect(result.invocation.costUsd).toBeGreaterThan(0);
+    expect(result.invocation.provider).toBe('openai');
+  });
+
+  it('rejects a response that does not match the schema rather than passing it on', async () => {
+    const gateway = new OpenAiGateway({
+      apiKey: 'sk-test',
+      fetchImpl: (async () =>
+        new Response(
+          JSON.stringify({
+            choices: [{ message: { tool_calls: [{ function: { arguments: '{"beat":"only this"}' } }] } }],
+          }),
+          { status: 200 },
+        )) as unknown as typeof fetch,
+    });
+
+    await expect(
+      gateway.generateStructured('writer_standard', z.object({ beat: z.string(), tension: z.number() }), [
+        { role: 'user', content: 'x' },
+      ]),
+    ).rejects.toThrow(/failed schema/);
+  });
+
+  it('pairs embeddings with their inputs by index, not by arrival order', async () => {
+    const gateway = new OpenAiGateway({
+      apiKey: 'sk-test',
+      fetchImpl: (async () =>
+        new Response(
+          // Deliberately out of order: the API does not promise ordering, and
+          // trusting it would pair the wrong vector with the wrong memory.
+          JSON.stringify({
+            data: [
+              { index: 1, embedding: [0.2] },
+              { index: 0, embedding: [0.1] },
+            ],
+          }),
+          { status: 200 },
+        )) as unknown as typeof fetch,
+    });
+
+    expect(await gateway.embed(['first', 'second'])).toEqual([[0.1], [0.2]]);
+  });
+
+  it('does not block the genre it exists to serve (spec §29)', async () => {
+    const moderationWith = (categories: Record<string, boolean>) =>
+      new OpenAiGateway({
+        apiKey: 'sk-test',
+        fetchImpl: (async () =>
+          new Response(JSON.stringify({ results: [{ flagged: true, categories }] }), {
+            status: 200,
+          })) as unknown as typeof fetch,
+      }).moderate('x');
+
+    // Fantasy violence and dark themes are the material, not a violation.
+    const violent = await moderationWith({ violence: true, 'violence/graphic': true });
+    expect(violent.flagged).toBe(false);
+    expect(violent.categories).toContain('violence');
+
+    const forbidden = await moderationWith({ 'sexual/minors': true });
+    expect(forbidden.flagged).toBe(true);
+    expect(forbidden.playerFacingMessage).toBeTruthy();
+    // §10.8 — never raw policy jargon in player-facing copy.
+    expect(forbidden.playerFacingMessage).not.toMatch(/sexual|minors|categor/i);
+  });
+});
 
 describe('rule-based intent parser', () => {
   it('maps plain verbs', () => {

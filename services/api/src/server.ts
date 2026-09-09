@@ -38,6 +38,7 @@ import {
 } from './turn-service.js';
 import {
   toContinueCard,
+  toPlayerTurn,
   toSceneState,
   toSessionSummary,
   toStoryDetail,
@@ -418,7 +419,8 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       session: toSessionSummary(session, story, state, turns.length),
       scene: toSceneState(story, state),
       // Spec §10.2 C — recent beats only; history is paged separately.
-      recentTurns: turns.slice(-8),
+      // Projected, so the exact DC and the raw mutations stay server-side.
+      recentTurns: turns.slice(-8).map((turn) => toPlayerTurn(story, turn)),
       suggestions: last?.suggestions ?? [],
       recap,
       revision: state.revision,
@@ -691,7 +693,10 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     if (!session || session.userId !== user.userId) {
       return sendError(reply, 404, 'NOT_FOUND', 'That turn does not exist.');
     }
-    return turn;
+
+    const story = await ctx.repo.getStoryVersion(session.storyVersionId);
+    if (!story) return sendError(reply, 500, 'SESSION_CORRUPT', 'That turn could not be loaded.');
+    return toPlayerTurn(story, turn);
   });
 
   // --- Wallet / store (§33.5) ---

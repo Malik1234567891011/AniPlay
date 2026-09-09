@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  CheckOutcome,
   CheckResult,
   ConsistencyViolation,
   MediaPlan,
@@ -256,11 +257,66 @@ export const TurnRecord = z
   .strict();
 export type TurnRecord = z.infer<typeof TurnRecord>;
 
+/**
+ * What a player is allowed to see of a check.
+ *
+ * Spec §12.7 — "do not reveal exact DC unless story settings allow it". A
+ * `CheckResult` carries the DC, every die rolled, the modifier and the margin,
+ * so sending one to a player of a world with `revealExactDc: false` hands them
+ * the number the world is deliberately not telling them. The coarse band is
+ * always allowed; the arithmetic appears only when the story opts in.
+ */
+export const PlayerCheckResult = z
+  .object({
+    checkId: z.string(),
+    label: z.string(),
+    attribute: z.string(),
+    skill: z.string().nullable(),
+    outcome: CheckOutcome,
+    /** §12.7 — Safe / Uncertain / Risky / Extreme, never a number. */
+    difficultyLabel: z.string(),
+    /** Present only when the story sets `revealExactDc`. */
+    dc: z.number().int().nullable(),
+    /** Present only when the story sets `revealCheckMath`. */
+    math: z.string().nullable(),
+  })
+  .strict();
+export type PlayerCheckResult = z.infer<typeof PlayerCheckResult>;
+
+/**
+ * A committed turn as the player receives it.
+ *
+ * `TurnRecord` is the internal record and stays that way: it carries the raw
+ * mutation list and the repair violations, which the record itself describes as
+ * creator/debug trace. Neither belongs in a response that any client can read.
+ */
+export const PlayerTurnRecord = z
+  .object({
+    turnId: z.string(),
+    sessionId: z.string(),
+    turnIndex: z.number().int(),
+    actionText: z.string().nullable(),
+    qualityTier: QualityTier,
+    creditsCharged: z.number().int(),
+    sceneSummary: z.string(),
+    blocks: z.array(NarrativeBlock),
+    checks: z.array(PlayerCheckResult),
+    /** The presented deltas, which is what the UI shows anyway. */
+    stateDeltas: z.array(StateDeltaPresentation),
+    suggestions: z.array(SuggestedAction),
+    endStatePrompt: z.string(),
+    heroImageUrl: z.string().nullable(),
+    revisionAfter: z.number().int(),
+    createdAt: z.string(),
+  })
+  .strict();
+export type PlayerTurnRecord = z.infer<typeof PlayerTurnRecord>;
+
 export const SessionDetailResponse = z
   .object({
     session: SessionSummary,
     scene: SessionSceneState,
-    recentTurns: z.array(TurnRecord),
+    recentTurns: z.array(PlayerTurnRecord),
     suggestions: z.array(SuggestedAction),
     /** Spec §16.6 — shown when returning after >8h. */
     recap: z

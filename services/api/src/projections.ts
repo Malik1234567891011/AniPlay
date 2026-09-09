@@ -3,6 +3,7 @@ import type {
   GameEvent,
   GameState,
   MemoryFact,
+  PlayerTurnRecord,
   SessionSceneState,
   SessionSummary,
   StoryDetailResponse,
@@ -15,6 +16,8 @@ import type {
 import {
   attributeModifier,
   charactersPresent,
+  dcBandLabel,
+  formatCheckMath,
   formatDeadline,
   formatWorldTime,
   proficiencyLabel,
@@ -512,5 +515,44 @@ export function toContinueCard(
     turnCount: turns.length,
     currentObjective: topObjective(state, story),
     recapLine: turns.at(-1)?.sceneSummary.split('\n')[0] ?? null,
+  };
+}
+
+/**
+ * Spec §12.7 — a committed turn as its player is allowed to see it.
+ *
+ * The stored `TurnRecord` is the engine's own record: exact DC, every die,
+ * the modifier, the margin, the raw mutation list, and the repair violations
+ * the contract itself marks as creator/debug trace. Handing all of that to the
+ * client turns a world that hides its numbers into one that merely declines to
+ * draw them on screen. This is the projection that actually withholds them.
+ */
+export function toPlayerTurn(story: StoryVersion, turn: TurnRecord): PlayerTurnRecord {
+  return {
+    turnId: turn.turnId,
+    sessionId: turn.sessionId,
+    turnIndex: turn.turnIndex,
+    actionText: turn.actionText,
+    qualityTier: turn.qualityTier,
+    creditsCharged: turn.creditsCharged,
+    sceneSummary: turn.sceneSummary,
+    blocks: turn.blocks,
+    checks: turn.checks.map((check) => ({
+      checkId: check.checkId,
+      label: check.label,
+      attribute: check.attribute,
+      skill: check.skill ?? null,
+      outcome: check.outcome,
+      // Always allowed: a band is a feeling, not a target number.
+      difficultyLabel: dcBandLabel(check.dc),
+      dc: story.rules.revealExactDc ? check.dc : null,
+      math: story.rules.revealCheckMath ? formatCheckMath(check) : null,
+    })),
+    stateDeltas: turn.stateDeltas,
+    suggestions: turn.suggestions,
+    endStatePrompt: turn.endStatePrompt,
+    heroImageUrl: turn.heroImageUrl,
+    revisionAfter: turn.revisionAfter,
+    createdAt: turn.createdAt,
   };
 }
