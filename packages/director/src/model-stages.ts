@@ -263,6 +263,7 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
     presentCharacters: context.presentCharacters.map((c) => ({
       id: c.def.id,
       name: c.def.name,
+      pronouns: c.def.pronouns,
       publicTraits: c.def.publicTraits,
       speechStyle: c.def.speechStyle,
       goals: c.def.goals,
@@ -272,6 +273,7 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
       mayReveal: c.revealableSecrets.map((s) => s.id),
       knows: c.knownMemories.map((m) => m.fact.text),
     })),
+    cast: context.story.characters.map((c) => ({ id: c.id, name: c.name, pronouns: c.pronouns })),
     recentTurns: context.recentTurns,
     retrievedFacts: context.retrievedFacts.map((f) => f.fact.text),
     arc: context.arc,
@@ -342,11 +344,20 @@ export class ModelWriter implements Writer {
             speakers: context.presentCharacters.map((c) => ({
               id: c.def.id,
               name: c.def.name,
+              pronouns: c.def.pronouns,
               speechStyle: c.def.speechStyle,
               voiceSamples: c.def.voiceSamples,
               mustNotReveal: c.def.secrets
                 .filter((s) => !c.revealableSecrets.some((r) => r.id === s.id))
                 .map((s) => s.id),
+            })),
+            // Everyone the beat could mention, not only who is on stage. A
+            // character who is absent still gets talked about, and the writer
+            // was calling them "him" because it had never been told otherwise.
+            cast: context.story.characters.map((c) => ({
+              id: c.id,
+              name: c.name,
+              pronouns: c.pronouns,
             })),
             observableFacts: context.resolution.observableFacts,
             constraints: context.resolution.privateFacts,
@@ -354,6 +365,7 @@ export class ModelWriter implements Writer {
           task:
             `Write the beat as a NarrativeTurn with schemaVersion "1.0", at most ${plan.wordBudget} words across all blocks. ` +
             'Use only speakerIds from `speakers`. Set voiceEligible true on dialogue blocks. ' +
+            'Use each person\u2019s own pronouns from `cast`, present or not. ' +
             'The beat must show what the player attempted, in their own terms, before it shows the result.',
           // What they typed, through the untrusted channel: it tells the writer
           // which nouns belong on the page, and nothing else.

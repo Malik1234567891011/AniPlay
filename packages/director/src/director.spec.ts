@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { LAUNCH_CATALOG, NINE_WEEKS, NINTH_ARCHIVE as STORY, TIDEWALL } from '@aniplay/test-fixtures';
+import {
+  LAUNCH_CATALOG,
+  NINE_WEEKS,
+  NINTH_ARCHIVE as STORY,
+  SALT_ROAD,
+  TIDEWALL,
+} from '@aniplay/test-fixtures';
 import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
 import { ActionIntent } from '@aniplay/contracts';
 import {
@@ -11,9 +17,10 @@ import {
   resolveIntent,
 } from '@aniplay/engine';
 import { stripInventedTravel, stripSubstitutedPeople } from './entity-resolution.js';
-import { OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
+import { ModelGatewayError, OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
 import { RuleBasedIntentParser } from './parser.js';
 import { RuleBasedDirector } from './director.js';
+import { ModelWriter } from './model-stages.js';
 import { TemplateWriter } from './writer.js';
 import { validateNarrative, repairNarrative } from './validator.js';
 import { buildTurnContext } from './context.js';
@@ -1097,6 +1104,57 @@ describe('every authored gate can actually be reached', () => {
     expect(result.state.flags[`visited:${STORY.rules.startingLocationId}`]).toBe(true);
     // Someone who is not in the scene is not met.
     expect(result.state.flags['met:ysolde']).toBeUndefined();
+  });
+});
+
+describe('the writer is told who everyone is', () => {
+  it('gives the model every character\u2019s pronouns, present or not', async () => {
+    // Found in play: the narration called Ferrow "him" while she was away from
+    // the gate being discussed. The cast's pronouns are authored on every
+    // character and had never been put in front of the model at all.
+    let sent = '';
+    const gateway = {
+      name: 'test',
+      generateStructured: async (_role: string, schema: { parse: (v: unknown) => unknown }, messages: { content: string }[]) => {
+        sent = messages.map((m) => m.content).join('\n');
+        throw new ModelGatewayError('stop here', 'PROVIDER_ERROR', false);
+      },
+      streamText: async function* () {},
+      embed: async () => [],
+      moderate: async () => ({ flagged: false, categories: [], playerFacingMessage: null }),
+    };
+
+    const state = createInitialState({
+      sessionId: 'sess_pronouns',
+      story: SALT_ROAD,
+      identity: bareIdentity(null),
+    });
+
+    const result = await runTurn({
+      story: SALT_ROAD,
+      state,
+      memories: [],
+      recentTurns: [],
+      actionText: 'I ask about the third well.',
+      qualityTier: 'VIVID',
+      turnId: 't_pronouns',
+      seed: 'pronoun-seed',
+      deps: {
+        parser: new RuleBasedIntentParser(),
+        director: new RuleBasedDirector(),
+        writer: new ModelWriter(gateway as never),
+      },
+    });
+
+    // The writer fell back, which is fine — what matters is what it was sent.
+    expect(result.narrative.blocks.length).toBeGreaterThan(0);
+    const ferrow = SALT_ROAD.characters.find((c) => c.id === 'ferrow')!;
+    expect(ferrow.pronouns).toBe('she/her');
+    expect(sent).toContain('"pronouns":"she/her"');
+    // And it covers the whole cast, not only whoever happens to be on stage.
+    for (const character of SALT_ROAD.characters) {
+      expect(sent).toContain(`"name":"${character.name}"`);
+    }
   });
 });
 
