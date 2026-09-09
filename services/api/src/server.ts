@@ -36,6 +36,7 @@ import {
 } from './context.js';
 import { NoVerifierError } from './store-verifier.js';
 import { TurnStreamHub, formatSse } from './stream.js';
+import { RATE_LIMITS, ruleFor } from './rate-limit.js';
 import {
   ContentBlockedError,
   StaleRevisionError,
@@ -105,6 +106,41 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   app.addHook('onSend', async (_request, reply, payload) => {
     void reply.header(CONTRACT_HEADER, CONTRACT_VERSION);
     return payload;
+  });
+
+  /**
+   * Spec §31.7. Keyed on the account where there is one and on the address
+   * where there is not, so a signed-out caller cannot spend the budget of
+   * everybody behind the same NAT and a signed-in one cannot escape their own
+   * by rotating addresses.
+   *
+   * Deliberately before authentication resolves the profile: verifying a token
+   * is cheap, and creating one on first sight is not.
+   */
+  app.addHook('onRequest', async (request, reply) => {
+    if (request.url.startsWith('/health') || request.url.startsWith('/media')) return;
+
+    const auth = await readAuth(ctx, request);
+    const key = auth.kind === 'OK' ? `user:${auth.user.userId}` : `ip:${request.ip}`;
+    const rule = RATE_LIMITS[ruleFor(request.method, request.url.split('?')[0] ?? '')];
+    const verdict = ctx.rateLimiter.check(`${key}:${ruleFor(request.method, request.url)}`, rule.limit, rule.windowMs);
+
+    void reply.header('x-ratelimit-limit', String(verdict.limit));
+    void reply.header('x-ratelimit-remaining', String(verdict.remaining));
+
+    if (!verdict.allowed) {
+      void reply.header('retry-after', String(verdict.retryAfterSeconds));
+      request.log.warn({ key, url: request.url }, 'rate limited');
+      return sendError(
+        reply,
+        429,
+        'RATE_LIMITED',
+        verdict.limit === RATE_LIMITS.turn.limit
+          ? 'You are playing faster than the world can keep up. Give it a moment.'
+          : 'Too many requests. Give it a moment.',
+        { retryAfterSeconds: verdict.retryAfterSeconds },
+      );
+    }
   });
 
   registerMediaRoutes(app, ctx);

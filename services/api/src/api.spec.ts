@@ -11,6 +11,7 @@ import type { TurnRecord } from '@aniplay/contracts';
 import type { AppContext } from './context.js';
 import { createHmac } from 'node:crypto';
 import { DevTokenVerifier, SupabaseJwtVerifier, devUserId } from './auth.js';
+import { RATE_LIMITS, SlidingWindowRateLimiter } from './rate-limit.js';
 import { NoVerifierError, createStoreVerifierFromEnv } from './store-verifier.js';
 import type { TurnStreamHub } from './stream.js';
 
@@ -41,6 +42,9 @@ function makeContext(now: () => Date = () => new Date()): AppContext {
     // The narrow floor, with no provider behind it: the same thing a build
     // with no keys ships with.
     moderator: new RuleBasedModerator(),
+    // Effectively off. The limiter has its own tests; a suite that plays
+    // hundreds of turns in a second is not the place to exercise it.
+    rateLimiter: { check: () => ({ allowed: true, retryAfterSeconds: 0, limit: 1e6, remaining: 1e6 }) },
     // The real selection logic, so the tests exercise platform dispatch and
     // not a hand-picked verifier that always answers.
     storeVerifier: createStoreVerifierFromEnv(loadConfig({ PORT: '4000' } as NodeJS.ProcessEnv), {} as NodeJS.ProcessEnv),
@@ -1242,5 +1246,79 @@ describe('taste-aware discover', () => {
     const body = (await app.inject({ method: 'GET', url: '/v1/discover?tastes=Cozy' })).json();
     const all = await ctx.repo.listStories();
     expect(rail(body, 'trending').stories).toHaveLength(all.length);
+  });
+});
+
+/** Spec §31.7 — the limit at the route, not only in the limiter. */
+describe('rate limiting', () => {
+  it('refuses a loop on the turn endpoint and says when to come back', async () => {
+    const base = makeContext();
+    const limited = buildServer({
+      ctx: {
+        ...base,
+        // Two turns a minute, so the third is a loop by definition.
+        rateLimiter: new SlidingWindowRateLimiter(),
+      },
+    }) as Server;
+
+    try {
+      const start = await limited.inject({
+        method: 'POST',
+        url: '/v1/stories/story_ninth_archive/sessions',
+        headers: auth,
+        payload: {
+          identity: {
+            displayName: 'Malik',
+            pronouns: 'he/him',
+            ageBand: null,
+            archetypeId: 'arch_scholar',
+            worldKnowsAboutYou: '',
+            advanced: {},
+            portraitAssetId: null,
+          },
+          usedQuickSetup: true,
+        },
+      });
+      const sessionId = start.json().session.sessionId;
+
+      let refused: { statusCode: number; json: () => { code: string; details?: { retryAfterSeconds?: number } } } | null =
+        null;
+      for (let i = 0; i < RATE_LIMITS.turn.limit + 2 && !refused; i += 1) {
+        const response = await limited.inject({
+          method: 'POST',
+          url: `/v1/sessions/${sessionId}/turns`,
+          headers: { ...auth, 'idempotency-key': crypto.randomUUID() },
+          payload: {
+            actionText: 'I look around.',
+            qualityTier: 'QUICK',
+            sessionRevision: 0,
+            selectedSuggestionId: null,
+            voicePreferred: false,
+          },
+        });
+        if (response.statusCode === 429) refused = response;
+      }
+
+      expect(refused, 'a loop should eventually be refused').not.toBeNull();
+      expect(refused!.json().code).toBe('RATE_LIMITED');
+      expect(refused!.json().details?.retryAfterSeconds).toBeGreaterThan(0);
+    } finally {
+      await limited.close();
+    }
+  });
+
+  it('does not spend the read budget on a turn, or the other way round', async () => {
+    const base = makeContext();
+    const limited = buildServer({ ctx: { ...base, rateLimiter: new SlidingWindowRateLimiter() } }) as Server;
+    try {
+      for (let i = 0; i < RATE_LIMITS.turn.limit + 2; i += 1) {
+        await limited.inject({ method: 'POST', url: '/v1/reports', headers: auth, payload: {} });
+      }
+      // Writes are exhausted; reading is untouched.
+      const read = await limited.inject({ method: 'GET', url: '/v1/discover', headers: auth });
+      expect(read.statusCode).toBe(200);
+    } finally {
+      await limited.close();
+    }
   });
 });

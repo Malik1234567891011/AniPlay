@@ -6,6 +6,7 @@ import { JobQueue, registerHandlers } from '@aniplay/worker';
 import { MemoryRepository } from './repo/memory.js';
 import { PostgresRepository } from './repo/postgres.js';
 import { createTokenVerifierFromEnv, type TokenVerifier, type VerifiedToken } from './auth.js';
+import { SlidingWindowRateLimiter, type RateLimiter } from './rate-limit.js';
 import { createStoreVerifierFromEnv, type StoreVerifier } from './store-verifier.js';
 import type { Repository, UserRecord } from './repo/types.js';
 import { WalletService } from './wallet.js';
@@ -98,6 +99,11 @@ export interface AppContext {
    * reserved or generated, so a blocked turn costs nothing.
    */
   readonly moderator: Moderator;
+  /**
+   * Spec §31.7 — rate limits by user, device and IP. The turn endpoint spends
+   * money on every call, so this is a cost control before it is anything else.
+   */
+  readonly rateLimiter: RateLimiter;
 }
 
 /**
@@ -161,6 +167,7 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
     storeVerifier: overrides.storeVerifier ?? createStoreVerifierFromEnv(config),
     auth: overrides.auth ?? createTokenVerifierFromEnv(config),
     moderator: overrides.moderator ?? createModerator(gateway),
+    rateLimiter: overrides.rateLimiter ?? new SlidingWindowRateLimiter(),
   };
 }
 
