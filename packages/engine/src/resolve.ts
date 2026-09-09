@@ -1461,27 +1461,45 @@ function resolveSteal(args: ResolveActionArgs): ActionOutcome {
   const ownerPresent =
     owner !== null && charactersPresent(state).some((runtime) => runtime.characterId === owner?.id);
 
+  // Picking something up is only stealing when it belongs to somebody.
+  //
+  // Every take used to roll against DC 15 — HARD — including lifting an
+  // unowned can of drink off a bench in an empty gym. The adversarial sweep
+  // reported NO_INVENTORY_MOVEMENT in six of ten worlds, which reads as a
+  // broken take verb and was really a difficulty band applied to the wrong
+  // act. If nothing owns it and nobody is watching, it is not a feat: the
+  // player reaches out and now they have it.
+  const anyoneWatching = charactersPresent(state).length > 0;
+  const uncontested = owner === null && !anyoneWatching;
+
   const skill = pickSkillFor(story, 'steal');
   const attribute: AttributeKey = 'agility';
-  const check = resolveCheck(rng, {
-    checkId: `chk_steal_${chosen.itemId}_${state.turnIndex}`,
-    label: `Take ${item?.name ?? 'it'}`,
-    attribute,
-    attributeScore: effectiveAttribute(state, story, attribute),
-    skillId: skill,
-    skillProficiency: skill ? (state.player.skills[skill] ?? 0) : 0,
-    equipmentModifier: supportSkillModifier(state, story, skill),
-    // Doing it in front of the person it belongs to is a different problem.
-    dc: DC_BANDS.HARD + situationalDc(args) + (ownerPresent ? 4 : 0),
-    advantageLevel: advantageFor(args),
-    allowsPartial: true,
-  });
+  const check = uncontested
+    ? null
+    : resolveCheck(rng, {
+        checkId: `chk_steal_${chosen.itemId}_${state.turnIndex}`,
+        label: `Take ${item?.name ?? 'it'}`,
+        attribute,
+        attributeScore: effectiveAttribute(state, story, attribute),
+        skillId: skill,
+        skillProficiency: skill ? (state.player.skills[skill] ?? 0) : 0,
+        equipmentModifier: supportSkillModifier(state, story, skill),
+        // Three different acts, three different problems: taking what nobody
+        // owns while somebody is in the room, taking somebody's property while
+        // they are elsewhere, and taking it in front of them.
+        dc:
+          (owner === null ? DC_BANDS.EASY : ownerPresent ? DC_BANDS.HARD : DC_BANDS.MODERATE) +
+          situationalDc(args) +
+          (ownerPresent ? 4 : 0),
+        advantageLevel: advantageFor(args),
+        allowsPartial: true,
+      });
 
   const mutations: StateMutation[] = [];
   const observableFacts: string[] = [];
   const privateFacts: PrivateFact[] = [];
 
-  if (isSuccess(check.outcome)) {
+  if (check === null || isSuccess(check.outcome)) {
     mutations.push({
       mutationId: nextMutationId(),
       type: 'ITEM_ADD',
@@ -1500,7 +1518,7 @@ function resolveSteal(args: ResolveActionArgs): ActionOutcome {
     observableFacts.push(`${item?.name ?? 'It'} is in your coat now.`);
 
     // Seen doing it is the interesting half. A partial success is exactly that.
-    if (check.outcome === 'SUCCESS_WITH_COST' || ownerPresent) {
+    if (check?.outcome === 'SUCCESS_WITH_COST' || ownerPresent) {
       const witness = witnessConsequences(args, nextMutationId, item?.name ?? 'something');
       mutations.push(...witness.mutations);
       observableFacts.push(...witness.facts);
@@ -1531,12 +1549,20 @@ function resolveSteal(args: ResolveActionArgs): ActionOutcome {
   }
 
   return {
-    checks: [check],
+    // No check at all when nothing was contested — a resolution that reports a
+    // roll it did not make is how a "check reveal" ends up showing a player
+    // dice for picking up a drink.
+    checks: check ? [check] : [],
     mutations,
     observableFacts,
     privateFacts,
     timeCategory: 'BRIEF',
-    normalized: { verb: 'steal', targetId: chosen.itemId, status: 'RESOLVED', outcome: check.outcome },
+    normalized: {
+      verb: 'steal',
+      targetId: chosen.itemId,
+      status: 'RESOLVED',
+      outcome: check?.outcome ?? 'CLEAN_SUCCESS',
+    },
   };
 }
 
