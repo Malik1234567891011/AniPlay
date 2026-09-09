@@ -94,6 +94,7 @@ export function SessionScreen({
   const [showQuality, setShowQuality] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [revision, setRevision] = useState(0);
+  const [playerPortraitUrl, setPlayerPortraitUrl] = useState<string | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
   const transcriptRef = useRef<ScrollView>(null);
@@ -125,6 +126,20 @@ export function SessionScreen({
     void refreshWallet();
     return () => abortRef.current?.abort();
   }, [load, loadDraft, refreshWallet, sessionId]);
+
+  // The player's own portrait, if this run has one drawn yet.
+  useEffect(() => {
+    const refresh = (): void => {
+      void api
+        .myCharacters()
+        .then(({ characters }) => {
+          setPlayerPortraitUrl(characters.find((c) => c.sessionId === sessionId)?.portraitUrl ?? null);
+        })
+        .catch(() => setPlayerPortraitUrl(null));
+    };
+    refresh();
+    return navigation.addListener('focus', refresh);
+  }, [navigation, sessionId]);
 
   // Spec §10.3 — the draft survives backgrounding and failed turns.
   useEffect(() => {
@@ -307,7 +322,15 @@ export function SessionScreen({
       </SafeAreaView>
 
       {/* B. Stage — 35–48% of usable height (§10.2 B). */}
-      {scene ? <Stage scene={scene} sessionId={sessionId} navigation={navigation} /> : null}
+      {scene ? (
+        <Stage
+          scene={scene}
+          sessionId={sessionId}
+          navigation={navigation}
+          playerPortraitUrl={playerPortraitUrl}
+          onOpenPortrait={() => navigation.navigate('Characters')}
+        />
+      ) : null}
 
       {/* C. Story beat / transcript (§10.2 C). */}
       <ScrollView
@@ -514,10 +537,14 @@ function Stage({
   scene,
   sessionId,
   navigation,
+  playerPortraitUrl,
+  onOpenPortrait,
 }: {
   scene: SessionSceneState;
   sessionId: string;
   navigation: RootNavigation;
+  playerPortraitUrl: string | null;
+  onOpenPortrait: () => void;
 }): React.JSX.Element {
   const { height } = useWindowDimensions();
   const stageHeight = Math.round(Math.max(240, Math.min(height * 0.4, 380)));
@@ -549,6 +576,44 @@ function Stage({
           />
         ))}
       </View>
+
+      {/* You, in the scene. The whole point is that this run is yours, so the
+          person it happened to should be on screen. Tapping opens the portrait
+          sheet, which is also where an unset one gets drawn. */}
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={
+          playerPortraitUrl ? 'Your character. Tap to view or redraw.' : 'Draw your character.'
+        }
+        onPress={onOpenPortrait}
+        style={{ position: 'absolute', right: GUTTER, bottom: 96 }}
+      >
+        {playerPortraitUrl ? (
+          <CharacterPortrait
+            name="You"
+            uri={playerPortraitUrl}
+            size={Math.min(76, (stageHeight - 170) / 1.25)}
+          />
+        ) : (
+          <View
+            style={{
+              width: 56,
+              height: 70,
+              borderRadius: radius.card,
+              borderWidth: 1,
+              borderStyle: 'dashed',
+              borderColor: colors.border.strong,
+              backgroundColor: 'rgba(11,13,18,0.6)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Txt variant="micro" color={colors.text.muted} center>
+              Draw{'\n'}yourself
+            </Txt>
+          </View>
+        )}
+      </Pressable>
 
       {/* Scrim: generated art is unpredictable, so the HUD brings its own contrast. */}
       <LinearGradient

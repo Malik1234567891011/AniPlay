@@ -1073,3 +1073,85 @@ describe('scene invalidation (spec §16.5)', () => {
     expect(committed.arc.pacingStage).not.toBe('CONSEQUENCE');
   });
 });
+
+describe('branching (a story that is actually yours)', () => {
+  /** Puts the player in the stacks having taken one specific route. */
+  const enterStacksVia = (route: 'mira' | 'bram' | 'force'): GameState => {
+    const state = baseState();
+    state.flags.knows_erasure = true;
+    advanceQuests(state, STORY);
+    state.player.locationId = 'archive_stacks';
+
+    if (route === 'mira') {
+      state.relationships.find((r) => r.characterId === 'mira')!.trust = 40;
+    } else if (route === 'bram') {
+      state.player.inventory.push({
+        entryId: 'inv_key', itemId: 'stack_key', quantity: 1, equipped: false, instanceName: null,
+      });
+    } else {
+      state.flags.forced_the_stacks = true;
+    }
+    return state;
+  };
+
+  it('completes the same step through three genuinely different routes', () => {
+    for (const route of ['mira', 'bram', 'force'] as const) {
+      const state = enterStacksVia(route);
+      const transitions = advanceQuests(state, STORY);
+      const advanced = transitions.find((t) => t.stepId === 'step_ledger' || t.routeId);
+      expect(advanced, `route ${route} did not open the step`).toBeDefined();
+    }
+  });
+
+  it('records which route was taken and what it closed off', () => {
+    const state = enterStacksVia('bram');
+    const transitions = advanceQuests(state, STORY);
+    const routed = transitions.find((t) => t.routeId);
+
+    expect(routed?.routeId).toBe('bram_key');
+    expect(routed?.setsFlags).toContain('bram_has_leverage');
+    // Buying a key means Mira never had to take the risk.
+    expect(routed?.closesFlags).toContain('mira_took_a_risk');
+  });
+
+  it('gives different players different downstream stories', () => {
+    const played = (route: 'mira' | 'bram' | 'force') => {
+      let state = enterStacksVia(route);
+      const resolution = resolveIntent({
+        story: STORY, state,
+        intent: intent([{ verb: 'inspect', actor: player, targets: [], method: 'look', declaredOutcome: null, timeIntent: 'NOW' }]),
+        turnId: 't', seed: `branch-${route}`,
+      });
+      state = commitTurn({ story: STORY, state, resolution, turnId: 't' }).state;
+      // Quests that only exist because of the route taken.
+      return state.quests
+        .filter((q) => q.status !== 'UNAVAILABLE')
+        .map((q) => q.questId)
+        .sort();
+    };
+
+    const viaMira = played('mira');
+    const viaForce = played('force');
+
+    expect(viaMira).toContain('q_owed_favour');
+    expect(viaMira).not.toContain('q_wards_watching');
+    expect(viaForce).toContain('q_wards_watching');
+    expect(viaForce).not.toContain('q_owed_favour');
+    // The two runs are genuinely different stories, not the same one reskinned.
+    expect(viaMira).not.toEqual(viaForce);
+  });
+
+  it('leaves a route closed once another was taken', () => {
+    let state = enterStacksVia('force');
+    const resolution = resolveIntent({
+      story: STORY, state,
+      intent: intent([{ verb: 'inspect', actor: player, targets: [], method: 'look', declaredOutcome: null, timeIntent: 'NOW' }]),
+      turnId: 't', seed: 'closed',
+    });
+    state = commitTurn({ story: STORY, state, resolution, turnId: 't' }).state;
+
+    expect(state.flags['route:q_ninth_shelf:broke_in']).toBe(true);
+    expect(state.flags['closed:mira_took_a_risk']).toBe(true);
+    expect(state.flags.wards_flagged_you).toBe(true);
+  });
+});

@@ -322,6 +322,27 @@ export const QuestStepDef = z
     directorNotes: z.string().default(''),
     enterWhen: QuestPredicate.nullable().default(null),
     succeedWhen: QuestPredicate.nullable().default(null),
+    /**
+     * Alternative ways to satisfy this step. Any one of them completes it.
+     *
+     * A single success predicate means exactly one route works and everything
+     * else a player tries is wasted effort — the golden-path problem. Routes
+     * here are genuinely different: they cost different things, set different
+     * flags, and change what the rest of the story can offer.
+     */
+    succeedWhenAny: z.array(
+      z
+        .object({
+          routeId: z.string(),
+          label: z.string(),
+          predicate: QuestPredicate,
+          /** Set when this route is the one taken, so later content can branch. */
+          setsFlags: z.array(z.string()).default([]),
+          /** Closed off by taking this route. Choices should cost something. */
+          closesFlags: z.array(z.string()).default([]),
+        })
+        .strict(),
+    ).default([]),
     failWhen: QuestPredicate.nullable().default(null),
     deadlineWorldMinute: z.number().int().nullable().default(null),
     hiddenUntilEntered: z.boolean().default(false),

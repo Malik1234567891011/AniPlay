@@ -691,8 +691,64 @@ const raw = {
         {
           id: 'step_stacks_access',
           playerCopy: 'Get into the stacks.',
-          directorNotes: 'Three routes: Mira covers you, Bram sells a key, or you take one. Each has a different cost.',
-          succeedWhen: { flagsSet: ['stacks_access'] },
+          directorNotes:
+            'Three genuinely different routes, and the one taken changes the rest of the story. ' +
+            'Do not steer the player toward any of them.',
+          // No single success predicate: any of these three completes the step,
+          // and each closes something the others would have kept open.
+          succeedWhenAny: [
+            {
+              routeId: 'mira_covers',
+              label: 'Mira covered for you',
+              predicate: {
+                flagsSet: [],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: 'archive_stacks',
+                completedEvents: [],
+                minRelationship: [{ characterId: 'mira', dimension: 'trust', value: 30 }],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+              },
+              // She took a risk for you, and that is now a thing you owe her.
+              setsFlags: ['stacks_access', 'mira_took_a_risk', 'owe_mira'],
+              closesFlags: ['clean_record'],
+            },
+            {
+              routeId: 'bram_key',
+              label: 'Bram sold you a key',
+              predicate: {
+                flagsSet: [],
+                flagsUnset: [],
+                hasItems: ['stack_key'],
+                atLocation: 'archive_stacks',
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+              },
+              // A paper trail exists, and Bram now has something on you.
+              setsFlags: ['stacks_access', 'bram_has_leverage', 'key_traceable'],
+              closesFlags: ['mira_took_a_risk'],
+            },
+            {
+              routeId: 'broke_in',
+              label: 'You got in on your own',
+              predicate: {
+                flagsSet: ['forced_the_stacks'],
+                flagsUnset: [],
+                hasItems: [],
+                atLocation: 'archive_stacks',
+                completedEvents: [],
+                minRelationship: [],
+                minFactionReputation: [],
+                beforeWorldMinute: null,
+              },
+              // Nobody owes you and nobody covers for you. The wards noticed.
+              setsFlags: ['stacks_access', 'wards_flagged_you', 'owe_nobody'],
+              closesFlags: ['clean_record', 'mira_took_a_risk'],
+            },
+          ],
           rewards: { xp: 50, items: [], flags: [] },
         },
         {
@@ -710,6 +766,85 @@ const raw = {
           enterWhen: { flagsSet: ['has_evidence'] },
           succeedWhen: { flagsSet: ['found_ninth_door'] },
           rewards: { xp: 120, items: [], flags: ['act_one_complete'] },
+        },
+      ],
+    },
+    {
+      id: 'q_owed_favour',
+      title: 'What You Owe Mira',
+      summary: 'Mira put herself in front of a disciplinary board for you. She has not asked for anything yet.',
+      kind: 'SIDE',
+      startsActive: false,
+      involvedCharacterIds: ['mira'],
+      involvedLocationIds: ['archive_floor', 'rooftop'],
+      knownRewardCopy: 'A debt settled, or a friend lost.',
+      // Only exists if she was the one who got you in.
+      discoverWhen: {
+        flagsSet: ['mira_took_a_risk'],
+        flagsUnset: [],
+        hasItems: [],
+        atLocation: null,
+        completedEvents: [],
+        minRelationship: [],
+        minFactionReputation: [],
+        beforeWorldMinute: null,
+      },
+      steps: [
+        {
+          id: 'step_mira_asks',
+          playerCopy: 'Find out what Mira wants in return.',
+          directorNotes: 'She does not want a favour back. She wants you to finish what you started.',
+          succeedWhen: {
+            flagsSet: ['mira_asked'],
+            flagsUnset: [],
+            hasItems: [],
+            atLocation: null,
+            completedEvents: [],
+            minRelationship: [],
+            minFactionReputation: [],
+            beforeWorldMinute: null,
+          },
+          rewards: { xp: 60, items: [], flags: [] },
+        },
+      ],
+    },
+    {
+      id: 'q_wards_watching',
+      title: 'The Wards Have Your Face',
+      summary: 'You forced a door the building was counting. Now it counts you.',
+      kind: 'SIDE',
+      startsActive: false,
+      involvedCharacterIds: ['kael', 'ysolde'],
+      involvedLocationIds: ['archive_floor', 'warden_office'],
+      knownRewardCopy: 'Get off the list, or learn to live on it.',
+      // Only exists if you got in the hard way.
+      discoverWhen: {
+        flagsSet: ['wards_flagged_you'],
+        flagsUnset: [],
+        hasItems: [],
+        atLocation: null,
+        completedEvents: [],
+        minRelationship: [],
+        minFactionReputation: [],
+        beforeWorldMinute: null,
+      },
+      steps: [
+        {
+          id: 'step_off_the_list',
+          playerCopy: 'Deal with the fact that the building is now watching you.',
+          directorNotes:
+            'Kael will have seen the log. Ysolde can make it disappear, and will want something for it.',
+          succeedWhen: {
+            flagsSet: ['ward_flag_resolved'],
+            flagsUnset: [],
+            hasItems: [],
+            atLocation: null,
+            completedEvents: [],
+            minRelationship: [],
+            minFactionReputation: [],
+            beforeWorldMinute: null,
+          },
+          rewards: { xp: 80, items: [], flags: [] },
         },
       ],
     },

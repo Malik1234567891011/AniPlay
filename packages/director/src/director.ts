@@ -601,6 +601,22 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
         sourceEventIds: [mutation.mutationId],
       });
     }
+    // How the player got somewhere is canon, and NPCs should know it. Whether
+    // Mira covered for you or you forced the door changes every later scene.
+    if (mutation.type === 'FLAG_SET' && mutation.reasonCode.startsWith('ROUTE_TAKEN:')) {
+      const flag = String((mutation.payload as { flag?: string }).flag ?? '');
+      if (flag.startsWith('route:')) {
+        proposals.push({
+          subjectId: 'player',
+          predicate: 'route_taken',
+          value: flag.slice('route:'.length),
+          visibility: 'WORLD_PUBLIC',
+          importance: 0.95,
+          sourceEventIds: [mutation.mutationId],
+        });
+      }
+    }
+
     if (mutation.type === 'QUEST_TRANSITION') {
       proposals.push({
         subjectId: mutation.subjectId,

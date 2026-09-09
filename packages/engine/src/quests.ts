@@ -58,6 +58,40 @@ export interface QuestTransition {
   readonly stepId: string | null;
   readonly playerCopy: string;
   readonly reasonCode: string;
+  /** Which of several possible routes the player actually took, when relevant. */
+  readonly routeId?: string;
+  readonly routeLabel?: string;
+  readonly setsFlags?: readonly string[];
+  readonly closesFlags?: readonly string[];
+}
+
+/**
+ * A step is satisfied by its single predicate, or by any one of its alternative
+ * routes. The route that fired is reported, because the rest of the story
+ * branches on which one it was.
+ */
+function evaluateStepSuccess(
+  step: { succeedWhen: QuestPredicate | null; succeedWhenAny: readonly {
+    routeId: string; label: string; predicate: QuestPredicate;
+    setsFlags: string[]; closesFlags: string[];
+  }[] },
+  state: GameState,
+): { satisfied: boolean; route?: { routeId: string; label: string; setsFlags: string[]; closesFlags: string[] } } {
+  for (const route of step.succeedWhenAny) {
+    if (evaluatePredicate(route.predicate, state)) {
+      return {
+        satisfied: true,
+        route: {
+          routeId: route.routeId,
+          label: route.label,
+          setsFlags: route.setsFlags,
+          closesFlags: route.closesFlags,
+        },
+      };
+    }
+  }
+  if (evaluatePredicate(step.succeedWhen, state)) return { satisfied: true };
+  return { satisfied: false };
 }
 
 /**
@@ -146,9 +180,19 @@ export function advanceQuests(state: GameState, story: StoryVersion): QuestTrans
         break;
       }
 
-      if (!evaluatePredicate(step.succeedWhen, state)) break;
+      const success = evaluateStepSuccess(step, state);
+      if (!success.satisfied) break;
 
       if (!progress.completedStepIds.includes(step.id)) progress.completedStepIds.push(step.id);
+
+      // Taking a route *is* part of resolving the step, so its flags land before
+      // the next step's entry gate is evaluated. Applying them later as a reward
+      // stalls the chain on a gate the route was meant to open.
+      if (success.route) {
+        state.flags[`route:${quest.id}:${success.route.routeId}`] = true;
+        for (const flag of success.route.setsFlags) state.flags[flag] = true;
+        for (const flag of success.route.closesFlags) state.flags[`closed:${flag}`] = true;
+      }
 
       const nextStep = quest.steps[quest.steps.indexOf(step) + 1];
       if (!nextStep) {
@@ -159,6 +203,8 @@ export function advanceQuests(state: GameState, story: StoryVersion): QuestTrans
           stepId: step.id,
           playerCopy: step.playerCopy,
           reasonCode: 'QUEST_COMPLETED',
+          ...(success.route ?? {}),
+          routeLabel: success.route?.label,
         });
         progress.status = 'COMPLETED';
         progress.currentStepId = null;
@@ -174,6 +220,8 @@ export function advanceQuests(state: GameState, story: StoryVersion): QuestTrans
           stepId: nextStep.id,
           playerCopy: nextStep.playerCopy,
           reasonCode: 'STEP_GATED',
+          ...(success.route ?? {}),
+          routeLabel: success.route?.label,
         });
         progress.status = 'BLOCKED';
         progress.currentStepId = nextStep.id;
@@ -187,6 +235,8 @@ export function advanceQuests(state: GameState, story: StoryVersion): QuestTrans
         stepId: nextStep.id,
         playerCopy: nextStep.playerCopy,
         reasonCode: 'STEP_ADVANCED',
+        ...(success.route ?? {}),
+        routeLabel: success.route?.label,
       });
       progress.status = 'ACTIVE';
       progress.currentStepId = nextStep.id;
@@ -235,6 +285,36 @@ export function rewardMutationsFor(
         reasonCode: `QUEST_REWARD:${transition.questId}`,
         payload: { flag, value: true },
       });
+    }
+
+    // The route taken is recorded as canon, and the routes it closed off are
+    // marked shut. A choice that costs nothing is not a choice.
+    if (transition.routeId) {
+      mutations.push({
+        mutationId: nextMutationId(),
+        type: 'FLAG_SET',
+        subjectId: 'session',
+        reasonCode: `ROUTE_TAKEN:${transition.questId}`,
+        payload: { flag: `route:${transition.questId}:${transition.routeId}`, value: true },
+      });
+      for (const flag of transition.setsFlags ?? []) {
+        mutations.push({
+          mutationId: nextMutationId(),
+          type: 'FLAG_SET',
+          subjectId: 'session',
+          reasonCode: `ROUTE_TAKEN:${transition.questId}`,
+          payload: { flag, value: true },
+        });
+      }
+      for (const flag of transition.closesFlags ?? []) {
+        mutations.push({
+          mutationId: nextMutationId(),
+          type: 'FLAG_SET',
+          subjectId: 'session',
+          reasonCode: `ROUTE_CLOSED:${transition.questId}`,
+          payload: { flag: `closed:${flag}`, value: true },
+        });
+      }
     }
   }
   return mutations;
