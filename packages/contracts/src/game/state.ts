@@ -209,6 +209,16 @@ export const ContestState = z
     playerControlled: z.boolean().default(false),
     /** Why control was handed over, for the director. */
     controlReason: z.string().default(''),
+    /**
+     * Simulated possessions since the player last had the ball.
+     *
+     * Without this, a reason like "you are being run off the floor" stays true
+     * for as long as the run lasts and re-fires on every single call — which
+     * hands the player nearly every possession and turns a forty-minute game
+     * back into the two hundred turns of homework the simulation exists to
+     * avoid. Time-critical reasons ignore it; mood-based ones do not.
+     */
+    possessionsSinceControl: z.number().int().min(0).default(99),
     /** Beat-by-beat log of what the simulation did, newest last. */
     log: z.array(z.string()).default([]),
     finished: z.boolean().default(false),

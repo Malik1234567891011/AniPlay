@@ -74,9 +74,15 @@ const CONSEQUENCE =
 const OBJECTIVE =
   /\b(find|prove|reach|get|deliver|escape|survive|convince|persuade|stop|recover|clear|earn|make|keep|before|need to|have to|must|want to|trying to|looking for)\b/i;
 
-/** 6. What is the tension? Something that can go wrong, named. */
+/**
+ * 6. What is the tension? Something that could go wrong, named.
+ *
+ * Stems rather than exact words: the first version listed `lose` and `lost`
+ * and so missed `loses`, which meant a premise that spelled out exactly what
+ * everybody stood to lose was reported as having no stakes at all.
+ */
 const TENSION =
-  /\b(danger|dangerous|risk|threat|trouble|expelled|removed|caught|detained|arrested|die|death|lose|lost|fail|failure|run out|deadline|weeks|days|watching|suspicious|hidden|secret|lying|lied)\b/i;
+  /\b(danger(?:ous)?|risk(?:s|ed|ing)?|threat(?:en(?:s|ed|ing)?)?|trouble|expel(?:led)?|removed|caught|detained|arrested|dies?|dying|death|los(?:e|es|ing|t)|fail(?:s|ed|ing|ure)?|shut(?:s|ting)? down|run(?:s|ning)? out|deadline|weeks|days|watching|suspicious|hidden|secret|lying|lied)\b/i;
 
 /** Habitual AI-fantasy constructions that read as prestige-fantasy filler. */
 const PROSE_TICS: Array<{ pattern: RegExp; label: string; fix: string }> = [

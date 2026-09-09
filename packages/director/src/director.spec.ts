@@ -1148,7 +1148,22 @@ describe('every launch world is playable', () => {
 
 describe('every authored gate can actually be reached', () => {
   /** Flags the engine produces from what it observed. See `recordObservations`. */
-  const ENGINE_PREFIXES = ['met:', 'spoke:', 'attacked:', 'visited:', 'used:', 'inspected:', 'cooldown:', 'route:', 'closed:'];
+  const ENGINE_PREFIXES = [
+    'met:',
+    'spoke:',
+    'attacked:',
+    'engaged:',
+    'visited:',
+    'used:',
+    'inspected:',
+    'cooldown:',
+    'route:',
+    'closed:',
+    // Written by a finished contest, keyed on the opponent. Spec §13.8.
+    'played:',
+    'beat:',
+    'lost_to:',
+  ];
 
   const producibleFlags = (world: (typeof LAUNCH_CATALOG)[number]): Set<string> => {
     const flags = new Set<string>();

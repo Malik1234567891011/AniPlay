@@ -15,6 +15,7 @@ import type { FiredWorldEvent } from './world-events.js';
 import { echoDirectorNotes, loopShouldReset, resetLoop, type LoopResetResult } from './loop.js';
 import { departuresFromMutations, type CrewDeparture } from './crew.js';
 import { scoutingMutations } from './tendencies.js';
+import { contestResultFlags } from './contest.js';
 
 /**
  * Spec §32.4 `commitTurn` — the single transaction that turns a `Resolution`
@@ -75,6 +76,24 @@ export function commitTurn(options: CommitOptions): CommitResult {
   // the player is standing and what they are holding, which is why authored
   // steps like "find the archive assistant" could never complete.
   recordObservations(state, story, resolution);
+
+  // A match that has ended is a thing the world knows about. Recorded before
+  // quests are evaluated, so a step can be written against having played
+  // somebody — which is the whole shape of a season.
+  if (state.contest?.finished) {
+    const results = contestResultFlags(state.contest).filter((flag) => !state.flags[flag]);
+    if (results.length > 0) {
+      const resultMutations: StateMutation[] = results.map((flag) => ({
+        mutationId: nextMutationId(),
+        type: 'FLAG_SET',
+        subjectId: state.contest!.opponentId,
+        reasonCode: 'CONTEST_RESULT',
+        payload: { flag, value: true },
+      }));
+      state = applyMutations(state, story, resultMutations);
+      accepted.push(...resultMutations);
+    }
+  }
 
   // Spec §12.10 — anyone who competed against the player today takes something
   // away from it. Once per world-day per opponent: a rival who guards you for

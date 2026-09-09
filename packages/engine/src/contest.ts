@@ -62,6 +62,7 @@ export function startContest(options: StartContestOptions): ContestState {
     matchupId: options.matchupId ?? null,
     playerControlled: false,
     controlReason: '',
+    possessionsSinceControl: 99,
     log: [],
     finished: false,
     playerWon: null,
@@ -119,6 +120,7 @@ export function simulateContest(
     const beat = simulateOnePossession(contest, rng, playerRating, opponent);
     beats.push(beat);
     contest.log.push(beat);
+    contest.possessionsSinceControl += 1;
     advanceClock(contest);
   }
 
@@ -148,17 +150,29 @@ function bestOffensiveModifier(state: GameState, story: StoryVersion): number {
  * Ordered by how much it matters. Everything here is a moment a sports story
  * would cut to; a stretch with none of them is a stretch worth summarising.
  */
+/** Mood-based reasons need this much game between them. */
+const CONTROL_SPACING = 4;
+
 function handOverReason(contest: ContestState): string | null {
   const margin = contest.playerScore - contest.opponentScore;
   const lastPeriod = contest.period === contest.periodCount;
 
-  if (lastPeriod && contest.clockSeconds <= 60 && Math.abs(margin) <= 6) {
-    return 'CLUTCH';
-  }
-  if (contest.momentum <= -0.6) return 'BLEEDING';
-  if (lastPeriod && contest.clockSeconds <= 180 && Math.abs(margin) <= 10) return 'CLOSING';
+  // Time-critical: these are single specific moments, so they fire the instant
+  // they are true regardless of when the player last had it.
+  if (lastPeriod && contest.clockSeconds <= 60 && Math.abs(margin) <= 6) return 'CLUTCH';
   if (contest.clockSeconds <= 24 && contest.playerPossession) return 'LAST_SHOT';
-  if (contest.momentum >= 0.7) return 'RUN';
+
+  // Mood-based: a run lasts several possessions, so without spacing these stay
+  // true and re-fire every call. Being handed the ball on every possession of
+  // a bad stretch is not drama, it is a punishment.
+  if (contest.possessionsSinceControl < CONTROL_SPACING) return null;
+
+  // Both of these are about a game that is still in the balance. A run when you
+  // are up thirty is mopping up, and bleeding when you are down forty is not a
+  // moment, it is the score — neither is worth taking the player's turn for.
+  if (contest.momentum <= -0.6 && margin > -20) return 'BLEEDING';
+  if (lastPeriod && contest.clockSeconds <= 180 && Math.abs(margin) <= 10) return 'CLOSING';
+  if (contest.momentum >= 0.7 && margin < 15) return 'RUN';
   return null;
 }
 
@@ -266,12 +280,18 @@ export function applyPlayerPossession(
   next.playerFatigue = Math.min(100, next.playerFatigue + 4);
   if (outcome.foul) next.playerFouls += 1;
 
+  // Scoring while being run off the floor is worth more than scoring while
+  // comfortable: stopping a run is the entire reason the player was handed the
+  // ball, so it has to actually stop it.
+  const stoppingARun = next.momentum < -0.3 && outcome.points > 0;
   next.momentum = clamp(
-    next.momentum + (outcome.points >= 3 ? 0.3 : outcome.points > 0 ? 0.2 : outcome.turnover ? -0.25 : -0.1),
+    next.momentum +
+      (stoppingARun ? 0.55 : outcome.points >= 3 ? 0.3 : outcome.points > 0 ? 0.2 : outcome.turnover ? -0.25 : -0.1),
   );
 
   next.playerControlled = false;
   next.controlReason = '';
+  next.possessionsSinceControl = 0;
   next.playerPossession = false;
   next.log.push(
     outcome.points > 0
@@ -308,4 +328,28 @@ export function contestSummary(contest: ContestState): string {
     return `Final ${contest.playerScore}–${contest.opponentScore} vs ${contest.opponentName}`;
   }
   return `${contest.playerScore}–${contest.opponentScore} vs ${contest.opponentName} · ${formatClock(contest.clockSeconds)} ${ordinal(contest.period)}`;
+}
+
+/**
+ * The flags a finished contest writes. Spec §13.8.
+ *
+ * Without this a match was a thing that happened and left no trace a quest
+ * could gate on — the launch-catalog test caught exactly that, on a world
+ * whose entire main line is "beat these five people". Results are engine
+ * observations like `visited:` and `spoke:` are, keyed on the opponent so a
+ * story never has to invent a flag name and get it wrong.
+ *
+ *   played:<opponentId>    it happened, whatever the result
+ *   beat:<opponentId>      you won
+ *   lost_to:<opponentId>   you did not
+ */
+export function contestResultFlags(contest: ContestState): string[] {
+  if (!contest.finished) return [];
+  const flags = [`played:${contest.opponentId}`];
+  flags.push(contest.playerWon ? `beat:${contest.opponentId}` : `lost_to:${contest.opponentId}`);
+  return flags;
+}
+
+export function playedFlag(opponentId: string): string {
+  return `played:${opponentId}`;
 }

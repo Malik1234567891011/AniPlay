@@ -8,6 +8,7 @@ import { NINE_WEEKS as NINE_WEEKS_RAW } from './nine-weeks.js';
 import { RED_MOON as RED_MOON_RAW } from './red-moon.js';
 import { SEVEN_DAYS as SEVEN_DAYS_RAW } from './seven-days.js';
 import { BLACKWAKE as BLACKWAKE_RAW } from './blackwake.js';
+import { LAST_FIVE as LAST_FIVE_RAW } from './last-five.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -20,6 +21,7 @@ export const NINE_WEEKS = withDerivedAssetKeys(NINE_WEEKS_RAW);
 export const RED_MOON = withDerivedAssetKeys(RED_MOON_RAW);
 export const SEVEN_DAYS = withDerivedAssetKeys(SEVEN_DAYS_RAW);
 export const BLACKWAKE = withDerivedAssetKeys(BLACKWAKE_RAW);
+export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
 
 /**
  * The official launch catalog.
@@ -34,7 +36,9 @@ export const BLACKWAKE = withDerivedAssetKeys(BLACKWAKE_RAW);
  * and Red Moon Brigade is a monster hunt where the meter that makes you strong
  * is the same one that stops you being a person, and Seven Days to Midnight is
  * a week that restarts where the only thing you keep is what you found out, and
- * Blackwake is an ocean where the crew are people who can leave.
+ * Blackwake is an ocean where the crew are people who can leave, and Last Five
+ * is a sport where your position is counted out of what you kept trying and
+ * every rival who watches film makes it harder.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -46,4 +50,5 @@ export const LAUNCH_CATALOG = [
   RED_MOON,
   SEVEN_DAYS,
   BLACKWAKE,
+  LAST_FIVE,
 ] as const;
