@@ -11,6 +11,19 @@ import { useStore } from '../state/store.jsx';
  * seconds, and there is no account wall in front of it.
  */
 
+/**
+ * The privacy policy and terms live wherever they are published, which is not
+ * something the app gets to invent. These were `https://aniplay.example/...`,
+ * which is a link to nothing in a screen App Store review reads carefully.
+ */
+async function openLegal(page: 'privacy' | 'terms'): Promise<void> {
+  const base = process.env.EXPO_PUBLIC_LEGAL_BASE_URL;
+  if (!base) return;
+  await Linking.openURL(`${base.replace(/\/$/, '')}/${page}`).catch(() => undefined);
+}
+
+const LEGAL_LINKS_CONFIGURED = Boolean(process.env.EXPO_PUBLIC_LEGAL_BASE_URL);
+
 /** OB-01 — no fake delay; the wordmark shows only for as long as boot takes. */
 export function SplashScreen(): React.JSX.Element {
   const fade = useRef(new Animated.Value(0)).current;
@@ -88,22 +101,18 @@ export function AgeGateScreen(): React.JSX.Element {
             disabled={!band || tooYoung}
             onPress={() => void confirmAge()}
           />
-          <Row gap={spacing.lg} style={{ justifyContent: 'center' }}>
-            <Txt
-              variant="caption"
-              color={colors.text.muted}
-              onPress={() => void Linking.openURL('https://aniplay.example/privacy')}
-            >
-              Privacy
-            </Txt>
-            <Txt
-              variant="caption"
-              color={colors.text.muted}
-              onPress={() => void Linking.openURL('https://aniplay.example/terms')}
-            >
-              Terms
-            </Txt>
-          </Row>
+          {/* Only shown once they point somewhere. A dead link on the age gate
+              is the first thing App Store review taps. */}
+          {LEGAL_LINKS_CONFIGURED ? (
+            <Row gap={spacing.lg} style={{ justifyContent: 'center' }}>
+              <Txt variant="caption" color={colors.text.muted} onPress={() => void openLegal('privacy')}>
+                Privacy
+              </Txt>
+              <Txt variant="caption" color={colors.text.muted} onPress={() => void openLegal('terms')}>
+                Terms
+              </Txt>
+            </Row>
+          ) : null}
         </Stack>
       </View>
     </SafeAreaView>
