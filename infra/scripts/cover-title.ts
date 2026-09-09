@@ -93,11 +93,14 @@ export async function compositeTitle(
   // "A broken ship. Nobody knows your name." did on the first cover.
   const kickerText = (plate.kicker ?? '').toUpperCase();
   const available = width - margin * 2;
-  // Condensed uppercase at this weight averages a little over half its point
-  // size per glyph, tracking included.
+  // The renderer behind sharp ignores `textLength`, so the type has to be sized
+  // to fit rather than squeezed to fit — the first attempt trusted textLength
+  // and clipped the last letter off "…YOU ARE BECOMING ONE." Deliberately a
+  // pessimistic per-glyph estimate: a kicker one point too small is invisible,
+  // a kicker one point too large is broken.
   const kickerSize = Math.max(
-    Math.round(width * 0.018),
-    Math.min(Math.round(width * 0.031), Math.floor(available / (kickerText.length * 0.62))),
+    Math.round(width * 0.016),
+    Math.min(Math.round(width * 0.030), Math.floor(available / (kickerText.length * 0.70))),
   );
 
   const lines = layoutTitle(plate.title.toUpperCase(), 15);
@@ -114,10 +117,7 @@ export async function compositeTitle(
     .join('');
 
   const kicker = kickerText
-    ? `<text x="${margin}" y="${height - margin}" class="kicker" textLength="${Math.min(
-        available,
-        Math.round(kickerText.length * kickerSize * 0.62),
-      )}" lengthAdjust="spacingAndGlyphs">${escapeXml(kickerText)}</text>`
+    ? `<text x="${margin}" y="${height - margin}" class="kicker">${escapeXml(kickerText)}</text>`
     : '';
 
   const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">

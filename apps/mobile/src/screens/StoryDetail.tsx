@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, FlatList, View } from 'react-native';
+import { Animated, FlatList, Modal, Pressable, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { StoryDetailResponse } from '@aniplay/contracts';
 import {
@@ -55,6 +55,7 @@ export function StoryDetailScreen({
   const insets = useSafeAreaInsets();
   const [detail, setDetail] = useState<StoryDetailResponse | null>(null);
   const [saved, setSaved] = useState(false);
+  const [castMember, setCastMember] = useState<StoryDetailResponse['cast'][number] | null>(null);
 
   // The key art is deliberately edge-to-edge under the status bar. Once the page
   // scrolls past it, body content would otherwise run under the clock unclipped,
@@ -197,21 +198,28 @@ export function StoryDetailScreen({
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={{ gap: spacing.lg }}
                 renderItem={({ item }) => (
-                  <View style={{ width: 148, gap: spacing.xs }}>
+                  // The carousel has to truncate, so the truncation has to be
+                  // one tap from the whole thing. A face a player is curious
+                  // about is the strongest signal they have about whether they
+                  // want this world at all.
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={`${item.name}, ${item.role}. Tap for details.`}
+                    onPress={() => setCastMember(item)}
+                    style={({ pressed }) => [{ width: 148, gap: spacing.xs, opacity: pressed ? 0.8 : 1 }]}
+                  >
                     <CharacterPortrait name={item.name} uri={item.portrait} size={148} />
                     <Txt variant="bodyCompact" numberOfLines={1}>
                       {item.name}
                     </Txt>
                     {/* Story function leads; the job title is secondary. */}
-                    <Txt variant="caption" color={colors.text.secondary} numberOfLines={4}>
+                    <Txt variant="caption" color={colors.text.secondary} numberOfLines={3}>
                       {item.cardBlurb || item.role}
                     </Txt>
-                    {item.cardBlurb ? (
-                      <Txt variant="micro" color={colors.text.muted} numberOfLines={1}>
-                        {item.role}
-                      </Txt>
-                    ) : null}
-                  </View>
+                    <Txt variant="micro" color={colors.text.muted} numberOfLines={1}>
+                      {item.cardBlurb ? item.role : 'Tap for more'}
+                    </Txt>
+                  </Pressable>
                 )}
               />
             </Stack>
@@ -277,7 +285,86 @@ export function StoryDetailScreen({
           opacity: scrimOpacity,
         }}
       />
+
+      {castMember ? <CastSheet member={castMember} onClose={() => setCastMember(null)} /> : null}
     </View>
+  );
+}
+
+/**
+ * A cast member, in full.
+ *
+ * Everything shown here is public: what they are to the player, what they are
+ * known for, what they look like. Nothing from `hiddenDrives`, `secrets` or
+ * `goals` reaches this screen — meeting someone should still be how you find
+ * out who they are.
+ */
+function CastSheet({
+  member,
+  onClose,
+}: {
+  member: StoryDetailResponse['cast'][number];
+  onClose: () => void;
+}): React.JSX.Element {
+  return (
+    <Modal transparent animationType="fade" onRequestClose={onClose}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Close"
+        onPress={onClose}
+        style={{ flex: 1, backgroundColor: 'rgba(6,7,10,0.86)', justifyContent: 'flex-end' }}
+      >
+        {/* Swallows the tap so pressing the card itself does not dismiss it. */}
+        <Pressable
+          onPress={() => undefined}
+          style={{
+            backgroundColor: colors.bg.raised,
+            borderTopLeftRadius: radius.large,
+            borderTopRightRadius: radius.large,
+            padding: GUTTER,
+            paddingBottom: spacing.xxl,
+            gap: spacing.lg,
+          }}
+        >
+          <View style={{ alignSelf: 'center', width: 36, height: 4, borderRadius: 2, backgroundColor: colors.text.muted }} />
+
+          <Row gap={spacing.lg} style={{ alignItems: 'flex-start' }}>
+            <CharacterPortrait name={member.name} uri={member.portrait} size={124} />
+            <View style={{ flex: 1, gap: spacing.xs }}>
+              <Txt variant="h2" numberOfLines={2}>
+                {member.name}
+              </Txt>
+              <Txt variant="caption" color={colors.text.secondary}>
+                {member.role}
+              </Txt>
+              {member.pronouns ? (
+                <Txt variant="micro" color={colors.text.muted}>
+                  {member.pronouns}
+                </Txt>
+              ) : null}
+            </View>
+          </Row>
+
+          {member.cardBlurb ? <Txt variant="body">{member.cardBlurb}</Txt> : null}
+
+          {member.publicTraits.length > 0 ? (
+            <Row gap={spacing.sm} style={{ flexWrap: 'wrap' }}>
+              {member.publicTraits.map((trait) => (
+                <Chip key={trait} label={trait} />
+              ))}
+            </Row>
+          ) : null}
+
+          {member.appearance ? (
+            <Txt variant="caption" color={colors.text.secondary}>
+              {member.appearance}
+            </Txt>
+          ) : null}
+
+          <Button label="Close" variant="secondary" onPress={onClose} />
+        </Pressable>
+      </Pressable>
+    </Modal>
   );
 }
 

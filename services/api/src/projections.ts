@@ -109,6 +109,8 @@ export function toStoryDetail(
       cardBlurb: c.cardBlurb,
       portrait: resolveAssetUrl(c.portrait),
       publicTraits: c.publicTraits,
+      pronouns: c.pronouns,
+      appearance: c.appearance,
     })),
     stats: {
       runs: signals.runs,

@@ -187,6 +187,17 @@ export const StoryDetailResponse = z
           cardBlurb: z.string(),
           portrait: z.string().nullable(),
           publicTraits: z.array(z.string()),
+          /**
+           * The rest of the card, for when a player taps a face.
+           *
+           * The carousel truncates a blurb to four lines because a carousel
+           * has to; that is only acceptable if the whole thing is one tap
+           * away. Nothing here is a spoiler — it is what the cast is publicly
+           * known for, which is exactly what a viewer would learn by meeting
+           * them.
+           */
+          pronouns: z.string().default('they/them'),
+          appearance: z.string().default(''),
         })
         .strict(),
     ),

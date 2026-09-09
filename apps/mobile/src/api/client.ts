@@ -219,13 +219,18 @@ export class ApiClient {
   }
 
   /** Tastes ride along rather than being stored, so this works signed out. */
-  discover(tastes: readonly string[] = []): Promise<DiscoverResponse> {
-    const query = tastes.length > 0 ? `?tastes=${encodeURIComponent(tastes.join(','))}` : '';
-    return this.#request('GET', `/v1/discover${query}`);
+  discover(tastes: readonly string[] = [], category: string | null = null): Promise<DiscoverResponse> {
+    const params = new URLSearchParams();
+    if (tastes.length > 0) params.set('tastes', tastes.join(','));
+    if (category) params.set('category', category);
+    const query = params.toString();
+    return this.#request('GET', `/v1/discover${query ? `?${query}` : ''}`);
   }
 
-  search(query: string): Promise<{ results: StorySummary[] }> {
-    return this.#request('GET', `/v1/search?q=${encodeURIComponent(query)}`);
+  search(query: string, category: string | null = null): Promise<{ results: StorySummary[] }> {
+    const params = new URLSearchParams({ q: query });
+    if (category) params.set('category', category);
+    return this.#request('GET', `/v1/search?${params.toString()}`);
   }
 
   storyDetail(storyId: string): Promise<StoryDetailResponse> {

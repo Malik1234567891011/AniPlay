@@ -143,6 +143,14 @@ async function main(): Promise<void> {
       if (spec.titleSafeArea) {
         const story = LAUNCH_CATALOG.find((s) => coverAssetKey(s.storyId) === spec.assetKey);
         if (story) {
+          // The untouched art is kept beside the finished cover. Typography is
+          // the part most likely to want another pass, and without this every
+          // adjustment to the wordmark costs a fresh generation of a picture
+          // that was already correct.
+          const rawPath = join(ASSET_DIR, `${spec.assetKey}.raw.png`);
+          await mkdir(dirname(rawPath), { recursive: true });
+          await writeFile(rawPath, asset.bytes);
+
           const plated = await compositeTitle(Buffer.from(asset.bytes), {
             title: story.title,
             kicker: story.fantasyLabel,

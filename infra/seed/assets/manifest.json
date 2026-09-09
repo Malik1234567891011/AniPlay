@@ -1386,25 +1386,6 @@
       "createdAt": "2026-09-09T08:59:30.568Z"
     }
   },
-  "story_blackwake/cover": {
-    "assetKey": "story_blackwake/cover",
-    "file": "story_blackwake/cover.png",
-    "kind": "COVER",
-    "alt": "Cover art for Blackwake: A broken ship. Nobody knows your name.",
-    "width": 1024,
-    "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
-    "provenance": {
-      "provider": "openai",
-      "model": "gpt-image-2",
-      "requestId": "1fc5ea19-b97d-4f95-ab5c-dca1f5b1d7f3",
-      "promptHash": "4eeaa6bd94541b64d8a32bc8b631bd1a",
-      "seed": "sv_blackwake_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.21952,
-      "latencyMs": 106986,
-      "createdAt": "2026-09-09T21:33:54.534Z"
-    }
-  },
   "story_red_moon/stage_the_ramparts": {
     "assetKey": "story_red_moon/stage_the_ramparts",
     "file": "story_red_moon/stage_the_ramparts.png",
@@ -1536,25 +1517,6 @@
       "costUsd": 0.01372,
       "latencyMs": 21433,
       "createdAt": "2026-09-09T21:35:38.385Z"
-    }
-  },
-  "story_red_moon/cover": {
-    "assetKey": "story_red_moon/cover",
-    "file": "story_red_moon/cover.png",
-    "kind": "COVER",
-    "alt": "Cover art for Red Moon Brigade: You hunt monsters. You are becoming one.",
-    "width": 1024,
-    "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
-    "provenance": {
-      "provider": "openai",
-      "model": "gpt-image-2",
-      "requestId": "ea94e176-4abb-45d8-9da5-347e977b4a7e",
-      "promptHash": "a26737376dc4f2402fa4892cf2c7cd0e",
-      "seed": "sv_red_moon_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.21952,
-      "latencyMs": 95898,
-      "createdAt": "2026-09-09T21:35:52.603Z"
     }
   },
   "story_red_moon/stage_ash_flats": {
@@ -1859,6 +1821,538 @@
       "costUsd": 0.02404,
       "latencyMs": 27260,
       "createdAt": "2026-09-09T21:37:50.331Z"
+    }
+  },
+  "story_seven_days/stage_the_library": {
+    "assetKey": "story_seven_days/stage_the_library",
+    "file": "story_seven_days/stage_the_library.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Public Library: One room upstairs above the old assembly hall.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c12d79b5-0566-459a-b56c-87768a64f3a3",
+      "promptHash": "a0799945a71b6dcc7959a3e8171e123a",
+      "seed": "sv_seven_days_1:loc:the_library:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36644,
+      "createdAt": "2026-09-09T21:38:09.916Z"
+    }
+  },
+  "story_seven_days/stage_the_marina": {
+    "assetKey": "story_seven_days/stage_the_marina",
+    "file": "story_seven_days/stage_the_marina.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Marina: Eighty berths, maybe thirty of them used.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "15e0f095-1242-422b-920b-5003b8213f33",
+      "promptHash": "6a1741afee24a282b20b3d1a222f9816",
+      "seed": "sv_seven_days_1:loc:the_marina:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44073,
+      "createdAt": "2026-09-09T21:38:10.228Z"
+    }
+  },
+  "story_seven_days/stage_the_clock_tower": {
+    "assetKey": "story_seven_days/stage_the_clock_tower",
+    "file": "story_seven_days/stage_the_clock_tower.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Clock Tower: Top of the hill, ninety feet, and stopped at 11:59 since before anybody alive was born.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5295ee06-4dd8-4680-8983-f77e5ee35905",
+      "promptHash": "6e29dcb8fb5219e214eec21ec84a04c9",
+      "seed": "sv_seven_days_1:loc:the_clock_tower:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 23197,
+      "createdAt": "2026-09-09T21:38:13.533Z"
+    }
+  },
+  "story_seven_days/stage_council_hall": {
+    "assetKey": "story_seven_days/stage_council_hall",
+    "file": "story_seven_days/stage_council_hall.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Council Hall: Municipal, 1890s, and much too big for a town this size.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a8129e81-d2fa-484c-9bbc-71b5e20e43ee",
+      "promptHash": "a9125d019b909027c270f2a0b6934d69",
+      "seed": "sv_seven_days_1:loc:council_hall:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 22352,
+      "createdAt": "2026-09-09T21:38:32.591Z"
+    }
+  },
+  "story_seven_days/stage_the_point": {
+    "assetKey": "story_seven_days/stage_the_point",
+    "file": "story_seven_days/stage_the_point.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Point: The headland past the marina.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "60f31898-7f12-4960-80cc-85edcb04bcd0",
+      "promptHash": "d8bb786803009b04d50aeda03283f5f2",
+      "seed": "sv_seven_days_1:loc:the_point:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 21020,
+      "createdAt": "2026-09-09T21:38:34.560Z"
+    }
+  },
+  "story_seven_days/theo": {
+    "assetKey": "story_seven_days/theo",
+    "file": "story_seven_days/theo.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Theo Marr, The boy at the middle table",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b67d22b5-c7c7-4bb7-9822-31af2a4b5ec8",
+      "promptHash": "e60b6d9e4b52c543aa5a8a9c725ec7ca",
+      "seed": "seven_days_theo_v1",
+      "costUsd": 0.00632,
+      "latencyMs": 13992,
+      "createdAt": "2026-09-09T21:38:46.588Z"
+    }
+  },
+  "story_seven_days/stage_the_old_town": {
+    "assetKey": "story_seven_days/stage_the_old_town",
+    "file": "story_seven_days/stage_the_old_town.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Old Town: Six streets of stone cottages above the front, most of them holiday lets.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5752d082-1fbf-411b-b3bb-e7e669b687cd",
+      "promptHash": "7777e4cf4d0e31119158b1d1e8fd141e",
+      "seed": "sv_seven_days_1:loc:the_old_town:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37966,
+      "createdAt": "2026-09-09T21:38:47.888Z"
+    }
+  },
+  "story_seven_days/mina": {
+    "assetKey": "story_seven_days/mina",
+    "file": "story_seven_days/mina.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Arclight, The first person you meet, every Monday",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "afad4fed-9034-499a-b4c7-22966962b8e3",
+      "promptHash": "4a8c48a8cdabb005c6130d8fdf70004d",
+      "seed": "seven_days_mina_v1",
+      "costUsd": 0.05488,
+      "latencyMs": 32626,
+      "createdAt": "2026-09-09T21:38:49.108Z"
+    }
+  },
+  "story_seven_days/wynn": {
+    "assetKey": "story_seven_days/wynn",
+    "file": "story_seven_days/wynn.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Detective Sera Wynn, Investigating something that has not happened yet",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "543a2f79-579c-4e27-af06-2c172782bf82",
+      "promptHash": "8d5aa0026fc1fb80c341a11e038108ed",
+      "seed": "seven_days_wynn_v1",
+      "costUsd": 0.01372,
+      "latencyMs": 17209,
+      "createdAt": "2026-09-09T21:38:51.778Z"
+    }
+  },
+  "story_seven_days/ivy": {
+    "assetKey": "story_seven_days/ivy",
+    "file": "story_seven_days/ivy.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ivy Sable, The one who disappears on Wednesday",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0d8d9fd1-a9e1-41ff-8e4d-d06ac029c70d",
+      "promptHash": "d11452657ce7dd307db48391e269182d",
+      "seed": "seven_days_ivy_v1",
+      "costUsd": 0.00632,
+      "latencyMs": 15368,
+      "createdAt": "2026-09-09T21:39:03.270Z"
+    }
+  },
+  "story_seven_days/elias": {
+    "assetKey": "story_seven_days/elias",
+    "file": "story_seven_days/elias.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Elias Crowe, The man everyone says is unwell",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b9bc18bc-4bd6-4018-869b-c85faa8a2875",
+      "promptHash": "948cb5b0e028222b4db1f058cc3c5599",
+      "seed": "seven_days_elias_v1",
+      "costUsd": 0.00632,
+      "latencyMs": 17150,
+      "createdAt": "2026-09-09T21:39:03.748Z"
+    }
+  },
+  "story_seven_days/harrow": {
+    "assetKey": "story_seven_days/harrow",
+    "file": "story_seven_days/harrow.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Councillor Ada Harrow, Arrives Thursday, leaves Friday",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c6acc66e-2671-4ccc-a42a-7f623b988e15",
+      "promptHash": "650edb53dcb8342fd4f2def4167b8b42",
+      "seed": "seven_days_harrow_v1",
+      "costUsd": 0.01372,
+      "latencyMs": 17912,
+      "createdAt": "2026-09-09T21:39:07.025Z"
+    }
+  },
+  "story_blackwake/key": {
+    "assetKey": "story_blackwake/key",
+    "file": "story_blackwake/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Blackwake",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "eaabc1a8-4c92-4339-8964-fe579dd9168d",
+      "promptHash": "0a9d5482d354290b29e35e81c9d6bf7b",
+      "seed": "sv_blackwake_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44967,
+      "createdAt": "2026-09-09T21:39:36.750Z"
+    }
+  },
+  "story_blackwake/stage_the_marrow": {
+    "assetKey": "story_blackwake/stage_the_marrow",
+    "file": "story_blackwake/stage_the_marrow.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Marrow: Forty feet of forty-year-old cutter with a cracked keel, one suit of tired sails, and nobody aboard her but you.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "452a3d9c-1183-4576-bc84-3412a33b81c1",
+      "promptHash": "b32070e793b1f1d27e7f38c3faee0868",
+      "seed": "sv_blackwake_1:loc:the_marrow:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34296,
+      "createdAt": "2026-09-09T21:39:38.049Z"
+    }
+  },
+  "story_blackwake/stage_saltmarket": {
+    "assetKey": "story_blackwake/stage_saltmarket",
+    "file": "story_blackwake/stage_saltmarket.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Saltmarket: Four hundred years of harbour built on top of itself.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b00d539b-3ff1-450d-ba06-022d82e6436b",
+      "promptHash": "be1a1c642fd0e4823852de008a471666",
+      "seed": "sv_blackwake_1:loc:saltmarket:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41464,
+      "createdAt": "2026-09-09T21:39:44.745Z"
+    }
+  },
+  "story_blackwake/stage_the_yard": {
+    "assetKey": "story_blackwake/stage_the_yard",
+    "file": "story_blackwake/stage_the_yard.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Corrow’s Yard: A slipway, three sheds, and a woman who can tell you what is wrong with your ship from sixty feet away and will, at length.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2b7e6334-9500-4f2d-9de7-bd372f11377e",
+      "promptHash": "f80888fa7df13d289e835f778819ee31",
+      "seed": "sv_blackwake_1:loc:the_yard:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38057,
+      "createdAt": "2026-09-09T21:39:45.101Z"
+    }
+  },
+  "story_blackwake/stage_the_crownless": {
+    "assetKey": "story_blackwake/stage_the_crownless",
+    "file": "story_blackwake/stage_the_crownless.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Crownless Sea: Nine hundred square miles of water that is on no chart printed in ninety years, and everything in it that is the reason for that.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "36ff8214-958e-4748-9b09-c9475b98f7d5",
+      "promptHash": "e61ff62d1f79e24e497f7e6e2f6536ea",
+      "seed": "sv_blackwake_1:loc:the_crownless:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 18215,
+      "createdAt": "2026-09-09T21:40:02.977Z"
+    }
+  },
+  "story_blackwake/stage_stormlee": {
+    "assetKey": "story_blackwake/stage_stormlee",
+    "file": "story_blackwake/stage_stormlee.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Stormlee: An island inside a storm that has not stopped in living memory.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ffbdfced-37f1-4a79-95a9-c706231cec17",
+      "promptHash": "9dd8d10ad24939874df1045ec6172f69",
+      "seed": "sv_blackwake_1:loc:stormlee:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35357,
+      "createdAt": "2026-09-09T21:40:13.419Z"
+    }
+  },
+  "story_blackwake/nessa": {
+    "assetKey": "story_blackwake/nessa",
+    "file": "story_blackwake/nessa.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nessa Vale, Navigator, wanted in three ports",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e8417e8a-15da-4ca6-827a-286fdfd72425",
+      "promptHash": "1a761d697e9867c2c0c3aa69bb805eb7",
+      "seed": "blackwake-nessa-01",
+      "costUsd": 0.05488,
+      "latencyMs": 30876,
+      "createdAt": "2026-09-09T21:40:15.986Z"
+    }
+  },
+  "story_blackwake/stage_the_drift": {
+    "assetKey": "story_blackwake/stage_the_drift",
+    "file": "story_blackwake/stage_the_drift.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Drift: A lawless port built across nine hulks lashed together and grown into each other.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4c299c7f-eb41-4c4d-8beb-986e71a2764c",
+      "promptHash": "84cbff709560b9fb211c34f3a1dd14c0",
+      "seed": "sv_blackwake_1:loc:the_drift:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43423,
+      "createdAt": "2026-09-09T21:40:20.180Z"
+    }
+  },
+  "story_blackwake/rook": {
+    "assetKey": "story_blackwake/rook",
+    "file": "story_blackwake/rook.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rook Arden, Ex-Ninth Fleet gunner",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5fc7eaca-56eb-445a-9bf2-cee40be34ccf",
+      "promptHash": "13a3ec45ab10c0e55986bc10b7544363",
+      "seed": "blackwake-rook-01",
+      "costUsd": 0.01372,
+      "latencyMs": 21646,
+      "createdAt": "2026-09-09T21:40:24.626Z"
+    }
+  },
+  "story_blackwake/veyra": {
+    "assetKey": "story_blackwake/veyra",
+    "file": "story_blackwake/veyra.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Captain Veyra Sol, Ninth Fleet, inshore squadron",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "965c296d-8283-4652-98f4-f21ffb2939ab",
+      "promptHash": "2b6195d006cd1a7ba84fcc5ba6c05e7f",
+      "seed": "blackwake-veyra-01",
+      "costUsd": 0.01372,
+      "latencyMs": 18309,
+      "createdAt": "2026-09-09T21:40:34.301Z"
+    }
+  },
+  "story_blackwake/tolla": {
+    "assetKey": "story_blackwake/tolla",
+    "file": "story_blackwake/tolla.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tolla Corrow, Shipwright, owns the yard",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9f73f10a-a288-4a28-a342-4895759f9ac8",
+      "promptHash": "8e87c78a640c9b54e3fdfee77e8e445d",
+      "seed": "blackwake-tolla-01",
+      "costUsd": 0.00632,
+      "latencyMs": 17020,
+      "createdAt": "2026-09-09T21:40:37.210Z"
+    }
+  },
+  "story_blackwake/harrow_bell": {
+    "assetKey": "story_blackwake/harrow_bell",
+    "file": "story_blackwake/harrow_bell.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Harrow Bell, Broker at the Drift",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2f4b7568-02e5-43dc-9264-2654eebc8a66",
+      "promptHash": "929ee9fbba8e472c1f0d47096ac66b5e",
+      "seed": "blackwake-harrow-01",
+      "costUsd": 0.00632,
+      "latencyMs": 18920,
+      "createdAt": "2026-09-09T21:40:43.549Z"
+    }
+  },
+  "story_blackwake/mako": {
+    "assetKey": "story_blackwake/mako",
+    "file": "story_blackwake/mako.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Renn, Diver, sixteen, absolutely certain",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ee5233d8-c5df-4b6f-ad76-a77da592c407",
+      "promptHash": "21731c5389b325f49528a27e69771726",
+      "seed": "blackwake-mako-01",
+      "costUsd": 0.05488,
+      "latencyMs": 36872,
+      "createdAt": "2026-09-09T21:40:50.297Z"
+    }
+  },
+  "story_red_moon/cover": {
+    "assetKey": "story_red_moon/cover",
+    "file": "story_red_moon/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Red Moon Brigade: You hunt monsters. You are becoming one.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a6497fec-d4e7-41ad-b675-e0a85a3378bc",
+      "promptHash": "a26737376dc4f2402fa4892cf2c7cd0e",
+      "seed": "sv_red_moon_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 94524,
+      "createdAt": "2026-09-09T21:43:37.093Z"
+    }
+  },
+  "story_seven_days/cover": {
+    "assetKey": "story_seven_days/cover",
+    "file": "story_seven_days/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Seven Days to Midnight: The city ends Sunday. Only you remember.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "faf77885-ca81-493c-a0f8-011d380312d5",
+      "promptHash": "eecd55406d1a1eea18a9315e39a05be6",
+      "seed": "sv_seven_days_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 99391,
+      "createdAt": "2026-09-09T21:43:41.975Z"
+    }
+  },
+  "story_blackwake/cover": {
+    "assetKey": "story_blackwake/cover",
+    "file": "story_blackwake/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Blackwake: A broken ship. Nobody knows your name.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "db812673-174b-4e35-aab1-aab9d5244f3b",
+      "promptHash": "4eeaa6bd94541b64d8a32bc8b631bd1a",
+      "seed": "sv_blackwake_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 105400,
+      "createdAt": "2026-09-09T21:43:47.985Z"
     }
   }
 }

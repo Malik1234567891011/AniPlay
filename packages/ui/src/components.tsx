@@ -48,6 +48,18 @@ export function StoryCoverCard({
   const isHero = variant === 'hero';
   const isRow = variant === 'row';
 
+  // The genre says something the cover cannot always carry, and it is the
+  // thing a browsing player is actually sorting on. A run count joins it only
+  // when somebody has genuinely played the world, and a community creator's
+  // name matters in a way "ANIMA Studio" on all nine cards does not.
+  const metaLine = [
+    story.tags[0] ?? null,
+    story.runs > 0 ? `${formatCredits(story.runs, true)} runs` : null,
+    story.official ? null : story.creatorName,
+  ]
+    .filter((part): part is string => !!part)
+    .join(' · ');
+
   // Spec §7.3 — the accessible name reads as one coherent label, not five nodes.
   const a11yLabel = [
     story.title,
@@ -91,10 +103,23 @@ export function StoryCoverCard({
       <View style={isRow ? { width: 64 } : undefined}>{cover}</View>
 
       <View style={[{ gap: 2, paddingTop: spacing.sm }, isRow && { flex: 1, paddingTop: 0 }]}>
-        <Row gap={spacing.xs}>
-          {story.badges.includes('OFFICIAL') ? <Chip label="Official" tone="accent" /> : null}
-          {story.badges.includes('TRENDING') ? <Chip label="Trending" tone="warning" /> : null}
-        </Row>
+        {/*
+          What goes under a cover has to earn the space it takes from the art.
+
+          "Official" used to sit here as a large accent pill on every single
+          card, which at launch — when every world is official — is a label that
+          distinguishes nothing while being the most visually prominent thing
+          on the card. Verification still lives in the data and on world detail,
+          where it means something; a badge is only worth a pill when it tells
+          you which of two things you are looking at. Same reasoning for run
+          counts: "0 runs" on every card is not social proof, it is an
+          admission, so a count only appears once it is real.
+        */}
+        {story.badges.includes('TRENDING') ? (
+          <Row gap={spacing.xs}>
+            <Chip label="Trending" tone="warning" />
+          </Row>
+        ) : null}
         <Txt variant={isHero ? 'h2' : 'bodyStrong'} numberOfLines={2}>
           {story.title}
         </Txt>
@@ -102,9 +127,11 @@ export function StoryCoverCard({
         <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>
           {story.fantasyLabel}
         </Txt>
-        <Txt variant="micro" color={colors.text.muted}>
-          {story.creatorName} · {formatCredits(story.runs, true)} runs
-        </Txt>
+        {metaLine ? (
+          <Txt variant="micro" color={colors.text.muted} numberOfLines={1}>
+            {metaLine}
+          </Txt>
+        ) : null}
       </View>
     </Pressable>
   );
@@ -658,10 +685,26 @@ export function ResourceBar({
   );
 }
 
-export function SectionHeader({ title, action }: { title: string; action?: React.ReactNode }): React.JSX.Element {
+export function SectionHeader({
+  title,
+  subtitle,
+  action,
+}: {
+  title: string;
+  /** Why this row exists, when that is not obvious from its name. */
+  subtitle?: string;
+  action?: React.ReactNode;
+}): React.JSX.Element {
   return (
-    <Row style={{ justifyContent: 'space-between', paddingHorizontal: spacing.lg }}>
-      <Txt variant="h3">{title}</Txt>
+    <Row style={{ justifyContent: 'space-between', paddingHorizontal: spacing.lg, alignItems: 'flex-end' }}>
+      <View style={{ flex: 1, gap: 1 }}>
+        <Txt variant="h3">{title}</Txt>
+        {subtitle ? (
+          <Txt variant="micro" color={colors.text.muted} numberOfLines={1}>
+            {subtitle}
+          </Txt>
+        ) : null}
+      </View>
       {action}
     </Row>
   );

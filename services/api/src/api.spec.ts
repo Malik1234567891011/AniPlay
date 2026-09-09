@@ -132,8 +132,19 @@ describe('bootstrap and catalog', () => {
     const raw = detail.body;
     expect(raw).not.toContain('hiddenDrives');
     expect(raw).not.toContain('erasure order that removed');
+    // An allowlist, not a denylist: anything new on a cast member has to be
+    // added here on purpose, which is what stops a field like `secrets` or
+    // `goals` reaching a client because somebody widened a projection.
     for (const member of detail.json().cast) {
-      expect(Object.keys(member)).toEqual(['id', 'name', 'role', 'cardBlurb', 'portrait', 'publicTraits']);
+      expect(Object.keys(member).sort()).toEqual(
+        ['appearance', 'cardBlurb', 'id', 'name', 'portrait', 'pronouns', 'publicTraits', 'role'].sort(),
+      );
+    }
+
+    // And the things that must never be there, named, so the assertion above
+    // failing tells you which way it went wrong.
+    for (const forbidden of ['hiddenDrives', 'secrets', 'goals', 'fears', 'knowledgeScope', 'values']) {
+      expect(raw, forbidden).not.toContain(`"${forbidden}"`);
     }
   });
 

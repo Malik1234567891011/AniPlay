@@ -5,6 +5,7 @@ import {
   RefreshControl,
   ScrollView,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -38,16 +39,39 @@ import type { RootNavigation } from '../navigation.jsx';
  * Spec §7.1 — Discover sells fantasies, not AI capabilities. It should read like
  * a premium storefront, not a feed of chatbot cards.
  */
+/**
+ * Card sizing, measured off the device rather than fixed at 150pt.
+ *
+ * Two competing goals: enough worlds visible that the catalog reads as
+ * abundant, and covers big enough that a face on one is still a face. On a
+ * 393pt phone a two-column grid gives 170pt cards — the art is the subject and
+ * the title is comfortably readable — while the rails run at 2.4 cards
+ * visible, so the row is obviously scrollable without a chevron telling you so.
+ *
+ * Three columns was tried and rejected: 108pt covers turn every character into
+ * a smudge, which defeats the entire point of a character-forward cover.
+ */
+function useCardWidths(): { gridCardWidth: number; railCardWidth: number } {
+  const { width } = useWindowDimensions();
+  const usable = width - GUTTER * 2;
+  return {
+    gridCardWidth: Math.floor((usable - spacing.md) / 2),
+    railCardWidth: Math.floor((usable - spacing.md * 1.4) / 2.4),
+  };
+}
+
 export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
   const { wallet, refreshWallet, offline, tastes } = useStore();
   const [data, setData] = useState<DiscoverResponse | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<StorySummary | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+  const { gridCardWidth, railCardWidth } = useCardWidths();
 
   const load = useCallback(async () => {
     try {
-      setData(await api.discover(tastes));
+      setData(await api.discover(tastes, category));
       setError(null);
       void refreshWallet();
     } catch (caught) {
@@ -62,7 +86,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
             : 'Could not load worlds.',
       );
     }
-  }, [refreshWallet, tastes]);
+  }, [refreshWallet, tastes, category]);
 
   useEffect(() => {
     void load();
@@ -77,7 +101,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
       {/* Spec §7.2 item 1 — safe-area header. */}
       <Row style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.md, justifyContent: 'space-between' }}>
         <Txt variant="h2" style={{ letterSpacing: 3 }}>
-          ANIMA
+          PLOTBREAK
         </Txt>
         <Row gap={spacing.sm}>
           <IconButton label="Search worlds" onPress={() => navigation.navigate('Search')}>
@@ -110,6 +134,37 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           />
         }
       >
+        {/*
+          The browse rail. Near the top because it is the answer to the
+          question a new player actually has — "is there the kind of anime I
+          like in here?" — and horizontal because the vocabulary should be
+          scannable in one gesture without pushing the covers off screen.
+
+          Categories come from the server, which only ever offers one that has
+          worlds in it, so tapping any of these can never open onto nothing.
+        */}
+        {data && data.categories.length > 0 ? (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={[{ id: '__all', label: 'All', count: 0 }, ...data.categories]}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.sm }}
+            style={{ flexGrow: 0 }}
+            renderItem={({ item }) => {
+              const id = item.id === '__all' ? null : item.id;
+              return (
+                <Chip
+                  label={item.label}
+                  tone={category === id ? 'accent' : 'neutral'}
+                  selected={category === id}
+                  onPress={() => setCategory(id)}
+                />
+              );
+            }}
+          />
+        ) : null}
+
         {!data && !error ? <DiscoverSkeleton /> : null}
 
         {error && !data ? (
@@ -121,37 +176,64 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           />
         ) : null}
 
-        {/* Spec §7.2 item 2 — one featured card, edge-to-edge art, one CTA. */}
-        {hero ? (
+        {/*
+          One featured world, sized so it sells that world without being the
+          entire first screen.
+
+          It used to run 16:11 of art plus two pills plus a three-line premise
+          plus a full-width button — about 55% of the viewport before a second
+          world was visible, on a storefront whose whole job is to say "there
+          are a lot of different anime here". The art is now wider than it is
+          tall, the copy is one line, and the CTA is inside the card, so the
+          category rail and the first row of covers are above the fold.
+        */}
+        {hero && !data?.activeCategory ? (
           <View style={{ paddingHorizontal: GUTTER }}>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`Featured: ${hero.title}. ${hero.fantasyLabel}`}
+              accessibilityLabel={`Featured: ${hero.title}. ${hero.fantasyLabel}. Enter world.`}
               onPress={() => navigation.navigate('StoryDetail', { storyId: hero.storyId })}
             >
               <StoryArt
                 seed={hero.storyId}
-                uri={hero.keyArt}
-                style={{ width: '100%', aspectRatio: 16 / 11, borderRadius: radius.large }}
+                uri={hero.keyArt ?? hero.coverImage}
+                style={{ width: '100%', aspectRatio: 16 / 9, borderRadius: radius.large, justifyContent: 'flex-end' }}
               >
-                {/* Text sits below the art's focal region so faces stay clear (§7.2). */}
-                <View style={{ padding: spacing.lg, gap: spacing.xs, backgroundColor: 'rgba(11,13,18,0.82)' }}>
-                  <Row gap={spacing.xs}>
-                    {hero.official ? <Chip label="Official" tone="accent" /> : null}
-                    <Chip label={hero.intensity === 'INTENSE' ? 'Intense' : hero.intensity === 'LIGHT' ? 'Light' : 'Moderate'} />
-                  </Row>
-                  <Txt variant="h1">{hero.title}</Txt>
-                  <Txt variant="bodyCompact" color={colors.text.secondary}>
-                    {hero.hook}
+                <View
+                  style={{
+                    padding: spacing.md,
+                    gap: spacing.xs,
+                    backgroundColor: 'rgba(11,13,18,0.78)',
+                    borderBottomLeftRadius: radius.large,
+                    borderBottomRightRadius: radius.large,
+                  }}
+                >
+                  <Txt variant="micro" color={colors.accent.primary} style={{ letterSpacing: 1.5 }}>
+                    FEATURED
                   </Txt>
+                  <Txt variant="h2" numberOfLines={1}>
+                    {hero.title}
+                  </Txt>
+                  <Row style={{ justifyContent: 'space-between', alignItems: 'center' }} gap={spacing.sm}>
+                    <Txt variant="caption" color={colors.text.secondary} numberOfLines={1} style={{ flex: 1 }}>
+                      {hero.fantasyLabel}
+                    </Txt>
+                    <View
+                      style={{
+                        paddingHorizontal: spacing.md,
+                        paddingVertical: spacing.xs,
+                        borderRadius: radius.control,
+                        backgroundColor: colors.accent.primary,
+                      }}
+                    >
+                      <Txt variant="caption" color="#0B0D12">
+                        Enter
+                      </Txt>
+                    </View>
+                  </Row>
                 </View>
               </StoryArt>
             </Pressable>
-            <Button
-              label="Enter world"
-              style={{ marginTop: spacing.md }}
-              onPress={() => navigation.navigate('StoryDetail', { storyId: hero.storyId })}
-            />
           </View>
         ) : null}
 
@@ -177,26 +259,65 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
 
         {data?.rails
           .filter((rail) => rail.kind !== 'HERO' && rail.kind !== 'CONTINUE' && rail.stories.length > 0)
-          .map((rail) => (
-            <Stack key={rail.id} gap={spacing.md}>
-              <SectionHeader title={rail.title} />
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={rail.stories}
-                keyExtractor={(item) => `${rail.id}_${item.storyId}`}
-                contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.md }}
-                renderItem={({ item }) => (
-                  <StoryCoverCard
-                    story={{ ...item, badges: item.badges as string[] }}
-                    width={150}
-                    onPress={() => navigation.navigate('StoryDetail', { storyId: item.storyId })}
-                    onLongPress={() => setPreview(item)}
+          .map((rail) => {
+            // A curated row is a sample and reads best as a rail you can flick
+            // through. The full catalog is not a sample — presenting it as one
+            // more horizontal strip is what made nine worlds feel like three.
+            // It gets a grid, which is the only layout that says "there is a
+            // lot here" without shrinking the covers to nothing.
+            const asGrid = rail.id === 'all' || rail.id === 'category';
+
+            return (
+              <Stack key={rail.id} gap={spacing.md}>
+                <SectionHeader title={rail.title} subtitle={rail.subtitle ?? undefined} />
+                {asGrid ? (
+                  <View
+                    style={{
+                      paddingHorizontal: GUTTER,
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      gap: spacing.md,
+                    }}
+                  >
+                    {rail.stories.map((item) => (
+                      <StoryCoverCard
+                        key={`${rail.id}_${item.storyId}`}
+                        story={{ ...item, badges: item.badges as string[] }}
+                        width={gridCardWidth}
+                        onPress={() => navigation.navigate('StoryDetail', { storyId: item.storyId })}
+                        onLongPress={() => setPreview(item)}
+                      />
+                    ))}
+                  </View>
+                ) : (
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={rail.stories}
+                    keyExtractor={(item) => `${rail.id}_${item.storyId}`}
+                    contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.md }}
+                    renderItem={({ item }) => (
+                      <StoryCoverCard
+                        story={{ ...item, badges: item.badges as string[] }}
+                        width={railCardWidth}
+                        onPress={() => navigation.navigate('StoryDetail', { storyId: item.storyId })}
+                        onLongPress={() => setPreview(item)}
+                      />
+                    )}
                   />
                 )}
-              />
-            </Stack>
-          ))}
+              </Stack>
+            );
+          })}
+
+        {data && data.rails.every((r) => r.stories.length === 0) ? (
+          <EmptyState
+            title="Nothing here yet"
+            body="No worlds in this category. Try another."
+            actionLabel="Show everything"
+            onAction={() => setCategory(null)}
+          />
+        ) : null}
       </ScrollView>
 
       {/* DS-04 — long-press quick preview. */}
