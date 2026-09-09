@@ -103,9 +103,110 @@ export const AbilityDef = z
       .nullable()
       .default(null),
     unlockedByDefault: z.boolean().default(false),
+    /**
+     * What the world has to be like before this can be used at all.
+     *
+     * Knowing a technique and being able to use it are different things: a
+     * hybrid's heavier traits only answer once they have stopped holding
+     * themselves together, and a Relic does nothing in a hand that has not been
+     * accepted by it. Without this, "power at a price" could only ever be
+     * modelled as a resource cost, which is a price you pay rather than a line
+     * you cross.
+     */
+    requires: z
+      .object({
+        flagsSet: z.array(z.string()).default([]),
+        flagsUnset: z.array(z.string()).default([]),
+        /** Usable only at or above this much of a resource. */
+        minResources: z
+          .array(z.object({ resourceId: z.string(), value: z.number().int() }).strict())
+          .default([]),
+        /** Usable only at or below it — the shape a stability meter needs. */
+        maxResources: z
+          .array(z.object({ resourceId: z.string(), value: z.number().int() }).strict())
+          .default([]),
+        /** Shown to the player when it is not available. Never a rules readout. */
+        lockedCopy: z.string().default(''),
+      })
+      .strict()
+      .default({ flagsSet: [], flagsUnset: [], minResources: [], maxResources: [], lockedCopy: '' }),
   })
   .strict();
 export type AbilityDef = z.infer<typeof AbilityDef>;
+
+/**
+ * Something the world does on its own, at a specific hour, whether or not the
+ * player is there to see it.
+ *
+ * A schedule says where a person is. This says what happens. The difference
+ * matters for any world where events have their own momentum — a theft at nine
+ * on Wednesday, a tide, a ship leaving — because without it "the world moves
+ * without you" can only be a promise the narrator makes.
+ *
+ * Firing is deterministic: same world minute, same flags, same outcome. A
+ * player who learns an event's timing can be somewhere else beforehand and stop
+ * it, which is the whole point.
+ */
+export const WorldEventDef = z
+  .object({
+    id: z.string(),
+    /** Minutes since the world began. Fires the first time the clock passes it. */
+    atWorldMinute: z.number().int().min(0),
+    /** Where it happens. Null means everywhere, or nowhere in particular. */
+    locationId: z.string().nullable().default(null),
+    /** What a player standing there would see. Plain, concrete, one sentence. */
+    publicCopy: z.string(),
+    /** Told to the director wherever the player is. Never shown raw. */
+    directorNotes: z.string().default(''),
+    setsFlags: z.array(z.string()).default([]),
+    /** Any one of these means the player already changed it. It does not fire. */
+    cancelledByFlags: z.array(z.string()).default([]),
+    /** All of these must hold, or it is not time yet. */
+    requiresFlags: z.array(z.string()).default([]),
+    /** Where people end up because of it. */
+    movesCharacters: z
+      .array(z.object({ characterId: z.string(), toLocationId: z.string() }).strict())
+      .default([]),
+  })
+  .strict();
+export type WorldEventDef = z.infer<typeof WorldEventDef>;
+
+/**
+ * A world that starts again.
+ *
+ * The reset is the engine's, not the narrator's: the clock reaching the end
+ * rebuilds the world exactly as it began, and what survives is declared here
+ * rather than decided per turn. Everything else — position, injuries, who is
+ * angry with whom, what was stolen — goes back.
+ */
+export const LoopRules = z
+  .object({
+    /** Where a new loop begins. */
+    startWorldMinute: z.number().int().min(0),
+    /** When the world ends, and the next one starts. */
+    endWorldMinute: z.number().int().min(1),
+    /**
+     * Flag prefixes that survive. This is what the player *knows*, and it is
+     * the whole progression system of a looping world: a code, a schedule, a
+     * name, a place — carried out of a week nobody else remembers.
+     */
+    persistentFlagPrefixes: z.array(z.string()).default(['knows:', 'echo:']),
+    /**
+     * How much of a relationship survives, 0 to 1.
+     *
+     * Nobody remembers the loop. But something extreme leaves a residue, and a
+     * person who trusted you completely does not meet you as a total stranger
+     * next time — they meet you as someone they have no reason to like and
+     * inexplicably do.
+     */
+    echoRetention: z.number().min(0).max(1).default(0),
+    /** Only relationships past this far from neutral leave one. */
+    echoThreshold: z.number().int().min(0).default(40),
+    /** Shown when a loop restarts. The player's own experience of it. */
+    resetCopy: z.string().default(''),
+  })
+  .strict();
+export type LoopRules = z.infer<typeof LoopRules>;
 
 export const LocationDef = z
   .object({
@@ -546,6 +647,8 @@ export const StoryRules = z
     toneGuide: z.string().default(''),
     /** Fork price in credits. Spec §20.10 default 120. */
     forkCostCredits: z.number().int().min(0).default(120),
+    /** Set on a world that starts again. Null on every world that does not. */
+    loop: LoopRules.nullable().default(null),
   })
   .strict();
 export type StoryRules = z.infer<typeof StoryRules>;
@@ -604,6 +707,8 @@ export const StoryVersion = z
     characters: z.array(CharacterDef).default([]),
     factions: z.array(FactionDef).default([]),
     quests: z.array(QuestDef).default([]),
+    /** What the world does on its own, at its own hours. */
+    worldEvents: z.array(WorldEventDef).default([]),
     promises: z.array(StoryPromiseDef).default([]),
     archetypes: z.array(ArchetypeDef).default([]),
     setupFields: z.array(CharacterSetupField).default([]),

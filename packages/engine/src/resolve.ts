@@ -21,6 +21,7 @@ import {
   getRelationship,
 } from './state.js';
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
+import { fireWorldEvents } from './world-events.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
 import { buildEncounter, canSpend, newTurnEconomy, spend, type ActionWeight, type TurnEconomy } from './combat.js';
 import { resolveNpcTurns } from './npc-turns.js';
@@ -257,6 +258,23 @@ export function resolveIntent(options: ResolveOptions): Resolution {
     privateFacts.push(...(npcTurns.privateFacts as PrivateFact[]));
   }
 
+  // Whatever the world was going to do at the hours this turn passed through,
+  // regardless of the player. Resolved here rather than at commit so it lands
+  // in the same beat the player reads: the scream from the market belongs in
+  // the paragraph where the hour turned, not in the next one.
+  const afterTime = projectState(state, story, mutations);
+  const world = fireWorldEvents(
+    afterTime,
+    story,
+    state.worldMinute,
+    afterTime.worldMinute,
+    nextMutationId,
+    afterTime.player.locationId,
+  );
+  mutations.push(...world.mutations);
+  observableFacts.push(...world.observableFacts);
+  privateFacts.push(...world.privateFacts.map((fact: string) => ({ visibility: 'SELF' as const, fact })));
+
   // Opportunities describe what the player can do *next*, so they are computed
   // against the world as this turn leaves it — otherwise a turn that moves you
   // would offer the exits of the room you just left.
@@ -385,6 +403,20 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
     );
   }
 
+  // Knowing a technique and being able to use it are different things. A trait
+  // that only answers once you have stopped holding yourself together is a line
+  // crossed, not a price paid, and a resource cost cannot model that.
+  const unmet = unmetRequirement(state, story, ability);
+  if (unmet) {
+    return refusal(
+      action,
+      'ABILITY_UNAVAILABLE',
+      unmet.inWorld,
+      `${ability.name} cannot be used in this state: ${unmet.reason}. Narrate the attempt and what ` +
+        'stops it, in the world\u2019s own terms. Do not let it work and do not name a game system.',
+    );
+  }
+
   const cooldownUntil = state.player.abilityCooldowns[ability.id] ?? 0;
   if (cooldownUntil > state.worldMinute) {
     return refusal(
@@ -486,6 +518,44 @@ function resolveAbility(args: ResolveActionArgs): ActionOutcome {
       outcome: checks[0]?.outcome ?? 'CLEAN_SUCCESS',
     },
   };
+}
+
+/**
+ * Why an ability the player has cannot be used right now.
+ *
+ * Returns null when it can. The player-facing half never mentions a threshold:
+ * "your hands are steady, and it does not answer to steady hands" is a fact
+ * about the fiction; "requires Instability >= 40" is a rules readout.
+ */
+export function unmetRequirement(
+  state: GameState,
+  story: StoryVersion,
+  ability: AbilityDef,
+): { inWorld: string; reason: string } | null {
+  const requires = ability.requires;
+  const fallback = requires.lockedCopy || `${ability.name} does not answer.`;
+
+  for (const flag of requires.flagsSet) {
+    if (!state.flags[flag]) return { inWorld: fallback, reason: `needs ${flag}` };
+  }
+  for (const flag of requires.flagsUnset) {
+    if (state.flags[flag]) return { inWorld: fallback, reason: `blocked by ${flag}` };
+  }
+  for (const need of requires.minResources) {
+    const current = state.player.resources.find((r) => r.id === need.resourceId)?.current ?? 0;
+    if (current < need.value) {
+      const name = story.resources.find((r) => r.id === need.resourceId)?.name ?? need.resourceId;
+      return { inWorld: fallback, reason: `needs ${name} at ${need.value} or above` };
+    }
+  }
+  for (const cap of requires.maxResources) {
+    const current = state.player.resources.find((r) => r.id === cap.resourceId)?.current ?? 0;
+    if (current > cap.value) {
+      const name = story.resources.find((r) => r.id === cap.resourceId)?.name ?? cap.resourceId;
+      return { inWorld: fallback, reason: `needs ${name} at ${cap.value} or below` };
+    }
+  }
+  return null;
 }
 
 function resolveItemUse(args: ResolveActionArgs): ActionOutcome {
@@ -1719,7 +1789,8 @@ function buildOpportunities(state: GameState, story: StoryVersion): string[] {
       return resource !== undefined && resource.current >= cost.amount;
     });
     const ready = (state.player.abilityCooldowns[abilityId] ?? 0) <= state.worldMinute;
-    if (affordable && ready) opportunities.push(`use_ability:${abilityId}`);
+    const available = unmetRequirement(state, story, ability) === null;
+    if (affordable && ready && available) opportunities.push(`use_ability:${abilityId}`);
   }
 
   for (const entry of state.player.inventory) {

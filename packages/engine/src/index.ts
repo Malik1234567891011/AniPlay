@@ -9,4 +9,6 @@ export * from './combat.js';
 export * from './npc-turns.js';
 export * from './progression.js';
 export * from './resolve.js';
+export * from './world-events.js';
+export * from './loop.js';
 export * from './commit.js';

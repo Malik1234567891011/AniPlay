@@ -11,6 +11,8 @@ import { levelUpMutations, milestoneMutations } from './progression.js';
 import { evaluateGates } from './relationships.js';
 import { encounterOutcome, defeatMutations } from './combat.js';
 import { charactersPresent, locationForSchedule } from './state.js';
+import type { FiredWorldEvent } from './world-events.js';
+import { echoDirectorNotes, loopShouldReset, resetLoop, type LoopResetResult } from './loop.js';
 
 /**
  * Spec §32.4 `commitTurn` — the single transaction that turns a `Resolution`
@@ -28,6 +30,12 @@ export interface CommitResult {
   readonly rejectedMutations: MutationRejection[];
   readonly gatesOpened: Array<{ characterId: string; gateId: string; label: string }>;
   readonly defeat: { occurred: boolean; narrativeHint: string | null };
+  /** What the world did on its own while the turn was resolving. */
+  readonly worldEvents: FiredWorldEvent[];
+  /** Facts the world events produced, to be merged into the beat. */
+  readonly worldEventFacts: { observable: string[]; private: string[] };
+  /** Set on the turn a looping world started again. */
+  readonly loopReset: { occurred: boolean; loopNumber: number; directorNotes: string[] };
 }
 
 export interface CommitOptions {
@@ -56,6 +64,7 @@ export function commitTurn(options: CommitOptions): CommitResult {
   // World time has moved: regenerate resources and let NPCs follow their schedules.
   regenerateResources(state, story, minutesElapsed);
   applySchedules(state, story);
+
 
   // Then record what the engine actually observed this turn, before quests are
   // asked what has happened. Without this a quest can only ever gate on where
@@ -126,9 +135,45 @@ export function commitTurn(options: CommitOptions): CommitResult {
   );
   state.rngCursor = resolution.checks.reduce((sum, check) => sum + check.rolls.length, state.rngCursor);
 
-  const events = buildEvents(state, turnId, accepted, questTransitions, now);
+  // Last of all: a world that has reached its end starts again. After the turn
+  // has fully committed, so the week that just ended is a real week in the log
+  // before it is rolled back.
+  let loop: LoopResetResult | null = null;
+  if (loopShouldReset(state, story)) loop = resetLoop(state, story);
 
-  return { state, events, questTransitions, rejectedMutations: rejected, gatesOpened, defeat };
+  const events = buildEvents(state, turnId, accepted, questTransitions, now);
+  if (loop) {
+    events.push({
+      eventId: `${turnId}:loop`,
+      sessionId: state.sessionId,
+      turnId,
+      sequence: events.length,
+      type: 'LOOP_RESET',
+      subjectId: 'session',
+      reasonCode: 'WORLD_ENDED',
+      payload: { loopNumber: loop.loopNumber },
+      worldMinute: state.worldMinute,
+      createdAt: now(),
+    });
+    state = loop.state;
+  }
+
+  return {
+    state,
+    events,
+    questTransitions,
+    rejectedMutations: rejected,
+    gatesOpened,
+    defeat,
+    // Fired during resolution, so the beat the player reads contains them.
+    worldEvents: [],
+    worldEventFacts: { observable: [], private: [] },
+    loopReset: {
+      occurred: loop !== null,
+      loopNumber: loop?.loopNumber ?? 1,
+      directorNotes: loop ? echoDirectorNotes(story, loop.echoes) : [],
+    },
+  };
 }
 
 /**
