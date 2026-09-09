@@ -27,12 +27,16 @@ import type {
  * State is deep-cloned on read and write so a caller mutating a returned object
  * cannot corrupt the store, which is what a real database would give us for free.
  */
+/** How far back a player can fork. Older snapshots are dropped. */
+const MAX_SNAPSHOTS = 60;
+
 export class MemoryRepository implements Repository {
   readonly #stories = new Map<string, StoryVersion>();
   readonly #signals = new Map<string, StorySignals>();
   readonly #users = new Map<string, UserRecord>();
   readonly #sessions = new Map<string, SessionRecord>();
   readonly #states = new Map<string, GameState>();
+  readonly #snapshots = new Map<string, Map<number, GameState>>();
   readonly #turns = new Map<string, TurnRecord[]>();
   readonly #turnsById = new Map<string, TurnRecord>();
   readonly #events = new Map<string, GameEvent[]>();
@@ -181,6 +185,28 @@ export class MemoryRepository implements Repository {
     if (current.revision !== expectedRevision) return false;
     this.#states.set(sessionId, structuredClone(state));
     return true;
+  }
+
+  /**
+   * Spec §11.7 — the state each turn started from, so a fork can return to it.
+   *
+   * Capped: a long run would otherwise keep every snapshot it ever made, and
+   * the ones a player can fork to are the ones they can still see.
+   */
+  async putStateSnapshot(sessionId: string, turnIndex: number, state: GameState): Promise<void> {
+    const snapshots = this.#snapshots.get(sessionId) ?? new Map<number, GameState>();
+    snapshots.set(turnIndex, structuredClone(state));
+
+    if (snapshots.size > MAX_SNAPSHOTS) {
+      const oldest = [...snapshots.keys()].sort((a, b) => a - b).slice(0, snapshots.size - MAX_SNAPSHOTS);
+      for (const key of oldest) snapshots.delete(key);
+    }
+    this.#snapshots.set(sessionId, snapshots);
+  }
+
+  async getStateSnapshot(sessionId: string, turnIndex: number): Promise<GameState | null> {
+    const state = this.#snapshots.get(sessionId)?.get(turnIndex);
+    return state ? structuredClone(state) : null;
   }
 
   // --- Turns and events ---

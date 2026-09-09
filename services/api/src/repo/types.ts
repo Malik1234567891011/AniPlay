@@ -120,6 +120,16 @@ export interface Repository {
    */
   saveState(sessionId: string, expectedRevision: number, state: GameState): Promise<boolean>;
 
+  /**
+   * Spec §11.7 — the state a turn started from.
+   *
+   * A fork copies authoritative state *at the selected event*, so something has
+   * to remember what that was. Without it a fork can only ever clone the
+   * present, which is not a branch.
+   */
+  putStateSnapshot(sessionId: string, turnIndex: number, state: GameState): Promise<void>;
+  getStateSnapshot(sessionId: string, turnIndex: number): Promise<GameState | null>;
+
   // --- Turns and events ---
   appendTurn(turn: TurnRecord): Promise<void>;
   /**

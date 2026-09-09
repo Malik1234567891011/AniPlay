@@ -403,6 +403,57 @@ describe('forking (spec §11.7, §20.10)', () => {
     expect(original.json().recentTurns.length).toBeGreaterThan(0);
   });
 
+  it('gives every turn its own index', async () => {
+    // The opening record is 0 and the first player turn used the pre-turn
+    // index, so two different beats both claimed 0 — which made "fork from
+    // here" ambiguous on the timeline.
+    const { sessionId, revision } = await startSession();
+    let rev = revision;
+    for (const text of ['I look at the ward.', 'I walk into the commons.']) {
+      const { body } = await playTurn(sessionId, rev, text);
+      await body.completion;
+      rev = (await ctx.repo.getState(sessionId))!.revision;
+    }
+
+    const indices = (await ctx.repo.listTurns(sessionId)).map((turn) => turn.turnIndex);
+    expect(new Set(indices).size).toBe(indices.length);
+    expect([...indices].sort((a, b) => a - b)).toEqual(indices);
+  });
+
+  it('branches from the moment chosen, not from the present', async () => {
+    // The bug: `forkState` cloned the live state and ignored the fork point
+    // entirely, so 120 credits bought a copy of wherever the player already
+    // was rather than a branch.
+    const { sessionId, revision } = await startSession();
+    const before = await ctx.repo.getState(sessionId);
+
+    let rev = revision;
+    for (const text of ['I read the ward above the gate.', 'I walk into the commons.']) {
+      const { body } = await playTurn(sessionId, rev, text);
+      await body.completion;
+      rev = (await ctx.repo.getState(sessionId))!.revision;
+    }
+
+    const moved = await ctx.repo.getState(sessionId);
+    expect(moved!.turnIndex).toBeGreaterThan(before!.turnIndex);
+
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/forks`,
+      headers: auth,
+      // The world as it was before the very first turn was taken.
+      payload: { atTurnIndex: before!.turnIndex },
+    });
+    const forkId = response.json().session.sessionId as string;
+    const branch = await ctx.repo.getState(forkId);
+
+    expect(branch!.turnIndex).toBe(before!.turnIndex);
+    expect(branch!.worldMinute).toBe(before!.worldMinute);
+    expect(branch!.player.locationId).toBe(before!.player.locationId);
+    // And it does not carry turns that had not happened yet at that point.
+    expect(await ctx.repo.listTurns(forkId)).toHaveLength(0);
+  });
+
   it('charges nothing when the player cannot afford it', async () => {
     const { sessionId } = await startSession();
     // Spend the wallet down below the fork price.

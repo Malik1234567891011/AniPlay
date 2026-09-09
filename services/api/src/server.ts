@@ -344,6 +344,9 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     };
 
     await ctx.repo.createSession(record, state);
+    // The world as it was before anything happened, so a fork from the opening
+    // is a real fork rather than a copy of wherever the player has got to.
+    await ctx.repo.putStateSnapshot(record.sessionId, state.turnIndex, state);
     await ctx.repo.bumpSignal(story.storyId, 'runs', 1);
 
     // The opening beat is authored, not generated, so it is free and instant
@@ -523,7 +526,14 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       }
 
       const newSessionId = `sess_${crypto.randomUUID()}`;
-      const forked = forkState(state, newSessionId);
+
+      // Spec §11.7 / §20.10 — a fork copies authoritative state at the selected
+      // event. Cloning the present would charge 120 credits for a branch that
+      // is not branched, so the snapshot the chosen turn started from is what
+      // gets copied; only a fork from the latest moment uses the live state.
+      const atTurnIndex = request.body?.atTurnIndex ?? state.turnIndex;
+      const snapshot = await ctx.repo.getStateSnapshot(session.sessionId, atTurnIndex);
+      const forked = forkState(snapshot ?? state, newSessionId);
 
       const record: SessionRecord = {
         sessionId: newSessionId,
@@ -538,7 +548,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
         // lineage rather than replaying the parent's dice.
         sessionSeed: session.sessionSeed,
         forkedFromSessionId: session.sessionId,
-        forkedAtTurnIndex: request.body?.atTurnIndex ?? state.turnIndex,
+        forkedAtTurnIndex: atTurnIndex,
         branchKey: `fork_${newSessionId.slice(-8)}`,
       };
 
@@ -550,7 +560,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       // the branch opens with an empty screen in the middle of a story and
       // reads as starting over, which is not what was paid for.
       const inherited = (await ctx.repo.listTurns(session.sessionId))
-        .filter((turn) => turn.turnIndex <= record.forkedAtTurnIndex!)
+        .filter((turn) => turn.turnIndex < atTurnIndex)
         .map((turn, index) => ({
           ...turn,
           // New ids: a turn is addressed globally, and two sessions cannot

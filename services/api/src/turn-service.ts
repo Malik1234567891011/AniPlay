@@ -115,6 +115,11 @@ async function processTurn(
 
     hub.emit(turnId, 'check.started', { label: 'Resolving' });
 
+    // Spec §11.7 — remember where this turn started, so a fork can come back
+    // to it. Saved before anything resolves, because that is the state a
+    // branch from this moment means.
+    await ctx.repo.putStateSnapshot(session.sessionId, state.turnIndex, state);
+
     const seed = deriveTurnSeed(session.sessionSeed, state.turnIndex, session.branchKey);
     const result = await runTurn({
       story,
@@ -153,7 +158,10 @@ async function processTurn(
     const record: TurnRecord = {
       turnId,
       sessionId: session.sessionId,
-      turnIndex: state.turnIndex,
+      // The index this turn produced, not the one it started from. The opening
+      // record is 0, so using the pre-turn index gave the first player turn 0
+      // as well and two different beats shared an index.
+      turnIndex: result.state.turnIndex,
       actionText,
       qualityTier,
       creditsCharged: reservation.amount,
