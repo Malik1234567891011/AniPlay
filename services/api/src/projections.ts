@@ -29,6 +29,19 @@ import type { SessionRecord, StorySignals } from './repo/types.js';
  * exactly what a screen needs, so the client never has to derive game rules.
  */
 
+/**
+ * Stories reference art by asset key ("ninth-archive/cover"), not by URL, so the
+ * same world can be served from any CDN. This resolves a key against the
+ * configured media host and returns null when there is none — the client then
+ * renders its deterministic placeholder rather than a broken image box.
+ */
+export function resolveAssetUrl(key: string | null): string | null {
+  if (!key) return null;
+  if (/^https?:\/\//.test(key)) return key;
+  const base = process.env.MEDIA_CDN_BASE_URL;
+  return base ? `${base.replace(/\/$/, '')}/${key}` : null;
+}
+
 /** Plain-language attribute copy for the World Sheet (spec §11.2). */
 const ATTRIBUTE_COPY: Record<string, { name: string; plain: string }> = {
   might: { name: 'Might', plain: 'Force, endurance, and raw physical power. Shoving a door, holding a line.' },
@@ -56,8 +69,8 @@ export function toStorySummary(
     hook: story.hook,
     creatorName: story.creatorName,
     official: story.official,
-    coverImage: story.coverImage,
-    keyArt: story.keyArt,
+    coverImage: resolveAssetUrl(story.coverImage),
+    keyArt: resolveAssetUrl(story.keyArt),
     tags: story.tags,
     mechanicsChips: story.mechanicsChips,
     contentDescriptors: story.contentDescriptors,
@@ -87,7 +100,7 @@ export function toStoryDetail(
       id: c.id,
       name: c.name,
       role: c.role,
-      portrait: c.portrait,
+      portrait: resolveAssetUrl(c.portrait),
       publicTraits: c.publicTraits,
     })),
     stats: {
@@ -109,7 +122,7 @@ export function toSessionSummary(record: SessionRecord, story: StoryVersion, sta
     storyId: record.storyId,
     storyVersionId: record.storyVersionId,
     title: story.title,
-    coverImage: story.coverImage,
+    coverImage: resolveAssetUrl(story.coverImage),
     revision: state.revision,
     turnCount,
     status: record.status,
@@ -127,7 +140,7 @@ export function toSceneState(story: StoryVersion, state: GameState): SessionScen
   return {
     locationId: state.player.locationId,
     locationName: location?.name ?? state.player.locationId,
-    stageImage: location?.stageImage ?? null,
+    stageImage: resolveAssetUrl(location?.stageImage ?? null),
     worldTimeLabel: formatWorldTime(state.worldMinute),
     worldMinute: state.worldMinute,
     dayNumber: dayNumber(state.worldMinute),
@@ -138,7 +151,7 @@ export function toSceneState(story: StoryVersion, state: GameState): SessionScen
         return {
           id: def.id,
           name: def.name,
-          portrait: def.portrait,
+          portrait: resolveAssetUrl(def.portrait),
           expression: 'neutral',
           speaking: false,
         };
@@ -319,7 +332,7 @@ export function toWorldSheet(
         return {
           characterId: rel.characterId,
           name: def?.name ?? rel.characterId,
-          portrait: def?.portrait ?? null,
+          portrait: resolveAssetUrl(def?.portrait ?? null),
           label: relationshipLabel(rel),
           lastInteractionTurn: rel.lastChangedTurn,
           // Numbers are sent only when the player asked to see them.
@@ -492,7 +505,7 @@ export function toContinueCard(
     sessionId: record.sessionId,
     storyId: record.storyId,
     title: story.title,
-    coverImage: story.coverImage,
+    coverImage: resolveAssetUrl(story.coverImage),
     lastPlayedAt: record.lastPlayedAt,
     turnCount: turns.length,
     currentObjective: topObjective(state, story),

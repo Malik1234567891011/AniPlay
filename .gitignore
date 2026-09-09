@@ -14,3 +14,7 @@ ios/
 android/
 .turbo/
 .data/
+
+# Generated art masters — regenerable via infra/scripts/generate-art.ts.
+# The optimized .webp derivatives are committed; the PNGs are not.
+infra/seed/assets/**/*.png

@@ -1,0 +1,421 @@
+import { Platform } from 'react-native';
+import type {
+  BootstrapResponse,
+  CreateSessionRequest,
+  DiscoverResponse,
+  LedgerResponse,
+  MeResponse,
+  QualityTier,
+  SessionDetailResponse,
+  SessionSummary,
+  StoryDetailResponse,
+  StorySummary,
+  SubmitTurnResponse,
+  TimelineResponse,
+  TurnRecord,
+  TurnStreamEventName,
+  WalletResponse,
+  WorldSheetResponse,
+} from '@aniplay/contracts';
+
+/**
+ * The typed `/v1` client.
+ *
+ * Every response shape comes from `@aniplay/contracts`, so a server change that
+ * breaks the client is a compile error rather than a runtime surprise.
+ */
+
+/**
+ * Simulators and devices cannot reach `localhost`. The iOS simulator shares the
+ * host's loopback; Android's emulator maps the host to 10.0.2.2. A physical
+ * device needs an explicit LAN address via EXPO_PUBLIC_API_URL.
+ */
+function defaultBaseUrl(): string {
+  const configured = process.env.EXPO_PUBLIC_API_URL;
+  if (configured) return configured;
+  if (Platform.OS === 'android') return 'http://10.0.2.2:4000';
+  return 'http://localhost:4000';
+}
+
+export interface PlayerCharacterCard {
+  sessionId: string;
+  storyId: string;
+  storyTitle: string;
+  displayName: string;
+  pronouns: string;
+  archetypeName: string | null;
+  portraitUrl: string | null;
+  appearanceNote: string;
+  worldKnowsAboutYou: string;
+  turnCount: number;
+  level: number;
+  milestones: number;
+  locationName: string;
+  canon: string[];
+  notableMemories: string[];
+  status: string;
+  lastPlayedAt: string;
+  portraitCost: number;
+}
+
+export class ApiError extends Error {
+  constructor(
+    readonly status: number,
+    readonly code: string,
+    override readonly message: string,
+    readonly details?: Record<string, unknown>,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+
+  /** Spec WL-03 — the wallet sheet shows the exact shortfall. */
+  get shortfall(): number | null {
+    return typeof this.details?.shortfall === 'number' ? this.details.shortfall : null;
+  }
+
+  get currentRevision(): number | null {
+    return typeof this.details?.currentRevision === 'number' ? this.details.currentRevision : null;
+  }
+}
+
+export interface TurnStreamHandlers {
+  onEvent?: (event: TurnStreamEventName, data: Record<string, unknown>) => void;
+  onError?: (error: Error) => void;
+}
+
+export class ApiClient {
+  #baseUrl: string;
+  #token: string | null = null;
+
+  constructor(baseUrl = defaultBaseUrl()) {
+    this.#baseUrl = baseUrl.replace(/\/$/, '');
+  }
+
+  get baseUrl(): string {
+    return this.#baseUrl;
+  }
+
+  setToken(token: string | null): void {
+    this.#token = token;
+  }
+
+  get token(): string | null {
+    return this.#token;
+  }
+
+  async #request<T>(
+    method: string,
+    path: string,
+    body?: unknown,
+    extraHeaders: Record<string, string> = {},
+  ): Promise<T> {
+    const headers: Record<string, string> = {
+      accept: 'application/json',
+      'x-app-version': '1.0.0',
+      ...extraHeaders,
+    };
+    if (body !== undefined) headers['content-type'] = 'application/json';
+    if (this.#token) headers.authorization = `Bearer ${this.#token}`;
+
+    let response: Response;
+    try {
+      response = await fetch(`${this.#baseUrl}${path}`, {
+        method,
+        headers,
+        body: body === undefined ? undefined : JSON.stringify(body),
+      });
+    } catch (cause) {
+      // Spec §10.8 — offline is a first-class state with plain copy.
+      throw new ApiError(0, 'OFFLINE', "You're offline. Your action is saved.", {
+        cause: String(cause),
+      });
+    }
+
+    if (response.status === 204) return undefined as T;
+
+    const text = await response.text();
+    const parsed: unknown = text.length > 0 ? JSON.parse(text) : null;
+
+    if (!response.ok) {
+      const error = (parsed ?? {}) as { code?: string; message?: string; details?: Record<string, unknown> };
+      throw new ApiError(
+        response.status,
+        error.code ?? 'UNKNOWN',
+        error.message ?? 'Something went wrong.',
+        error.details,
+      );
+    }
+
+    return parsed as T;
+  }
+
+  // --- Bootstrap and catalog ---
+
+  bootstrap(): Promise<BootstrapResponse> {
+    return this.#request('GET', '/v1/bootstrap');
+  }
+
+  discover(): Promise<DiscoverResponse> {
+    return this.#request('GET', '/v1/discover');
+  }
+
+  search(query: string): Promise<{ results: StorySummary[] }> {
+    return this.#request('GET', `/v1/search?q=${encodeURIComponent(query)}`);
+  }
+
+  storyDetail(storyId: string): Promise<StoryDetailResponse> {
+    return this.#request('GET', `/v1/stories/${storyId}`);
+  }
+
+  saveStory(storyId: string, saved: boolean): Promise<{ saved: boolean }> {
+    return this.#request(saved ? 'POST' : 'DELETE', `/v1/stories/${storyId}/save`);
+  }
+
+  hideStory(storyId: string): Promise<{ hidden: boolean }> {
+    return this.#request('POST', `/v1/stories/${storyId}/hide`);
+  }
+
+  // --- Sessions ---
+
+  createSession(storyId: string, body: CreateSessionRequest): Promise<SessionDetailResponse> {
+    return this.#request('POST', `/v1/stories/${storyId}/sessions`, body);
+  }
+
+  listSessions(): Promise<{ sessions: SessionSummary[] }> {
+    return this.#request('GET', '/v1/sessions');
+  }
+
+  session(sessionId: string): Promise<SessionDetailResponse> {
+    return this.#request('GET', `/v1/sessions/${sessionId}`);
+  }
+
+  deleteSession(sessionId: string): Promise<{ deleted: boolean }> {
+    return this.#request('DELETE', `/v1/sessions/${sessionId}`);
+  }
+
+  worldSheet(sessionId: string): Promise<WorldSheetResponse> {
+    return this.#request('GET', `/v1/sessions/${sessionId}/world-sheet`);
+  }
+
+  timeline(sessionId: string): Promise<TimelineResponse> {
+    return this.#request('GET', `/v1/sessions/${sessionId}/timeline`);
+  }
+
+  forkSession(sessionId: string, atTurnIndex?: number): Promise<{ session: SessionSummary; creditsCharged: number }> {
+    return this.#request('POST', `/v1/sessions/${sessionId}/forks`, { atTurnIndex });
+  }
+
+  correctCanon(sessionId: string, factId: string, correctedText: string) {
+    return this.#request<{
+      accepted: boolean;
+      conflictExplanation: string | null;
+      offerFork: boolean;
+    }>('POST', `/v1/sessions/${sessionId}/canon-corrections`, { factId, correctedText });
+  }
+
+  // --- Turns ---
+
+  submitTurn(
+    sessionId: string,
+    body: { actionText: string; qualityTier: QualityTier; sessionRevision: number },
+    idempotencyKey: string,
+  ): Promise<SubmitTurnResponse> {
+    return this.#request(
+      'POST',
+      `/v1/sessions/${sessionId}/turns`,
+      { ...body, selectedSuggestionId: null, voicePreferred: false },
+      { 'idempotency-key': idempotencyKey },
+    );
+  }
+
+  turn(turnId: string): Promise<TurnRecord> {
+    return this.#request('GET', `/v1/turns/${turnId}`);
+  }
+
+  /**
+   * Consumes the SSE turn stream.
+   *
+   * React Native has no EventSource, so this reads the response body directly.
+   * Hermes exposes `fetch` without streaming bodies, so the fallback polls the
+   * finished turn — the UI is identical either way, only the pacing differs.
+   */
+  async streamTurn(
+    turnId: string,
+    streamToken: string,
+    handlers: TurnStreamHandlers,
+    signal?: AbortSignal,
+  ): Promise<void> {
+    const url = `${this.#baseUrl}/v1/turns/${turnId}/stream?token=${encodeURIComponent(streamToken)}`;
+
+    try {
+      const response = await fetch(url, {
+        headers: this.#token ? { authorization: `Bearer ${this.#token}` } : {},
+        signal,
+      });
+
+      const body = response.body as ReadableStream<Uint8Array> | null | undefined;
+      if (!body?.getReader) {
+        await this.#pollTurn(turnId, handlers, signal);
+        return;
+      }
+
+      const reader = body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        // SSE frames are separated by a blank line.
+        const frames = buffer.split('\n\n');
+        buffer = frames.pop() ?? '';
+
+        for (const frame of frames) {
+          const dataLine = frame.split('\n').find((line) => line.startsWith('data:'));
+          if (!dataLine) continue;
+          try {
+            const parsed = JSON.parse(dataLine.slice(5).trim()) as {
+              event: TurnStreamEventName;
+              data: Record<string, unknown>;
+            };
+            handlers.onEvent?.(parsed.event, parsed.data);
+          } catch {
+            // A truncated frame completes on the next read.
+          }
+        }
+      }
+    } catch (error) {
+      if (signal?.aborted) return;
+      // Streaming failed, but the turn may still have committed server-side.
+      await this.#pollTurn(turnId, handlers, signal).catch(() => {
+        handlers.onError?.(error instanceof Error ? error : new Error(String(error)));
+      });
+    }
+  }
+
+  /** Fallback: the turn is authoritative once committed, so polling is safe. */
+  async #pollTurn(turnId: string, handlers: TurnStreamHandlers, signal?: AbortSignal): Promise<void> {
+    for (let attempt = 0; attempt < 40; attempt++) {
+      if (signal?.aborted) return;
+      try {
+        const turn = await this.turn(turnId);
+        for (const check of turn.checks) {
+          handlers.onEvent?.('check.resolved', {
+            checkId: check.checkId,
+            label: check.label,
+            outcome: check.outcome,
+            outcomeLabel: check.outcome,
+            difficultyLabel: '',
+            math: null,
+          });
+        }
+        turn.blocks.forEach((block, index) => {
+          handlers.onEvent?.('text.delta', { blockIndex: index, ...block });
+        });
+        handlers.onEvent?.('turn.completed', {
+          turnId: turn.turnId,
+          sceneSummary: turn.sceneSummary,
+          endStatePrompt: turn.endStatePrompt,
+          suggestions: turn.suggestions,
+          creditsCharged: turn.creditsCharged,
+        });
+        return;
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 404) {
+          await new Promise((resolve) => setTimeout(resolve, 250));
+          continue;
+        }
+        throw error;
+      }
+    }
+    handlers.onError?.(new Error('Turn did not complete in time.'));
+  }
+
+  // --- Media (spec §9.3) ---
+
+  /**
+   * Generates or regenerates the player's portrait for a run. Costs credits and
+   * is refunded automatically if the provider fails.
+   */
+  generatePortrait(
+    sessionId: string,
+    body: { appearanceNote?: string } = {},
+  ): Promise<{
+    assetKey: string;
+    url: string;
+    alt: string;
+    variant: number;
+    creditsCharged: number;
+    balance: number;
+  }> {
+    return this.#request('POST', `/v1/sessions/${sessionId}/portrait`, body);
+  }
+
+  /** Every player character across every world, with the canon each accumulated. */
+  myCharacters(): Promise<{ characters: PlayerCharacterCard[] }> {
+    return this.#request('GET', '/v1/me/characters');
+  }
+
+  // --- Wallet ---
+
+  wallet(): Promise<WalletResponse> {
+    return this.#request('GET', '/v1/wallet');
+  }
+
+  ledger(cursor?: string): Promise<LedgerResponse> {
+    return this.#request('GET', `/v1/wallet/ledger${cursor ? `?cursor=${cursor}` : ''}`);
+  }
+
+  claimDaily(): Promise<{ granted: boolean; amount: number; balance: number; nextClaimAt: string | null }> {
+    return this.#request('POST', '/v1/wallet/daily-claim');
+  }
+
+  syncPurchase(productId: string, storeTransactionId: string) {
+    return this.#request<{ credited: number; duplicate: boolean; balance: number }>(
+      'POST',
+      '/v1/store/purchases/sync',
+      { productId, storeTransactionId, platform: 'SANDBOX', receipt: null },
+    );
+  }
+
+  // --- Account and safety ---
+
+  me(): Promise<MeResponse> {
+    return this.#request('GET', '/v1/me');
+  }
+
+  updateMe(patch: Record<string, unknown>): Promise<MeResponse> {
+    return this.#request('PATCH', '/v1/me', patch);
+  }
+
+  report(body: {
+    targetType: string;
+    targetId: string;
+    reason: string;
+    details?: string;
+    alsoHide?: boolean;
+  }): Promise<{ reportId: string; caseReference: string }> {
+    return this.#request('POST', '/v1/reports', {
+      details: '',
+      alsoHide: false,
+      ...body,
+    });
+  }
+
+  migrateGuest(guestUserId: string, displayName: string) {
+    return this.#request<{ migrated: boolean; sessionsMoved: number }>(
+      'POST',
+      '/v1/auth/guest-migrate',
+      { guestUserId, displayName },
+    );
+  }
+
+  deleteAccount(): Promise<{ deleted: boolean }> {
+    return this.#request('POST', '/v1/account/deletion-request');
+  }
+}
+
+export const api = new ApiClient();

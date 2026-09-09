@@ -25,12 +25,13 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     : env.NODE_ENV === 'staging'
       ? 'staging'
       : 'dev') as AppConfig['environment'];
-  return {
-    port,
-    host,
-    environment,
-    baseUrl: env.PUBLIC_BASE_URL ?? `http://localhost:${port}`,
-  };
+  const baseUrl = env.PUBLIC_BASE_URL ?? `http://localhost:${port}`;
+
+  // Generated art is served by this process in development. Setting
+  // MEDIA_CDN_BASE_URL points the same asset keys at a real CDN in production.
+  if (!env.MEDIA_CDN_BASE_URL) process.env.MEDIA_CDN_BASE_URL = `${baseUrl}/media`;
+
+  return { port, host, environment, baseUrl };
 }
 
 export interface AppContext {

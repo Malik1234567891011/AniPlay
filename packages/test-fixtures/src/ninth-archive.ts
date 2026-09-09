@@ -376,6 +376,10 @@ const raw = {
       ],
       appearance:
         'Small, dark-haired, ink to the second knuckle, archive coat two sizes too big and worn like armour.',
+      visualHook:
+        "A single bone-white streak burned through her black hair above the left temple, where a ward caught her, and both hands inked black to the second knuckle.",
+      silhouette:
+        "Small and swallowed by an archive coat two sizes too big, collar up, sleeves rolled twice and still too long.",
       artSeed: 'mira-senn-v1',
       portrait: 'ninth-archive/mira',
       expressions: ['neutral', 'wary', 'tired', 'amused', 'alarmed', 'resolved'],
@@ -439,6 +443,10 @@ const raw = {
         'If you are innocent then you will not mind the delay.',
       ],
       appearance: 'Tall, close-cropped fair hair, prefect sash kept immaculate, hands always visible.',
+      visualHook:
+        "A prefect sash worn immaculately over a black mourning band he has never once explained, and a single black glove on the right hand that never comes off.",
+      silhouette:
+        "Tall and squared-off, hands always visible and still, the only person in any room standing perfectly straight.",
       artSeed: 'kael-ostrand-v1',
       portrait: 'ninth-archive/kael',
       expressions: ['neutral', 'stern', 'suspicious', 'conflicted', 'furious'],
@@ -495,6 +503,10 @@ const raw = {
         'You may ask me anything. I will answer what I can.',
       ],
       appearance: 'Sixties, silver plait, half-moon spectacles, ink-stained cuffs she does not bother to hide.',
+      visualHook:
+        "A dozen thin ink-stained silver rings, one per erased student, which she turns on her finger whenever she is about to say something untrue.",
+      silhouette:
+        "Upright and unhurried, silver plait over one shoulder, half-moon spectacles low on the nose.",
       artSeed: 'ysolde-farrow-v1',
       portrait: 'ninth-archive/ysolde',
       expressions: ['warm', 'neutral', 'attentive', 'disappointed', 'cold'],
@@ -550,6 +562,10 @@ const raw = {
         'Do not look at me like that, I have feelings and a schedule.',
       ],
       appearance: 'Short, broad, permanently slightly damp, four coats’ worth of pockets in one coat.',
+      visualHook:
+        "The last two fingers missing from his left hand, entirely undiscussed, and a coat carrying four coats' worth of visibly overstuffed pockets.",
+      silhouette:
+        "Short, broad, permanently slightly damp, leaning in like he is already mid-deal.",
       artSeed: 'bram-ketch-v1',
       portrait: 'ninth-archive/bram',
       expressions: ['grinning', 'neutral', 'shifty', 'serious', 'delighted'],

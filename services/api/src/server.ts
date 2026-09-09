@@ -43,6 +43,7 @@ import {
   toTimeline,
   toWorldSheet,
 } from './projections.js';
+import { registerMediaRoutes } from './media-routes.js';
 import type { SessionRecord, StorySignals } from './repo/types.js';
 
 /**
@@ -91,6 +92,8 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     void reply.header(CONTRACT_HEADER, CONTRACT_VERSION);
     return payload;
   });
+
+  registerMediaRoutes(app, ctx);
 
   // --- Health ---
 

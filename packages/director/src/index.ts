@@ -1,4 +1,5 @@
 export * from './gateway/index.js';
+export * from './media/index.js';
 export * from './parser.js';
 export * from './memory.js';
 export * from './context.js';

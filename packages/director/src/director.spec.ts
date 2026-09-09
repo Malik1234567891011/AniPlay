@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { NINTH_ARCHIVE as STORY } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG, NINTH_ARCHIVE as STORY } from '@aniplay/test-fixtures';
 import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
 import { createInitialState, deriveTurnSeed, resolveIntent } from '@aniplay/engine';
 import { RuleBasedIntentParser } from './parser.js';
@@ -622,5 +622,126 @@ describe('writer', () => {
     const turn = writer.writeSync(context, director.planSync(context));
     const spoken = turn.blocks.filter((b) => b.type === 'DIALOGUE').map((b) => b.text);
     expect(spoken).not.toContain(line);
+  });
+});
+
+describe('every launch world is playable', () => {
+  it('runs a turn in each world without an invalid narrative', async () => {
+    for (const world of LAUNCH_CATALOG) {
+      const state = createInitialState({
+        sessionId: `sess_${world.storyId}`,
+        story: world,
+        identity: {
+          displayName: 'Malik',
+          pronouns: 'he/him',
+          ageBand: null,
+          archetypeId: world.archetypes[0]?.id ?? null,
+          worldKnowsAboutYou: '',
+          advanced: {},
+          portraitAssetId: null,
+        },
+      });
+
+      for (const text of ['I look around.', 'I ask them what is going on.', 'I wait and listen.']) {
+        const result = await runTurn({
+          story: world, state, memories: [], recentTurns: [],
+          actionText: text, qualityTier: 'VIVID', turnId: 't1', seed: 'launch-seed',
+        });
+        expect(result.report.valid, `${world.title}: ${text}`).toBe(true);
+        expect(result.narrative.blocks.length).toBeGreaterThan(0);
+        expect(result.plan.suggestedActions.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('enforces each world’s own defeat mode', () => {
+    const modes = LAUNCH_CATALOG.map((w) => w.rules.defeatMode);
+    // The Salt Road is the permanent-death world, and declares it up front.
+    expect(modes).toContain('LETHAL');
+    const lethal = LAUNCH_CATALOG.find((w) => w.rules.defeatMode === 'LETHAL')!;
+    expect(lethal.contentDescriptors).toContain('PERMANENT_DEATH');
+  });
+
+  it('meets the §43.1 content bar in every world', () => {
+    for (const world of LAUNCH_CATALOG) {
+      expect(world.fantasyLabel.length, world.title).toBeLessThanOrEqual(42);
+      expect(world.opening.split(/\s+/).length, `${world.title} opening`).toBeGreaterThanOrEqual(50);
+      expect(world.opening.split(/\s+/).length, `${world.title} opening`).toBeLessThanOrEqual(150);
+      expect(world.premise.split(/\s+/).length, `${world.title} premise`).toBeGreaterThanOrEqual(100);
+      expect(world.promises.length, `${world.title} promises`).toBeGreaterThanOrEqual(3);
+      expect(world.characters.length, `${world.title} cast`).toBeGreaterThanOrEqual(3);
+      expect(world.openingSuggestions.length).toBe(3);
+      // Every location a story lists must be reachable from somewhere.
+      const reachable = new Set([world.rules.startingLocationId]);
+      for (const location of world.locations) for (const edge of location.connections) reachable.add(edge.to);
+      for (const location of world.locations) {
+        expect(reachable.has(location.id), `${world.title}: ${location.id} unreachable`).toBe(true);
+      }
+      // Every authored reference must resolve.
+      for (const archetype of world.archetypes) {
+        for (const item of archetype.startingItems) {
+          expect(world.items.some((i) => i.id === item.itemId), `${world.title}: ${item.itemId}`).toBe(true);
+        }
+        for (const abilityId of archetype.startingAbilities) {
+          expect(world.abilities.some((a) => a.id === abilityId), `${world.title}: ${abilityId}`).toBe(true);
+        }
+        for (const skillId of Object.keys(archetype.skillProficiencies)) {
+          expect(world.skills.some((s) => s.id === skillId), `${world.title}: ${skillId}`).toBe(true);
+        }
+      }
+      for (const quest of world.quests) {
+        for (const step of quest.steps) {
+          for (const reward of step.rewards.items) {
+            expect(world.items.some((i) => i.id === reward.itemId), `${world.title}: ${reward.itemId}`).toBe(true);
+          }
+        }
+        for (const id of quest.involvedCharacterIds) {
+          expect(world.characters.some((c) => c.id === id), `${world.title}: ${id}`).toBe(true);
+        }
+        for (const id of quest.involvedLocationIds) {
+          expect(world.locations.some((l) => l.id === id), `${world.title}: ${id}`).toBe(true);
+        }
+      }
+      for (const ability of world.abilities) {
+        for (const cost of ability.costs) {
+          expect(world.resources.some((r) => r.id === cost.resourceId), `${world.title}: ${cost.resourceId}`).toBe(true);
+        }
+        if (ability.check?.skillId) {
+          expect(world.skills.some((s) => s.id === ability.check!.skillId), `${world.title}: ${ability.check.skillId}`).toBe(true);
+        }
+      }
+      for (const character of world.characters) {
+        if (character.homeLocationId) {
+          expect(world.locations.some((l) => l.id === character.homeLocationId), `${world.title}: ${character.homeLocationId}`).toBe(true);
+        }
+        for (const block of character.schedule) {
+          expect(world.locations.some((l) => l.id === block.locationId), `${world.title}: ${block.locationId}`).toBe(true);
+        }
+      }
+    }
+  });
+});
+
+describe('generated art stays in sync with the stories that declare it', () => {
+  it('derives every asset key from the same source as the generator', async () => {
+    const { coverPrompt, keyArtPrompt, locationPrompt, characterPrompt } = await import('./media/prompts.js');
+
+    // A story that declares an asset key the generator would never produce ends
+    // up with a blank image in the app, and nothing catches it until a screenshot.
+    for (const story of LAUNCH_CATALOG) {
+      expect(story.coverImage, story.title).toBe(coverPrompt(story).assetKey);
+      expect(story.keyArt, story.title).toBe(keyArtPrompt(story).assetKey);
+
+      for (const location of story.locations) {
+        expect(location.stageImage, `${story.title}/${location.id}`).toBe(
+          locationPrompt(story, location).assetKey,
+        );
+      }
+      for (const character of story.characters) {
+        expect(character.portrait, `${story.title}/${character.id}`).toBe(
+          characterPrompt(story, character).assetKey,
+        );
+      }
+    }
   });
 });

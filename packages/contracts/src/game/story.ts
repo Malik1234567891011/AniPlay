@@ -209,6 +209,18 @@ export const CharacterDef = z
     /** Short, quotable lines the writer may draw on to keep voice stable. */
     voiceSamples: z.array(z.string()).default([]),
     appearance: z.string().default(''),
+    /**
+     * The single memorable feature that makes this character readable at a
+     * glance and impossible to confuse with anyone else — a scar, a missing
+     * finger, half a face of stage makeup.
+     *
+     * Kept separate from `appearance` because it is the load-bearing part of the
+     * design: it goes into the portrait prompt with emphasis, and it is what a
+     * player will describe when they talk about this character to someone else.
+     */
+    visualHook: z.string().default(''),
+    /** What their outline reads as across a dark room. Drives pose and costume. */
+    silhouette: z.string().default(''),
     /** Spec §19.2 — stable seed + descriptor keeps the face consistent across generations. */
     artSeed: z.string().nullable().default(null),
     portrait: z.string().nullable().default(null),

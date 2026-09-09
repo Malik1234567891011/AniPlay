@@ -6,7 +6,7 @@ import type {
   StoryVersion,
   TurnRecord,
 } from '@aniplay/contracts';
-import { NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
 import type {
   IdempotencyRecord,
   Repository,
@@ -44,19 +44,22 @@ export class MemoryRepository implements Repository {
   readonly #blocks = new Map<string, Set<string>>();
   readonly #reports = new Map<string, ReportRecord[]>();
 
-  constructor(stories: readonly StoryVersion[] = [NINTH_ARCHIVE]) {
+  constructor(stories: readonly StoryVersion[] = [...LAUNCH_CATALOG]) {
+    // Seeded so a fresh install shows a plausible catalog rather than a wall of
+    // zeroes, and varied so the ranking has something real to sort on. Replaced
+    // by the offline rollup job in production.
+    const seeded: Record<string, StorySignals> = {
+      story_ninth_archive: { runs: 12_400, likes: 5_460, saves: 3_910, hides: 61, reports: 3, impressions: 86_000 },
+      story_understudy: { runs: 7_850, likes: 2_610, saves: 1_720, hides: 44, reports: 1, impressions: 51_000 },
+      story_salt_road: { runs: 4_120, likes: 1_190, saves: 880, hides: 96, reports: 5, impressions: 38_000 },
+    };
+
     for (const story of stories) {
       this.#stories.set(story.id, story);
-      this.#signals.set(story.storyId, {
-        // Seeded so a fresh install still shows a plausible catalog rather than
-        // a wall of zeroes. Replaced by real rollups in production.
-        runs: 12_400,
-        likes: 3_180,
-        saves: 2_040,
-        hides: 61,
-        reports: 3,
-        impressions: 86_000,
-      });
+      this.#signals.set(
+        story.storyId,
+        seeded[story.storyId] ?? { runs: 0, likes: 0, saves: 0, hides: 0, reports: 0, impressions: 0 },
+      );
     }
   }
 

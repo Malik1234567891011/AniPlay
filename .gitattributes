@@ -1,0 +1,3 @@
+# Generated art masters are large binaries; mark them so diffs stay readable.
+infra/seed/assets/**/*.png binary
+infra/seed/assets/**/*.webp binary

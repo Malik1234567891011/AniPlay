@@ -1,0 +1,648 @@
+{
+  "story_ninth_archive/stage_gate_arch": {
+    "assetKey": "story_ninth_archive/stage_gate_arch",
+    "file": "story_ninth_archive/stage_gate_arch.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Gate Arch: Verath’s outer arch, wide enough for four abreast and warded to read every one of them.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ba0f6162-b08f-4956-a696-ee726fc5c4e8",
+      "promptHash": "a15a7a9f0877fb0c1d57159a5350331c",
+      "seed": "sv_ninth_archive_1:loc:gate_arch:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 21806,
+      "createdAt": "2026-09-09T05:51:25.961Z"
+    }
+  },
+  "story_ninth_archive/cover": {
+    "assetKey": "story_ninth_archive/cover",
+    "file": "story_ninth_archive/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Ninth Archive: Your sigil was erased. It still burns.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "57a660c4-7da4-4967-b003-c6cfca790943",
+      "promptHash": "4cb5bcba809a9afb26f82a3678cb0120",
+      "seed": "sv_ninth_archive_1:cover:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 21933,
+      "createdAt": "2026-09-09T05:51:26.041Z"
+    }
+  },
+  "story_ninth_archive/key": {
+    "assetKey": "story_ninth_archive/key",
+    "file": "story_ninth_archive/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Ninth Archive",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a2946092-2bc9-4749-9a37-8a4e2623a61b",
+      "promptHash": "6c61f4371b3f2510b1b8d6eff2f5ffc5",
+      "seed": "sv_ninth_archive_1:key:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 24454,
+      "createdAt": "2026-09-09T05:51:28.607Z"
+    }
+  },
+  "story_ninth_archive/stage_commons": {
+    "assetKey": "story_ninth_archive/stage_commons",
+    "file": "story_ninth_archive/stage_commons.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Commons: A long hall of scarred oak tables where the Academy pretends to be a school.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "82fd7bba-91d5-48df-9c68-82d7c328d061",
+      "promptHash": "56a1de939b46eea457a2e113a3667079",
+      "seed": "sv_ninth_archive_1:loc:commons:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40180,
+      "createdAt": "2026-09-09T05:51:44.337Z"
+    }
+  },
+  "story_ninth_archive/stage_archive_stacks": {
+    "assetKey": "story_ninth_archive/stage_archive_stacks",
+    "file": "story_ninth_archive/stage_archive_stacks.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Stacks: Rolling shelves on iron rails, packed close enough that you have to crank a gap to walk.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "86137558-72bb-4aaa-9c07-116209549cd9",
+      "promptHash": "5912a3c565601c3560369613b11eea76",
+      "seed": "sv_ninth_archive_1:loc:archive_stacks:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16747,
+      "createdAt": "2026-09-09T05:51:45.361Z"
+    }
+  },
+  "story_ninth_archive/stage_archive_floor": {
+    "assetKey": "story_ninth_archive/stage_archive_floor",
+    "file": "story_ninth_archive/stage_archive_floor.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Archive Reading Floor: Eight doors, eight brass numerals, and a reading floor between them where the lamps are kept deliberately low.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9b192fbf-2966-4114-b7ae-6be5f1084011",
+      "promptHash": "0292a7d38f2669ccb32fffda0c78cbf4",
+      "seed": "sv_ninth_archive_1:loc:archive_floor:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 22739,
+      "createdAt": "2026-09-09T05:51:48.784Z"
+    }
+  },
+  "story_ninth_archive/stage_rooftop": {
+    "assetKey": "story_ninth_archive/stage_rooftop",
+    "file": "story_ninth_archive/stage_rooftop.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Leads: Flat lead sheeting between two gables, out of the wind and out of the wards.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d811f7d5-99d0-4c3c-b757-99758ff7068d",
+      "promptHash": "33b7f02f1d45f454e489cac7b94b9354",
+      "seed": "sv_ninth_archive_1:loc:rooftop:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16384,
+      "createdAt": "2026-09-09T05:52:01.750Z"
+    }
+  },
+  "story_ninth_archive/stage_lecture_hall": {
+    "assetKey": "story_ninth_archive/stage_lecture_hall",
+    "file": "story_ninth_archive/stage_lecture_hall.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Arcane Lecture Hall: Steep banked benches around a demonstration well.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "59aa81d5-8171-4a17-92aa-befa9ecc2255",
+      "promptHash": "bad7d36e74fce0ba86b88321b7f8892b",
+      "seed": "sv_ninth_archive_1:loc:lecture_hall:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37994,
+      "createdAt": "2026-09-09T05:52:03.960Z"
+    }
+  },
+  "story_ninth_archive/stage_dorm": {
+    "assetKey": "story_ninth_archive/stage_dorm",
+    "file": "story_ninth_archive/stage_dorm.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Your Room: A bed, a desk, a window that does not quite close, and a door the Academy has a key to.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8c95ae92-da99-4a1b-aa32-1b986ec49544",
+      "promptHash": "2f45f3b81fb745c9c43ae7e275536ce3",
+      "seed": "sv_ninth_archive_1:loc:dorm:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 15471,
+      "createdAt": "2026-09-09T05:52:04.258Z"
+    }
+  },
+  "story_ninth_archive/stage_warden_office": {
+    "assetKey": "story_ninth_archive/stage_warden_office",
+    "file": "story_ninth_archive/stage_warden_office.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Warden's Office: Warm, tidy, and hung with student portraits going back sixty years.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dc5e1db4-5619-413d-a321-a83d488abb83",
+      "promptHash": "dc46bcb11e4c2a0d8893b1e72c79c13a",
+      "seed": "sv_ninth_archive_1:loc:warden_office:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41988,
+      "createdAt": "2026-09-09T05:52:26.328Z"
+    }
+  },
+  "story_ninth_archive/ysolde": {
+    "assetKey": "story_ninth_archive/ysolde",
+    "file": "story_ninth_archive/ysolde.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Warden Ysolde Farrow, Warden of Records",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1913625e-a365-4c33-803c-6bdd67628733",
+      "promptHash": "0bd23f0648ef68f29a0bf5f3564d82f5",
+      "seed": "ysolde-farrow-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40664,
+      "createdAt": "2026-09-09T06:03:42.291Z"
+    }
+  },
+  "story_ninth_archive/kael": {
+    "assetKey": "story_ninth_archive/kael",
+    "file": "story_ninth_archive/kael.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kael Ostrand, Gate prefect, fifth year",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7dec56b-546e-4e7c-baa9-75aa914db2bb",
+      "promptHash": "16408ae09a099277274741f4b8ac1c9c",
+      "seed": "kael-ostrand-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 26496,
+      "createdAt": "2026-09-09T05:52:30.462Z"
+    }
+  },
+  "story_understudy/cover": {
+    "assetKey": "story_understudy/cover",
+    "file": "story_understudy/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Understudy: You know every line. Nobody knows you.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "27aaf67c-db4f-4bed-bf5c-b98b027e9d8d",
+      "promptHash": "c5605ed71cc3356b65b579cb28bef2a3",
+      "seed": "sv_understudy_1:cover:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 17183,
+      "createdAt": "2026-09-09T05:52:44.663Z"
+    }
+  },
+  "story_ninth_archive/mira": {
+    "assetKey": "story_ninth_archive/mira",
+    "file": "story_ninth_archive/mira.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mira Senn, Archive assistant, third year",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bbd01a85-8d1d-4cd8-8ee8-6cdb0e74a48a",
+      "promptHash": "6cdb2e2bd7b09f1f64a6ba48010a75ae",
+      "seed": "mira-senn-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44133,
+      "createdAt": "2026-09-09T05:52:45.888Z"
+    }
+  },
+  "story_ninth_archive/bram": {
+    "assetKey": "story_ninth_archive/bram",
+    "file": "story_ninth_archive/bram.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bram Ketch, Second year, unofficial quartermaster",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0c8d8357-d51f-41e3-ab73-957bc36831f3",
+      "promptHash": "dfbb37f3db4651cd982e360fd7c9ebf7",
+      "seed": "bram-ketch-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 29855,
+      "createdAt": "2026-09-09T05:52:56.189Z"
+    }
+  },
+  "story_understudy/key": {
+    "assetKey": "story_understudy/key",
+    "file": "story_understudy/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Understudy",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f610a525-f50b-4cf7-9903-94d85c6cef21",
+      "promptHash": "72ce8f9c8d167f6fb28444a1667dfcaa",
+      "seed": "sv_understudy_1:key:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 28007,
+      "createdAt": "2026-09-09T05:52:58.473Z"
+    }
+  },
+  "story_understudy/stage_rehearsal_room": {
+    "assetKey": "story_understudy/stage_rehearsal_room",
+    "file": "story_understudy/stage_rehearsal_room.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Rehearsal Room Two: Sprung floor, one wall of mirrors, and a piano nobody is allowed to move.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f219b7a4-2c3b-44ab-afbc-82c8cc897f87",
+      "promptHash": "9d4ef51443ec5718395695dc05f871f0",
+      "seed": "sv_understudy_1:loc:rehearsal_room:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20575,
+      "createdAt": "2026-09-09T05:53:05.240Z"
+    }
+  },
+  "story_understudy/stage_green_room": {
+    "assetKey": "story_understudy/stage_green_room",
+    "file": "story_understudy/stage_green_room.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Green Room: Two sofas that have outlived four principals, a kettle, and a noticeboard where the cast list goes up.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f257154b-ad89-4476-9fe7-bcf6b2f10bb7",
+      "promptHash": "24582cea15dd6dcfe7bec79d8b151b6f",
+      "seed": "sv_understudy_1:loc:green_room:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 31743,
+      "createdAt": "2026-09-09T05:53:17.639Z"
+    }
+  },
+  "story_understudy/stage_stage": {
+    "assetKey": "story_understudy/stage_stage",
+    "file": "story_understudy/stage_stage.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Main Stage: Nine hundred empty seats and a ghost light burning at centre.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ec28f93a-7a60-49b8-b2a2-c6412939a893",
+      "promptHash": "e59912cd62b2ec31d077fe09422c780a",
+      "seed": "sv_understudy_1:loc:stage:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 21467,
+      "createdAt": "2026-09-09T05:53:17.660Z"
+    }
+  },
+  "story_understudy/stage_wardrobe": {
+    "assetKey": "story_understudy/stage_wardrobe",
+    "file": "story_understudy/stage_wardrobe.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Wardrobe: Rails to the ceiling and the smell of steam.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f2d7962d-9f44-4734-bea6-87ef2dbe84ad",
+      "promptHash": "26d094efb645b87e2656ba12da155caa",
+      "seed": "sv_understudy_1:loc:wardrobe:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 25986,
+      "createdAt": "2026-09-09T05:53:24.465Z"
+    }
+  },
+  "story_understudy/talia": {
+    "assetKey": "story_understudy/talia",
+    "file": "story_understudy/talia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talia Renn, First cast, Ysra",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7278ed40-c323-4740-a54d-5f87cbae5d28",
+      "promptHash": "a53237b5da1552e9e4b635d7c820eeb0",
+      "seed": "talia-renn-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 26246,
+      "createdAt": "2026-09-09T05:53:43.890Z"
+    }
+  },
+  "story_understudy/stage_directors_office": {
+    "assetKey": "story_understudy/stage_directors_office",
+    "file": "story_understudy/stage_directors_office.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Director's Office: One chair for him and one for whoever is in trouble.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "44f5a3b8-5505-4833-a792-23e9bf95a00e",
+      "promptHash": "7b27a1b68450a2c6a636586fc27aebf1",
+      "seed": "sv_understudy_1:loc:directors_office:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42119,
+      "createdAt": "2026-09-09T05:53:47.363Z"
+    }
+  },
+  "story_understudy/oswin": {
+    "assetKey": "story_understudy/oswin",
+    "file": "story_understudy/oswin.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Oswin Deare, Director",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0dea51b1-6bc1-4c76-9e5a-2ed7d69bff03",
+      "promptHash": "ff3daaf4f1275b840d59dc3705433d37",
+      "seed": "oswin-deare-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38072,
+      "createdAt": "2026-09-09T05:53:55.735Z"
+    }
+  },
+  "story_salt_road/cover": {
+    "assetKey": "story_salt_road/cover",
+    "file": "story_salt_road/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Salt Road: Eleven days of road. Nine days of water.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4a801887-f305-43ec-8298-6374d9ef3124",
+      "promptHash": "0f02d800887a2a83c5f1ac9cfa972459",
+      "seed": "sv_salt_road_1:cover:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 17437,
+      "createdAt": "2026-09-09T05:54:01.329Z"
+    }
+  },
+  "story_understudy/marta": {
+    "assetKey": "story_understudy/marta",
+    "file": "story_understudy/marta.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marta Voss, Wardrobe mistress",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c71d2f8a-3bf2-4a10-96c1-8068ee8844cf",
+      "promptHash": "d8a491624c5216e66ee497f4d73c8492",
+      "seed": "marta-voss-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40246,
+      "createdAt": "2026-09-09T06:01:43.447Z"
+    }
+  },
+  "story_salt_road/stage_ossun_gate": {
+    "assetKey": "story_salt_road/stage_ossun_gate",
+    "file": "story_salt_road/stage_ossun_gate.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Ossun Gate: The last wall before the flats.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "627989be-6b26-4a72-b2cf-03050636deae",
+      "promptHash": "e2b485dbda4ed208ab9dd57ed4b27171",
+      "seed": "sv_salt_road_1:loc:ossun_gate:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 18277,
+      "createdAt": "2026-09-09T05:54:14.014Z"
+    }
+  },
+  "story_salt_road/key": {
+    "assetKey": "story_salt_road/key",
+    "file": "story_salt_road/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Salt Road",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a3976539-c577-4aee-bbfe-afaee864f532",
+      "promptHash": "0c35ca4def43b693a1f7118d60be7ccf",
+      "seed": "sv_salt_road_1:key:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 30571,
+      "createdAt": "2026-09-09T05:54:17.937Z"
+    }
+  },
+  "story_salt_road/stage_first_well": {
+    "assetKey": "story_salt_road/stage_first_well",
+    "file": "story_salt_road/stage_first_well.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The First Well: A stone ring and a windlass that works.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "eedda622-8100-43bb-ac22-b635e152b503",
+      "promptHash": "e5121bc4a3731c511e7fabb226a0e446",
+      "seed": "sv_salt_road_1:loc:first_well:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 18353,
+      "createdAt": "2026-09-09T05:54:19.693Z"
+    }
+  },
+  "story_salt_road/stage_the_wrecks": {
+    "assetKey": "story_salt_road/stage_the_wrecks",
+    "file": "story_salt_road/stage_the_wrecks.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Wrecks: Four wagons in a rough line, upright, still loaded.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "35a4c248-74d8-4d10-a1eb-0f430470f6fc",
+      "promptHash": "333a0c83788da9bcb5b5ab8cd91c0b07",
+      "seed": "sv_salt_road_1:loc:the_wrecks:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16363,
+      "createdAt": "2026-09-09T05:54:23.799Z"
+    }
+  },
+  "story_salt_road/stage_third_well": {
+    "assetKey": "story_salt_road/stage_third_well",
+    "file": "story_salt_road/stage_third_well.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Third Well: Marked with a question mark on every map worth having.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e2286d9d-7623-40ae-ab56-39c34de41655",
+      "promptHash": "542899c3836fde5e3fb712ced4e17907",
+      "seed": "sv_salt_road_1:loc:third_well:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16813,
+      "createdAt": "2026-09-09T05:54:34.755Z"
+    }
+  },
+  "story_salt_road/stage_second_well": {
+    "assetKey": "story_salt_road/stage_second_well",
+    "file": "story_salt_road/stage_second_well.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Second Well: Sound, deep, and crowded.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "08e129d0-8666-4b12-8b5d-fb0f33b22c2b",
+      "promptHash": "c8d7d1f86910bf419f4e5d276752cc39",
+      "seed": "sv_salt_road_1:loc:second_well:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 24162,
+      "createdAt": "2026-09-09T05:54:38.194Z"
+    }
+  },
+  "story_salt_road/ferrow": {
+    "assetKey": "story_salt_road/ferrow",
+    "file": "story_salt_road/ferrow.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ferrow, Guide, nine crossings",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7e6ddc80-0e78-4929-bef7-397c57a2b72c",
+      "promptHash": "2930b318cf19328c619710d8739243c3",
+      "seed": "ferrow-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 23146,
+      "createdAt": "2026-09-09T05:54:42.843Z"
+    }
+  },
+  "story_salt_road/oren": {
+    "assetKey": "story_salt_road/oren",
+    "file": "story_salt_road/oren.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Oren, Joined at the second well",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "00beb12f-a9a7-4860-9f13-f618de23b72b",
+      "promptHash": "52b329de46c2c8daaf79b5cccfc9df54",
+      "seed": "oren-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 21567,
+      "createdAt": "2026-09-09T06:04:40.827Z"
+    }
+  },
+  "story_salt_road/sabe": {
+    "assetKey": "story_salt_road/sabe",
+    "file": "story_salt_road/sabe.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sabe, Pilgrim",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6d464e5a-9f3e-433c-b96d-916117cc99c1",
+      "promptHash": "aeb36fdc04105ac5419c3bd7fed085d0",
+      "seed": "sabe-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40133,
+      "createdAt": "2026-09-09T05:55:14.902Z"
+    }
+  }
+}

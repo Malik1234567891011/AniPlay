@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "AniPlay",
+    "slug": "aniplay",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aniplay.app"
+    },
+    "android": {
+      "package": "com.aniplay.app",
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "scheme": "aniplay",
+    "backgroundColor": "#0B0D12",
+    "splash": {
+      "backgroundColor": "#0B0D12",
+      "resizeMode": "contain",
+      "image": "./assets/splash-icon.png"
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}

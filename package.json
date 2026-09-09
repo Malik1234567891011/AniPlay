@@ -3,7 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "description": "Project ANIMA — anime roleplay RPG. The model interprets intent. The game engine determines truth. The AI director makes truth entertaining.",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "workspaces": [
     "packages/*",
     "services/*",
@@ -20,8 +22,9 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "typescript": "^5.7.2",
+    "sharp": "^0.35.4",
     "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
 }
