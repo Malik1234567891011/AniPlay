@@ -115,6 +115,34 @@ const FILLER = [
   /\btime seems to slow\b/i,
 ];
 
+/**
+ * A token the API will actually accept.
+ *
+ * With a Supabase project configured the API verifies real JWTs, so a made-up
+ * `guest_…` string is refused — correctly, and it stopped this script dead the
+ * first time auth went live. Asking Supabase for an anonymous session is both
+ * what a real player does and one more thing the sweep now exercises.
+ */
+async function playerToken(): Promise<string> {
+  const url = process.env.SUPABASE_URL;
+  const anonKey = process.env.SUPABASE_ANON_KEY;
+  if (!url || !anonKey) return `guest_${crypto.randomUUID()}`;
+
+  const response = await fetch(`${url.replace(/\/$/, '')}/auth/v1/signup`, {
+    method: 'POST',
+    headers: { apikey: anonKey, authorization: `Bearer ${anonKey}`, 'content-type': 'application/json' },
+    body: '{}',
+  });
+  const body = (await response.json()) as { access_token?: string; msg?: string };
+  if (!body.access_token) {
+    throw new Error(
+      `Could not get an anonymous session from Supabase: ${body.msg ?? response.status}. ` +
+        'Enable anonymous sign-ins under Authentication → Sign In / Providers.',
+    );
+  }
+  return body.access_token;
+}
+
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const base = args.find((a) => a.startsWith('--base='))?.slice('--base='.length) ?? 'http://localhost:4000';
@@ -139,7 +167,7 @@ async function main(): Promise<void> {
     }
 
     const auth = {
-      authorization: `Bearer guest_${crypto.randomUUID()}`,
+      authorization: `Bearer ${await playerToken()}`,
       'content-type': 'application/json',
     };
 

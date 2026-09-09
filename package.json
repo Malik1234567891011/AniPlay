@@ -19,7 +19,7 @@
     "api": "npm run dev -w @aniplay/api",
     "mobile": "npm run start -w @aniplay/mobile",
     "clean": "rm -rf packages/*/dist services/*/dist node_modules/.cache",
-    "smoke": "tsx infra/scripts/smoke.ts",
+    "smoke": "tsx --env-file-if-exists=.env infra/scripts/smoke.ts",
     "art": "tsx infra/scripts/generate-art.ts",
     "brand": "tsx infra/scripts/generate-brand.ts",
     "migrate": "tsx infra/scripts/migrate.ts"
