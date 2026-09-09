@@ -7,9 +7,18 @@
 
 BEGIN;
 
--- Supabase Auth owns this schema and this table. The FK from `profiles` is what
--- ties a player row to an actual credential, so it has to exist before 0001.
-CREATE SCHEMA IF NOT EXISTS auth;
+-- Supabase Auth owns this schema, this table and this function, and owns them
+-- as a different role. So everything here is strictly "create it only if it is
+-- not already there" — never CREATE OR REPLACE, which on a managed project
+-- either fails for want of ownership or, worse, succeeds and quietly replaces
+-- Supabase's own definition with ours.
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'auth') THEN
+    EXECUTE 'CREATE SCHEMA auth';
+  END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS auth.users (
   id                 uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -18,12 +27,25 @@ CREATE TABLE IF NOT EXISTS auth.users (
   created_at         timestamptz NOT NULL DEFAULT now()
 );
 
--- Supabase exposes the caller's user id to Row Level Security through this
--- function. The API connects as the service role and enforces ownership in
--- code, so locally it only has to exist for the policies in 0001 to compile.
-CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid
-  LANGUAGE sql STABLE
-  AS $$ SELECT nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+-- Supabase exposes the caller's user id to Row Level Security through this.
+-- The API connects as the service role and enforces ownership in code, so
+-- locally it only has to exist for the policies in 0001 to compile.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+      FROM pg_proc p
+      JOIN pg_namespace n ON n.oid = p.pronamespace
+     WHERE n.nspname = 'auth' AND p.proname = 'uid'
+  ) THEN
+    EXECUTE $fn$
+      CREATE FUNCTION auth.uid() RETURNS uuid
+        LANGUAGE sql STABLE
+        AS 'SELECT nullif(current_setting(''request.jwt.claim.sub'', true), '''')::uuid'
+    $fn$;
+  END IF;
+END
+$$;
 
 -- pgvector is enabled on Supabase and is usually absent locally. Semantic
 -- memory retrieval degrades to lexical similarity without it, which the
