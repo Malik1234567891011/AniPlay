@@ -87,11 +87,24 @@ async function main(): Promise<void> {
 /**
  * The official worlds ship with the app rather than being authored in the
  * product, so the database is brought up to match the code rather than the
- * other way round. Upserted on the version id, and a published version is
- * immutable, so this only ever adds versions.
+ * other way round.
+ *
+ * The subtlety is that a published version is frozen by a trigger (§35.3:
+ * sessions pin the version they started on, so editing one rewrites history
+ * mid-run for everyone playing it). The seeder used to `DO UPDATE SET
+ * definition`, which the trigger rejects — and because that aborted the whole
+ * transaction on the first world whose definition had drifted, three finished
+ * worlds sat in the code for a day without ever reaching the catalog.
+ *
+ * So a drifted definition becomes what the schema was built for: the next
+ * version, as a new row. Runs in progress keep the version they pinned,
+ * everything new picks up the latest, and nothing is edited in place.
  */
 async function seedCatalog(client: Client): Promise<void> {
   console.log('\nSeeding the official catalog…');
+  let added = 0;
+  let revised = 0;
+
   for (const story of LAUNCH_CATALOG) {
     await client.query(
       `INSERT INTO stories (story_id, slug, creator_id, official, status)
@@ -99,20 +112,51 @@ async function seedCatalog(client: Client): Promise<void> {
        ON CONFLICT (story_id) DO UPDATE SET status = 'PUBLISHED', updated_at = now()`,
       [story.storyId, story.storyId.replace(/^story_/, '').replace(/_/g, '-')],
     );
+
+    // What the database already holds for this world, if anything.
+    const { rows: existing } = await client.query<{
+      story_version_id: string;
+      version: number;
+      definition: unknown;
+    }>(
+      `SELECT story_version_id, version, definition FROM story_versions
+       WHERE story_id = $1 ORDER BY version DESC LIMIT 1`,
+      [story.storyId],
+    );
+    const current = existing[0];
+
+    let versionId = story.id;
+    let version = story.version;
+
+    if (current) {
+      // Compare the way Postgres will: jsonb normalises key order, so a
+      // round-tripped definition is only "different" when it really is.
+      const { rows: diff } = await client.query<{ changed: boolean }>(
+        `SELECT ($1::jsonb IS DISTINCT FROM $2::jsonb) AS changed`,
+        [JSON.stringify(current.definition), JSON.stringify(story)],
+      );
+      if (!diff[0]?.changed) {
+        console.log(`  · ${story.title} (v${current.version}, unchanged)`);
+        continue;
+      }
+      version = current.version + 1;
+      versionId = `${story.id.replace(/_\d+$/, '')}_${version}`;
+      revised += 1;
+    } else {
+      added += 1;
+    }
+
     await client.query(
       `INSERT INTO story_versions (story_version_id, story_id, version, definition, title,
                                    fantasy_label, hook, intensity, content_descriptors,
                                    clarity_passed, published_at)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,true,COALESCE($10, now()))
-       ON CONFLICT (story_version_id) DO UPDATE SET definition = EXCLUDED.definition,
-                                                    title = EXCLUDED.title,
-                                                    fantasy_label = EXCLUDED.fantasy_label,
-                                                    hook = EXCLUDED.hook`,
+       ON CONFLICT (story_version_id) DO NOTHING`,
       [
-        story.id,
+        versionId,
         story.storyId,
-        story.version,
-        JSON.stringify(story),
+        version,
+        JSON.stringify({ ...story, id: versionId, version }),
         story.title,
         story.fantasyLabel,
         story.hook,
@@ -121,16 +165,17 @@ async function seedCatalog(client: Client): Promise<void> {
         story.publishedAt,
       ],
     );
-    await client.query(
-      `UPDATE stories SET published_version_id = $2 WHERE story_id = $1`,
-      [story.storyId, story.id],
-    );
-    await client.query(
-      `INSERT INTO story_signals (story_id) VALUES ($1) ON CONFLICT DO NOTHING`,
-      [story.storyId],
-    );
-    console.log(`  ✓ ${story.title}`);
+    await client.query(`UPDATE stories SET published_version_id = $2 WHERE story_id = $1`, [
+      story.storyId,
+      versionId,
+    ]);
+    await client.query(`INSERT INTO story_signals (story_id) VALUES ($1) ON CONFLICT DO NOTHING`, [
+      story.storyId,
+    ]);
+    console.log(`  ${current ? '↑' : '✓'} ${story.title} (v${version})`);
   }
+
+  console.log(`  ${added} new, ${revised} revised.`);
 }
 
 void main();

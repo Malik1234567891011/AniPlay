@@ -126,8 +126,13 @@ export class PostgresRepository implements Repository {
   // --- Catalog -------------------------------------------------------------
 
   async listStories(): Promise<StoryVersion[]> {
+    // One row per world: the newest version of each. Without DISTINCT ON this
+    // returned every version ever published, so the moment a world had a
+    // second version it appeared twice in Discover — the same cover, the same
+    // title, two cards.
     const { rows } = await this.#pool.query<{ definition: unknown }>(
-      `SELECT definition FROM story_versions ORDER BY story_id, version DESC`,
+      `SELECT DISTINCT ON (story_id) definition FROM story_versions
+       ORDER BY story_id, version DESC`,
     );
     return rows.map((row) => StoryVersion.parse(row.definition));
   }
