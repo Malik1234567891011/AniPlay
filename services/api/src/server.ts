@@ -485,6 +485,27 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   });
 
   /** Spec §11.8 — free, and refused when it contradicts authoritative state. */
+  /**
+   * WS-07 — pin a moment as canon you want kept.
+   *
+   * Not decoration: retrieval weights a pinned fact higher, so this is how a
+   * player says "whatever else the story forgets, it does not forget this".
+   * Free, because it changes nothing about the world — only what the world is
+   * most likely to remember about it.
+   */
+  app.post<{ Params: { sessionId: string; factId: string }; Body: { pinned?: boolean } }>(
+    '/v1/sessions/:sessionId/timeline/:factId/pin',
+    async (request, reply) => {
+      const loaded = await loadSession(request.params.sessionId, request, reply);
+      if (!loaded) return reply;
+
+      const pinned = request.body?.pinned ?? true;
+      const fact = await ctx.repo.setMemoryPinned(loaded.session.sessionId, request.params.factId, pinned);
+      if (!fact) return sendError(reply, 404, 'NOT_FOUND', 'That moment is not in this timeline.');
+      return { factId: fact.factId, pinned: fact.pinned };
+    },
+  );
+
   app.post<{ Params: { sessionId: string } }>('/v1/sessions/:sessionId/canon-corrections', async (request, reply) => {
     const loaded = await loadSession(request.params.sessionId, request, reply);
     if (!loaded) return reply;

@@ -1094,3 +1094,62 @@ describe('rephrasing a turn', () => {
     expect(await ctx.wallet.getBalance(GUEST)).toBe(before);
   });
 });
+
+/** WS-07 — the player decides what the story must not forget. */
+describe('pinning canon', () => {
+  it('pins a fact, and the pin survives a reload', async () => {
+    const { sessionId, revision } = await startSession();
+    // Violence is the kind of event the world is required to remember, so it is
+    // the reliable way to get canon on the board (§17.6).
+    await playTurn(sessionId, revision, 'I hit Kael.');
+
+    const timeline = await app.inject({
+      method: 'GET',
+      url: `/v1/sessions/${sessionId}/timeline`,
+      headers: auth,
+    });
+    const canon = timeline.json().entries.find((e: { group: string }) => e.group === 'CANON');
+    expect(canon, 'a played turn should have left some canon behind').toBeDefined();
+    expect(canon.pinned).toBe(false);
+
+    const pin = await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/timeline/${canon.id}/pin`,
+      headers: auth,
+      payload: { pinned: true },
+    });
+    expect(pin.statusCode).toBe(200);
+    expect(pin.json()).toEqual({ factId: canon.id, pinned: true });
+
+    const again = await app.inject({
+      method: 'GET',
+      url: `/v1/sessions/${sessionId}/timeline`,
+      headers: auth,
+    });
+    expect(again.json().entries.find((e: { id: string }) => e.id === canon.id).pinned).toBe(true);
+  });
+
+  it('will not pin a moment that is not in this timeline', async () => {
+    const { sessionId } = await startSession();
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/timeline/fact_not_real/pin`,
+      headers: auth,
+      payload: { pinned: true },
+    });
+    expect(response.statusCode).toBe(404);
+  });
+
+  it('will not let one account pin inside another account’s run', async () => {
+    const { sessionId, revision } = await startSession();
+    await playTurn(sessionId, revision, 'I look around.');
+    const facts = await ctx.repo.listMemories(sessionId);
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/timeline/${facts[0]?.factId ?? 'x'}/pin`,
+      headers: { authorization: 'Bearer guest_intruder' },
+      payload: { pinned: true },
+    });
+    expect(response.statusCode).toBe(404);
+  });
+});

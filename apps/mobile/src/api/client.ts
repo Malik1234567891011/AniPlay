@@ -447,6 +447,15 @@ export class ApiClient {
     );
   }
 
+  /** WS-07 — keep this moment. Pinned canon is weighted higher in retrieval. */
+  pinTimelineEntry(sessionId: string, factId: string, pinned: boolean) {
+    return this.#request<{ factId: string; pinned: boolean }>(
+      'POST',
+      `/v1/sessions/${sessionId}/timeline/${factId}/pin`,
+      { pinned },
+    );
+  }
+
   // --- Account and safety ---
 
   me(): Promise<MeResponse> {

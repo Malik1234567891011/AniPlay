@@ -419,11 +419,21 @@ export function ReportHistoryScreen({ navigation }: { navigation: RootNavigation
  * ship a stub that pretends otherwise, this states plainly what is coming and
  * points at what the schema already supports.
  */
-export function CreateScreen(): React.JSX.Element {
+/**
+ * CR-01 — what the world builder will be.
+ *
+ * Reached from the profile, not from a tab. It is not built, and a tab that
+ * only says "coming soon" spends a quarter of the navigation on something the
+ * player cannot do.
+ */
+export function CreateScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: colors.bg.base }}>
-      <Row style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.md }}>
-        <Txt variant="h1">Create</Txt>
+      <Row style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.md, justifyContent: 'space-between' }}>
+        <Txt variant="h1">Making worlds</Txt>
+        <IconButton label="Close" onPress={() => navigation.goBack()}>
+          <Txt variant="h3">✕</Txt>
+        </IconButton>
       </Row>
 
       <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl }}>

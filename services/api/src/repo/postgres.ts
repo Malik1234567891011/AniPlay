@@ -574,6 +574,14 @@ export class PostgresRepository implements Repository {
     });
   }
 
+  async setMemoryPinned(sessionId: string, factId: string, pinned: boolean): Promise<MemoryFact | null> {
+    const { rows } = await this.#pool.query<Record<string, unknown>>(
+      `UPDATE memory_facts SET pinned = $3 WHERE session_id = $1 AND fact_id = $2 RETURNING *`,
+      [sessionId, factId, pinned],
+    );
+    return rows[0] ? toMemoryFact(rows[0]) : null;
+  }
+
   // --- Wallet --------------------------------------------------------------
 
   async listLedger(accountId: string): Promise<LedgerEntry[]> {

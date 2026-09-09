@@ -26,7 +26,6 @@ import { CharactersScreen } from './screens/Characters.jsx';
 export type TabParamList = {
   Discover: undefined;
   Library: undefined;
-  Create: undefined;
   Profile: undefined;
 };
 
@@ -39,6 +38,7 @@ export type RootParamList = {
   WorldSheet: { sessionId: string; tab?: string };
   Wallet: { shortfall?: number } | undefined;
   SignIn: undefined;
+  Create: undefined;
   Report: { targetType: string; targetId: string };
   Characters: undefined;
   ReportHistory: undefined;
@@ -71,7 +71,6 @@ const navigationTheme = {
 const TAB_GLYPH: Record<keyof TabParamList, string> = {
   Discover: '◈',
   Library: '▤',
-  Create: '✎',
   Profile: '◉',
 };
 
@@ -101,7 +100,10 @@ function Tabs(): React.JSX.Element {
     >
       <Tab.Screen name="Discover" component={DiscoverScreen as never} />
       <Tab.Screen name="Library" component={LibraryScreen as never} />
-      <Tab.Screen name="Create" component={CreateScreen} />
+      {/* No Create tab at launch. The world builder is not built, and a tab
+          that only says "coming soon" is a quarter of the navigation spent on
+          something the player cannot do. What is coming is described from the
+          profile instead, where it reads as a note rather than a dead end. */}
       <Tab.Screen name="Profile" component={ProfileScreen as never} />
     </Tab.Navigator>
   );
@@ -143,6 +145,7 @@ export function Navigation(): React.JSX.Element {
           <Stack.Screen name="WorldSheet" component={WorldSheetScreen as never} />
           <Stack.Screen name="Wallet" component={WalletScreen as never} />
           <Stack.Screen name="SignIn" component={SignInScreen as never} />
+          <Stack.Screen name="Create" component={CreateScreen as never} />
           <Stack.Screen name="Report" component={ReportScreen as never} />
           <Stack.Screen name="ReportHistory" component={ReportHistoryScreen as never} />
           <Stack.Screen name="Characters" component={CharactersScreen as never} />

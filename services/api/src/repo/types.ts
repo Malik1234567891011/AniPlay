@@ -164,6 +164,13 @@ export interface Repository {
   listMemories(sessionId: string): Promise<MemoryFact[]>;
   appendMemories(sessionId: string, facts: readonly MemoryFact[]): Promise<void>;
   replaceMemories(sessionId: string, facts: readonly MemoryFact[]): Promise<void>;
+  /**
+   * WS-07 — the player pins a fact as canon they want kept.
+   *
+   * Not cosmetic: retrieval boosts a pinned fact, so pinning is how a player
+   * says "this is the thing about my story that must not get lost".
+   */
+  setMemoryPinned(sessionId: string, factId: string, pinned: boolean): Promise<MemoryFact | null>;
 
   // --- Wallet ---
   listLedger(accountId: string): Promise<LedgerEntry[]>;

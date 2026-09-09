@@ -559,6 +559,8 @@ function Timeline({
   const [correcting, setCorrecting] = useState<string | null>(null);
   const [correction, setCorrection] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // WS-07 — which entry is mid-pin, so the row cannot be double-tapped.
+  const [pinning, setPinning] = useState<string | null>(null);
 
   const submitCorrection = (factId: string): void => {
     const text = correction.trim();
@@ -609,7 +611,48 @@ function Timeline({
             </Row>
             <Txt variant="bodyCompact">{entry.text}</Txt>
             <Row gap={spacing.md} style={{ marginTop: spacing.xs, flexWrap: 'wrap' }}>
-              {entry.pinned ? <Chip label="Pinned canon" tone="accent" /> : null}
+              {/* WS-07 — pinning is how a player says which moments the story
+                  must not lose. Retrieval weights them higher, so it changes
+                  what gets remembered rather than only how it is labelled. */}
+              {entry.correctable ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: entry.pinned }}
+                  accessibilityLabel={
+                    entry.pinned ? `Unpin: ${entry.text}` : `Keep this moment: ${entry.text}`
+                  }
+                  disabled={pinning === entry.id}
+                  onPress={() => {
+                    setNotice(null);
+                    setPinning(entry.id);
+                    void api
+                      .pinTimelineEntry(sessionId, entry.id, !entry.pinned)
+                      .then((result) => {
+                        onRefresh(
+                          entries.map((e) =>
+                            e.id === entry.id ? { ...e, pinned: result.pinned } : e,
+                          ),
+                        );
+                        setNotice(
+                          result.pinned
+                            ? 'Pinned. The story will keep coming back to this.'
+                            : 'Unpinned.',
+                        );
+                      })
+                      .catch(() => setNotice('That could not be pinned just now.'))
+                      .finally(() => setPinning(null));
+                  }}
+                >
+                  <Txt
+                    variant="caption"
+                    color={entry.pinned ? colors.accent.primary : colors.text.secondary}
+                  >
+                    {entry.pinned ? '★ Pinned canon' : '☆ Keep this'}
+                  </Txt>
+                </Pressable>
+              ) : entry.pinned ? (
+                <Chip label="Pinned canon" tone="accent" />
+              ) : null}
               {/* WS-08 — the engine's own decisions are not opinions, so only
                   generated canon carries this. It is free: a contradiction the
                   system produced is not something to charge for. */}

@@ -378,6 +378,7 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
         <Stack gap={spacing.md}>
           <Txt variant="h3">Privacy & safety</Txt>
           <LinkRow label="Report history" onPress={() => navigation.navigate('ReportHistory')} />
+          <LinkRow label="Making your own worlds" onPress={() => navigation.navigate('Create')} />
           <LinkRow label="Wallet & purchases" onPress={() => navigation.navigate('Wallet')} />
         </Stack>
 

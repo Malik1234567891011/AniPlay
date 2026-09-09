@@ -287,6 +287,15 @@ export class MemoryRepository implements Repository {
     this.#memories.set(sessionId, [...facts]);
   }
 
+  async setMemoryPinned(sessionId: string, factId: string, pinned: boolean): Promise<MemoryFact | null> {
+    const list = this.#memories.get(sessionId) ?? [];
+    const index = list.findIndex((fact) => fact.factId === factId);
+    if (index === -1) return null;
+    const updated = { ...list[index]!, pinned };
+    this.#memories.set(sessionId, list.map((fact, i) => (i === index ? updated : fact)));
+    return updated;
+  }
+
   // --- Wallet ---
 
   async listLedger(accountId: string): Promise<LedgerEntry[]> {

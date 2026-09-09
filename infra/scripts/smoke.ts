@@ -64,7 +64,7 @@ function probesFor(story: StoryVersion): Probe[] {
     story.locations.find((l) => l.id !== story.rules.startingLocationId)?.name ?? 'somewhere else';
   // One character off by a letter, the way a player actually types.
   const misspelled = firstName.length > 3 ? `${firstName.slice(0, -1)}${firstName.slice(-1)}e` : firstName;
-  const violent = story.rules.combatEnabled;
+  const violent = story.rules.allowsCombat;
 
   return [
     { text: 'I look around and take it in.', intent: 'looking' },
