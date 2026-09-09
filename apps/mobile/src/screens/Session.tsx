@@ -1053,9 +1053,22 @@ function QualitySheet({
                           </Txt>
                         ) : null}
                       </Stack>
-                      <Txt variant="bodyStrong" color={affordable ? colors.text.primary : colors.semantic.warning}>
-                        {tier.costCredits}
-                      </Txt>
+                      {/*
+                        A credit number is a price, not an answer to "what am I
+                        choosing". What a player actually wants to know is how
+                        far their balance goes at this tier — the same question
+                        every one of these cards is really being asked.
+                      */}
+                      <Stack gap={2} style={{ alignItems: 'flex-end' }}>
+                        <Txt variant="bodyStrong" color={affordable ? colors.text.primary : colors.semantic.warning}>
+                          {tier.costCredits}
+                        </Txt>
+                        <Txt variant="micro" color={colors.text.muted}>
+                          {affordable
+                            ? `${Math.floor(balance / tier.costCredits)} turns left`
+                            : 'not enough'}
+                        </Txt>
+                      </Stack>
                     </Row>
                   </Card>
                 </Pressable>

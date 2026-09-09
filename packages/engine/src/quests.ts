@@ -280,6 +280,15 @@ export function rewardMutationsFor(
         payload: { itemId: item.itemId, quantity: item.qty },
       });
     }
+    for (const gain of step.rewards.reputation) {
+      mutations.push({
+        mutationId: nextMutationId(),
+        type: 'FACTION_DELTA',
+        subjectId: gain.factionId,
+        reasonCode: `QUEST_REWARD:${transition.questId}`,
+        payload: { amount: gain.amount },
+      });
+    }
     for (const abilityId of step.rewards.abilities) {
       mutations.push({
         mutationId: nextMutationId(),

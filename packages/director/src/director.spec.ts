@@ -1202,6 +1202,61 @@ describe('every authored gate can actually be reached', () => {
     }
   });
 
+  it('never gates on standing nothing can earn', () => {
+    // Institutional reputation only ever fell — public violence, and an NPC
+    // calling for help. A gate above its own starting value was a door with no
+    // key, and every faction gate in the catalog was one.
+    for (const world of LAUNCH_CATALOG) {
+      // The best any single run could reach: the faction's own floor, plus the
+      // most generous archetype's standing, plus every step reward. A gate
+      // above that is a door with no key for anybody.
+      const ceiling = new Map(world.factions.map((f) => [f.id, f.startingReputation]));
+      for (const archetype of world.archetypes) {
+        for (const entry of archetype.startingReputation) {
+          const floor = world.factions.find((f) => f.id === entry.factionId)?.startingReputation ?? 0;
+          ceiling.set(entry.factionId, Math.max(ceiling.get(entry.factionId) ?? 0, floor + entry.amount));
+        }
+      }
+      for (const quest of world.quests) {
+        for (const step of quest.steps) {
+          for (const gain of step.rewards.reputation) {
+            ceiling.set(gain.factionId, (ceiling.get(gain.factionId) ?? 0) + Math.max(0, gain.amount));
+          }
+        }
+      }
+
+      const unreachable: string[] = [];
+      const check = (
+        gates: readonly { factionId: string; value: number }[],
+        where: string,
+      ): void => {
+        for (const gate of gates) {
+          if ((ceiling.get(gate.factionId) ?? 0) >= gate.value) continue;
+          unreachable.push(
+            `${gate.factionId} needs ${gate.value}, nothing gets it past ${ceiling.get(gate.factionId) ?? 0} (${where})`,
+          );
+        }
+      };
+
+      for (const quest of world.quests) {
+        for (const step of quest.steps) {
+          if (step.enterWhen) check(step.enterWhen.minFactionReputation, `${quest.id}/${step.id}.enterWhen`);
+          if (step.succeedWhen) {
+            check(step.succeedWhen.minFactionReputation, `${quest.id}/${step.id}.succeedWhen`);
+          }
+          for (const route of step.succeedWhenAny) {
+            check(route.predicate.minFactionReputation, `${quest.id}/${step.id}/${route.routeId}`);
+          }
+        }
+      }
+
+      expect(
+        unreachable,
+        `${world.title} gates on standing nothing can earn:\n  ${unreachable.join('\n  ')}`,
+      ).toEqual([]);
+    }
+  });
+
   it('never gates on an event nothing completes', () => {
     for (const world of LAUNCH_CATALOG) {
       const producible = producibleEvents(world);

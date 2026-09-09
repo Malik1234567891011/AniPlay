@@ -387,6 +387,19 @@ export const QuestStepDef = z
         items: z.array(z.object({ itemId: z.string(), qty: z.number().int() }).strict()).default([]),
         flags: z.array(z.string()).default([]),
         /**
+         * Standing gained with a faction for finishing this step.
+         *
+         * The point of the field is that institutional reputation could only
+         * ever go *down*: the engine drops it for public violence and for an
+         * NPC calling for help, and nothing raised it. Every faction gate in
+         * the catalog sat above its own starting value, so all of them were
+         * unreachable — including the five that were meant to be the whole
+         * point of choosing a class.
+         */
+        reputation: z
+          .array(z.object({ factionId: z.string(), amount: z.number().int() }).strict())
+          .default([]),
+        /**
          * Abilities taught by finishing this step.
          *
          * The point of the field is that a build is not settled at character
@@ -397,7 +410,7 @@ export const QuestStepDef = z
         abilities: z.array(z.string()).default([]),
       })
       .strict()
-      .default({ xp: 0, items: [], flags: [], abilities: [] }),
+      .default({ xp: 0, items: [], flags: [], abilities: [], reputation: [] }),
   })
   .strict();
 export type QuestStepDef = z.infer<typeof QuestStepDef>;
@@ -470,6 +483,17 @@ export const ArchetypeDef = z
     skillProficiencies: z.record(z.string(), z.number().int().min(0).max(5)).default({}),
     startingItems: z.array(z.object({ itemId: z.string(), qty: z.number().int() }).strict()).default([]),
     startingAbilities: z.array(z.string()).default([]),
+    /**
+     * Standing this choice confers on its own.
+     *
+     * In a world where the class *is* an order, being a Healer means the
+     * Stillhand already counts you as one of theirs. Without this, faction
+     * reputation started at zero for everyone and could only ever fall, so
+     * every door the class was supposed to open was locked to everybody.
+     */
+    startingReputation: z
+      .array(z.object({ factionId: z.string(), amount: z.number().int() }).strict())
+      .default([]),
   })
   .strict();
 export type ArchetypeDef = z.infer<typeof ArchetypeDef>;

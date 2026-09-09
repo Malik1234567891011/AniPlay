@@ -853,7 +853,21 @@ const raw = {
           directorNotes:
             'Odalys is testing whether the player can take a correction. Arguing is survivable; sulking is not.',
           succeedWhen: { flagsSet: ['spoke:odalys'], atLocation: 'muster_yard' },
-          rewards: { xp: 30, items: [{ itemId: 'field_kit', qty: 2 }], flags: ['drill_passed', 'known_to_odalys'] },
+          rewards: {
+            xp: 30,
+            items: [{ itemId: 'field_kit', qty: 2 }],
+            flags: ['drill_passed', 'known_to_odalys'],
+            // Getting through the first drill is when your own order stops
+            // treating you as a name on a roll. Enough, with the standing the
+            // class already carries, to reach the doors it is supposed to open.
+            reputation: [
+              { factionId: 'faction_iron_march', amount: 6 },
+              { factionId: 'faction_silent_rank', amount: 6 },
+              { factionId: 'faction_longwatch', amount: 6 },
+              { factionId: 'faction_bright_hall', amount: 6 },
+              { factionId: 'faction_stillhand', amount: 6 },
+            ],
+          },
         },
         {
           id: 'step_earn_a_place',
@@ -985,7 +999,14 @@ const raw = {
             flagsSet: ['spoke:bec'],
             minRelationship: [{ characterId: 'bec', dimension: 'trust', value: 28 }],
           },
-          rewards: { xp: 40, items: [], flags: ['bec_told_privately'] },
+          rewards: {
+            xp: 40,
+            items: [],
+            flags: ['bec_told_privately'],
+            // Getting a Longwatch archer to say it to you and not to an officer
+            // is how the bows come to think you are worth talking to.
+            reputation: [{ factionId: 'faction_longwatch', amount: 8 }],
+          },
         },
         {
           id: 'step_get_signature',
@@ -1195,6 +1216,7 @@ const raw = {
       skillProficiencies: { warfare: 3, blades: 2, riding: 2, endurance: 1 },
       startingItems: [{ itemId: 'field_kit', qty: 1 }],
       startingAbilities: ['break_charge', 'call_the_mount'],
+      startingReputation: [{ factionId: 'faction_iron_march', amount: 20 }],
     },
     {
       id: 'arch_rogue',
@@ -1208,6 +1230,7 @@ const raw = {
       skillProficiencies: { blades: 2, stealth: 3, beastlore: 2, insight: 1 },
       startingItems: [{ itemId: 'field_kit', qty: 1 }],
       startingAbilities: ['open_the_seam', 'send_the_bond'],
+      startingReputation: [{ factionId: 'faction_silent_rank', amount: 20 }],
     },
     {
       id: 'arch_archer',
@@ -1221,6 +1244,7 @@ const raw = {
       skillProficiencies: { archery: 3, insight: 2, endurance: 1, command: 1 },
       startingItems: [{ itemId: 'field_kit', qty: 1 }],
       startingAbilities: ['held_shot', 'mark_it'],
+      startingReputation: [{ factionId: 'faction_longwatch', amount: 20 }],
     },
     {
       id: 'arch_sorcerer',
@@ -1234,6 +1258,7 @@ const raw = {
       skillProficiencies: { sorcery: 3, insight: 2, endurance: 1 },
       startingItems: [{ itemId: 'ward_salt', qty: 2 }],
       startingAbilities: ['first_element', 'hold_open'],
+      startingReputation: [{ factionId: 'faction_bright_hall', amount: 20 }],
     },
     {
       id: 'arch_healer',
@@ -1247,6 +1272,7 @@ const raw = {
       skillProficiencies: { mending: 3, insight: 2, endurance: 1, command: 1 },
       startingItems: [{ itemId: 'ward_salt', qty: 2 }, { itemId: 'field_kit', qty: 1 }],
       startingAbilities: ['thread', 'the_cut'],
+      startingReputation: [{ factionId: 'faction_stillhand', amount: 20 }],
     },
   ],
   setupFields: [

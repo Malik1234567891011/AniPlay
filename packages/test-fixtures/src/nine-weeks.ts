@@ -763,6 +763,10 @@ const raw = {
             afterWorldMinute: 17 * 60,
           },
           rewards: {
+            // Being good on the floor is how this place decides what it
+            // thinks of you, and it is the only currency here that is not
+            // somebody's feelings.
+            reputation: [{ factionId: 'faction_house', amount: 12 }],
             xp: 30,
             items: [{ itemId: 'shift_swap', qty: 1 }],
             flags: ['first_service_done', 'on_the_rota'],
@@ -780,7 +784,12 @@ const raw = {
             afterWorldMinute: 28 * 24 * 60,
             minFactionReputation: [{ factionId: 'faction_house', value: 15 }],
           },
-          rewards: { xp: 60, items: [], flags: ['week_five_reached'] },
+          rewards: {
+            xp: 60,
+            items: [],
+            flags: ['week_five_reached'],
+            reputation: [{ factionId: 'faction_house', amount: 15 }],
+          },
         },
       ],
     },

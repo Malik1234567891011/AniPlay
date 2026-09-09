@@ -111,10 +111,13 @@ export function createInitialState({ sessionId, story, identity }: CreateStateOp
     startedAtWorldMinute: q.startsActive ? story.rules.startWorldMinute : null,
   }));
 
+  const archetypeStanding = new Map(
+    (archetype?.startingReputation ?? []).map((entry) => [entry.factionId, entry.amount]),
+  );
   const factions: FactionState[] = story.factions.map((f) => ({
     factionId: f.id,
-    reputation: f.startingReputation,
-    rankLabel: rankLabelFor(f.ranks, f.startingReputation),
+    reputation: f.startingReputation + (archetypeStanding.get(f.id) ?? 0),
+    rankLabel: rankLabelFor(f.ranks, f.startingReputation + (archetypeStanding.get(f.id) ?? 0)),
   }));
 
   const discoveredLocationIds = [

@@ -979,6 +979,10 @@ const raw = {
             xp: 30,
             items: [{ itemId: 'wrapped_blade', qty: 1 }],
             flags: [],
+            // A guest with a slip who works a shift is a guest who has worked a
+            // shift. It is not much, and it is the first thing the Kiln has
+            // written down about the player that is not the slip.
+            reputation: [{ factionId: 'faction_kiln', amount: 30 }],
           },
         },
         {
