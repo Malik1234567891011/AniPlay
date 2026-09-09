@@ -379,11 +379,24 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
   }
 
   // 2. An ability that is unlocked, affordable, and off cooldown.
-  for (const opportunity of opportunities) {
-    if (!opportunity.startsWith('use_ability:')) continue;
-    const ability = story.abilities.find((a) => a.id === opportunity.slice('use_ability:'.length));
-    if (!ability) continue;
+  //
+  // Three things were wrong with how this read. It always offered the *first*
+  // eligible ability, so the same suggestion appeared verbatim turn after turn.
+  // It aimed at `presentCharacters[0]`, which in a gym meant offering to drive
+  // to the basket at the head coach. And it rendered as "Use Get Downhill —
+  // put your shoulder past theirs and get to the rim before the help arrives",
+  // which is a glossary entry with a verb bolted on.
+  const eligibleAbilities = opportunities
+    .filter((o) => o.startsWith('use_ability:'))
+    .map((o) => story.abilities.find((a) => a.id === o.slice('use_ability:'.length)))
+    .filter((a): a is NonNullable<typeof a> => !!a);
 
+  // Rotate deterministically. A player who tried a drive last turn should be
+  // shown something else this turn, and the same state must always produce the
+  // same suggestion.
+  const ability = eligibleAbilities[state.turnIndex % Math.max(1, eligibleAbilities.length)];
+
+  if (ability) {
     const costLabel =
       ability.costs.length > 0
         ? ability.costs
@@ -399,19 +412,26 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
         )
       : 'SAFE';
 
-    // Name the target. "Ember Palm — heat carried in the hand" is a glossary
-    // entry; "Use Ember Palm on Tam" is a thing the player is about to do.
-    const target =
-      ability.targetRule === 'SELF' || ability.targetRule === 'NONE' ? null : context.presentCharacters[0];
-    const opener = target ? `Use ${ability.name} on ${target.def.name.split(/\s+/)[0]}` : `Use ${ability.name}`;
+    // Whoever this plausibly lands on: someone the player is already in it
+    // with, then someone who has a reason to be opposite them, and only then
+    // whoever happens to be standing here.
+    const needsTarget = ability.targetRule !== 'SELF' && ability.targetRule !== 'NONE';
+    const target = needsTarget ? preferredTarget(context) : null;
+
+    // Affordances are already written as things a player would say — that is
+    // what they are for — so the suggestion uses the player's words rather
+    // than the system's name for the move.
+    const phrase = ability.affordances[0] ?? lowerFirst(ability.name);
+    const text = target
+      ? `${capitalize(phrase)} — ${target.def.name.split(/\s+/)[0]}`
+      : capitalize(phrase);
 
     push({
-      text: `${opener} — ${lowerFirst(ability.description.replace(/\.$/, ''))}.`.slice(0, 180),
+      text: text.slice(0, 180),
       intentHint: `use_ability:${ability.id}`,
       risk,
       resourceCostLabel: costLabel,
     });
-    break;
   }
 
   // 3. Somewhere to go that the objective points at.
@@ -742,4 +762,31 @@ function buildArcUpdates(context: TurnContext): Array<Record<string, unknown>> {
   }
 
   return updates;
+}
+
+/**
+ * Who an offensive or contested action should be aimed at.
+ *
+ * Not simply the first person in the room. A suggestion that offers to drive
+ * past the head coach, or to threaten the person who just helped you, reads as
+ * the game not knowing what is going on — so this prefers whoever the player
+ * is actually in it with.
+ */
+function preferredTarget(context: TurnContext): TurnContext['presentCharacters'][number] | null {
+  const present = context.presentCharacters;
+  if (present.length === 0) return null;
+
+  const engaged = present.find((c) => context.state.flags[`engaged:${c.def.id}`]);
+  if (engaged) return engaged;
+
+  const rival = [...present]
+    .filter((c) => c.relationship.rivalry > 0)
+    .sort((a, b) => b.relationship.rivalry - a.relationship.rivalry)[0];
+  if (rival) return rival;
+
+  return present[0] ?? null;
+}
+
+function capitalize(value: string): string {
+  return value.length === 0 ? value : value[0]!.toUpperCase() + value.slice(1);
 }
