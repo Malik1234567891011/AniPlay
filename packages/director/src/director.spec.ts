@@ -2187,3 +2187,27 @@ describe('what the writer is told about who is on stage', () => {
     expect(sent.toLowerCase()).toMatch(/attacked/);
   });
 });
+
+/** Naming a thing that is not here gets you told so, not handed something else. */
+describe('taking what you named', () => {
+  const steal = (text: string, locationId: string) => {
+    const state = { ...baseState(), player: { ...baseState().player, locationId } };
+    const intent = parse(text, state);
+    return resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 'take' });
+  };
+
+  it('refuses a named item this room does not contain', () => {
+    // The gate arch has chalk. It does not have the stack key.
+    const resolution = steal('I steal the stack key.', 'gate_arch');
+    expect(resolution.checks).toHaveLength(0);
+    expect(resolution.mutations.filter((m) => m.type === 'ITEM_ADD')).toHaveLength(0);
+    expect(resolution.observableFacts.join(' ')).toMatch(/not here/i);
+    // And says what is, so the refusal is useful.
+    expect(resolution.observableFacts.join(' ')).toMatch(/chalk/i);
+  });
+
+  it('still answers "the most valuable thing in reach"', () => {
+    const resolution = steal('I take the most valuable thing in reach.', 'gate_arch');
+    expect(resolution.checks).toHaveLength(1);
+  });
+});

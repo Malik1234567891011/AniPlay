@@ -1111,13 +1111,44 @@ function resolveSteal(args: ResolveActionArgs): ActionOutcome {
   // players type and the room already knows what that is.
   const namedItemId = action.targets.find((target) => target.entityType === 'item')?.entityId;
   const spoken = `${action.method} ${action.declaredOutcome ?? ''}`.toLowerCase();
+  const labelsFor = (entry: { itemId: string; aka: string[] }): string[] =>
+    [story.items.find((i) => i.id === entry.itemId)?.name ?? '', ...entry.aka].filter(Boolean);
+
+  // Somebody who names a thing that is not here has to be told that, not handed
+  // whatever was nearest. "I steal the ward salt" taking the field kit is the
+  // same bug as a named stranger being redirected at whoever was standing by.
+  // Named by its own name, or by any of the words a location uses for it —
+  // "the key", "the ledger" — because that is how people refer to things they
+  // have only heard about.
+  const everyLabel = story.locations.flatMap((location) =>
+    location.takeableItems.flatMap((entry) => labelsFor(entry)),
+  );
+  const namedSomething =
+    Boolean(namedItemId) ||
+    [...story.items.map((item) => item.name), ...everyLabel].some(
+      (label) => label.length > 3 && spoken.includes(label.toLowerCase()),
+    );
+  const matchesWhatTheyNamed = (entry: { itemId: string; aka: string[] }): boolean =>
+    entry.itemId === namedItemId || labelsFor(entry).some((label) => spoken.includes(label.toLowerCase()));
+
+  if (namedSomething && !available.some(matchesWhatTheyNamed)) {
+    const here = available
+      .map((entry) => story.items.find((i) => i.id === entry.itemId)?.name)
+      .filter((name): name is string => !!name);
+    return refusal(
+      action,
+      'NOT_HERE',
+      here.length > 0
+        ? `That is not here. ${formatList(here)} ${here.length === 1 ? 'is' : 'are'}.`
+        : 'That is not here.',
+      'The player named something this place does not contain. Narrate them looking for it and not ' +
+        'finding it, and name what is actually within reach. Do not let them take anything else instead.',
+    );
+  }
+
   const chosen =
     available.find((entry) => entry.itemId === namedItemId) ??
-    available.find((entry) =>
-      [story.items.find((i) => i.id === entry.itemId)?.name ?? '', ...entry.aka]
-        .filter(Boolean)
-        .some((label) => spoken.includes(label.toLowerCase())),
-    ) ??
+    available.find(matchesWhatTheyNamed) ??
     // "The most valuable thing in reach" — a quest item outranks a trinket,
     // and the author's own ordering decides the rest.
     [...available].sort(

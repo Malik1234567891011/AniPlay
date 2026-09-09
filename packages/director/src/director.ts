@@ -325,7 +325,9 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
   const strained = resolution.mutations.find(
     (mutation) =>
       mutation.type === 'RELATIONSHIP_DELTA' &&
-      String(mutation.reasonCode).startsWith('SOCIAL:') &&
+      // Trust and affection specifically: fear going up after a theft is the
+      // same event as trust going down, and one chip should not fire twice.
+      ['trust', 'affection'].includes(String((mutation.payload as { dimension?: string }).dimension)) &&
       Number((mutation.payload as { amount?: number }).amount ?? 0) < 0 &&
       context.presentCharacters.some((c) => c.def.id === mutation.subjectId),
   );
