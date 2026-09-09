@@ -1037,6 +1037,36 @@ describe('player agency and action resolution', () => {
     expect(found).toBe(true);
   });
 
+  it('refuses a declaration that is a campaign, not an action', async () => {
+    const result = await runTurn({
+      story: STORY, state: baseState(), memories: [], recentTurns: [],
+      actionText: 'I burn down the academy.',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-scope',
+    });
+
+    // A lucky roll must never destroy the setting.
+    expect(result.resolution.normalizedActions[0]).toMatchObject({
+      status: 'REJECTED',
+      reason: 'OUT_OF_SCOPE',
+    });
+    expect(result.resolution.checks).toHaveLength(0);
+    expect(result.resolution.mutations).toHaveLength(0);
+    expect(result.resolution.timeAdvancedMinutes).toBe(0);
+  });
+
+  it('catches an NPC decision even when a clause sits before the verb', async () => {
+    const result = await runTurn({
+      story: STORY, state: baseState(), memories: [], recentTurns: [],
+      actionText: 'Kael steps aside and lets me through.',
+      qualityTier: 'VIVID', turnId: 't1', seed: 'agency-authoring-2',
+    });
+
+    // Reinterpreted as persuasion, and Kael still decides.
+    expect(result.intent.actions[0]?.verb).toBe('persuade');
+    expect(result.intent.unsafeOrMetaRequests).toContain('world_authoring_request');
+    expect(result.state.player.locationId).toBe(baseState().player.locationId);
+  });
+
   it('CASE 7: a narration failure never re-rolls the resolved action', async () => {
     const state = baseState();
     const seed = 'idempotent-narration';

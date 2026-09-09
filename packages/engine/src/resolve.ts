@@ -150,6 +150,32 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   const economy = newTurnEconomy();
   const deferred: string[] = [];
 
+  // A declaration the player cannot settle in one action is refused as stated,
+  // before any dice are rolled. Otherwise a lucky roll burns down the setting.
+  if (intent.unsafeOrMetaRequests?.includes('out_of_scope')) {
+    return {
+      schemaVersion: '1.0',
+      turnId,
+      valid: true,
+      invalidReason: null,
+      normalizedActions: [{ verb: intent.actions[0]?.verb ?? 'custom', status: 'REJECTED', reason: 'OUT_OF_SCOPE' }],
+      checks: [],
+      mutations: [],
+      observableFacts: ['That is not something you can do in one move.'],
+      privateFacts: [
+        {
+          visibility: 'SELF',
+          fact:
+            'The player declared an outcome that would take a plan, not an action. Narrate them realising the ' +
+            'scale of it and what the first real step would have to be. Do not let any part of it happen.',
+        },
+      ],
+      timeAdvancedMinutes: 0,
+      newOpportunities: buildOpportunities(state, story),
+      rngSeedHash: rng.seedHash,
+    };
+  }
+
   for (const action of intent.actions) {
     const weight = VERB_WEIGHT[action.verb] ?? 'MAJOR';
 

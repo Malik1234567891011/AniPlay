@@ -8,7 +8,7 @@ import type {
   Visibility,
 } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
-import { detectWorldAuthoring, resolveCharacterMention } from './entity-resolution.js';
+import { detectOutOfScope, detectWorldAuthoring, resolveCharacterMention } from './entity-resolution.js';
 
 /**
  * Spec §17.1 step 5 — freeform text becomes a structured `ActionIntent`.
@@ -89,6 +89,11 @@ export class RuleBasedIntentParser implements IntentParser {
     const raw = text.trim().slice(0, 4000);
 
     const unsafeOrMetaRequests = META_PATTERNS.filter((m) => m.pattern.test(raw)).map((m) => m.label);
+
+    // A goal stated as though it were a single action. Marked here so the
+    // engine refuses to settle a campaign with one die roll.
+    const scope = detectOutOfScope(raw);
+    if (scope.detected) unsafeOrMetaRequests.push('out_of_scope');
 
     // Spec §3.2 — the player may attempt anything and author nothing. A sentence
     // that decides an NPC's behaviour is converted into the action the player

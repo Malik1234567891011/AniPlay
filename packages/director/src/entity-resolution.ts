@@ -133,7 +133,7 @@ export interface WorldAuthoringVerdict {
 
 /** "Mira gives me the key", "the guard opens the door", "Kael agrees". */
 const NPC_DECISION =
-  /\b([A-Z][a-z]+|the \w+)\s+(gives?|hands?|offers?|grants?|tells?|agrees?|admits?|confesses?|allows?|lets?|opens?|reveals?|surrenders?|obeys?|decides?|falls in love|forgives?)\b/;
+  /\b([A-Z][a-z]+|the \w+)\b[^.]{0,30}?\s(gives?|hands?|offers?|grants?|tells?|agrees?|admits?|confesses?|allows?|lets?|opens?|reveals?|surrenders?|obeys?|decides?|steps aside|backs down|stands aside|walks away|nods|relents?|falls in love|forgives?)\b/;
 
 /** "she falls in love with me", "he becomes my ally", "they trust me now". */
 const NPC_STATE_CLAIM =
@@ -142,6 +142,22 @@ const NPC_STATE_CLAIM =
 /** "the king gives me his kingdom", "I own the archive now". */
 const WORLD_FACT_CLAIM =
   /\b(?:i|we)\s+(?:now\s+)?(?:own|control|rule|command|have always|already have|am the)\b/i;
+
+/**
+ * A declaration that is a campaign rather than an action.
+ *
+ * "I burn down the academy" is not one atomic attempt the dice can settle; it
+ * is an outcome that would take a plan, and resolving it with a single check
+ * means a lucky roll destroys the setting. These are refused as stated and
+ * pushed back to the player as something they can actually start doing.
+ */
+const OUT_OF_SCOPE =
+  /\b(?:burn down|destroy|level|raze|blow up|take over|conquer|overthrow|abolish|dismantle|wipe out|massacre|kill everyone|kill them all|kill all)\b/i;
+
+export function detectOutOfScope(text: string): { detected: boolean; claim: string | null } {
+  const match = text.match(OUT_OF_SCOPE);
+  return { detected: !!match, claim: match?.[0] ?? null };
+}
 
 export function detectWorldAuthoring(
   text: string,
