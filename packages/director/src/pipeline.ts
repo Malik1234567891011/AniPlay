@@ -18,6 +18,8 @@ import { RuleBasedDirector, type Director } from './director.js';
 import { TemplateWriter, type Writer } from './writer.js';
 import { repairNarrative, validateNarrative } from './validator.js';
 import { materializeProposals } from './memory.js';
+import { classifyClaim, directorNoteFor, proposalFor } from './player-canon.js';
+import { detectOutOfScope } from './entity-resolution.js';
 
 /**
  * Spec §17.1 — the turn pipeline, steps 4 through 12.
@@ -83,7 +85,8 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
 
   // Step 5 — intent parsing.
   clock.start('parse');
-  const intent = await deps.parser.parse(actionText, { story, state, intentId: `int_${turnId}` });
+  const parsed = await deps.parser.parse(actionText, { story, state, intentId: `int_${turnId}` });
+  const intent = annotateScope(parsed, actionText);
   clock.end('parse');
 
   // Step 7 — the deterministic engine. This is where outcomes are decided.
@@ -110,6 +113,16 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     playerDialogue: intent.dialogue,
   });
   clock.end('context');
+
+  // Spec §3.3 — before the director plans anything, work out whether the player
+  // just authored something rather than attempted it. A declarative sentence
+  // about themselves or their past is theirs to state; the world adapts to it
+  // instead of rolling a die against it.
+  const canon = classifyClaim(actionText, { story, state, turnIndex: state.turnIndex });
+  const canonNote = directorNoteFor(canon, story);
+  if (canonNote) {
+    context.resolution.privateFacts.push({ visibility: 'SELF', fact: canonNote });
+  }
 
   // Step 8 — the director plans presentation. It cannot change the resolution.
   clock.start('director');
@@ -144,7 +157,14 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     turnId,
     now: options.now,
   });
-  const newMemories = materializeProposals(plan.memoryProposals, commit.state, turnId, story);
+  // An established claim is written down before anything the model proposed,
+  // so it cannot be crowded out, and it is pinned so ordinary retrieval never
+  // ranks it away. This is the difference between the world adapting to the
+  // player and the world humouring them for one paragraph.
+  const canonProposal = proposalFor(canon, state.turnIndex);
+  const proposals = canonProposal ? [canonProposal, ...plan.memoryProposals] : plan.memoryProposals;
+  const newMemories = materializeProposals(proposals, commit.state, turnId, story);
+  if (canonProposal && newMemories[0]) newMemories[0] = { ...newMemories[0], pinned: true };
   clock.end('commit');
 
   return {
@@ -297,4 +317,24 @@ export async function rephraseNarration(options: RephraseOptions): Promise<Rephr
   }
 
   return { narrative, report, repaired };
+}
+
+
+/**
+ * Marks a campaign-sized declaration, whichever parser produced the intent.
+ *
+ * This used to live inside `RuleBasedIntentParser`, which in production is only
+ * the fallback — the model parser was what actually ran, and it never set
+ * `out_of_scope` at all. So the engine branch that reads the flag was
+ * effectively dead outside tests, in both directions: the guard against a
+ * single die settling a campaign never fired in production, and neither would
+ * the undertaking that replaced it.
+ *
+ * It belongs here rather than in either parser: it is a property of the
+ * sentence the player wrote, not of how that sentence was interpreted.
+ */
+export function annotateScope(intent: ActionIntent, actionText: string): ActionIntent {
+  if (!detectOutOfScope(actionText).detected) return intent;
+  if (intent.unsafeOrMetaRequests.includes('out_of_scope')) return intent;
+  return { ...intent, unsafeOrMetaRequests: [...intent.unsafeOrMetaRequests, 'out_of_scope'] };
 }

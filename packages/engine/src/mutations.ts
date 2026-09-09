@@ -373,6 +373,20 @@ function applyOne(state: GameState, story: StoryVersion, mutation: StateMutation
         state.player.abilityCooldowns[flag.slice('cooldown:'.length)] = Math.trunc(value);
         return;
       }
+      // `dead:<characterId>` is the other reserved namespace, and it exists
+      // because nothing in the engine could previously make a character stop
+      // being alive. `CharacterRuntimeState.alive` was in the schema, read in
+      // three places, and never written — so an NPC the story needed in act
+      // three was quietly immortal, which is the exact thing a game called
+      // Plotbreak must not do. The mutation enum is fixed by the AI contract,
+      // so death travels as a flag and lands on the typed field.
+      if (flag.startsWith('dead:')) {
+        const characterId = flag.slice('dead:'.length);
+        const runtime = state.characters.find((c) => c.characterId === characterId);
+        if (runtime) runtime.alive = value === false;
+        state.flags[flag] = value !== false;
+        return;
+      }
       if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
         state.flags[flag] = value;
       } else {

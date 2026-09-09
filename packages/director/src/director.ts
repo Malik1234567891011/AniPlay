@@ -46,7 +46,7 @@ export class RuleBasedDirector implements Director {
       mediaPlan: buildMediaPlan(context, beatType),
       memoryProposals: proposeMemories(context),
       arcUpdates: buildArcUpdates(context),
-      wordBudget: config.wordBudget,
+      wordBudget: beatBudget(context, config.wordBudget),
     };
   }
 }
@@ -789,4 +789,83 @@ function preferredTarget(context: TurnContext): TurnContext['presentCharacters']
 
 function capitalize(value: string): string {
   return value.length === 0 ? value : value[0]!.toUpperCase() + value.slice(1);
+}
+
+
+// --- How much writing this turn has earned ---------------------------------
+
+/**
+ * Spec §16.7 — length follows what happened, not what the player paid.
+ *
+ * `wordBudget` used to be a constant per quality tier: 60 for QUICK, 95 for
+ * VIVID, 130 for CINEMATIC. So walking into a corridor and the death of a
+ * major character got the same amount of writing, and a session read as a
+ * uniform drip of eighty-word paragraphs regardless of whether anything
+ * happened. Measured across a real Last Five session: every turn between 57
+ * and 91 words, including the one where the coach first notices you.
+ *
+ * The tier now sets the middle of a range rather than the whole of it, and the
+ * turn's own event density moves within it. Every signal below is something
+ * the engine already decided, so nothing here is guesswork about importance —
+ * it is a count of what actually occurred.
+ *
+ * The ceiling is 220 because the AI contract says so (`BeatPlan.wordBudget`,
+ * maximum 220). Genuinely cinematic 400-word moments would need that contract
+ * raised, which is not a change to make quietly.
+ */
+export function beatBudget(context: TurnContext, tierBudget: number): number {
+  const { resolution, arc } = context;
+
+  let weight = 1;
+
+  // Event density: how much of the world actually moved.
+  const mutations = resolution.mutations.length;
+  if (mutations === 0) weight -= 0.35;
+  else if (mutations >= 6) weight += 0.35;
+  else if (mutations >= 3) weight += 0.15;
+
+  // A refusal, or an action that resolved to nothing, needs a sentence and not
+  // a scene. This is the other half of the problem: trivial turns were
+  // *over*-written just as reliably as important ones were under-written.
+  const rejected = resolution.normalizedActions.some(
+    (a) => (a as { status?: string }).status === 'REJECTED',
+  );
+  if (rejected) weight -= 0.3;
+
+  // Outcomes that are worth describing properly.
+  for (const check of resolution.checks) {
+    if (check.outcome === 'CRITICAL_SUCCESS' || check.outcome === 'COMPLICATION') weight += 0.25;
+  }
+
+  // Things that only happen at real turning points.
+  const reason = (code: string): boolean => resolution.mutations.some((m) => m.reasonCode.startsWith(code));
+  if (resolution.mutations.some((m) => m.type === 'QUEST_TRANSITION')) weight += 0.3;
+  if (resolution.mutations.some((m) => m.type === 'ENCOUNTER_START')) weight += 0.35;
+  if (reason('KILLED_BY_PLAYER')) weight += 0.7;
+  if (reason('CREW_DEPARTED') || reason('CREW_BETRAYAL')) weight += 0.4;
+  if (reason('WORLD_EVENT')) weight += 0.25;
+  if (reason('UNDERTAKING_BEGUN')) weight += 0.5;
+  if (reason('ABILITY_UNLOCK') || reason('LEVEL_CHANGE')) weight += 0.25;
+
+  // Meeting somebody for the first time is a scene; passing them again is not.
+  const firstMeeting = context.presentCharacters.some(
+    (c) => !context.state.flags[`met:${c.def.id}`],
+  );
+  if (firstMeeting) weight += 0.25;
+
+  // Where the episode is. A rest beat should breathe; a consequence beat is
+  // the thing the episode was building to.
+  if (arc.pacingStage === 'CONSEQUENCE') weight += 0.3;
+  else if (arc.pacingStage === 'ESCALATION') weight += 0.15;
+  else if (arc.pacingStage === 'REST') weight -= 0.2;
+  weight += (arc.tension - 0.5) * 0.3;
+
+  // The player said something about themselves that the world now has to
+  // absorb. That is worth the words.
+  if (resolution.privateFacts.some((f) => f.fact.startsWith('The player has established'))) {
+    weight += 0.4;
+  }
+
+  const budget = Math.round(tierBudget * Math.max(0.5, Math.min(2.4, weight)));
+  return Math.max(30, Math.min(220, budget));
 }

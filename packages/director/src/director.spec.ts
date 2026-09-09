@@ -1884,21 +1884,59 @@ describe('player agency and action resolution', () => {
     expect(found).toBe(true);
   });
 
-  it('refuses a declaration that is a campaign, not an action', async () => {
+  it('starts a declaration that is a campaign, rather than refusing it', async () => {
     const result = await runTurn({
       story: STORY, state: baseState(), memories: [], recentTurns: [],
       actionText: 'I burn down the academy.',
       qualityTier: 'VIVID', turnId: 't1', seed: 'agency-scope',
     });
 
-    // A lucky roll must never destroy the setting.
-    expect(result.resolution.normalizedActions[0]).toMatchObject({
-      status: 'REJECTED',
-      reason: 'OUT_OF_SCOPE',
-    });
+    // Spec §3.4 — "I burn down the academy" is a player telling you what the
+    // rest of their story is about. It used to come back as "that is not
+    // something you can do in one move" with an instruction to let no part of
+    // it happen, which is the setting defending itself from the player.
+    expect(result.resolution.normalizedActions[0]).toMatchObject({ status: 'RESOLVED' });
+    expect(result.resolution.observableFacts.join(' ')).toMatch(/started.*cannot be un-done/i);
+    // Somebody was there, and who saw it is part of what happened.
+    expect(result.resolution.observableFacts.join(' ')).toMatch(/saw you begin/i);
+
+    // It is now on the record as something in motion, so anything downstream
+    // can gate on it.
+    const flags = result.resolution.mutations
+      .filter((m) => m.type === 'FLAG_SET')
+      .map((m) => m.payload.flag as string);
+    expect(flags.some((f) => f.startsWith('undertaking:'))).toBe(true);
+    expect(result.state.flags[flags.find((f) => f.startsWith('undertaking:'))!]).toBe(true);
+
+    // The part that was always right: a single die must never settle a
+    // campaign, so nothing is rolled and the outcome is not decided here.
     expect(result.resolution.checks).toHaveLength(0);
-    expect(result.resolution.mutations).toHaveLength(0);
-    expect(result.resolution.timeAdvancedMinutes).toBe(0);
+    expect(result.resolution.timeAdvancedMinutes).toBeGreaterThan(0);
+
+    // And the writer is told not to wall it off.
+    const notes = result.resolution.privateFacts.map((f) => f.fact).join(' ');
+    expect(notes).toMatch(/do NOT write that nothing happened/i);
+    expect(notes).toMatch(/invent an obstacle/i);
+    expect(notes).toMatch(/first, concrete, irreversible step/i);
+  });
+
+  it('gives the same campaign the same id, and two campaigns two ids', async () => {
+    const run = (actionText: string) =>
+      runTurn({
+        story: STORY, state: baseState(), memories: [], recentTurns: [],
+        actionText, qualityTier: 'VIVID', turnId: 't1', seed: 'agency-scope-id',
+      });
+
+    const flagOf = (r: Awaited<ReturnType<typeof run>>) =>
+      r.resolution.mutations.map((m) => m.payload.flag as string).find((f) => f?.startsWith('undertaking:'));
+
+    const [a, b, c] = await Promise.all([
+      run('I burn down the academy.'),
+      run('I burn down the academy.'),
+      run('I take over the archive.'),
+    ]);
+    expect(flagOf(a)).toBe(flagOf(b));
+    expect(flagOf(a)).not.toBe(flagOf(c));
   });
 
   it('catches an NPC decision even when a clause sits before the verb', async () => {

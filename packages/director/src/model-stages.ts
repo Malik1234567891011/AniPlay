@@ -233,7 +233,22 @@ export class ModelDirector implements Director {
           worldRules: [
             `World: ${context.story.title}.`,
             `Tone: ${context.toneGuide}`,
-            `Immutable canon: ${context.hardCanon.join(' | ')}`,
+            // Spec §3.5 — the two lists, stated as two lists.
+            //
+            // Only the first is fixed. Everything else is open space the story
+            // may invent into, and saying so matters: told only what it must
+            // not contradict, a writer defends the authored map by inventing
+            // reasons the player cannot leave it. Asked to leave the academy
+            // entirely, one produced "the wards flare red, a silent, forceful
+            // barrier — the air itself will not let you go", which is a wall
+            // built to keep a player inside the content.
+            `Immutable canon — these cannot stop being true: ${context.hardCanon.join(' | ')}`,
+            'Everything not in that list is open. You may invent minor people, rooms, streets, jobs, ' +
+              'rumours, towns and trouble as the player needs them, and you should, because a world with ' +
+              'edges you cannot cross is not a world.',
+            'Never invent an obstacle whose purpose is to keep the player inside the authored material. ' +
+              'If they walk out, they are out, and where they arrive is somewhere you make up. If they ' +
+              'abandon what the story wanted, the story is now about what they did instead.',
           ].join('\n'),
           state: directorPayload(context),
           task:
@@ -420,10 +435,20 @@ export class ModelWriter implements Writer {
             // nothing, and their action is narrated rather than quoted.
             playerSpeech: context.playerDialogue.map((line) => line.text),
             observableFacts: context.resolution.observableFacts,
-            constraints: context.resolution.privateFacts,
+            // Named `directives` rather than `constraints`: these are as often
+            // an instruction to make something happen as a prohibition, and a
+            // model given a list called "constraints" reads the whole list as
+            // things it must not do.
+            directives: context.resolution.privateFacts,
           },
           task:
-            `Write the beat as a NarrativeTurn with schemaVersion "1.0", at most ${plan.wordBudget} words across all blocks. ` +
+            // Both ends stated. Given only a maximum, a writer treats it as a
+            // target and every turn arrives at the same length; the budget is
+            // computed per turn from what actually happened, so the floor
+            // carries as much information as the ceiling.
+            `Write the beat as a NarrativeTurn with schemaVersion "1.0". This turn has earned roughly ` +
+            `${Math.round(plan.wordBudget * 0.7)}–${plan.wordBudget} words across all blocks: use them if the ` +
+            `scene is worth them and stop early if it is not. ` +
             'Use only speakerIds from `speakers`. Set voiceEligible true on dialogue blocks. ' +
             'Use each person\u2019s own pronouns from `cast`, present or not. ' +
             'Each speaker carries `knows` and `feelsAboutYou`. Somebody the player attacked, lied to or ' +

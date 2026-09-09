@@ -303,3 +303,97 @@ export function defeatMutations(
     }
   }
 }
+
+
+// ---------------------------------------------------------------------------
+// Death
+// ---------------------------------------------------------------------------
+
+export function deadFlag(characterId: string): string {
+  return `dead:${characterId}`;
+}
+
+export function isAlive(state: GameState, characterId: string): boolean {
+  return state.characters.find((c) => c.characterId === characterId)?.alive ?? true;
+}
+
+/**
+ * Spec §13.9 — whether this attack finishes them.
+ *
+ * The rule the engine needs to be able to answer honestly is the user's: if
+ * the action reasonably happens, commit it. Not "is this character needed in
+ * act three".
+ *
+ * Two ways someone dies. A world that runs `LETHAL` kills anyone whose health
+ * reaches zero, because that is what that mode means. Every other world
+ * requires the player to be standing over somebody already down and to do it
+ * deliberately — which keeps a scuffle from becoming a killing by accident,
+ * and keeps a killing from being impossible.
+ */
+export function lethalMutations(
+  state: GameState,
+  story: StoryVersion,
+  characterId: string,
+  options: { deliberate: boolean },
+  nextMutationId: () => string,
+): StateMutation[] {
+  if (!isAlive(state, characterId)) return [];
+
+  const participant = state.encounter?.participants.find((p) => p.entityId === characterId);
+  const down = participant ? participant.downed || participant.health <= 0 : false;
+
+  const lethalWorld = story.rules.defeatMode === 'LETHAL';
+  const kills = lethalWorld ? down : down && options.deliberate;
+  if (!kills) return [];
+
+  return [
+    {
+      mutationId: nextMutationId(),
+      type: 'FLAG_SET',
+      subjectId: characterId,
+      reasonCode: 'KILLED_BY_PLAYER',
+      payload: { flag: deadFlag(characterId), value: true },
+    },
+  ];
+}
+
+/**
+ * What the world lost when somebody died.
+ *
+ * Returned so the director can be told rather than left to notice. The point
+ * is not to undo it — nobody is resurrected to protect a plot — it is that
+ * everything the dead person was carrying is now a hole in the story that has
+ * to be routed around, and the writer needs to know the shape of the hole.
+ */
+export function deathConsequences(story: StoryVersion, characterId: string): string[] {
+  const character = story.characters.find((c) => c.id === characterId);
+  if (!character) return [];
+
+  const notes: string[] = [`${character.name} is dead. They stay dead.`];
+
+  const secrets = character.secrets.map((s) => s.fact);
+  if (secrets.length > 0) {
+    notes.push(
+      `What died with them, unless it exists somewhere else in the world: ${secrets.join(' | ')} ` +
+        'Do not have anyone else simply know it now. If the player is to learn it, they learn it another way.',
+    );
+  }
+
+  const quests = story.quests.filter((q) => q.involvedCharacterIds.includes(characterId));
+  if (quests.length > 0) {
+    notes.push(
+      `These were built around them and now have to happen differently or not at all: ${quests
+        .map((q) => q.title)
+        .join(', ')}.`,
+    );
+  }
+
+  const bereaved = story.characters.filter(
+    (c) => c.id !== characterId && c.knowledgeScope.some((k) => character.knowledgeScope.includes(k)),
+  );
+  if (bereaved.length > 0) {
+    notes.push(`People who will find out and have a view: ${bereaved.map((c) => c.name).join(', ')}.`);
+  }
+
+  return notes;
+}

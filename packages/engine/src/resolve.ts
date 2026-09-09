@@ -25,7 +25,16 @@ import { fireWorldEvents } from './world-events.js';
 import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
 import { scoutingPressure, tendencyMutations } from './tendencies.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
-import { buildEncounter, canSpend, newTurnEconomy, spend, type ActionWeight, type TurnEconomy } from './combat.js';
+import {
+  buildEncounter,
+  canSpend,
+  deathConsequences,
+  lethalMutations,
+  newTurnEconomy,
+  spend,
+  type ActionWeight,
+  type TurnEconomy,
+} from './combat.js';
 import { resolveNpcTurns } from './npc-turns.js';
 import { applyMutations, validateMutations } from './mutations.js';
 
@@ -155,27 +164,68 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   const economy = newTurnEconomy();
   const deferred: string[] = [];
 
-  // A declaration the player cannot settle in one action is refused as stated,
-  // before any dice are rolled. Otherwise a lucky roll burns down the setting.
+  // Spec §3.4 — a declaration too big for one action is not refused. It starts.
+  //
+  // This used to return "That is not something you can do in one move" with the
+  // instruction "Do not let any part of it happen", which is the setting
+  // protecting itself from the player. In a game called Plotbreak, "I burn down
+  // the archive" is not an invalid input — it is a player telling you what the
+  // rest of their story is about.
+  //
+  // So the engine commits it as an undertaking: the first step really happens,
+  // the world can see it, and a flag records that this is now in motion so
+  // anything downstream can gate on it. What the engine will not do is settle
+  // the whole campaign on one die, which was the real problem all along.
   if (intent.unsafeOrMetaRequests?.includes('out_of_scope')) {
+    const undertaking = undertakingId(intent.rawAction);
+    const witnesses = charactersPresent(state)
+      .map((c) => story.characters.find((d) => d.id === c.characterId)?.name)
+      .filter((n): n is string => !!n)
+      .slice(0, 2);
     return {
       schemaVersion: '1.0',
       turnId,
       valid: true,
       invalidReason: null,
-      normalizedActions: [{ verb: intent.actions[0]?.verb ?? 'custom', status: 'REJECTED', reason: 'OUT_OF_SCOPE' }],
+      normalizedActions: [
+        { verb: intent.actions[0]?.verb ?? 'custom', status: 'RESOLVED', undertaking },
+      ],
       checks: [],
-      mutations: [],
-      observableFacts: ['That is not something you can do in one move.'],
+      mutations: [
+        {
+          mutationId: `mut_${turnId}_u0`,
+          type: 'FLAG_SET',
+          subjectId: 'player',
+          reasonCode: 'UNDERTAKING_BEGUN',
+          payload: { flag: `undertaking:${undertaking}`, value: true },
+        },
+      ],
+      // The fact has to be concrete or the writer anchors on its thinness and
+      // produces "nothing stirs". The engine cannot know what the first step
+      // of a given campaign looks like, but it knows one has been taken and it
+      // knows who was standing there when it was.
+      observableFacts: [
+        'You have started. The first step is done and it cannot be un-done.',
+        witnesses.length > 0
+          ? `${witnesses.join(' and ')} saw you begin.`
+          : 'Nobody saw you begin, which is its own problem later.',
+      ],
       privateFacts: [
         {
           visibility: 'SELF',
           fact:
-            'The player declared an outcome that would take a plan, not an action. Narrate them realising the ' +
-            'scale of it and what the first real step would have to be. Do not let any part of it happen.',
+            'AUTHORITATIVE: the player has begun something that takes a campaign rather than an action: ' +
+            `"${intent.rawAction.slice(0, 240)}" ` +
+            'This is not a failed attempt and it is not an intention. A first, concrete, irreversible step ' +
+            'has happened and your job is to say what it was. Invent that step — it is yours to invent — ' +
+            'and make it cost or commit something. ' +
+            'Do NOT write that nothing happened, that the world did not respond, that they lacked the power, ' +
+            'or that they merely considered it. Do NOT resolve the whole campaign. Do NOT invent an ' +
+            'obstacle whose purpose is to make this impossible. ' +
+            'Name who noticed and what they will do about it. This is the spine of their story now.',
         },
       ],
-      timeAdvancedMinutes: 0,
+      timeAdvancedMinutes: TIME_COST_MINUTES.SCENE,
       newOpportunities: buildOpportunities(state, story),
       rngSeedHash: rng.seedHash,
     };
@@ -1227,6 +1277,8 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
   mutations.push(...witness.mutations);
   observableFacts.push(...witness.facts);
 
+  const deathNotes: string[] = [];
+
   if (isSuccess(check.outcome)) {
     const base = 4 + attributeModifier(effectiveAttribute(state, story, attribute));
     const damage = check.outcome === 'CRITICAL_SUCCESS' ? base * 2 : base;
@@ -1238,6 +1290,20 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
       payload: { participantId: character.id, healthDelta: -damage },
     });
     observableFacts.push(`Your strike lands on ${character.name}.`);
+
+    // Spec §13.9 — and if they were already down and the player meant it, that
+    // is the end of them. The engine has to be able to say yes to this: an NPC
+    // who cannot die because a later quest needs them is the story protecting
+    // itself from the player, which is the one thing this product must not do.
+    const finishing = /\b(finish|kill|end (?:him|her|them)|do not stop|keep going|make sure)\b/i.test(
+      `${action.method} ${action.declaredOutcome ?? ''}`,
+    );
+    const lethal = lethalMutations(state, story, character.id, { deliberate: finishing }, nextMutationId);
+    if (lethal.length > 0) {
+      mutations.push(...lethal);
+      observableFacts.push(`${character.name} does not get up.`);
+      deathNotes.push(...deathConsequences(story, character.id));
+    }
 
     // Spec §12.5 — a partial success costs something the player can name.
     if (check.outcome === 'SUCCESS_WITH_COST') {
@@ -1259,6 +1325,9 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
       ...(encounterJustStarted
         ? [{ visibility: 'SELF', fact: 'This is the opening exchange. Establish stakes and position.' }]
         : []),
+      // Everything the world just lost. Not an instruction to undo it — an
+      // instruction to route around the hole it left.
+      ...deathNotes.map((fact) => ({ visibility: 'SELF' as const, fact })),
       {
         visibility: 'SELF',
         fact:
@@ -1968,4 +2037,21 @@ function buildOpportunities(state: GameState, story: StoryVersion): string[] {
 function nameOf(story: StoryVersion, characterId: string | null): string {
   if (!characterId) return 'The defence';
   return story.characters.find((c) => c.id === characterId)?.name ?? 'The defence';
+}
+
+/**
+ * A stable id for something the player has set in motion.
+ *
+ * Derived from what they actually wrote, so two different campaigns are two
+ * different flags and repeating the same one does not create a second.
+ */
+function undertakingId(raw: string): string {
+  return raw
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .split(/\s+/)
+    .filter((w) => w.length > 2)
+    .slice(0, 5)
+    .join('_')
+    .slice(0, 60) || 'unnamed';
 }
