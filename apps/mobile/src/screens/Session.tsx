@@ -45,6 +45,7 @@ import {
   colors,
   GUTTER,
   haptic,
+  HIT_SLOP,
   radius,
   spacing,
 } from '@aniplay/ui';
@@ -95,6 +96,7 @@ export function SessionScreen({
   const [pending, setPending] = useState<PendingTurn | null>(null);
   const [error, setError] = useState<{ message: string; retry: boolean } | null>(null);
   const [showQuality, setShowQuality] = useState(false);
+  const [showTurnMenu, setShowTurnMenu] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [revision, setRevision] = useState(0);
   const [playerPortraitUrl, setPlayerPortraitUrl] = useState<string | null>(null);
@@ -151,8 +153,10 @@ export function SessionScreen({
     return () => clearTimeout(timer);
   }, [draft, saveDraft, sessionId]);
 
-  const send = useCallback(async () => {
-    const text = draft.trim();
+  // `override` is how the turn menu re-sends an action that is no longer in
+  // the composer. GP-04 retry is a new turn, not a rewind.
+  const send = useCallback(async (override?: string) => {
+    const text = (override ?? draft).trim();
     if (text.length === 0 || sending) return;
 
     // Spec §26.7 / WL-03 — the pill stays selectable when short; Send is what
@@ -542,11 +546,28 @@ export function SessionScreen({
               affordable={affordable}
               onPress={() => setShowQuality(true)}
             />
-            {!affordable ? (
-              <Txt variant="micro" color={colors.semantic.warning}>
-                {tier.costCredits - balance} more credits needed
-              </Txt>
-            ) : null}
+            <Row gap={spacing.lg}>
+              {!affordable ? (
+                <Txt variant="micro" color={colors.semantic.warning}>
+                  {tier.costCredits - balance} more credits needed
+                </Txt>
+              ) : null}
+              {/* GP-04. In the dock rather than in the transcript: at the end
+                  of a scroll region its frame sits behind this bar, so it was
+                  unreachable exactly when a player would want it. */}
+              {latest?.actionText && !pending ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Turn options"
+                  hitSlop={HIT_SLOP}
+                  onPress={() => setShowTurnMenu(true)}
+                >
+                  <Txt variant="micro" color={colors.text.muted}>
+                    ··· Last turn
+                  </Txt>
+                </Pressable>
+              ) : null}
+            </Row>
           </Row>
         </View>
       </KeyboardAvoidingView>
@@ -574,6 +595,27 @@ export function SessionScreen({
             Tap anywhere to close
           </Txt>
         </Pressable>
+      ) : null}
+
+      {showTurnMenu && latest?.actionText ? (
+        <TurnMenu
+          actionText={latest.actionText}
+          turnCost={tier.costCredits}
+          onRetry={() => {
+            const again = latest.actionText ?? '';
+            setShowTurnMenu(false);
+            void send(again);
+          }}
+          onEdit={() => {
+            setDraft(latest.actionText ?? '');
+            setShowTurnMenu(false);
+          }}
+          onReport={() => {
+            setShowTurnMenu(false);
+            navigation.navigate('WorldSheet', { sessionId, tab: 'timeline' });
+          }}
+          onClose={() => setShowTurnMenu(false)}
+        />
       ) : null}
 
       {showQuality ? (
@@ -782,17 +824,71 @@ function PlayerAction({ text }: { text: string }): React.JSX.Element {
   );
 }
 
-/** GP-02 — the tier sheet. Copy describes presentation, never dice (§20.3). */
-function QualitySheet({
-  current,
-  balance,
-  onSelect,
+/**
+ * GP-04 / §20.9 — what you can do about a turn that already happened.
+ *
+ * Every option says what it costs before it is taken. Retrying is a new turn
+ * because new generation is requested; editing is free until you send it; and
+ * telling us the story got something wrong is free, because a contradiction the
+ * system produced is not something to charge for.
+ */
+function TurnMenu({
+  actionText,
+  turnCost,
+  onRetry,
+  onEdit,
+  onReport,
   onClose,
 }: {
-  current: QualityTier;
-  balance: number;
-  onSelect: (tier: QualityTier) => void;
+  actionText: string;
+  turnCost: number;
+  onRetry: () => void;
+  onEdit: () => void;
+  onReport: () => void;
   onClose: () => void;
+}): React.JSX.Element {
+  return (
+    <Sheet title="This turn" onClose={onClose}>
+      <Txt variant="bodyCompact" color={colors.text.secondary}>
+        “{actionText}”
+      </Txt>
+
+      <Stack gap={spacing.sm}>
+        <Button label={`Try the same thing again · ${turnCost}`} variant="secondary" onPress={onRetry} />
+        <Txt variant="micro" color={colors.text.muted}>
+          Sends it again as a new turn. The dice are rolled fresh because it is a new attempt — the
+          world does not rewind.
+        </Txt>
+      </Stack>
+
+      <Stack gap={spacing.sm}>
+        <Button label="Put it back in the composer" variant="secondary" onPress={onEdit} />
+        <Txt variant="micro" color={colors.text.muted}>
+          Change the wording and send when you are ready. Costs nothing until you do.
+        </Txt>
+      </Stack>
+
+      <Stack gap={spacing.sm}>
+        <Button label="Something here is wrong" variant="tertiary" onPress={onReport} />
+        <Txt variant="micro" color={colors.text.muted}>
+          Opens the timeline, where you can correct what the story recorded. Free.
+        </Txt>
+      </Stack>
+    </Sheet>
+  );
+}
+
+/** The bottom-sheet shell. Scrim dismisses, content scrolls, safe area respected. */
+function Sheet({
+  title,
+  subtitle,
+  onClose,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  onClose: () => void;
+  children: React.ReactNode;
 }): React.JSX.Element {
   const fade = useRef(new Animated.Value(0)).current;
 
@@ -803,7 +899,7 @@ function QualitySheet({
   return (
     <View style={{ position: 'absolute', inset: 0, justifyContent: 'flex-end' }}>
       <Pressable
-        accessibilityLabel="Close quality selector"
+        accessibilityLabel={`Close ${title.toLowerCase()}`}
         style={{ position: 'absolute', inset: 0, backgroundColor: colors.scrim }}
         onPress={onClose}
       />
@@ -818,14 +914,40 @@ function QualitySheet({
         >
           <Stack gap={spacing.lg} style={{ padding: GUTTER }}>
             <Stack gap={spacing.xs}>
-              <Txt variant="h2">Turn quality</Txt>
-              <Txt variant="caption" color={colors.text.secondary}>
-                Higher tiers buy richer direction and better visuals. Every tier rolls the same dice —
-                paying more never changes an outcome.
-              </Txt>
+              <Txt variant="h2">{title}</Txt>
+              {subtitle ? (
+                <Txt variant="caption" color={colors.text.secondary}>
+                  {subtitle}
+                </Txt>
+              ) : null}
             </Stack>
+            {children}
+          </Stack>
+        </SafeAreaView>
+      </Animated.View>
+    </View>
+  );
+}
 
-            {Object.values(QUALITY_TIERS).map((tier) => {
+/** GP-02 — the tier sheet. Copy describes presentation, never dice (§20.3). */
+function QualitySheet({
+  current,
+  balance,
+  onSelect,
+  onClose,
+}: {
+  current: QualityTier;
+  balance: number;
+  onSelect: (tier: QualityTier) => void;
+  onClose: () => void;
+}): React.JSX.Element {
+  return (
+    <Sheet
+      title="Turn quality"
+      subtitle="Higher tiers buy richer direction and better visuals. Every tier rolls the same dice — paying more never changes an outcome."
+      onClose={onClose}
+    >
+      {Object.values(QUALITY_TIERS).map((tier) => {
               const selected = tier.id === current;
               const affordable = balance >= tier.costCredits;
               return (
@@ -858,11 +980,8 @@ function QualitySheet({
                   </Card>
                 </Pressable>
               );
-            })}
-          </Stack>
-        </SafeAreaView>
-      </Animated.View>
-    </View>
+      })}
+    </Sheet>
   );
 }
 
