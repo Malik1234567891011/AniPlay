@@ -156,7 +156,11 @@ export function checkChoiceClarity(
     //    different about the option.
     const grants = archetypeGrants(story, option);
     const total =
-      grants.abilities.length + grants.skills.length + grants.attributes.length + grants.items.length;
+      grants.abilities.length +
+      grants.skills.length +
+      grants.attributes.length +
+      grants.items.length +
+      grants.standing.length;
     if (total === 0) {
       push({
         code: 'NO_MECHANICAL_EFFECT',

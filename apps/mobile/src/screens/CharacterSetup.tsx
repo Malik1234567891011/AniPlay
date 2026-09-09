@@ -408,6 +408,7 @@ function GrantList({ grants }: { grants: SetupArchetype['grants'] }): React.JSX.
     ['Better at', grants.skills],
     ['Attributes', grants.attributes],
     ['Carries', grants.items],
+    ['Counted by', grants.standing],
   ];
   const shown = lines.filter(([, values]) => values.length > 0);
   if (shown.length === 0) return null;

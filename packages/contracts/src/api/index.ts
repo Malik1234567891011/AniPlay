@@ -144,6 +144,7 @@ export const SetupArchetype = ArchetypeDef.extend({
       skills: z.array(z.string()),
       abilities: z.array(z.string()),
       items: z.array(z.string()),
+      standing: z.array(z.string()),
     })
     .strict(),
 }).strict();

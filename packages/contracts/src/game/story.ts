@@ -657,6 +657,8 @@ export interface ArchetypeGrants {
   readonly attributes: string[];
   /** Item names and counts. */
   readonly items: string[];
+  /** "The Stillhand +20" — where this choice already counts as one of them. */
+  readonly standing: string[];
 }
 
 /** Spec §12.4 — proficiency 0–5. */
@@ -694,5 +696,10 @@ export function archetypeGrants(story: StoryVersion, archetype: ArchetypeDef): A
     return entry.qty > 1 ? `${name} ×${entry.qty}` : name;
   });
 
-  return { abilities, skills, attributes, items };
+  const standing = archetype.startingReputation.map((entry) => {
+    const faction = story.factions.find((f) => f.id === entry.factionId);
+    return `${faction?.name ?? entry.factionId} ${entry.amount > 0 ? '+' : ''}${entry.amount}`;
+  });
+
+  return { abilities, skills, attributes, items, standing };
 }
