@@ -272,16 +272,16 @@
     "alt": "Cover art for The Blank Prophecy: They read your future. It was empty.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "bd4113f7-a815-4735-a7ca-b61717f1c862",
-      "promptHash": "3664c1892284e56bf2c6ccc38bcfd1c8",
-      "seed": "sv_blank_prophecy_1:cover:plotbreak-cover-v2",
+      "requestId": "543bb11d-c4f9-4f03-87d5-b8c343464861",
+      "promptHash": "0d9c9dcd55fe1c120912e112e7cb2664",
+      "seed": "sv_blank_prophecy_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.21952,
-      "latencyMs": 98565,
-      "createdAt": "2026-09-10T17:13:45.044Z"
+      "latencyMs": 93609,
+      "createdAt": "2026-09-10T21:15:24.878Z"
     }
   },
   "story_blank_prophecy/despina": {
@@ -1773,16 +1773,16 @@
     "alt": "Cover art for The Fourth Beast: Three beasts. Two people. You chose first.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "319d82b6-dddc-4469-b6d9-b2cd8a4b9715",
-      "promptHash": "773ddbc8b70c4b770725995d59b5a329",
-      "seed": "sv_fourth_beast_1:cover:plotbreak-cover-v2",
+      "requestId": "abbfe701-e30e-40de-822c-83ae31451f97",
+      "promptHash": "2497d2a85ba86cf3830032dfd0295ead",
+      "seed": "sv_fourth_beast_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.21952,
-      "latencyMs": 111731,
-      "createdAt": "2026-09-10T16:41:20.317Z"
+      "latencyMs": 98504,
+      "createdAt": "2026-09-10T21:13:50.790Z"
     }
   },
   "story_fourth_beast/key": {
@@ -2932,16 +2932,16 @@
     "alt": "Cover art for Good Morning, Husband: Four years married. You just met her.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "3463c853-b852-40a2-9d84-febdb9f3ffb7",
-      "promptHash": "babe4a9f4dcb81cccb3ecdfa034def74",
-      "seed": "sv_good_morning_husband_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.21952,
-      "latencyMs": 101031,
-      "createdAt": "2026-09-10T16:49:23.222Z"
+      "requestId": "50b8d23e-5903-4332-ba7d-c19de901e0df",
+      "promptHash": "640fc48ffe7850067a785fcbb4b8b938",
+      "seed": "sv_good_morning_husband_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 34798,
+      "createdAt": "2026-09-10T21:24:29.204Z"
     }
   },
   "story_good_morning_husband/emi": {
@@ -4205,16 +4205,16 @@
     "alt": "Cover art for Hush House: Do not open the door at 2:13 a.m.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "6fa02a0d-6f08-4910-b777-9c3efaed6b0c",
-      "promptHash": "1d7df8e110132efcf0ec3f691113774e",
-      "seed": "sv_hush_house_1:cover:plotbreak-cover-v2",
+      "requestId": "ab372a5f-0763-4f69-bbc4-da32c73fef2c",
+      "promptHash": "1e3ca6b5217ce7f10716454f9023e71c",
+      "seed": "sv_hush_house_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.05488,
-      "latencyMs": 36139,
-      "createdAt": "2026-09-10T16:34:49.879Z"
+      "latencyMs": 34704,
+      "createdAt": "2026-09-10T21:23:15.850Z"
     }
   },
   "story_hush_house/key": {
@@ -5212,16 +5212,16 @@
     "alt": "Cover art for Itachi: Both sides already think you are theirs.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "6486408f-8bc9-478e-a570-9de36248cc46",
-      "promptHash": "430feaacfcc8e752a8543882584077ef",
-      "seed": "sv_itachi_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.05488,
-      "latencyMs": 42153,
-      "createdAt": "2026-09-10T08:51:13.612Z"
+      "requestId": "4a49c552-6baf-4923-8836-5076db80a2b1",
+      "promptHash": "aa099aaef46e900e27c80b71ea344ffc",
+      "seed": "sv_itachi_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.21952,
+      "latencyMs": 89996,
+      "createdAt": "2026-09-10T21:20:49.476Z"
     }
   },
   "story_itachi/danzo": {
@@ -9525,16 +9525,16 @@
     "alt": "Cover art for Primal Crown: The herds moved early. Somebody loses.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "c465810f-dc7d-4e3a-b215-7b289d8833de",
-      "promptHash": "c27f08f3d155bf3d113e79311694cc5b",
-      "seed": "sv_primal_crown_1:cover:plotbreak-cover-v2",
+      "requestId": "06a547f6-95d1-4b04-8d3d-8ac13d9aa034",
+      "promptHash": "b65aa4f497f5ab54cf7783f8d4b0d8bc",
+      "seed": "sv_primal_crown_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.21952,
-      "latencyMs": 111027,
-      "createdAt": "2026-09-10T16:07:42.220Z"
+      "latencyMs": 110231,
+      "createdAt": "2026-09-10T21:22:40.404Z"
     }
   },
   "story_primal_crown/ilya": {
@@ -11007,16 +11007,16 @@
     "alt": "Cover art for The Red Floor: No cameras. No records. Step on or do not.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "cb806e4c-169d-4ec8-bb54-496ad42cd317",
-      "promptHash": "d31eef2f3f536fd5c9b57b55aca684b6",
-      "seed": "sv_red_floor_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.05488,
-      "latencyMs": 38630,
-      "createdAt": "2026-09-10T17:29:36.848Z"
+      "requestId": "faf1e549-87f7-4450-a362-0559754a5f79",
+      "promptHash": "c2890160e94c6cc0c1444a7aa425d2fd",
+      "seed": "sv_red_floor_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.21952,
+      "latencyMs": 97213,
+      "createdAt": "2026-09-10T21:17:02.755Z"
     }
   },
   "story_red_floor/daigo": {
@@ -12892,12 +12892,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "7e361056-4869-4a05-9de7-0e00b3012a61",
-      "promptHash": "4765b44fb28068e936524d491bb5f609",
+      "requestId": "9861a5f9-413d-4e45-88c5-c44531803ebe",
+      "promptHash": "b3f72cbd1b129397ae38a9743b5d33d2",
       "seed": "sv_second_skin_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.05488,
-      "latencyMs": 41299,
-      "createdAt": "2026-09-10T21:07:33.040Z"
+      "latencyMs": 38684,
+      "createdAt": "2026-09-10T21:19:18.889Z"
     }
   },
   "story_second_skin/edran": {
@@ -15035,16 +15035,16 @@
     "alt": "Cover art for Seven Names: You hang at dawn. Unless you go now.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "bd66c46c-1847-4e5c-bfaa-ff4e31d0818e",
-      "promptHash": "a81edc3d9cb30f29ee271e4f3d9315f2",
-      "seed": "sv_seven_names_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.05488,
-      "latencyMs": 41615,
-      "createdAt": "2026-09-10T16:56:58.514Z"
+      "requestId": "9dbcca15-c437-42cc-8a88-95c6ee4e751a",
+      "promptHash": "998704965d068be600aed033de323dcb",
+      "seed": "sv_seven_names_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.21952,
+      "latencyMs": 96098,
+      "createdAt": "2026-09-10T21:18:39.603Z"
     }
   },
   "story_seven_names/key": {
@@ -17106,16 +17106,16 @@
     "alt": "Cover art for Window Seven: Seven nights. One window. She waved.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "c685394f-f470-4e8d-a22f-6401c6936d9a",
-      "promptHash": "b73f3094c7ffdf047b80b2c7d1ff468a",
-      "seed": "sv_window_seven_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.21952,
-      "latencyMs": 91770,
-      "createdAt": "2026-09-10T16:43:11.042Z"
+      "requestId": "2c4fbc3a-a06b-4513-a042-9828b8826591",
+      "promptHash": "139cb2c3fce6eb4440ca76e101f4f7d9",
+      "seed": "sv_window_seven_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 37131,
+      "createdAt": "2026-09-10T21:23:53.652Z"
     }
   },
   "story_window_seven/halden": {
