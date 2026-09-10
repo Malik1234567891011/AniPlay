@@ -6,7 +6,11 @@ import type {
 import { countItem, isSuccess } from '@aniplay/engine';
 import type { TurnContext } from './context.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
+import { findEmptyConsequences, stripEmptyConsequences } from './empty-consequence.js';
 import { findAbsenceOfPresent } from './present-absence.js';
+
+/** Kept in one place so the repair can find its own findings. */
+const EMPTY_CONSEQUENCE_MARKER = 'Names a change without naming what changed';
 import {
   NAME_SPAM_MARKER,
   NAME_SPAM_THRESHOLD,
@@ -183,6 +187,18 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
         push('NAME_IDENTITY_DRIFT', 'WARN', `Player appears to be addressed as ${first}.`);
       }
     }
+  }
+
+  // --- UNSUPPORTED_STATE: a consequence with nothing in it ---
+  // WARN, and stripped by sentence rather than by block: the rest of the
+  // paragraph is usually good, and this is one sentence of filler in it.
+  for (const empty of findEmptyConsequences(turn.blocks)) {
+    push(
+      'UNSUPPORTED_STATE',
+      'WARN',
+      `${EMPTY_CONSEQUENCE_MARKER}: "${empty.sentence.slice(0, 120)}"`,
+      empty.blockIndex,
+    );
   }
 
   // --- LOCATION_CONTRADICTION: somebody written out of the room they are in ---
@@ -377,6 +393,28 @@ export function repairNarrative(
   /** Needed to rewrite third-person narration rather than delete it. */
   playerName?: string,
 ): NarrativeTurn {
+  // A consequence with nothing in it: strip the sentence, keep the beat. Not
+  // gated on knowing the player's name, unlike the voice repairs below.
+  const emptyBlocks = new Set(
+    report.violations
+      .filter((v) => v.description.startsWith(EMPTY_CONSEQUENCE_MARKER) && typeof v.blockIndex === 'number')
+      .map((v) => v.blockIndex as number),
+  );
+  if (emptyBlocks.size > 0) {
+    turn = {
+      ...turn,
+      blocks: turn.blocks
+        .map((block, index) =>
+          emptyBlocks.has(index) ? { ...block, text: stripEmptyConsequences(block.text) } : block,
+        )
+        .filter((block) => block.text.trim().length > 0),
+    };
+    report = {
+      ...report,
+      violations: report.violations.filter((v) => !v.description.startsWith(EMPTY_CONSEQUENCE_MARKER)),
+    };
+  }
+
   // Voice is fixable in place, and deleting a whole narration block over a
   // pronoun would cost the player the beat. Do this before anything is dropped.
   let repaired = turn;

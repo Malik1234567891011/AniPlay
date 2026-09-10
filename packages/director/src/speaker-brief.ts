@@ -53,7 +53,20 @@ export interface SpeakerBrief {
    */
   readonly canTell: readonly string[];
   readonly mustNotReveal: readonly string[];
+  /**
+   * What this person is still carrying about the player.
+   *
+   * The same facts are in `knows`, and that was not enough: buried in a list of
+   * eight things somebody knows, "Sora belittled Dai at the Kosei Gym" reads
+   * like scenery. Pulled out, it is the first thing about them. This is the
+   * difference between a world that stores what you did and one that acts like
+   * it happened.
+   */
+  readonly holdingAgainstYou: readonly string[];
 }
+
+/** Memories about being wronged by the player, wherever they came from. */
+const GRIEVANCES = new Set(['was_attacked_by_player', 'was_treated_badly_by_player', 'witnessed_violence']);
 
 export function speakerBrief(c: PresentCharacterContext): SpeakerBrief {
   return {
@@ -78,5 +91,8 @@ export function speakerBrief(c: PresentCharacterContext): SpeakerBrief {
     mustNotReveal: c.def.secrets
       .filter((s) => !c.revealableSecrets.some((r) => r.id === s.id))
       .map((s) => s.id),
+    holdingAgainstYou: c.knownMemories
+      .filter((m) => GRIEVANCES.has(m.fact.predicate))
+      .map((m) => m.fact.text),
   };
 }
