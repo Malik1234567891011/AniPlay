@@ -23,14 +23,31 @@ the documents still outstanding.
   *Dico d'espions*. Includes the finding that `un agent` means the recruited
   source, not the officer.
 
-## Still outstanding
+## Written since, from this research — all of it in `../`
 LANGUAGE_BIBLE, NARRATIVE_STYLE, DIALOGUE_AND_REGISTER, GENRE_GUIDES,
-TERMINOLOGY, ENGLISH_CALQUE_BLACKLIST, PLAYER_GRAMMAR,
+TERMINOLOGY, ENGLISH_CALQUE_BLACKLIST, PLAYER_GRAMMAR, TYPOGRAPHY,
 LOCALIZATION_ARCHITECTURE, STORY_AUDIT, APP_STORE_FRANCE, QA_PLAN.
+
+Plus three reporting tools that change nothing: `npm run i18n:extract`,
+`npm run fr:lint`, `npm run fr:probe`.
+
+## Still outstanding
+Nothing in the document set. The next work is Phase 2 and it starts at
+`ENGLISH_FREEZE_COMMIT` — the sequence is in
+[`../LOCALIZATION_ARCHITECTURE.md`](../LOCALIZATION_ARCHITECTURE.md#phase-2-implementation-sequence).
 
 Two research areas came up thin and are worth a fresh pass **only if budget
 allows**: French horror *game* localization (Amnesia, Resident Evil, Silent
-Hill, Alan Wake), and the Stephen King French-translation debate.
+Hill, Alan Wake), and the Stephen King French-translation debate. Neither
+blocks anything — the horror register question is already settled by the
+Lovecraft/Camus and Sola/Lauzon evidence.
+
+Two decisions are **pending approval** and nothing has been applied to code:
+world titles (`TERMINOLOGY.md` §1.3) and quality-tier labels (§3.6).
+
+One brand blocker sits outside this project: `app.json` says `AniPlay`,
+`server.ts:330` says `Plotbreak`. The France store listing cannot be prepared
+around an ambiguous name.
 
 ## The three findings that matter most across all five
 1. **Do not add.** Every documented failure in French genre translation is an

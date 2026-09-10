@@ -1,8 +1,9 @@
 # Plotbreak — localisation fr-FR
 
-**Statut : PHASE 1 (recherche). Aucune traduction de masse n'a été faite.**
+**Statut : PHASE 1 terminée pour la documentation. Aucune traduction de masse n'a été faite.**
 
 Branche `localization/fr-fr`, worktree `/Users/malik/AniPlay-fr-fr`, basée sur `main` @ `77aeeb7`.
+Les quatorze documents ci-dessous existent. Rien n'a été appliqué au code.
 
 ---
 
@@ -31,7 +32,7 @@ playing for thirty minutes and never once thinking *c'est traduit de l'anglais*.
 | 3 | [`NARRATIVE_STYLE.md`](NARRATIVE_STYLE.md) | Second-person French narration that reads as literature, not as instructions. |
 | 4 | [`DIALOGUE_AND_REGISTER.md`](DIALOGUE_AND_REGISTER.md) | Spoken French, the `addressMode` character state, slang policy, the profanity ladder. |
 | 5 | [`PLAYER_GRAMMAR.md`](PLAYER_GRAMMAR.md) | `Tu es arrivé` vs `Tu es arrivée`. The player identity model and the agreement policy. |
-| 6 | [`GENRE_GUIDES.md`](GENRE_GUIDES.md) | Twelve genre voices. Basketball, espionage, horror, fantasy, romance and the rest do not share a narrator. |
+| 6 | [`GENRE_GUIDES.md`](GENRE_GUIDES.md) | Fourteen genre voices. Basketball, espionage, horror, fantasy, romance and the rest do not share a narrator. |
 | 7 | [`TERMINOLOGY.md`](TERMINOLOGY.md) | Anime/manga vocabulary, Plotbreak product terms, proper nouns, grammatical gender glossary. |
 | 8 | [`ENGLISH_CALQUE_BLACKLIST.md`](ENGLISH_CALQUE_BLACKLIST.md) | The living list of what makes French sound translated. |
 | 9 | [`TYPOGRAPHY.md`](TYPOGRAPHY.md) | Guillemets, spacing, apostrophes, the one Plotbreak quotation convention, and what is actually safe on an iPhone. |
@@ -59,8 +60,24 @@ playing for thirty minutes and never once thinking *c'est traduit de l'anglais*.
 6. **Never keep a joke because it survives translation.** Preserve function,
    character intent and comedic rhythm. The French version may have a
    different joke.
-7. **Proper nouns hold still.** Kaia Thorn, Blackwake, Last Five and Mara
-   Ellison do not become French. Titles, ranks, organisations and puns may.
+7. **Proper nouns hold still.** Kaia Thorn, Mara Ellison, Saltmarket and Kosei
+   do not become French. Ranks, organisations and puns may.
+   ⚠️ **The title of a *work* is a separate question** and it is open: French
+   publishing translates titles and keeps the names inside them, which would
+   make Blackwake `Sillage Noir` and Last Five `Le Cinq Majeur`. Candidates,
+   with the cover-art constraint and the alternative of keeping all ten in
+   English, are in [`TERMINOLOGY.md` §1.3](TERMINOLOGY.md). **Pending approval —
+   nothing has been renamed.**
+
+## Tooling
+
+Three scripts, added on this branch. All three **report and change nothing.**
+
+| Command | What it does |
+| --- | --- |
+| `npm run i18n:extract` | Reproduces the string inventory in [`UI_AUDIT.md`](UI_AUDIT.md), split into client / server / model. `--worlds` measures the authored world content — **252 776 characters, ≈46 000 words** |
+| `npm run fr:lint` | The 30 rules in [`QA_PLAN.md`](QA_PLAN.md) §2. `--self-test` proves them against 30 bad samples and 17 native French lines, which is what it does today because there is no fr catalogue yet. `--fenced <file.md>` lints ```fr blocks — that is how the App Store copy is checked |
+| `npm run fr:probe` | Runs a 39-sentence French corpus through the shipped parser, the entity resolver and the streaming writer. `--strict` exits non-zero while French still falls through |
 
 ## Phase boundary
 
