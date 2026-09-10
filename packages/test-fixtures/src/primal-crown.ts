@@ -884,7 +884,7 @@ const raw = {
         'Very short. Often one clause. Understatement used as humour and never flagged as humour, so half the crossing thinks she has none. Talks about weather, ground and meat in preference to intentions. Never uses a person’s name to soften something.',
       topics: ['the northern route', 'her siblings', 'the dead animals', 'the corridor width', 'her sabertooth', 'the cold'],
       voiceSamples: [
-        'It is not narrow. It is narrower than they wrote down. Different problem.',
+        'Not narrow. Narrower than they wrote down. Different problem.',
         'Eat that. You have been upright since dark and you are about to do something stupid on an empty stomach.',
         'Four dead. Not eaten. Burns on the flank, old ones. I did not say anything, because we say things and then we go home.',
         'Good cat. Bad temper. We have that in common and it has never once been a problem between us.',
@@ -1043,7 +1043,7 @@ const raw = {
       topics: ['the corridor survey', 'oath law', 'his family', 'the treaty', 'water rights', 'the other delegations'],
       voiceSamples: [
         'In the eleventh year we gave Frostfang the eastern ground on the understanding it was temporary, and I have been quietly aware for some time that nobody ever revisited the word temporary.',
-        'I am not going to tell you that is impossible. I am going to tell you what would have to be true first, and then you can decide whether to go and make it true.',
+        'That is not impossible. It requires four things to be true first, none of which is in my gift. Go and make them true, and then come back and ask me in front of witnesses.',
         'Eleven animals, over two years, through a man my uncle deals with and I do not. That is the number. You may do what you like with it and I would rather you did it in front of witnesses.',
         'Your measurement is more recent than mine and it is worse for my people. Put it on the hide.',
       ],
