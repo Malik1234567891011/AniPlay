@@ -495,6 +495,18 @@ export function SessionScreen({
         {turns.slice(0, -1).map((turn) => (
           <View key={turn.turnId} style={{ gap: spacing.sm }}>
             {turn.actionText ? <PlayerAction text={turn.actionText} /> : null}
+            {/*
+              The frame belongs to the beat that earned it.
+              
+              There used to be exactly one hero image on screen, in a fixed slot
+              below the feed, showing whichever turn was newest — so an image
+              appeared with its beat and vanished the moment the next turn
+              landed. Scrolling back through the story showed none of the art it
+              had shown you live. A frame is part of the beat; it stays with it.
+            */}
+            {turn.heroImageUrl ? (
+              <HeroFrame uri={turn.heroImageUrl} onPress={() => setFullScreenImage(turn.heroImageUrl!)} />
+            ) : null}
             {turn.blocks.map((block, index) => (
               <Block key={index} block={block} scene={scene} />
             ))}
@@ -527,22 +539,7 @@ export function SessionScreen({
 
         {/* Spec §19.1 tier 2 — a hero frame for a beat that earned one. */}
         {heroImageUrl ? (
-          <Pressable
-            accessibilityRole="imagebutton"
-            accessibilityLabel="Scene image. Tap to view full screen."
-            onPress={() => setFullScreenImage(heroImageUrl)}
-          >
-            <Image
-              source={{ uri: heroImageUrl }}
-              style={{
-                width: '100%',
-                aspectRatio: 3 / 2,
-                borderRadius: radius.card,
-                backgroundColor: colors.bg.elevated,
-              }}
-              resizeMode="cover"
-            />
-          </Pressable>
+          <HeroFrame uri={heroImageUrl} onPress={() => setFullScreenImage(heroImageUrl)} />
         ) : null}
 
         {/*
@@ -1047,6 +1044,28 @@ function Block({ block, scene }: { block: NarrativeBlock; scene: SessionSceneSta
     );
   }
   return <NarrationBlock text={block.text} />;
+}
+
+/** A beat's hero frame. Rendered inline with its turn, so it stays in the feed. */
+function HeroFrame({ uri, onPress }: { uri: string; onPress: () => void }): React.JSX.Element {
+  return (
+    <Pressable
+      accessibilityRole="imagebutton"
+      accessibilityLabel="Scene image. Tap to view full screen."
+      onPress={onPress}
+    >
+      <Image
+        source={{ uri }}
+        style={{
+          width: '100%',
+          aspectRatio: 3 / 2,
+          borderRadius: radius.card,
+          backgroundColor: colors.bg.elevated,
+        }}
+        resizeMode="cover"
+      />
+    </Pressable>
+  );
 }
 
 function PlayerAction({ text }: { text: string }): React.JSX.Element {
