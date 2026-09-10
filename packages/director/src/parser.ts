@@ -37,14 +37,25 @@ export interface IntentParser {
 }
 
 /** Ordered longest-phrase-first so "use ability" beats "use". */
+/**
+ * A violent verb with somebody on the end of it.
+ *
+ * The object has to look like a person: a pronoun, or a capitalised name,
+ * optionally behind "the" or a possessive. "deck him", "beat Rei", "kick the
+ * Drillmaster" — and not "on a deck", "beat the five who left", "kick the ball".
+ */
+const AGGRESSION_AT_A_PERSON =
+  /\b(?:deck|floor|beat|hit|kick|jump|smack|slap)\s+(?:him|her|them|me|us|his|their|(?:the|that|this|a|an)\s+(?:\w+\s+)?(?:man|woman|guy|girl|boy|kid|lad|fellow|bastard|guard|sailor|soldier|officer|captain|coach|stranger|thug|drunk|clerk|driver|bouncer)|the\s+\p{Lu}[\p{Ll}\p{M}'’-]+|\p{Lu}[\p{Ll}\p{M}'’-]{2,})\b/u;
+
 const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
   { verb: 'travel', patterns: [/\b(go|head|walk|travel|move|return|climb|descend|enter|leave|exit)\s+(to|into|for|toward|towards|back|up|down|out|in)\b/i, /\b(go|head|travel)\s+to\b/i] },
   {
     verb: 'attack',
     patterns: [
-      /\b(attack|strike|hit|punch|stab|slash|swing at|fight|lunge at|shove|tackle|headbutt|kick)\b/i,
-      // How people actually phrase violence.
-      /\b(beat|batter|pummel|thrash|clobber|deck|floor|jump|throttle|strangle|choke)\b/i,
+      /\b(attack|strike|punch|stab|slash|swing at|fight|lunge at|shove|tackle|headbutt)\b/i,
+      // How people actually phrase violence, minus the words that are also
+      // ordinary nouns — those are below, and they need a person after them.
+      /\b(batter|pummel|thrash|clobber|throttle|strangle|choke)\b/i,
       /\bbeat (?:the )?(?:shit|hell|crap|life|daylights) out of\b/i,
       /\b(lay into|wail on|rough up|beat up|knock out|take a swing at|go for|set upon)\b/i,
       /\b(kill|murder|stab|shoot|execute|finish off)\b/i,
@@ -53,6 +64,19 @@ const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
       /\b(fights?|fighting|swinging|swings)\b/i,
       /\b(keep|carry on|press|continue)\s+(going|at it|fighting|the attack|attacking|pressing)\b/i,
       /\bagain\b.*\b(hit|swing|strike)\b|\b(hit|swing|strike)\b.*\bagain\b/i,
+      // Violence only when it lands on somebody.
+      //
+      // "deck", "floor", "beat", "hit", "kick" and "jump" are violent verbs and
+      // ordinary nouns, and this pattern read them as violence wherever they
+      // appeared. "I mock Mako and tell her she is useless on a deck" — on a
+      // *ship* — opened a fistfight and she hit the player for four damage.
+      // Last Five's premise is literally "Beat the five who left"; a sports
+      // world is full of hitting and kicking that is not assault.
+      //
+      // So they count when a person follows them, and not otherwise. The cast
+      // is checked separately, at the target stage, so a name here is only the
+      // shape of one.
+      AGGRESSION_AT_A_PERSON,
     ],
   },
   { verb: 'defend', patterns: [/\b(defend|block|parry|brace|guard|shield myself|dodge)\b/i] },
