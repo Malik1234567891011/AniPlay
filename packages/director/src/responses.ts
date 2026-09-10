@@ -39,6 +39,17 @@ const ResponseSet = z
             text: z.string().max(320),
             /** The attitude this one takes, for the diversity check below. */
             attitude: z.string().max(40),
+            /**
+             * Who this response is aimed at, by id, from `inTheRoom`.
+             *
+             * Not a command language — the text still goes to the interpreter
+             * verbatim, exactly as if it were typed. This is the one fact the
+             * card already knows and a regex has to guess: a tap of *"So it's
+             * pancakes and swims, huh? Sounds like you're dodging"* names
+             * nobody, and in a room of three the parser gave up and created no
+             * speech act at all, so nobody was obliged to answer.
+             */
+            addressedTo: z.string().max(64).nullable(),
           })
           .strict(),
       )
@@ -180,18 +191,21 @@ export async function generateResponses(
         state: payload(context, narrative),
         task:
           'Write three responses the player could send next. Each is first person, 1–3 sentences, ' +
-          'an action and usually a line of dialogue. Give each a one-word attitude.',
+          'an action and usually a line of dialogue. Give each a one-word attitude, and the id of the ' +
+          'person it is addressed to from inTheRoom — null if it is addressed to nobody in particular.',
       }),
       { maxTokens: 700, temperature: 0.9, timeoutMs: 12_000 },
     );
 
+    const inRoom = new Set(context.presentCharacters.map((c) => c.def.id));
     const responses = result.value.responses
       .map((r) => ({
-        // The interpreter reads this exactly as if it were typed, so the hint
-        // says nothing the words do not: no verb to privilege, no target to
-        // pre-resolve, no separate command language for cards.
+        // The interpreter reads the text exactly as if it were typed — no verb
+        // is privileged and nothing is pre-resolved. The hint carries only the
+        // addressee, and only when the model named somebody who is actually in
+        // the room, so a hallucinated id can never reach the engine.
         text: r.text.trim(),
-        intentHint: 'freeform',
+        intentHint: inRoom.has(r.addressedTo ?? '') ? `speak:${r.addressedTo}` : 'freeform',
         risk: undefined,
         resourceCostLabel: null,
       }))

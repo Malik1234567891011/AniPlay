@@ -199,7 +199,7 @@ export function SessionScreen({
 
   // `override` is how the turn menu re-sends an action that is no longer in
   // the composer. GP-04 retry is a new turn, not a rewind.
-  const send = useCallback(async (override?: string) => {
+  const send = useCallback(async (override?: string, intentHint?: string | null) => {
     const text = (override ?? draft).trim();
     if (text.length === 0 || sending) return;
 
@@ -231,7 +231,7 @@ export function SessionScreen({
     try {
       const accepted = await api.submitTurn(
         sessionId,
-        { actionText: text, qualityTier, sessionRevision: revision },
+        { actionText: text, qualityTier, sessionRevision: revision, selectedSuggestionId: intentHint ?? null },
         idempotencyKey,
       );
 
@@ -608,7 +608,11 @@ export function SessionScreen({
                 // the lean-back way of playing can afford.
                 onPress={() => {
                   setSuggestions([]);
-                  void send(item.text);
+                  // The card's hint goes up with it. A tapped response was
+                  // written by a stage that knew who it was addressed to, and
+                  // re-deriving that from its own prose is how "Fancy the
+                  // company?" invited nobody.
+                  void send(item.text, item.intentHint);
                 }}
                 onEdit={() => {
                   setSuggestions([]);

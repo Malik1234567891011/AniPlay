@@ -287,13 +287,23 @@ export class ApiClient {
 
   submitTurn(
     sessionId: string,
-    body: { actionText: string; qualityTier: QualityTier; sessionRevision: number },
+    body: {
+      actionText: string;
+      qualityTier: QualityTier;
+      sessionRevision: number;
+      /**
+       * The tapped response's `intentHint`, so the server knows who the line is
+       * aimed at rather than re-deriving it from the card's own prose. Null for
+       * typed input, which is parsed from the words as it always was.
+       */
+      selectedSuggestionId?: string | null;
+    },
     idempotencyKey: string,
   ): Promise<SubmitTurnResponse> {
     return this.#request(
       'POST',
       `/v1/sessions/${sessionId}/turns`,
-      { ...body, selectedSuggestionId: null, voicePreferred: false },
+      { selectedSuggestionId: null, ...body, voicePreferred: false },
       { 'idempotency-key': idempotencyKey },
     );
   }

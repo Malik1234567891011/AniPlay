@@ -396,7 +396,11 @@ export function estimateTokens(value: unknown): number {
  */
 function turnsSinceHeroImage(recentTurns: readonly TurnRecord[]): number | null {
   for (let i = recentTurns.length - 1; i >= 0; i--) {
-    if (recentTurns[i]?.heroImageUrl) return recentTurns.length - 1 - i;
+    // Distance to the turn being planned, which is not in `recentTurns` — so
+    // a frame on the immediately previous turn is one turn ago, not zero. The
+    // off-by-one here made every gap read one turn shorter than it was, and
+    // the spacing rule reject frames it should have allowed.
+    if (recentTurns[i]?.heroImageUrl) return recentTurns.length - i;
   }
   return null;
 }

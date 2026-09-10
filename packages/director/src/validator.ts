@@ -7,7 +7,7 @@ import { countItem, isSuccess } from '@aniplay/engine';
 import type { TurnContext } from './context.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { findEmptyConsequences, stripEmptyConsequences } from './empty-consequence.js';
-import { findAbsenceOfPresent } from './present-absence.js';
+import { findAbsenceOfPresent, findPresenceOfAbsent } from './present-absence.js';
 
 /** Kept in one place so the repair can find its own findings. */
 const EMPTY_CONSEQUENCE_MARKER = 'Names a change without naming what changed';
@@ -214,6 +214,33 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
       'LOCATION_CONTRADICTION',
       'ERROR',
       `${claim.name} is in this location, but the prose writes them out of it: "${claim.sentence}"`,
+      claim.blockIndex,
+    );
+  }
+
+  // --- LOCATION_CONTRADICTION, the other direction ---
+  // Somebody the engine does not have in the room, written into it.
+  //
+  // The dock beat in Nine Weeks: the player invited Juno for a walk, the
+  // invitation resolved as a targetless action so nobody moved, and the writer
+  // covered the empty dock with "Juno drags a hand along the top rail as they
+  // join you." The media plan for that beat listed no active characters at all.
+  // One turn later the engine's version won and the player was told they had
+  // imagined it.
+  //
+  // Same code, same severity: a beat that seats somebody in the room is a
+  // promise the next turn has to break.
+  const presentIds = new Set(context.presentCharacters.map((c) => c.def.id));
+  for (const claim of findPresenceOfAbsent(
+    turn.blocks,
+    context.story.characters
+      .filter((c) => !presentIds.has(c.id))
+      .map((c) => ({ id: c.id, name: c.name })),
+  )) {
+    push(
+      'LOCATION_CONTRADICTION',
+      'ERROR',
+      `${claim.name} is not in this location, but the prose puts them in it: "${claim.sentence}"`,
       claim.blockIndex,
     );
   }
