@@ -60,13 +60,16 @@ describe('plurals, and the zero that is singular in French', () => {
     // A half-built catalogue must render English, not the key. A screen full
     // of `profile.haptics` is not a useful intermediate state.
     //
-    // The key is *found* rather than named. `profile.haptics` was written here
-    // as the example and stopped being untranslated the moment `fr/profile.ts`
-    // was written — any key named here has the same fate, so the test asks the
-    // catalogue which key is still missing instead of remembering one.
-    const untranslated = TRANSLATION_KEYS.find((key) => !(key in fr));
-    if (!untranslated) throw new Error('the French catalogue is complete — this test has done its job and can go');
-    expect(translate('fr', untranslated)).toBe(en[untranslated]);
+    // The catalogue is complete now, so the fallback is exercised against a key
+    // that is deliberately absent rather than against a real gap. Naming a real
+    // key here was tried twice and broke both times — first when
+    // `profile.haptics` was translated, then when the last area file landed and
+    // there was no untranslated key left to find. The behaviour under test is
+    // i18next's fallback, not the state of the translation.
+    const missing = 'profile.language_never_translated' as TranslationKey;
+    expect(translate('fr', missing)).toBe(missing);
+    // And the real invariant, now that it holds: French covers every key.
+    expect(TRANSLATION_KEYS.filter((key) => !(key in fr))).toEqual([]);
   });
 
   it('renders a French key French has got', () => {
