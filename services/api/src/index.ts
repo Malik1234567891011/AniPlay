@@ -35,7 +35,7 @@ ready
         persistence: app.ctx.repo instanceof PostgresRepository ? 'postgres' : 'in-process',
         auth: app.ctx.auth.name,
       },
-      'ANIMA API listening',
+      'Plotbreak API listening',
     );
   })
   .catch((error) => {
