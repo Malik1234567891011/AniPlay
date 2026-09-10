@@ -785,3 +785,58 @@ writer disagree about who is in the room, and nothing catches it.*
 8. Then the small ones: #14 singular-they agreement, #16/#30 time, #17 scroll,
    #20 telemetry, #21 chip wording, #25 false positive, #29 echoed input,
    #22 autocorrect.
+
+---
+
+# FIX PASS — status
+
+Branch `main`. Commits `53d846b`, `3ea2d12`.
+
+## Fixed and tested
+
+| # | What | Where |
+|---|---|---|
+| 37 | Absence check matched "Juno Vale"/"Vale", never "Juno" — so it had never fired in this world | `present-absence.ts` → `nameKeys` |
+| 12 | Writer placing a character the engine does not have in the room, now caught the same way | `present-absence.ts` `findPresenceOfAbsent`, wired in `validator.ts` |
+| 19 | Cards carry their addressee; `selectedSuggestionId` (dead on the wire since the first API) now delivers it; typed input falls back to whoever spoke last | `responses.ts`, `parser.ts`, `pipeline.ts`, `turn-service.ts`, `server.ts`, `client.ts`, `Session.tsx` |
+| 11 | `notable` had no term a conversation world could satisfy; VIVID spacing 10 → 5; `turnsSinceHeroImage` off by one | `director.ts`, `context.ts` |
+| 36 | `STATE_REVEAL` instructed the stamina paragraph on every resource tick | `director.ts` `buildBeats` |
+| 33 | Cards written from the attempt rather than the outcome (`howItWentForYou`) | `responses.ts` |
+| 24 / 38 | Dialogue offered to an empty room (`youAreAlone` + `talksToNobody`) | `responses.ts` |
+| — | Props invented for the player (the cigarette) | `responses.ts` policy |
+| 7 | Composer placeholder — not a bug, was the a11y label | — |
+
+New tests: `present-absence.spec.ts` (+10), `hero-frame.spec.ts` (10),
+`addressee.spec.ts` (9), `responses.spec.ts` (9). Full suite and typecheck green.
+
+## Not yet fixed
+
+**Needs a playtest to confirm the fixes landed before doing more.** The next
+run should be cheap now — read turns from Postgres, not the UI.
+
+- **#18** `interact` on "I turn to Juno" — a DC 10 `mind` check with an energy
+  cost for turning your head. The stamina *narration* is fixed; the spurious
+  mutation is not. Stage-direction verbs should not roll.
+- **#31** A public scene leaves no trace. Climbing on the bar and demanding a
+  friend's secret in front of the whole staff produced `checks: []` and one
+  `TIME_ADVANCE`. Needs a flag and an observable fact at minimum — no invented
+  relationship maths. Parse confirmed: `speak→juno` + `travel→longhouse_bar` +
+  a targetless `speak`, so the intent is there and the engine drops it.
+- **#35** Dialogue attributions with no dialogue — should resolve with #19,
+  since the empty `speakerOrder` came from Juno not being present. Verify.
+- **#32** The dock card in 8 of 9 turns. `youHaveAlreadyTried` exists and was
+  not honoured; may improve with `howItWentForYou`. Verify before adding code.
+- **#14** "They glances" — singular-they agreement, intermittent.
+- **#16 / #30** Dusk at 4:44 PM; conversation costs 12 minutes and crossing the
+  camp costs 3.
+- **#17** Feed scrolls back ~350pt on submit when the cards are removed.
+- **#20** `model_invocations` has never had a row. No honest latency data.
+- **#21** "Juno reconsiders you" for −1 respect reads as warming.
+- **#25** `NAME_IDENTITY_DRIFT` false positive on "Cass stands where you left him".
+- **#29** The player's own line echoed back as a NARRATION block.
+- **#22** `autoCorrect` unset on the composer (defaults on) — verify on device.
+
+## Next
+Re-run Nine Weeks to ~12 turns reading from Postgres, and check specifically:
+frames per turn, whether any card addresses an absent character, whether a
+refusal survives into the next card set, and whether stamina prose is gone.
