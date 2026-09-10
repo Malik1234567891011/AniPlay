@@ -37,7 +37,8 @@ const raw = {
     'If the hallway light outside 309 turns red, do not look through the peephole.\n\n' +
     'If the lift opens onto a floor labelled 0, do not step out.\n\n' +
     'If somebody knocks at 2:13 in the morning and says they are Ayame, do not open it. She will never knock at that time. She promises.\n\n' +
-    'Her older sister disappeared from this building four years ago. The police wrote it up as a runaway. Ayame moved in to prove otherwise, and she has seen Mika twice since.\n\n' +
+    'What breaking one of them costs is not written down anywhere. The tenant who had 312 before you found out on a Thursday in March, and Mrs Vale has still not taken his name off the mailbox.\n\n' +
+    'Ayame’s older sister disappeared from this building four years ago. The police wrote it up as a runaway. Ayame moved in to prove otherwise, she has seen Mika twice since, and she is not going to lose her a second time.\n\n' +
     'The house was built over something that burned in 1911, and it has spent a hundred years learning how people behave. It does not haunt anybody. It rehearses them, and it gets better at it the more you let somebody matter to you.',
   creatorId: 'creator_official',
   creatorName: 'ANIMA Studio',
@@ -796,7 +797,7 @@ const raw = {
       name: 'Tomas Reed',
       role: 'Room 206. Paramedic, nights',
       cardBlurb:
-        'The most rational person in the building, which is why what he has seen in the stairwell twice is a problem he has decided to solve by working more shifts.',
+        'The most rational person in the building, and the one who will tell you plainly what he saw in the stairwell twice — then explain it away and pick up another shift so he does not have to think about it.',
       pronouns: 'he/him',
       publicTraits: ['Practical', 'Dry', 'Permanently four hours short of enough sleep'],
       hiddenDrives: ['He is trying to earn a deposit fast enough to get his younger brother out of their mother’s flat'],
@@ -1571,7 +1572,7 @@ const raw = {
       id: 'archetype',
       label: 'What do you actually do?',
       helpText:
-        'Where you were before Bellweather Street, which sets what you are good at. It does not set what you believe about the building, what you are willing to do about it, or whether you stay. All of that is yours.',
+        'Where you were before Bellweather Street, which sets what you are good at. It is fixed for the whole story. What it does not set is what you believe about the building, what you are willing to do about it, or whether you stay — all of that is yours, and you can change your mind about any of it on any night.',
       kind: 'ARCHETYPE',
       required: true,
     },
