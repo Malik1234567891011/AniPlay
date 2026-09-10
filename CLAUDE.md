@@ -30,6 +30,11 @@ writes the beat.
   bugs come from.
 - Turn pipeline order (§17.1): parse → reserve → resolve → direct → write →
   validate → repair (once) → commit.
+- **The simulator loses its auth when the app relaunches.** Discover still
+  renders (it is public), but Library shows "Sign in to continue" and every
+  existing session is unreachable. Do not try to reach a session through the UI
+  after a relaunch — `npm run smoke` drives the whole pipeline with no auth and
+  no UI, and is the right tool for verifying engine or director changes.
 
 ## Working here
 
@@ -42,6 +47,10 @@ the call, it is carrying it for the rest of the session.
   tokens and says more than a `snapshot_ui` at ~4,000. Screenshots are for
   pixels only — layout, images, did-it-render.
 - **Filter verbose commands.** `npm test 2>&1 | grep -E "Test Files|Tests |FAIL"`.
+- **`npm run playtest <session-id> [fromTurn]`** prints a played session's beats
+  with the media plan, beat plan, checks, mutations and cards attached.
+  `npm run playtest latest` lists recent sessions. This is the cheap way to read
+  a playtest.
 - **Checkpoint to a file as you go**, not at the end. A conclusion that lives
   only in the conversation is one rate limit away from being re-derived at full
   price. Commit it.
