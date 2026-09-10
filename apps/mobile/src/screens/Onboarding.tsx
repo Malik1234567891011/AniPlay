@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Linking, ScrollView, View } from 'react-native';
+import { Animated, Dimensions, FlatList, Linking, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Chip, Row, Stack, Txt, colors, spacing, GUTTER } from '@aniplay/ui';
+import { Button, Chip, Row, Stack, StoryArt, Txt, colors, radius, spacing, GUTTER } from '@aniplay/ui';
+import type { StorySummary } from '@aniplay/contracts';
+import { api } from '../api/client.jsx';
 import { useStore } from '../state/store.jsx';
 
 /**
@@ -174,6 +176,113 @@ export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Eleme
           <Button label="Skip" variant="tertiary" onPress={() => finish([])} />
         </Stack>
       </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+/**
+ * OB-04 — five worlds, and a way in.
+ *
+ * The taste screen before this asks what somebody likes and then drops them on
+ * a shelf of twenty-three things, which is the moment a new player bounces. So
+ * the last thing onboarding does is put five covers in front of them and let
+ * one of them be tapped.
+ *
+ * Five, not twenty-three, and deliberately unlike each other: a dark shinobi
+ * tragedy, a beastfolk arena, a domestic romance, a horror, a piece of military
+ * science fiction. Somebody who likes none of these can still see everything,
+ * which is what the button underneath is for.
+ *
+ * The picks are pinned rather than computed. A "most promising" query would
+ * rank on run counts we do not have yet, and would quietly drift as the catalog
+ * grows; this is a shop window and somebody should choose what is in it.
+ */
+const SHOWCASE_STORY_IDS = [
+  'story_itachi',
+  'story_second_skin',
+  'story_good_morning_husband',
+  'story_hush_house',
+  'story_zero_throne',
+] as const;
+
+export function ShowcaseScreen({
+  onSeeAll,
+  onOpen,
+}: {
+  onSeeAll: () => void;
+  onOpen: (storyId: string) => void;
+}): React.JSX.Element {
+  const [stories, setStories] = useState<StorySummary[]>([]);
+
+  useEffect(() => {
+    let live = true;
+    void api
+      .discover()
+      .then((data) => {
+        if (!live) return;
+        const all = new Map(data.rails.flatMap((rail) => rail.stories).map((s) => [s.storyId, s]));
+        // Pinned order, and anything missing is skipped rather than leaving a
+        // hole — a world can be pulled from the catalog without breaking this.
+        setStories(SHOWCASE_STORY_IDS.map((id) => all.get(id)).filter((s): s is StorySummary => !!s));
+      })
+      .catch(() => undefined);
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  // A card wide enough that the next one peeks in at the edge, which is what
+  // says "these swipe" without a hint or a row of dots.
+  const cardWidth = Math.min(Dimensions.get('window').width * 0.62, 260);
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
+      <View style={{ flex: 1, paddingTop: spacing.xxxl }}>
+        <Stack gap={spacing.sm} style={{ paddingHorizontal: GUTTER }}>
+          <Txt variant="display">All set! Choose a title and play now.</Txt>
+          <Txt variant="body" color={colors.text.secondary}>
+            We picked a few to start you off.
+          </Txt>
+        </Stack>
+
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <FlatList
+            horizontal
+            data={stories}
+            keyExtractor={(item) => item.storyId}
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={cardWidth + spacing.md}
+            decelerationRate="fast"
+            contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.md }}
+            renderItem={({ item }) => (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`${item.title}. Start this story.`}
+                onPress={() => onOpen(item.storyId)}
+                style={({ pressed }) => ({ width: cardWidth, opacity: pressed ? 0.85 : 1 })}
+              >
+                <StoryArt
+                  seed={item.storyId}
+                  uri={item.coverImage}
+                  style={{ width: cardWidth, height: cardWidth * 1.5, borderRadius: radius.card }}
+                />
+                <Stack gap={2} style={{ paddingTop: spacing.md }}>
+                  <Txt variant="h3" numberOfLines={2}>
+                    {item.title}
+                  </Txt>
+                  <Txt variant="caption" color={colors.text.muted}>
+                    Plotbreak
+                  </Txt>
+                </Stack>
+              </Pressable>
+            )}
+          />
+        </View>
+
+        <View style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.lg }}>
+          <Button label="See all stories" variant="secondary" onPress={onSeeAll} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
