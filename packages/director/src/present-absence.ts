@@ -37,6 +37,14 @@ const ABSENCE = [
   /\b(?:has|had|have)\s+(?:already\s+)?(?:left|gone)\b/i,
   /\b(?:only|just)\s+(?:an?\s+)?(?:\w+\s+){0,2}empty\s+\w+/i,
   /\bnowhere\s+(?:to\s+be\s+)?(?:seen|found)\b/i,
+  // Not here *yet*, which is the same claim pointed at the future.
+  //
+  // The third distinct wording this bug has arrived in — "Coach Torakawa isn't
+  // here", "the platform is empty except for you", and "Mina hasn't come up
+  // the platform, not yet" — so this one is written as a shape rather than a
+  // phrase: a negated arrival, whatever verb it uses.
+  /\b(?:has|have|had)(?:n['’]t|\s+not)\s+(?:yet\s+)?(?:come|arrived|shown|turned|appeared|made\s+it)\b/i,
+  /\b(?:is|are|was|were)(?:n['’]t|\s+not)\s+(?:here|there|around)\s+yet\b/i,
 ];
 
 /** "empty except for her" is a full room of one person, not an absence. */
@@ -59,6 +67,8 @@ const EMPTIED_ROOM = [
   /\byou\s+are\s+(?:completely\s+|quite\s+|entirely\s+)?alone\b/i,
   /\b(?:there\s+is|there's)\s+no\s?(?:one|body)\s+(?:else\s+)?(?:here|there|around|left)\b/i,
   /\bnobody\s+else\s+(?:is|was)\s+(?:here|there|around)\b/i,
+  // Subject first, which the "there is nobody" form above does not cover.
+  /\b(?:nobody|no\s?one)\s+(?:is|was)\s+(?:here|there|around|coming)\b/i,
   /\bthe\s+\w+\s+(?:is|was)\s+(?:completely\s+)?deserted\b/i,
 ];
 

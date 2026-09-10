@@ -68,6 +68,30 @@ describe('writing somebody out of the room they are standing in', () => {
     expect(findAbsenceOfPresent([{ text: 'You are alone on the platform.' }], [])).toEqual([]);
   });
 
+  it('catches the same claim pointed at the future', () => {
+    // Live, third wording: "You ask about the tower, but nobody is there. Mina
+    // hasn't come up the platform, not yet."
+    for (const text of [
+      'Torakawa has not come up yet.',
+      'Torakawa hasn’t arrived.',
+      'Torakawa is not here yet.',
+      'Nobody is there.',
+      'No one is around.',
+    ]) {
+      expect(findAbsenceOfPresent([{ text }], PRESENT), text).toHaveLength(1);
+    }
+  });
+
+  it('does not read an ordinary "not yet" as an absence', () => {
+    for (const text of [
+      'Torakawa has not said anything yet.',
+      'Torakawa is not ready to talk about it.',
+      'You have not asked Torakawa yet.',
+    ]) {
+      expect(findAbsenceOfPresent([{ text }], PRESENT), text).toEqual([]);
+    }
+  });
+
   it('says nothing about a character who is not on stage', () => {
     expect(findAbsenceOfPresent([{ text: 'Rei Amagi is not here.' }], PRESENT)).toEqual([]);
   });
