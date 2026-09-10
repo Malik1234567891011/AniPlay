@@ -90,6 +90,12 @@ const POLICY = [
   'At least one of the three should be able to change the scene: go somewhere, start something, end the',
   'conversation, involve somebody else. Three ways to keep talking to the same person about the same',
   'thing is a story that cannot move.',
+  '',
+  'When a response goes somewhere, NAME the place, using one of `whereYouCouldGo` and the world\'s own',
+  'word for it. "Lead the way" and "as we walk" read like movement and are not movement — the player',
+  'stays exactly where they were. "I pick up my bag and follow her down to the Esplanade" is movement.',
+  'If a scene has been in one room for a while and nothing is holding the player there, one of the',
+  'three should leave it.',
 ].join('\n');
 
 /**
@@ -105,6 +111,16 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
     whatThePlayerDid: context.playerAction,
     where: context.scene.locationName,
     when: context.scene.worldTimeLabel,
+    /**
+     * Real exits, by name.
+     *
+     * Without these the responses talk about leaving instead of leaving. Nine
+     * turns of a Seven Days playtest stayed on one railway platform while the
+     * cards said "lead the way — pastries before secrets" and "I glance at the
+     * bakery sign as we walk": the prose moved and the player did not, because
+     * nothing named a destination the parser could resolve.
+     */
+    whereYouCouldGo: exitsFrom(context),
     you: {
       name: context.player.name,
       pronouns: context.player.pronouns,
@@ -132,6 +148,14 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
       .filter((text): text is string => !!text),
     remembered: context.retrievedFacts.map((f) => f.fact.text),
   };
+}
+
+/** The places this room actually connects to, as the world names them. */
+function exitsFrom(context: TurnContext): string[] {
+  return context.resolution.newOpportunities
+    .filter((o) => o.startsWith('travel_to:'))
+    .map((o) => context.story.locations.find((l) => l.id === o.slice('travel_to:'.length))?.name)
+    .filter((name): name is string => !!name);
 }
 
 /**
