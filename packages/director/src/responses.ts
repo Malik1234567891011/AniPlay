@@ -28,6 +28,7 @@ import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { buildMessages, SAFETY_POLICY, worldRules } from './model-stages.js';
+import { nameKeys } from '@aniplay/contracts';
 import { speakerBrief } from './speaker-brief.js';
 import { stateBands } from './state-bands.js';
 
@@ -194,7 +195,7 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
 
 
 /**
- * A line of dialogue offered to a player who is standing on their own.
+ * A response that reaches for somebody who is not in the room.
  *
  * The policy says not to, and the policy is not enough on its own: turn 17 of
  * a Nine Weeks run produced a beat that said *"Nobody answers. No Juno, no
@@ -203,14 +204,34 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
  * unchanged: *"I wave at Juno with a grin, stepping closer"*, on a beat whose
  * own prose said Juno had left.
  *
- * Dropping the card is better than showing it. Two workable responses beat
- * three where one cannot function, and if too few survive the caller falls
- * back to the rule-built suggestions, which only ever address people the
- * engine has in the room.
+ * Dropping the card is better than showing it — but only the ones that
+ * actually reach. An earlier version dropped every quoted line in an empty
+ * room, which emptied the whole set in Itachi's district and fell the cards
+ * back to the rule-built menu items ("Throw", "Head to The House On The
+ * Corner.") that the prose responses exist to replace. A player alone may
+ * mutter, call out, or read a duty board aloud.
  */
-export function talksToNobody(text: string, peoplePresent: number): boolean {
+export function talksToNobody(
+  text: string,
+  peoplePresent: number,
+  absentNames: readonly string[] = [],
+): boolean {
   if (peoplePresent > 0) return false;
-  return /["\u201c\u00ab][^"\u201c\u201d\u00ab\u00bb]{2,}["\u201d\u00bb]/.test(text);
+
+  const names = absentNames.filter((name) => name.length >= 3);
+  const mentioned = names.find((name) => new RegExp(`\\b${escapeName(name)}\\b`, 'i').test(text));
+  if (!mentioned) return false;
+
+  // Thinking about somebody who is not here is exactly what a player alone
+  // does. Reaching for them is the bug.
+  return !new RegExp(
+    `\\b(?:think|thinking|thought|wonder|wondering|remember|remembering|miss|missing|imagine|picture|recall)\\b[^.!?]{0,40}\\b${escapeName(mentioned)}\\b`,
+    'i',
+  ).test(text);
+}
+
+function escapeName(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
@@ -268,6 +289,12 @@ export async function generateResponses(
     );
 
     const inRoom = new Set(context.presentCharacters.map((c) => c.def.id));
+    // Everybody the player might name who is not standing here.
+    // Every word of every absent name, so "Sandoval" is caught as well as
+    // "Teo" — the same helper the absence validator uses.
+    const absentNames = context.story.characters
+      .filter((c) => !inRoom.has(c.id))
+      .flatMap((c) => nameKeys(c.name));
     const responses = result.value.responses
       .map((r) => ({
         // The interpreter reads the text exactly as if it were typed — no verb
@@ -280,7 +307,7 @@ export async function generateResponses(
         resourceCostLabel: null,
       }))
       .filter((r) => r.text.length > 0)
-      .filter((r) => !talksToNobody(r.text, inRoom.size))
+      .filter((r) => !talksToNobody(r.text, inRoom.size, absentNames))
       .slice(0, 3);
 
     return responses.length >= 2 ? responses : null;

@@ -19,7 +19,9 @@ if (cmd === 'latest') {
     await new Promise(res => setTimeout(res, 2000));
   }
 } else {
-  const [sid, from] = [process.argv[3], Number(process.argv[4] ?? 0)];
+  // argv[2] is the session id in this branch — it is only a subcommand in the
+  // two above.
+  const [sid, from] = [cmd, Number(process.argv[3] ?? 0)];
   const r = await c.query(
     `select turn_index, action_text, blocks, checks, mutations, state_deltas, suggestions,
             media_plan, hero_image_url, repair_violations, beat_plan

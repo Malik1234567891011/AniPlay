@@ -656,6 +656,17 @@ export function SessionScreen({
               placeholder={composerPlaceholder(scene)}
               placeholderTextColor={colors.text.muted}
               multiline
+              /*
+                iOS autocorrect rewrote what the player actually typed. "I'll be
+                at the dock" arrived as "I'love be at the dock", twice, in
+                testing — and this is a game whose entire input is prose full of
+                invented proper nouns (Torakawa, Sandoval, Blackwake), which is
+                the worst possible case for a dictionary that has never heard of
+                them. Spell check stays on, so a typo is still underlined; what
+                stops is the app silently replacing a word the player chose.
+              */
+              autoCorrect={false}
+              spellCheck
               accessibilityLabel="What do you do?"
               editable={!pending}
               style={{
