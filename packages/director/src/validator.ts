@@ -9,6 +9,14 @@ import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { findEmptyConsequences, stripEmptyConsequences } from './empty-consequence.js';
 import { findAbsenceOfPresent, findPresenceOfAbsent } from './present-absence.js';
 
+/** Words that make a following "you" an object rather than somebody addressed. */
+const PREPOSITIONS = [
+  'behind', 'beside', 'below', 'above', 'before', 'beyond', 'near', 'past', 'around',
+  'toward', 'towards', 'opposite', 'against', 'between', 'among', 'with', 'without',
+  'for', 'from', 'to', 'at', 'by', 'on', 'in', 'of', 'like', 'unlike', 'beneath',
+  'under', 'over', 'across', 'through', 'inside', 'outside',
+].join('|');
+
 /** Kept in one place so the repair can find its own findings. */
 const EMPTY_CONSEQUENCE_MARKER = 'Names a change without naming what changed';
 import {
@@ -182,7 +190,18 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
     for (const character of story.characters) {
       const first = character.name.split(/\s+/)[0]!;
       if (first.toLowerCase() === playerName.toLowerCase()) continue;
-      const addressedAsNpc = new RegExp(`\\byou(?:,| are| were)? ${escapeRegex(first)}\\b`, 'i');
+      // "Behind you, Cass's silhouette lingers at the mouth of the path" is
+      // not the player being called Cass. The old pattern matched `you, Cass`
+      // anywhere, so every ordinary "behind you, X" and "beside you, X" was a
+      // violation — which was the only thing the validator caught in a
+      // twenty-five turn run, and it was wrong.
+      //
+      // A vocative "you" is not the object of a preposition, so this refuses to
+      // match when one is sitting in front of it.
+      const addressedAsNpc = new RegExp(
+        `(?<!\\b(?:${PREPOSITIONS})\\s)\\byou(?:,| are| were)? ${escapeRegex(first)}\\b`,
+        'i',
+      );
       if (addressedAsNpc.test(fullText)) {
         push('NAME_IDENTITY_DRIFT', 'WARN', `Player appears to be addressed as ${first}.`);
       }
