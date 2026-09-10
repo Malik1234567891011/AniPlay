@@ -22,6 +22,7 @@ import {
 } from '@aniplay/ui';
 import { ApiError, api, type PlayerCharacterCard } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
+import { useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
 
 /**
@@ -228,6 +229,7 @@ const LANGUAGE_NAMES: Record<Locale, string> = { en: 'English', fr: 'Français' 
 
 /** PR-01 / PR-02 — public and private cleanly separated. */
 export function ProfileScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
+  const t = useT();
   const { wallet, isGuest, refreshWallet, signOut, locale, localeChoice, setLocale } = useStore();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [characters, setCharacters] = useState<PlayerCharacterCard[]>([]);
@@ -273,15 +275,15 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
           <Pressable
             onPress={() => setLanguageTaps((n) => n + 1)}
             accessibilityRole="header"
-            accessibilityLabel="Profile"
+            accessibilityLabel={t('profile.title')}
           >
-            <Txt variant="h1">Profile</Txt>
+            <Txt variant="h1">{t('profile.title')}</Txt>
           </Pressable>
           <CreditBalance balance={wallet?.balance ?? 0} onPress={() => navigation.navigate('Wallet')} />
         </Row>
 
         <Card style={{ gap: spacing.sm }}>
-          <Txt variant="h3">{me?.displayName ?? 'Guest'}</Txt>
+          <Txt variant="h3">{me?.displayName ?? t('profile.guest')}</Txt>
           {isGuest ? (
             <>
               <Txt variant="caption" color={colors.text.secondary}>
@@ -379,13 +381,13 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
 
         {languageVisible ? (
           <Stack gap={spacing.md}>
-            <Txt variant="h3">Language</Txt>
+            <Txt variant="h3">{t('profile.language')}</Txt>
             <Txt variant="micro" color={colors.text.muted}>
-              Applies to new stories. A story already started keeps the language it began in.
+              {t('profile.language_hint')}
             </Txt>
             <Row gap={spacing.sm}>
               <Chip
-                label="Device"
+                label={t('profile.language_device')}
                 selected={localeChoice === null}
                 onPress={() => void setLocale(null)}
               />
@@ -399,42 +401,42 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
               ))}
             </Row>
             <Txt variant="micro" color={colors.text.muted}>
-              New stories will be in {LANGUAGE_NAMES[locale]}.
+              {t('profile.language_current', { name: LANGUAGE_NAMES[locale] })}
             </Txt>
           </Stack>
         ) : null}
 
         <Stack gap={spacing.md}>
-          <Txt variant="h3">Gameplay</Txt>
+          <Txt variant="h3">{t('profile.gameplay')}</Txt>
           <Toggle
-            label="Show advanced relationship stats"
-            hint="Reveals the numbers behind Trusted, Rival, and the rest."
+            label={t('profile.advanced_relationship_stats')}
+            hint={t('profile.advanced_relationship_stats_hint')}
             value={me?.settings.showAdvancedRelationshipStats ?? false}
             onChange={(v) => setSetting('showAdvancedRelationshipStats', v)}
           />
           <Toggle
-            label="Show check maths"
-            hint="Shows the roll and modifiers, where the world allows it."
+            label={t('profile.check_math')}
+            hint={t('profile.check_math_hint')}
             value={me?.settings.showCheckMath ?? false}
             onChange={(v) => setSetting('showCheckMath', v)}
           />
         </Stack>
 
         <Stack gap={spacing.md}>
-          <Txt variant="h3">Audio & visual</Txt>
+          <Txt variant="h3">{t('profile.audio_visual')}</Txt>
           <Toggle
-            label="Reduce motion"
-            hint="Removes parallax and non-essential animation."
+            label={t('profile.reduce_motion')}
+            hint={t('profile.reduce_motion_hint')}
             value={me?.settings.reduceMotion ?? false}
             onChange={(v) => setSetting('reduceMotion', v)}
           />
           <Toggle
-            label="Autoplay character voice"
+            label={t('profile.voice_autoplay')}
             value={me?.settings.voiceAutoplay ?? false}
             onChange={(v) => setSetting('voiceAutoplay', v)}
           />
           <Toggle
-            label="Haptics"
+            label={t('profile.haptics')}
             value={me?.settings.hapticsEnabled ?? true}
             onChange={(v) => setSetting('hapticsEnabled', v)}
           />
@@ -443,17 +445,17 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
         <Divider />
 
         <Stack gap={spacing.md}>
-          <Txt variant="h3">Privacy & safety</Txt>
-          <LinkRow label="Report history" onPress={() => navigation.navigate('ReportHistory')} />
-          <LinkRow label="Making your own worlds" onPress={() => navigation.navigate('Create')} />
-          <LinkRow label="Wallet & purchases" onPress={() => navigation.navigate('Wallet')} />
+          <Txt variant="h3">{t('profile.privacy_safety')}</Txt>
+          <LinkRow label={t('profile.report_history')} onPress={() => navigation.navigate('ReportHistory')} />
+          <LinkRow label={t('profile.creator_teaser')} onPress={() => navigation.navigate('Create')} />
+          <LinkRow label={t('profile.wallet')} onPress={() => navigation.navigate('Wallet')} />
         </Stack>
 
         <Divider />
 
         {/* PR-03 — deletion is available from inside the app (§23.3). */}
         <Stack gap={spacing.md}>
-          <Txt variant="h3">Account</Txt>
+          <Txt variant="h3">{t('profile.account')}</Txt>
           {/* Spec §25.8 — one primary per region, and an irreversible action is
               not it. Deletion stays easy to find and hard to hit by accident:
               a plain destructive row, then a confirmation that says what goes. */}

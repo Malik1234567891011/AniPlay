@@ -19,6 +19,9 @@
     "@formatjs/intl-listformat": "^8.3.13",
     "@formatjs/intl-locale": "^5.3.10",
     "@formatjs/intl-numberformat": "^9.4.0",
-    "@formatjs/intl-pluralrules": "^6.3.13"
+    "@formatjs/intl-pluralrules": "^6.3.13",
+    "i18next": "^26.4.2",
+    "i18next-icu": "^2.4.4",
+    "intl-messageformat": "^11.2.14"
   }
 }

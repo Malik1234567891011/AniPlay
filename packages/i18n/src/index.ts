@@ -13,3 +13,6 @@ export * from './typography.js';
 export * from './format.js';
 export * from './search.js';
 export * from './conformance.js';
+export * from './catalog/en/index.js';
+export * from './catalog/fr/index.js';
+export * from './translate.js';
