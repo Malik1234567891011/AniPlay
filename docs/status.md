@@ -1,179 +1,232 @@
-# Status
+# PLOTBREAK — where everything is
 
-What is built, what is stubbed, and what the spec still wants. Updated
-2026-09-09.
+**Last updated: 2026-09-10, 13:30 (America/New_York).** This is the current
+one. `docs/status.md` and `docs/session-status.md` are older and should be read
+as history, not state.
 
-Run `npm run smoke` before believing any of it. It plays every world badly on
-purpose — attacking people it was meant to talk to, refusing the quest, trying
-to fly, misspelling names, lying, stealing, wandering off, then coming back to
-ask whether anyone is still angry — and reports what did not hold.
+---
 
-## Playable end to end
+## The short version
 
-The full turn pipeline runs offline with no API keys, and with an
-`OPENAI_API_KEY` or `ANTHROPIC_API_KEY` the parser, director and writer route to
-a real model. Six official worlds, 391 tests, and a mobile client that plays
-them.
+The catalog is **16 worlds**, all with cover art, all live on the simulator.
+Itachi and Primal Crown are the newest finished ones and both look good. The
+core loop plays well — the writing is genuinely strong in Itachi — and the
+remaining problems are continuity and presentation, not prose.
 
-| Area | State |
-| --- | --- |
-| Turn pipeline §17.1 | Built, streamed over SSE with a per-turn replay buffer |
-| Determinism §12.1 | Built and tested — same seed, same outcome, every tier |
-| Wallet §20 | Built: two-phase reserve, append-only ledger, exactly-once grants |
-| Store §33.5 | Built, with server-side receipt verification and restore |
-| Quests §15 | Built, including multi-route steps and engine-observed gates |
-| Relationships §14 | Built: five dimensions, dampening, predicate gates |
-| Combat §13 | Built: encounters, turn economy, NPC turns from the same seed |
-| Media §19 | Covers, key art, stages, portraits, hero frames, player portraits. `npm run art` and `npm run brand` |
-| Safety §29/§33.8 | Input moderation before the reserve, reports, blocks, hide, moderation on generated media |
-| Rate limits §31.7 | Sliding window per account or address, four budgets, 429 with Retry-After |
-| Mobile client | All launch screens except the creator console. Turn menu, rephrase, canon correction, pinning, forks, share |
-| Postgres §34/§35 | Built. `npm run migrate` applies the schema and seeds the catalog; a run survives restart, redeploy and a second device |
-| Auth §6 | Built on Supabase Auth: Sign in with Apple, emailed codes, anonymous guests, JWT verified server-side |
-| Purchases §20.6/§33.5 | Built end to end: native sheet, server verification, exactly-once credit, restore, and recovery from a charge we never heard about |
+Three workstreams: **main** (core loop + UI, me), **stories/four-new-worlds**
+(new worlds, agent), **localization/fr-fr** (French, agent). All three are
+committed. Main has 30+ commits ahead of `origin/main` at the time of writing —
+see "Push state" below.
 
-## The six worlds
+---
 
-| World | Spine | Defeat |
-| --- | --- | --- |
-| The Ninth Archive | Investigation, wards, an institution that erased you | Fail forward |
-| The Understudy | Pure social systems, no combat at all | Fail forward |
-| The Salt Road | Travel arithmetic and water | **Lethal** |
-| The Tidewall | Five classes, five routes through every door | Fail forward |
-| The Unbound | Build freedom; half the abilities are awakened, not chosen | Fail forward |
-| Nine Weeks | Romance that can genuinely fail, no combat | Fail forward |
+## Branches
 
-## Stubbed, with the shape in place
+| Branch | Worktree | State |
+|---|---|---|
+| `main` | `/Users/malik/AniPlay` | Active. Everything below unless stated. |
+| `stories/four-new-worlds` | `/Users/malik/AniPlay-stories` | Agent running. Merged into main at `befd652`. |
+| `localization/fr-fr` | `/Users/malik/AniPlay-fr-fr` | Agent finished. **Not yet merged to main.** |
 
-- **Worker queues (§32.2).** Real queue with idempotency, backoff and a dead
-  letter. The hero-frame handler is live; embeddings, ranking rollups,
-  prepublish evaluation, media moderation, notifications, analytics rollups and
-  account purge are registered and log rather than act.
-- **Auth (§6).** Real. Supabase Auth issues the token; the API verifies it in
-  both signing modes a project can be in and never trusts an unchecked claim.
-  The development token-is-the-user-id verifier still exists so `npm run api`
-  works with no infrastructure, and cannot be selected in production.
-  Google sign-in is not wired and is not shown.
-- **Persistence.** Real. Postgres holds the profile, the session, authoritative
-  state, fork snapshots, the turn log, the append-only event log, memory, the
-  wallet ledger and idempotency keys. `MemoryRepository` remains for tests and
-  for running with no database.
-- **Store.** Real. Apple and Google decide whether money moved; a transaction is
-  never finished until our server has credited it, so a purchase the store took
-  and we never heard about comes back by itself on the next launch.
-- **Forks.** Real: the API snapshots the state each turn began from and a fork
-  copies the snapshot for the chosen moment, inheriting the transcript up to it.
-  Snapshots are capped at 60 per session, so a very long run cannot be forked
-  back to its beginning.
+---
 
-## Not built
+## Worlds — 16 in the catalog
 
-| Spec | What is missing |
-| --- | --- |
-| §21 creator platform | The whole world builder. A placeholder screen explains what it will be. |
-| §38 admin console | `apps/admin` is empty. |
-| §19.7 voice | Blocks are marked `voiceEligible`; nothing speaks them. |
-| §24 | Diegetic push notifications, flagged off at launch by design. |
-| Google sign-in | Apple and emailed codes are wired. Google is not, and is not offered. |
+**The original ten**, all with locked covers that must not be regenerated:
+Blackwake, Last Five, Nine Weeks, Red Moon Brigade, Seven Days to Midnight,
+The Ninth Archive, The Salt Road, The Tidewall, The Unbound, The Understudy.
 
-## Recently closed
+**Six newer:**
 
-Worth knowing because the shape of these bugs recurs:
+| World | Code | Spec | Art | Notes |
+|---|---|---|---|---|
+| Itachi | ✅ | ✅ | ✅ 89 assets | Best-written world we have. `protagonist: NAMED`. |
+| Primal Crown | ✅ | ✅ | ✅ 70 assets | |
+| Zero Throne | ✅ | ✅ | ⏳ in flight | Stories agent is generating; cover 404s until it lands. |
+| Hush House | ✅ | ✅ | ✅ 63 assets | Art generated this session. |
+| Window Seven | ✅ | ✅ | ✅ 58 assets | Art generated this session. |
+| Good Morning, Husband | ✅ | ✅ | ✅ 59 assets | Art generated this session. |
 
-- The player was narrated in the third person. "I hit her" came back as "Robin
-  lunges toward Mira Senn" — first person in, third person out, on a screen that
-  addresses the player as "you" everywhere else.
-- You could punch someone who was not in the room. The previous turn said Mira
-  was absent; the next rolled an attack against her and dealt damage from her.
-- The change strip showed changes that had not happened: the model authored
-  `stateDeltaPresentation` freely, including entries against mutation ids that
-  existed nowhere.
-- A public insult resolved to nothing. It parsed as `speak`, which has no check,
-  no relationship movement and no flag.
-- `steal` ran a check and added nothing, so the prose pocketed the ledger and
-  the bag stayed empty.
-- The Understudy and The Salt Road had no branching quest steps at all — one
-  predicate per step, so every run was the same run.
-- The Understudy's company book step could only be completed by someone who
-  already held the book it awarded. Nine Weeks gated a route on a letter nothing
-  gave out.
-- The Unbound's `line_by_awakening` route required an ability nothing could
-  unlock, so the route was unreachable and starting without a technique was a
-  trap dressed as a choice.
-- `AppStoreVerifier` asked one host and treated 404 as "no such transaction",
-  which fails every sandbox and TestFlight purchase.
+**Still to build** (bibles in `/Users/malik/Downloads/morestoryideas/`, agent has
+the queue): `02_THE_FOURTH_BEAST`, `03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
+`06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE`.
 
-- Authored progression was unreachable. 39 flags and 16 events across the
-  catalog that nothing could ever set, so every main quest stalled at step two
-  and nothing surfaced it. The engine now records what it observed and two
-  tests make an unsettable gate unshippable.
-- A fork cloned the present and ignored the fork point.
-- The client was sent the exact DC, the roll maths and the raw mutation list
-  regardless of what the world said it hid.
-- `/v1/store/purchases/sync` credited a wallet on the client's word alone.
-- The writer never saw what the player typed, or anyone's pronouns, or what the
-  player had said aloud.
-- The parser could invent travel, and could redirect a named stranger at
-  whoever was standing nearby.
-- Waiting advanced the clock by six minutes, so no authored schedule was
-  reachable by waiting for it.
+**Art recipe** (~$2.60 and ~20–35 min per world, concurrency 4):
+```bash
+export OPENAI_API_KEY="$(grep '^OPENAI_API_KEY' /Users/malik/AniPlay/.env | cut -d= -f2- | tr -d '"'\'' \r')"
+npx tsx infra/scripts/generate-art.ts --only=story_<id> --reactions --concurrency=4
+npx tsx infra/scripts/optimize-art.ts
+npm run migrate   # REQUIRED — asset keys are baked into a story version
+```
+No text is baked into the art. The wordmark is composited afterwards over the
+reserved bottom 22%, and `cover.raw.png` keeps the un-plated master so French
+re-plates rather than regenerates.
 
-## Is it a game?
+---
 
-The question worth asking of every world is whether the systems on screen
-change what can happen. Per world, the number of quest routes and how many of
-them a build, a relationship or an institution actually gates:
+## French
 
-| World | Routes | Build-gated | Relationship-gated | Faction-gated |
-| --- | --- | --- | --- | --- |
-| The Ninth Archive | 14 | 4 | 5 | 0 |
-| The Understudy | 10 | 8 | 5 | 0 |
-| The Salt Road | 7 | 3 | 3 | 0 |
-| The Tidewall | 12 | 6 | 5 | 6 |
-| The Unbound | 18 | 6 | 6 | 1 |
-| Nine Weeks | 15 | 1 | 8 | 1 |
+**Agent finished.** All gates green: typecheck, test, lint, `i18n-extract
+--gate` (zero un-keyed client strings), `fr-lint --catalog` (**614/614 keys, 0
+violations**), `fr:probe` (32/39), `expo export --platform ios`.
 
-Two of these were zero across the board a day ago. `catalog.spec.ts` holds the
-floor: a world must have more than one way through, must never gate on an
-ability nobody can learn, an item nothing gives out or standing nothing can
-earn, and must close something somewhere.
+**Steps 1–8 and 10 done. Steps 9, 11 and 12 not started.**
 
-## Known limitations worth writing down
+Two things it surfaced that are worth acting on:
 
-- Suggestions come from `newOpportunities`, so on a turn that changed little
-  they can repeat. Correct, but it reads as staleness when several
-  low-consequence turns run together.
-- The rule-based writer is deliberately plain. It exists so the product works
-  with no keys, not to be good prose. With a provider configured the difference
-  is large.
-- Rate limiting is per API instance. Correct for the launch shape — one
-  process — and it has to move to a shared store before a second one exists.
-- The moderation fallback, used when no model provider is configured, is three
-  narrow categories rather than a classifier. It is a floor, not a policy.
-- A new account gets 900 credits and the default tier costs 60, so the free
-  allowance is fifteen turns and then 300 a day. Whether that is the right
-  funnel is a product decision, not a bug, but it is the number.
-- Blocking stores a list nothing reads, because the launch catalog is
-  first-party and no player ever sees another player's content. It becomes real
-  the moment the creator platform does.
+1. **`fr-lint` FRC002 has been shaping the copy rather than checking it.** It
+   fails any two consecutive capitalised words, so a mid-string proper noun is
+   impossible — `setup.name_placeholder` reads `Ex. : Sarrow` instead of a full
+   name *because of the linter*, and two agents moved a `☆` glyph to the edge of
+   a button to get past it. `lintCatalogue()` also has no suppression escape
+   hatch, unlike `lint()`. Fix before the next catalogue pass.
+2. **`de {name}` renders `de Élodie`** for vowel-initial names and ICU cannot
+   inspect an argument's first letter. Two keys restructured so elision never
+   arises; `elide()` ships in `@aniplay/i18n` for the rest, aspirated-h list
+   included.
 
-## What is needed from outside this repo
+Full detail: `docs/localization/fr-FR/checkpoint.md` on the `localization/fr-fr`
+branch. **Standing constraint: English and French are both permanent
+first-class locales.** Any change that makes French work by degrading or
+overwriting the English path is a regression.
 
-Everything below is built and configured by environment variable. None of it can
-be finished from inside the codebase.
+**Not merged to main yet.** That is a deliberate open decision, not an oversight.
 
-| Needed | For | Where it goes |
-| --- | --- | --- |
-| A Supabase project | Auth and the database | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_JWT_SECRET`, `DATABASE_URL`, plus `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` in the app |
-| Sign in with Apple enabled | The Apple button | Supabase → Authentication → Providers → Apple, and the capability on the App ID |
-| Anonymous sign-in enabled | Guests (§6.3) | Supabase → Authentication → Providers → Anonymous |
-| An App Store Connect API key | Verifying purchases | `APP_STORE_KEY_ID`, `APP_STORE_ISSUER_ID`, `APP_STORE_PRIVATE_KEY`, `APP_STORE_BUNDLE_ID` |
-| Five consumable IAP products | The credit packs | Product ids `crd_2000`, `crd_10000`, `crd_20000`, `crd_50000`, `crd_first_21000` |
-| An Apple Developer team | Any build on a device | EAS credentials |
-| Model credits | Any real prose at all | `OPENAI_API_KEY` currently returns `credit_balance_exhausted`. Every stage falls back to the deterministic writer, which `/health` now reports under `modelDegradations` |
-| A published privacy policy and terms | The age gate links, and App Store review | `EXPO_PUBLIC_LEGAL_BASE_URL` — the links are hidden until it is set, rather than pointing at nothing |
+---
 
-Until the Supabase values exist the API runs on its development verifier and the
-app plays as a device-local guest, which is a supported mode and says so on the
-sign-in sheet. Until the App Store key exists a production build refuses to
-credit any purchase rather than crediting one it cannot verify.
+## Images
+
+Covers, key art, location stages, character portraits and 8-emotion reaction
+decks. 1,222 assets total; masters 2,637MB, delivery 90MB webp (masters are
+gitignored, webp is committed).
+
+**Hero-frame gating was the reason images almost never appeared.** `notable` was
+defined as `REVEAL || CRITICAL_SUCCESS || ENCOUNTER_START || QUEST_TRANSITION` —
+four combat-and-quest events that a romance or slice-of-life world never
+generates. The only remaining road was `landmark`, which there means "a new
+room" or "a new face", and both run out. A 25-turn Nine Weeks run produced two
+frames. Now relationship changes, refusals and visible expression changes count,
+`HERO_SPACING.VIVID` is 5 rather than 10, and `turnsSinceHeroImage` no longer
+reports every gap one turn short.
+
+**Open image bug — hero frames do not stay in the feed (HIGH).** Reported by
+Malik and confirmed in the code. `Session.tsx:424`:
+```ts
+const heroImageUrl = pending ? pending.heroImageUrl : (latest?.heroImageUrl ?? null);
+```
+There is exactly **one** hero image on screen and it belongs to the newest turn,
+rendered in a fixed slot rather than inline in the transcript. So an image
+appears with its beat and vanishes the moment the next turn lands. The fix is to
+render the frame inline, attached to its own turn, so it stays in history — which
+is what the reference apps do. **Not yet fixed.**
+
+---
+
+## Bugs — fixed this session
+
+From `docs/25turnfix.md` (39 findings from a 25-turn Nine Weeks playtest):
+
+- **#37 The absence check had never once fired.** `findAbsenceOfPresent` matched
+  the full name and the *last* word — "Juno Vale" and "Vale" — and prose only
+  ever says "Juno". Six absence bugs walked past it. Now uses `nameKeys`.
+- **#12 The inverse, now caught too**: prose putting a character into a room the
+  engine does not have them in.
+- **#19 Response cards defeated our own parser.** Every card scored 0.44–0.62
+  confidence, so every tap took the 2.4s model-parse path the fast parser exists
+  to avoid, and cards naming nobody produced no speech act at all in a room of
+  three. Cards now carry their addressee via `selectedSuggestionId`, a field
+  that had been on the wire since the first API, hardcoded to null and ignored.
+- **#11 Hero-frame gating** (above).
+- **#36 The stamina tic was an instruction**, not a flourish: `buildBeats`
+  emitted a `STATE_REVEAL` for every `RESOURCE_DELTA` telling the writer to
+  dramatise it, and promised a UI chip that had been removed.
+- **#33/#24/#38 Cards written from the attempt, not the outcome.** Juno refuses
+  to leave the bar; all three next cards put the player outside on the steps.
+  `howItWentForYou` now states the outcome off the engine.
+- **#18 `turn` was in the interact lexicon**, so "I turn to Juno" rolled a DC 10
+  mind check and spent stamina.
+- **#30 Time was charged per clause**, so a two-clause sentence cost 12 minutes
+  while crossing the camp cost 3.
+- **#21** "Juno reconsiders you" was shown for a *loss* of respect.
+- **#17** Feed jumped ~350pt backwards on every submit.
+- **#22** `autoCorrect` on the composer rewrote player input ("I'll" → "I'love").
+- **#39 Named-protagonist worlds asked who you are.** Itachi's own premise says
+  who you are and the setup screen still asked for a name, pronouns and
+  appearance. `StoryVersion.protagonist` is `BLANK` (default) or `NAMED`.
+- **Speaker identity was resolved against `presentCharacters`**, so walking out
+  of a room stripped the name and face off every line already on screen.
+  `scene.cast` now carries the whole cast.
+- **Continue/Library/quick-preview drew gradient placeholders** over worlds whose
+  covers had shipped; `coverImage` was on all three payloads and unused.
+  Continue is also vertical now, not a carousel.
+- **Three new worlds shipped without `withDerivedAssetKeys`**, so 180 files of
+  art sat on disk while the catalog served null. Guarded in `catalog.spec`.
+
+---
+
+## Bugs — still open
+
+**Image**
+- Hero frames vanish from history (above). **Highest-value open item.**
+
+**Engine / director**
+- **#31** A public scene leaves no trace. Standing on a bar and demanding a
+  friend's secret in front of the whole staff produced `checks: []` and a single
+  `TIME_ADVANCE`. Needs a flag and an observable fact — no invented relationship
+  maths. The world sheet promises "People talk."
+- **`FORGOT_VIOLENCE` ×5 in smoke** — coming back to someone you attacked and
+  nothing refers to it. Same family as #31.
+- **#35** Dialogue attributions with no dialogue ("Their tone is low…" with no
+  line). Should be resolved by #19; needs verification.
+- **#32** The same relocation card offered in 8 of 9 turns.
+  `youHaveAlreadyTried` exists and was not honoured.
+- **#14** "They glances" — singular-they agreement, intermittent.
+- **#16** Dusk at 4:44 PM in summer; the writer has `worldTimeLabel` and ignores it.
+- **#25** `NAME_IDENTITY_DRIFT` false positive on "Cass stands where you left him".
+- **#29** The player's own line echoed back as a NARRATION block.
+
+**Instrumentation**
+- **#20 `model_invocations` has never had a row.** Zero, for every session ever.
+  We charge credits per turn and cannot say what a turn costs or how long a
+  stage takes. Every latency number so far is a stopwatch around the whole
+  request. This blocks honest work on speed.
+
+**Choice cards**
+- When the player is alone and the model writes cards that reach for absent
+  characters, they are dropped; if fewer than two survive the set falls back to
+  the rule-built menu items ("Throw", "Head to The House On The Corner"). The
+  filter was narrowed this session so this should be rare, but the fallback
+  itself is still the old checklist style.
+
+---
+
+## Simulator
+
+Expo Go, device `6FB9A6DC-8EE5-44E1-80BA-06974D8950F9`, Metro on 8081, API on
+4000. To reload after a change:
+```bash
+xcrun simctl terminate 6FB9A6DC-8EE5-44E1-80BA-06974D8950F9 host.exp.Exponent
+xcrun simctl openurl 6FB9A6DC-8EE5-44E1-80BA-06974D8950F9 "exp://127.0.0.1:8081"
+```
+Metro caches aggressively; if a change does not appear, restart it with
+`--clear`. **The accessibility snapshot lags the render** — trust a screenshot
+over `snapshot_ui` when they disagree.
+
+`npm run playtest <session-id>` reads a played session out of Postgres with its
+media plan, beat plan, checks and cards attached. ~800 tokens a turn against
+~4,000 for a UI snapshot, and it shows things the UI cannot. Use it.
+
+---
+
+## What I would do next, in order
+
+1. **Hero frames inline in the feed** so images stay in history. Visible, and
+   the thing Malik has raised twice.
+2. **#20 model invocation logging.** Nothing about performance is honest until
+   this exists.
+3. **#31 / FORGOT_VIOLENCE** — consequence for social acts. The largest
+   remaining gap between what the world sheets promise and what the engine does.
+4. **Merge French to main** once the FRC002 linter issue is decided.
+5. Re-run the 25-turn playtest to confirm the fixes landed, reading from
+   Postgres. Then the smaller items: #14, #16, #25, #29, #32.
+6. Zero Throne art, then the six remaining worlds (agent has this).
