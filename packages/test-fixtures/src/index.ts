@@ -19,6 +19,7 @@ import { FOURTH_BEAST as FOURTH_BEAST_RAW } from './fourth-beast.js';
 import { SEVEN_NAMES as SEVEN_NAMES_RAW } from './seven-names.js';
 import { BLANK_PROPHECY as BLANK_PROPHECY_RAW } from './blank-prophecy.js';
 import { RED_FLOOR as RED_FLOOR_RAW } from './red-floor.js';
+import { SECOND_SKIN as SECOND_SKIN_RAW } from './second-skin.js';
 
 
 export { withDerivedAssetKeys } from './derive-assets.js';
@@ -40,6 +41,7 @@ export const FOURTH_BEAST = withDerivedAssetKeys(FOURTH_BEAST_RAW);
 export const SEVEN_NAMES = withDerivedAssetKeys(SEVEN_NAMES_RAW);
 export const BLANK_PROPHECY = withDerivedAssetKeys(BLANK_PROPHECY_RAW);
 export const RED_FLOOR = withDerivedAssetKeys(RED_FLOOR_RAW);
+export const SECOND_SKIN = withDerivedAssetKeys(SECOND_SKIN_RAW);
 
 /**
  * Three of the newest worlds ship without generated art, deliberately.
@@ -90,7 +92,9 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * about it is that a name on a list is not a person who deserves to die, and The Blank Prophecy is a world that decides who everybody is
  * going to be by reading a thread, and a person it read and found nothing on, and The Red Floor is a storage level under an ageing gym where
  * fighters from every discipline meet after midnight and nothing that happens
- * down there has ever been written down.
+ * down there has ever been written down, and Second Skin is a world where everybody chooses which animal
+ * they become at sixteen and keeps it for life, and a woman who has done it twice
+ * comes through the ceremony window.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -113,4 +117,5 @@ export const LAUNCH_CATALOG = [
   SEVEN_NAMES,
   BLANK_PROPHECY,
   RED_FLOOR,
+  SECOND_SKIN,
 ] as const;

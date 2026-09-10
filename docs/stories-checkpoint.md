@@ -25,15 +25,16 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | The Fourth Beast | ✅ `fourth-beast.ts` | ✅ `fourth-beast.spec.ts` | ✅ 70 assets | ✅ |
 | Seven Names | ✅ `seven-names.ts` | ✅ `seven-names.spec.ts` | ✅ 82 assets | ✅ |
 | The Blank Prophecy | ✅ `blank-prophecy.ts` | ✅ `blank-prophecy.spec.ts` | ✅ 70 assets | ✅ |
-| The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ⏳ next | ✅ |
+| The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ✅ 78 assets | ✅ |
+| Second Skin | ✅ `second-skin.ts` | ✅ `second-skin.spec.ts` | ⏳ next | ✅ |
 
-All three gates green at the last commit. Catalog is now 20 worlds.
+All three gates green at the last commit. Catalog is now 21 worlds.
 
 **Not mine.** Another agent is generating art for Hush House, Window Seven and
 Good Morning, Husband on `main`. Do not generate for those three.
 
-**Untouched (2 worlds), in build order:**
-`07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
+**Untouched (1 world):**
+`08_LAST_SERVICE` — the last one. — all in
 `/Users/malik/Downloads/morestoryideas/`. Copy each bible into
 `docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
 `05_ZERO_THRONE.md`, that folder's index → `00_MORESTORYIDEAS_INDEX.md`).
@@ -198,8 +199,8 @@ every character and an animal cannot have them.
 
 ## Next
 
-1. Generate The Red Floor art, then `optimize-art.ts`, gates, commit, push.
-2. Build `07_SECOND_SKIN.md`, then `08_LAST_SERVICE.md`. That is the last of them.
+1. Generate Second Skin art, then `optimize-art.ts`, gates, commit, push.
+2. Build `08_LAST_SERVICE.md`. That is the last bible.
 
 **The per-world loop that works — follow it exactly:**
 
@@ -265,6 +266,17 @@ topic; it never writes anything. Nothing will ever set it and the event fires
 forever or the route is dead. Hit by `camille_works_with_you` (Fourth Beast),
 `thalia_lends_the_bow` (Blank Prophecy) and `knows:the_real_width` (Primal
 Crown, where the gate existed and nothing wrote the flag it implied).
+
+**Do these three greps before running any suite on a new world.** They catch
+the errors that have recurred most and each takes one command:
+
+```bash
+# 1. Every gated ability must be granted by some step's rewards.abilities.
+grep -n "unlockedByDefault: false" -B12 packages/test-fixtures/src/<w>.ts | grep "id: '"
+grep -n "abilities: \[" packages/test-fixtures/src/<w>.ts
+# 2. Every cardBlurb must contain "you" or "your".
+# 3. Every location must have an inbound connection, not just an outbound one.
+```
 
 **Third recurring class: a location with an edge out and none in.**
 `director.spec.ts` walks reachability from `rules.startingLocationId` through
