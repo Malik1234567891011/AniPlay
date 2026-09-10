@@ -28,8 +28,9 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ✅ 78 assets | ✅ |
 | Second Skin | ✅ `second-skin.ts` | ✅ `second-skin.spec.ts` | ✅ 78 assets | ✅ |
 | Last Service | ✅ `last-service.ts` | ✅ `last-service.spec.ts` | ✅ 79 assets incl. v3 cover | ✅ |
+| Pink Tide | ✅ `pink-tide.ts` | ✅ `pink-tide.spec.ts` | ⏳ generating (100 planned) | ✅ |
 
-All three gates green at the last commit. Catalog is now **22 worlds**. Every
+All three gates green at the last commit. Catalog is now **23 worlds**. Every
 bible in the queue is built; nothing is untouched.
 
 **Not mine.** Another agent is generating art for Hush House, Window Seven and
@@ -210,13 +211,17 @@ in this session. **Keep writing the good word — just add it to the map.**
 
 ## Next
 
-1. **Nothing outstanding on this branch.** Every bible assigned to it is
-   built, gated, catalogued and illustrated, and `origin/main` is merged in
-   as of the v3 cover direction. Last Service's cover was generated under
-   `plotbreak-cover-v3-anime` with plating off.
-2. Offered but not taken: populating `protagonist` on the worlds this branch
-   built. The schema is on main and defaults to `BLANK`, which is correct
-   for all eight of them; Itachi already declares `NAMED` on main.
+1. **Pink Tide art** is generating: cover (v3 anime direction, using the
+   world's own `coverDirection` brief), key art, 17 stages, 9 portraits and
+   9 reaction decks — 100 assets. Then `optimize-art.ts`, gates, commit, push.
+2. Nothing else outstanding. Every bible assigned to this branch is built,
+   gated, catalogued and illustrated.
+
+**`coverDirection` (new, on main).** An optional hand-written cover brief that
+replaces the composed prompt while keeping the style spine, framing rule,
+`CAST_APPEAL` block and negatives. It is a `z.string()`, so write it as an
+array of lines and `.join(' ')` the way Itachi does. Pink Tide uses it because
+its bible had a specific image; the other eight let the composer work.
 
 **The image provider rate-limits hard at about sixty images in a stretch.**
 Fourteen frames failed as `RATE_LIMITED` at concurrency 4 and again
