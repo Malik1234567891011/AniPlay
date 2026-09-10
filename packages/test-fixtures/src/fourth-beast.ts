@@ -44,7 +44,7 @@ const raw = {
     'There are three creatures in that room and you are choosing first. She gets the second. The third stays where it is.\n\n' +
     'You need to work out what you have taken on quickly, because it takes about three weeks for the man in the pale coat to notice that somebody in this city can finally hurt him.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

@@ -40,7 +40,7 @@ export function SplashScreen(): React.JSX.Element {
     <View style={{ flex: 1, backgroundColor: colors.bg.base, alignItems: 'center', justifyContent: 'center' }}>
       <Animated.View style={{ opacity: fade, alignItems: 'center', gap: spacing.md }}>
         <Txt variant="display" style={{ letterSpacing: 6 }}>
-          ANIMA
+          PLOTBREAK
         </Txt>
         {showProgress ? (
           <Txt variant="caption" color={colors.text.muted}>
@@ -91,7 +91,7 @@ export function AgeGateScreen(): React.JSX.Element {
 
         {tooYoung ? (
           <Txt variant="bodyCompact" color={colors.semantic.warning}>
-            ANIMA is built for players aged 13 and over. Thanks for being honest with us.
+            PLOTBREAK is built for players aged 13 and over. Thanks for being honest with us.
           </Txt>
         ) : null}
 

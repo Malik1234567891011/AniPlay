@@ -45,7 +45,7 @@ const raw = {
     'Then he offers you a choice. Spend your last six hours trying to prove you are innocent, or spend them getting off this island.\n\n' +
     'He says one more thing before you answer. A name on a list is not the same as a person who deserves to die, and the beginners always get that wrong.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

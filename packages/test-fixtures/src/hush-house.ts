@@ -39,7 +39,7 @@ const raw = {
     'Her older sister disappeared from this building four years ago. The police wrote it up as a runaway. Ayame moved in to prove otherwise, she has seen Mika twice since, and she is not going to lose her a second time.\n\n' +
     'The rent is due on the first and you need somewhere to live. Everything else here is a thing you find out.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

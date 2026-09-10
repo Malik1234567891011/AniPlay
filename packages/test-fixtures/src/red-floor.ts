@@ -44,7 +44,7 @@ const raw = {
     'You have come down the stairs. Somebody is going to ask what you do, and then somebody is going to ask whether you want to step on.\n\n' +
     'You need to work out what you are actually here to find out, because everybody down there already knows what they came for.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

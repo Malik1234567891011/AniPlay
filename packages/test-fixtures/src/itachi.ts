@@ -55,7 +55,7 @@ const raw = {
     'Nobody here is a villain. Your father is right that his clan has been treated as a suspect for ten years. The village is right that a coup would open the gates to three countries that have been waiting for one.\n\n' +
     'So you need to find something both of them can live with, or choose which one to betray, or find a third thing nobody has thought of yet.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

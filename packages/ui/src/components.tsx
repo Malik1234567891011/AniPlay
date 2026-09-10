@@ -51,7 +51,7 @@ export function StoryCoverCard({
   // The genre says something the cover cannot always carry, and it is the
   // thing a browsing player is actually sorting on. A run count joins it only
   // when somebody has genuinely played the world, and a community creator's
-  // name matters in a way "ANIMA Studio" on all nine cards does not.
+  // name matters in a way "Plotbreak Studios" on all nine cards does not.
   const metaLine = [
     story.tags[0] ?? null,
     story.runs > 0 ? `${formatCredits(story.runs, true)} ${story.runs === 1 ? 'run' : 'runs'}` : null,

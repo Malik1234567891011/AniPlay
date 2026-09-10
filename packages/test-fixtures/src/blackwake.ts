@@ -37,7 +37,7 @@ const raw = {
     'You are in Saltmarket harbour with a ship you cannot sail alone, and the only person who has offered to help is a navigator with a warrant out on her who will not say why she can read your guardian’s handwriting.\n\n' +
     'Nobody knows your name yet.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'blackwake/cover',
   keyArt: 'blackwake/key',

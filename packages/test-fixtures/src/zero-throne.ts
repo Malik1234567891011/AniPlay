@@ -46,7 +46,7 @@ const raw = {
     'Some of them want the machine. Some of them want you. One of them already knows what actually happened that night and has spent eighteen years keeping it secret.\n\n' +
     'You do not have to get in. Something underneath the armistice has started moving again, and it has noticed you either way.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

@@ -41,7 +41,7 @@ const raw = {
     'Then the door opens and a woman comes in out of the rain with a knife roll over one shoulder, and every cook on the line clocks her before she has taken two steps, because this city knows her face.\n\n' +
     'She has not come to eat. She has come with an invitation, and you need to decide within about a minute what you are going to say to it.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

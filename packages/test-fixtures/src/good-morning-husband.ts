@@ -49,7 +49,7 @@ const raw = {
     'What you do about that is yours. Tell her. Play along until it stops being playing. Keep this life and make it better than the one you lost, or go and find out what happened and lose this one working it out.\n\n' +
     'She has a secret of her own, and hers has a deadline.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

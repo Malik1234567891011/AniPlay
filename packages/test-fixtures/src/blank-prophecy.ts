@@ -43,7 +43,7 @@ const raw = {
     'They read you and there was nothing there.\n\n' +
     'So now a man who spent six years proving that being told your future is the thing that causes it wants very much to meet you, several gods want to know what you are, and the creatures that eat fate have started following you home.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

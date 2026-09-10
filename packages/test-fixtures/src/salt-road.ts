@@ -23,7 +23,7 @@ const raw = {
     'Nothing hunts you out here. There are no monsters on the flats. The danger is distance and arithmetic, and the fact that every choice about pace and route spends water you cannot get back. ' +
     'If you run out, you die, and that is permanent. The road does not care whose fault it was.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

@@ -23,7 +23,7 @@ const raw = {
     'So you have six weeks to make yourself necessary. That means being the person who fixes things when they go wrong, and it means collecting favours you will have to pay for later. ' +
     'Nobody in this building will ever raise their voice at you. It is still the most dangerous place you have worked.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

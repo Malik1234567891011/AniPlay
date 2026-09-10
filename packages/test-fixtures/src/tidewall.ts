@@ -29,7 +29,7 @@ const raw = {
     'Then a survivor told you, once and quietly, that after the fighting stopped he saw Wren walk north through the pass on her own feet. Nobody senior will hear it. The pass is closed to everyone except the unit posted at the eleventh gate.\n\n' +
     'That posting goes to whichever recruits rank highest in their order when the next tide comes. So you have four months to earn a place near the top of your order’s list, before the tide arrives and the gate is given to somebody else. Miss it and the pass stays shut for another year, and a recruit caught walking into it alone is struck off the roll for good.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'tidewall/cover',
   keyArt: 'tidewall/key',

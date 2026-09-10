@@ -45,7 +45,7 @@ const raw = {
     'Something has also been killing bonded animals in the north and leaving them where they fell. Nobody wants to raise that until the corridor question is settled, so nobody is going to.\n\n' +
     'You need to work out, in three days, which of these five you would rather owe.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

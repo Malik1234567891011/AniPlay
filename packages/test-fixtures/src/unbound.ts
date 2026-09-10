@@ -30,7 +30,7 @@ const raw = {
     'Your master says he never taught it. Somebody did, because that form has been used three times outside these walls this year, and each one is a death nobody has explained.\n\n' +
     'So there are two things to do at once. Earn a place in a school that did not ask for you, and find out who actually taught that form, before the Concord finishes deciding what to do with the man who says he did not.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'unbound/cover',
   keyArt: 'unbound/key',

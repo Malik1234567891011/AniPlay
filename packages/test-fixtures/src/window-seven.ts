@@ -40,7 +40,7 @@ const raw = {
     'YOU ARE WATCHING THE WRONG APARTMENT.\n\n' +
     'So either the target knows exactly where you are sitting, or somebody inside your own service wanted you in this particular room. Six nights left to work out which, and the service does not officially exist, which means nobody is coming if you are wrong.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

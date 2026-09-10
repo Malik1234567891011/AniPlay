@@ -44,7 +44,7 @@ const raw = {
     'At the ceremony that evening a window comes in and a woman drops into the hall with wardens behind her. She has snow-leopard ears and a long spotted tail, and black feathers come up her left forearm while four hundred people are watching.\n\n' +
     'She is not here for you. She is here for something underneath this building, so by the end of the night you need to decide what you are going to say you saw.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: null,
   keyArt: null,

@@ -36,7 +36,7 @@ const raw = {
     'The Brigade has a standing order about people who come back changed. Nobody will tell you what it is. Dr Voss has asked to examine you twice. Captain Venn has not asked anything, which is worse.\n\n' +
     'You are back on the roster tomorrow.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'red_moon/cover',
   keyArt: 'red_moon/key',
