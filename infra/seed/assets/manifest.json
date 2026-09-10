@@ -14647,5 +14647,1487 @@
       "latencyMs": 36519,
       "createdAt": "2026-09-10T17:37:35.200Z"
     }
+  },
+  "story_second_skin/stage_heartstone_hall": {
+    "assetKey": "story_second_skin/stage_heartstone_hall",
+    "file": "story_second_skin/stage_heartstone_hall.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Heartstone Hall: Pale stone, four hundred people and a gallery running round three sides at the height a Hawk would use.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f11504f8-f728-4bc4-b999-6f590a388237",
+      "promptHash": "13f0cfc45af8cba8d09a83a858579e7e",
+      "seed": "sv_second_skin_1:loc:heartstone_hall:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39485,
+      "createdAt": "2026-09-10T17:47:30.321Z"
+    }
+  },
+  "story_second_skin/key": {
+    "assetKey": "story_second_skin/key",
+    "file": "story_second_skin/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Second Skin",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bc150789-4d2a-4344-9d54-491cb99e2065",
+      "promptHash": "113f501083d9d8bd47447b224bbc5b8a",
+      "seed": "sv_second_skin_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41881,
+      "createdAt": "2026-09-10T17:47:32.717Z"
+    }
+  },
+  "story_second_skin/stage_larkspire_market": {
+    "assetKey": "story_second_skin/stage_larkspire_market",
+    "file": "story_second_skin/stage_larkspire_market.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Market Streets: Pale stone and red tile, canals, hanging gardens and a crowd built out of about forty different body plans.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fb725efb-4dc9-4fe9-9f12-d13a96a1235e",
+      "promptHash": "e7350a4bdf5415786338e6571db7f494",
+      "seed": "sv_second_skin_1:loc:larkspire_market:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43645,
+      "createdAt": "2026-09-10T17:47:34.482Z"
+    }
+  },
+  "story_second_skin/stage_player_home": {
+    "assetKey": "story_second_skin/stage_player_home",
+    "file": "story_second_skin/stage_player_home.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Home: Three rooms up a stair with a bend in it, chairs in two different back designs, a doorway that somebody widened eleven years ago for a relative, and a cord in your family’s colours that took eleven days to braid.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7911697d-4d89-4233-83a2-0a396c4100c2",
+      "promptHash": "ad35e0949fc624045166bc2ad4d85d52",
+      "seed": "sv_second_skin_1:loc:player_home:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38266,
+      "createdAt": "2026-09-10T17:48:08.593Z"
+    }
+  },
+  "story_second_skin/stage_the_rails": {
+    "assetKey": "story_second_skin/stage_the_rails",
+    "file": "story_second_skin/stage_the_rails.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Rails: The upper city: landing rails on every third roof, rope walks, gutters wide enough to run, and an entire second set of streets that about a third of the population uses daily and the rest have never been on.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d7409596-4933-4fdb-9e74-8d81890ab795",
+      "promptHash": "ecffb6e438c428d123cdb1cb43e6f939",
+      "seed": "sv_second_skin_1:loc:the_rails:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39596,
+      "createdAt": "2026-09-10T17:48:12.319Z"
+    }
+  },
+  "story_second_skin/stage_the_canal_quarter": {
+    "assetKey": "story_second_skin/stage_the_canal_quarter",
+    "file": "story_second_skin/stage_the_canal_quarter.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Canal Quarter: Where the water and the trade meet: barges, warm rooms let by the week to Serpents and anybody else who wants one, an eel market, and about eleven inns whose keepers have all agreed not to ask anybody anything.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cb07ecce-ab13-4193-b11f-4c1ee628d0e7",
+      "promptHash": "de8ef00c3a799760456c754f531327fd",
+      "seed": "sv_second_skin_1:loc:the_canal_quarter:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39586,
+      "createdAt": "2026-09-10T17:48:14.078Z"
+    }
+  },
+  "story_second_skin/cover": {
+    "assetKey": "story_second_skin/cover",
+    "file": "story_second_skin/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Second Skin: One body. One shape. Choose at sixteen.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2a7afa4f-5146-4ada-8812-2f7c7e4dea17",
+      "promptHash": "e109815f3173349f81a9242c380510ae",
+      "seed": "sv_second_skin_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 109563,
+      "createdAt": "2026-09-10T17:48:40.387Z"
+    }
+  },
+  "story_second_skin/stage_sai_infirmary": {
+    "assetKey": "story_second_skin/stage_sai_infirmary",
+    "file": "story_second_skin/stage_sai_infirmary.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Infirmary On The Water: Two rooms over a boat-builder, run by a Concord physician who is officially doing outreach and unofficially doing something else.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d87a5909-acfc-448b-9d30-64a0777fe00f",
+      "promptHash": "ed02273773714389e825a074c3597df9",
+      "seed": "sv_second_skin_1:loc:sai_infirmary:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 27761,
+      "createdAt": "2026-09-10T17:48:41.846Z"
+    }
+  },
+  "story_second_skin/stage_warden_post": {
+    "assetKey": "story_second_skin/stage_warden_post",
+    "file": "story_second_skin/stage_warden_post.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Warden Post: Navy and gold, a duty desk, a board of notices and eleven people whose actual job is stopping civilians being hurt and who are extremely good at it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "444cf6e3-1ec8-48e0-a0b5-6dd9fb91712b",
+      "promptHash": "aa33cd474560d9fd911ec030dd1dfbeb",
+      "seed": "sv_second_skin_1:loc:warden_post:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40298,
+      "createdAt": "2026-09-10T17:48:48.901Z"
+    }
+  },
+  "story_second_skin/stage_concord_house": {
+    "assetKey": "story_second_skin/stage_concord_house",
+    "file": "story_second_skin/stage_concord_house.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Concord House: Green and cream, a waiting hall with forty people in it on any given morning, free draughts for anybody in their first year, and a records floor above that is the only part of the building with a lock on the door.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "78352ab9-ebe8-4ab5-af81-444304a8ae8f",
+      "promptHash": "ba2474b9fdf83bf1c92ce74dd656dee1",
+      "seed": "sv_second_skin_1:loc:concord_house:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44613,
+      "createdAt": "2026-09-10T17:48:56.940Z"
+    }
+  },
+  "story_second_skin/stage_the_undercroft": {
+    "assetKey": "story_second_skin/stage_the_undercroft",
+    "file": "story_second_skin/stage_the_undercroft.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Undercroft: Under the hall, around the top of the thing itself, which is warm and enormous and moves about eleven times an hour.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "23fe3e44-a107-4468-a224-15984c535ce7",
+      "promptHash": "2ae6b75a5983cedd3991d091c3c527c2",
+      "seed": "sv_second_skin_1:loc:the_undercroft:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38064,
+      "createdAt": "2026-09-10T17:49:18.666Z"
+    }
+  },
+  "story_second_skin/stage_the_far_road": {
+    "assetKey": "story_second_skin/stage_the_far_road",
+    "file": "story_second_skin/stage_the_far_road.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Far Road: North out of the city gate and up: eleven days of trade road with messenger towers on the high points, inns with warm rooms, and Roadwardens who will walk with you for a stretch if the weather turns.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aadbd31a-42e8-4bf2-8116-3bde5b8b1204",
+      "promptHash": "893db64e0c65c4d1f08197b39e40a6e4",
+      "seed": "sv_second_skin_1:loc:the_far_road:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38538,
+      "createdAt": "2026-09-10T17:49:20.390Z"
+    }
+  },
+  "story_second_skin/stage_veyr_pass": {
+    "assetKey": "story_second_skin/stage_veyr_pass",
+    "file": "story_second_skin/stage_veyr_pass.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Veyr Pass: A high northern town on a shelf of rock with a Roadwarden station, four hundred people and a great deal of snow.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7907b425-42b8-4a63-811b-6ec4207141db",
+      "promptHash": "26d0b87882a008ce9a34277d7da23c2d",
+      "seed": "sv_second_skin_1:loc:veyr_pass:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44839,
+      "createdAt": "2026-09-10T17:49:33.752Z"
+    }
+  },
+  "story_second_skin/stage_aurelion_gate": {
+    "assetKey": "story_second_skin/stage_aurelion_gate",
+    "file": "story_second_skin/stage_aurelion_gate.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Capital Gate: Eleven days south: white walls, a river, a Concord seat with a dome on it, and somewhere under all of that a ward with a number rather than a name.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "856d767c-1257-4f0b-8aca-26fd693e48fc",
+      "promptHash": "005e684a2c77d8191684636146401e00",
+      "seed": "sv_second_skin_1:loc:aurelion_gate:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40860,
+      "createdAt": "2026-09-10T17:49:37.809Z"
+    }
+  },
+  "story_second_skin/kaia": {
+    "assetKey": "story_second_skin/kaia",
+    "file": "story_second_skin/kaia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, Twenty-two, former Roadwarden, wanted, and the only person you have ever seen with two shapes",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6745765c-9d22-43c9-b6b0-137c5e866bdf",
+      "promptHash": "eaae3f78e5c9421e09edc86c2c33364d",
+      "seed": "ss-kaia-01",
+      "costUsd": 0.02404,
+      "latencyMs": 25813,
+      "createdAt": "2026-09-10T17:49:46.208Z"
+    }
+  },
+  "story_second_skin/ren": {
+    "assetKey": "story_second_skin/ren",
+    "file": "story_second_skin/ren.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, Sixteen, chose Wolf in front of four generations of Wolf Wardens, and wanted Hawk",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0ce994f6-df4b-44f3-9d33-f2740972ba53",
+      "promptHash": "55d5e7bd7434ae24f1e888af12a7203c",
+      "seed": "ss-ren-01",
+      "costUsd": 0.00632,
+      "latencyMs": 18864,
+      "createdAt": "2026-09-10T17:49:56.678Z"
+    }
+  },
+  "story_second_skin/stage_ward_seven": {
+    "assetKey": "story_second_skin/stage_ward_seven",
+    "file": "story_second_skin/stage_ward_seven.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Secondary Echo Ward Seven: Clean, warm, well-lit and underground.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f817b98-7b76-4159-95fb-ebbb78cd28a9",
+      "promptHash": "39546551ed0fc418829c7e43b5617122",
+      "seed": "sv_second_skin_1:loc:ward_seven:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41352,
+      "createdAt": "2026-09-10T17:50:00.029Z"
+    }
+  },
+  "story_second_skin/tessa": {
+    "assetKey": "story_second_skin/tessa",
+    "file": "story_second_skin/tessa.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, Sixteen, chose Hawk, and has wanted the far-road courier network since she was nine",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "70f951b0-cf70-4cee-9d7c-b8ec264e5d2c",
+      "promptHash": "faee59549aa9bd6a3257df17e9412b31",
+      "seed": "ss-tessa-01",
+      "costUsd": 0.01372,
+      "latencyMs": 20136,
+      "createdAt": "2026-09-10T17:50:06.349Z"
+    }
+  },
+  "story_second_skin/ilyra": {
+    "assetKey": "story_second_skin/ilyra",
+    "file": "story_second_skin/ilyra.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, Thirty-four, Captain of the Crown Wardens in Larkspire, and the officer whose lawful duty is bringing Kaia Voss in",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b736c09b-4797-48ba-bf99-91fa086fd3be",
+      "promptHash": "f473a297b1eba36a76679a81af7dc9d3",
+      "seed": "ss-ilyra-01",
+      "costUsd": 0.05488,
+      "latencyMs": 35952,
+      "createdAt": "2026-09-10T17:50:09.715Z"
+    }
+  },
+  "story_second_skin/sai": {
+    "assetKey": "story_second_skin/sai",
+    "file": "story_second_skin/sai.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, Twenty-nine, Concord physician, and the author of a protocol his own institution has declined to publish",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "37e80c41-a63e-415e-a605-5ff14c700859",
+      "promptHash": "2d2f296bc6f74f4f9d95c00073302dfc",
+      "seed": "ss-sai-01",
+      "costUsd": 0.01372,
+      "latencyMs": 20584,
+      "createdAt": "2026-09-10T17:50:17.266Z"
+    }
+  },
+  "story_second_skin/lio": {
+    "assetKey": "story_second_skin/lio",
+    "file": "story_second_skin/lio.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, Eighteen, officially dead for fourteen months, and living in a clean warm room under the capital",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0f79bde8-b125-441e-a720-90dcad7c20e9",
+      "promptHash": "ed45b10f1a7716d281764c1e6bacdfdc",
+      "seed": "ss-lio-01",
+      "costUsd": 0.01372,
+      "latencyMs": 20402,
+      "createdAt": "2026-09-10T17:50:26.758Z"
+    }
+  },
+  "story_second_skin/edran": {
+    "assetKey": "story_second_skin/edran",
+    "file": "story_second_skin/edran.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, Fifty-six, High Keeper of the Concord, and the most persuasive person in this story",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a77daeed-8fdb-46c7-9d54-12fed1045d3d",
+      "promptHash": "c87007421023abf665c800ffa9004014",
+      "seed": "ss-edran-01",
+      "costUsd": 0.02404,
+      "latencyMs": 26730,
+      "createdAt": "2026-09-10T17:50:26.774Z"
+    }
+  },
+  "story_second_skin/kaia_warm": {
+    "assetKey": "story_second_skin/kaia_warm",
+    "file": "story_second_skin/kaia_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d93c3845-c08b-4ebf-8913-a991786e873a",
+      "promptHash": "926a5316d6d0d49fe39a5c97247cf13f",
+      "seed": "ss-kaia-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 20479,
+      "createdAt": "2026-09-10T17:50:37.759Z"
+    }
+  },
+  "story_second_skin/kaia_neutral": {
+    "assetKey": "story_second_skin/kaia_neutral",
+    "file": "story_second_skin/kaia_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9d2c60e5-b773-40cf-bd73-75b3b354dfc8",
+      "promptHash": "430e5473c8dd64a9d9f2a35974aefe20",
+      "seed": "ss-kaia-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 37211,
+      "createdAt": "2026-09-10T17:50:46.934Z"
+    }
+  },
+  "story_second_skin/kaia_surprised": {
+    "assetKey": "story_second_skin/kaia_surprised",
+    "file": "story_second_skin/kaia_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "74e4ea7b-aefd-4c57-8878-a43da76e82fe",
+      "promptHash": "9c394a42b190ea87a9831e1bcfe0f526",
+      "seed": "ss-kaia-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21546,
+      "createdAt": "2026-09-10T17:50:48.325Z"
+    }
+  },
+  "story_second_skin/kaia_amused": {
+    "assetKey": "story_second_skin/kaia_amused",
+    "file": "story_second_skin/kaia_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b3a20ad3-0dfa-445e-a7a1-679c0dec18c8",
+      "promptHash": "0e0ef3cded3547a5774da27cd57d9809",
+      "seed": "ss-kaia-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 36238,
+      "createdAt": "2026-09-10T17:51:03.005Z"
+    }
+  },
+  "story_second_skin/kaia_confused": {
+    "assetKey": "story_second_skin/kaia_confused",
+    "file": "story_second_skin/kaia_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9995caa5-ebd3-434f-8ba6-6b00ee63673f",
+      "promptHash": "005fb781da036170b35892085f53b3cc",
+      "seed": "ss-kaia-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 25534,
+      "createdAt": "2026-09-10T17:51:03.301Z"
+    }
+  },
+  "story_second_skin/kaia_annoyed": {
+    "assetKey": "story_second_skin/kaia_annoyed",
+    "file": "story_second_skin/kaia_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4051c89f-c3ae-411f-b9cf-e4db74edf988",
+      "promptHash": "6b613cb473736b19e028c1a7aae26522",
+      "seed": "ss-kaia-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 27483,
+      "createdAt": "2026-09-10T17:51:14.424Z"
+    }
+  },
+  "story_second_skin/kaia_angry": {
+    "assetKey": "story_second_skin/kaia_angry",
+    "file": "story_second_skin/kaia_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "27c712b8-96f4-407b-b064-1ac1bacc0b36",
+      "promptHash": "265f87b7c64fd0881449fb33a7261237",
+      "seed": "ss-kaia-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 27606,
+      "createdAt": "2026-09-10T17:51:15.938Z"
+    }
+  },
+  "story_second_skin/kaia_worried": {
+    "assetKey": "story_second_skin/kaia_worried",
+    "file": "story_second_skin/kaia_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Voss, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf3425a0-80f5-4016-a644-f3011d58d31b",
+      "promptHash": "032169eb3e95179fed784e20a9c2c10a",
+      "seed": "ss-kaia-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 20473,
+      "createdAt": "2026-09-10T17:51:23.490Z"
+    }
+  },
+  "story_second_skin/ilyra_warm": {
+    "assetKey": "story_second_skin/ilyra_warm",
+    "file": "story_second_skin/ilyra_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5de58e52-617e-4010-91ca-ae57691b6c21",
+      "promptHash": "4a11acf1e372ab9a7e155a5ed8df7457",
+      "seed": "ss-ilyra-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 20751,
+      "createdAt": "2026-09-10T17:51:35.183Z"
+    }
+  },
+  "story_second_skin/ilyra_neutral": {
+    "assetKey": "story_second_skin/ilyra_neutral",
+    "file": "story_second_skin/ilyra_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "20b62172-7937-4f16-b512-2754ac500941",
+      "promptHash": "fc5f636f34bd75be7c57fdc3608a6528",
+      "seed": "ss-ilyra-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 33643,
+      "createdAt": "2026-09-10T17:51:36.951Z"
+    }
+  },
+  "story_second_skin/ilyra_amused": {
+    "assetKey": "story_second_skin/ilyra_amused",
+    "file": "story_second_skin/ilyra_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7bdec6bf-c91a-492b-8d04-aa1c42c20498",
+      "promptHash": "1fb6afcf05e5f26bef559238bd0c17c1",
+      "seed": "ss-ilyra-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 37372,
+      "createdAt": "2026-09-10T17:51:53.316Z"
+    }
+  },
+  "story_second_skin/ilyra_surprised": {
+    "assetKey": "story_second_skin/ilyra_surprised",
+    "file": "story_second_skin/ilyra_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f9a9b87a-f75e-4632-a047-5a8cee7af173",
+      "promptHash": "0ad771936d508be8c928aa78a2b7f6f6",
+      "seed": "ss-ilyra-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 35330,
+      "createdAt": "2026-09-10T17:51:58.824Z"
+    }
+  },
+  "story_second_skin/ilyra_confused": {
+    "assetKey": "story_second_skin/ilyra_confused",
+    "file": "story_second_skin/ilyra_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "65026bf3-6506-4082-9db8-c29b67fc2c75",
+      "promptHash": "f73aa904e8364685cbed96b14133396b",
+      "seed": "ss-ilyra-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 34212,
+      "createdAt": "2026-09-10T17:52:09.405Z"
+    }
+  },
+  "story_second_skin/ilyra_annoyed": {
+    "assetKey": "story_second_skin/ilyra_annoyed",
+    "file": "story_second_skin/ilyra_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d4330e32-c452-46c9-831b-980e9e9e1734",
+      "promptHash": "a496c804cb530b355caec158c56b49a2",
+      "seed": "ss-ilyra-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 36585,
+      "createdAt": "2026-09-10T17:52:13.542Z"
+    }
+  },
+  "story_second_skin/ilyra_worried": {
+    "assetKey": "story_second_skin/ilyra_worried",
+    "file": "story_second_skin/ilyra_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "abdff91a-a0d9-4f34-9793-f49c89254de3",
+      "promptHash": "1494bf3483490cfa8b2968976da9305b",
+      "seed": "ss-ilyra-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 24317,
+      "createdAt": "2026-09-10T17:52:23.148Z"
+    }
+  },
+  "story_second_skin/ilyra_angry": {
+    "assetKey": "story_second_skin/ilyra_angry",
+    "file": "story_second_skin/ilyra_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilyra Morn, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "da8c69fa-05cf-4e6a-8a97-87f58ce87b91",
+      "promptHash": "4aa3f66d6c2bdefd7b7a5faf8bf8237a",
+      "seed": "ss-ilyra-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 36783,
+      "createdAt": "2026-09-10T17:52:30.107Z"
+    }
+  },
+  "story_second_skin/ren_neutral": {
+    "assetKey": "story_second_skin/ren_neutral",
+    "file": "story_second_skin/ren_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d950a2b2-c496-462b-a959-c787e1351036",
+      "promptHash": "0a080e0b3ac33a92a75664e5e49eaed3",
+      "seed": "ss-ren-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 24124,
+      "createdAt": "2026-09-10T17:52:33.536Z"
+    }
+  },
+  "story_second_skin/ren_warm": {
+    "assetKey": "story_second_skin/ren_warm",
+    "file": "story_second_skin/ren_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4e734076-7e62-4a6e-baea-0b071077c4c6",
+      "promptHash": "597e84aae30bb1c1a49be29beceb4db3",
+      "seed": "ss-ren-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 21790,
+      "createdAt": "2026-09-10T17:52:35.341Z"
+    }
+  },
+  "story_second_skin/ren_confused": {
+    "assetKey": "story_second_skin/ren_confused",
+    "file": "story_second_skin/ren_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "95a96452-7e4d-4159-b584-6f71e536cf2f",
+      "promptHash": "687db51c6994c2b8febd90c3b6eaa401",
+      "seed": "ss-ren-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 20586,
+      "createdAt": "2026-09-10T17:52:54.132Z"
+    }
+  },
+  "story_second_skin/ren_annoyed": {
+    "assetKey": "story_second_skin/ren_annoyed",
+    "file": "story_second_skin/ren_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2e77af90-e86f-4b94-a059-e81164a65e1c",
+      "promptHash": "e7a541a45f5466c23e931a6f6d408d41",
+      "seed": "ss-ren-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 24518,
+      "createdAt": "2026-09-10T17:52:59.867Z"
+    }
+  },
+  "story_second_skin/ren_amused": {
+    "assetKey": "story_second_skin/ren_amused",
+    "file": "story_second_skin/ren_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "513afd12-1d91-4974-afcb-571f6372b0ab",
+      "promptHash": "ffdd7160de2311cf39eb137f1b84258c",
+      "seed": "ss-ren-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 38651,
+      "createdAt": "2026-09-10T17:53:01.804Z"
+    }
+  },
+  "story_second_skin/ren_surprised": {
+    "assetKey": "story_second_skin/ren_surprised",
+    "file": "story_second_skin/ren_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d39f3b8a-610c-49b2-ba3b-8d5d889f0067",
+      "promptHash": "4ac974084ff792d0bf1689d6dd882ce2",
+      "seed": "ss-ren-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 34647,
+      "createdAt": "2026-09-10T17:53:04.761Z"
+    }
+  },
+  "story_second_skin/ren_angry": {
+    "assetKey": "story_second_skin/ren_angry",
+    "file": "story_second_skin/ren_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6307e98e-7382-4f38-965c-b05dbc3a7817",
+      "promptHash": "c7ce12a531603609274ec5d7487587bc",
+      "seed": "ss-ren-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 18566,
+      "createdAt": "2026-09-10T17:53:12.705Z"
+    }
+  },
+  "story_second_skin/ren_worried": {
+    "assetKey": "story_second_skin/ren_worried",
+    "file": "story_second_skin/ren_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Maren Tovi, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "55958110-d983-4980-8f5b-872656c03a15",
+      "promptHash": "314e86021918ec461c84adc31500af52",
+      "seed": "ss-ren-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 20213,
+      "createdAt": "2026-09-10T17:53:20.092Z"
+    }
+  },
+  "story_second_skin/tessa_neutral": {
+    "assetKey": "story_second_skin/tessa_neutral",
+    "file": "story_second_skin/tessa_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "83651115-3069-434e-8dbe-7e606c3ea869",
+      "promptHash": "0b02bde57fde44a60db1d163931041dc",
+      "seed": "ss-tessa-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 20011,
+      "createdAt": "2026-09-10T17:53:21.820Z"
+    }
+  },
+  "story_second_skin/tessa_warm": {
+    "assetKey": "story_second_skin/tessa_warm",
+    "file": "story_second_skin/tessa_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "11303529-0af6-4429-9a87-98e0244caef2",
+      "promptHash": "ec9f7199dc865e238e3283d1ec1680ac",
+      "seed": "ss-tessa-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 18332,
+      "createdAt": "2026-09-10T17:53:23.098Z"
+    }
+  },
+  "story_second_skin/tessa_amused": {
+    "assetKey": "story_second_skin/tessa_amused",
+    "file": "story_second_skin/tessa_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f1f70ec1-bbb7-4f3b-a23e-0c8c460c030c",
+      "promptHash": "8b95e583933fe7b46bdd43dc9ee5ed80",
+      "seed": "ss-tessa-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 19824,
+      "createdAt": "2026-09-10T17:53:32.538Z"
+    }
+  },
+  "story_second_skin/tessa_surprised": {
+    "assetKey": "story_second_skin/tessa_surprised",
+    "file": "story_second_skin/tessa_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c3ca86e7-cc36-449f-8ec3-ece56f7eb11a",
+      "promptHash": "fac101f14beef0a235b1e5499492609e",
+      "seed": "ss-tessa-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 18384,
+      "createdAt": "2026-09-10T17:53:38.490Z"
+    }
+  },
+  "story_second_skin/tessa_confused": {
+    "assetKey": "story_second_skin/tessa_confused",
+    "file": "story_second_skin/tessa_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e4fc1d16-11e9-4c6b-b4d0-414ff7e5f2cb",
+      "promptHash": "99863cf50beb272d59e9210772f2e793",
+      "seed": "ss-tessa-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18848,
+      "createdAt": "2026-09-10T17:53:40.676Z"
+    }
+  },
+  "story_second_skin/tessa_annoyed": {
+    "assetKey": "story_second_skin/tessa_annoyed",
+    "file": "story_second_skin/tessa_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cdee2172-8339-4198-b183-053d6159b479",
+      "promptHash": "adb22cb61af4e6155b022ec61ec2adb7",
+      "seed": "ss-tessa-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 21582,
+      "createdAt": "2026-09-10T17:53:44.688Z"
+    }
+  },
+  "story_second_skin/tessa_angry": {
+    "assetKey": "story_second_skin/tessa_angry",
+    "file": "story_second_skin/tessa_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d4d03a89-6282-4d66-968b-4231cd4cc951",
+      "promptHash": "82e060064333c7d4fc2e379aea6f4e3b",
+      "seed": "ss-tessa-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 22407,
+      "createdAt": "2026-09-10T17:53:54.956Z"
+    }
+  },
+  "story_second_skin/tessa_worried": {
+    "assetKey": "story_second_skin/tessa_worried",
+    "file": "story_second_skin/tessa_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tessa Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0562c1c3-6e1a-45f3-a64e-312f07a27db9",
+      "promptHash": "2de074be7deb33badb9f1246b8b07815",
+      "seed": "ss-tessa-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21287,
+      "createdAt": "2026-09-10T17:53:59.787Z"
+    }
+  },
+  "story_second_skin/sai_warm": {
+    "assetKey": "story_second_skin/sai_warm",
+    "file": "story_second_skin/sai_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ff4ae000-d538-452a-baa7-0410579ed37f",
+      "promptHash": "654a72bc9db871f665783cb92408628a",
+      "seed": "ss-sai-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 23682,
+      "createdAt": "2026-09-10T17:54:08.380Z"
+    }
+  },
+  "story_second_skin/sai_neutral": {
+    "assetKey": "story_second_skin/sai_neutral",
+    "file": "story_second_skin/sai_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9bcb0153-be96-4bb9-8309-bae1d40ba1cc",
+      "promptHash": "68586fae53439dc12ebfd6055446463f",
+      "seed": "ss-sai-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 36411,
+      "createdAt": "2026-09-10T17:54:17.094Z"
+    }
+  },
+  "story_second_skin/sai_surprised": {
+    "assetKey": "story_second_skin/sai_surprised",
+    "file": "story_second_skin/sai_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "065629e1-eebf-47a4-acbe-9a58847cb82a",
+      "promptHash": "ee25000dd7c744b49e5062dbe0633c06",
+      "seed": "ss-sai-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 23092,
+      "createdAt": "2026-09-10T17:54:22.888Z"
+    }
+  },
+  "story_second_skin/sai_confused": {
+    "assetKey": "story_second_skin/sai_confused",
+    "file": "story_second_skin/sai_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1487bb67-ee5c-474f-aaed-1995ddeb0795",
+      "promptHash": "208c0dd70555eb0d49cbbc8ad8e56342",
+      "seed": "ss-sai-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 20061,
+      "createdAt": "2026-09-10T17:54:28.450Z"
+    }
+  },
+  "story_second_skin/sai_amused": {
+    "assetKey": "story_second_skin/sai_amused",
+    "file": "story_second_skin/sai_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "73f57afa-d87d-4654-987f-a4b18bf17e52",
+      "promptHash": "e84caa842cc785ddc3dea73b288147e2",
+      "seed": "ss-sai-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34670,
+      "createdAt": "2026-09-10T17:54:29.635Z"
+    }
+  },
+  "story_second_skin/sai_annoyed": {
+    "assetKey": "story_second_skin/sai_annoyed",
+    "file": "story_second_skin/sai_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "577f1083-7640-4d1f-9a8e-10536130cf84",
+      "promptHash": "7f241ab9d224cad13e30bd37bc89f8f6",
+      "seed": "ss-sai-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 19451,
+      "createdAt": "2026-09-10T17:54:36.562Z"
+    }
+  },
+  "story_second_skin/sai_angry": {
+    "assetKey": "story_second_skin/sai_angry",
+    "file": "story_second_skin/sai_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0375312b-c078-4324-8d00-734905d1404d",
+      "promptHash": "3b78b01ba108bc7c30c039fa681de25a",
+      "seed": "ss-sai-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 24325,
+      "createdAt": "2026-09-10T17:54:47.219Z"
+    }
+  },
+  "story_second_skin/edran_warm": {
+    "assetKey": "story_second_skin/edran_warm",
+    "file": "story_second_skin/edran_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ad537b56-3902-426b-8f18-933a77054a57",
+      "promptHash": "571004f8ce0072a816c7c83b76c5ec6e",
+      "seed": "ss-edran-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 14991,
+      "createdAt": "2026-09-10T17:54:51.561Z"
+    }
+  },
+  "story_second_skin/sai_worried": {
+    "assetKey": "story_second_skin/sai_worried",
+    "file": "story_second_skin/sai_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sai Velo, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4489c86a-4da5-4278-a47f-d353aed75f3a",
+      "promptHash": "1fe26caceffe0681109741881e55f876",
+      "seed": "ss-sai-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 33945,
+      "createdAt": "2026-09-10T17:55:02.404Z"
+    }
+  },
+  "story_second_skin/edran_amused": {
+    "assetKey": "story_second_skin/edran_amused",
+    "file": "story_second_skin/edran_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "53488fdb-0254-46a8-a53f-3fc027da5ced",
+      "promptHash": "774a15d5f06661bf9d198269496d23a1",
+      "seed": "ss-edran-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 18012,
+      "createdAt": "2026-09-10T17:55:05.236Z"
+    }
+  },
+  "story_second_skin/edran_neutral": {
+    "assetKey": "story_second_skin/edran_neutral",
+    "file": "story_second_skin/edran_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c421f1ab-4d0c-4727-a45c-4b1edde2f4ca",
+      "promptHash": "5fe15f46b63f467ccbaf67f8f36ad8ae",
+      "seed": "ss-edran-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 38257,
+      "createdAt": "2026-09-10T17:55:07.900Z"
+    }
+  },
+  "story_second_skin/edran_surprised": {
+    "assetKey": "story_second_skin/edran_surprised",
+    "file": "story_second_skin/edran_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8a3d8d66-ac88-4ea2-b672-d719ba312cab",
+      "promptHash": "30c6b86fb1fe186930763ab1678b1caa",
+      "seed": "ss-edran-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 17583,
+      "createdAt": "2026-09-10T17:55:09.154Z"
+    }
+  },
+  "story_second_skin/edran_worried": {
+    "assetKey": "story_second_skin/edran_worried",
+    "file": "story_second_skin/edran_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf777c6c-31d1-4a7a-bb9d-db37c37ed60f",
+      "promptHash": "94f4de78d501efc9e208325375cb4600",
+      "seed": "ss-edran-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 15042,
+      "createdAt": "2026-09-10T17:55:24.206Z"
+    }
+  },
+  "story_second_skin/edran_annoyed": {
+    "assetKey": "story_second_skin/edran_annoyed",
+    "file": "story_second_skin/edran_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3e72e1bf-22a7-4597-8afa-d172bc7debd2",
+      "promptHash": "a94de5b2e65298c88ed965e4ad9777d2",
+      "seed": "ss-edran-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 20938,
+      "createdAt": "2026-09-10T17:55:26.183Z"
+    }
+  },
+  "story_second_skin/edran_angry": {
+    "assetKey": "story_second_skin/edran_angry",
+    "file": "story_second_skin/edran_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8a59da84-f2d8-4283-bd81-6daf45f119f0",
+      "promptHash": "1fd514ec665d3dea402859777bf0cd49",
+      "seed": "ss-edran-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 19210,
+      "createdAt": "2026-09-10T17:55:27.123Z"
+    }
+  },
+  "story_second_skin/edran_confused": {
+    "assetKey": "story_second_skin/edran_confused",
+    "file": "story_second_skin/edran_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Edran Sol, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f4d690f1-e448-47e7-b221-24462b4b9f2b",
+      "promptHash": "d4ec159d0f984ddbe4630d239190ab79",
+      "seed": "ss-edran-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 34865,
+      "createdAt": "2026-09-10T17:55:37.277Z"
+    }
+  },
+  "story_second_skin/lio_amused": {
+    "assetKey": "story_second_skin/lio_amused",
+    "file": "story_second_skin/lio_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8fb7c1ff-b000-4dde-96fb-004609b49ca9",
+      "promptHash": "378ac16aad30ac0e12c659f633c95c83",
+      "seed": "ss-lio-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 20755,
+      "createdAt": "2026-09-10T17:55:47.888Z"
+    }
+  },
+  "story_second_skin/lio_neutral": {
+    "assetKey": "story_second_skin/lio_neutral",
+    "file": "story_second_skin/lio_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5bb388be-ebbf-46a8-b242-2f34afa83707",
+      "promptHash": "1463155b3421b49247aedf32626878be",
+      "seed": "ss-lio-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 31372,
+      "createdAt": "2026-09-10T17:55:55.588Z"
+    }
+  },
+  "story_second_skin/lio_warm": {
+    "assetKey": "story_second_skin/lio_warm",
+    "file": "story_second_skin/lio_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e6188b77-7ee7-443e-9dda-b439c0412a82",
+      "promptHash": "ea95544c2fb08665a64475907071b744",
+      "seed": "ss-lio-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 39444,
+      "createdAt": "2026-09-10T17:56:05.636Z"
+    }
+  },
+  "story_second_skin/lio_surprised": {
+    "assetKey": "story_second_skin/lio_surprised",
+    "file": "story_second_skin/lio_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2a5a9a70-2fbe-4d5b-852a-3645e101ebb6",
+      "promptHash": "d6a5688004be703ee463bd6c82234702",
+      "seed": "ss-lio-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 35703,
+      "createdAt": "2026-09-10T17:56:12.992Z"
+    }
+  },
+  "story_second_skin/lio_confused": {
+    "assetKey": "story_second_skin/lio_confused",
+    "file": "story_second_skin/lio_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09089336-004b-4432-9c46-ceae8b96d327",
+      "promptHash": "b948a2ea0250f95cbabc2eca4f52d9b7",
+      "seed": "ss-lio-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 36391,
+      "createdAt": "2026-09-10T17:56:24.286Z"
+    }
+  },
+  "story_second_skin/lio_angry": {
+    "assetKey": "story_second_skin/lio_angry",
+    "file": "story_second_skin/lio_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a7cddde7-8661-4e5c-8642-0c43847e3ead",
+      "promptHash": "fbcaff9b8fda9d8a1508fe91ce882b78",
+      "seed": "ss-lio-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 24884,
+      "createdAt": "2026-09-10T17:56:30.528Z"
+    }
+  },
+  "story_second_skin/lio_annoyed": {
+    "assetKey": "story_second_skin/lio_annoyed",
+    "file": "story_second_skin/lio_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2ead2675-c42f-4f4f-ab44-9d10a6076af7",
+      "promptHash": "1a0d2e3ff6f379ea76ef282b4c75feed",
+      "seed": "ss-lio-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 36326,
+      "createdAt": "2026-09-10T17:56:31.923Z"
+    }
+  },
+  "story_second_skin/lio_worried": {
+    "assetKey": "story_second_skin/lio_worried",
+    "file": "story_second_skin/lio_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lio Voss, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dfaba81b-7b2a-4203-a6c0-ccbf86e19e47",
+      "promptHash": "3eca94ceb7e17d9d6fa464403c56b618",
+      "seed": "ss-lio-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 32834,
+      "createdAt": "2026-09-10T17:56:45.837Z"
+    }
   }
 }
