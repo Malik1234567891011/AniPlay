@@ -61,6 +61,24 @@ const NOT_A_VERB = new Set([
  * dialogue is correct and is left alone.
  */
 export function toSecondPerson(text: string, playerName: string): string {
+  // Never inside quotation marks, whatever kind of block this is.
+  //
+  // Somebody calling the player by name out loud is correct, and rewriting it
+  // produces nonsense: a line that ended "I have no wish to explain myself to
+  // the Fleet this morning, Sable." reached the player as "…this morning, you."
+  // The block had been misparsed as narration — that is fixed at the source —
+  // but the invariant belongs here, because quoted speech is somebody speaking
+  // however the block ended up labelled.
+  return outsideQuotes(text, (span) => rewriteNarration(span, playerName));
+}
+
+/** Applies a rewrite to everything except the quoted spans. */
+function outsideQuotes(text: string, rewrite: (span: string) => string): string {
+  const parts = text.split(/([“"][^“”"]*[”"])/g);
+  return parts.map((part, index) => (index % 2 === 1 ? part : rewrite(part))).join('');
+}
+
+function rewriteNarration(text: string, playerName: string): string {
   const names = [playerName.trim(), playerName.trim().split(/\s+/)[0] ?? '']
     .filter((name) => name.length > 1)
     // Longest first, so "Robin Vale" is consumed before "Robin".

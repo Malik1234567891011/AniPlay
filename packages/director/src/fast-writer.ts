@@ -62,9 +62,7 @@ export function takeCompleteSentences(buffer: string): { emit: string; rest: str
  */
 export function blocksFrom(text: string, context: TurnContext): NarrativeBlock[] {
   const blocks: NarrativeBlock[] = [];
-  const byName = new Map(
-    context.story.characters.map((c) => [c.name.split(/\s+/)[0]!.toLowerCase(), c.id]),
-  );
+  const byName = speakerIndex(context);
 
   for (const paragraph of text.split(/\n+/).map((p) => p.trim()).filter(Boolean)) {
     const speech = SPEAKER_LINE.exec(paragraph);
@@ -92,6 +90,45 @@ export function blocksFrom(text: string, context: TurnContext): NarrativeBlock[]
     }
   }
   return blocks;
+}
+
+/**
+ * Every name a speaker line might use, pointing at the person who owns it.
+ *
+ * Only the *first* word of each name was indexed, so "Captain Veyra Sol" was
+ * reachable as "Captain" and nothing else — and a beat that wrote
+ * `Veyra: "We should not linger."` did not parse as dialogue at all. It stayed
+ * narration, which cost it the portrait and the speaker name on screen, and
+ * then cost it the line itself: narration containing the player's name is
+ * rewritten to "you", so a character addressing the player by name came out as
+ * "I have no wish to explain myself to the Fleet this morning, you."
+ *
+ * A word two characters share points at neither. Guessing between them is how a
+ * line ends up attributed to the wrong person, which is worse than leaving it
+ * as narration.
+ */
+function speakerIndex(context: TurnContext): Map<string, string> {
+  const index = new Map<string, string>();
+  const ambiguous = new Set<string>();
+
+  for (const character of context.story.characters) {
+    const keys = [character.name, ...character.name.split(/\s+/)]
+      .map((part) => part.toLowerCase())
+      .filter((part) => part.length >= 3);
+
+    for (const key of keys) {
+      if (ambiguous.has(key)) continue;
+      const existing = index.get(key);
+      if (existing !== undefined && existing !== character.id) {
+        index.delete(key);
+        ambiguous.add(key);
+        continue;
+      }
+      index.set(key, character.id);
+    }
+  }
+
+  return index;
 }
 
 export interface FastWriteOptions {
