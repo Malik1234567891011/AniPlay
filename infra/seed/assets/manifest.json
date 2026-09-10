@@ -8947,5 +8947,1335 @@
       "latencyMs": 36683,
       "createdAt": "2026-09-10T16:31:58.692Z"
     }
+  },
+  "story_fourth_beast/stage_latin_quarter": {
+    "assetKey": "story_fourth_beast/stage_latin_quarter",
+    "file": "story_fourth_beast/stage_latin_quarter.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Fifth: Bookshops, a cinema that shows the same four films forever, students on the kerb outside a bar at eleven at night, and streets narrow enough that two people cannot pass a delivery scooter without one of them stopping.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6555b8eb-cb92-4baa-8d29-87e09c11face",
+      "promptHash": "62861f6cbbe21e570637dca6c748df66",
+      "seed": "sv_fourth_beast_1:loc:latin_quarter:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36350,
+      "createdAt": "2026-09-10T16:40:04.951Z"
+    }
+  },
+  "story_fourth_beast/key": {
+    "assetKey": "story_fourth_beast/key",
+    "file": "story_fourth_beast/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Fourth Beast",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ecad6c2c-8d00-4c27-b431-8a21b9eed7e2",
+      "promptHash": "5c7cfae68c81d8ff706892b140f03711",
+      "seed": "sv_fourth_beast_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42436,
+      "createdAt": "2026-09-10T16:40:11.036Z"
+    }
+  },
+  "story_fourth_beast/stage_beraud_lab": {
+    "assetKey": "story_fourth_beast/stage_beraud_lab",
+    "file": "story_fourth_beast/stage_beraud_lab.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Room Under The Institute: Down two flights from an ordinary research building near the Panthéon: a long low room with grow lights, planted beds and warm air, more greenhouse than laboratory.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d605a28e-de87-4f21-96a6-d4b163c7ad70",
+      "promptHash": "9394e0cf0776ea501494a5488b410aa4",
+      "seed": "sv_fourth_beast_1:loc:beraud_lab:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44032,
+      "createdAt": "2026-09-10T16:40:12.633Z"
+    }
+  },
+  "story_fourth_beast/stage_metro_line": {
+    "assetKey": "story_fourth_beast/stage_metro_line",
+    "file": "story_fourth_beast/stage_metro_line.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Métro: Tiled corridors, warm wind ahead of a train, buskers, and the specific silence of a carriage where forty people have all decided not to look at each other.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c08e3521-5420-491d-8caf-fe421eedf130",
+      "promptHash": "0aa346ba01ac049b8dcf98b3526dc6da",
+      "seed": "sv_fourth_beast_1:loc:metro_line:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34875,
+      "createdAt": "2026-09-10T16:40:39.836Z"
+    }
+  },
+  "story_fourth_beast/stage_canal_saint_martin": {
+    "assetKey": "story_fourth_beast/stage_canal_saint_martin",
+    "file": "story_fourth_beast/stage_canal_saint_martin.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Canal Saint-Martin: Iron footbridges, plane trees, locks that take twenty minutes to fill, and people sitting on the quay with a bottle and no intention of moving.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ac936647-5fe4-4421-b1df-c31f3510261d",
+      "promptHash": "7fcbaac12b05f44e4a0c3c261cf05037",
+      "seed": "sv_fourth_beast_1:loc:canal_saint_martin:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40542,
+      "createdAt": "2026-09-10T16:40:51.589Z"
+    }
+  },
+  "story_fourth_beast/stage_montmartre": {
+    "assetKey": "story_fourth_beast/stage_montmartre",
+    "file": "story_fourth_beast/stage_montmartre.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Montmartre: Stairs.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a4d1fb09-3f33-4a8a-994d-84ecce02ca02",
+      "promptHash": "502232013434327a785846e304b6ee56",
+      "seed": "sv_fourth_beast_1:loc:montmartre:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43132,
+      "createdAt": "2026-09-10T16:40:55.791Z"
+    }
+  },
+  "story_fourth_beast/stage_the_roofline": {
+    "assetKey": "story_fourth_beast/stage_the_roofline",
+    "file": "story_fourth_beast/stage_the_roofline.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Roofline: Zinc, chimney stacks, satellite dishes and a two-hundred-year-old drainage arrangement that assumes nobody will ever stand on it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ccf73036-eeba-4377-ba36-38eed1288f17",
+      "promptHash": "6bc7cda70aabc6803282b1b8c9155a02",
+      "seed": "sv_fourth_beast_1:loc:the_roofline:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 25888,
+      "createdAt": "2026-09-10T16:41:05.749Z"
+    }
+  },
+  "story_fourth_beast/cover": {
+    "assetKey": "story_fourth_beast/cover",
+    "file": "story_fourth_beast/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Fourth Beast: Three beasts. Two people. You chose first.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "319d82b6-dddc-4469-b6d9-b2cd8a4b9715",
+      "promptHash": "773ddbc8b70c4b770725995d59b5a329",
+      "seed": "sv_fourth_beast_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 111731,
+      "createdAt": "2026-09-10T16:41:20.317Z"
+    }
+  },
+  "story_fourth_beast/stage_belleville": {
+    "assetKey": "story_fourth_beast/stage_belleville",
+    "file": "story_fourth_beast/stage_belleville.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Belleville: A hill of markets, four cuisines on one street, a park with the whole city laid out below it, and about eleven thousand people who all know each other well enough to notice a stranger and well enough not to mention it to the police.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "17942dea-65db-4db3-8706-caf19d97ceb0",
+      "promptHash": "ee1fec73c2effbfff1efe29201f7c363",
+      "seed": "sv_fourth_beast_1:loc:belleville:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37683,
+      "createdAt": "2026-09-10T16:41:29.284Z"
+    }
+  },
+  "story_fourth_beast/stage_lina_flat": {
+    "assetKey": "story_fourth_beast/stage_lina_flat",
+    "file": "story_fourth_beast/stage_lina_flat.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Fourth Floor Walk-Up: One room, a mattress, a desk, and a paper map of Paris on the wall with six months of pins in it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cbc5df01-cc08-4613-8d58-ba189c2b9ed3",
+      "promptHash": "fef0ce068017d2c43ea37762bd87afd2",
+      "seed": "sv_fourth_beast_1:loc:lina_flat:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41947,
+      "createdAt": "2026-09-10T16:41:37.850Z"
+    }
+  },
+  "story_fourth_beast/stage_the_seine": {
+    "assetKey": "story_fourth_beast/stage_the_seine",
+    "file": "story_fourth_beast/stage_the_seine.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Riverbank: Stone quays below the traffic, bridges every four hundred metres, and a strip of the city where you can walk for an hour and be visible to almost nobody.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "42ff9cc5-7dbb-485a-8649-1c2066fd8f74",
+      "promptHash": "84f38b1528f053168e8da189acfe5899",
+      "seed": "sv_fourth_beast_1:loc:the_seine:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43172,
+      "createdAt": "2026-09-10T16:41:48.927Z"
+    }
+  },
+  "story_fourth_beast/stage_palais_royal": {
+    "assetKey": "story_fourth_beast/stage_palais_royal",
+    "file": "story_fourth_beast/stage_palais_royal.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Centre: Arcades, gravel gardens, black-and-white columns, a fountain, and the kind of address a foundation with three hundred million euros and a philanthropy budget puts on its letterhead.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aef2ef8c-f2e7-40cf-9a33-d9a91fd4c995",
+      "promptHash": "d2c201183a833a78e74dccac301901db",
+      "seed": "sv_fourth_beast_1:loc:palais_royal:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 23522,
+      "createdAt": "2026-09-10T16:41:52.812Z"
+    }
+  },
+  "story_fourth_beast/stage_police_prefecture": {
+    "assetKey": "story_fourth_beast/stage_police_prefecture",
+    "file": "story_fourth_beast/stage_police_prefecture.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Prefecture: A great stone building on the island with a courtyard full of parked vehicles and a floor upstairs where nine people have been working six months of linked cases with an evidence board they have started keeping face-down when anybody senior visits.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "eb7f6d53-99a4-49a0-b914-a336d87f4661",
+      "promptHash": "b2b34c9643771492769ccd128fdba723",
+      "seed": "sv_fourth_beast_1:loc:police_prefecture:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35176,
+      "createdAt": "2026-09-10T16:41:55.695Z"
+    }
+  },
+  "story_fourth_beast/stage_the_quarries": {
+    "assetKey": "story_fourth_beast/stage_the_quarries",
+    "file": "story_fourth_beast/stage_the_quarries.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Quarries: A hundred and eighty kilometres of limestone galleries under the south of the city, cut for stone before anybody thought to write down where.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "28c0fe96-d2e8-4af8-84a9-ff576182233f",
+      "promptHash": "498257ddcf37a5e6611e90b1483b5294",
+      "seed": "sv_fourth_beast_1:loc:the_quarries:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 21371,
+      "createdAt": "2026-09-10T16:42:10.302Z"
+    }
+  },
+  "story_fourth_beast/camille": {
+    "assetKey": "story_fourth_beast/camille",
+    "file": "story_fourth_beast/camille.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, Twenty-one, the other compatible person, and three months into looking for her brother without waiting for anybody to authorise it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "306ca2e6-e95b-45ad-ae0a-e516846eb0d6",
+      "promptHash": "624174fa8f8e7306195ad04891881d74",
+      "seed": "fb-camille-01",
+      "costUsd": 0.01372,
+      "latencyMs": 20856,
+      "createdAt": "2026-09-10T16:42:16.558Z"
+    }
+  },
+  "story_fourth_beast/stage_service_tunnels": {
+    "assetKey": "story_fourth_beast/stage_service_tunnels",
+    "file": "story_fourth_beast/stage_service_tunnels.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Service Level: Behind the doors that say no entry: cable runs, ventilation plant, disused platforms from lines that were never finished, and a hundred and forty years of the city building underneath itself and forgetting.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b35a1dd5-4cd4-44eb-b11c-07cd2ce76832",
+      "promptHash": "bf2027f7daa619e555e6df469484acc8",
+      "seed": "sv_fourth_beast_1:loc:service_tunnels:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38891,
+      "createdAt": "2026-09-10T16:42:16.748Z"
+    }
+  },
+  "story_fourth_beast/stage_the_boundary": {
+    "assetKey": "story_fourth_beast/stage_the_boundary",
+    "file": "story_fourth_beast/stage_the_boundary.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Where The Stone Stops: A gallery like every other gallery, except that the far wall is not there and has not been for some time.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "97763c4f-99bf-4809-94e3-1b12d3f0a31e",
+      "promptHash": "b964266228ba3842d459cc4617cb5a92",
+      "seed": "sv_fourth_beast_1:loc:the_boundary:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 26601,
+      "createdAt": "2026-09-10T16:42:19.417Z"
+    }
+  },
+  "story_fourth_beast/ravel": {
+    "assetKey": "story_fourth_beast/ravel",
+    "file": "story_fourth_beast/ravel.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, Commandante, thirty-seven, running six months of linked cases out of a room where the evidence board gets turned around when anybody senior visits",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9846eefb-4de5-4202-b340-8b00582a2183",
+      "promptHash": "5be69bcddfb1f0d9e1ec18b0d094a8c8",
+      "seed": "fb-ravel-01",
+      "costUsd": 0.00632,
+      "latencyMs": 14995,
+      "createdAt": "2026-09-10T16:42:34.417Z"
+    }
+  },
+  "story_fourth_beast/morel": {
+    "assetKey": "story_fourth_beast/morel",
+    "file": "story_fourth_beast/morel.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, The biologist who grew three animals in a basement because nothing else in the world could touch the man doing this",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b11b82e1-a3d6-4d27-8fa5-769b74a502b3",
+      "promptHash": "d788e587fa2f5707f8073f616788a3a2",
+      "seed": "fb-morel-01",
+      "costUsd": 0.00632,
+      "latencyMs": 18519,
+      "createdAt": "2026-09-10T16:42:35.275Z"
+    }
+  },
+  "story_fourth_beast/lucien": {
+    "assetKey": "story_fourth_beast/lucien",
+    "file": "story_fourth_beast/lucien.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, Thirty-four, a foundation, a philanthropy budget, a great many people missing, and a creature that chose him rather than the other way round",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "535cb35f-ac9d-4b8e-b5a3-22a1a4548214",
+      "promptHash": "5fe8abd73c4cd29470ee026efea66cb4",
+      "seed": "fb-lucien-01",
+      "costUsd": 0.01372,
+      "latencyMs": 26360,
+      "createdAt": "2026-09-10T16:42:36.667Z"
+    }
+  },
+  "story_fourth_beast/lina": {
+    "assetKey": "story_fourth_beast/lina",
+    "file": "story_fourth_beast/lina.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, Journalism student, twenty-three, and the only person in Paris who had the disappearances on one map before anybody official did",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "80fe09cc-8b6a-4129-9e49-1c953a069cc2",
+      "promptHash": "d59c5fcdebdd2b3ac4d8161f0bb0d043",
+      "seed": "fb-lina-01",
+      "costUsd": 0.02404,
+      "latencyMs": 24103,
+      "createdAt": "2026-09-10T16:42:40.668Z"
+    }
+  },
+  "story_fourth_beast/camille_neutral": {
+    "assetKey": "story_fourth_beast/camille_neutral",
+    "file": "story_fourth_beast/camille_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4d880cce-bf97-4d8e-962d-8a3d4698f2dc",
+      "promptHash": "b74974cddbdd8a2c9da0b47964c7c2f2",
+      "seed": "fb-camille-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19791,
+      "createdAt": "2026-09-10T16:42:55.070Z"
+    }
+  },
+  "story_fourth_beast/camille_warm": {
+    "assetKey": "story_fourth_beast/camille_warm",
+    "file": "story_fourth_beast/camille_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0b8d2451-a18e-428a-b662-2a514b366580",
+      "promptHash": "8d0bbc45c973946a0f4c0afe2d068ba8",
+      "seed": "fb-camille-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 22491,
+      "createdAt": "2026-09-10T16:42:59.162Z"
+    }
+  },
+  "story_fourth_beast/camille_amused": {
+    "assetKey": "story_fourth_beast/camille_amused",
+    "file": "story_fourth_beast/camille_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "68d0325a-e9e2-4049-ab9e-dae5c33e9948",
+      "promptHash": "4299fdf2f6b3cf1f40afa3189eea5f30",
+      "seed": "fb-camille-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 35258,
+      "createdAt": "2026-09-10T16:43:15.933Z"
+    }
+  },
+  "story_fourth_beast/camille_confused": {
+    "assetKey": "story_fourth_beast/camille_confused",
+    "file": "story_fourth_beast/camille_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ec2e606d-1b49-485c-b6e7-563bddf76934",
+      "promptHash": "b2bd7a884f8dfb4132399ff759eba2a5",
+      "seed": "fb-camille-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 24704,
+      "createdAt": "2026-09-10T16:43:23.871Z"
+    }
+  },
+  "story_fourth_beast/theo": {
+    "assetKey": "story_fourth_beast/theo",
+    "file": "story_fourth_beast/theo.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, Twenty-four, missing since March, and — if anybody gets down there — not dead",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1097a311-b179-43bc-86ee-170cb89dd33a",
+      "promptHash": "845016d5d6858326f37e522e199b8a8f",
+      "seed": "fb-theo-01",
+      "costUsd": 0.05488,
+      "latencyMs": 51023,
+      "createdAt": "2026-09-10T16:43:25.445Z"
+    }
+  },
+  "story_fourth_beast/camille_surprised": {
+    "assetKey": "story_fourth_beast/camille_surprised",
+    "file": "story_fourth_beast/camille_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6d230db6-d4eb-43fb-ab36-095665f83a6e",
+      "promptHash": "42a06f2859d22cde3f8c80b76bc9597b",
+      "seed": "fb-camille-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 36461,
+      "createdAt": "2026-09-10T16:43:31.537Z"
+    }
+  },
+  "story_fourth_beast/camille_annoyed": {
+    "assetKey": "story_fourth_beast/camille_annoyed",
+    "file": "story_fourth_beast/camille_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a7748516-de22-49b0-94a9-300cc71744b5",
+      "promptHash": "a882cc1e13682b9184cbe97b1b7edf5e",
+      "seed": "fb-camille-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 30264,
+      "createdAt": "2026-09-10T16:43:46.202Z"
+    }
+  },
+  "story_fourth_beast/camille_angry": {
+    "assetKey": "story_fourth_beast/camille_angry",
+    "file": "story_fourth_beast/camille_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6f2cca51-46bc-4a17-b50d-b9352a6e4843",
+      "promptHash": "07f1874c92571f29ef8b3d32b98bf0b5",
+      "seed": "fb-camille-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 25050,
+      "createdAt": "2026-09-10T16:43:48.924Z"
+    }
+  },
+  "story_fourth_beast/lucien_neutral": {
+    "assetKey": "story_fourth_beast/lucien_neutral",
+    "file": "story_fourth_beast/lucien_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f3b09244-d99c-4c31-af1a-d40d90cd1236",
+      "promptHash": "9f8c82d72e3ad29d93f35fda952bfc7f",
+      "seed": "fb-lucien-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19127,
+      "createdAt": "2026-09-10T16:43:50.672Z"
+    }
+  },
+  "story_fourth_beast/camille_worried": {
+    "assetKey": "story_fourth_beast/camille_worried",
+    "file": "story_fourth_beast/camille_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Camille Laurent, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "897abf73-6f7f-42f9-b592-71313c8eb32b",
+      "promptHash": "36b88d98e82da2be885bef6c2e01b5c7",
+      "seed": "fb-camille-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 36673,
+      "createdAt": "2026-09-10T16:44:02.124Z"
+    }
+  },
+  "story_fourth_beast/lucien_warm": {
+    "assetKey": "story_fourth_beast/lucien_warm",
+    "file": "story_fourth_beast/lucien_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d5e70be9-945f-4c45-b37a-5e07386c49f4",
+      "promptHash": "79ac7867a36e4f26a5b1242c78528ca5",
+      "seed": "fb-lucien-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 18323,
+      "createdAt": "2026-09-10T16:44:04.529Z"
+    }
+  },
+  "story_fourth_beast/lucien_surprised": {
+    "assetKey": "story_fourth_beast/lucien_surprised",
+    "file": "story_fourth_beast/lucien_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3a77eb4d-0e6c-40db-bf13-6345c4e6d9ba",
+      "promptHash": "6277221acc1b75d05b7e9f540c2ab607",
+      "seed": "fb-lucien-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 16498,
+      "createdAt": "2026-09-10T16:44:07.177Z"
+    }
+  },
+  "story_fourth_beast/lucien_amused": {
+    "assetKey": "story_fourth_beast/lucien_amused",
+    "file": "story_fourth_beast/lucien_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cc4070ec-f155-475b-858f-00f93b712675",
+      "promptHash": "0029bb833eb581f9e323420673c754ed",
+      "seed": "fb-lucien-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 19021,
+      "createdAt": "2026-09-10T16:44:07.952Z"
+    }
+  },
+  "story_fourth_beast/lucien_annoyed": {
+    "assetKey": "story_fourth_beast/lucien_annoyed",
+    "file": "story_fourth_beast/lucien_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1135e8e7-5676-4b0f-96ea-8b0756b678a3",
+      "promptHash": "6df59733dcab5a53f46b4741cac7cc9c",
+      "seed": "fb-lucien-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 17933,
+      "createdAt": "2026-09-10T16:44:22.464Z"
+    }
+  },
+  "story_fourth_beast/lucien_confused": {
+    "assetKey": "story_fourth_beast/lucien_confused",
+    "file": "story_fourth_beast/lucien_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6686890d-1460-44fb-9f6e-924cd128e4d6",
+      "promptHash": "dfd719feb10d52625f8e28acbcd1cdb9",
+      "seed": "fb-lucien-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 24224,
+      "createdAt": "2026-09-10T16:44:26.352Z"
+    }
+  },
+  "story_fourth_beast/lucien_worried": {
+    "assetKey": "story_fourth_beast/lucien_worried",
+    "file": "story_fourth_beast/lucien_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ef7cbfda-c106-4bc2-9a8e-8dee1bd7fc10",
+      "promptHash": "f82725204d41ea228f625be8fa34cf0e",
+      "seed": "fb-lucien-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 18598,
+      "createdAt": "2026-09-10T16:44:26.554Z"
+    }
+  },
+  "story_fourth_beast/lucien_angry": {
+    "assetKey": "story_fourth_beast/lucien_angry",
+    "file": "story_fourth_beast/lucien_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucien Marot, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4e176f6c-6210-471c-a659-7391e57a966e",
+      "promptHash": "edaf54713665de856678f0991a813232",
+      "seed": "fb-lucien-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 20748,
+      "createdAt": "2026-09-10T16:44:27.932Z"
+    }
+  },
+  "story_fourth_beast/lina_neutral": {
+    "assetKey": "story_fourth_beast/lina_neutral",
+    "file": "story_fourth_beast/lina_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9f4db6a4-6e37-47d1-9594-58bb7cc0f23e",
+      "promptHash": "27bd9af6ab2e555c379fc66ea752468a",
+      "seed": "fb-lina-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 25776,
+      "createdAt": "2026-09-10T16:44:48.244Z"
+    }
+  },
+  "story_fourth_beast/lina_amused": {
+    "assetKey": "story_fourth_beast/lina_amused",
+    "file": "story_fourth_beast/lina_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0b2a4538-c423-4a34-92b4-3cd811dee91d",
+      "promptHash": "7e72330e8b8933f39872de3438a77af1",
+      "seed": "fb-lina-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 25100,
+      "createdAt": "2026-09-10T16:44:51.663Z"
+    }
+  },
+  "story_fourth_beast/lina_surprised": {
+    "assetKey": "story_fourth_beast/lina_surprised",
+    "file": "story_fourth_beast/lina_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7dd69e64-af36-4ac9-874d-d96e2590576a",
+      "promptHash": "2acf873fcbdfa14e214bdffe81d80858",
+      "seed": "fb-lina-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 25629,
+      "createdAt": "2026-09-10T16:44:53.567Z"
+    }
+  },
+  "story_fourth_beast/lina_warm": {
+    "assetKey": "story_fourth_beast/lina_warm",
+    "file": "story_fourth_beast/lina_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "778eec5d-ee3b-4ca3-9f1e-731303533d5d",
+      "promptHash": "0876a0003f7b8b00d68d281db6c072da",
+      "seed": "fb-lina-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 36325,
+      "createdAt": "2026-09-10T16:45:02.682Z"
+    }
+  },
+  "story_fourth_beast/lina_annoyed": {
+    "assetKey": "story_fourth_beast/lina_annoyed",
+    "file": "story_fourth_beast/lina_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2cb65cc4-0697-4eb6-baab-ac38a1acece3",
+      "promptHash": "4923cfc6c2130a05f0d0e32a9565faff",
+      "seed": "fb-lina-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 22148,
+      "createdAt": "2026-09-10T16:45:13.816Z"
+    }
+  },
+  "story_fourth_beast/lina_confused": {
+    "assetKey": "story_fourth_beast/lina_confused",
+    "file": "story_fourth_beast/lina_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f63e149d-dc08-4743-96e3-0ee27ec20502",
+      "promptHash": "2bdc875b34c02dff9bde217cd807df43",
+      "seed": "fb-lina-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 37102,
+      "createdAt": "2026-09-10T16:45:25.352Z"
+    }
+  },
+  "story_fourth_beast/morel_neutral": {
+    "assetKey": "story_fourth_beast/morel_neutral",
+    "file": "story_fourth_beast/morel_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f6262c4-986d-4ec4-a997-4c147499be73",
+      "promptHash": "d5720a9819684bd10067d7341ee3caaa",
+      "seed": "fb-morel-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 20495,
+      "createdAt": "2026-09-10T16:45:34.314Z"
+    }
+  },
+  "story_fourth_beast/lina_angry": {
+    "assetKey": "story_fourth_beast/lina_angry",
+    "file": "story_fourth_beast/lina_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ef15483f-9b20-4e1b-b415-27d1476424c2",
+      "promptHash": "09188475547ffddb77c980ea132c06fa",
+      "seed": "fb-lina-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 44895,
+      "createdAt": "2026-09-10T16:45:38.465Z"
+    }
+  },
+  "story_fourth_beast/lina_worried": {
+    "assetKey": "story_fourth_beast/lina_worried",
+    "file": "story_fourth_beast/lina_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lina Haddad, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8774f7d8-a997-4b18-a10c-fc94870fa307",
+      "promptHash": "8819b854fc3f50255d34a3dc070d3bb0",
+      "seed": "fb-lina-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 44492,
+      "createdAt": "2026-09-10T16:45:47.180Z"
+    }
+  },
+  "story_fourth_beast/morel_warm": {
+    "assetKey": "story_fourth_beast/morel_warm",
+    "file": "story_fourth_beast/morel_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1e905699-40d6-4526-91a0-7a72e5e6467f",
+      "promptHash": "85c76a22aa18878f2545843e90b6a4bc",
+      "seed": "fb-morel-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 22167,
+      "createdAt": "2026-09-10T16:45:47.524Z"
+    }
+  },
+  "story_fourth_beast/morel_amused": {
+    "assetKey": "story_fourth_beast/morel_amused",
+    "file": "story_fourth_beast/morel_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "719d31c9-29cf-40f4-bd8f-6e70a365a124",
+      "promptHash": "d663a5bb7b3d0c4f9a5d73f970d21320",
+      "seed": "fb-morel-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 21437,
+      "createdAt": "2026-09-10T16:45:55.756Z"
+    }
+  },
+  "story_fourth_beast/morel_surprised": {
+    "assetKey": "story_fourth_beast/morel_surprised",
+    "file": "story_fourth_beast/morel_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "452e71e1-5310-4eef-a3e3-5921c12c11f9",
+      "promptHash": "57b7e9cb63f48c02552a0df4b8c9df58",
+      "seed": "fb-morel-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 19633,
+      "createdAt": "2026-09-10T16:45:58.103Z"
+    }
+  },
+  "story_fourth_beast/morel_annoyed": {
+    "assetKey": "story_fourth_beast/morel_annoyed",
+    "file": "story_fourth_beast/morel_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ffc5097c-ca6f-4488-8f52-d44f472e4739",
+      "promptHash": "13598cd80b94aba9d1d871f100c4eb29",
+      "seed": "fb-morel-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 18761,
+      "createdAt": "2026-09-10T16:46:06.290Z"
+    }
+  },
+  "story_fourth_beast/morel_confused": {
+    "assetKey": "story_fourth_beast/morel_confused",
+    "file": "story_fourth_beast/morel_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "62b80816-611a-405b-90b1-8c91643802c6",
+      "promptHash": "91f9a4447de68a24fd7c576ca6b0b7a9",
+      "seed": "fb-morel-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 27270,
+      "createdAt": "2026-09-10T16:46:14.454Z"
+    }
+  },
+  "story_fourth_beast/morel_worried": {
+    "assetKey": "story_fourth_beast/morel_worried",
+    "file": "story_fourth_beast/morel_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "795c0ef2-aadc-4399-a28f-e1025f6042e8",
+      "promptHash": "ecee039891cd33b108d90016a56ed9ca",
+      "seed": "fb-morel-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 16640,
+      "createdAt": "2026-09-10T16:46:14.749Z"
+    }
+  },
+  "story_fourth_beast/ravel_neutral": {
+    "assetKey": "story_fourth_beast/ravel_neutral",
+    "file": "story_fourth_beast/ravel_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "afffaa60-8c4c-4b97-8457-3b33966179f1",
+      "promptHash": "dd45c05486b5037f3e75ab7046bb265f",
+      "seed": "fb-ravel-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 16910,
+      "createdAt": "2026-09-10T16:46:23.205Z"
+    }
+  },
+  "story_fourth_beast/ravel_amused": {
+    "assetKey": "story_fourth_beast/ravel_amused",
+    "file": "story_fourth_beast/ravel_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4f3e40ad-18e3-4a23-a9f8-3002cea15ee8",
+      "promptHash": "dffebef5248aa764ccbbfab01b16faa6",
+      "seed": "fb-ravel-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 18537,
+      "createdAt": "2026-09-10T16:46:33.289Z"
+    }
+  },
+  "story_fourth_beast/morel_angry": {
+    "assetKey": "story_fourth_beast/morel_angry",
+    "file": "story_fourth_beast/morel_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Morel, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bbd57026-2344-46fb-bb51-7e5f36ed54d4",
+      "promptHash": "14e74ffd6dd8e32850d573f8f7c80cfc",
+      "seed": "fb-morel-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 40932,
+      "createdAt": "2026-09-10T16:46:36.691Z"
+    }
+  },
+  "story_fourth_beast/ravel_warm": {
+    "assetKey": "story_fourth_beast/ravel_warm",
+    "file": "story_fourth_beast/ravel_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f2d567f5-3a72-46bd-b152-eb5ac863da77",
+      "promptHash": "4985213a7ae503ae8a29f64702322198",
+      "seed": "fb-ravel-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 23785,
+      "createdAt": "2026-09-10T16:46:38.246Z"
+    }
+  },
+  "story_fourth_beast/ravel_surprised": {
+    "assetKey": "story_fourth_beast/ravel_surprised",
+    "file": "story_fourth_beast/ravel_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a984bbe6-d91f-4f02-9c04-d2472a653f94",
+      "promptHash": "6deb0bcba770974fc530ed4039147c87",
+      "seed": "fb-ravel-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 18419,
+      "createdAt": "2026-09-10T16:46:41.633Z"
+    }
+  },
+  "story_fourth_beast/ravel_confused": {
+    "assetKey": "story_fourth_beast/ravel_confused",
+    "file": "story_fourth_beast/ravel_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b978fedd-cf3b-41a8-8bbf-ddd4c61814fd",
+      "promptHash": "61c5f35265a16b95d219ef5e6b788c0d",
+      "seed": "fb-ravel-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18764,
+      "createdAt": "2026-09-10T16:46:52.057Z"
+    }
+  },
+  "story_fourth_beast/ravel_annoyed": {
+    "assetKey": "story_fourth_beast/ravel_annoyed",
+    "file": "story_fourth_beast/ravel_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f78d7a01-0dde-4341-ac11-90ce0ed875d4",
+      "promptHash": "53d761fb928d4fe538ce402c9a7df257",
+      "seed": "fb-ravel-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 22296,
+      "createdAt": "2026-09-10T16:46:58.989Z"
+    }
+  },
+  "story_fourth_beast/ravel_angry": {
+    "assetKey": "story_fourth_beast/ravel_angry",
+    "file": "story_fourth_beast/ravel_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2bab8199-a46a-4e46-aae6-e68a80cad94e",
+      "promptHash": "a7f18f3b574277859609db0748229acf",
+      "seed": "fb-ravel-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 23583,
+      "createdAt": "2026-09-10T16:47:01.834Z"
+    }
+  },
+  "story_fourth_beast/ravel_worried": {
+    "assetKey": "story_fourth_beast/ravel_worried",
+    "file": "story_fourth_beast/ravel_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Inès Ravel, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ac22927d-b05c-486f-99ec-e11372380ae8",
+      "promptHash": "3321c31ab18d09a785c632cfeb01a1bf",
+      "seed": "fb-ravel-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 23823,
+      "createdAt": "2026-09-10T16:47:05.462Z"
+    }
+  },
+  "story_fourth_beast/theo_warm": {
+    "assetKey": "story_fourth_beast/theo_warm",
+    "file": "story_fourth_beast/theo_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e963d911-57d9-4c59-9bd6-06279dc9f1f2",
+      "promptHash": "e494de84fd9682b243db985e2bdc8316",
+      "seed": "fb-theo-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 19448,
+      "createdAt": "2026-09-10T16:47:18.440Z"
+    }
+  },
+  "story_fourth_beast/theo_amused": {
+    "assetKey": "story_fourth_beast/theo_amused",
+    "file": "story_fourth_beast/theo_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "db6c8606-46c7-4ec4-b47a-19179187ae21",
+      "promptHash": "a444686a9c45d248e9c911d2bf7c4f34",
+      "seed": "fb-theo-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 21464,
+      "createdAt": "2026-09-10T16:47:23.303Z"
+    }
+  },
+  "story_fourth_beast/theo_neutral": {
+    "assetKey": "story_fourth_beast/theo_neutral",
+    "file": "story_fourth_beast/theo_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7892761d-9530-44e9-baed-e0984c8e622e",
+      "promptHash": "8fdbe7a9b4e18fb590bd8f9f12a3d9c8",
+      "seed": "fb-theo-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 36802,
+      "createdAt": "2026-09-10T16:47:28.864Z"
+    }
+  },
+  "story_fourth_beast/theo_surprised": {
+    "assetKey": "story_fourth_beast/theo_surprised",
+    "file": "story_fourth_beast/theo_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c9b65030-24b7-4c99-8066-9a9ed6be4d96",
+      "promptHash": "23402097cba166864a8c008b2c39b661",
+      "seed": "fb-theo-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 24531,
+      "createdAt": "2026-09-10T16:47:29.997Z"
+    }
+  },
+  "story_fourth_beast/theo_confused": {
+    "assetKey": "story_fourth_beast/theo_confused",
+    "file": "story_fourth_beast/theo_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c1d99989-e254-46a8-bc6a-cf2348d9a0a1",
+      "promptHash": "00fc9a804e24cb0bbd65e8dc3d062241",
+      "seed": "fb-theo-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 22544,
+      "createdAt": "2026-09-10T16:47:40.990Z"
+    }
+  },
+  "story_fourth_beast/theo_annoyed": {
+    "assetKey": "story_fourth_beast/theo_annoyed",
+    "file": "story_fourth_beast/theo_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c9fbd77e-ff3a-4684-b664-ed8101527454",
+      "promptHash": "d714734e221b8693200d34b03fecd9b6",
+      "seed": "fb-theo-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 22566,
+      "createdAt": "2026-09-10T16:47:45.876Z"
+    }
+  },
+  "story_fourth_beast/theo_angry": {
+    "assetKey": "story_fourth_beast/theo_angry",
+    "file": "story_fourth_beast/theo_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4aa2e2a1-eaff-4f4d-9717-d4fbcaab7e9a",
+      "promptHash": "d1279f80d073a21eaf3398b0a92f0a61",
+      "seed": "fb-theo-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 40438,
+      "createdAt": "2026-09-10T16:48:09.309Z"
+    }
+  },
+  "story_fourth_beast/theo_worried": {
+    "assetKey": "story_fourth_beast/theo_worried",
+    "file": "story_fourth_beast/theo_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Théo Laurent, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0213aa7f-2bd2-4f94-9410-23f06d46cd65",
+      "promptHash": "dd7d5ea6d7965a74cb2baf57c5f3d171",
+      "seed": "fb-theo-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 44443,
+      "createdAt": "2026-09-10T16:48:14.444Z"
+    }
   }
 }
