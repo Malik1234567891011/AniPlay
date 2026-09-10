@@ -12,6 +12,7 @@ import { LAST_FIVE as LAST_FIVE_RAW } from './last-five.js';
 import { HUSH_HOUSE } from './hush-house.js';
 import { WINDOW_SEVEN } from './window-seven.js';
 import { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
+import { ITACHI } from './itachi.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -39,6 +40,7 @@ export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
 export { HUSH_HOUSE } from './hush-house.js';
 export { WINDOW_SEVEN } from './window-seven.js';
 export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
+export { ITACHI } from './itachi.js';
 
 /**
  * The official launch catalog.
@@ -60,7 +62,10 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * imitating the ones you let matter to you, and Window Seven is seven nights at
  * a camera where the brief is the thing every route through the story breaks, and
  * Good Morning, Husband is a marriage that already has four years of history in
- * it on the morning the player arrives with none.
+ * it on the morning the player arrives with none, and Itachi is a fortnight in
+ * which a thirteen-year-old is the only channel between two organisations that
+ * have each decided he is theirs, and the famous thing at the end of it is one
+ * of twelve destinations rather than the shape of the world.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -76,4 +81,5 @@ export const LAUNCH_CATALOG = [
   HUSH_HOUSE,
   WINDOW_SEVEN,
   GOOD_MORNING_HUSBAND,
+  ITACHI,
 ] as const;

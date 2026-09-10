@@ -174,33 +174,51 @@ marriage not surviving; `Separate Rooms` is reachable by playing quietly and
 politely and carries no relationship floor, because that is the honest failure
 mode of a real marriage.
 
+### Itachi (`itachi.ts`, `itachi.spec.ts`)
+Shinobi political tragedy, written from scratch off a 15,554-word bible.
+
+**The span decision, which had to be made before anything else.** The bible
+runs age four to death and reanimation. A `StoryVersion` has one clock, one set
+of locations and one cast at one set of ages, so the playable world is **the
+coup crisis**: twelve days, age thirteen, Shisui alive, Sasuke seven, Danzō
+active, the massacre not yet demanded of anybody. §55 calls this the best phase
+for this product and §257 says the massacre must not arrive fast, and all ten
+alternate lifelines in §135 are decisions made inside this fortnight.
+
+*Everything before it is memory.* The battlefield at four is the archetype
+choice — §8 asks for an "early war belief" stored at the start and read back by
+four different men later, which is exactly what a build option is. Academy,
+genin team, Tenma, ANBU entry and Mukai are `knowledgeScope` and item lore.
+
+*Everything after it is endings.* Akatsuki, Kisame, the illness, the hotel
+corridor, the final fight, Edo Tensei — those are what a destination *means*.
+`The Shadow` carries nine canon years in its epilogue, which is the right amount
+of room for the route this world exists to let you refuse.
+
+8 characters, 12 endings (4 plain losses, all four rarities), 14 locations, 6
+quests / 14 steps, 10 world events, 4 invisible banded resources (Reserve
+`GOOD_HIGH`, Clan Pressure / Silence / Leverage `GOOD_LOW`, in that array order
+on purpose). The famous night needs an ability granted by one step of a quest
+that only opens after a night that only happens to a player who went and found
+Shisui, *plus* having taken Danzō's bargain — so a passive run reaches none of
+it, and 8 of 12 endings never touch it.
+
+`itachi.spec.ts` covers what the generic specs cannot: opening co-location and
+that nobody else defaults into that room; every canon-recreating world event
+having a cancelling condition that something actually sets; the famous route
+being expensive rather than default; all 28 cast pairs compared for lexical
+overlap; each character's declared `speechStyle` differentiator being
+demonstrated in the samples the writer receives; resource drivers and array
+order; and the quiet loss being reachable without a mistake.
+
+Three real defects came out of that spec rather than out of review: Sasuke and
+Izumi were both counting things out loud and both using the number eleven,
+Izumi and Mikoto were sharing an observational register down to the word
+"twice", and Izumi had no home and was scheduled asleep in a public street.
+
 ## The queue, in order
 
-### 1. ITACHI — do this next (user asked for it specifically)
-`/Users/malik/Downloads/morestoryideas/09_ITACHI.md` — 15,554 words, ~101KB,
-100+ numbered sections, spanning age four through death and reanimation.
-
-**Flag this before building it into the shipping catalog.** Every other world in
-`LAUNCH_CATALOG` is deliberately original — Last Five's own header says "No real
-school, player, team or signature move is referenced, and the reason the five
-left is the story's own." This bible is Itachi Uchiha, Sasuke, Shisui, Danzō,
-Kakashi, Hiruzen, the Uchiha, Konoha and Akatsuki: named characters and plot
-from *Naruto*. Building it is fine and the user asked for it. Marking it
-`official: true` and shipping it in `LAUNCH_CATALOG` alongside the originals is a
-rights decision rather than a craft one, and the user should make it
-deliberately. Suggested default until they say otherwise: build the world file
-and its spec, export it from `index.ts`, and hold it out of `LAUNCH_CATALOG`
-behind a clearly-commented line — or set `official: false` — so nothing ships by
-accident. Ask.
-
-Scale note: at 15.5k words this bible is five to ten times the size of the four.
-It will not fit one authoring pass comfortably. Expect to split it — the natural
-seam in the bible itself is age 4 → academy → genin/ANBU → the coup → Akatsuki,
-and the schema has `worldEvents` plus quest chains to carry a life that long.
-Keep structured state small anyway; a long timeline is not a reason for seven
-variables.
-
-### 2. Primal Crown
+### 1. Primal Crown — do this next
 `docs/story-bibles/04_PRIMAL_CROWN.md`. Nothing written. Prehistoric faction
 adventure: five factions (Emberclaw, Stoneback, Frostfang, Skyfire, Mireborn)
 plus the hidden Ashen Hand, the Great Migration as world pressure, White Maw as
@@ -210,7 +228,7 @@ add a walk-away and make several losses. Bible asks for qualitative per-faction
 standing rather than one global reputation — `FactionDef` with `ranks` does this.
 Beast bonding must not be a class lock.
 
-### 3–9. The rest of `/Users/malik/Downloads/morestoryideas/`
+### 2–8. The rest of `/Users/malik/Downloads/morestoryideas/`
 `01_ZERO_THRONE` (mecha/political), `02_THE_FOURTH_BEAST` (Paris
 creature-bonding), `03_SEVEN_NAMES` (Belle Époque revenge/heist),
 `04_THE_BLANK_PROPHECY` (modern Greek myth), `06_THE_RED_FLOOR`
