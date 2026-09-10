@@ -1,6 +1,6 @@
 # PLOTBREAK — where everything is
 
-**Last updated: 2026-09-10, 13:30 (America/New_York).** This is the current
+**Last updated: 2026-09-10, 17:20 (America/New_York).** This is the current
 one. `docs/status.md` and `docs/session-status.md` are older and should be read
 as history, not state.
 
@@ -8,17 +8,16 @@ as history, not state.
 
 ## The short version
 
-The catalog is **16 worlds**, all with cover art, all live on the simulator.
-Itachi and Primal Crown are the newest finished ones and both look good. The
-core loop plays well — the writing is genuinely strong in Itachi — and the
-remaining problems are continuity and presentation, not prose.
+The catalog is **21 worlds**, 22 once Last Service lands. All six queued worlds
+(Zero Throne, The Fourth Beast, The Blank Prophecy, The Red Floor, Second Skin,
+Seven Names) are built, arted, merged and seeded.
 
-Three workstreams: **main** (core loop + UI, me), **stories/four-new-worlds**
-(new worlds, agent), **localization/fr-fr** (French, agent). All three are
-committed. Main has 30+ commits ahead of `origin/main` at the time of writing —
-see "Push state" below.
+**Cover art direction changed today.** Ours read as painterly film posters next
+to a shelf of Naruto and My Hero Academia. Covers now ask for a TV anime key
+visual — flat cel shading, ink outlines, saturated colour, cast filling the
+frame — and carry no wordmark. Eleven covers regenerated under it.
 
----
+Next: French. Play it, judge it, make it better than the English.
 
 ## Branches
 
@@ -30,26 +29,19 @@ see "Push state" below.
 
 ---
 
-## Worlds — 16 in the catalog
+## Worlds — 21 in the catalog, 22 with Last Service
 
-**The original ten**, all with locked covers that must not be regenerated:
-Blackwake, Last Five, Nine Weeks, Red Moon Brigade, Seven Days to Midnight,
-The Ninth Archive, The Salt Road, The Tidewall, The Unbound, The Understudy.
+**The original ten.** Six of them (Ninth Archive, Understudy, Salt Road,
+Tidewall, Unbound, Nine Weeks) are in `LEGACY_COVER_STORY_IDS` — covers locked,
+never regenerate. The other four (Blackwake, Last Five, Red Moon, Seven Days)
+are fair game.
 
-**Six newer:**
+**Eleven newer, all built, arted, seeded and live:** Itachi, Primal Crown, Zero
+Throne, Hush House, Window Seven, Good Morning Husband, The Fourth Beast, The
+Blank Prophecy, The Red Floor, Second Skin, Seven Names.
 
-| World | Code | Spec | Art | Notes |
-|---|---|---|---|---|
-| Itachi | ✅ | ✅ | ✅ 89 assets | Best-written world we have. `protagonist: NAMED`. |
-| Primal Crown | ✅ | ✅ | ✅ 70 assets | |
-| Zero Throne | ✅ | ✅ | ⏳ in flight | Stories agent is generating; cover 404s until it lands. |
-| Hush House | ✅ | ✅ | ✅ 63 assets | Art generated this session. |
-| Window Seven | ✅ | ✅ | ✅ 58 assets | Art generated this session. |
-| Good Morning, Husband | ✅ | ✅ | ✅ 59 assets | Art generated this session. |
-
-**Still to build** (bibles in `/Users/malik/Downloads/morestoryideas/`, agent has
-the queue): `02_THE_FOURTH_BEAST`, `03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
-`06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE`.
+**In flight:** Last Service — 2,245 lines written, needs its spec, catalog entry
+and art. The stories agent has it.
 
 **Art recipe** (~$2.60 and ~20–35 min per world, concurrency 4):
 ```bash
@@ -58,9 +50,7 @@ npx tsx infra/scripts/generate-art.ts --only=story_<id> --reactions --concurrenc
 npx tsx infra/scripts/optimize-art.ts
 npm run migrate   # REQUIRED — asset keys are baked into a story version
 ```
-No text is baked into the art. The wordmark is composited afterwards over the
-reserved bottom 22%, and `cover.raw.png` keeps the un-plated master so French
-re-plates rather than regenerates.
+Nothing is baked into the art, including the title — see the addendum.
 
 ---
 
@@ -109,16 +99,9 @@ frames. Now relationship changes, refusals and visible expression changes count,
 `HERO_SPACING.VIVID` is 5 rather than 10, and `turnsSinceHeroImage` no longer
 reports every gap one turn short.
 
-**Open image bug — hero frames do not stay in the feed (HIGH).** Reported by
-Malik and confirmed in the code. `Session.tsx:424`:
-```ts
-const heroImageUrl = pending ? pending.heroImageUrl : (latest?.heroImageUrl ?? null);
-```
-There is exactly **one** hero image on screen and it belongs to the newest turn,
-rendered in a fixed slot rather than inline in the transcript. So an image
-appears with its beat and vanishes the moment the next turn lands. The fix is to
-render the frame inline, attached to its own turn, so it stays in history — which
-is what the reference apps do. **Not yet fixed.**
+**Hero frames stay in the feed now.** There used to be exactly one on screen,
+in a fixed slot bound to the newest turn, so a frame appeared with its beat and
+vanished when the next turn landed. They render inline with their own turn.
 
 ---
 
@@ -230,3 +213,93 @@ media plan, beat plan, checks and cards attached. ~800 tokens a turn against
 5. Re-run the 25-turn playtest to confirm the fixes landed, reading from
    Postgres. Then the smaller items: #14, #16, #25, #29, #32.
 6. Zero Throne art, then the six remaining worlds (agent has this).
+
+---
+
+# Addendum — 2026-09-10, 17:20
+
+## Cover art, changed
+
+Malik put our shelf next to Naruto, One Piece, Jujutsu Kaisen, Hajime no Ippo,
+Code Geass and My Hero Academia: *"theyre much more bubbly and anime esque where
+ours look more realistic… the cover arts dont ressmeble animes."*
+
+The cause was in our own prompt. `STYLE_SPINE` asked for a **painterly**
+cel-shaded style, **cinematic** composition, **film-grade lighting**, a
+**restrained palette** and **subtle grain** — five phrases that each describe a
+film poster. We were commissioning the thing he did not want, precisely.
+
+Three changes:
+
+1. **`COVER_STYLE_SPINE`** — covers get their own spine describing a *medium*,
+   not a mood: flat cel shading in two or three hard steps, no airbrushed
+   gradients, bold black ink outlines, high-chroma colour, a flat or simply
+   graded background rather than a painted environment. Naruto is orange, My
+   Hero Academia is yellow; neither is restrained and neither has grain.
+2. **Framing is a stated rule** and is the part that matters most. The cast
+   fills three quarters of the frame, cropped by its edges, faces roughly a
+   fifth of the picture height, front-on at eye level. The setting is a backdrop.
+   Every reference has the cast enormous; ours had a small figure in a good room.
+3. **No wordmark.** Covers carry `titleSafeArea: null`, which switches plating
+   off, and no quiet band is reserved. The Discover card already prints the
+   title beneath the picture, so plating said it twice — and one template across
+   twenty covers is what made them feel identical. `cover-title.ts` is untouched;
+   restoring it is one field.
+
+Scoped to covers on purpose: covers carry `COVER_DIRECTION_VERSION`, so bumping
+it to `plotbreak-cover-v3-anime` leaves ~1,200 stage and portrait assets alone.
+The six worlds in `LEGACY_COVER_STORY_IDS` stay locked.
+
+**Open question:** stages and portraits are still generated under the old
+painterly spine. Making them match is another ~1,200 assets and real money — a
+decision, not an oversight.
+
+## Reaction art, made reachable
+
+The largest single find of the day. Reaction decks are generated from a fixed
+eight emotions; worlds author expressions in their own voice (`sulking`,
+`implacable`, `unimpressed`). Nothing reconciled the two, so the director picked
+an authored word, the key had never been drawn, and the frame 404'd silently.
+**257 of 374 authored expressions across the catalog had no asset — 69%.** Of
+Itachi's 89 files, 64 are reaction frames and only `neutral` was reachable.
+
+`toReactionEmotion` maps the authored word onto one of the eight, and
+`catalog.spec` fails if a world introduces one the map does not know — which it
+promptly did, catching thirty new words from the six merged worlds.
+
+## Also fixed since the last entry
+
+- **Hero frames stay in the feed.** One slot bound to the newest turn meant a
+  frame vanished the moment the next turn landed.
+- **Speakers keep their name and face after leaving the room** (`scene.cast`).
+- **#16** the writer is told the clock and what the light is doing — "dusk" at
+  4:44 PM.
+- **#31 / FORGOT_VIOLENCE** the world remembers being attacked even when the new
+  turn names nobody, and a public statement records that the room heard it.
+- **#18** turning your head no longer rolls a DC 10 check.
+- **#30** time is no longer charged per clause.
+- **#25** the one check that fired in 25 turns was a false positive.
+- **#21** a lost point of respect no longer reads as warming.
+- **#17** the feed no longer jumps backwards on submit.
+- **#22** autocorrect no longer rewrites what the player typed.
+- **#39** named-protagonist worlds stop asking who you are.
+- **#40–43** Mikoto in two places in one beat; Sasuke `delighted` while hurt; a
+  card calling Sasuke "nii-san"; three cards all answering yes to a yes-or-no.
+
+## Still open
+
+- **#20 `model_invocations` has never had a row.** Blocks honest latency work.
+- **#35** dialogue attributions with no dialogue — verify, likely fixed by #19.
+- **#32** the same relocation card offered in 8 of 9 turns.
+- **#14** "They glances" — singular-they agreement, intermittent.
+- **#29** the player's own line echoed back as a NARRATION block.
+- A card that puts the NPC's question in the player's mouth (seen in Itachi
+  turn 7: the player asks Sasuke when *Sasuke* can finish something).
+- Stage and portrait art still under the old painterly spine.
+
+## Next
+
+1. Last Service (agent, in flight) — the 22nd world.
+2. **French.** Play it end to end, judge it honestly, make it better than the
+   English. Steps 9, 11 and 12 of the localization plan are unstarted, and
+   `fr-lint` FRC002 is shaping copy rather than checking it.

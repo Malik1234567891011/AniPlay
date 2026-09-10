@@ -41,11 +41,28 @@ import type { SessionRecord, StorySignals } from './repo/types.js';
  * configured media host and returns null when there is none — the client then
  * renders its deterministic placeholder rather than a broken image box.
  */
-export function resolveAssetUrl(key: string | null): string | null {
+/**
+ * A media URL, versioned so a regenerated asset actually reaches the player.
+ *
+ * Asset keys are stable by design — `story_itachi/cover` is the same string
+ * forever — which means a client that has fetched it once keeps its copy
+ * forever too. When every cover in the catalog was regenerated under a new art
+ * direction, the simulator went on showing the old ones, and would have kept
+ * showing them on a real device indefinitely. The art was correct on the server
+ * and invisible to everybody who had already looked.
+ *
+ * `version` is the story version, which `npm run migrate` increments whenever a
+ * fixture changes — including its derived asset keys. Passing it makes the URL
+ * change exactly when the art might have, and never otherwise, so caching still
+ * does its job the rest of the time.
+ */
+export function resolveAssetUrl(key: string | null, version?: number): string | null {
   if (!key) return null;
   if (/^https?:\/\//.test(key)) return key;
   const base = process.env.MEDIA_CDN_BASE_URL;
-  return base ? `${base.replace(/\/$/, '')}/${key}` : null;
+  if (!base) return null;
+  const url = `${base.replace(/\/$/, '')}/${key}`;
+  return version === undefined ? url : `${url}?v=${version}`;
 }
 
 /** Plain-language attribute copy for the World Sheet (spec §11.2). */
@@ -75,8 +92,8 @@ export function toStorySummary(
     hook: story.hook,
     creatorName: story.creatorName,
     official: story.official,
-    coverImage: resolveAssetUrl(story.coverImage),
-    keyArt: resolveAssetUrl(story.keyArt),
+    coverImage: resolveAssetUrl(story.coverImage, story.version),
+    keyArt: resolveAssetUrl(story.keyArt, story.version),
     tags: story.tags,
     mechanicsChips: story.mechanicsChips,
     contentDescriptors: story.contentDescriptors,
@@ -108,7 +125,7 @@ export function toStoryDetail(
       role: c.role,
       // The blurb leads on the card; the role stays available underneath it.
       cardBlurb: c.cardBlurb,
-      portrait: resolveAssetUrl(c.portrait),
+      portrait: resolveAssetUrl(c.portrait, story.version),
       publicTraits: c.publicTraits,
       pronouns: c.pronouns,
       appearance: c.appearance,
@@ -138,7 +155,7 @@ export function toSessionSummary(record: SessionRecord, story: StoryVersion, sta
     storyId: record.storyId,
     storyVersionId: record.storyVersionId,
     title: story.title,
-    coverImage: resolveAssetUrl(story.coverImage),
+    coverImage: resolveAssetUrl(story.coverImage, story.version),
     revision: state.revision,
     turnCount,
     status: record.status,
@@ -159,7 +176,7 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
   return {
     locationId: state.player.locationId,
     locationName: location?.name ?? state.player.locationId,
-    stageImage: resolveAssetUrl(location?.stageImage ?? null),
+    stageImage: resolveAssetUrl(location?.stageImage ?? null, story.version),
     worldTimeLabel: formatWorldTime(state.worldMinute),
     worldMinute: state.worldMinute,
     dayNumber: dayNumber(state.worldMinute),
@@ -175,7 +192,7 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
     cast: story.characters.map((c) => ({
       id: c.id,
       name: c.name,
-      portrait: resolveAssetUrl(c.portrait),
+      portrait: resolveAssetUrl(c.portrait, story.version),
     })),
     presentCharacters: charactersPresent(state)
       .map((runtime) => {
@@ -184,7 +201,7 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
         return {
           id: def.id,
           name: def.name,
-          portrait: resolveAssetUrl(def.portrait),
+          portrait: resolveAssetUrl(def.portrait, story.version),
           expression: 'neutral',
           speaking: false,
           reactionUrl: null,
@@ -549,7 +566,7 @@ export function toContinueCard(
     sessionId: record.sessionId,
     storyId: record.storyId,
     title: story.title,
-    coverImage: resolveAssetUrl(story.coverImage),
+    coverImage: resolveAssetUrl(story.coverImage, story.version),
     lastPlayedAt: record.lastPlayedAt,
     turnCount: turns.length,
     currentObjective: topObjective(state, story),

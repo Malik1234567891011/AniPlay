@@ -42,6 +42,13 @@ const NEGATIVES = [
   'No text, no lettering, no captions, no watermarks, no logos, no signatures, no UI.',
   'No real people or celebrity likenesses.',
   'Not photorealistic. No 3D render look.',
+  // Named because we kept getting them. Our covers came back as muted painted
+  // illustrations next to a shelf of Naruto and My Hero Academia, and "not
+  // photorealistic" was not enough to prevent it — the model will happily paint
+  // something that is neither a photograph nor an anime.
+  'Not a digital painting, not oil or gouache texture, no visible brush strokes.',
+  'No desaturated or muted palette. No sepia, no washed-out greys.',
+  'Not a live-action film poster.',
 ].join(' ');
 
 export type ShotKind =
@@ -101,16 +108,60 @@ export const LEGACY_COVER_STORY_IDS: readonly string[] = [
   'story_nine_weeks',
 ];
 
+/**
+ * What a cover is made of, and it is not what the shared spine makes.
+ *
+ * Malik, with Naruto, One Piece, Jujutsu Kaisen, Hajime no Ippo, Code Geass and
+ * My Hero Academia next to our shelf: "theyre much more bubbly and anime esque
+ * where ours look more realistic… the cover arts dont ressmeble animes."
+ *
+ * He is right, and the cause was in our own words. `STYLE_SPINE` asks for a
+ * "**painterly** cel-shaded style", "**cinematic** composition, **film-grade
+ * lighting**", a "**restrained palette**" and "subtle **grain**" — every one of
+ * those pulls toward a film poster and away from a television key visual. We
+ * were commissioning the thing he does not want, precisely.
+ *
+ * What those six references actually share, which is a *medium* and not a mood:
+ * flat cel shading in two or three hard steps with no airbrushed gradient, a
+ * visible black ink outline on every character, high-chroma colour, a flat or
+ * simply-graded background rather than a painted environment, and the cast
+ * large in frame facing the viewer. Naruto is orange. My Hero Academia is
+ * yellow. Neither is restrained and neither has grain.
+ */
+const COVER_STYLE_SPINE = [
+  'Anime television key visual, in the style of a 1990s-2010s TV anime poster.',
+  'Cel shading only: flat areas of colour, hard-edged shadow shapes, two or three tone steps.',
+  'No airbrushed gradients on skin or cloth. No painterly brushwork. No film grain.',
+  'Bold clean black ink outlines on every character, thicker on the silhouette.',
+  'High-chroma saturated colour. Bright, confident, poster-like.',
+  'Background is flat or a simple graded colour field, or a lightly drawn setting — never a detailed painting.',
+  'Characters large in frame, near the picture plane, faces clearly readable at thumbnail size.',
+  'Large expressive anime eyes with visible highlights. Clean simplified features.',
+].join(' ');
+
 /** The character-forward cover standard. Everything new is made under this. */
-export const COVER_DIRECTION_VERSION = 'plotbreak-cover-v2';
+export const COVER_DIRECTION_VERSION = 'plotbreak-cover-v3-anime';
 
 /**
- * The lower band of a cover is left deliberately quiet so the wordmark can be
- * composited there afterwards.
+ * Kept, and no longer used by `coverPrompt`. Covers are not plated.
  *
- * Image models cannot spell. Asking one for a title yields malformed lettering
- * roughly every other generation, and the failure is invisible until somebody
- * reads it. So the art reserves the space and the pipeline draws the text.
+ * The reasoning that built this still holds — image models cannot spell, so a
+ * title has to be drawn by us rather than asked for. What changed is that we
+ * stopped wanting one on the art at all:
+ *
+ *   - The card in Discover already prints the title as a text label directly
+ *     under the picture. Plating it put the same words on screen twice.
+ *   - One template wordmark across twenty covers is what made them feel
+ *     identical. Malik: "boring purple cover bottom left… makes all the covers
+ *     feel the same". The references he gave have bespoke per-title logos —
+ *     hand-lettered design work, not something a shared template reaches.
+ *   - It reserved the bottom 22% of every cover as a deliberately dull band, so
+ *     we were paying composition for the privilege.
+ *   - Un-plated art is locale-free by construction, which was the original
+ *     reason for keeping `cover.raw`.
+ *
+ * Setting `titleSafeArea` back to this on a cover spec is all it takes to bring
+ * plating back, and `cover-title.ts` is untouched.
  */
 export const TITLE_SAFE_AREA = { top: 0.78, bottom: 1 } as const;
 
@@ -129,16 +180,16 @@ function coverComposition(story: StoryVersion): string {
   if (has('sports', 'team')) {
     return (
       'Composition: peak-action sports key visual. One athlete in the foreground mid-drive, low camera, ' +
-      'body torqued, sweat and motion blur on the trailing arm. A rival closing from behind or across them, ' +
-      'eyes locked on the ball. Arena floodlights, blown-out highlights, a packed dark crowd behind. ' +
+      'body torqued, speed lines behind the trailing arm. A rival closing from behind or across them, ' +
+      'eyes locked on the ball. Bright arena colour, a simply drawn crowd behind. ' +
       'Strong diagonal energy — nobody is standing still.'
     );
   }
   if (has('romance', 'slice of life')) {
     return (
       'Composition: two characters close in frame, the space between them doing the work. Eye contact or ' +
-      'a deliberately avoided glance. Shallow depth of field, warm practical light, an ordinary setting ' +
-      'made intimate. Quiet, not dramatic. No action poses.'
+      'a deliberately avoided glance. Bright warm colour, an ordinary setting made intimate. Close and ' +
+      'large in frame — shoulders-up or waist-up, not a wide shot. Appealing, expressive faces.'
     );
   }
   if (has('body horror', 'horror')) {
@@ -239,10 +290,23 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
     seed: `${story.id}:cover:${COVER_DIRECTION_VERSION}`,
     alt: `Cover art for ${story.title}: ${story.fantasyLabel}`,
     styleVersion: COVER_DIRECTION_VERSION,
-    titleSafeArea: { ...TITLE_SAFE_AREA },
+    titleSafeArea: null,
     prompt: compose([
-      STYLE_SPINE,
+      COVER_STYLE_SPINE,
       'This is an anime poster / key visual, not an environment painting. Characters are the subject.',
+      // Scale, stated as a rule rather than left to taste.
+      //
+      // Every reference Malik gave — Naruto, One Piece, Jujutsu Kaisen, Hajime
+      // no Ippo, Code Geass, My Hero Academia — has the cast enormous and
+      // frontal, filling the frame corner to corner and cropped by its edges.
+      // Ours had a well-drawn person standing in a well-drawn room, small.
+      // "the chracters in the cover being super frontal taking most of the
+      // space n every exmaple i gave."
+      'FRAMING, THIS MATTERS MOST: the characters fill the frame. They occupy at least three quarters ' +
+        'of the image and are cropped by its edges. Faces are large — a head is roughly a fifth of the ' +
+        'picture height. Shot from the front, near eye level, looking at or just past the viewer. ' +
+        'The setting is a backdrop behind them, small and simple, never the subject.',
+      'The characters must pop off the background: strong silhouette separation, rim light or a clean outline.',
       coverComposition(story),
       coverCast(story),
       hero ? `Setting behind them: ${hero.artDirection}` : null,
@@ -252,8 +316,9 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
       // have to survive being 40 pixels across.
       'Faces large enough and contrast high enough that the characters are still readable at thumbnail size.',
       'Strong readable silhouettes. Distinct hair shapes and colours between characters.',
-      `Leave the bottom ${Math.round((1 - TITLE_SAFE_AREA.top) * 100)}% of the frame visually quiet — ` +
-        'darker, low detail, no faces or focal elements — as space for a title to be placed later.',
+      // No reserved band any more: nothing is composited over these. See
+      // TITLE_SAFE_AREA. The art gets the whole frame.
+      'Use the full frame. The composition may run to all four edges.',
       COVER_NEGATIVES,
       NEGATIVES,
     ]),

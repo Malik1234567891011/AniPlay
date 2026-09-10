@@ -96,17 +96,21 @@ groupSynonyms('neutral', 'serious', 'level', 'flat', 'still', 'quiet', 'silent',
   'focused', 'absorbed', 'attentive', 'direct', 'candid', 'precise', 'technical', 'determined',
   'resolved', 'decisive', 'careful', 'conceding');
 
-// The six worlds written after the map above brought thirty-two more words with
-// them. Same rule: the authored word stays, it just has to land on a face.
-groupSynonyms('warm', 'fond', 'engaged', 'enthusiastic', 'interested', 'unburdened', 'unguarded');
-groupSynonyms('amused', 'sardonic', 'animated');
-groupSynonyms('surprised', 'exposed', 'undone', 'undefended', 'awake');
-groupSynonyms('confused', 'curious', 'deflecting');
-groupSynonyms('annoyed', 'bored', 'immovable', 'shut down', 'contemptuous');
-groupSynonyms('worried', 'anxious', 'breaking', 'failing', 'lost', 'uncomfortable', 'unnerved',
-  'wretched');
-groupSynonyms('neutral', 'absent', 'brisk', 'clinical', 'decided', 'dogged', 'exact',
-  'informative');
+// The six worlds that landed after this table was written brought thirty more
+// words with them, which is the guard in `catalog.spec` doing its job: each one
+// would otherwise have been a face that 404'd in silence.
+groupSynonyms('warm', 'fond', 'unburdened', 'unguarded', 'undefended', 'enthusiastic', 'animated');
+groupSynonyms('amused', 'sardonic', 'interested', 'curious');
+groupSynonyms('surprised', 'undone', 'unnerved', 'exposed', 'breaking');
+groupSynonyms('confused', 'lost', 'deflecting', 'absent');
+groupSynonyms('annoyed', 'contemptuous', 'brisk', 'bored', 'clinical', 'exact', 'informative',
+  'immovable', 'dogged', 'decided');
+groupSynonyms('worried', 'anxious', 'wretched', 'failing');
+groupSynonyms('neutral', 'engaged', 'awake');
+// Last Service arrived after that: Daichi goes silent when he is annoyed, and
+// Reina is a critic being watched eat.
+groupSynonyms('annoyed', 'shut down');
+groupSynonyms('worried', 'uncomfortable');
 
 /** Every authored word this knows how to draw, for the catalog spec to check. */
 export function knownExpression(expression: string): boolean {
