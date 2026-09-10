@@ -1040,6 +1040,26 @@ function promoteAddressee(args: ResolveActionArgs): ActionOutcome | null {
 }
 
 /**
+ * The engine asserting, in words the writer reads, that this person is here.
+ *
+ * The negative case has always been explicit — "Mira is not in this location,
+ * narrate the absence" — and the positive case was silent, which left the
+ * writer free to decide someone had stepped out. It used that freedom: a coach
+ * asked a hard question became an empty folding chair with a jacket over it.
+ *
+ * Presence is the engine's to decide, so the engine says so.
+ */
+function standingInFrontOfYou(name: string): PrivateFact {
+  return {
+    visibility: 'SELF',
+    fact:
+      `${name} is in this room, in front of the player, right now. They heard this. ` +
+      'They own the response — answer, refuse, deflect or walk out, but they are the one who reacts, ' +
+      'and they cannot be absent, elsewhere, or represented by an empty chair.',
+  };
+}
+
+/**
  * Spec §14.2 — social actions never set relationship numbers directly. The
  * check produces a severity, `clampRelationshipDelta` decides the real change.
  */
@@ -1134,7 +1154,7 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
     observableFacts.push(`${character.name} gives ground, and ${cost.description}.`);
   }
 
-  const privateFacts: PrivateFact[] = [];
+  const privateFacts: PrivateFact[] = [standingInFrontOfYou(character.name)];
   if (!isSuccess(check.outcome)) {
     privateFacts.push({
       visibility: 'SELF',
@@ -1709,6 +1729,12 @@ function resolveSpeak(args: ResolveActionArgs): ActionOutcome {
       if (promoted) return promoted;
     }
     const present = charactersPresent(state).some((c) => c.characterId === target.entityId);
+    if (character && present) {
+      return {
+        ...resolveFreeAction(args),
+        privateFacts: [standingInFrontOfYou(character.name)],
+      };
+    }
     if (character && !present) {
       const runtime = state.characters.find((c) => c.characterId === character.id);
       const whereabouts = story.locations.find((l) => l.id === runtime?.locationId);

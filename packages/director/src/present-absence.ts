@@ -26,7 +26,11 @@
  * the exemptions below matter as much as the patterns.
  */
 const ABSENCE = [
-  /\b(?:is|are|was|were)\s+(?:not|no longer)\s+(?:here|there|in|around|coming)\b/i,
+  // Contractions included, and the typographic apostrophe with them: the live
+  // beat that slipped through the first version of this said "Coach Torakawa
+  // isn’t here", which the spelled-out pattern did not match. The negation is
+  // required, not optional — "is here" must never match.
+  /\b(?:is|are|was|were)(?:n['’]t\s+|\s+(?:not|no longer)\s+)(?:here|there|around|coming)\b/i,
   /\b(?:is|are|was|were)\s+(?:gone|missing|absent|elsewhere|nowhere)\b/i,
   /\bno\s+(?:sign|sight|trace)\s+of\b/i,
   /\b(?:look|looked|looking|search|searched|scan|scanned)\b[^,]{0,40}\bfor\b[^,]{0,40},?\s*but\b/i,

@@ -522,7 +522,7 @@ export function annotateScope(intent: ActionIntent, actionText: string): ActionI
  * frame or nothing at all is right there, and showing some character because
  * the system wants an image is exactly the failure to avoid.
  */
-function reactingCharacter(
+export function reactingCharacter(
   context: TurnContext,
   intent: ActionIntent,
 ): TurnContext['presentCharacters'][number] | null {
@@ -538,8 +538,46 @@ function reactingCharacter(
     if (match) return match;
   }
 
+  // The player typed a name and the parser did not turn it into a target.
+  //
+  // This is not a rare miss. It happened on the second turn of an ordinary
+  // session: "I walk over to Coach Torakawa and tell her I'm not playing today
+  // unless she tells me why she really let the last five leave" produced no NPC
+  // target at all, so the reaction frame fell through to relationship weight
+  // and showed the player a teammate they had just shaken hands with, mid-
+  // ultimatum to somebody else. Whoever the player named owns the beat, and
+  // their own words are better evidence of that than a parse of them.
+  const named = namedInAction(intent.rawAction, present);
+  if (named) return named;
+
   // Nobody named: whoever this player has the most going on with.
   return [...present].sort((a, b) => weight(b.relationship) - weight(a.relationship))[0] ?? null;
+}
+
+/**
+ * The present character whose name the player actually typed.
+ *
+ * Longest name first, so "Coach Torakawa" beats "Coach", and last-resort
+ * surname matching because people are addressed by one part of their name.
+ */
+function namedInAction(
+  rawAction: string,
+  present: TurnContext['presentCharacters'],
+): TurnContext['presentCharacters'][number] | null {
+  const text = rawAction.toLowerCase();
+  const candidates = present
+    .flatMap((character) =>
+      [character.def.name, ...character.def.name.split(/\s+/)]
+        .filter((name) => name.length >= 3)
+        .map((name) => ({ character, name })),
+    )
+    .sort((a, b) => b.name.length - a.name.length);
+
+  return (
+    candidates.find(({ name }) =>
+      new RegExp(`\\b${name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(text),
+    )?.character ?? null
+  );
 }
 
 function weight(rel: { trust: number; affection: number; respect: number; fear: number; rivalry: number }): number {

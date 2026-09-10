@@ -33,6 +33,10 @@ describe('writing somebody out of the room they are standing in', () => {
       'Torakawa is gone.',
       'Torakawa has already left.',
       'Torakawa is no longer here.',
+      // The contraction the first version of this let through, live.
+      'There’s no answer — Coach Torakawa isn’t here, just the team.',
+      "Torakawa isn't here.",
+      'Torakawa is nowhere to be seen.',
     ]) {
       expect(findAbsenceOfPresent([{ text }], PRESENT), text).toHaveLength(1);
     }
@@ -40,6 +44,16 @@ describe('writing somebody out of the room they are standing in', () => {
 
   it('says nothing about a character who is not on stage', () => {
     expect(findAbsenceOfPresent([{ text: 'Rei Amagi is not here.' }], PRESENT)).toEqual([]);
+  });
+
+  it('never reads a plain statement of presence as an absence', () => {
+    for (const text of [
+      'Torakawa is here.',
+      'Torakawa was here before you arrived.',
+      'Torakawa is around somewhere on the court, watching.',
+    ]) {
+      expect(findAbsenceOfPresent([{ text }], PRESENT), text).toEqual([]);
+    }
   });
 
   it('leaves ordinary prose about a present character alone', () => {
