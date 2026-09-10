@@ -40,6 +40,31 @@ export function dayPart(worldMinute: number): DayPart {
   return 'Night';
 }
 
+/**
+ * What the light is doing, in words a writer can put in a sentence.
+ *
+ * `dayPart` alone was all the writer got, and "afternoon" is vague enough to
+ * reach for atmosphere: a beat at **4:44 PM** at a summer lake camp opened "out
+ * into the dusk… the air already shifting toward night", and one at 5:32 PM
+ * managed "the hush of late afternoon" and "the sun is down behind the lake" in
+ * the same breath. The header said the time the whole while.
+ *
+ * Deliberately conservative and deliberately not seasonal. We do not model
+ * latitude or time of year, so this says only what is true almost anywhere:
+ * mid-afternoon is not dusk, and eight in the evening is not noon. A world that
+ * wants "dark by four" can say so in its tone guide, which the writer also gets.
+ */
+export function lightAt(worldMinute: number): string {
+  const hour = Math.floor(minuteOfDay(worldMinute) / 60);
+  if (hour < 5) return 'full dark, hours from any light';
+  if (hour < 7) return 'first light, the sky going grey then colour';
+  if (hour < 16) return 'broad daylight — it is not getting dark and will not for hours';
+  if (hour < 18) return 'daylight still, going gold and low; sunset has not happened';
+  if (hour < 20) return 'the light going, sun low or just gone';
+  if (hour < 22) return 'dark, with whatever lamps this place has';
+  return 'full dark and late';
+}
+
 /** Header label: `Day 2 · 4:15 PM`. Spec §10.2 A. */
 export function formatWorldTime(worldMinute: number): string {
   return `Day ${dayNumber(worldMinute)} · ${formatClock(worldMinute)}`;

@@ -259,7 +259,10 @@ export function buildBeats(context: TurnContext, beatType: BeatType, speakerOrde
 function narrationInstruction(context: TurnContext, beatType: BeatType): string {
   const base = [
     `Tone: ${context.toneGuide}`,
-    `Place: ${context.scene.locationName}, ${context.scene.dayPart.toLowerCase()}.`,
+    // The clock, not just the part of day. "Afternoon" let a 4:44 PM beat open
+    // "out into the dusk"; the header said 4:44 PM at the same moment.
+    `Place: ${context.scene.locationName}, ${context.scene.clock} — ${context.scene.light}.`,
+    'The clock above is what the player can see. Do not contradict it.',
   ];
 
   switch (beatType) {

@@ -21,6 +21,8 @@ import {
   relationshipLabel,
   topObjective,
   dayPart,
+  formatClock,
+  lightAt,
 } from '@aniplay/engine';
 import { retrieveLore } from './authored-lore.js';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
@@ -61,6 +63,10 @@ export interface TurnContext {
     readonly artDirection: string;
     readonly worldTimeLabel: string;
     readonly dayPart: string;
+    /** `4:44 PM` — the clock the header is showing the player. */
+    readonly clock: string;
+    /** What the light is doing, so the prose cannot contradict the clock. */
+    readonly light: string;
     readonly presentCharacterIds: readonly string[];
   };
 
@@ -299,6 +305,8 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
       artDirection: location?.artDirection ?? '',
       worldTimeLabel: formatWorldTime(state.worldMinute),
       dayPart: dayPart(state.worldMinute),
+      clock: formatClock(state.worldMinute),
+      light: lightAt(state.worldMinute),
       presentCharacterIds: presentIds,
     },
     player: {
