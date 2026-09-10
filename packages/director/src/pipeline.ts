@@ -16,7 +16,7 @@ import { buildTurnContext, type TurnContext } from './context.js';
 import { RuleBasedIntentParser, type IntentParser } from './parser.js';
 import { RuleBasedDirector, type Director } from './director.js';
 import { TemplateWriter, type Writer } from './writer.js';
-import { repairNarrative, validateNarrative } from './validator.js';
+import { isRepairable, repairNarrative, validateNarrative } from './validator.js';
 import { materializeProposals } from './memory.js';
 import { classifyClaim, directorNoteFor, proposalFor } from './player-canon.js';
 import { detectOutOfScope } from './entity-resolution.js';
@@ -263,7 +263,7 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   let repaired = false;
 
   // Step 11 — exactly one constrained repair pass. Never a loop.
-  if (!report.valid) {
+  if (isRepairable(report)) {
     narrative = repairNarrative(narrative, report, context.player.name);
     report = validateNarrative({ context, turn: narrative });
     repaired = true;
@@ -484,7 +484,7 @@ export async function rephraseNarration(options: RephraseOptions): Promise<Rephr
   let narrative = await deps.writer.write(context, options.plan);
   let report = validateNarrative({ context, turn: narrative });
   let repaired = false;
-  if (!report.valid) {
+  if (isRepairable(report)) {
     narrative = repairNarrative(narrative, report, context.player.name);
     report = validateNarrative({ context, turn: narrative });
     repaired = true;

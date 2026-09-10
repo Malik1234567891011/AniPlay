@@ -387,6 +387,25 @@ function sentenceAround(text: string, index: number): string {
   return text.slice(start, dot === -1 ? text.length : dot + 1);
 }
 
+/**
+ * Whether anything in this report is worth a repair pass.
+ *
+ * Not the same question as `valid`. Some findings are WARN by design — a line
+ * of filler does not make a turn wrong, it makes it worse — and are still fixed
+ * in place. Keying the repair on validity alone meant those were repaired only
+ * on turns that happened to be invalid for some other reason, which in a sweep
+ * looked like a 7-in-8 fix rate and was really luck.
+ */
+export function isRepairable(report: ConsistencyReport): boolean {
+  return (
+    !report.valid ||
+    report.violations.some(
+      (v) =>
+        v.description.startsWith(EMPTY_CONSEQUENCE_MARKER) || v.description.includes(NAME_SPAM_MARKER),
+    )
+  );
+}
+
 export function repairNarrative(
   turn: NarrativeTurn,
   report: ConsistencyReport,

@@ -61,3 +61,29 @@ describe('a change with nothing changed', () => {
     expect(found[0]!.sentence).toBe('The air shifts.');
   });
 });
+
+describe('the repair actually runs', () => {
+  it('treats a filler-only turn as worth repairing', async () => {
+    const { isRepairable } = await import('./validator.js');
+    // WARN-only, so `valid` stays true. Keying the repair on validity alone
+    // meant filler was stripped only on turns that were invalid for some other
+    // reason — which in a sweep looked like a 7-in-8 fix rate and was luck.
+    const report = {
+      valid: true,
+      violations: [
+        {
+          code: 'UNSUPPORTED_STATE' as const,
+          severity: 'WARN' as const,
+          description: 'Names a change without naming what changed: "The world shifts."',
+          blockIndex: 0,
+        },
+      ],
+    };
+    expect(isRepairable(report)).toBe(true);
+  });
+
+  it('leaves a clean turn alone', async () => {
+    const { isRepairable } = await import('./validator.js');
+    expect(isRepairable({ valid: true, violations: [] })).toBe(false);
+  });
+});
