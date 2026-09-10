@@ -11835,5 +11835,1335 @@
       "latencyMs": 21660,
       "createdAt": "2026-09-10T17:06:24.626Z"
     }
+  },
+  "story_blank_prophecy/stage_monastiraki_platform": {
+    "assetKey": "story_blank_prophecy/stage_monastiraki_platform",
+    "file": "story_blank_prophecy/stage_monastiraki_platform.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Platform Two: The open-air platform at the interchange with the flea market above it and the ancient road visible through glass at the far end.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9b40c361-0af1-449a-b3b9-392fec4fb0fa",
+      "promptHash": "4365c123a3a4e943374c5eac741dca48",
+      "seed": "sv_blank_prophecy_1:loc:monastiraki_platform:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36607,
+      "createdAt": "2026-09-10T17:12:43.099Z"
+    }
+  },
+  "story_blank_prophecy/stage_monastiraki_streets": {
+    "assetKey": "story_blank_prophecy/stage_monastiraki_streets",
+    "file": "story_blank_prophecy/stage_monastiraki_streets.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Square And The Lanes: A square with a mosque, a church and a ruin in it, four bars still going, and a warren of lanes behind full of shuttered stalls, cats, and a smell of grilled meat that does not stop until about four.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "30118f23-3594-48b0-a625-45f63129be0d",
+      "promptHash": "d62b571f971580940cf94d693ecf883e",
+      "seed": "sv_blank_prophecy_1:loc:monastiraki_streets:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39004,
+      "createdAt": "2026-09-10T17:12:45.497Z"
+    }
+  },
+  "story_blank_prophecy/stage_to_xenon": {
+    "assetKey": "story_blank_prophecy/stage_to_xenon",
+    "file": "story_blank_prophecy/stage_to_xenon.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "To Xenon: A narrow guesthouse with a kitchen that has never been shut when somebody needed it open.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5dad8fcd-4a3e-4f4f-8a6e-21b1a57fa721",
+      "promptHash": "095618f1d57a0861660e39d150fdcb7f",
+      "seed": "sv_blank_prophecy_1:loc:to_xenon:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39875,
+      "createdAt": "2026-09-10T17:13:22.982Z"
+    }
+  },
+  "story_blank_prophecy/stage_plaka_rooftops": {
+    "assetKey": "story_blank_prophecy/stage_plaka_rooftops",
+    "file": "story_blank_prophecy/stage_plaka_rooftops.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Roofs Under The Rock: Flat concrete roofs with water tanks and washing lines, stepping up the slope towards the floodlit rock, so that a person can cross four streets without touching the ground and be looked down on the whole way by a building that has been there for two and a half thousand years.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fd49f24a-fba7-48b7-b89e-27d9505fb59d",
+      "promptHash": "52a09f5f205452113a355c7f36e5dd2c",
+      "seed": "sv_blank_prophecy_1:loc:plaka_rooftops:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40040,
+      "createdAt": "2026-09-10T17:13:25.546Z"
+    }
+  },
+  "story_blank_prophecy/cover": {
+    "assetKey": "story_blank_prophecy/cover",
+    "file": "story_blank_prophecy/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Blank Prophecy: They read your future. It was empty.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd4113f7-a815-4735-a7ca-b61717f1c862",
+      "promptHash": "3664c1892284e56bf2c6ccc38bcfd1c8",
+      "seed": "sv_blank_prophecy_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 98565,
+      "createdAt": "2026-09-10T17:13:45.044Z"
+    }
+  },
+  "story_blank_prophecy/stage_the_slope": {
+    "assetKey": "story_blank_prophecy/stage_the_slope",
+    "file": "story_blank_prophecy/stage_the_slope.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Slope: The path round the base of the rock, worn to a shine by three million pairs of feet a year, closed at night and entirely walkable if you know which gate does not lock.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2166cf7a-90dc-4390-81f8-406ddf9f4faa",
+      "promptHash": "9aab4ecba3d9d6ac9a6fe4b6c8d2dfd1",
+      "seed": "sv_blank_prophecy_1:loc:the_slope:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 22330,
+      "createdAt": "2026-09-10T17:13:45.319Z"
+    }
+  },
+  "story_blank_prophecy/key": {
+    "assetKey": "story_blank_prophecy/key",
+    "file": "story_blank_prophecy/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Blank Prophecy",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "28f8de01-6353-4af6-8ca7-e7f63b4e78a0",
+      "promptHash": "8b2c99ebb384044a502e07dcf9b4febd",
+      "seed": "sv_blank_prophecy_1:key:anima-v1",
+      "costUsd": 0.21952,
+      "latencyMs": 103419,
+      "createdAt": "2026-09-10T17:13:49.912Z"
+    }
+  },
+  "story_blank_prophecy/stage_the_kerameikos": {
+    "assetKey": "story_blank_prophecy/stage_the_kerameikos",
+    "file": "story_blank_prophecy/stage_the_kerameikos.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Old Burying Ground: Eleven acres of grave markers and foundations below street level, with a stream running through it and tortoises in the grass.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "30ccaf50-cb9d-47aa-8abc-6ecc2fa053ba",
+      "promptHash": "c4e6cb2320007f6c17fd05ea61ae177a",
+      "seed": "sv_blank_prophecy_1:loc:the_kerameikos:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38561,
+      "createdAt": "2026-09-10T17:14:04.113Z"
+    }
+  },
+  "story_blank_prophecy/stage_piraeus_road": {
+    "assetKey": "story_blank_prophecy/stage_piraeus_road",
+    "file": "story_blank_prophecy/stage_piraeus_road.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Port Road: Container cranes, ferry gates, and eleven thousand people a day going to islands.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d05b7cb9-a07d-46f2-8e12-edd36f8a0870",
+      "promptHash": "1f35cf646cf8087f4556ceb34306860b",
+      "seed": "sv_blank_prophecy_1:loc:piraeus_road:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37451,
+      "createdAt": "2026-09-10T17:14:22.775Z"
+    }
+  },
+  "story_blank_prophecy/stage_the_crossroads": {
+    "assetKey": "story_blank_prophecy/stage_the_crossroads",
+    "file": "story_blank_prophecy/stage_the_crossroads.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Where Three Ways Meet: A junction on the edge of the city where an old road, a new road and a track that is not on any map come together.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ae9066cd-22e3-4ca9-8b38-03a8f5da0605",
+      "promptHash": "c9b4af66210981514597eabb3b706e58",
+      "seed": "sv_blank_prophecy_1:loc:the_crossroads:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39672,
+      "createdAt": "2026-09-10T17:14:24.919Z"
+    }
+  },
+  "story_blank_prophecy/stage_the_council_chamber": {
+    "assetKey": "story_blank_prophecy/stage_the_council_chamber",
+    "file": "story_blank_prophecy/stage_the_council_chamber.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Chamber In The Rock: Cut into the hill below the temple, older than the temple, and used continuously since.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7f6c6474-66c5-4f03-8181-2d374958c1a0",
+      "promptHash": "658d68cdd2eaa5a77be4b91e36e58fac",
+      "seed": "sv_blank_prophecy_1:loc:the_council_chamber:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 21624,
+      "createdAt": "2026-09-10T17:14:25.743Z"
+    }
+  },
+  "story_blank_prophecy/stage_the_cut_thread_house": {
+    "assetKey": "story_blank_prophecy/stage_the_cut_thread_house",
+    "file": "story_blank_prophecy/stage_the_cut_thread_house.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Warehouse: Forty people who all have a version of the same story, a kitchen, a crèche, and a wall with about nine hundred names on it — every one of them somebody who was told what they were going to do before they had done it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d77d1243-ff34-4cbf-a726-11e9382382ce",
+      "promptHash": "c60468cb9fa9bc0aff9e88c4471b5485",
+      "seed": "sv_blank_prophecy_1:loc:the_cut_thread_house:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36349,
+      "createdAt": "2026-09-10T17:14:26.267Z"
+    }
+  },
+  "story_blank_prophecy/stage_the_loom": {
+    "assetKey": "story_blank_prophecy/stage_the_loom",
+    "file": "story_blank_prophecy/stage_the_loom.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Loom: Not a machine and not a room.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8031d296-24c7-4916-8912-be844fb0e120",
+      "promptHash": "e97f6b9b40861d45cc29938f1bbf9507",
+      "seed": "sv_blank_prophecy_1:loc:the_loom:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20152,
+      "createdAt": "2026-09-10T17:14:46.424Z"
+    }
+  },
+  "story_blank_prophecy/stage_delphi_road": {
+    "assetKey": "story_blank_prophecy/stage_delphi_road",
+    "file": "story_blank_prophecy/stage_delphi_road.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Road To Delphi: Three hours north-west through mountains, past a service station where the coffee is genuinely excellent, and up into a valley of olive terraces below a cliff with two enormous rocks in it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0a35387d-44d6-4e5b-8ffe-984f99a07dd5",
+      "promptHash": "9b15c87c28549d220ace55454cf5e11e",
+      "seed": "sv_blank_prophecy_1:loc:delphi_road:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 25023,
+      "createdAt": "2026-09-10T17:14:47.802Z"
+    }
+  },
+  "story_blank_prophecy/stage_the_way_down": {
+    "assetKey": "story_blank_prophecy/stage_the_way_down",
+    "file": "story_blank_prophecy/stage_the_way_down.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Thin Corner: A stair that is not in any plan, going down from a corner of the old burying ground, dry and warm and entirely silent.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8316e6a8-5208-42e1-8cc2-61f4d080896b",
+      "promptHash": "d7330d18e3898dca215aece4b54d4b43",
+      "seed": "sv_blank_prophecy_1:loc:the_way_down:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 24861,
+      "createdAt": "2026-09-10T17:14:50.610Z"
+    }
+  },
+  "story_blank_prophecy/stage_delphi_sanctuary": {
+    "assetKey": "story_blank_prophecy/stage_delphi_sanctuary",
+    "file": "story_blank_prophecy/stage_delphi_sanctuary.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Sanctuary: Terraces of foundations climbing a mountainside, a theatre, a stadium at the top, and a stone that was once considered the centre of the world by people who were not being metaphorical.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "54ef954f-753c-4b3a-89f9-5410a891a7fa",
+      "promptHash": "758f3baad2f4b7777055a86fb83b67ed",
+      "seed": "sv_blank_prophecy_1:loc:delphi_sanctuary:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38404,
+      "createdAt": "2026-09-10T17:15:03.328Z"
+    }
+  },
+  "story_blank_prophecy/kyros": {
+    "assetKey": "story_blank_prophecy/kyros",
+    "file": "story_blank_prophecy/kyros.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, Twenty-seven, the hero who survived his own prophecy, and the man who has spent four years proving that being told your future is what causes it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dbc8cd1f-2d73-4b9e-a004-8854dd3d050c",
+      "promptHash": "c0af72b582731340af15e12f010c5340",
+      "seed": "bp-kyros-01",
+      "costUsd": 0.00632,
+      "latencyMs": 17317,
+      "createdAt": "2026-09-10T17:15:05.123Z"
+    }
+  },
+  "story_blank_prophecy/hecate": {
+    "assetKey": "story_blank_prophecy/hecate",
+    "file": "story_blank_prophecy/hecate.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, The one whose whole domain is the place between things, met at a junction on the edge of Athens with a shoebox shrine in a wall",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8cce0cc9-a8ac-4873-9ede-6fbd6a8e3885",
+      "promptHash": "bd1abfab6f5440256b0ca5fc479a27c3",
+      "seed": "bp-hecate-01",
+      "costUsd": 0.01372,
+      "latencyMs": 22148,
+      "createdAt": "2026-09-10T17:15:12.762Z"
+    }
+  },
+  "story_blank_prophecy/hermes": {
+    "assetKey": "story_blank_prophecy/hermes",
+    "file": "story_blank_prophecy/hermes.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, The one who turns up because he is curious, wants something, and is completely upfront about both",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "eb873b53-6884-42e3-bfe0-91974b85fed2",
+      "promptHash": "4c171dba9f1e4aeab55183cb21f828fa",
+      "seed": "bp-hermes-01",
+      "costUsd": 0.00632,
+      "latencyMs": 17671,
+      "createdAt": "2026-09-10T17:15:21.007Z"
+    }
+  },
+  "story_blank_prophecy/thalia": {
+    "assetKey": "story_blank_prophecy/thalia",
+    "file": "story_blank_prophecy/thalia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, Twenty-one, a monster hunter who carries one of Artemis’s Names, and the first person to find out you can see any of this",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3f9336bb-eabe-4540-8fd9-95c558fe1a7f",
+      "promptHash": "c8fb3436c082492c115f8dd998d2faf6",
+      "seed": "bp-thalia-01",
+      "costUsd": 0.05488,
+      "latencyMs": 36984,
+      "createdAt": "2026-09-10T17:15:23.415Z"
+    }
+  },
+  "story_blank_prophecy/eirene": {
+    "assetKey": "story_blank_prophecy/eirene",
+    "file": "story_blank_prophecy/eirene.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, The oracle who read you at Delphi, got nothing, and kept the failed reading against nineteen years of her own procedure",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "255e5572-0e8a-4acf-ae8e-553b32b33db6",
+      "promptHash": "37ba0bf11fd1c0366605c586af815495",
+      "seed": "bp-eirene-01",
+      "costUsd": 0.02404,
+      "latencyMs": 22161,
+      "createdAt": "2026-09-10T17:15:34.930Z"
+    }
+  },
+  "story_blank_prophecy/despina": {
+    "assetKey": "story_blank_prophecy/despina",
+    "file": "story_blank_prophecy/despina.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, Keeps a guesthouse where the kitchen has never been shut when somebody needed it open, and has kept the oldest rule in the world for thirty years",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f6fae19-c062-45ae-9086-6063cdebc2b8",
+      "promptHash": "e448d3c64a98046b1c6c77a275091049",
+      "seed": "bp-despina-01",
+      "costUsd": 0.05488,
+      "latencyMs": 34317,
+      "createdAt": "2026-09-10T17:15:39.444Z"
+    }
+  },
+  "story_blank_prophecy/thalia_neutral": {
+    "assetKey": "story_blank_prophecy/thalia_neutral",
+    "file": "story_blank_prophecy/thalia_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "39164d72-8642-4c5f-9512-56c9617e0afb",
+      "promptHash": "0806e0a351440b759323c6e5181ef962",
+      "seed": "bp-thalia-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19406,
+      "createdAt": "2026-09-10T17:15:40.420Z"
+    }
+  },
+  "story_blank_prophecy/thalia_warm": {
+    "assetKey": "story_blank_prophecy/thalia_warm",
+    "file": "story_blank_prophecy/thalia_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "85e14d88-6cf6-4614-956d-2b8f065b782f",
+      "promptHash": "62c0b79c9d1a5b9925d85c2fe0902223",
+      "seed": "bp-thalia-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 25329,
+      "createdAt": "2026-09-10T17:15:48.749Z"
+    }
+  },
+  "story_blank_prophecy/thalia_amused": {
+    "assetKey": "story_blank_prophecy/thalia_amused",
+    "file": "story_blank_prophecy/thalia_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "747dcb77-3c59-4fb2-aadc-341929c28e60",
+      "promptHash": "7b2ec40dce95c57a4214e9e755f14760",
+      "seed": "bp-thalia-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23092,
+      "createdAt": "2026-09-10T17:15:58.028Z"
+    }
+  },
+  "story_blank_prophecy/thalia_confused": {
+    "assetKey": "story_blank_prophecy/thalia_confused",
+    "file": "story_blank_prophecy/thalia_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "56cc47e4-cf95-4002-85cc-43f7a1058e86",
+      "promptHash": "90738feab4a1c513316acd691b7ccf79",
+      "seed": "bp-thalia-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19164,
+      "createdAt": "2026-09-10T17:15:59.589Z"
+    }
+  },
+  "story_blank_prophecy/thalia_annoyed": {
+    "assetKey": "story_blank_prophecy/thalia_annoyed",
+    "file": "story_blank_prophecy/thalia_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5abc0020-cd24-4da4-a269-3e84c550bef8",
+      "promptHash": "8e96d6339cfa287ba65e1a7b49cddd92",
+      "seed": "bp-thalia-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18191,
+      "createdAt": "2026-09-10T17:16:06.954Z"
+    }
+  },
+  "story_blank_prophecy/thalia_surprised": {
+    "assetKey": "story_blank_prophecy/thalia_surprised",
+    "file": "story_blank_prophecy/thalia_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "11b9b7f5-dc04-4edf-b8c3-12fcb0f40003",
+      "promptHash": "493f9bdb3b88d9c5128a411acd996000",
+      "seed": "bp-thalia-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 33945,
+      "createdAt": "2026-09-10T17:16:13.394Z"
+    }
+  },
+  "story_blank_prophecy/thalia_angry": {
+    "assetKey": "story_blank_prophecy/thalia_angry",
+    "file": "story_blank_prophecy/thalia_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a8b0ac26-9b01-4fa8-ae92-952f91e19711",
+      "promptHash": "d3b7c2ef3a4946fc55c46c97f3a3d41c",
+      "seed": "bp-thalia-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 24183,
+      "createdAt": "2026-09-10T17:16:22.214Z"
+    }
+  },
+  "story_blank_prophecy/thalia_worried": {
+    "assetKey": "story_blank_prophecy/thalia_worried",
+    "file": "story_blank_prophecy/thalia_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Thalia Kyrkos, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "730cd621-120f-41e3-930a-87aa5c0ef9da",
+      "promptHash": "9162ec452cba7b0df8d8fb1ffd9e5791",
+      "seed": "bp-thalia-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 23436,
+      "createdAt": "2026-09-10T17:16:23.029Z"
+    }
+  },
+  "story_blank_prophecy/kyros_neutral": {
+    "assetKey": "story_blank_prophecy/kyros_neutral",
+    "file": "story_blank_prophecy/kyros_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "85f7a3cc-5c41-4a4f-a5e6-590fe6dace2b",
+      "promptHash": "a637dc465ca186c8aed047e2d3a93706",
+      "seed": "bp-kyros-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19567,
+      "createdAt": "2026-09-10T17:16:26.526Z"
+    }
+  },
+  "story_blank_prophecy/kyros_warm": {
+    "assetKey": "story_blank_prophecy/kyros_warm",
+    "file": "story_blank_prophecy/kyros_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "955c3bcd-02b9-4567-baea-41958f824b15",
+      "promptHash": "ea3fdc580803f04cae1315242716e52f",
+      "seed": "bp-kyros-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 15840,
+      "createdAt": "2026-09-10T17:16:29.242Z"
+    }
+  },
+  "story_blank_prophecy/kyros_amused": {
+    "assetKey": "story_blank_prophecy/kyros_amused",
+    "file": "story_blank_prophecy/kyros_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8b3e6d83-6adf-437c-a316-2d0355736054",
+      "promptHash": "86d45847cd8260c193aaad74935f6597",
+      "seed": "bp-kyros-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23160,
+      "createdAt": "2026-09-10T17:16:45.380Z"
+    }
+  },
+  "story_blank_prophecy/kyros_confused": {
+    "assetKey": "story_blank_prophecy/kyros_confused",
+    "file": "story_blank_prophecy/kyros_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "597edc75-4bfb-4fb5-a576-a75f67b538cf",
+      "promptHash": "c83306b891a49f654ac04e2804d8ae27",
+      "seed": "bp-kyros-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19284,
+      "createdAt": "2026-09-10T17:16:45.815Z"
+    }
+  },
+  "story_blank_prophecy/kyros_surprised": {
+    "assetKey": "story_blank_prophecy/kyros_surprised",
+    "file": "story_blank_prophecy/kyros_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "30ecba39-2c92-401d-8996-343bd91e5f28",
+      "promptHash": "6967c7372fab6487a0ec682db2ed7de1",
+      "seed": "bp-kyros-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 34254,
+      "createdAt": "2026-09-10T17:16:57.286Z"
+    }
+  },
+  "story_blank_prophecy/kyros_worried": {
+    "assetKey": "story_blank_prophecy/kyros_worried",
+    "file": "story_blank_prophecy/kyros_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4420ab4d-b1fc-4140-9203-fded434bc516",
+      "promptHash": "bf57620724f1ef81114599a19acecedf",
+      "seed": "bp-kyros-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 19346,
+      "createdAt": "2026-09-10T17:17:05.164Z"
+    }
+  },
+  "story_blank_prophecy/kyros_annoyed": {
+    "assetKey": "story_blank_prophecy/kyros_annoyed",
+    "file": "story_blank_prophecy/kyros_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "608e81b4-d079-4386-82b8-7e1586da40d8",
+      "promptHash": "c19504668b91c0a4deb69df83439d291",
+      "seed": "bp-kyros-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 36227,
+      "createdAt": "2026-09-10T17:17:05.478Z"
+    }
+  },
+  "story_blank_prophecy/kyros_angry": {
+    "assetKey": "story_blank_prophecy/kyros_angry",
+    "file": "story_blank_prophecy/kyros_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kyros Argyros, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4dd53d9f-78b5-4130-9d1c-b24ab14b8e3f",
+      "promptHash": "80961d1fa4c35e74ea842c9684864947",
+      "seed": "bp-kyros-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 23439,
+      "createdAt": "2026-09-10T17:17:08.825Z"
+    }
+  },
+  "story_blank_prophecy/hecate_neutral": {
+    "assetKey": "story_blank_prophecy/hecate_neutral",
+    "file": "story_blank_prophecy/hecate_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "72c557a0-21f0-4dfa-b1c7-c33a1ab141c6",
+      "promptHash": "738be30123ff5ec39d62a5830232e325",
+      "seed": "bp-hecate-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 22095,
+      "createdAt": "2026-09-10T17:17:19.385Z"
+    }
+  },
+  "story_blank_prophecy/hecate_amused": {
+    "assetKey": "story_blank_prophecy/hecate_amused",
+    "file": "story_blank_prophecy/hecate_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f7e930e-e500-4e60-8efe-a39db3b4e405",
+      "promptHash": "f549de73860c9ac42e68dc05930bafe8",
+      "seed": "bp-hecate-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 16726,
+      "createdAt": "2026-09-10T17:17:22.209Z"
+    }
+  },
+  "story_blank_prophecy/hecate_warm": {
+    "assetKey": "story_blank_prophecy/hecate_warm",
+    "file": "story_blank_prophecy/hecate_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "446b1a00-24af-4a8d-bc27-b6286ed1d9e8",
+      "promptHash": "37a975dcfd59deed6e0f142fd391e15c",
+      "seed": "bp-hecate-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 24592,
+      "createdAt": "2026-09-10T17:17:29.761Z"
+    }
+  },
+  "story_blank_prophecy/hecate_surprised": {
+    "assetKey": "story_blank_prophecy/hecate_surprised",
+    "file": "story_blank_prophecy/hecate_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6713d3c7-7b44-4e0c-80cc-3d6b32dce1a5",
+      "promptHash": "60809f878509c81ca4e5105ef9341399",
+      "seed": "bp-hecate-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21826,
+      "createdAt": "2026-09-10T17:17:30.659Z"
+    }
+  },
+  "story_blank_prophecy/hecate_confused": {
+    "assetKey": "story_blank_prophecy/hecate_confused",
+    "file": "story_blank_prophecy/hecate_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "28a105e6-c5d0-466f-a98e-21392760443b",
+      "promptHash": "91e67ba73f81fac5a180dde2c6ec3bd0",
+      "seed": "bp-hecate-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19312,
+      "createdAt": "2026-09-10T17:17:38.706Z"
+    }
+  },
+  "story_blank_prophecy/hecate_annoyed": {
+    "assetKey": "story_blank_prophecy/hecate_annoyed",
+    "file": "story_blank_prophecy/hecate_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e95a4ff7-518c-468f-aa94-bfee74b3834f",
+      "promptHash": "fb08f5a3911eeabf1384eefde140dd50",
+      "seed": "bp-hecate-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18667,
+      "createdAt": "2026-09-10T17:17:40.883Z"
+    }
+  },
+  "story_blank_prophecy/hecate_angry": {
+    "assetKey": "story_blank_prophecy/hecate_angry",
+    "file": "story_blank_prophecy/hecate_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "443d36cc-364a-4d75-9dc8-6dc8839fbe92",
+      "promptHash": "1168e5ef50a87052a6c68af0087e1d3b",
+      "seed": "bp-hecate-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 19194,
+      "createdAt": "2026-09-10T17:17:48.959Z"
+    }
+  },
+  "story_blank_prophecy/hecate_worried": {
+    "assetKey": "story_blank_prophecy/hecate_worried",
+    "file": "story_blank_prophecy/hecate_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hecate, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "faf275d0-f789-4c0d-be8b-2c584c185ab8",
+      "promptHash": "e5bc60e9ef29065b18b21f668f06d170",
+      "seed": "bp-hecate-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 18713,
+      "createdAt": "2026-09-10T17:17:49.377Z"
+    }
+  },
+  "story_blank_prophecy/hermes_neutral": {
+    "assetKey": "story_blank_prophecy/hermes_neutral",
+    "file": "story_blank_prophecy/hermes_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "446eab78-8004-48c1-95a5-0d30fb67687b",
+      "promptHash": "dad5cb971b3e694732e5cedfe6f2f60f",
+      "seed": "bp-hermes-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 15926,
+      "createdAt": "2026-09-10T17:17:54.639Z"
+    }
+  },
+  "story_blank_prophecy/hermes_amused": {
+    "assetKey": "story_blank_prophecy/hermes_amused",
+    "file": "story_blank_prophecy/hermes_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "00119701-3657-4c77-9048-5ec75123a29a",
+      "promptHash": "d230e31d87065871d821c520cf1fd52a",
+      "seed": "bp-hermes-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 20205,
+      "createdAt": "2026-09-10T17:18:09.171Z"
+    }
+  },
+  "story_blank_prophecy/hermes_confused": {
+    "assetKey": "story_blank_prophecy/hermes_confused",
+    "file": "story_blank_prophecy/hermes_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d186eec5-e3ef-4652-b305-a50f90740617",
+      "promptHash": "9dd8a03873d418feeaa9ef9d00c9eed6",
+      "seed": "bp-hermes-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19725,
+      "createdAt": "2026-09-10T17:18:14.371Z"
+    }
+  },
+  "story_blank_prophecy/hermes_warm": {
+    "assetKey": "story_blank_prophecy/hermes_warm",
+    "file": "story_blank_prophecy/hermes_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "17e70835-bdf3-4e62-b061-0305d12959cf",
+      "promptHash": "fda08d71317b2a1fff394ce4156cace2",
+      "seed": "bp-hermes-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 37447,
+      "createdAt": "2026-09-10T17:18:18.336Z"
+    }
+  },
+  "story_blank_prophecy/hermes_surprised": {
+    "assetKey": "story_blank_prophecy/hermes_surprised",
+    "file": "story_blank_prophecy/hermes_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ce743ac3-cecc-4ae1-abfd-51fa5af594cc",
+      "promptHash": "39abe18df145495609f0b375507b02a8",
+      "seed": "bp-hermes-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 36743,
+      "createdAt": "2026-09-10T17:18:26.123Z"
+    }
+  },
+  "story_blank_prophecy/hermes_angry": {
+    "assetKey": "story_blank_prophecy/hermes_angry",
+    "file": "story_blank_prophecy/hermes_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fb650c57-87b5-4536-b741-9ee00c346978",
+      "promptHash": "18a0414bec4496d3934bba04d0e02342",
+      "seed": "bp-hermes-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 18611,
+      "createdAt": "2026-09-10T17:18:32.987Z"
+    }
+  },
+  "story_blank_prophecy/hermes_worried": {
+    "assetKey": "story_blank_prophecy/hermes_worried",
+    "file": "story_blank_prophecy/hermes_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "35ae515a-c776-4baf-abd5-7359b7c24832",
+      "promptHash": "20cd043d84fc20e2ba6ddca7d2797050",
+      "seed": "bp-hermes-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 26242,
+      "createdAt": "2026-09-10T17:18:44.582Z"
+    }
+  },
+  "story_blank_prophecy/hermes_annoyed": {
+    "assetKey": "story_blank_prophecy/hermes_annoyed",
+    "file": "story_blank_prophecy/hermes_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hermes, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2436d36d-5d23-4d92-ba6a-e8f262cf9dce",
+      "promptHash": "0f36afed68faf48627bab0de66a8a8d5",
+      "seed": "bp-hermes-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 35762,
+      "createdAt": "2026-09-10T17:18:44.937Z"
+    }
+  },
+  "story_blank_prophecy/despina_warm": {
+    "assetKey": "story_blank_prophecy/despina_warm",
+    "file": "story_blank_prophecy/despina_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "88df7297-577a-45ce-b4b9-d86ebb47d9ec",
+      "promptHash": "4c90946a8da016db44710f68b6d9be59",
+      "seed": "bp-despina-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 19943,
+      "createdAt": "2026-09-10T17:18:52.935Z"
+    }
+  },
+  "story_blank_prophecy/despina_neutral": {
+    "assetKey": "story_blank_prophecy/despina_neutral",
+    "file": "story_blank_prophecy/despina_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bec9a067-4225-4734-8862-23ab048306d3",
+      "promptHash": "75849ade105c4616862f6cbdd055ad7d",
+      "seed": "bp-despina-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 33387,
+      "createdAt": "2026-09-10T17:18:59.514Z"
+    }
+  },
+  "story_blank_prophecy/despina_amused": {
+    "assetKey": "story_blank_prophecy/despina_amused",
+    "file": "story_blank_prophecy/despina_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5f984403-69d6-41ab-9e69-0856cecd6cd4",
+      "promptHash": "37cba6119e1d600a4a1d6cb73602ea6c",
+      "seed": "bp-despina-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 27636,
+      "createdAt": "2026-09-10T17:19:12.233Z"
+    }
+  },
+  "story_blank_prophecy/despina_surprised": {
+    "assetKey": "story_blank_prophecy/despina_surprised",
+    "file": "story_blank_prophecy/despina_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c324f32e-b424-4443-be8f-b8600e687aa2",
+      "promptHash": "d205b0d091e3ffc9258a3cc1a8b06ec1",
+      "seed": "bp-despina-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 32521,
+      "createdAt": "2026-09-10T17:19:17.463Z"
+    }
+  },
+  "story_blank_prophecy/despina_confused": {
+    "assetKey": "story_blank_prophecy/despina_confused",
+    "file": "story_blank_prophecy/despina_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d1fee76b-5148-43b9-a01e-f50b07c9ef85",
+      "promptHash": "908894e52d7eb95411e92894ab260eb4",
+      "seed": "bp-despina-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 25909,
+      "createdAt": "2026-09-10T17:19:18.850Z"
+    }
+  },
+  "story_blank_prophecy/despina_annoyed": {
+    "assetKey": "story_blank_prophecy/despina_annoyed",
+    "file": "story_blank_prophecy/despina_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ff0f8851-246e-47b0-9673-06e750b2a2cd",
+      "promptHash": "e79dd01d722a15b51fc7b1b6d9dd945d",
+      "seed": "bp-despina-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 22446,
+      "createdAt": "2026-09-10T17:19:21.966Z"
+    }
+  },
+  "story_blank_prophecy/despina_angry": {
+    "assetKey": "story_blank_prophecy/despina_angry",
+    "file": "story_blank_prophecy/despina_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "335e16aa-f9d6-4e16-9486-da3c1244edc0",
+      "promptHash": "bf9a4690be780ac76fb6bb606423f860",
+      "seed": "bp-despina-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 23385,
+      "createdAt": "2026-09-10T17:19:35.623Z"
+    }
+  },
+  "story_blank_prophecy/eirene_neutral": {
+    "assetKey": "story_blank_prophecy/eirene_neutral",
+    "file": "story_blank_prophecy/eirene_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bece0cca-ef42-4d30-89d0-fcde52c4fcb5",
+      "promptHash": "ff2796029d22d30114d74df54f785881",
+      "seed": "bp-eirene-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 32896,
+      "createdAt": "2026-09-10T17:19:51.755Z"
+    }
+  },
+  "story_blank_prophecy/despina_worried": {
+    "assetKey": "story_blank_prophecy/despina_worried",
+    "file": "story_blank_prophecy/despina_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Despina Vlahos, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8a79aa3e-8097-47a6-a564-8943e8d04e22",
+      "promptHash": "0976dd29f427b7fb82b3d72674b6d969",
+      "seed": "bp-despina-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 36316,
+      "createdAt": "2026-09-10T17:19:53.787Z"
+    }
+  },
+  "story_blank_prophecy/eirene_warm": {
+    "assetKey": "story_blank_prophecy/eirene_warm",
+    "file": "story_blank_prophecy/eirene_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8fa9bdc9-c86f-4886-9c84-8814363f92cb",
+      "promptHash": "c91da62d0c2620e43e4f03b8f55c49e3",
+      "seed": "bp-eirene-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 34347,
+      "createdAt": "2026-09-10T17:19:56.321Z"
+    }
+  },
+  "story_blank_prophecy/eirene_amused": {
+    "assetKey": "story_blank_prophecy/eirene_amused",
+    "file": "story_blank_prophecy/eirene_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "257c8c05-7c75-4522-a2f9-3ea34407164e",
+      "promptHash": "7ea050d56f35ca842584b0650c1cf0ad",
+      "seed": "bp-eirene-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23388,
+      "createdAt": "2026-09-10T17:19:59.022Z"
+    }
+  },
+  "story_blank_prophecy/eirene_annoyed": {
+    "assetKey": "story_blank_prophecy/eirene_annoyed",
+    "file": "story_blank_prophecy/eirene_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c7c3e3cc-ff7e-4893-9783-a3f80b5ee353",
+      "promptHash": "4e180ea2d6e75f4fb3b0b5674cb320e3",
+      "seed": "bp-eirene-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 21302,
+      "createdAt": "2026-09-10T17:20:17.633Z"
+    }
+  },
+  "story_blank_prophecy/eirene_angry": {
+    "assetKey": "story_blank_prophecy/eirene_angry",
+    "file": "story_blank_prophecy/eirene_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e5048620-7cd6-456c-8c1d-159c998559d2",
+      "promptHash": "2871dd13459901462941d7e7a66cd999",
+      "seed": "bp-eirene-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 21366,
+      "createdAt": "2026-09-10T17:20:20.399Z"
+    }
+  },
+  "story_blank_prophecy/eirene_surprised": {
+    "assetKey": "story_blank_prophecy/eirene_surprised",
+    "file": "story_blank_prophecy/eirene_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2ebe1079-80ad-4484-b2ff-4e9bdd99fd09",
+      "promptHash": "f0cf4cd9a35256b355e060872da3763a",
+      "seed": "bp-eirene-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 35438,
+      "createdAt": "2026-09-10T17:20:27.199Z"
+    }
+  },
+  "story_blank_prophecy/eirene_confused": {
+    "assetKey": "story_blank_prophecy/eirene_confused",
+    "file": "story_blank_prophecy/eirene_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c77924b5-784b-416a-91a1-430a8be70096",
+      "promptHash": "5d3b5fb2fed39a7948bf9a3e24343fc9",
+      "seed": "bp-eirene-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 33447,
+      "createdAt": "2026-09-10T17:20:27.240Z"
+    }
+  },
+  "story_blank_prophecy/eirene_worried": {
+    "assetKey": "story_blank_prophecy/eirene_worried",
+    "file": "story_blank_prophecy/eirene_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eirene Sallas, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1547793c-953a-44cb-b980-c2cf0e21eb0a",
+      "promptHash": "14522d8aea84ba64b848a3be91d51a86",
+      "seed": "bp-eirene-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 40979,
+      "createdAt": "2026-09-10T17:20:58.615Z"
+    }
   }
 }
