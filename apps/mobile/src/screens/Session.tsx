@@ -1005,7 +1005,15 @@ const StyleSheetAbsolute = { position: 'absolute' as const, top: 0, left: 0, rig
 
 function Block({ block, scene }: { block: NarrativeBlock; scene: SessionSceneState | null }): React.JSX.Element {
   if (block.type === 'DIALOGUE') {
-    const character = scene?.presentCharacters.find((c) => c.id === block.speakerId);
+    // Resolved against the whole cast, not who is in the room now.
+    //
+    // The feed is history. Looking a speaker up in `presentCharacters` meant
+    // that walking out of a room retroactively stripped the name and face off
+    // every line already on screen — "mikoto", lowercase, beside a letter
+    // avatar, for a scene that had rendered correctly a turn earlier.
+    const character =
+      scene?.cast.find((c) => c.id === block.speakerId) ??
+      scene?.presentCharacters.find((c) => c.id === block.speakerId);
     return (
       <DialogueBlock
         speaker={block.speakerId === 'player' ? 'You' : (character?.name ?? block.speakerId ?? 'Someone')}

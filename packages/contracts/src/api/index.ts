@@ -279,6 +279,34 @@ export const SessionSceneState = z
         })
         .strict(),
     ),
+    /**
+     * Everybody this world contains, for rendering the feed's history.
+     *
+     * `presentCharacters` is who is in the room *now*, which is the wrong list
+     * to resolve a dialogue block against: the feed shows past beats, and the
+     * moment the player walks out of a room every line they already read lost
+     * its speaker's name and face and fell back to the raw character id — a
+     * lowercase "mikoto" beside a letter avatar, in a scene that had rendered
+     * correctly one turn earlier.
+     *
+     * The same failure once had a narrower shape: `presentCharacters` was
+     * capped at three, so a fourth speaker could not be resolved either. That
+     * cap was removed for exactly this reason. This finishes the job — a
+     * speaker is a fact about the story, not about where the player is standing.
+     *
+     * Names and portrait URLs only; it is small and it never goes stale.
+     */
+    cast: z
+      .array(
+        z
+          .object({
+            id: z.string(),
+            name: z.string(),
+            portrait: z.string().nullable(),
+          })
+          .strict(),
+      )
+      .default([]),
     objective: z.string().nullable(),
     resources: z.array(
       z
