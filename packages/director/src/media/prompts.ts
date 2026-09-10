@@ -143,12 +143,25 @@ const COVER_STYLE_SPINE = [
 export const COVER_DIRECTION_VERSION = 'plotbreak-cover-v3-anime';
 
 /**
- * The lower band of a cover is left deliberately quiet so the wordmark can be
- * composited there afterwards.
+ * Kept, and no longer used by `coverPrompt`. Covers are not plated.
  *
- * Image models cannot spell. Asking one for a title yields malformed lettering
- * roughly every other generation, and the failure is invisible until somebody
- * reads it. So the art reserves the space and the pipeline draws the text.
+ * The reasoning that built this still holds — image models cannot spell, so a
+ * title has to be drawn by us rather than asked for. What changed is that we
+ * stopped wanting one on the art at all:
+ *
+ *   - The card in Discover already prints the title as a text label directly
+ *     under the picture. Plating it put the same words on screen twice.
+ *   - One template wordmark across twenty covers is what made them feel
+ *     identical. Malik: "boring purple cover bottom left… makes all the covers
+ *     feel the same". The references he gave have bespoke per-title logos —
+ *     hand-lettered design work, not something a shared template reaches.
+ *   - It reserved the bottom 22% of every cover as a deliberately dull band, so
+ *     we were paying composition for the privilege.
+ *   - Un-plated art is locale-free by construction, which was the original
+ *     reason for keeping `cover.raw`.
+ *
+ * Setting `titleSafeArea` back to this on a cover spec is all it takes to bring
+ * plating back, and `cover-title.ts` is untouched.
  */
 export const TITLE_SAFE_AREA = { top: 0.78, bottom: 1 } as const;
 
@@ -277,7 +290,7 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
     seed: `${story.id}:cover:${COVER_DIRECTION_VERSION}`,
     alt: `Cover art for ${story.title}: ${story.fantasyLabel}`,
     styleVersion: COVER_DIRECTION_VERSION,
-    titleSafeArea: { ...TITLE_SAFE_AREA },
+    titleSafeArea: null,
     prompt: compose([
       COVER_STYLE_SPINE,
       'This is an anime poster / key visual, not an environment painting. Characters are the subject.',
@@ -303,8 +316,9 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
       // have to survive being 40 pixels across.
       'Faces large enough and contrast high enough that the characters are still readable at thumbnail size.',
       'Strong readable silhouettes. Distinct hair shapes and colours between characters.',
-      `Leave the bottom ${Math.round((1 - TITLE_SAFE_AREA.top) * 100)}% of the frame visually quiet — ` +
-        'darker, low detail, no faces or focal elements — as space for a title to be placed later.',
+      // No reserved band any more: nothing is composited over these. See
+      // TITLE_SAFE_AREA. The art gets the whole frame.
+      'Use the full frame. The composition may run to all four edges.',
       COVER_NEGATIVES,
       NEGATIVES,
     ]),
