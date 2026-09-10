@@ -550,8 +550,21 @@ export function reactingCharacter(
   const named = namedInAction(intent.rawAction, present);
   if (named) return named;
 
-  // Nobody named: whoever this player has the most going on with.
-  return [...present].sort((a, b) => weight(b.relationship) - weight(a.relationship))[0] ?? null;
+  // Nobody was named. Somebody may still have been *affected* — shoved past,
+  // stolen from, frightened by what the player did to somebody else — and the
+  // engine says so in the mutations.
+  const moved = present.filter((c) =>
+    context.resolution.mutations.some((m) => m.subjectId === c.def.id),
+  );
+  if (moved.length > 0) {
+    return [...moved].sort((a, b) => weight(b.relationship) - weight(a.relationship))[0]!;
+  }
+
+  // And otherwise, nothing. A turn spent walking across a room or looking at a
+  // wall is not a turn anybody reacted to, and putting a face on it anyway is
+  // how images stop meaning anything — a reaction frame should say "this landed
+  // on somebody", so on a turn where it did not, there is no frame.
+  return null;
 }
 
 /**

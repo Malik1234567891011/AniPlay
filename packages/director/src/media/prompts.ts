@@ -217,6 +217,14 @@ function coverCast(story: StoryVersion): string {
  * a place you can recognise. The v1 direction asked for the opposite in so many
  * words — "a single figure seen from behind or in silhouette, small against the
  * setting" — which is why the catalog reads as a set of landscape paintings.
+ *
+ * A shelf of covers is not supposed to match. Looking at a competitor's top
+ * ranking — a fantasy oil painting next to a monochrome noir next to a bright
+ * school piece with a shaped logo — the variety is what makes the shelf worth
+ * scrolling, and a uniform house style would be the boring version of this. The
+ * composition rules below are about whether a cover *works* at thumbnail size,
+ * not about making them look like each other, and per-story direction is
+ * expected to pull each one somewhere different.
  */
 export function coverPrompt(story: StoryVersion): ImagePromptSpec {
   const legacy = LEGACY_COVER_STORY_IDS.includes(story.storyId);

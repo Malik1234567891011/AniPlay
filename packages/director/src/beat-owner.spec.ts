@@ -24,7 +24,8 @@ const PRESENT = [
   character('jun', 'Jun Hasabe', 0),
 ];
 
-const context = (present = PRESENT) => ({ presentCharacters: present }) as unknown as TurnContext;
+const context = (present = PRESENT, mutations: Array<{ subjectId: string }> = []) =>
+  ({ presentCharacters: present, resolution: { mutations } }) as unknown as TurnContext;
 
 const intent = (rawAction: string, targetId?: string): ActionIntent =>
   ({
@@ -72,11 +73,20 @@ describe('who owns the beat', () => {
 
   it('does not match a name inside another word', () => {
     // "Jun" must not be found in "junction".
-    expect(reactingCharacter(context(), intent('I look at the junction of the two lines.'))!.def.id).toBe('dai');
+    expect(reactingCharacter(context(), intent('I look at the junction of the two lines.'))).toBeNull();
   });
 
-  it('falls back to who the player has most going on with when nobody is named', () => {
-    expect(reactingCharacter(context(), intent('I take the ball and drive.'))!.def.id).toBe('dai');
+  it('shows whoever the turn actually landed on, when nobody was named', () => {
+    const shoved = context(PRESENT, [{ subjectId: 'jun' }]);
+    expect(reactingCharacter(shoved, intent('I shove past whoever is in the way.'))!.def.id).toBe('jun');
+  });
+
+  it('shows nobody on a turn nobody reacted to', () => {
+    // Not every beat has a face on it. A turn spent crossing a room is not one
+    // somebody reacted to, and a portrait there is how images stop meaning
+    // anything.
+    expect(reactingCharacter(context(), intent('I take the ball and drive.'))).toBeNull();
+    expect(reactingCharacter(context(), intent('I look around the gym.'))).toBeNull();
   });
 
   it('shows nobody when the player is alone', () => {
