@@ -99,3 +99,29 @@ describe('every launch world', () => {
     });
   }
 });
+
+/**
+ * A world whose art exists must actually ask for it.
+ *
+ * `derive-assets.ts` says this failure is "invisible in tests and only shows up
+ * in a screenshot, so it is designed out rather than guarded against". It was
+ * not designed out: Hush House, Window Seven and Good Morning, Husband were
+ * exported raw — correct while their art was uncommissioned, and silently wrong
+ * the moment it was generated. 180 files sat on disk while the catalog served
+ * null and every card drew a gradient.
+ *
+ * So: guarded against, since the design did not hold.
+ */
+describe('worlds that have art declare it', () => {
+  const assetsRoot = new URL('../../../infra/seed/assets/', import.meta.url);
+
+  for (const story of LAUNCH_CATALOG) {
+    it(`${story.title} declares a cover if one has been generated`, async () => {
+      const { existsSync } = await import('node:fs');
+      const generated = existsSync(new URL(`${story.storyId}/cover.webp`, assetsRoot));
+      if (!generated) return; // Art not commissioned yet: null keys are correct.
+      expect(story.coverImage, `${story.title} has cover art on disk but declares none`).toBeTruthy();
+      expect(story.keyArt, `${story.title} has art on disk but declares no key art`).toBeTruthy();
+    });
+  }
+});
