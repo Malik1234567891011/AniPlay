@@ -125,3 +125,34 @@ describe('worlds that have art declare it', () => {
     });
   }
 });
+
+/**
+ * Every expression a world authors must resolve to a face that exists.
+ *
+ * Reaction decks are generated from a fixed eight, and worlds name expressions
+ * in their own voice — `sulking`, `implacable`, `unimpressed`. Nothing
+ * reconciled the two, so the director picked an authored word, the asset key
+ * had never been drawn, and the frame 404'd silently. Measured when this was
+ * written: **257 of 374 authored expressions across the catalog had no asset.**
+ * Sixty-four of Itachi's eighty-nine files are reaction frames and only
+ * `neutral` could be reached, which is why a world with eighty-nine images
+ * looked like a world with none.
+ *
+ * `toReactionEmotion` maps the authored word onto one of the eight. This checks
+ * the map actually covers what the catalog says, so a new world introducing a
+ * new word fails here rather than shipping an invisible hole.
+ */
+describe('authored expressions resolve to a real face', () => {
+  for (const story of LAUNCH_CATALOG) {
+    it(`${story.title} uses expressions the generator draws`, async () => {
+      const { knownExpression } = await import('@aniplay/contracts');
+      const unknown = story.characters
+        .flatMap((c) => c.expressions.map((e) => ({ character: c.name, expression: e })))
+        .filter(({ expression }) => !knownExpression(expression));
+      expect(
+        unknown.map((u) => `${u.character}: ${u.expression}`),
+        'add these to EMOTION_SYNONYMS in packages/contracts/src/game/assets.ts',
+      ).toEqual([]);
+    });
+  }
+});
