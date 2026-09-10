@@ -18018,16 +18018,16 @@
     "alt": "Cover art for Zero Throne: It knelt. Every camera saw it choose you.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "bf1bda3f-6542-413f-b9bc-f46a69cac56e",
-      "promptHash": "f31ed15f1dfcb9d29c4910a0e35610dc",
-      "seed": "sv_zero_throne_1:cover:plotbreak-cover-v2",
+      "requestId": "e5b047dd-bbc5-49ef-a554-26c58fac5492",
+      "promptHash": "0fe66b0c7f3f22dded1bee261f771aef",
+      "seed": "sv_zero_throne_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.21952,
-      "latencyMs": 105062,
-      "createdAt": "2026-09-10T16:24:24.890Z"
+      "latencyMs": 99140,
+      "createdAt": "2026-09-10T21:12:11.362Z"
     }
   },
   "story_zero_throne/eli": {
