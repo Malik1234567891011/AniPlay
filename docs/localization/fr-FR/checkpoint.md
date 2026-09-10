@@ -19,39 +19,30 @@ final copy polish, store metadata and release QA wait for English to settle.
 
 ## State
 
-Steps 1–4 are done and pushed. Step 6 is part-done and uncommitted. Step 5 is
-untouched.
+Steps 1, 2, 3, 4 and 6 are done, verified and pushed. Step 5 is the only one of
+1–6 outstanding.
 
 | # | Step | Status |
 |---|---|---|
-| 1 | `Intl` polyfills, `frDate`, `normalizeForSearch`, `frCollator` | ✅ done, pushed |
-| 2 | `locale` on `GameState`, `expo-localization`, hidden switch | ✅ done, pushed |
-| 3 | i18next + ICU, catalogue, English keys only | 🟡 ~97 % — see below |
-| 4 | Server strings → keys + params | ✅ done, pushed |
-| 5 | Memory facts → structured | ⬜ untouched |
-| 6 | `PlayerIdentity.grammar` + French `CharacterSetup` question | 🟡 schema landed, screen not started |
-| 7–12 | French catalogue, policies, `addressMode`, parser, pilot world | ⬜ untouched |
+| 1 | `Intl` polyfills, `frDate`, `normalizeForSearch`, `frCollator` | ✅ done |
+| 2 | `locale` on `GameState`, `expo-localization`, hidden switch | ✅ done |
+| 3 | i18next + ICU, catalogue, English keys only | ✅ **gate green — zero un-keyed client strings** |
+| 4 | Server strings → keys + params | ✅ done |
+| 5 | Memory facts → structured | ⬜ **next** |
+| 6 | `PlayerIdentity.grammar` + French `CharacterSetup` question | ✅ done |
+| 7–12 | French catalogue, policies, `addressMode`, parser, pilot world | ⬜ |
 
-**Last pushed commit:** `Key the app, and split every engine label from its
-wording`. After it, `d66be08` was cherry-picked from `main` (CLAUDE.md +
-`docs/token-practices.md`).
+**Gates, all by exit code:** `npm run typecheck` 0 · `npm test` 0 ·
+`npm run lint` 0 · `npx tsx infra/scripts/i18n-extract.ts --gate` **0**
+(47 exempt, 207 server, 1085 model) · `npm run fr:lint -- --self-test` 0 ·
+`npm run fr:probe` 0 (still 37/39 `custom` — that is step 10) ·
+`npx expo export --platform ios` 0, 5.0 MB / 1076 modules.
 
-**Uncommitted right now:**
-- `packages/contracts/src/game/state.ts` — `GrammaticalGender`, `PlayerGrammar`,
-  `PlayerIdentity.grammar`, `DEFAULT_PLAYER_GRAMMAR`, `playerGrammar()`.
-  Typechecks clean.
-- `packages/ui/src/tokens.ts` — `formatCredits` is locale-aware; `Georgia` and
-  the rgba scrim exempted.
-- `packages/ui/src/primitives.tsx` — `Georgia` exempted.
-- `packages/ui/package.json` — depends on `@aniplay/i18n`.
+Everything is committed and pushed. Working tree clean.
 
-**Gate status:** `npx tsx infra/scripts/i18n-extract.ts --gate` exits 1 with
-**53 un-keyed client strings**, all in two files:
-`apps/mobile/src/screens/CharacterSetup.tsx` (27) and
-`packages/ui/src/components.tsx` (26). Everything else is keyed.
-
-`npm run typecheck` 0 · `npm test` 0 · `npm run lint` 0 · `npm run fr:lint --
---self-test` 0.
+**Catalogue size:** 15 English area files under
+`packages/i18n/src/catalog/en/`, ~600 keys. French has `world`, `profile`,
+`setup` only — step 7 populates the rest.
 
 ---
 
@@ -250,48 +241,38 @@ producible by suffix concatenation.
 
 ## Next
 
-Concrete, in order:
+**Step 5 — memory facts must stop being English prose.** This is the change
+`LOCALIZATION_ARCHITECTURE.md` §5 calls the worst finding in the audit, and it
+is worth doing for the English side regardless.
 
-1. **Commit the uncommitted work above** (contracts grammar schema + `packages/ui`).
-2. **`apps/mobile/src/screens/CharacterSetup.tsx`** — steps 3 and 6 together,
-   since step 6 rewrites this screen anyway. 27 un-keyed strings. Catalogue file
-   `packages/i18n/src/catalog/en/setup.ts` (currently an empty stub, nobody else
-   owns it) and `catalog/fr/setup.ts` for the French-only question.
-   The French grammar question, from `PLAYER_GRAMMAR.md` rule 2 but **without
-   the midpoint** its draft copy shows, because rule 4 forbids `·` in UI too:
+`packages/director/src/director.ts` ~670–740 builds facts as English sentences:
 
-   ```
-   Comment le monde parle de toi
-   ◯ Il          « Tu es arrivé »        on parle de toi au masculin
-   ◯ Elle        « Tu es arrivée »       on parle de toi au féminin
-   ◯ Iel         « Tu viens d’arriver »  on parle de toi avec iel
-   ◯ Peu importe « Tu viens d’arriver »  le récit évite la question
-   ```
+```ts
+const HOSTILE_VERBS = { threaten: 'threatened and belittled', … };
+value: `${player.name} ${what} ${char.name} at ${scene.locationName}, ${scene.worldTimeLabel}.`
+```
 
-   Shown **only when the interface locale is `fr`**; English keeps its free-text
-   `pronouns` field exactly as it is. That preview line *is* step 6's gate —
-   `Tu es arrivée` renders for a player who asked for it.
-3. **`packages/i18n/src/grammar.ts`** — `agree(masculine, gender)` for French
-   past participles and adjectives (`-e`, `-eux`→`-euse`, `-f`→`-ve`,
-   `-er`→`-ère`, `-el`→`-elle`, `-en`→`-enne`, `-on`→`-onne`; NEUTRAL and
-   UNSPECIFIED take the unmarked masculine, never a midpoint). Used by the
-   preview now and by `WRITER_POLICY_FR` at step 8.
-4. **Thread `playerGrammar(identity)` into `context.ts`** → `TurnContext.player`,
-   so both model stages can see it.
-5. **`packages/ui/src/components.tsx`** — the last 26 strings. It is on the
-   do-not-edit conflict list, so: add a **new** file
-   `packages/ui/src/i18n.tsx` holding a tiny locale context + `useUiT()`, and
-   keep the `components.tsx` diff purely mechanical (`'Save'` →
-   `{t('ui.save')}`) so it rebases cleanly. Report the diff explicitly.
-6. **Step 5 — memory facts → structured.** `packages/director/src/director.ts`
-   lines ~670–740, `HOSTILE_VERBS` and the `value:` template. `director.ts` is
-   **not** on the forbidden list; `model-stages.ts`, `fast-writer.ts`,
-   `responses.ts`, `parser.ts`, `entity-resolution.ts` and
-   `packages/ui/src/components.tsx` are.
-7. Then steps 7–12 as briefed, ending with a French pilot world.
+They are stored, retrieved, and handed to the writer as `speakers[].knows` and
+to the choice generator as `remembered` — so in a French session the model reads
+English sentences in its own context window **every turn**, and it compounds
+because memory accumulates.
 
-Merge `origin/main` — do **not** rebase; force-push is blocked, and a rebase
-already required a reconciliation merge once (see Dead ends).
+The fix: store the structure (`kind`, `actorId`, `targetId`, `verb`,
+`locationId`, `worldMinute`), render `text` at **retrieval** time in the session
+locale through the same catalogue. `MemoryFact` already has `predicate`, `value`
+and `text` fields in `packages/contracts/src/game/state.ts` — `value` is
+`z.unknown()`, which is where the structure goes, and `text` becomes derived
+rather than stored.
+
+`director.ts` is **not** on the forbidden list. `model-stages.ts`,
+`fast-writer.ts`, `responses.ts`, `parser.ts` and `entity-resolution.ts` are —
+and `context.ts` is the seam that reaches both model paths without touching
+them, exactly as it did for step 4.
+
+Then steps 7–12: French catalogue, `WRITER_POLICY_FR`, `addressMode`, the French
+verb lexicon, and the pilot world.
+
+Merge `origin/main` — never rebase.
 
 ---
 
