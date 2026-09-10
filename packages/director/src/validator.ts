@@ -6,6 +6,7 @@ import type {
 import { countItem, isSuccess } from '@aniplay/engine';
 import type { TurnContext } from './context.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
+import { findAbsenceOfPresent } from './present-absence.js';
 import {
   NAME_SPAM_MARKER,
   NAME_SPAM_THRESHOLD,
@@ -182,6 +183,23 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
         push('NAME_IDENTITY_DRIFT', 'WARN', `Player appears to be addressed as ${first}.`);
       }
     }
+  }
+
+  // --- LOCATION_CONTRADICTION: somebody written out of the room they are in ---
+  // ERROR, not WARN. The block that says the coach is not there is the block
+  // that stops the player getting the scene they asked for, and keeping it
+  // while the rest of the beat proceeds would leave the turn contradicting
+  // itself on the page.
+  for (const claim of findAbsenceOfPresent(
+    turn.blocks,
+    context.presentCharacters.map((c) => ({ id: c.def.id, name: c.def.name })),
+  )) {
+    push(
+      'LOCATION_CONTRADICTION',
+      'ERROR',
+      `${claim.name} is in this location, but the prose writes them out of it: "${claim.sentence}"`,
+      claim.blockIndex,
+    );
   }
 
   // --- NAME_IDENTITY_DRIFT: the chatbot tell ---
