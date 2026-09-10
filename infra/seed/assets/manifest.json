@@ -13165,5 +13165,1487 @@
       "latencyMs": 40979,
       "createdAt": "2026-09-10T17:20:58.615Z"
     }
+  },
+  "story_red_floor/stage_the_red_floor": {
+    "assetKey": "story_red_floor/stage_the_red_floor",
+    "file": "story_red_floor/stage_the_red_floor.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Red Floor: The old storage level, low-ceilinged, with faded dark red mats laid across the whole of it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9f76f6c0-e9b5-4fbf-afaa-5b13388f3205",
+      "promptHash": "d2b73ae044bf0b7d742ae967371c2c64",
+      "seed": "sv_red_floor_1:loc:the_red_floor:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34578,
+      "createdAt": "2026-09-10T17:29:32.811Z"
+    }
+  },
+  "story_red_floor/stage_mikado_gym": {
+    "assetKey": "story_red_floor/stage_mikado_gym",
+    "file": "story_red_floor/stage_mikado_gym.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Mikado Gym: Second floor of an old mixed-use building above a restaurant, up a staircase with a bend in it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1f536a9c-6846-48cb-9807-357c78d26d3e",
+      "promptHash": "4525d2faadbfaf07b32bd0802725272d",
+      "seed": "sv_red_floor_1:loc:mikado_gym:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35757,
+      "createdAt": "2026-09-10T17:29:33.989Z"
+    }
+  },
+  "story_red_floor/cover": {
+    "assetKey": "story_red_floor/cover",
+    "file": "story_red_floor/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for The Red Floor: No cameras. No records. Step on or do not.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cb806e4c-169d-4ec8-bb54-496ad42cd317",
+      "promptHash": "d31eef2f3f536fd5c9b57b55aca684b6",
+      "seed": "sv_red_floor_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.05488,
+      "latencyMs": 38630,
+      "createdAt": "2026-09-10T17:29:36.848Z"
+    }
+  },
+  "story_red_floor/key": {
+    "assetKey": "story_red_floor/key",
+    "file": "story_red_floor/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for The Red Floor",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dd4bbeae-38a3-4be7-a4dd-cb00ed87a371",
+      "promptHash": "6a9215047febd4b6005ad2c52d19fe4d",
+      "seed": "sv_red_floor_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42446,
+      "createdAt": "2026-09-10T17:29:40.678Z"
+    }
+  },
+  "story_red_floor/stage_the_office": {
+    "assetKey": "story_red_floor/stage_the_office",
+    "file": "story_red_floor/stage_the_office.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Office: Two metres by three, a desk, a kettle, a filing cabinet with a drawer that does not open, and a wall with eleven picture hooks in it and one photograph hanging on the second hook from the left.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "47af99f2-0bbf-4782-8da2-cf690edec8d5",
+      "promptHash": "17dc86e3e56d80b4856e07a8cd6dbe6e",
+      "seed": "sv_red_floor_1:loc:the_office:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 27116,
+      "createdAt": "2026-09-10T17:29:59.937Z"
+    }
+  },
+  "story_red_floor/stage_the_arcade": {
+    "assetKey": "story_red_floor/stage_the_arcade",
+    "file": "story_red_floor/stage_the_arcade.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Shopping Arcade: Four hundred metres of roofed arcade with three shutters permanently down, a fishmonger, a stationers, a bar with eleven seats and a convenience store at the far end that is the only thing open at four in the morning.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf8e0101-6286-4e90-beda-881353638b4b",
+      "promptHash": "76c0939d507fd4c9bf66373953f35e05",
+      "seed": "sv_red_floor_1:loc:the_arcade:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38167,
+      "createdAt": "2026-09-10T17:30:12.164Z"
+    }
+  },
+  "story_red_floor/stage_the_waterfront": {
+    "assetKey": "story_red_floor/stage_the_waterfront",
+    "file": "story_red_floor/stage_the_waterfront.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Waterfront: A container terminal, a fish market that starts at four, and about two kilometres of seawall with a hill at the end of it that everybody in this sport in this city has run up at five in the morning and hated.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "abbbbe15-bbcb-44c0-a5a6-a4ab60924995",
+      "promptHash": "6bdbb46a491b39e42b204147900cf543",
+      "seed": "sv_red_floor_1:loc:the_waterfront:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37250,
+      "createdAt": "2026-09-10T17:30:14.296Z"
+    }
+  },
+  "story_red_floor/stage_mei_clinic": {
+    "assetKey": "story_red_floor/stage_mei_clinic",
+    "file": "story_red_floor/stage_mei_clinic.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Clinic: Sports medicine and rehab on the first floor of a modern building, with a gym at the back that is better equipped than Mikado and a waiting room containing four people who all know each other.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a8bbf329-9333-4d03-aca4-ff1348fa6e30",
+      "promptHash": "deb9b83b7f922764a523881e6c09a303",
+      "seed": "sv_red_floor_1:loc:mei_clinic:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42962,
+      "createdAt": "2026-09-10T17:30:23.646Z"
+    }
+  },
+  "story_red_floor/stage_koji_print_shop": {
+    "assetKey": "story_red_floor/stage_koji_print_shop",
+    "file": "story_red_floor/stage_koji_print_shop.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Namba Printing: A two-man print and packaging business in a side street, run by a man and his nephew, with a guillotine, three machines of different ages and a radio that has been on the same station since 2009.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "df5a9b8b-bbac-458e-aea5-a9a3261e6187",
+      "promptHash": "426be31d120bfa2552191099af4c9651",
+      "seed": "sv_red_floor_1:loc:koji_print_shop:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38093,
+      "createdAt": "2026-09-10T17:30:38.036Z"
+    }
+  },
+  "story_red_floor/stage_junpei_flat": {
+    "assetKey": "story_red_floor/stage_junpei_flat",
+    "file": "story_red_floor/stage_junpei_flat.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Eleventh Floor: One room and a kitchen in a residential tower, with a bed, a table, a television that is never on and almost nothing else.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c993f956-df24-4c1c-aaa8-fbc8a71f9bbd",
+      "promptHash": "b7b9d1f377cb7f9b7dbcabb84e27ff04",
+      "seed": "sv_red_floor_1:loc:junpei_flat:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 32433,
+      "createdAt": "2026-09-10T17:30:44.606Z"
+    }
+  },
+  "story_red_floor/stage_seno_gym": {
+    "assetKey": "story_red_floor/stage_seno_gym",
+    "file": "story_red_floor/stage_seno_gym.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Seno Boxing: A proper professional operation eleven minutes from Mikado: two rings, air conditioning, a sponsor board, a physio on site and a wall of photographs of people who have gone somewhere.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d8256cca-0283-4cbd-93b3-51563a8b0938",
+      "promptHash": "0a566c2a75bb1c6dcb683207c7fe854f",
+      "seed": "sv_red_floor_1:loc:seno_gym:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38255,
+      "createdAt": "2026-09-10T17:30:52.557Z"
+    }
+  },
+  "story_red_floor/stage_the_arena": {
+    "assetKey": "story_red_floor/stage_the_arena",
+    "file": "story_red_floor/stage_the_arena.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Kurohama Arena: Four thousand seats, a proper canvas, commission officials, a doctor at ringside and a broadcast truck outside.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd5fdd20-b09d-416d-b9ba-d216fe7fd282",
+      "promptHash": "a2b18dff4ecd0f4bf850e00ae8b4f35d",
+      "seed": "sv_red_floor_1:loc:the_arena:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 33341,
+      "createdAt": "2026-09-10T17:30:56.999Z"
+    }
+  },
+  "story_red_floor/stage_the_weigh_in": {
+    "assetKey": "story_red_floor/stage_the_weigh_in",
+    "file": "story_red_floor/stage_the_weigh_in.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Function Room: A hotel function room with a scale on a low stage, a backdrop with eleven logos on it, and about forty people who all want something specific from the next ninety seconds.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dd873c0d-0200-4515-adad-7d5e825777df",
+      "promptHash": "774032fe4448001a98f07b2507751f45",
+      "seed": "sv_red_floor_1:loc:the_weigh_in:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37522,
+      "createdAt": "2026-09-10T17:31:15.565Z"
+    }
+  },
+  "story_red_floor/aya": {
+    "assetKey": "story_red_floor/aya",
+    "file": "story_red_floor/aya.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, Twenty-three, nationally ranked, a pressure fighter who teaches people to be frightened of standing still",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6da8cb82-3f12-4c3f-8f15-4e1b375baaf4",
+      "promptHash": "b4d91a593a95c1b4cc4b7432d9fa5ca6",
+      "seed": "rf-aya-01",
+      "costUsd": 0.01372,
+      "latencyMs": 19616,
+      "createdAt": "2026-09-10T17:31:16.626Z"
+    }
+  },
+  "story_red_floor/stage_the_hill": {
+    "assetKey": "story_red_floor/stage_the_hill",
+    "file": "story_red_floor/stage_the_hill.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Hill: Nine hundred metres at about eleven per cent, at the end of the seawall, with a vending machine at the top that has been broken since spring.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5c3dc396-ea01-4269-9408-69847e6d274d",
+      "promptHash": "741ba60f0a4e887e0f0bc7cf405511be",
+      "seed": "sv_red_floor_1:loc:the_hill:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37220,
+      "createdAt": "2026-09-10T17:31:21.832Z"
+    }
+  },
+  "story_red_floor/stage_daigo_camp": {
+    "assetKey": "story_red_floor/stage_daigo_camp",
+    "file": "story_red_floor/stage_daigo_camp.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Camp: A converted warehouse an hour out of the city where a world champion trains with eleven people and no press.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2c630a62-5f95-4eed-a540-6736d2280720",
+      "promptHash": "7799d67f90ea135f3dd740a7c4d682fd",
+      "seed": "sv_red_floor_1:loc:daigo_camp:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 32239,
+      "createdAt": "2026-09-10T17:31:24.799Z"
+    }
+  },
+  "story_red_floor/riku": {
+    "assetKey": "story_red_floor/riku",
+    "file": "story_red_floor/riku.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, Twenty-two, a professional boxer with a proper gym and a proper team, who comes down to a basement on Sundays anyway",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b71c5f9c-c837-4967-9aff-1d86c767ad55",
+      "promptHash": "ba04b00616cc1e89256125a4141ef09c",
+      "seed": "rf-riku-01",
+      "costUsd": 0.00632,
+      "latencyMs": 13895,
+      "createdAt": "2026-09-10T17:31:29.472Z"
+    }
+  },
+  "story_red_floor/maki": {
+    "assetKey": "story_red_floor/maki",
+    "file": "story_red_floor/maki.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, Fifty-eight, owns Mikado, keeps the floor, and once asked a boxer for one more round and got it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9b2f6733-78f4-466f-a8eb-67e83d74a584",
+      "promptHash": "de4be56efa03c512acc36c22658b8025",
+      "seed": "rf-maki-01",
+      "costUsd": 0.01372,
+      "latencyMs": 17862,
+      "createdAt": "2026-09-10T17:31:39.698Z"
+    }
+  },
+  "story_red_floor/junpei": {
+    "assetKey": "story_red_floor/junpei",
+    "file": "story_red_floor/junpei.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, Thirty-four, former national champion, stopped twice in his last five, and frightened of Mondays",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "844b87c8-7d62-4035-b9de-88fef61e744c",
+      "promptHash": "e1fdb2d281281543daef18f78869bb6f",
+      "seed": "rf-junpei-01",
+      "costUsd": 0.01372,
+      "latencyMs": 21425,
+      "createdAt": "2026-09-10T17:31:50.903Z"
+    }
+  },
+  "story_red_floor/daigo": {
+    "assetKey": "story_red_floor/daigo",
+    "file": "story_red_floor/daigo.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, World champion, thirty-one, trains in a warehouse an hour out of the city with eleven people and no press",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "24876038-5a84-4049-b676-3a2e4b719aa8",
+      "promptHash": "7dc479ecc0f9f451e2916300ec41ac12",
+      "seed": "rf-daigo-01",
+      "costUsd": 0.05488,
+      "latencyMs": 40644,
+      "createdAt": "2026-09-10T17:31:57.276Z"
+    }
+  },
+  "story_red_floor/mei": {
+    "assetKey": "story_red_floor/mei",
+    "file": "story_red_floor/mei.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, Thirty-two, sports physician, former high-level judoka, and the only person in this story whose no actually means no",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5b18139c-5af2-4241-981f-77d94fd2e103",
+      "promptHash": "d5bdba742a0e7cb717bf958b10126104",
+      "seed": "rf-mei-01",
+      "costUsd": 0.05488,
+      "latencyMs": 34056,
+      "createdAt": "2026-09-10T17:31:58.865Z"
+    }
+  },
+  "story_red_floor/koji": {
+    "assetKey": "story_red_floor/koji",
+    "file": "story_red_floor/koji.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, Twenty-eight, journeyman, works in his uncle’s print shop, has lost a great deal and loves this anyway",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9b503449-98f8-4670-ac08-4c09ca54e0c5",
+      "promptHash": "2effa3a47e99038f508a54eef0248b21",
+      "seed": "rf-koji-01",
+      "costUsd": 0.02404,
+      "latencyMs": 21979,
+      "createdAt": "2026-09-10T17:32:01.683Z"
+    }
+  },
+  "story_red_floor/aya_neutral": {
+    "assetKey": "story_red_floor/aya_neutral",
+    "file": "story_red_floor/aya_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fc830205-c94e-4d88-8ce3-b9a0122d0f80",
+      "promptHash": "fe024459a86302f2d9c15e2f582a341b",
+      "seed": "rf-aya-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 20119,
+      "createdAt": "2026-09-10T17:32:11.027Z"
+    }
+  },
+  "story_red_floor/aya_surprised": {
+    "assetKey": "story_red_floor/aya_surprised",
+    "file": "story_red_floor/aya_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ac03607b-9f1b-47f7-9147-e7e5c43789b5",
+      "promptHash": "a6f5f5bd4b923a0eb04377aac5d05661",
+      "seed": "rf-aya-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 19170,
+      "createdAt": "2026-09-10T17:32:20.863Z"
+    }
+  },
+  "story_red_floor/aya_amused": {
+    "assetKey": "story_red_floor/aya_amused",
+    "file": "story_red_floor/aya_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bba3b380-c21a-4415-b8f0-697ab4b79a63",
+      "promptHash": "08543f2abe3f9810a6420955a002c893",
+      "seed": "rf-aya-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34839,
+      "createdAt": "2026-09-10T17:32:33.711Z"
+    }
+  },
+  "story_red_floor/aya_warm": {
+    "assetKey": "story_red_floor/aya_warm",
+    "file": "story_red_floor/aya_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f00f7ced-75eb-42f0-b004-2479a155263c",
+      "promptHash": "6a886dd54b8233353f07e519c1513670",
+      "seed": "rf-aya-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 37518,
+      "createdAt": "2026-09-10T17:32:34.801Z"
+    }
+  },
+  "story_red_floor/aya_annoyed": {
+    "assetKey": "story_red_floor/aya_annoyed",
+    "file": "story_red_floor/aya_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "93773bf3-637c-47f8-8e89-0fc0b0c5dd39",
+      "promptHash": "4373683fe14e07e6474df3ae0a5be48d",
+      "seed": "rf-aya-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 20155,
+      "createdAt": "2026-09-10T17:32:41.027Z"
+    }
+  },
+  "story_red_floor/aya_confused": {
+    "assetKey": "story_red_floor/aya_confused",
+    "file": "story_red_floor/aya_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "10c03534-23ec-44c3-ad8a-959e746fc5fb",
+      "promptHash": "e1d69f22de333132c9173e7dd41b5986",
+      "seed": "rf-aya-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 37349,
+      "createdAt": "2026-09-10T17:32:48.382Z"
+    }
+  },
+  "story_red_floor/aya_angry": {
+    "assetKey": "story_red_floor/aya_angry",
+    "file": "story_red_floor/aya_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ffa2bbc0-f96e-4b9b-a65d-6d043ad4e5f0",
+      "promptHash": "c01d595a220128e1e6fb8ad1cf71d8ff",
+      "seed": "rf-aya-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 24330,
+      "createdAt": "2026-09-10T17:32:58.047Z"
+    }
+  },
+  "story_red_floor/riku_neutral": {
+    "assetKey": "story_red_floor/riku_neutral",
+    "file": "story_red_floor/riku_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "03c2af99-e7f2-4182-8e6a-e87aff286af4",
+      "promptHash": "6b3d00a353cbf7273ce9edfa6a4f45c1",
+      "seed": "rf-riku-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 17069,
+      "createdAt": "2026-09-10T17:32:58.103Z"
+    }
+  },
+  "story_red_floor/aya_worried": {
+    "assetKey": "story_red_floor/aya_worried",
+    "file": "story_red_floor/aya_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Aya Kisaragi, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd851963-7dbc-40a4-95ab-21d1b970a9d7",
+      "promptHash": "f2e2153f84a42c7ccfe716a9230d8969",
+      "seed": "rf-aya-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 26000,
+      "createdAt": "2026-09-10T17:33:00.811Z"
+    }
+  },
+  "story_red_floor/riku_warm": {
+    "assetKey": "story_red_floor/riku_warm",
+    "file": "story_red_floor/riku_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0a446eeb-7c7b-4342-ac7d-47aa8a1a3235",
+      "promptHash": "5869a333e386482181a2076c08a3325c",
+      "seed": "rf-riku-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 22162,
+      "createdAt": "2026-09-10T17:33:10.569Z"
+    }
+  },
+  "story_red_floor/riku_confused": {
+    "assetKey": "story_red_floor/riku_confused",
+    "file": "story_red_floor/riku_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2687c35f-5773-42ff-9b77-ea916de582b0",
+      "promptHash": "db12dfe9a391fc84ff758fd6b8e32b73",
+      "seed": "rf-riku-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 16411,
+      "createdAt": "2026-09-10T17:33:17.231Z"
+    }
+  },
+  "story_red_floor/riku_amused": {
+    "assetKey": "story_red_floor/riku_amused",
+    "file": "story_red_floor/riku_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e29763a7-f632-40bb-858d-f7e50f760ef5",
+      "promptHash": "40eac3186c9aaf6fd44707a59527b41e",
+      "seed": "rf-riku-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23904,
+      "createdAt": "2026-09-10T17:33:21.962Z"
+    }
+  },
+  "story_red_floor/riku_surprised": {
+    "assetKey": "story_red_floor/riku_surprised",
+    "file": "story_red_floor/riku_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "49515b0f-ef91-42fe-b1fb-996a33442b76",
+      "promptHash": "aa3887b79a1e57196cbbc1ff292d4712",
+      "seed": "rf-riku-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 23885,
+      "createdAt": "2026-09-10T17:33:21.993Z"
+    }
+  },
+  "story_red_floor/riku_annoyed": {
+    "assetKey": "story_red_floor/riku_annoyed",
+    "file": "story_red_floor/riku_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fb342d5f-0bc7-43db-94e4-336cdc25a582",
+      "promptHash": "fc90023cb964491e23b89c8ccb564e8f",
+      "seed": "rf-riku-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18686,
+      "createdAt": "2026-09-10T17:33:29.262Z"
+    }
+  },
+  "story_red_floor/riku_angry": {
+    "assetKey": "story_red_floor/riku_angry",
+    "file": "story_red_floor/riku_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3736b65a-b711-4f94-888f-746df5cfab67",
+      "promptHash": "4d484e24d88e1ed857dca7ead335a2c8",
+      "seed": "rf-riku-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 17379,
+      "createdAt": "2026-09-10T17:33:34.616Z"
+    }
+  },
+  "story_red_floor/daigo_neutral": {
+    "assetKey": "story_red_floor/daigo_neutral",
+    "file": "story_red_floor/daigo_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "33ab74e3-ea7d-4712-bcd7-86729f6eb1ea",
+      "promptHash": "6ab68ebe9f870dc331bb36a135f40479",
+      "seed": "rf-daigo-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 14626,
+      "createdAt": "2026-09-10T17:33:36.625Z"
+    }
+  },
+  "story_red_floor/riku_worried": {
+    "assetKey": "story_red_floor/riku_worried",
+    "file": "story_red_floor/riku_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Riku Seno, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6d1587d6-c31f-4abb-952c-ded456a27691",
+      "promptHash": "4875e3f9071c880a74b377833f8b07bb",
+      "seed": "rf-riku-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 18705,
+      "createdAt": "2026-09-10T17:33:40.671Z"
+    }
+  },
+  "story_red_floor/daigo_warm": {
+    "assetKey": "story_red_floor/daigo_warm",
+    "file": "story_red_floor/daigo_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "140118b0-0133-4d0a-a43f-802e63635c8c",
+      "promptHash": "9fde546cced068845eaccca13efcaea3",
+      "seed": "rf-daigo-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 18530,
+      "createdAt": "2026-09-10T17:33:47.798Z"
+    }
+  },
+  "story_red_floor/daigo_amused": {
+    "assetKey": "story_red_floor/daigo_amused",
+    "file": "story_red_floor/daigo_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1f2392cb-9f2d-4566-b733-60b3bf25b397",
+      "promptHash": "ea27374bbea38bebac37db130eef8b35",
+      "seed": "rf-daigo-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 16357,
+      "createdAt": "2026-09-10T17:33:50.979Z"
+    }
+  },
+  "story_red_floor/daigo_surprised": {
+    "assetKey": "story_red_floor/daigo_surprised",
+    "file": "story_red_floor/daigo_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7eeeacd1-09b5-4195-9fde-bd24f635af0d",
+      "promptHash": "a0dc6b0a3490b01b7b8a77e0f49ea440",
+      "seed": "rf-daigo-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 19725,
+      "createdAt": "2026-09-10T17:33:56.354Z"
+    }
+  },
+  "story_red_floor/daigo_confused": {
+    "assetKey": "story_red_floor/daigo_confused",
+    "file": "story_red_floor/daigo_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6be09504-4883-4c70-b998-4212a45a4f15",
+      "promptHash": "90656cd473c0235169cb87fd17975c4f",
+      "seed": "rf-daigo-01:confused",
+      "costUsd": 0.00632,
+      "latencyMs": 16229,
+      "createdAt": "2026-09-10T17:33:56.904Z"
+    }
+  },
+  "story_red_floor/daigo_annoyed": {
+    "assetKey": "story_red_floor/daigo_annoyed",
+    "file": "story_red_floor/daigo_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f6684121-4da9-4462-a92b-0aa9d91426e7",
+      "promptHash": "9714deff056d7edf04b672e62874e52b",
+      "seed": "rf-daigo-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 15320,
+      "createdAt": "2026-09-10T17:34:03.121Z"
+    }
+  },
+  "story_red_floor/maki_neutral": {
+    "assetKey": "story_red_floor/maki_neutral",
+    "file": "story_red_floor/maki_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "15d4c6ee-3f01-40c9-9b73-bbee8f9d14c7",
+      "promptHash": "ff49ac8dafd3cfe0203e3666ac987712",
+      "seed": "rf-maki-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 13826,
+      "createdAt": "2026-09-10T17:34:10.735Z"
+    }
+  },
+  "story_red_floor/daigo_worried": {
+    "assetKey": "story_red_floor/daigo_worried",
+    "file": "story_red_floor/daigo_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ac94a4a0-3ad8-4d87-b9b5-12ddd1832b28",
+      "promptHash": "a28be8543d370f09cb094efb897a3277",
+      "seed": "rf-daigo-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 18374,
+      "createdAt": "2026-09-10T17:34:14.733Z"
+    }
+  },
+  "story_red_floor/maki_warm": {
+    "assetKey": "story_red_floor/maki_warm",
+    "file": "story_red_floor/maki_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fea98c98-eeb6-4329-bf55-28631e42aa42",
+      "promptHash": "4305aae83a68a842ceaf0ae09fea917d",
+      "seed": "rf-maki-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 13432,
+      "createdAt": "2026-09-10T17:34:16.560Z"
+    }
+  },
+  "story_red_floor/daigo_angry": {
+    "assetKey": "story_red_floor/daigo_angry",
+    "file": "story_red_floor/daigo_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daigo Kurosaki, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ed82b982-0d32-452f-aabf-9dbc2792cfa8",
+      "promptHash": "78eade54ce27bf3b862888e5ea8005b7",
+      "seed": "rf-daigo-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 33042,
+      "createdAt": "2026-09-10T17:34:24.024Z"
+    }
+  },
+  "story_red_floor/maki_amused": {
+    "assetKey": "story_red_floor/maki_amused",
+    "file": "story_red_floor/maki_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ab0bd4b7-324b-4e4a-8bd7-88c77d4fe5d1",
+      "promptHash": "9abb65d78a2f3cc50b6709e8c7ce9043",
+      "seed": "rf-maki-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 24922,
+      "createdAt": "2026-09-10T17:34:35.661Z"
+    }
+  },
+  "story_red_floor/maki_annoyed": {
+    "assetKey": "story_red_floor/maki_annoyed",
+    "file": "story_red_floor/maki_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f5db415c-28cd-4f73-a98f-9bf4c758c4ec",
+      "promptHash": "44381660d1e924c7d4706112af19bdaa",
+      "seed": "rf-maki-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18252,
+      "createdAt": "2026-09-10T17:34:42.283Z"
+    }
+  },
+  "story_red_floor/maki_surprised": {
+    "assetKey": "story_red_floor/maki_surprised",
+    "file": "story_red_floor/maki_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3da3fabd-7cbd-4485-8296-220107225181",
+      "promptHash": "60d19c72a6ea1dc53e134741c5724b96",
+      "seed": "rf-maki-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 32385,
+      "createdAt": "2026-09-10T17:34:47.127Z"
+    }
+  },
+  "story_red_floor/maki_confused": {
+    "assetKey": "story_red_floor/maki_confused",
+    "file": "story_red_floor/maki_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a3410c32-9a41-4e16-82da-1baf42eec36e",
+      "promptHash": "4a1b6f9e05ca5176574f4638c7cd52c0",
+      "seed": "rf-maki-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 31027,
+      "createdAt": "2026-09-10T17:34:47.594Z"
+    }
+  },
+  "story_red_floor/maki_angry": {
+    "assetKey": "story_red_floor/maki_angry",
+    "file": "story_red_floor/maki_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "deef60e6-f5b9-4b6a-b638-72eaeff3e742",
+      "promptHash": "5cfafaa52fa9ad1fc54369cdce35550e",
+      "seed": "rf-maki-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 22392,
+      "createdAt": "2026-09-10T17:34:58.062Z"
+    }
+  },
+  "story_red_floor/maki_worried": {
+    "assetKey": "story_red_floor/maki_worried",
+    "file": "story_red_floor/maki_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tetsuo Maki, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d7ca13d9-e501-4b58-95ec-0cf985f2c66a",
+      "promptHash": "db8b9d42195c05241cd454a350797440",
+      "seed": "rf-maki-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 18742,
+      "createdAt": "2026-09-10T17:35:01.041Z"
+    }
+  },
+  "story_red_floor/mei_warm": {
+    "assetKey": "story_red_floor/mei_warm",
+    "file": "story_red_floor/mei_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "50c72ac0-1a30-4e42-8ea8-2cd1885c8e70",
+      "promptHash": "5e9e8c2597910067a6d3d714a1ca8bb6",
+      "seed": "rf-mei-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 19533,
+      "createdAt": "2026-09-10T17:35:07.134Z"
+    }
+  },
+  "story_red_floor/mei_neutral": {
+    "assetKey": "story_red_floor/mei_neutral",
+    "file": "story_red_floor/mei_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fb41a14f-efa4-4eb4-b64f-0caeb20cbae7",
+      "promptHash": "60a3bd1b38bd0889365ded4c62071086",
+      "seed": "rf-mei-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 25467,
+      "createdAt": "2026-09-10T17:35:12.599Z"
+    }
+  },
+  "story_red_floor/mei_surprised": {
+    "assetKey": "story_red_floor/mei_surprised",
+    "file": "story_red_floor/mei_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b69d612a-508e-4bee-8889-c7deefb37763",
+      "promptHash": "58f28b92f3ef36200b733f39e5b8f518",
+      "seed": "rf-mei-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 18456,
+      "createdAt": "2026-09-10T17:35:19.504Z"
+    }
+  },
+  "story_red_floor/mei_amused": {
+    "assetKey": "story_red_floor/mei_amused",
+    "file": "story_red_floor/mei_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "663ed5b0-b3c3-4645-a084-14a4b1bc1b44",
+      "promptHash": "dbcacadca82c559eb75dc7177947e3d5",
+      "seed": "rf-mei-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 21870,
+      "createdAt": "2026-09-10T17:35:19.944Z"
+    }
+  },
+  "story_red_floor/mei_annoyed": {
+    "assetKey": "story_red_floor/mei_annoyed",
+    "file": "story_red_floor/mei_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9900d604-78bd-4f0d-84c1-2f91db456a5d",
+      "promptHash": "aaf570b3f20a84a2a1434afd055ea620",
+      "seed": "rf-mei-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 17792,
+      "createdAt": "2026-09-10T17:35:30.402Z"
+    }
+  },
+  "story_red_floor/mei_angry": {
+    "assetKey": "story_red_floor/mei_angry",
+    "file": "story_red_floor/mei_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "47224108-a0f8-4fd8-a803-7eb1e2846d9b",
+      "promptHash": "0a19351c593287b972174b62685750d0",
+      "seed": "rf-mei-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 19851,
+      "createdAt": "2026-09-10T17:35:39.362Z"
+    }
+  },
+  "story_red_floor/mei_confused": {
+    "assetKey": "story_red_floor/mei_confused",
+    "file": "story_red_floor/mei_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f414324f-c168-4040-8547-81d538d36566",
+      "promptHash": "235b5c8be3c3e65a6bb8663f87a3dc77",
+      "seed": "rf-mei-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 37789,
+      "createdAt": "2026-09-10T17:35:44.931Z"
+    }
+  },
+  "story_red_floor/mei_worried": {
+    "assetKey": "story_red_floor/mei_worried",
+    "file": "story_red_floor/mei_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mei Hoshino, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f2ed1659-a681-457f-8c29-ba78d30b4878",
+      "promptHash": "7a040882d628e28b95fcfac2fc1b9214",
+      "seed": "rf-mei-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 25855,
+      "createdAt": "2026-09-10T17:35:45.812Z"
+    }
+  },
+  "story_red_floor/junpei_neutral": {
+    "assetKey": "story_red_floor/junpei_neutral",
+    "file": "story_red_floor/junpei_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3784a2dc-36fc-48af-8c2a-8d12d14935f9",
+      "promptHash": "090c45696c598b3482af8f0ed07b7340",
+      "seed": "rf-junpei-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 25152,
+      "createdAt": "2026-09-10T17:35:55.562Z"
+    }
+  },
+  "story_red_floor/junpei_warm": {
+    "assetKey": "story_red_floor/junpei_warm",
+    "file": "story_red_floor/junpei_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f9ec8716-08dc-4646-aef2-d277026f0167",
+      "promptHash": "458e1e23449b8702a1856ca3f4cf7783",
+      "seed": "rf-junpei-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 20523,
+      "createdAt": "2026-09-10T17:35:59.889Z"
+    }
+  },
+  "story_red_floor/junpei_confused": {
+    "assetKey": "story_red_floor/junpei_confused",
+    "file": "story_red_floor/junpei_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "33c2c9ff-7a2a-47e6-8fc1-3c2db5dad89a",
+      "promptHash": "d06d0d3c5f87631cc181334bbd6690f6",
+      "seed": "rf-junpei-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 22753,
+      "createdAt": "2026-09-10T17:36:18.320Z"
+    }
+  },
+  "story_red_floor/junpei_annoyed": {
+    "assetKey": "story_red_floor/junpei_annoyed",
+    "file": "story_red_floor/junpei_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a57f33b0-1b7a-4572-808f-3ee6737b0d86",
+      "promptHash": "f533faf8527d0914e1adb1e3b7d567cf",
+      "seed": "rf-junpei-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 21115,
+      "createdAt": "2026-09-10T17:36:21.013Z"
+    }
+  },
+  "story_red_floor/junpei_amused": {
+    "assetKey": "story_red_floor/junpei_amused",
+    "file": "story_red_floor/junpei_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ecfd294d-2ca3-408d-be92-871515f3363f",
+      "promptHash": "2cac564592b673ca960e201d22dcb7ef",
+      "seed": "rf-junpei-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 36139,
+      "createdAt": "2026-09-10T17:36:21.073Z"
+    }
+  },
+  "story_red_floor/junpei_surprised": {
+    "assetKey": "story_red_floor/junpei_surprised",
+    "file": "story_red_floor/junpei_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e8d983e7-93a3-4efc-9068-b7d9161fbcc7",
+      "promptHash": "3952067f054c91a47ca940c863a4dab1",
+      "seed": "rf-junpei-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 36803,
+      "createdAt": "2026-09-10T17:36:22.623Z"
+    }
+  },
+  "story_red_floor/junpei_angry": {
+    "assetKey": "story_red_floor/junpei_angry",
+    "file": "story_red_floor/junpei_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0245f11f-d43e-48dc-b67b-4778c4576595",
+      "promptHash": "52dd267cb7ae549fad4d8ddd8c26690d",
+      "seed": "rf-junpei-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 17892,
+      "createdAt": "2026-09-10T17:36:36.219Z"
+    }
+  },
+  "story_red_floor/koji_warm": {
+    "assetKey": "story_red_floor/koji_warm",
+    "file": "story_red_floor/koji_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7230716-91bb-48f3-bb55-28a543c1dbfa",
+      "promptHash": "b6c1fc208f741cdbace3f1e72596029c",
+      "seed": "rf-koji-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 18294,
+      "createdAt": "2026-09-10T17:36:40.924Z"
+    }
+  },
+  "story_red_floor/junpei_worried": {
+    "assetKey": "story_red_floor/junpei_worried",
+    "file": "story_red_floor/junpei_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Junpei Arata, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ebec3347-a10f-45f9-b730-0c162c465c0b",
+      "promptHash": "7d0f1aeded7e0b2b864a5e9512af163c",
+      "seed": "rf-junpei-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 34885,
+      "createdAt": "2026-09-10T17:36:55.904Z"
+    }
+  },
+  "story_red_floor/koji_amused": {
+    "assetKey": "story_red_floor/koji_amused",
+    "file": "story_red_floor/koji_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "06b77a91-2e3e-4995-959a-bf9f03c33865",
+      "promptHash": "ea0a4bc671d118025ab0c153667124c3",
+      "seed": "rf-koji-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 20959,
+      "createdAt": "2026-09-10T17:36:57.184Z"
+    }
+  },
+  "story_red_floor/koji_neutral": {
+    "assetKey": "story_red_floor/koji_neutral",
+    "file": "story_red_floor/koji_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ca3d74d8-90e7-4a73-9767-4edf875b3965",
+      "promptHash": "7d2cf53dff2d826a0bd5f33166ee9892",
+      "seed": "rf-koji-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 37595,
+      "createdAt": "2026-09-10T17:36:58.675Z"
+    }
+  },
+  "story_red_floor/koji_annoyed": {
+    "assetKey": "story_red_floor/koji_annoyed",
+    "file": "story_red_floor/koji_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ca387af1-029e-4e5b-bd73-ca3e74283032",
+      "promptHash": "0272cc724b58091702b2867f9606ae1f",
+      "seed": "rf-koji-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 19119,
+      "createdAt": "2026-09-10T17:37:16.308Z"
+    }
+  },
+  "story_red_floor/koji_surprised": {
+    "assetKey": "story_red_floor/koji_surprised",
+    "file": "story_red_floor/koji_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "61579cbd-f307-449c-9368-e353c6a7050d",
+      "promptHash": "499b1b5326c20d4528932634a0b5916c",
+      "seed": "rf-koji-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 36942,
+      "createdAt": "2026-09-10T17:37:17.872Z"
+    }
+  },
+  "story_red_floor/koji_confused": {
+    "assetKey": "story_red_floor/koji_confused",
+    "file": "story_red_floor/koji_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "907ef140-f8c0-458a-a810-8aab07d5da66",
+      "promptHash": "5fd4b4a5772501a89e59237fdc157c93",
+      "seed": "rf-koji-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 26680,
+      "createdAt": "2026-09-10T17:37:22.589Z"
+    }
+  },
+  "story_red_floor/koji_worried": {
+    "assetKey": "story_red_floor/koji_worried",
+    "file": "story_red_floor/koji_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "34a8267e-92c4-4eac-89fd-7932848b4dfd",
+      "promptHash": "a054fe1ec7b9c03a684ac7a3227b9653",
+      "seed": "rf-koji-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 18641,
+      "createdAt": "2026-09-10T17:37:34.957Z"
+    }
+  },
+  "story_red_floor/koji_angry": {
+    "assetKey": "story_red_floor/koji_angry",
+    "file": "story_red_floor/koji_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Koji Namba, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6646fd85-99b1-4ab0-b045-235ee9b14d21",
+      "promptHash": "1a9c6d8e225f5ff6b91cd4af08883567",
+      "seed": "rf-koji-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 36519,
+      "createdAt": "2026-09-10T17:37:35.200Z"
+    }
   }
 }
