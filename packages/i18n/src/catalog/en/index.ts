@@ -2,6 +2,7 @@ import { characters } from './characters.js';
 import { discover } from './discover.js';
 import { errors } from './errors.js';
 import { library } from './library.js';
+import { memory } from './memory.js';
 import { misc } from './misc.js';
 import { nav } from './nav.js';
 import { onboarding } from './onboarding.js';
@@ -59,6 +60,7 @@ export const en = {
   ...share,
   ...misc,
   ...errors,
+  ...memory,
   ...ui,
 } as const;
 

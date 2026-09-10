@@ -9,6 +9,7 @@ import type {
 import type { ReactionEmotion } from '@aniplay/contracts';
 import { QUALITY_TIERS, shortName } from '@aniplay/contracts';
 import { isSuccess, outcomeLabel, estimateRisk, attributeModifier } from '@aniplay/engine';
+import { type HostileVerb, type StructuredFact } from './memory-facts.js';
 import type { TurnContext, PresentCharacterContext } from './context.js';
 import { renderableFacts } from './writer.js';
 
@@ -665,16 +666,18 @@ function musicFor(beatType: BeatType, context: TurnContext): string | null {
  * stored by the engine layer, never written directly.
  */
 /**
- * Social acts an NPC would carry with them, and how to say what happened.
+ * Social acts an NPC would carry with them.
  *
- * Described from the verb rather than from the player's own sentence: the raw
- * text is untrusted, and a memory is something the world asserts.
+ * A **set of verb ids**, not a table of English phrases. It used to be
+ * `{ threaten: 'threatened and belittled', … }`, and the phrase went straight
+ * into the stored fact — so the writer read English out of its own context
+ * window every turn, in every language. The wording now lives in the catalogue
+ * under `memory.hostile_act` as an ICU `select`; see `memory-facts.ts`.
+ *
+ * Described from the verb rather than from the player's own sentence either
+ * way: the raw text is untrusted, and a memory is something the world asserts.
  */
-const HOSTILE_VERBS: Record<string, string> = {
-  threaten: 'threatened and belittled',
-  deceive: 'lied to',
-  oppose: 'refused and stood against',
-};
+const HOSTILE_VERBS: readonly HostileVerb[] = ['threaten', 'deceive', 'oppose'];
 
 function proposeMemories(context: TurnContext): MemoryProposal[] {
   const proposals: MemoryProposal[] = [];
@@ -685,7 +688,11 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
       proposals.push({
         subjectId: 'player',
         predicate: 'notable_moment',
-        value: `${check.label} — ${outcomeLabel(check.outcome)}`,
+        value: {
+          kind: 'NOTABLE_MOMENT',
+          label: check.label,
+          outcome: check.outcome,
+        } satisfies StructuredFact,
         visibility: 'WORLD_PUBLIC',
         importance: check.outcome === 'CRITICAL_SUCCESS' ? 0.7 : 0.75,
         sourceEventIds: [check.checkId],
@@ -707,7 +714,16 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
     proposals.push({
       subjectId: character.id,
       predicate: 'was_attacked_by_player',
-      value: `${context.player.name} attacked ${character.name} at ${context.scene.locationName}, ${context.scene.worldTimeLabel}.`,
+      // Structure, not a sentence. Rendered at storage time in the run's
+      // locale, and re-renderable in the other one — which is what makes a
+      // French run and an English run comparable at all.
+      value: {
+        kind: 'ATTACK',
+        actorId: 'player',
+        targetId: character.id,
+        locationId: state.player.locationId,
+        worldMinute: state.worldMinute,
+      } satisfies StructuredFact,
       // NPC_PRIVATE so it is retrieved for them specifically, and importance 1
       // so recency decay never drops it out of their context.
       visibility: 'NPC_PRIVATE',
@@ -723,20 +739,27 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
   // at all: told in front of the whole company that they were a fraud, an NPC
   // moved two points of respect and remembered nothing, and greeted the player
   // warmly four turns later.
-  const hostile = new Map<string, string>();
+  const hostile = new Map<string, HostileVerb>();
   for (const mutation of resolution.mutations) {
     if (mutation.type !== 'RELATIONSHIP_DELTA') continue;
     const verb = mutation.reasonCode.startsWith('SOCIAL:') ? mutation.reasonCode.split(':')[1] : null;
-    if (!verb || !HOSTILE_VERBS[verb]) continue;
-    hostile.set(mutation.subjectId, HOSTILE_VERBS[verb]!);
+    if (!verb || !HOSTILE_VERBS.includes(verb as HostileVerb)) continue;
+    hostile.set(mutation.subjectId, verb as HostileVerb);
   }
-  for (const [characterId, what] of hostile) {
+  for (const [characterId, verb] of hostile) {
     const character = context.story.characters.find((c) => c.id === characterId);
     if (!character) continue;
     proposals.push({
       subjectId: character.id,
       predicate: 'was_treated_badly_by_player',
-      value: `${context.player.name} ${what} ${character.name} at ${context.scene.locationName}, ${context.scene.worldTimeLabel}.`,
+      value: {
+        kind: 'HOSTILE_ACT',
+        verb,
+        actorId: 'player',
+        targetId: character.id,
+        locationId: state.player.locationId,
+        worldMinute: state.worldMinute,
+      } satisfies StructuredFact,
       // Theirs specifically, and important enough that it does not decay out of
       // their context before the player comes back.
       visibility: 'NPC_PRIVATE',
@@ -752,7 +775,13 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
         proposals.push({
           subjectId: witness.id,
           predicate: 'witnessed_violence',
-          value: `${witness.name} saw ${context.player.name} attack someone at ${context.scene.locationName}.`,
+          value: {
+            kind: 'WITNESSED_VIOLENCE',
+            witnessId: witness.id,
+            actorId: 'player',
+            locationId: state.player.locationId,
+            worldMinute: state.worldMinute,
+          } satisfies StructuredFact,
           visibility: 'NPC_PRIVATE',
           importance: 0.9,
           sourceEventIds: [mutation.mutationId],

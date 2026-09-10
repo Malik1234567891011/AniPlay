@@ -1,4 +1,5 @@
 import type { TranslationKey } from '../en/index.js';
+import { memory } from './memory.js';
 import { profile } from './profile.js';
 import { setup } from './setup.js';
 import { world } from './world.js';
@@ -25,6 +26,7 @@ import { world } from './world.js';
  */
 export const fr: Partial<Record<TranslationKey, string>> = {
   ...world,
+  ...memory,
   ...profile,
   ...setup,
 };

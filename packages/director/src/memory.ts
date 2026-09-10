@@ -1,4 +1,14 @@
-import type { CharacterDef, GameState, MemoryFact, MemoryProposal, StoryVersion } from '@aniplay/contracts';
+import type {
+  CharacterDef,
+  CheckOutcome,
+  GameState,
+  MemoryFact,
+  MemoryProposal,
+  StoryVersion,
+} from '@aniplay/contracts';
+import { formatWorldTime, outcomeLabel } from '@aniplay/engine';
+import { translate, type Locale } from '@aniplay/i18n';
+import { isStructuredFact, predicatePhrase, renderStructuredFact } from './memory-facts.js';
 import { canCharacterKnow } from '@aniplay/engine';
 
 /**
@@ -165,7 +175,11 @@ export function materializeProposals(
     subjectId: proposal.subjectId,
     predicate: proposal.predicate,
     value: proposal.value,
-    text: renderFactText(proposal, story, state.player.identity.displayName),
+    // Rendered in the **run's** locale, which is frozen at creation — so a
+    // stored sentence can never be in the wrong language for the session that
+    // reads it. The structure stays in `value`, so the same fact can be
+    // re-rendered in the other language whenever a QA comparison needs it.
+    text: renderFactText(proposal, story, state.player.identity.displayName, state.locale),
     visibility: proposal.visibility,
     importance: proposal.importance,
     confidence: 1,
@@ -181,30 +195,60 @@ export function materializeProposals(
 /**
  * The player-facing sentence for a fact.
  *
- * `text` is rendered directly in the World Sheet's "Recently" panel, so it has
- * to read as English. It used to be the raw triple — "kael explained red ward:
- * true" — which is a database row with a bullet in front of it.
+ * `text` is rendered directly in the World Sheet's "Recently" panel **and** is
+ * handed to the writer as `speakers[].knows`, so it has to read as the language
+ * the run is being played in. It used to be the raw triple — "kael explained
+ * red ward: true" — which is a database row with a bullet in front of it.
+ *
+ * The composed shape is deliberately unchanged: subject, predicate-as-words,
+ * then the value. Only the words are now looked up rather than spliced, so
+ * English renders exactly what it rendered before.
  */
-function renderFactText(proposal: MemoryProposal, story?: StoryVersion, playerName?: string): string {
-  const subject = displayNameFor(proposal.subjectId, story, playerName);
-  const phrase = proposal.predicate.replace(/_/g, ' ').trim();
+export function renderFactText(
+  proposal: MemoryProposal,
+  story?: StoryVersion,
+  playerName?: string,
+  locale: Locale = 'en',
+): string {
+  const subject = displayNameFor(proposal.subjectId, story, playerName, locale);
+  const phrase = predicatePhrase(proposal.predicate, locale);
+
+  const value = isStructuredFact(proposal.value)
+    ? renderStructuredFact(proposal.value, {
+        locale,
+        nameFor: (id) => displayNameFor(id, story, playerName, locale),
+        timeFor: (minute) => formatWorldTime(minute, locale),
+        outcomeFor: (outcome) => outcomeLabel(outcome as CheckOutcome, locale),
+      })
+    : proposal.value;
 
   // `true` is what the predicate already says; printing it adds nothing.
   const body =
-    proposal.value === true || proposal.value === null || proposal.value === undefined
-      ? `${subject} ${phrase}.`
-      : proposal.value === false
-        ? `${subject} ${phrase}: no.`
-        : typeof proposal.value === 'string'
-          ? `${subject} ${phrase}: ${proposal.value}`
-          : `${subject} ${phrase}: ${JSON.stringify(proposal.value)}`;
+    value === true || value === null || value === undefined
+      ? translate(locale, 'memory.sentence', { subject, phrase })
+      : value === false
+        ? translate(locale, 'memory.sentence_no', { subject, phrase })
+        : typeof value === 'string'
+          ? translate(locale, 'memory.sentence_value', { subject, phrase, value })
+          : translate(locale, 'memory.sentence_value', {
+              subject,
+              phrase,
+              value: JSON.stringify(value),
+            });
 
   return body.charAt(0).toUpperCase() + body.slice(1);
 }
 
 /** An id is not a name. Resolves against everything a fact can be about. */
-function displayNameFor(subjectId: string, story?: StoryVersion, playerName?: string): string {
-  if (subjectId === 'player') return playerName && playerName.length > 0 ? playerName : 'You';
+function displayNameFor(
+  subjectId: string,
+  story?: StoryVersion,
+  playerName?: string,
+  locale: Locale = 'en',
+): string {
+  if (subjectId === 'player') {
+    return playerName && playerName.length > 0 ? playerName : translate(locale, 'memory.you');
+  }
   if (!story) return subjectId.replace(/_/g, ' ');
   return (
     story.characters.find((c) => c.id === subjectId)?.name ??

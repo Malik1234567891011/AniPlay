@@ -4,6 +4,8 @@ import { createInitialState, resolveIntent } from '@aniplay/engine';
 import { RuleBasedDirector } from './director.js';
 import { RuleBasedIntentParser } from './parser.js';
 import { buildTurnContext } from './context.js';
+import { isStructuredFact, type StructuredFact } from './memory-facts.js';
+import { renderFactText } from './memory.js';
 
 /**
  * Cruelty that leaves a mark.
@@ -41,8 +43,45 @@ describe('what an NPC carries away from being humiliated', () => {
     const mark = proposals.find((p) => p.subjectId === 'dai');
     expect(mark).toBeDefined();
     expect(mark!.visibility).toBe('NPC_PRIVATE');
-    expect(mark!.value).toMatch(/Dai Okonkwo/);
-    expect(mark!.value).toMatch(/belittled|threatened/);
+
+    // The mark is **structure**, not a sentence. It used to be
+    // `Sora threatened and belittled Dai Okonkwo at …` — English prose, stored,
+    // and then read back into the writer's context window every turn. In a
+    // French session that is the most reliable way to induce language drift
+    // there is, and it compounds as memory accumulates.
+    expect(isStructuredFact(mark!.value)).toBe(true);
+    const fact = mark!.value as Extract<StructuredFact, { kind: 'HOSTILE_ACT' }>;
+    expect(fact.kind).toBe('HOSTILE_ACT');
+    expect(fact.targetId).toBe('dai');
+    expect(fact.actorId).toBe('player');
+    expect(['threaten', 'oppose', 'deceive']).toContain(fact.verb);
+  });
+
+  it('still says the same thing in English once it is rendered', () => {
+    // The structure is what is stored; the sentence is what is read. English
+    // must be exactly what it was before the fact stopped being prose.
+    const mark = insult(
+      'I tell Dai, in front of everyone, that they are a fraud and I am done pretending otherwise.',
+    ).find((p) => p.subjectId === 'dai')!;
+
+    const text = renderFactText(mark, LAST_FIVE, 'Sora', 'en');
+    expect(text).toMatch(/Dai Okonkwo/);
+    expect(text).toMatch(/belittled|threatened|refused|lied/);
+    expect(text).toMatch(/^Dai Okonkwo was treated badly by player: Sora /);
+  });
+
+  it('says it in French for a French run, with no English left in it', () => {
+    // The point of the whole change: nothing English reaches a French context
+    // window, and the same fact is legible in both languages — which is what
+    // makes a French run and an English run comparable during QA.
+    const mark = insult(
+      'I tell Dai, in front of everyone, that they are a fraud and I am done pretending otherwise.',
+    ).find((p) => p.subjectId === 'dai')!;
+
+    const text = renderFactText(mark, LAST_FIVE, 'Sora', 'fr');
+    expect(text).toContain('Dai Okonkwo');
+    expect(text).toContain('a été maltraité par le joueur');
+    expect(text).not.toMatch(/\b(threatened|belittled|attacked|saw|at)\b/);
   });
 
   it('makes it important enough to survive until the player comes back', () => {
