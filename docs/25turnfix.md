@@ -840,3 +840,47 @@ run should be cheap now — read turns from Postgres, not the UI.
 Re-run Nine Weeks to ~12 turns reading from Postgres, and check specifically:
 frames per turn, whether any card addresses an absent character, whether a
 refusal survives into the next card set, and whether stamina prose is gone.
+
+---
+
+## 39. Identity setup is shown for worlds that already know who you are — HIGH
+
+Caught by Malik on Itachi's "Who are you?" screen. In Itachi the player *is*
+Itachi Uchiha — the world sheet's own premise is *"you are thirteen, you are the
+best shinobi your clan has produced in a generation."* The setup screen then
+asks them to type their own name, invent their appearance, and choose pronouns,
+and prefills the fields with example text describing Itachi back at them
+(*"Small for thirteen, lines under the eyes that nobody that age should have"*).
+
+The game is asking the player to invent a character the story has already
+written. Malik: *"doesnt sit right w me."*
+
+Compare Nine Weeks, where it is exactly right: you are an unnamed person coming
+back to a summer job, and inventing yourself is the premise.
+
+**The distinction is protagonist authorship, and no world declares it.**
+
+- **Blank protagonist** (Nine Weeks, Blackwake, Seven Days): name, pronouns,
+  appearance and "what the world knows about you" are the point. Keep all of it.
+- **Named protagonist** (Itachi, and any adaptation): the name, pronouns and
+  appearance are already canon. Asking for them is a fourth-wall break on the
+  first screen, before a word of prose.
+
+What Itachi should show is **only** the archetype question, which is the one
+piece that is genuinely the player's:
+
+> *"You were four, on a battlefield, with your father. What did you take away
+> from it?"* — with its excellent note that it sets what you are good at and
+> decides nothing about the plot.
+
+That is characterisation, not identity, and it is the right question. The other
+three fields are the wrong ones.
+
+Suggested shape: a `protagonist` field on the story — `BLANK` (default, current
+behaviour) or `NAMED` with the canonical name, pronouns and description. On
+`NAMED`, `CharacterSetup` hides the identity fields, seeds the identity from the
+world, and shows the archetype question alone under a heading that fits — "What
+kind of Itachi are you?" rather than "Who are you?".
+
+Nothing about this reduces freedom: the player can still do anything once they
+are in. It only stops the setup screen asking a question the story has answered.
