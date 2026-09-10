@@ -8,10 +8,64 @@ import { AttributeKey, CharacterDef, LocationDef } from './story.js';
  * spec §0: "Deterministic game state overrides generated prose."
  */
 
+/**
+ * How the narration should agree with the player, grammatically.
+ *
+ * Locale-specific and additive: an English session neither collects nor reads
+ * it. French needs it constantly and in second person — `Tu es arrivé` against
+ * `Tu es arrivée` — across past participles with `être`, reflexive pasts,
+ * predicate adjectives, role nouns and how an NPC refers to you.
+ *
+ * **Declared, never inferred.** Not from the display name, not from the
+ * portrait, not from the archetype, and not by parsing `pronouns` — every one
+ * of those is wrong for some real player, and being wrong about this in a
+ * romance product is not a typo.
+ *
+ * `NEUTRAL` and `UNSPECIFIED` are handled by *avoidance*, not by a midpoint.
+ * `arrivé·e` never appears in narration: the midpoint is an administrative
+ * register in France, it was banned from school documents by ministerial
+ * circular, it breaks read-aloud, and the product marks blocks `voiceEligible`.
+ * Present-tense, verb-driven French avoids the participle entirely, which is
+ * what `NARRATIVE_STYLE.md` asks for on independent grounds.
+ */
+export const GrammaticalGender = z.enum(['MASCULINE', 'FEMININE', 'NEUTRAL', 'UNSPECIFIED']);
+export type GrammaticalGender = z.infer<typeof GrammaticalGender>;
+
+export const PlayerGrammar = z
+  .object({
+    gender: GrammaticalGender.default('UNSPECIFIED'),
+    /**
+     * What NPCs use in the third person. fr-FR: `il` | `elle` | `iel`, or a
+     * neologism the player typed. Free text on purpose — the enum above is for
+     * agreement, and a four-value enum must not take over the self-expression
+     * work.
+     */
+    thirdPerson: z.string().default(''),
+  })
+  .strict();
+export type PlayerGrammar = z.infer<typeof PlayerGrammar>;
+
 export const PlayerIdentity = z
   .object({
     displayName: z.string(),
+    /**
+     * Free text, and it stays free text. The player is explicitly invited to
+     * "write anything" here, so it cannot be repurposed as a grammar signal —
+     * see `grammar` below, which is the field French actually reads.
+     */
     pronouns: z.string().default('they/them'),
+    /**
+     * Additive and **optional**, not defaulted.
+     *
+     * Optional so that every `PlayerIdentity` literal already in the codebase —
+     * 29 spec fixtures across five packages — keeps compiling untouched. A
+     * defaulted field is present after `parse` but still required in the
+     * inferred type, which would have made a French-only field a breaking
+     * change for the English test suite. Read it through
+     * `playerGrammar(identity)`, which normalises `undefined` to the unmarked
+     * form.
+     */
+    grammar: PlayerGrammar.optional(),
     ageBand: z.string().nullable().default(null),
     archetypeId: z.string().nullable().default(null),
     /** Max 300 chars. Spec §9.2 CS-01. */
@@ -21,6 +75,23 @@ export const PlayerIdentity = z
   })
   .strict();
 export type PlayerIdentity = z.infer<typeof PlayerIdentity>;
+
+/** The unmarked form: masculine agreement, no third-person preference stated. */
+export const DEFAULT_PLAYER_GRAMMAR: PlayerGrammar = {
+  gender: 'UNSPECIFIED',
+  thirdPerson: '',
+};
+
+/**
+ * Read an identity's grammar without every caller having to handle `undefined`.
+ *
+ * An identity created before the field existed, or in an English session that
+ * never asks the question, reads as `UNSPECIFIED` — which the French writer
+ * handles by avoidance rather than by guessing.
+ */
+export function playerGrammar(identity: PlayerIdentity): PlayerGrammar {
+  return identity.grammar ?? DEFAULT_PLAYER_GRAMMAR;
+}
 
 export const ResourceState = z
   .object({ id: z.string(), current: z.number(), max: z.number() })

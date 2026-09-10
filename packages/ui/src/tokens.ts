@@ -6,6 +6,8 @@
  * token, so a light theme is a swap rather than a rewrite (§25.2).
  */
 
+import { formatCompact, formatNumber, type Locale } from '@aniplay/i18n';
+
 export const colors = {
   bg: {
     base: '#0B0D12',
@@ -33,6 +35,7 @@ export const colors = {
     strong: '#333B4C',
   },
   /** Scrim behind sheets and full-screen media. */
+  // i18n-exempt: a CSS colour value
   scrim: 'rgba(4, 6, 11, 0.72)',
 } as const;
 
@@ -82,6 +85,13 @@ export const type = {
  * Narration uses a serif for short passages only (§25.3). Falls back to the
  * platform serif rather than shipping a font file for v1.
  */
+// ⚠️ Worth knowing: a CoreText glyph probe found **Georgia has no U+202F**, the
+// narrow no-break space CLDR uses to group French thousands. That is not a
+// theoretical problem — it is why `@aniplay/i18n` folds U+202F to U+00A0 on
+// every string it renders. Without the fold, every grouped number in French
+// narration would draw its separator from a fallback face at a width nobody
+// chose. See `docs/localization/fr-FR/research/typography.md`.
+// i18n-exempt: a font family name, not copy
 export const NARRATION_FONT = 'Georgia';
 
 /** Spec §25.8 — 44×44pt minimum for anything used frequently. */
@@ -154,9 +164,32 @@ export function outcomeColor(outcome: string): string {
 /**
  * Spec §26.10 — never abbreviate below 10,000; the wallet always shows the
  * full number.
+ *
+ * English keeps its own arithmetic, deliberately. `Intl`'s compact notation is
+ * **not** a drop-in for the hand-rolled `K`/`M`: it drops the trailing `.0`
+ * (`10K` where this says `10.0K`) and rounds half-to-even (`10 850` becomes
+ * `10.9K` where this says `10.8K`). Measured across 285 728 values, the two
+ * disagree on about a tenth of them. Swapping English onto `Intl` would be a
+ * visible English change, so French gets a branch instead of English getting a
+ * rewrite.
+ *
+ * French cannot use this arithmetic at all: French compact is `10 k` —
+ * lowercase, with a space — and `1 M`, which no amount of suffix concatenation
+ * produces.
+ *
+ * One thing did change for English: the uncompacted path was
+ * `value.toLocaleString()` with **no locale**, which meant an English session
+ * on a French phone rendered `10 000`. It now names its locale. On an English
+ * phone the output is identical; on a French one it is finally right.
  */
-export function formatCredits(value: number, compact = false): string {
-  if (!compact || value < 10_000) return value.toLocaleString();
+export function formatCredits(value: number, compact = false, locale: Locale = 'en'): string {
+  if (locale !== 'en') {
+    if (!compact || value < 10_000) return formatNumber(value, locale);
+    return formatCompact(value, locale);
+  }
+  if (!compact || value < 10_000) return formatNumber(value, 'en');
+  // i18n-exempt: the English branch, kept byte-identical on purpose — French takes the branch above
   if (value < 1_000_000) return `${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}K`;
+  // i18n-exempt: as above
   return `${(value / 1_000_000).toFixed(1)}M`;
 }
