@@ -422,7 +422,10 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
     // is grammatical for any character rather than splicing quest copy.
     const text = topic
       ? `Ask ${firstName} about ${topic}.`
-      : speaker.relationshipLabel === 'Rival' || speaker.relationshipLabel === 'Hostile'
+      : // The id, not the label. Comparing against the English word was a
+        // latent bug even in English — a copy edit would have silently turned
+        // this branch off — and a certain one the moment the label is French.
+        speaker.relationshipTone === 'RIVAL' || speaker.relationshipTone === 'HOSTILE'
         ? `Press ${firstName} for a straight answer.`
         : `Ask ${firstName} what they actually know.`;
     push({

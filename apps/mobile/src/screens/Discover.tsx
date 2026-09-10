@@ -31,6 +31,7 @@ import {
 } from '@aniplay/ui';
 import { api, ApiError } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
+import { useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
 
 /**
@@ -61,6 +62,7 @@ function useCardWidths(): { gridCardWidth: number; railCardWidth: number } {
 }
 
 export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
+  const t = useT();
   const { wallet, refreshWallet, offline, tastes } = useStore();
   const [data, setData] = useState<DiscoverResponse | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -80,13 +82,13 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
       // server being down and the server refusing, and helps with none of them.
       setError(
         caught instanceof ApiError && caught.code === 'OFFLINE'
-          ? "You're offline. Worlds you have already started still open from your Library."
+          ? t('discover.offline_body')
           : caught instanceof ApiError
             ? caught.message
-            : 'Could not load worlds.',
+            : t('discover.load_failed'),
       );
     }
-  }, [refreshWallet, tastes, category]);
+  }, [refreshWallet, tastes, category, t]);
 
   useEffect(() => {
     void load();
@@ -104,7 +106,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           PLOTBREAK
         </Txt>
         <Row gap={spacing.sm}>
-          <IconButton label="Search worlds" onPress={() => navigation.navigate('Search')}>
+          <IconButton label={t('discover.search_worlds')} onPress={() => navigation.navigate('Search')}>
             <Txt variant="h3" color={colors.text.secondary}>
               ⌕
             </Txt>
@@ -116,7 +118,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
       {offline ? (
         <View style={{ marginHorizontal: GUTTER, marginBottom: spacing.sm, padding: spacing.md, borderRadius: radius.control, backgroundColor: colors.bg.raised }}>
           <Txt variant="caption" color={colors.semantic.warning}>
-            You're offline. Showing what we have.
+            {t('discover.offline_banner')}
           </Txt>
         </View>
       ) : null}
@@ -147,7 +149,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={[{ id: '__all', label: 'All', count: 0 }, ...data.categories]}
+            data={[{ id: '__all', label: t('discover.category_all'), count: 0 }, ...data.categories]}
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.sm }}
             style={{ flexGrow: 0 }}
@@ -169,9 +171,9 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
 
         {error && !data ? (
           <EmptyState
-            title="Nothing loaded"
+            title={t('discover.load_failed_title')}
             body={error}
-            actionLabel="Try again"
+            actionLabel={t('discover.try_again')}
             onAction={() => void load()}
           />
         ) : null}
@@ -191,7 +193,10 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           <View style={{ paddingHorizontal: GUTTER }}>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`Featured: ${hero.title}. ${hero.fantasyLabel}. Enter world.`}
+              accessibilityLabel={t('discover.hero_a11y', {
+                title: hero.title,
+                fantasy: hero.fantasyLabel,
+              })}
               onPress={() => navigation.navigate('StoryDetail', { storyId: hero.storyId })}
             >
               <StoryArt
@@ -209,7 +214,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
                   }}
                 >
                   <Txt variant="micro" color={colors.accent.primary} style={{ letterSpacing: 1.5 }}>
-                    FEATURED
+                    {t('discover.featured_badge')}
                   </Txt>
                   <Txt variant="h2" numberOfLines={1}>
                     {hero.title}
@@ -227,7 +232,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
                       }}
                     >
                       <Txt variant="caption" color="#0B0D12">
-                        Enter
+                        {t('discover.hero_enter')}
                       </Txt>
                     </View>
                   </Row>
@@ -240,7 +245,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
         {/* Spec §7.2 item 3 — Continue, only when there is something to continue. */}
         {data && data.continueCards.length > 0 ? (
           <Stack gap={spacing.md}>
-            <SectionHeader title="Continue" />
+            <SectionHeader title={t('discover.continue')} />
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -312,9 +317,9 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
 
         {data && data.rails.every((r) => r.stories.length === 0) ? (
           <EmptyState
-            title="Nothing here yet"
-            body="No worlds in this category. Try another."
-            actionLabel="Show everything"
+            title={t('discover.empty_title')}
+            body={t('discover.empty_body')}
+            actionLabel={t('discover.empty_action')}
             onAction={() => setCategory(null)}
           />
         ) : null}
@@ -346,10 +351,15 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
 }
 
 function ContinueTile({ card, onPress }: { card: ContinueCard; onPress: () => void }): React.JSX.Element {
+  const t = useT();
+
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Continue ${card.title}. ${card.currentObjective ?? ''}`}
+      accessibilityLabel={t('discover.continue_a11y', {
+        title: card.title,
+        objective: card.currentObjective ?? '',
+      })}
       onPress={onPress}
       style={({ pressed }) => ({ width: 260, opacity: pressed ? 0.85 : 1 })}
     >
@@ -361,7 +371,7 @@ function ContinueTile({ card, onPress }: { card: ContinueCard; onPress: () => vo
               {card.title}
             </Txt>
             <Txt variant="micro" color={colors.text.muted}>
-              {card.turnCount} turns
+              {t('discover.continue_turns', { count: card.turnCount })}
             </Txt>
           </View>
         </Row>
@@ -389,12 +399,13 @@ function QuickPreviewSheet({
   onHide: () => void;
   onReport: () => void;
 }): React.JSX.Element {
+  const t = useT();
   const [saved, setSaved] = useState(story.saved);
 
   return (
     <View style={{ position: 'absolute', inset: 0, justifyContent: 'flex-end' }}>
       <Pressable
-        accessibilityLabel="Close preview"
+        accessibilityLabel={t('discover.preview_close_a11y')}
         style={{ position: 'absolute', inset: 0, backgroundColor: colors.scrim }}
         onPress={onClose}
       />
@@ -410,19 +421,19 @@ function QuickPreviewSheet({
             </View>
           </Row>
 
-          <Button label="Open story" onPress={onOpen} />
+          <Button label={t('discover.preview_open')} onPress={onOpen} />
 
           <Row gap={spacing.md} style={{ justifyContent: 'space-between' }}>
             <Chip
-              label={saved ? 'Saved' : 'Save'}
+              label={saved ? t('discover.saved') : t('discover.save')}
               selected={saved}
               onPress={() => {
                 setSaved(!saved);
                 void api.saveStory(story.storyId, !saved).catch(() => setSaved(saved));
               }}
             />
-            <Chip label="Not interested" onPress={onHide} />
-            <Chip label="Report" tone="danger" onPress={onReport} />
+            <Chip label={t('discover.not_interested')} onPress={onHide} />
+            <Chip label={t('discover.report')} tone="danger" onPress={onReport} />
           </Row>
         </View>
       </SafeAreaView>
@@ -454,6 +465,7 @@ function DiscoverSkeleton(): React.JSX.Element {
 
 /** DS-02 / DS-03 — search with filters. */
 export function SearchScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
+  const t = useT();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<StorySummary[]>([]);
   const [loading, setLoading] = useState(false);
@@ -484,9 +496,9 @@ export function SearchScreen({ navigation }: { navigation: RootNavigation }): Re
           autoFocus
           value={query}
           onChangeText={setQuery}
-          placeholder="Search titles, creators, tags"
+          placeholder={t('discover.search_placeholder')}
           placeholderTextColor={colors.text.muted}
-          accessibilityLabel="Search worlds"
+          accessibilityLabel={t('discover.search_worlds')}
           returnKeyType="search"
           style={{
             flex: 1,
@@ -499,7 +511,7 @@ export function SearchScreen({ navigation }: { navigation: RootNavigation }): Re
           }}
         />
         <Txt variant="body" color={colors.accent.primary} onPress={() => navigation.goBack()}>
-          Cancel
+          {t('discover.search_cancel')}
         </Txt>
       </Row>
 
@@ -528,11 +540,15 @@ export function SearchScreen({ navigation }: { navigation: RootNavigation }): Re
         ListEmptyComponent={
           loading ? null : (
             <EmptyState
-              title={query.length > 0 ? 'No worlds matched' : 'Search for a world'}
+              title={
+                query.length > 0
+                  ? t('discover.search_no_results_title')
+                  : t('discover.search_prompt_title')
+              }
               body={
                 query.length > 0
-                  ? 'Try a shorter search, or browse the rails on Discover.'
-                  : 'Search by title, creator, tag, premise, or a character you remember.'
+                  ? t('discover.search_no_results_body')
+                  : t('discover.search_prompt_body')
               }
             />
           )

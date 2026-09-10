@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import { translatorFor, type Translator } from '@aniplay/i18n';
 import type {
   BootstrapResponse,
   CreateSessionRequest,
@@ -94,6 +95,19 @@ export class ApiClient {
    * while the app was backgrounded is renewed rather than sent and rejected.
    */
   #tokenProvider: (() => Promise<string | null>) | null = null;
+  /**
+   * The interface translator.
+   *
+   * This module is not React, so there is no `useT()` here, and there is no
+   * ambient current language either — `translate.ts` is explicit that a
+   * module-level default is how two halves of the app get out of step. So the
+   * language arrives the same way the token does: pushed in at boot by the
+   * store, which is the one place that holds it (`state/store.tsx`).
+   *
+   * English until then, which is what an error thrown before the store has
+   * hydrated should say anyway.
+   */
+  #t: Translator = translatorFor('en');
 
   constructor(baseUrl = defaultBaseUrl()) {
     this.#baseUrl = baseUrl.replace(/\/$/, '');
@@ -110,6 +124,11 @@ export class ApiClient {
   /** Installed once at boot by the auth store. */
   setTokenProvider(provider: (() => Promise<string | null>) | null): void {
     this.#tokenProvider = provider;
+  }
+
+  /** Installed by the store, and again whenever the player changes language. */
+  setTranslator(t: Translator): void {
+    this.#t = t;
   }
 
   get token(): string | null {
@@ -142,6 +161,7 @@ export class ApiClient {
     // again would spend a second refresh, and GoTrue rotates refresh tokens,
     // so the second ask can invalidate the first answer.
     const token = useToken ?? (await this.#authorization());
+    // i18n-exempt: an HTTP Authorization header value, not copy
     if (token) headers.authorization = `Bearer ${token}`;
 
     let response: Response;
@@ -153,7 +173,7 @@ export class ApiClient {
       });
     } catch (cause) {
       // Spec §10.8 — offline is a first-class state with plain copy.
-      throw new ApiError(0, 'OFFLINE', "You're offline. Your action is saved.", {
+      throw new ApiError(0, 'OFFLINE', this.#t('error.offline_action_saved'), {
         cause: String(cause),
       });
     }
@@ -192,19 +212,15 @@ export class ApiClient {
       // in the app then shows the same unexplained 401. Name it, because the
       // fix is a restart of the dev server and nothing in the app itself.
       if (response.status === 401 && token?.startsWith('guest_')) {
-        throw new ApiError(
-          401,
-          'AUTH_NOT_CONFIGURED',
-          'This build has no sign-in configuration, and the server requires one. ' +
-            'Restart the dev server so it picks up EXPO_PUBLIC_SUPABASE_URL and ' +
-            'EXPO_PUBLIC_SUPABASE_ANON_KEY.',
-        );
+        throw new ApiError(401, 'AUTH_NOT_CONFIGURED', this.#t('error.auth_not_configured'));
       }
 
       throw new ApiError(
         response.status,
         error.code ?? 'UNKNOWN',
-        error.message ?? 'Something went wrong.',
+        // The server's message is already in the player's language when the
+        // server knows it; ours is the fallback for when it said nothing.
+        error.message ?? this.#t('error.request_failed'),
         error.details,
       );
     }
@@ -319,6 +335,7 @@ export class ApiClient {
 
     try {
       const response = await fetch(url, {
+        // i18n-exempt: an HTTP Authorization header value, not copy
         headers: this.#token ? { authorization: `Bearer ${this.#token}` } : {},
         signal,
       });
@@ -400,7 +417,7 @@ export class ApiClient {
         throw error;
       }
     }
-    handlers.onError?.(new Error('Turn did not complete in time.'));
+    handlers.onError?.(new Error(this.#t('error.turn_timeout')));
   }
 
   // --- Media (spec §9.3) ---

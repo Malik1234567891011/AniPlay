@@ -1,5 +1,6 @@
 import type { TranslationKey } from '../en/index.js';
 import { profile } from './profile.js';
+import { world } from './world.js';
 
 /**
  * The French catalogue.
@@ -22,5 +23,6 @@ import { profile } from './profile.js';
  * always; headings and buttons are **sentence case**, never French Title Case.
  */
 export const fr: Partial<Record<TranslationKey, string>> = {
+  ...world,
   ...profile,
 };

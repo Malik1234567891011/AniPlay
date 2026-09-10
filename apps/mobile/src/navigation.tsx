@@ -16,6 +16,7 @@ import { LibraryScreen, ProfileScreen } from './screens/LibraryProfile.jsx';
 import { CreateScreen, ReportHistoryScreen, ReportScreen, SignInScreen } from './screens/Misc.jsx';
 import { ShareScreen } from './screens/Share.jsx';
 import { CharactersScreen } from './screens/Characters.jsx';
+import { useT } from './i18n/useT.js';
 
 /**
  * Spec §5 — information architecture.
@@ -59,6 +60,9 @@ export type RootRoute<T extends keyof RootParamList> = RouteProp<RootParamList, 
 const Stack = createNativeStackNavigator<RootParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 
+// i18n-exempt: the platform's own font family name, not copy
+const SYSTEM_FONT = 'System';
+
 const navigationTheme = {
   dark: true,
   colors: {
@@ -70,10 +74,10 @@ const navigationTheme = {
     notification: colors.accent.secondary,
   },
   fonts: {
-    regular: { fontFamily: 'System', fontWeight: '400' as const },
-    medium: { fontFamily: 'System', fontWeight: '500' as const },
-    bold: { fontFamily: 'System', fontWeight: '600' as const },
-    heavy: { fontFamily: 'System', fontWeight: '700' as const },
+    regular: { fontFamily: SYSTEM_FONT, fontWeight: '400' as const },
+    medium: { fontFamily: SYSTEM_FONT, fontWeight: '500' as const },
+    bold: { fontFamily: SYSTEM_FONT, fontWeight: '600' as const },
+    heavy: { fontFamily: SYSTEM_FONT, fontWeight: '700' as const },
   },
 };
 
@@ -83,7 +87,15 @@ const TAB_GLYPH: Record<keyof TabParamList, string> = {
   Profile: '◉',
 };
 
+/**
+ * A route name is an identifier and a tab label is copy, and here they happen
+ * to be the same English word. They stop being the same word in French, which
+ * is what `tabBarLabel` is for: `name` stays what `navigate()` is called with,
+ * and the label is looked up.
+ */
 function Tabs(): React.JSX.Element {
+  const t = useT();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -107,13 +119,25 @@ function Tabs(): React.JSX.Element {
         ),
       })}
     >
-      <Tab.Screen name="Discover" component={DiscoverScreen as never} />
-      <Tab.Screen name="Library" component={LibraryScreen as never} />
+      <Tab.Screen
+        name="Discover" // i18n-exempt: route name; the visible label is tabBarLabel
+        component={DiscoverScreen as never}
+        options={{ tabBarLabel: t('nav.discover') }}
+      />
+      <Tab.Screen
+        name="Library" // i18n-exempt: route name; the visible label is tabBarLabel
+        component={LibraryScreen as never}
+        options={{ tabBarLabel: t('nav.library') }}
+      />
       {/* No Create tab at launch. The world builder is not built, and a tab
-          that only says "coming soon" is a quarter of the navigation spent on
-          something the player cannot do. What is coming is described from the
-          profile instead, where it reads as a note rather than a dead end. */}
-      <Tab.Screen name="Profile" component={ProfileScreen as never} />
+        * that only says "coming soon" is a quarter of the navigation spent on
+        * something the player cannot do. What is coming is described from the
+        * profile instead, where it reads as a note rather than a dead end. */}
+      <Tab.Screen
+        name="Profile" // i18n-exempt: route name; the visible label is tabBarLabel
+        component={ProfileScreen as never}
+        options={{ tabBarLabel: t('nav.profile') }}
+      />
     </Tab.Navigator>
   );
 }
@@ -131,6 +155,14 @@ export function Navigation(): React.JSX.Element {
 
   return (
     <NavigationContainer theme={navigationTheme}>
+      {/*
+       * Route names below are identifiers: the keys of `RootParamList`, and
+       * what `navigate()` is passed. Nothing here is displayed — every screen
+       * in this navigator draws its own header — so none of it is keyed. The
+       * single-word ones carry an exemption because a lone capitalised word is
+       * indistinguishable from a label to the string extractor; the compound
+       * ones (`StoryDetail`, `WorldSheet`) are not mistakable and carry none.
+       */}
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -139,26 +171,48 @@ export function Navigation(): React.JSX.Element {
           animation: 'slide_from_right',
         }}
       >
-        <Stack.Screen name="Tabs" component={Tabs} />
+        <Stack.Screen
+          name="Tabs" // i18n-exempt: route name
+          component={Tabs}
+        />
         <Stack.Screen name="StoryDetail" component={StoryDetailScreen as never} />
         <Stack.Screen name="CharacterSetup" component={CharacterSetupScreen as never} />
         <Stack.Screen
-          name="Session"
+          name="Session" // i18n-exempt: route name
           component={SessionScreen as never}
           options={{ animation: 'fade', gestureEnabled: false }}
         />
 
         {/* Spec §25.10 — scoped tasks are sheets. */}
         <Stack.Group screenOptions={{ presentation: 'modal', animation: 'slide_from_bottom' }}>
-          <Stack.Screen name="Search" component={SearchScreen as never} />
+          <Stack.Screen
+            name="Search" // i18n-exempt: route name
+            component={SearchScreen as never}
+          />
           <Stack.Screen name="WorldSheet" component={WorldSheetScreen as never} />
-          <Stack.Screen name="Wallet" component={WalletScreen as never} />
+          <Stack.Screen
+            name="Wallet" // i18n-exempt: route name
+            component={WalletScreen as never}
+          />
           <Stack.Screen name="SignIn" component={SignInScreen as never} />
-          <Stack.Screen name="Create" component={CreateScreen as never} />
-          <Stack.Screen name="Share" component={ShareScreen as never} options={{ presentation: 'modal' }} />
-          <Stack.Screen name="Report" component={ReportScreen as never} />
+          <Stack.Screen
+            name="Create" // i18n-exempt: route name
+            component={CreateScreen as never}
+          />
+          <Stack.Screen
+            name="Share" // i18n-exempt: route name
+            component={ShareScreen as never}
+            options={{ presentation: 'modal' }}
+          />
+          <Stack.Screen
+            name="Report" // i18n-exempt: route name
+            component={ReportScreen as never}
+          />
           <Stack.Screen name="ReportHistory" component={ReportHistoryScreen as never} />
-          <Stack.Screen name="Characters" component={CharactersScreen as never} />
+          <Stack.Screen
+            name="Characters" // i18n-exempt: route name
+            component={CharactersScreen as never}
+          />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

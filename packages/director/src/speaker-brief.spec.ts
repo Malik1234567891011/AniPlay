@@ -16,6 +16,7 @@ const kai = LAST_FIVE.characters.find((c) => c.id === 'kai')!;
 
 const context = (overrides: Partial<PresentCharacterContext> = {}): PresentCharacterContext => ({
   def: kai,
+  relationshipTone: 'WARM' as const,
   relationshipLabel: 'Warming',
   relationship: { trust: 30, affection: 5, respect: 0, fear: 0, rivalry: 0 },
   knownMemories: [],

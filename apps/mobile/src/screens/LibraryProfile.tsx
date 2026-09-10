@@ -30,6 +30,7 @@ import type { RootNavigation } from '../navigation.jsx';
  */
 
 export function LibraryScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
+  const t = useT();
   const [sessions, setSessions] = useState<SessionSummary[] | null>(null);
   const [managing, setManaging] = useState<SessionSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -45,13 +46,13 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
       // reads as "your saves are gone".
       setError(
         caught instanceof ApiError && caught.code === 'OFFLINE'
-          ? "You're offline. Your worlds are safe — they live on the server, not on this phone."
+          ? t('library.offline')
           : caught instanceof ApiError
             ? caught.message
-            : 'We could not load your worlds just now. Nothing has been lost.',
+            : t('library.load_failed_body'),
       );
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     void load();
@@ -64,29 +65,32 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <Row style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.md }}>
-        <Txt variant="h1">Library</Txt>
+        <Txt variant="h1">{t('library.title')}</Txt>
       </Row>
 
       {error && !sessions ? (
         <EmptyState
-          title="Couldn't load your library"
+          title={t('library.load_failed_title')}
           body={error}
-          actionLabel="Try again"
+          actionLabel={t('library.try_again')}
           onAction={() => void load()}
         />
       ) : sessions && sessions.length === 0 ? (
         <EmptyState
-          title="No worlds yet"
-          body="Anything you start shows up here, with your progress saved."
-          actionLabel="Browse worlds"
-          onAction={() => navigation.navigate('Tabs', { screen: 'Discover' })}
+          title={t('library.no_worlds_yet')}
+          body={t('library.no_worlds_body')}
+          actionLabel={t('library.browse_worlds')}
+          onAction={() => {
+            // i18n-exempt: 'Discover' is a nested navigator route name, not shown to anybody
+            navigation.navigate('Tabs', { screen: 'Discover' });
+          }}
         />
       ) : (
         <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl, paddingBottom: spacing.giant }}>
           {active.length > 0 ? (
             <Stack gap={spacing.md}>
               <Txt variant="caption" color={colors.text.muted}>
-                ACTIVE
+                {t('library.section_active')}
               </Txt>
               {active.map((session) => (
                 <SessionCard
@@ -102,7 +106,7 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
           {finished.length > 0 ? (
             <Stack gap={spacing.md}>
               <Txt variant="caption" color={colors.text.muted}>
-                FINISHED
+                {t('library.section_finished')}
               </Txt>
               {finished.map((session) => (
                 <SessionCard
@@ -121,7 +125,7 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
       {managing ? (
         <View style={{ position: 'absolute', inset: 0, justifyContent: 'flex-end' }}>
           <Pressable
-            accessibilityLabel="Close"
+            accessibilityLabel={t('library.close_sheet')}
             style={{ position: 'absolute', inset: 0, backgroundColor: colors.scrim }}
             onPress={() => setManaging(null)}
           />
@@ -132,10 +136,13 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
             <Stack gap={spacing.md} style={{ padding: GUTTER }}>
               <Txt variant="h3">{managing.title}</Txt>
               <Txt variant="caption" color={colors.text.muted}>
-                {managing.turnCount} turns · started {new Date(managing.createdAt).toLocaleDateString()}
+                {t('library.run_started', {
+                  count: managing.turnCount,
+                  date: new Date(managing.createdAt).toLocaleDateString(),
+                })}
               </Txt>
               <Button
-                label="Fork this run · 120 credits"
+                label={t('library.fork_run')}
                 variant="secondary"
                 onPress={() => {
                   const id = managing.sessionId;
@@ -143,22 +150,25 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
                   void api
                     .forkSession(id)
                     .then((response) => navigation.navigate('Session', { sessionId: response.session.sessionId }))
-                    .catch(() => Alert.alert('Could not fork', 'You may need more credits.'));
+                    .catch(() => Alert.alert(t('library.fork_failed_title'), t('library.fork_failed_body')));
                 }}
               />
               <Button
-                label="Delete run"
+                label={t('library.delete_run')}
                 variant="danger"
                 hapticKind="warning"
                 onPress={() => {
                   const target = managing;
                   Alert.alert(
-                    'Delete this run?',
-                    `"${target.title}" and its ${target.turnCount} turns will be gone. This cannot be undone.`,
+                    t('library.delete_confirm_title'),
+                    t('library.delete_confirm_body', {
+                      title: target.title,
+                      count: target.turnCount,
+                    }),
                     [
-                      { text: 'Keep it', style: 'cancel' },
+                      { text: t('library.delete_keep'), style: 'cancel' },
                       {
-                        text: 'Delete',
+                        text: t('library.delete_confirm'),
                         style: 'destructive',
                         onPress: () => {
                           setManaging(null);
@@ -186,10 +196,14 @@ function SessionCard({
   onPress: () => void;
   onManage: () => void;
 }): React.JSX.Element {
+  const t = useT();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${session.title}, ${session.turnCount} turns. Continue.`}
+      accessibilityLabel={t('library.session_card_a11y', {
+        title: session.title,
+        count: session.turnCount,
+      })}
       onPress={onPress}
       onLongPress={onManage}
       style={({ pressed }) => ({ opacity: pressed ? 0.85 : 1 })}
@@ -202,14 +216,17 @@ function SessionCard({
               {session.title}
             </Txt>
             <Txt variant="caption" color={colors.text.secondary}>
-              as {session.displayName}
+              {t('library.playing_as', { name: session.displayName })}
             </Txt>
             <Txt variant="micro" color={colors.text.muted}>
-              {session.turnCount} turns · {new Date(session.lastPlayedAt).toLocaleDateString()}
+              {t('library.turns_and_date', {
+                count: session.turnCount,
+                date: new Date(session.lastPlayedAt).toLocaleDateString(),
+              })}
             </Txt>
-            {session.forkedFromSessionId ? <Chip label="Fork" /> : null}
+            {session.forkedFromSessionId ? <Chip label={t('library.fork_badge')} /> : null}
           </Stack>
-          <IconButton label="Manage this run" onPress={onManage}>
+          <IconButton label={t('library.manage_run')} onPress={onManage}>
             <Txt variant="h3" color={colors.text.muted}>
               ⋯
             </Txt>
@@ -225,6 +242,7 @@ function SessionCard({
  * that says "French" to someone looking for "Français" is the one string in the
  * app that must not be localized.
  */
+// i18n-exempt: a language picker names each language in its own language
 const LANGUAGE_NAMES: Record<Locale, string> = { en: 'English', fr: 'Français' };
 
 /** PR-01 / PR-02 — public and private cleanly separated. */
@@ -287,10 +305,10 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
           {isGuest ? (
             <>
               <Txt variant="caption" color={colors.text.secondary}>
-                You're playing as a guest. Sign in to save this world and continue anywhere.
+                {t('profile.guest_explainer')}
               </Txt>
               <Button
-                label="Sign in"
+                label={t('profile.sign_in')}
                 variant="secondary"
                 style={{ marginTop: spacing.sm }}
                 onPress={() => navigation.navigate('SignIn')}
@@ -302,17 +320,17 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
                 {me?.email ?? me?.handle}
               </Txt>
               <Button
-                label="Sign out"
+                label={t('profile.sign_out')}
                 variant="tertiary"
                 full={false}
                 style={{ alignSelf: 'flex-start', marginTop: spacing.sm }}
                 onPress={() =>
                   Alert.alert(
-                    'Sign out?',
-                    'Your worlds stay saved to your account. Sign back in on any device to pick them up.',
+                    t('profile.sign_out_confirm_title'),
+                    t('library.sign_out_confirm_body'),
                     [
-                      { text: 'Stay signed in', style: 'cancel' },
-                      { text: 'Sign out', onPress: () => void signOut() },
+                      { text: t('library.sign_out_stay'), style: 'cancel' },
+                      { text: t('profile.sign_out'), onPress: () => void signOut() },
                     ],
                   )
                 }
@@ -323,9 +341,9 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
 
         {me ? (
           <Row style={{ justifyContent: 'space-around' }}>
-            <Stat label="Worlds" value={me.stats.storiesPlayed} />
-            <Stat label="Turns" value={me.stats.turnsPlayed} />
-            <Stat label="Created" value={me.stats.worldsCreated} />
+            <Stat label={t('library.stat_worlds')} value={me.stats.storiesPlayed} />
+            <Stat label={t('library.stat_turns')} value={me.stats.turnsPlayed} />
+            <Stat label={t('library.stat_created')} value={me.stats.worldsCreated} />
           </Row>
         ) : null}
 
@@ -333,10 +351,10 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
         {characters.length > 0 ? (
           <Stack gap={spacing.md}>
             <Row style={{ justifyContent: 'space-between' }}>
-              <Txt variant="h3">Your characters</Txt>
+              <Txt variant="h3">{t('library.your_characters')}</Txt>
               <Pressable accessibilityRole="button" onPress={() => navigation.navigate('Characters')}>
                 <Txt variant="caption" color={colors.accent.primary}>
-                  See all
+                  {t('library.see_all')}
                 </Txt>
               </Pressable>
             </Row>
@@ -345,7 +363,10 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
                 <Pressable
                   key={character.sessionId}
                   accessibilityRole="button"
-                  accessibilityLabel={`${character.displayName} in ${character.storyTitle}`}
+                  accessibilityLabel={t('library.character_in_story_a11y', {
+                    name: character.displayName,
+                    story: character.storyTitle,
+                  })}
                   onPress={() => navigation.navigate('Characters')}
                   style={{ width: 108, gap: spacing.xs }}
                 >
@@ -361,7 +382,7 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
                       style={{ width: 108, height: 135, borderRadius: radius.card, alignItems: 'center', justifyContent: 'center' }}
                     >
                       <Txt variant="micro" color={colors.text.muted} center style={{ padding: spacing.xs }}>
-                        Tap to draw
+                        {t('library.tap_to_draw')}
                       </Txt>
                     </StoryArt>
                   )}
@@ -460,23 +481,23 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
               not it. Deletion stays easy to find and hard to hit by accident:
               a plain destructive row, then a confirmation that says what goes. */}
           <Button
-            label="Delete account"
+            label={t('library.delete_account')}
             variant="dangerQuiet"
             full={false}
             style={{ alignSelf: 'flex-start' }}
             hapticKind="warning"
             onPress={() =>
               Alert.alert(
-                'Delete your account?',
-                'Your worlds, progress, and saved stories will be removed. Purchased credits cannot be recovered. This cannot be undone.',
+                t('library.delete_account_confirm_title'),
+                t('library.delete_account_confirm_body'),
                 [
-                  { text: 'Keep my account', style: 'cancel' },
+                  { text: t('library.delete_account_keep'), style: 'cancel' },
                   {
-                    text: 'Delete everything',
+                    text: t('library.delete_account_confirm'),
                     style: 'destructive',
                     onPress: () => {
                       void api.deleteAccount().then(() =>
-                        Alert.alert('Account deleted', 'Your data will be fully purged within 30 days.'),
+                        Alert.alert(t('library.account_deleted_title'), t('library.account_deleted_body')),
                       );
                     },
                   },

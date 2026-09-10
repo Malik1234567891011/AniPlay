@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { TimelineEntry, WorldSheetResponse } from '@aniplay/contracts';
+import type { TranslationKey } from '@aniplay/i18n';
 import {
   Button,
   Card,
@@ -21,6 +22,7 @@ import {
   spacing,
 } from '@aniplay/ui';
 import { api } from '../api/client.js';
+import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 /**
@@ -33,14 +35,14 @@ import type { RootNavigation, RootRoute } from '../navigation.jsx';
 const TABS = ['overview', 'character', 'inventory', 'quests', 'relationships', 'map', 'timeline'] as const;
 type Tab = (typeof TABS)[number];
 
-const TAB_LABEL: Record<Tab, string> = {
-  overview: 'Overview',
-  character: 'Character',
-  inventory: 'Inventory',
-  quests: 'Quests',
-  relationships: 'People',
-  map: 'Map',
-  timeline: 'Timeline',
+const TAB_LABEL: Record<Tab, TranslationKey> = {
+  overview: 'worldsheet.tab_overview',
+  character: 'worldsheet.tab_character',
+  inventory: 'worldsheet.tab_inventory',
+  quests: 'worldsheet.tab_quests',
+  relationships: 'worldsheet.tab_people',
+  map: 'worldsheet.tab_map',
+  timeline: 'worldsheet.tab_timeline',
 };
 
 export function WorldSheetScreen({
@@ -50,6 +52,7 @@ export function WorldSheetScreen({
   navigation: RootNavigation;
   route: RootRoute<'WorldSheet'>;
 }): React.JSX.Element {
+  const t = useT();
   const { sessionId } = route.params;
   const [tab, setTab] = useState<Tab>((route.params.tab as Tab) ?? 'overview');
   const [sheet, setSheet] = useState<WorldSheetResponse | null>(null);
@@ -63,8 +66,8 @@ export function WorldSheetScreen({
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <Row style={{ paddingHorizontal: GUTTER, justifyContent: 'space-between' }}>
-        <Txt variant="h2">World Sheet</Txt>
-        <IconButton label="Close" onPress={() => navigation.goBack()}>
+        <Txt variant="h2">{t('worldsheet.title')}</Txt>
+        <IconButton label={t('worldsheet.close')} onPress={() => navigation.goBack()}>
           <Txt variant="h3">✕</Txt>
         </IconButton>
       </Row>
@@ -79,7 +82,7 @@ export function WorldSheetScreen({
         contentContainerStyle={{ paddingHorizontal: GUTTER, paddingVertical: spacing.md, gap: spacing.sm }}
       >
         {TABS.map((id) => (
-          <Chip key={id} label={TAB_LABEL[id]} selected={tab === id} onPress={() => setTab(id)} />
+          <Chip key={id} label={t(TAB_LABEL[id])} selected={tab === id} onPress={() => setTab(id)} />
         ))}
       </ScrollView>
 
@@ -100,6 +103,7 @@ export function WorldSheetScreen({
             <Timeline
               entries={timeline}
               sessionId={sessionId}
+              // i18n-exempt: the app's own name, which is not translated
               storyTitle={sheet?.overview.chapterLabel ?? 'AniPlay'}
               navigation={navigation}
               onRefresh={setTimeline}
@@ -113,6 +117,7 @@ export function WorldSheetScreen({
 
 /** WS-01 — current essentials only (§11.1). */
 function Overview({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
+  const t = useT();
   const { overview } = sheet;
   return (
     <Stack gap={spacing.xl}>
@@ -136,7 +141,7 @@ function Overview({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
       {overview.topObjective ? (
         <Stack gap={spacing.sm}>
           <Txt variant="caption" color={colors.text.muted}>
-            CURRENT OBJECTIVE
+            {t('worldsheet.current_objective')}
           </Txt>
           <Txt variant="body">{overview.topObjective}</Txt>
         </Stack>
@@ -145,7 +150,7 @@ function Overview({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
       {overview.statuses.length > 0 ? (
         <Stack gap={spacing.sm}>
           <Txt variant="caption" color={colors.text.muted}>
-            ACTIVE EFFECTS
+            {t('worldsheet.active_effects')}
           </Txt>
           <Row gap={spacing.sm} style={{ flexWrap: 'wrap' }}>
             {overview.statuses.map((status) => (
@@ -162,11 +167,14 @@ function Overview({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
       {overview.relationshipHighlights.length > 0 ? (
         <Stack gap={spacing.sm}>
           <Txt variant="caption" color={colors.text.muted}>
-            WHO'S ON YOUR MIND
+            {t('worldsheet.relationship_highlights')}
           </Txt>
           <Row gap={spacing.sm} style={{ flexWrap: 'wrap' }}>
             {overview.relationshipHighlights.map((highlight) => (
-              <Chip key={highlight.characterId} label={`${highlight.name} · ${highlight.label}`} />
+              <Chip
+                key={highlight.characterId}
+                label={t('worldsheet.highlight', { name: highlight.name, label: highlight.label })}
+              />
             ))}
           </Row>
         </Stack>
@@ -175,11 +183,11 @@ function Overview({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
       {overview.recentEvents.length > 0 ? (
         <Stack gap={spacing.sm}>
           <Txt variant="caption" color={colors.text.muted}>
-            RECENTLY
+            {t('worldsheet.recently')}
           </Txt>
           {overview.recentEvents.map((event, index) => (
             <Txt key={index} variant="bodyCompact" color={colors.text.secondary}>
-              · {event}
+              {t('worldsheet.recent_event', { event })}
             </Txt>
           ))}
         </Stack>
@@ -190,6 +198,7 @@ function Overview({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
 
 /** WS-02 — attributes explain themselves in plain language (§11.2). */
 function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
+  const t = useT();
   const { character } = sheet;
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -207,20 +216,27 @@ function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
         ) : null}
         <Row gap={spacing.sm} style={{ marginTop: spacing.sm }}>
           {character.progressionMode === 'LEVEL' ? (
-            <Chip label={`Level ${character.level}`} tone="accent" />
+            <Chip label={t('worldsheet.level', { level: character.level })} tone="accent" />
           ) : (
-            <Chip label={`${character.milestones.length} milestones`} tone="accent" />
+            <Chip
+              label={t('worldsheet.milestones', { count: character.milestones.length })}
+              tone="accent"
+            />
           )}
         </Row>
       </Card>
 
       <Stack gap={spacing.md}>
-        <Txt variant="h3">Attributes</Txt>
+        <Txt variant="h3">{t('worldsheet.attributes')}</Txt>
         {character.attributes.map((attribute) => (
           <Pressable
             key={attribute.key}
             accessibilityRole="button"
-            accessibilityLabel={`${attribute.name}, ${attribute.value}. ${attribute.plainLanguage}`}
+            accessibilityLabel={t('worldsheet.attribute_a11y', {
+              name: attribute.name,
+              value: attribute.value,
+              plain: attribute.plainLanguage,
+            })}
             onPress={() => setExpanded(expanded === attribute.key ? null : attribute.key)}
           >
             <Card style={{ gap: spacing.xs }}>
@@ -245,7 +261,7 @@ function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
       </Stack>
 
       <Stack gap={spacing.md}>
-        <Txt variant="h3">Skills</Txt>
+        <Txt variant="h3">{t('worldsheet.skills')}</Txt>
         {character.skills
           .filter((skill) => skill.proficiency > 0)
           .concat(character.skills.filter((skill) => skill.proficiency === 0))
@@ -263,7 +279,7 @@ function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
 
       {character.abilities.length > 0 ? (
         <Stack gap={spacing.md}>
-          <Txt variant="h3">Powers</Txt>
+          <Txt variant="h3">{t('worldsheet.powers')}</Txt>
           {character.abilities.map((ability) => (
             <Card key={ability.id} style={{ gap: spacing.xs }}>
               <Row style={{ justifyContent: 'space-between' }}>
@@ -283,7 +299,7 @@ function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
               </Txt>
               {ability.cooldownRemaining > 0 ? (
                 <Txt variant="micro" color={colors.semantic.warning}>
-                  Recovering — {ability.cooldownRemaining} min
+                  {t('worldsheet.cooldown', { minutes: ability.cooldownRemaining })}
                 </Txt>
               ) : null}
             </Card>
@@ -293,11 +309,11 @@ function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
 
       {character.factions.length > 0 ? (
         <Stack gap={spacing.md}>
-          <Txt variant="h3">Standing</Txt>
+          <Txt variant="h3">{t('worldsheet.standing')}</Txt>
           {character.factions.map((faction) => (
             <Row key={faction.factionId} style={{ justifyContent: 'space-between' }}>
               <Txt variant="bodyCompact">{faction.name}</Txt>
-              <Chip label={faction.rankLabel || 'Unknown'} />
+              <Chip label={faction.rankLabel || t('worldsheet.rank_unknown')} />
             </Row>
           ))}
         </Stack>
@@ -308,8 +324,15 @@ function Character({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
 
 /** WS-03 — engine-authoritative items only (§11.3). */
 function Inventory({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
+  const t = useT();
+
   if (sheet.inventory.length === 0) {
-    return <EmptyState title="Nothing on you" body="Anything you pick up in the story shows up here." />;
+    return (
+      <EmptyState
+        title={t('worldsheet.inventory_empty_title')}
+        body={t('worldsheet.inventory_empty_body')}
+      />
+    );
   }
 
   return (
@@ -325,7 +348,7 @@ function Inventory({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
                 </Txt>
               ) : null}
             </Row>
-            {item.equipped ? <Chip label="Equipped" tone="accent" /> : null}
+            {item.equipped ? <Chip label={t('worldsheet.equipped')} tone="accent" /> : null}
             {item.rarity ? <Chip label={item.rarity} /> : null}
           </Row>
 
@@ -354,25 +377,39 @@ function Inventory({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element 
 
 /** WS-04 — active, leads, completed, failed (§11.4). */
 function Quests({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
-  const groups: Array<[string, typeof sheet.quests]> = [
-    ['Active', sheet.quests.filter((q) => q.status === 'ACTIVE' || q.status === 'BLOCKED')],
-    ['Leads', sheet.quests.filter((q) => q.status === 'DISCOVERED')],
-    ['Completed', sheet.quests.filter((q) => q.status === 'COMPLETED')],
-    ['Closed', sheet.quests.filter((q) => q.status === 'FAILED' || q.status === 'EXPIRED')],
+  const t = useT();
+  // The key, not the label, so a group's React key and its heading do not both
+  // change when the language does.
+  const groups: Array<[TranslationKey, typeof sheet.quests]> = [
+    [
+      'worldsheet.quests_active',
+      sheet.quests.filter((q) => q.status === 'ACTIVE' || q.status === 'BLOCKED'),
+    ],
+    ['worldsheet.quests_leads', sheet.quests.filter((q) => q.status === 'DISCOVERED')],
+    ['worldsheet.quests_completed', sheet.quests.filter((q) => q.status === 'COMPLETED')],
+    [
+      'worldsheet.quests_closed',
+      sheet.quests.filter((q) => q.status === 'FAILED' || q.status === 'EXPIRED'),
+    ],
   ];
 
   if (sheet.quests.length === 0) {
-    return <EmptyState title="No objectives yet" body="Objectives appear as the story gives you something to chase." />;
+    return (
+      <EmptyState
+        title={t('worldsheet.quests_empty_title')}
+        body={t('worldsheet.quests_empty_body')}
+      />
+    );
   }
 
   return (
     <Stack gap={spacing.xl}>
       {groups
         .filter(([, quests]) => quests.length > 0)
-        .map(([label, quests]) => (
-          <Stack key={label} gap={spacing.md}>
+        .map(([labelKey, quests]) => (
+          <Stack key={labelKey} gap={spacing.md}>
             <Txt variant="caption" color={colors.text.muted}>
-              {label.toUpperCase()}
+              {t(labelKey).toUpperCase()}
             </Txt>
             {quests.map((quest) => (
               <Card key={quest.questId} style={{ gap: spacing.xs }}>
@@ -381,6 +418,9 @@ function Quests({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
                     {quest.title}
                   </Txt>
                   {quest.deadlineLabel ? (
+                    // The tone, not the text: the label the player reads is
+                    // quest.deadlineLabel itself, which is server copy (UI_AUDIT §5).
+                    // i18n-exempt: a sentinel compared against the server's own deadlineLabel, never rendered
                     <Chip label={quest.deadlineLabel} tone={quest.deadlineLabel === 'Overdue' ? 'danger' : 'warning'} />
                   ) : null}
                 </Row>
@@ -389,11 +429,11 @@ function Quests({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
                 </Txt>
                 {quest.currentStepCopy ? (
                   <Txt variant="bodyCompact" color={colors.accent.primary} style={{ marginTop: spacing.xs }}>
-                    ❯ {quest.currentStepCopy}
+                    {t('worldsheet.quest_step', { step: quest.currentStepCopy })}
                   </Txt>
                 ) : (
                   <Txt variant="caption" color={colors.text.muted} style={{ marginTop: spacing.xs }}>
-                    ❯ Not yet clear.
+                    {t('worldsheet.quest_step_unclear')}
                   </Txt>
                 )}
                 {quest.involvedNames.length > 0 ? (
@@ -409,8 +449,24 @@ function Quests({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
   );
 }
 
+/**
+ * The five relationship dimensions. The array is the shape of
+ * `relationship.dimensions`, so the members stay data keys; the labels the
+ * player reads come out of the catalogue, lower-case as the screen shows them.
+ */
+const DIMENSIONS = ['trust', 'affection', 'respect', 'fear', 'rivalry'] as const;
+
+const DIMENSION_LABEL: Record<(typeof DIMENSIONS)[number], TranslationKey> = {
+  trust: 'worldsheet.dimension_trust',
+  affection: 'worldsheet.dimension_affection',
+  respect: 'worldsheet.dimension_respect',
+  fear: 'worldsheet.dimension_fear',
+  rivalry: 'worldsheet.dimension_rivalry',
+};
+
 /** WS-05 — qualitative labels by default (§11.5). */
 function Relationships({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
+  const t = useT();
   const showNumbers = sheet.relationships.some((r) =>
     Object.values(r.dimensions).some((v) => v !== 0),
   );
@@ -431,10 +487,10 @@ function Relationships({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Elem
 
           {showNumbers ? (
             <Row gap={spacing.md} style={{ flexWrap: 'wrap' }}>
-              {(['trust', 'affection', 'respect', 'fear', 'rivalry'] as const).map((dimension) => (
+              {DIMENSIONS.map((dimension) => (
                 <View key={dimension} style={{ minWidth: 64 }}>
                   <Txt variant="micro" color={colors.text.muted}>
-                    {dimension}
+                    {t(DIMENSION_LABEL[dimension])}
                   </Txt>
                   <Txt variant="caption">{relationship.dimensions[dimension]}</Txt>
                 </View>
@@ -445,7 +501,7 @@ function Relationships({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Elem
       ))}
       {!showNumbers ? (
         <Txt variant="micro" color={colors.text.muted}>
-          Turn on advanced relationship stats in Settings to see the underlying numbers.
+          {t('worldsheet.relationship_numbers_hint')}
         </Txt>
       ) : null}
     </Stack>
@@ -454,15 +510,17 @@ function Relationships({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Elem
 
 /** WS-06 — a 2D node map, not an explorable world (§11.6). */
 function MapTab({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
+  const t = useT();
   const SIZE = 320;
 
   return (
     <Stack gap={spacing.lg}>
       <View
         accessible
-        accessibilityLabel={`Map. You are at ${
-          sheet.map.nodes.find((n) => n.current)?.name ?? 'an unknown place'
-        }. ${sheet.map.nodes.length} places discovered.`}
+        accessibilityLabel={t('worldsheet.map_a11y', {
+          place: sheet.map.nodes.find((n) => n.current)?.name ?? t('worldsheet.map_unknown_place'),
+          count: sheet.map.nodes.length,
+        })}
         style={{
           height: SIZE,
           borderRadius: radius.card,
@@ -495,6 +553,7 @@ function MapTab({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
                 height: 1,
                 backgroundColor: colors.border.strong,
                 transform: [{ translateY: -0.5 }, { rotateZ: `${angle}deg` }],
+                // i18n-exempt: a CSS transform-origin keyword, not text
                 transformOrigin: 'left center',
               }}
             />
@@ -535,12 +594,12 @@ function MapTab({ sheet }: { sheet: WorldSheetResponse }): React.JSX.Element {
       </View>
 
       <Row gap={spacing.md} style={{ flexWrap: 'wrap' }}>
-        <Chip label="You are here" tone="accent" />
-        <Chip label="Has an objective" tone="warning" />
+        <Chip label={t('worldsheet.map_you_are_here')} tone="accent" />
+        <Chip label={t('worldsheet.map_has_objective')} tone="warning" />
       </Row>
 
       <Txt variant="caption" color={colors.text.muted}>
-        Travel is an action. Type where you want to go, and the story resolves the journey.
+        {t('worldsheet.map_travel_hint')}
       </Txt>
     </Stack>
   );
@@ -560,6 +619,7 @@ function Timeline({
   navigation: RootNavigation;
   onRefresh: (entries: TimelineEntry[]) => void;
 }): React.JSX.Element {
+  const t = useT();
   const [forking, setForking] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   // WS-08 / §11.8 — the id being corrected, and what the player says it was.
@@ -579,20 +639,25 @@ function Timeline({
         if (response.accepted) {
           setCorrecting(null);
           setCorrection('');
-          setNotice('Fixed. That is what the story remembers now.');
+          setNotice(t('worldsheet.correction_accepted'));
           void api.timeline(sessionId).then((r) => onRefresh(r.entries));
         } else {
           // §11.8 — a correction that contradicts authoritative state is
           // refused with the reason, not silently dropped.
-          setNotice(response.conflictExplanation ?? 'That contradicts something the engine already decided.');
+          setNotice(response.conflictExplanation ?? t('worldsheet.correction_conflict'));
         }
       })
-      .catch(() => setNotice('That did not go through. Nothing was changed.'))
+      .catch(() => setNotice(t('worldsheet.correction_failed')))
       .finally(() => setSubmitting(false));
   };
 
   if (entries.length === 0) {
-    return <EmptyState title="Nothing recorded yet" body="Everything that becomes canon will be listed here." />;
+    return (
+      <EmptyState
+        title={t('worldsheet.timeline_empty_title')}
+        body={t('worldsheet.timeline_empty_body')}
+      />
+    );
   }
 
   return (
@@ -626,7 +691,9 @@ function Timeline({
                   accessibilityRole="button"
                   accessibilityState={{ selected: entry.pinned }}
                   accessibilityLabel={
-                    entry.pinned ? `Unpin: ${entry.text}` : `Keep this moment: ${entry.text}`
+                    entry.pinned
+                      ? t('worldsheet.unpin_a11y', { text: entry.text })
+                      : t('worldsheet.pin_a11y', { text: entry.text })
                   }
                   disabled={pinning === entry.id}
                   onPress={() => {
@@ -642,11 +709,11 @@ function Timeline({
                         );
                         setNotice(
                           result.pinned
-                            ? 'Pinned. The story will keep coming back to this.'
-                            : 'Unpinned.',
+                            ? t('worldsheet.pinned_notice')
+                            : t('worldsheet.unpinned_notice'),
                         );
                       })
-                      .catch(() => setNotice('That could not be pinned just now.'))
+                      .catch(() => setNotice(t('worldsheet.pin_failed')))
                       .finally(() => setPinning(null));
                   }}
                 >
@@ -654,11 +721,11 @@ function Timeline({
                     variant="caption"
                     color={entry.pinned ? colors.accent.primary : colors.text.secondary}
                   >
-                    {entry.pinned ? '★ Pinned canon' : '☆ Keep this'}
+                    {entry.pinned ? t('worldsheet.pinned_canon_star') : t('worldsheet.pin_action')}
                   </Txt>
                 </Pressable>
               ) : entry.pinned ? (
-                <Chip label="Pinned canon" tone="accent" />
+                <Chip label={t('worldsheet.pinned_canon')} tone="accent" />
               ) : null}
               {/* WS-08 — the engine's own decisions are not opinions, so only
                   generated canon carries this. It is free: a contradiction the
@@ -666,7 +733,7 @@ function Timeline({
               {entry.correctable ? (
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel={`This is wrong: ${entry.text}`}
+                  accessibilityLabel={t('worldsheet.correct_a11y', { text: entry.text })}
                   onPress={() => {
                     setNotice(null);
                     setCorrection(correcting === entry.id ? '' : entry.text);
@@ -674,14 +741,14 @@ function Timeline({
                   }}
                 >
                   <Txt variant="caption" color={colors.text.secondary}>
-                    {correcting === entry.id ? 'Cancel' : 'This is wrong'}
+                    {correcting === entry.id ? t('worldsheet.cancel') : t('worldsheet.this_is_wrong')}
                   </Txt>
                 </Pressable>
               ) : null}
               {/* WS-07 — share the moment, spoiler-safe, from where it sits. */}
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={`Share: ${entry.text}`}
+                accessibilityLabel={t('worldsheet.share_a11y', { text: entry.text })}
                 onPress={() =>
                   navigation.navigate('Share', {
                     storyTitle,
@@ -692,13 +759,13 @@ function Timeline({
                 }
               >
                 <Txt variant="caption" color={colors.text.secondary}>
-                  Share
+                  {t('worldsheet.share')}
                 </Txt>
               </Pressable>
               {entry.forkable ? (
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel="Fork the timeline from this moment"
+                  accessibilityLabel={t('worldsheet.fork_a11y')}
                   disabled={forking}
                   onPress={() => {
                     setForking(true);
@@ -710,19 +777,21 @@ function Timeline({
                       .catch((error) =>
                         setNotice(
                           error?.code === 'INSUFFICIENT_CREDITS'
-                            ? `You need ${error.shortfall ?? 120} more credits to fork this timeline.`
+                            ? t('worldsheet.fork_insufficient_credits', {
+                                count: error.shortfall ?? 120,
+                              })
                             : error?.code === 'OFFLINE'
-                              ? "You're offline. The fork will work once you reconnect."
+                              ? t('worldsheet.fork_offline')
                               : error?.code === 'NOT_FOUND'
-                                ? 'This run is no longer on the server. Nothing was charged.'
-                                : 'The fork did not go through, and you were not charged. Try again in a moment.',
+                                ? t('worldsheet.fork_not_found')
+                                : t('worldsheet.fork_failed'),
                         ),
                       )
                       .finally(() => setForking(false));
                   }}
                 >
                   <Txt variant="caption" color={colors.accent.primary}>
-                    Fork from here · 120
+                    {t('worldsheet.fork_from_here')}
                   </Txt>
                 </Pressable>
               ) : null}
@@ -736,9 +805,9 @@ function Timeline({
                   multiline
                   maxLength={400}
                   autoFocus
-                  placeholder="What actually happened?"
+                  placeholder={t('worldsheet.correction_placeholder')}
                   placeholderTextColor={colors.text.muted}
-                  accessibilityLabel="What actually happened"
+                  accessibilityLabel={t('worldsheet.correction_a11y')}
                   style={{
                     minHeight: 76,
                     padding: spacing.md,
@@ -750,10 +819,10 @@ function Timeline({
                   }}
                 />
                 <Button
-                  label="Fix it"
+                  label={t('worldsheet.fix_it')}
                   size="medium"
                   loading={submitting}
-                  loadingLabel="Checking…"
+                  loadingLabel={t('worldsheet.checking')}
                   disabled={correction.trim().length === 0}
                   onPress={() => submitCorrection(entry.id)}
                 />
@@ -763,11 +832,10 @@ function Timeline({
         ))}
 
       <Txt variant="micro" color={colors.text.muted}>
-        Correcting is free. It changes what the story remembers, never what the engine decided — a
-        correction that contradicts the record is refused with the reason.
+        {t('worldsheet.correction_explainer')}
       </Txt>
       <Txt variant="micro" color={colors.text.muted}>
-        Forking copies this world at the chosen moment. The original branch is never destroyed.
+        {t('worldsheet.fork_explainer')}
       </Txt>
     </Stack>
   );

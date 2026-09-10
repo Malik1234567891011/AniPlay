@@ -22,6 +22,7 @@ import type {
   SuggestedAction,
 } from '@aniplay/contracts';
 import { QUALITY_TIERS } from '@aniplay/contracts';
+import type { TranslationKey, Translator } from '@aniplay/i18n';
 import {
   ActionSuggestion,
   Button,
@@ -50,6 +51,7 @@ import {
 } from '@aniplay/ui';
 import { api, ApiError } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
+import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 /**
@@ -125,9 +127,10 @@ export function SessionScreen({
   route,
 }: {
   navigation: RootNavigation;
-  route: RootRoute<'Session'>;
+  route: RootRoute<'Session'>; // i18n-exempt: navigation route name, never displayed
 }): React.JSX.Element {
   const { sessionId } = route.params;
+  const t = useT();
   const insets = useSafeAreaInsets();
   const { wallet, qualityTier, setQualityTier, setBalance, refreshWallet, saveDraft, loadDraft } = useStore();
 
@@ -164,11 +167,11 @@ export function SessionScreen({
       setError(null);
     } catch (caught) {
       setError({
-        message: caught instanceof ApiError ? caught.message : 'Could not load this story.',
+        message: caught instanceof ApiError ? caught.message : t('session.load_failed'),
         retry: true,
       });
     }
-  }, [sessionId]);
+  }, [sessionId, t]);
 
   useEffect(() => {
     void load();
@@ -342,14 +345,14 @@ export function SessionScreen({
               haptic('error');
               setDraft(text);
               setPending(null);
-              setError({ message: String(data.message ?? "That turn didn't complete. You weren't charged."), retry: true });
+              setError({ message: String(data.message ?? t('session.turn_failed')), retry: true });
               void refreshWallet();
             }
           },
           onError: () => {
             setPending(null);
             setDraft(text);
-            setError({ message: "That turn didn't complete. You weren't charged.", retry: true });
+            setError({ message: t('session.turn_failed'), retry: true });
             void refreshWallet();
           },
         },
@@ -367,11 +370,11 @@ export function SessionScreen({
       } else if (caught instanceof ApiError && caught.code === 'STALE_REVISION') {
         // Spec §17.4 — refresh and let the player resend deliberately.
         await load();
-        setError({ message: 'This story moved on. Your action is still here — send it when ready.', retry: false });
+        setError({ message: t('session.stale_revision'), retry: false });
       } else if (caught instanceof ApiError && caught.code === 'OFFLINE') {
-        setError({ message: "You're offline. Your action is saved.", retry: true });
+        setError({ message: t('session.offline'), retry: true });
       } else {
-        setError({ message: "That turn didn't complete. You weren't charged.", retry: true });
+        setError({ message: t('session.turn_failed'), retry: true });
       }
     } finally {
       setSending(false);
@@ -379,7 +382,7 @@ export function SessionScreen({
     }
   }, [
     affordable, balance, draft, load, navigation, qualityTier, refreshWallet,
-    revision, saveDraft, sending, sessionId, setBalance, tier.costCredits,
+    revision, saveDraft, sending, sessionId, setBalance, t, tier.costCredits,
   ]);
 
   const latest = turns.at(-1);
@@ -406,14 +409,14 @@ export function SessionScreen({
           message:
             error instanceof ApiError
               ? error.message
-              : 'That could not be rewritten just now. Nothing was charged.',
+              : t('session.rephrase_failed'),
           retry: false,
         });
       } finally {
         setRephrasing(false);
       }
     },
-    [setBalance],
+    [setBalance, t],
   );
 
   const heroImageUrl = pending ? pending.heroImageUrl : (latest?.heroImageUrl ?? null);
@@ -428,7 +431,7 @@ export function SessionScreen({
       <SafeAreaView edges={['top']}>
         <Row style={{ height: 56, paddingHorizontal: GUTTER, justifyContent: 'space-between' }}>
           <Row gap={spacing.sm} style={{ flex: 1 }}>
-            <IconButton label="Back to library" onPress={() => navigation.goBack()}>
+            <IconButton label={t('session.back_to_library')} onPress={() => navigation.goBack()}>
               <Txt variant="h2">‹</Txt>
             </IconButton>
             <View style={{ flex: 1 }}>
@@ -445,7 +448,7 @@ export function SessionScreen({
           <Row gap={spacing.sm}>
             <CreditBalance balance={balance} onPress={() => navigation.navigate('Wallet')} />
             <IconButton
-              label="Open World Sheet"
+              label={t('session.open_world_sheet')}
               onPress={() => navigation.navigate('WorldSheet', { sessionId })}
             >
               <Txt variant="h3" color={colors.text.secondary}>
@@ -482,6 +485,7 @@ export function SessionScreen({
       >
         {/* The whole story, scrollable, with nothing folded away.
             
+            // i18n-exempt: names an affordance that was removed; comment prose, never rendered
             Earlier beats used to sit behind an "↑ Earlier beats" button and
             then render at 55% opacity, which made the last hour of play look
             like an appendix and made the screen feel like a set of active
@@ -524,7 +528,7 @@ export function SessionScreen({
         {heroImageUrl ? (
           <Pressable
             accessibilityRole="imagebutton"
-            accessibilityLabel="Scene image. Tap to view full screen."
+            accessibilityLabel={t('session.scene_image_a11y')}
             onPress={() => setFullScreenImage(heroImageUrl)}
           >
             <Image
@@ -549,7 +553,10 @@ export function SessionScreen({
         {pending?.reaction?.url ? (
           <Pressable
             accessibilityRole="imagebutton"
-            accessibilityLabel={`${pending.reaction.name}, ${pending.reaction.emotion}. Tap to view full screen.`}
+            accessibilityLabel={t('session.reaction_image_a11y', {
+              name: pending.reaction.name,
+              emotion: pending.reaction.emotion,
+            })}
             onPress={() => setFullScreenImage(pending.reaction!.url!)}
             style={{ marginHorizontal: -GUTTER }}
           >
@@ -562,7 +569,12 @@ export function SessionScreen({
         ) : null}
 
         {visibleBlocks.map((block, index) => (
-          <Block key={`${pending?.turnId ?? latest?.turnId}_${index}`} block={block} scene={scene} />
+          <Block
+            // i18n-exempt: React list key, never displayed
+            key={`${pending?.turnId ?? latest?.turnId}_${index}`}
+            block={block}
+            scene={scene}
+          />
         ))}
 
         {/*
@@ -581,7 +593,7 @@ export function SessionScreen({
             <ActivityIndicator size="small" color={colors.text.muted} />
             {/* Spec §25.12 — an honest state, not theatrical loading copy. */}
             <Txt variant="caption" color={colors.text.muted}>
-              Resolving…
+              {t('session.resolving')}
             </Txt>
           </Row>
         ) : null}
@@ -593,6 +605,7 @@ export function SessionScreen({
             
             Pinned, they cost two or three lines of prose on every screen and
             they sit in the player's eyeline while they are still reading the
+            // i18n-exempt: a paraphrase inside comment prose, never rendered
             beat, which reads as "choose before you finish". In the feed they
             are simply what comes next: you read to the bottom, and there they
             are. Hidden entirely while a turn resolves, so a set the player has
@@ -623,7 +636,12 @@ export function SessionScreen({
           <Card style={{ borderColor: colors.semantic.warning, gap: spacing.md }}>
             <Txt variant="bodyCompact">{error.message}</Txt>
             {error.retry ? (
-              <Button label="Try again" variant="secondary" full={false} onPress={() => void send()} />
+              <Button
+                label={t('session.try_again')}
+                variant="secondary"
+                full={false}
+                onPress={() => void send()}
+              />
             ) : null}
           </Card>
         ) : null}
@@ -644,10 +662,10 @@ export function SessionScreen({
             <TextInput
               value={draft}
               onChangeText={setDraft}
-              placeholder={composerPlaceholder(scene)}
+              placeholder={composerPlaceholder(t, scene)}
               placeholderTextColor={colors.text.muted}
               multiline
-              accessibilityLabel="What do you do?"
+              accessibilityLabel={t('session.what_do_you_do')}
               editable={!pending}
               style={{
                 flex: 1,
@@ -664,7 +682,7 @@ export function SessionScreen({
             />
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={pending ? 'Stop' : 'Send action'}
+              accessibilityLabel={pending ? t('session.stop') : t('session.send_action')}
               accessibilityState={{ disabled: draft.trim().length === 0 && !pending }}
               disabled={draft.trim().length === 0 && !pending}
               onPress={() => {
@@ -702,7 +720,7 @@ export function SessionScreen({
 
           <Row style={{ paddingHorizontal: GUTTER, paddingTop: spacing.sm, justifyContent: 'space-between' }}>
             <QualityPill
-              label={tier.label}
+              label={t(TIER_LABEL_KEYS[tier.id])}
               cost={tier.costCredits}
               affordable={affordable}
               onPress={() => setShowQuality(true)}
@@ -710,7 +728,7 @@ export function SessionScreen({
             <Row gap={spacing.lg}>
               {!affordable ? (
                 <Txt variant="micro" color={colors.semantic.warning}>
-                  {tier.costCredits - balance} more credits needed
+                  {t('session.more_credits_needed', { count: tier.costCredits - balance })}
                 </Txt>
               ) : null}
               {/* GP-04. In the dock rather than in the transcript: at the end
@@ -719,12 +737,12 @@ export function SessionScreen({
               {latest?.actionText && !pending ? (
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel="Turn options"
+                  accessibilityLabel={t('session.turn_options')}
                   hitSlop={HIT_SLOP}
                   onPress={() => setShowTurnMenu(true)}
                 >
                   <Txt variant="micro" color={colors.text.muted}>
-                    ··· Last turn
+                    {t('session.last_turn')}
                   </Txt>
                 </Pressable>
               ) : null}
@@ -737,7 +755,7 @@ export function SessionScreen({
       {fullScreenImage ? (
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Close image"
+          accessibilityLabel={t('session.close_image')}
           onPress={() => setFullScreenImage(null)}
           style={{
             position: 'absolute',
@@ -753,7 +771,7 @@ export function SessionScreen({
             resizeMode="contain"
           />
           <Txt variant="caption" color={colors.text.muted} style={{ marginTop: spacing.xl }}>
-            Tap anywhere to close
+            {t('session.tap_anywhere_to_close')}
           </Txt>
         </Pressable>
       ) : null}
@@ -825,18 +843,26 @@ export function SessionScreen({
  * to tell "somebody is about to leave" from "everybody is fine" without
  * reading, and should get no more precision than that.
  */
-/** "Dai, Kai and Coach Torakawa" — for the stage's one accessible label. */
-function namesInWords(names: readonly string[]): string {
+/**
+ * "Dai, Kai and Coach Torakawa" — for the stage's one accessible label.
+ *
+ * A plain function rather than a component, so the translator is passed in;
+ * `useT()` is a hook and may only be called from a component body.
+ */
+function namesInWords(t: Translator, names: readonly string[]): string {
   if (names.length <= 1) return names[0] ?? '';
-  return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+  return t('session.name_list', {
+    others: names.slice(0, -1).join(', '),
+    last: names.at(-1),
+  });
 }
 
 const CREW_MOOD_TONE: Record<string, 'neutral' | 'success' | 'warning' | 'danger'> = {
-  'with you': 'success',
+  'with you': 'success', // i18n-exempt: engine mood value used as a lookup key, not display text
   steady: 'neutral',
   restless: 'warning',
   unhappy: 'warning',
-  'about to walk': 'danger',
+  'about to walk': 'danger', // i18n-exempt: engine mood value used as a lookup key, not display text
 };
 
 function Stage({
@@ -852,6 +878,7 @@ function Stage({
   playerPortraitUrl: string | null;
   onOpenPortrait: () => void;
 }): React.JSX.Element {
+  const t = useT();
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   // Spec §10.2 B — 35 to 48% of *usable* height. Measuring the whole window
@@ -899,13 +926,15 @@ function Stage({
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={
-          playerPortraitUrl ? 'Your character. Tap to view or redraw.' : 'Draw your character.'
+          playerPortraitUrl
+            ? t('session.your_character_a11y')
+            : t('session.draw_your_character_a11y')
         }
         onPress={onOpenPortrait}
         style={{ position: 'absolute', right: GUTTER, bottom: 96 }}
       >
         {playerPortraitUrl ? (
-          <CharacterPortrait name="You" uri={playerPortraitUrl} size={playerSlotWidth} />
+          <CharacterPortrait name={t('session.you')} uri={playerPortraitUrl} size={playerSlotWidth} />
         ) : (
           // The empty slot is the same footprint as the portrait that replaces
           // it, so nothing on the stage moves when the drawing arrives. It also
@@ -931,7 +960,7 @@ function Stage({
               +
             </Txt>
             <Txt variant="micro" color={colors.text.secondary} center numberOfLines={2}>
-              Draw yourself
+              {t('session.draw_yourself')}
             </Txt>
           </View>
         )}
@@ -948,14 +977,21 @@ function Stage({
       <View
         accessible
         // Spec §27.4 — the stage is one semantic group, not a maze of nodes.
-        accessibilityLabel={`Scene: ${scene.locationName}. ${
-          scene.presentCharacters.length > 0
-            ? // Now that the scene reports everyone rather than three of them,
-              // "A and B and C and D and E and F" is what a screen reader would
-              // have to say. A list reads as a list.
-              `${namesInWords(scene.presentCharacters.map((c) => c.name))} present.`
-            : 'Nobody else here.'
-        }`}
+        accessibilityLabel={t('session.stage_a11y', {
+          location: scene.locationName,
+          presence:
+            scene.presentCharacters.length > 0
+              ? // Now that the scene reports everyone rather than three of them,
+                // "A and B and C and D and E and F" is what a screen reader would
+                // have to say. A list reads as a list.
+                t('session.present', {
+                  names: namesInWords(
+                    t,
+                    scene.presentCharacters.map((c) => c.name),
+                  ),
+                })
+              : t('session.nobody_else_here'),
+        })}
         style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: GUTTER, gap: spacing.md }}
       >
         <Row gap={spacing.xl} style={{ flexWrap: 'wrap' }}>
@@ -979,7 +1015,7 @@ function Stage({
             {scene.crew.map((member) => (
               <Chip
                 key={member.id}
-                label={`${member.name} · ${member.mood}`}
+                label={t('session.crew_member', { name: member.name, mood: member.mood })}
                 tone={CREW_MOOD_TONE[member.mood] ?? 'neutral'}
               />
             ))}
@@ -1000,11 +1036,16 @@ function Stage({
 const StyleSheetAbsolute = { position: 'absolute' as const, top: 0, left: 0, right: 0, bottom: 0 };
 
 function Block({ block, scene }: { block: NarrativeBlock; scene: SessionSceneState | null }): React.JSX.Element {
+  const t = useT();
   if (block.type === 'DIALOGUE') {
     const character = scene?.presentCharacters.find((c) => c.id === block.speakerId);
     return (
       <DialogueBlock
-        speaker={block.speakerId === 'player' ? 'You' : (character?.name ?? block.speakerId ?? 'Someone')}
+        speaker={
+          block.speakerId === 'player'
+            ? t('session.you')
+            : (character?.name ?? block.speakerId ?? t('session.someone'))
+        }
         text={block.text}
         portraitUri={character?.portrait}
         voiceEligible={block.voiceEligible}
@@ -1022,10 +1063,11 @@ function Block({ block, scene }: { block: NarrativeBlock; scene: SessionSceneSta
 }
 
 function PlayerAction({ text }: { text: string }): React.JSX.Element {
+  const t = useT();
   return (
     <View
       accessible
-      accessibilityLabel={`You: ${text}`}
+      accessibilityLabel={t('session.player_action_a11y', { text })}
       style={{
         alignSelf: 'flex-end',
         maxWidth: '85%',
@@ -1073,54 +1115,53 @@ function TurnMenu({
   onShare: () => void;
   onClose: () => void;
 }): React.JSX.Element {
+  const t = useT();
   return (
-    <Sheet title="This turn" onClose={onClose}>
+    <Sheet title={t('session.this_turn')} onClose={onClose}>
       <Txt variant="bodyCompact" color={colors.text.secondary}>
-        “{actionText}”
+        {t('session.quoted_action', { text: actionText })}
       </Txt>
 
       <Stack gap={spacing.sm}>
-        <Button label={`Try the same thing again · ${turnCost}`} variant="secondary" onPress={onRetry} />
+        <Button label={t('session.retry', { cost: turnCost })} variant="secondary" onPress={onRetry} />
         <Txt variant="micro" color={colors.text.muted}>
-          Sends it again as a new turn. The dice are rolled fresh because it is a new attempt — the
-          world does not rewind.
+          {t('session.retry_explainer')}
         </Txt>
       </Stack>
 
       {rephrasable ? (
         <Stack gap={spacing.sm}>
           <Button
-            label={`Tell it differently · ${turnCost}`}
+            label={t('session.rephrase', { cost: turnCost })}
             variant="secondary"
             loading={rephrasing}
-            loadingLabel="Rewriting…"
+            loadingLabel={t('session.rewriting')}
             onPress={onRephrase}
           />
           <Txt variant="micro" color={colors.text.muted}>
-            The same moment, written again. Nothing that happened changes — the same rolls, the same
-            outcome, the same consequences. Only the words are new.
+            {t('session.rephrase_explainer')}
           </Txt>
         </Stack>
       ) : null}
 
       <Stack gap={spacing.sm}>
-        <Button label="Put it back in the composer" variant="secondary" onPress={onEdit} />
+        <Button label={t('session.edit_action')} variant="secondary" onPress={onEdit} />
         <Txt variant="micro" color={colors.text.muted}>
-          Change the wording and send when you are ready. Costs nothing until you do.
+          {t('session.edit_explainer')}
         </Txt>
       </Stack>
 
       <Stack gap={spacing.sm}>
-        <Button label="Share this moment" variant="secondary" onPress={onShare} />
+        <Button label={t('session.share_action')} variant="secondary" onPress={onShare} />
         <Txt variant="micro" color={colors.text.muted}>
-          Makes a card on your phone. You choose what it says and where it goes.
+          {t('session.share_explainer')}
         </Txt>
       </Stack>
 
       <Stack gap={spacing.sm}>
-        <Button label="Something here is wrong" variant="tertiary" onPress={onReport} />
+        <Button label={t('session.report_action')} variant="tertiary" onPress={onReport} />
         <Txt variant="micro" color={colors.text.muted}>
-          Opens the timeline, where you can correct what the story recorded. Free.
+          {t('session.report_explainer')}
         </Txt>
       </Stack>
     </Sheet>
@@ -1139,6 +1180,7 @@ function Sheet({
   onClose: () => void;
   children: React.ReactNode;
 }): React.JSX.Element {
+  const t = useT();
   const fade = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -1148,7 +1190,7 @@ function Sheet({
   return (
     <View style={{ position: 'absolute', inset: 0, justifyContent: 'flex-end' }}>
       <Pressable
-        accessibilityLabel={`Close ${title.toLowerCase()}`}
+        accessibilityLabel={t('session.close_sheet', { title: title.toLowerCase() })}
         style={{ position: 'absolute', inset: 0, backgroundColor: colors.scrim }}
         onPress={onClose}
       />
@@ -1178,6 +1220,30 @@ function Sheet({
   );
 }
 
+/**
+ * The four tier names and promises, keyed here rather than in
+ * `@aniplay/contracts`.
+ *
+ * `QUALITY_TIERS` is a wire contract shared with the server, and its `label`
+ * and `promise` are English literals in a package that has no translator. The
+ * ids stay the source of truth; the words a player reads come out of the
+ * catalogue. **The names may be brand names — TERMINOLOGY.md §3.6 has not been
+ * approved yet, so do not rename them.**
+ */
+const TIER_LABEL_KEYS: Record<QualityTier, TranslationKey> = {
+  QUICK: 'session.tier_quick',
+  VIVID: 'session.tier_vivid',
+  CINEMATIC: 'session.tier_cinematic',
+  APEX: 'session.tier_apex',
+};
+
+const TIER_PROMISE_KEYS: Record<QualityTier, TranslationKey> = {
+  QUICK: 'session.tier_quick_promise',
+  VIVID: 'session.tier_vivid_promise',
+  CINEMATIC: 'session.tier_cinematic_promise',
+  APEX: 'session.tier_apex_promise',
+};
+
 /** GP-02 — the tier sheet. Copy describes presentation, never dice (§20.3). */
 function QualitySheet({
   current,
@@ -1190,10 +1256,11 @@ function QualitySheet({
   onSelect: (tier: QualityTier) => void;
   onClose: () => void;
 }): React.JSX.Element {
+  const t = useT();
   return (
     <Sheet
-      title="Turn quality"
-      subtitle="Higher tiers buy richer direction and better visuals. Every tier rolls the same dice — paying more never changes an outcome."
+      title={t('session.turn_quality')}
+      subtitle={t('session.turn_quality_explainer')}
       onClose={onClose}
     >
       {Object.values(QUALITY_TIERS).map((tier) => {
@@ -1204,21 +1271,25 @@ function QualitySheet({
                   key={tier.id}
                   accessibilityRole="radio"
                   accessibilityState={{ selected }}
-                  accessibilityLabel={`${tier.label}, ${tier.costCredits} credits. ${tier.promise}`}
+                  accessibilityLabel={t('session.tier_a11y', {
+                    label: t(TIER_LABEL_KEYS[tier.id]),
+                    cost: tier.costCredits,
+                    promise: t(TIER_PROMISE_KEYS[tier.id]),
+                  })}
                   onPress={() => onSelect(tier.id)}
                 >
                   <Card style={{ borderColor: selected ? colors.accent.primary : colors.border.subtle }}>
                     <Row style={{ justifyContent: 'space-between' }}>
                       <Stack gap={2} style={{ flex: 1 }}>
                         <Txt variant="bodyStrong" color={selected ? colors.accent.primary : colors.text.primary}>
-                          {tier.label}
+                          {t(TIER_LABEL_KEYS[tier.id])}
                         </Txt>
                         <Txt variant="caption" color={colors.text.secondary}>
-                          {tier.promise}
+                          {t(TIER_PROMISE_KEYS[tier.id])}
                         </Txt>
                         {tier.heroImageEligible ? (
                           <Txt variant="micro" color={colors.text.muted}>
-                            Can generate a hero frame
+                            {t('session.hero_frame_eligible')}
                           </Txt>
                         ) : null}
                       </Stack>
@@ -1234,8 +1305,10 @@ function QualitySheet({
                         </Txt>
                         <Txt variant="micro" color={colors.text.muted}>
                           {affordable
-                            ? `${Math.floor(balance / tier.costCredits)} turns left`
-                            : 'not enough'}
+                            ? t('session.turns_left', {
+                                count: Math.floor(balance / tier.costCredits),
+                              })
+                            : t('session.not_enough')}
                         </Txt>
                       </Stack>
                     </Row>
@@ -1247,11 +1320,16 @@ function QualitySheet({
   );
 }
 
-/** Spec §10.3 — the placeholder varies with context. */
-function composerPlaceholder(scene: SessionSceneState | null): string {
-  if (scene?.encounter) return 'What do you do?';
-  if ((scene?.presentCharacters.length ?? 0) > 0) return 'Say or do anything…';
-  return 'What do you do?';
+/**
+ * Spec §10.3 — the placeholder varies with context.
+ *
+ * A plain function rather than a component, so the translator is passed in;
+ * `useT()` is a hook and may only be called from a component body.
+ */
+function composerPlaceholder(t: Translator, scene: SessionSceneState | null): string {
+  if (scene?.encounter) return t('session.what_do_you_do');
+  if ((scene?.presentCharacters.length ?? 0) > 0) return t('session.say_or_do_anything');
+  return t('session.what_do_you_do');
 }
 
 function outcomeText(outcome: string): string {
@@ -1270,6 +1348,7 @@ function outcomeText(outcome: string): string {
  * or it does not appear, and where fiction can carry it, fiction does.
  */
 function ContextStrip({ scene }: { scene: SessionSceneState }): React.JSX.Element | null {
+  const t = useT();
   const contest = scene.contest ?? null;
 
   // A match has a score and a clock, and during one they are the whole point.
@@ -1309,7 +1388,11 @@ function ContextStrip({ scene }: { scene: SessionSceneState }): React.JSX.Elemen
   return (
     <Row gap={spacing.sm} style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.sm, flexWrap: 'wrap' }}>
       {failing.map((resource) => (
-        <Chip key={resource.id} label={`${resource.name} is nearly gone`} tone="warning" />
+        <Chip
+          key={resource.id}
+          label={t('session.resource_nearly_gone', { name: resource.name })}
+          tone="warning"
+        />
       ))}
     </Row>
   );

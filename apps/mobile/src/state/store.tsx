@@ -14,7 +14,7 @@ import type {
   QualityTier,
   WalletSummary,
 } from '@aniplay/contracts';
-import { DEFAULT_LOCALE, isLocale } from '@aniplay/i18n';
+import { DEFAULT_LOCALE, isLocale, translatorFor } from '@aniplay/i18n';
 import { applyDeviceTimeZone, deviceLocale } from '../i18n/device.js';
 import { api, ApiError } from '../api/client.js';
 import { auth, AuthError } from '../auth/index.js';
@@ -186,6 +186,24 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
   const [state, dispatch] = useReducer(reducer, initialState);
   const hydrating = useRef(false);
 
+  /**
+   * Not `useT()`. That hook reads this store through the context this
+   * component provides, and a provider is outside its own provider — calling
+   * it here would throw. The language is right there in `state` instead.
+   */
+  const t = useMemo(() => translatorFor(state.locale), [state.locale]);
+
+  /**
+   * The API client and the auth store are not React and cannot hold a hook, so
+   * the language is pushed down to them from here — the one place that knows
+   * it. Declared before the boot effect so an error thrown during `restore()`
+   * is already in the right language.
+   */
+  useEffect(() => {
+    api.setTranslator(t);
+    auth.setTranslator(t);
+  }, [t]);
+
   // Boot: restore identity, then bootstrap. A guest token is minted locally so
   // the player can browse and start one session before any account exists (§6.3).
   useEffect(() => {
@@ -251,6 +269,9 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
       const previous = auth.identity;
       const identity = await auth.verifyEmailCode(email, code);
       if (previous?.isGuest && previous.userId !== identity.userId) {
+        // Translating this would persist a French display name on an account
+        // whose owner may switch the interface back to English tomorrow.
+        // i18n-exempt: a display name written once to the account, not UI copy
         await api.migrateGuest(previous.userId, identity.email ?? 'Player').catch(() => undefined);
       }
       await adopt(identity);
@@ -264,20 +285,21 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
     // Android and the web build have no business paying for that.
     const apple = await import('expo-apple-authentication');
     if (!(await apple.isAvailableAsync())) {
-      throw new AuthError('Sign in with Apple is not available on this device.', 'UNAVAILABLE');
+      throw new AuthError(t('error.apple_unavailable'), 'UNAVAILABLE');
     }
     const credential = await apple.signInAsync({
       requestedScopes: [apple.AppleAuthenticationScope.EMAIL, apple.AppleAuthenticationScope.FULL_NAME],
     });
     if (!credential.identityToken) {
-      throw new AuthError('Apple did not return a sign-in token. Try again.', 'NO_IDENTITY_TOKEN');
+      throw new AuthError(t('error.apple_no_token'), 'NO_IDENTITY_TOKEN');
     }
     const identity = await auth.signInWithIdToken('apple', credential.identityToken);
     if (previous?.isGuest && previous.userId !== identity.userId) {
+      // i18n-exempt: the same account display name as above, not UI copy
       await api.migrateGuest(previous.userId, identity.email ?? 'Player').catch(() => undefined);
     }
     await adopt(identity);
-  }, [adopt]);
+  }, [adopt, t]);
 
   const signOut = useCallback(async () => {
     await auth.signOut();
@@ -377,6 +399,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
 
 export function useStore(): AppStore {
   const store = useContext(StoreContext);
+  // i18n-exempt: a programming error, thrown at a developer and never rendered
   if (!store) throw new Error('useStore must be used inside AppStoreProvider');
   return store;
 }

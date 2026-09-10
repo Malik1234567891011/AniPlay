@@ -4,6 +4,7 @@ import type {
   IntentDialogue,
   MemoryFact,
   QualityTier,
+  RelationshipState,
   Resolution,
   StoryVersion,
   TurnRecord,
@@ -19,9 +20,12 @@ import {
   crewRoster,
   formatWorldTime,
   relationshipLabel,
+  relationshipTone,
   topObjective,
   dayPart,
+  dayPartLabel,
 } from '@aniplay/engine';
+import type { DayPart, RelationshipTone } from '@aniplay/engine';
 import { retrieveLore } from './authored-lore.js';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
 
@@ -34,8 +38,37 @@ import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.j
  * inventory or quest state.
  */
 
+/**
+ * The relationship a character with no `RelationshipState` reads as.
+ *
+ * Was the literal `'Wary'`, which is the English wording of a state rather than
+ * the state itself. Going through `relationshipLabel` means the fallback is
+ * translated like every other rung of the ladder.
+ */
+const NEUTRAL_RELATIONSHIP: RelationshipState = {
+  characterId: '',
+  trust: 0,
+  affection: 0,
+  respect: 0,
+  fear: 0,
+  rivalry: 0,
+  lastChangedTurn: -1,
+  unlockedGates: [],
+};
+
 export interface PresentCharacterContext {
   readonly def: CharacterDef;
+  /**
+   * How the character reads, **as an id**.
+   *
+   * Added because the label was being compared against literal English —
+   * `relationshipLabel === 'Rival'` in `director.ts` — which is a latent bug in
+   * English (a copy edit breaks it silently) and a certain one in French. Any
+   * code that wants to *branch* on the relationship uses this; only code that
+   * wants to *show* it uses the label.
+   */
+  readonly relationshipTone: RelationshipTone;
+  /** Already in the session's locale. Shown to the player and read by the model. */
   readonly relationshipLabel: string;
   readonly relationship: { trust: number; affection: number; respect: number; fear: number; rivalry: number };
   /** Only what this NPC could know — filtered before it ever reaches a prompt. */
@@ -59,8 +92,12 @@ export interface TurnContext {
     readonly locationName: string;
     readonly locationDescription: string;
     readonly artDirection: string;
+    /** `Day 3 · 4:15 PM` / `Jour 3 · 16:15`, in the session's locale. */
     readonly worldTimeLabel: string;
+    /** The word — `Afternoon`, `Après-midi`. For prose. */
     readonly dayPart: string;
+    /** The id — `AFTERNOON`. For branching. */
+    readonly dayPartId: DayPart;
     readonly presentCharacterIds: readonly string[];
   };
 
@@ -227,9 +264,10 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
 
       return {
         def,
+        relationshipTone: rel ? relationshipTone(rel) : 'WARY',
         relationshipLabel: rel
-          ? relationshipLabel(rel)
-          : 'Wary',
+          ? relationshipLabel(rel, state.locale)
+          : relationshipLabel(NEUTRAL_RELATIONSHIP, state.locale),
         relationship: dimensions,
         // Per-NPC retrieval, filtered to their own knowledge scope.
         knownMemories: retrieveMemories(
@@ -297,8 +335,12 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
       locationName: location?.name ?? state.player.locationId,
       locationDescription: location?.description ?? '',
       artDirection: location?.artDirection ?? '',
-      worldTimeLabel: formatWorldTime(state.worldMinute),
-      dayPart: dayPart(state.worldMinute),
+      // In the session's locale, not the interface's: this string is read by
+      // the writer as well as shown on the HUD, and the run's language is the
+      // one the prose is in.
+      worldTimeLabel: formatWorldTime(state.worldMinute, state.locale),
+      dayPart: dayPartLabel(state.worldMinute, state.locale),
+      dayPartId: dayPart(state.worldMinute),
       presentCharacterIds: presentIds,
     },
     player: {

@@ -90,9 +90,22 @@ export type BootstrapResponse = z.infer<typeof BootstrapResponse>;
 export const DiscoverRail = z
   .object({
     id: z.string(),
+    /**
+     * Rendered text, in the locale the request resolved to.
+     *
+     * Kept alongside `titleKey` rather than replaced by it: a client that does
+     * not know a key still has something to draw, and an older build keeps
+     * working. The client should prefer `titleKey` when it has the key, so the
+     * shelf follows the language switch without waiting for a refetch.
+     */
     title: z.string(),
+    /** Catalogue key for `title`. See `rails.ts`. */
+    titleKey: z.string().nullable().default(null),
     kind: z.enum(['HERO', 'CONTINUE', 'FOR_YOU', 'TRENDING', 'NEW', 'GENRE', 'FOLLOWING']),
     subtitle: z.string().nullable().default(null),
+    /** Catalogue key for `subtitle`, with its ICU arguments. */
+    subtitleKey: z.string().nullable().default(null),
+    subtitleParams: z.record(z.string()).nullable().default(null),
     stories: z.array(StorySummary),
   })
   .strict();

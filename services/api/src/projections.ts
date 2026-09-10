@@ -28,6 +28,7 @@ import {
   topObjective,
   dayNumber,
 } from '@aniplay/engine';
+import { translatorFor, type Locale, type TranslationKey, type Translator } from '@aniplay/i18n';
 import type { SessionRecord, StorySignals } from './repo/types.js';
 
 /**
@@ -48,15 +49,36 @@ export function resolveAssetUrl(key: string | null): string | null {
   return base ? `${base.replace(/\/$/, '')}/${key}` : null;
 }
 
-/** Plain-language attribute copy for the World Sheet (spec §11.2). */
-const ATTRIBUTE_COPY: Record<string, { name: string; plain: string }> = {
-  might: { name: 'Might', plain: 'Force, endurance, and raw physical power. Shoving a door, holding a line.' },
-  agility: { name: 'Agility', plain: 'Speed, precision, and reflex. Moving quietly, moving fast, not being seen.' },
-  mind: { name: 'Mind', plain: 'Analysis, memory, and technical knowledge. Noticing what is missing from a page.' },
-  presence: { name: 'Presence', plain: 'Persuasion, command, and performance. Being believed, or being feared.' },
-  resolve: { name: 'Resolve', plain: 'Willpower and composure. Not flinching when it matters.' },
-  arcana: { name: 'Arcana', plain: 'Attunement to the extraordinary. Reading a ward, bending one.' },
+/**
+ * Plain-language attribute copy for the World Sheet (spec §11.2).
+ *
+ * Was a table of English sentences, which is one of the two reasons a
+ * fully-translated client would still have shown `Might — Force, endurance, and
+ * raw physical power.` to a French player (`UI_AUDIT.md` §5). Now a table of
+ * catalogue keys, rendered in the **run's** locale — the World Sheet is a view
+ * of one run, and a run's language is frozen.
+ *
+ * An attribute key the catalogue does not know still falls back to the raw id,
+ * exactly as before.
+ */
+const ATTRIBUTE_KEYS: Record<string, { name: TranslationKey; plain: TranslationKey }> = {
+  might: { name: 'world.attr.might.name', plain: 'world.attr.might.plain' },
+  agility: { name: 'world.attr.agility.name', plain: 'world.attr.agility.plain' },
+  mind: { name: 'world.attr.mind.name', plain: 'world.attr.mind.plain' },
+  presence: { name: 'world.attr.presence.name', plain: 'world.attr.presence.plain' },
+  resolve: { name: 'world.attr.resolve.name', plain: 'world.attr.resolve.plain' },
+  arcana: { name: 'world.attr.arcana.name', plain: 'world.attr.arcana.plain' },
 };
+
+function attributeName(key: string, t: Translator): string {
+  const entry = ATTRIBUTE_KEYS[key];
+  return entry ? t(entry.name) : key;
+}
+
+function attributePlain(key: string, t: Translator): string {
+  const entry = ATTRIBUTE_KEYS[key];
+  return entry ? t(entry.plain) : '';
+}
 
 export function toStorySummary(
   story: StoryVersion,
@@ -162,7 +184,7 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
     locationId: state.player.locationId,
     locationName: location?.name ?? state.player.locationId,
     stageImage: resolveAssetUrl(location?.stageImage ?? null),
-    worldTimeLabel: formatWorldTime(state.worldMinute),
+    worldTimeLabel: formatWorldTime(state.worldMinute, state.locale),
     worldMinute: state.worldMinute,
     dayNumber: dayNumber(state.worldMinute),
     // Everybody who is actually here.
@@ -234,11 +256,15 @@ export function toWorldSheet(
   showAdvancedRelationshipStats: boolean,
 ): WorldSheetResponse {
   const location = story.locations.find((l) => l.id === state.player.locationId);
+  // The run's locale, frozen at creation — not the interface's. This sheet
+  // describes one run, and its numbers and names are the ones the writer is
+  // already using.
+  const t = translatorFor(state.locale);
 
   return {
     overview: {
       locationName: location?.name ?? state.player.locationId,
-      worldTimeLabel: formatWorldTime(state.worldMinute),
+      worldTimeLabel: formatWorldTime(state.worldMinute, state.locale),
       chapterLabel: `Episode ${state.arc.episode}`,
       topObjective: topObjective(state, story),
       resources: visibleResources(story, state),
@@ -250,7 +276,7 @@ export function toWorldSheet(
         .map((r) => ({
           characterId: r.characterId,
           name: story.characters.find((c) => c.id === r.characterId)?.name ?? r.characterId,
-          label: relationshipLabel(r),
+          label: relationshipLabel(r, state.locale),
         })),
       recentEvents: memories
         .filter((f) => f.supersededByFactId === null)
@@ -266,17 +292,17 @@ export function toWorldSheet(
       milestones: state.player.milestones,
       attributes: Object.entries(state.player.attributes).map(([key, value]) => ({
         key,
-        name: ATTRIBUTE_COPY[key]?.name ?? key,
+        name: attributeName(key, t),
         value,
         modifier: attributeModifier(value),
-        plainLanguage: ATTRIBUTE_COPY[key]?.plain ?? '',
+        plainLanguage: attributePlain(key, t),
       })),
       skills: story.skills.map((skill) => ({
         id: skill.id,
         name: skill.name,
-        attribute: ATTRIBUTE_COPY[skill.attribute]?.name ?? skill.attribute,
+        attribute: attributeName(skill.attribute, t),
         proficiency: state.player.skills[skill.id] ?? 0,
-        proficiencyLabel: proficiencyLabel(state.player.skills[skill.id] ?? 0),
+        proficiencyLabel: proficiencyLabel(state.player.skills[skill.id] ?? 0, state.locale),
       })),
       abilities: state.player.abilities
         .map((id) => {
@@ -314,7 +340,7 @@ export function toWorldSheet(
         if (!def) return null;
         const effects: string[] = [];
         for (const [key, value] of Object.entries(def.attributeModifiers)) {
-          effects.push(`${value > 0 ? '+' : ''}${value} ${ATTRIBUTE_COPY[key]?.name ?? key}`);
+          effects.push(`${value > 0 ? '+' : ''}${value} ${attributeName(key, t)}`);
         }
         for (const [skillId, value] of Object.entries(def.skillModifiers)) {
           const name = story.skills.find((s) => s.id === skillId)?.name ?? skillId;
@@ -355,7 +381,7 @@ export function toWorldSheet(
           status: progress.status,
           // Spec §11.4 — mystery worlds may hide steps the player has not reached.
           currentStepCopy: step && !step.hiddenUntilEntered ? step.playerCopy : null,
-          deadlineLabel: formatDeadline(state.worldMinute, step?.deadlineWorldMinute ?? null),
+          deadlineLabel: formatDeadline(state.worldMinute, step?.deadlineWorldMinute ?? null, state.locale),
           rewardCopy: def.knownRewardCopy,
           involvedNames: def.involvedCharacterIds.map(
             (id) => story.characters.find((c) => c.id === id)?.name ?? id,
@@ -373,7 +399,7 @@ export function toWorldSheet(
           characterId: rel.characterId,
           name: def?.name ?? rel.characterId,
           portrait: resolveAssetUrl(def?.portrait ?? null),
-          label: relationshipLabel(rel),
+          label: relationshipLabel(rel, state.locale),
           lastInteractionTurn: rel.lastChangedTurn,
           // Numbers are sent only when the player asked to see them.
           dimensions: showAdvancedRelationshipStats
@@ -429,6 +455,8 @@ export function toTimeline(
   events: readonly GameEvent[],
   memories: readonly MemoryFact[],
   turns: readonly TurnRecord[],
+  /** The run's locale. Defaulted so a caller that has not been given one behaves as before. */
+  locale: Locale = 'en',
 ): TimelineEntry[] {
   const entries: TimelineEntry[] = [];
 
@@ -438,7 +466,7 @@ export function toTimeline(
       id: fact.factId,
       group: 'CANON',
       turnIndex: fact.createdAtTurn,
-      worldTimeLabel: formatWorldTime(fact.createdAtWorldMinute),
+      worldTimeLabel: formatWorldTime(fact.createdAtWorldMinute, locale),
       text: fact.text,
       pinned: fact.pinned,
       // Only generated canon is correctable; engine events are not opinions.
@@ -454,7 +482,7 @@ export function toTimeline(
       id: event.eventId,
       group,
       turnIndex: turns.find((t) => t.turnId === event.turnId)?.turnIndex ?? 0,
-      worldTimeLabel: formatWorldTime(event.worldMinute),
+      worldTimeLabel: formatWorldTime(event.worldMinute, locale),
       text: describeEvent(story, event),
       pinned: false,
       correctable: false,
@@ -562,7 +590,12 @@ export function toContinueCard(
  * client turns a world that hides its numbers into one that merely declines to
  * draw them on screen. This is the projection that actually withholds them.
  */
-export function toPlayerTurn(story: StoryVersion, turn: TurnRecord): PlayerTurnRecord {
+export function toPlayerTurn(
+  story: StoryVersion,
+  turn: TurnRecord,
+  /** The run's locale. Defaulted so a caller that has not been given one behaves as before. */
+  locale: Locale = 'en',
+): PlayerTurnRecord {
   return {
     turnId: turn.turnId,
     sessionId: turn.sessionId,
@@ -579,7 +612,7 @@ export function toPlayerTurn(story: StoryVersion, turn: TurnRecord): PlayerTurnR
       skill: check.skill ?? null,
       outcome: check.outcome,
       // Always allowed: a band is a feeling, not a target number.
-      difficultyLabel: dcBandLabel(check.dc),
+      difficultyLabel: dcBandLabel(check.dc, locale),
       dc: story.rules.revealExactDc ? check.dc : null,
       math: story.rules.revealCheckMath ? formatCheckMath(check) : null,
     })),

@@ -3,6 +3,7 @@ import { Animated, Linking, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Chip, Row, Stack, Txt, colors, spacing, GUTTER } from '@aniplay/ui';
 import { useStore } from '../state/store.jsx';
+import { useT } from '../i18n/useT.js';
 
 /**
  * Screens OB-01 to OB-03.
@@ -19,6 +20,7 @@ import { useStore } from '../state/store.jsx';
 async function openLegal(page: 'privacy' | 'terms'): Promise<void> {
   const base = process.env.EXPO_PUBLIC_LEGAL_BASE_URL;
   if (!base) return;
+  // i18n-exempt: a URL, not copy — the localized page is chosen by the site.
   await Linking.openURL(`${base.replace(/\/$/, '')}/${page}`).catch(() => undefined);
 }
 
@@ -26,6 +28,7 @@ const LEGAL_LINKS_CONFIGURED = Boolean(process.env.EXPO_PUBLIC_LEGAL_BASE_URL);
 
 /** OB-01 — no fake delay; the wordmark shows only for as long as boot takes. */
 export function SplashScreen(): React.JSX.Element {
+  const t = useT();
   const fade = useRef(new Animated.Value(0)).current;
   const [showProgress, setShowProgress] = useState(false);
 
@@ -39,12 +42,13 @@ export function SplashScreen(): React.JSX.Element {
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg.base, alignItems: 'center', justifyContent: 'center' }}>
       <Animated.View style={{ opacity: fade, alignItems: 'center', gap: spacing.md }}>
+        {/* i18n-exempt: the wordmark. ANIMA is the product's name, not a word. */}
         <Txt variant="display" style={{ letterSpacing: 6 }}>
           ANIMA
         </Txt>
         {showProgress ? (
           <Txt variant="caption" color={colors.text.muted}>
-            Loading…
+            {t('onboarding.loading')}
           </Txt>
         ) : null}
       </Animated.View>
@@ -54,14 +58,15 @@ export function SplashScreen(): React.JSX.Element {
 
 /** OB-02 — shown once, before any personalized content. */
 export function AgeGateScreen(): React.JSX.Element {
+  const t = useT();
   const { confirmAge } = useStore();
   const [band, setBand] = useState<string | null>(null);
 
   const bands = [
-    { id: 'under13', label: 'Under 13' },
-    { id: '13_17', label: '13 – 17' },
-    { id: '18_24', label: '18 – 24' },
-    { id: '25plus', label: '25 or older' },
+    { id: 'under13', label: t('onboarding.age_band_under_13') },
+    { id: '13_17', label: t('onboarding.age_band_13_17') },
+    { id: '18_24', label: t('onboarding.age_band_18_24') },
+    { id: '25plus', label: t('onboarding.age_band_25_plus') },
   ];
 
   const tooYoung = band === 'under13';
@@ -70,10 +75,9 @@ export function AgeGateScreen(): React.JSX.Element {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <View style={{ flex: 1, padding: GUTTER, justifyContent: 'center', gap: spacing.xxl }}>
         <Stack gap={spacing.sm}>
-          <Txt variant="display">Before you enter</Txt>
+          <Txt variant="display">{t('onboarding.age_gate_title')}</Txt>
           <Txt variant="body" color={colors.text.secondary}>
-            Some worlds here deal with conflict, danger, and difficult choices. Tell us your age band so we
-            can show you the right ones.
+            {t('onboarding.age_gate_body')}
           </Txt>
         </Stack>
 
@@ -91,13 +95,13 @@ export function AgeGateScreen(): React.JSX.Element {
 
         {tooYoung ? (
           <Txt variant="bodyCompact" color={colors.semantic.warning}>
-            ANIMA is built for players aged 13 and over. Thanks for being honest with us.
+            {t('onboarding.age_too_young')}
           </Txt>
         ) : null}
 
         <Stack gap={spacing.md}>
           <Button
-            label="Continue"
+            label={t('onboarding.continue')}
             disabled={!band || tooYoung}
             onPress={() => void confirmAge()}
           />
@@ -106,10 +110,10 @@ export function AgeGateScreen(): React.JSX.Element {
           {LEGAL_LINKS_CONFIGURED ? (
             <Row gap={spacing.lg} style={{ justifyContent: 'center' }}>
               <Txt variant="caption" color={colors.text.muted} onPress={() => void openLegal('privacy')}>
-                Privacy
+                {t('onboarding.privacy')}
               </Txt>
               <Txt variant="caption" color={colors.text.muted} onPress={() => void openLegal('terms')}>
-                Terms
+                {t('onboarding.terms')}
               </Txt>
             </Row>
           ) : null}
@@ -121,6 +125,7 @@ export function AgeGateScreen(): React.JSX.Element {
 
 /** OB-03 — optional, skippable, one screen. Must not delay play (§6.2). */
 export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Element {
+  const t = useT();
   const { setTastes, bootstrap } = useStore();
   const [picked, setPicked] = useState<string[]>([]);
 
@@ -148,10 +153,9 @@ export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Eleme
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xxl, flexGrow: 1 }}>
         <Stack gap={spacing.sm} style={{ paddingTop: spacing.xxxl }}>
-          <Txt variant="display">Pick anything you'd actually play.</Txt>
+          <Txt variant="display">{t('onboarding.taste_title')}</Txt>
           <Txt variant="body" color={colors.text.secondary}>
-            Up to five. This decides what the top of Discover shows you — nothing is hidden either way, and
-            you can change it whenever you like. Skipping is fine.
+            {t('onboarding.taste_body')}
           </Txt>
         </Stack>
 
@@ -170,8 +174,8 @@ export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Eleme
         <View style={{ flex: 1 }} />
 
         <Stack gap={spacing.md}>
-          <Button label="Continue" onPress={() => finish(picked)} />
-          <Button label="Skip" variant="tertiary" onPress={() => finish([])} />
+          <Button label={t('onboarding.continue')} onPress={() => finish(picked)} />
+          <Button label={t('onboarding.skip')} variant="tertiary" onPress={() => finish([])} />
         </Stack>
       </ScrollView>
     </SafeAreaView>

@@ -1,6 +1,19 @@
+import { characters } from './characters.js';
+import { discover } from './discover.js';
+import { errors } from './errors.js';
 import { library } from './library.js';
+import { misc } from './misc.js';
 import { nav } from './nav.js';
+import { onboarding } from './onboarding.js';
 import { profile } from './profile.js';
+import { rails } from './rails.js';
+import { session } from './session.js';
+import { setup } from './setup.js';
+import { share } from './share.js';
+import { story } from './story.js';
+import { wallet } from './wallet.js';
+import { world } from './world.js';
+import { worldsheet } from './worldsheet.js';
 
 /**
  * The English catalogue — and the definition of what a key is.
@@ -12,7 +25,7 @@ import { profile } from './profile.js';
  *
  * Split by area rather than kept in one file, for two reasons. Keys are already
  * namespaced (`wallet.*`, `session.*`), so the split follows the names; and it
- * means two people can key two screens without editing the same file.
+ * means two screens can be keyed without editing the same file.
  *
  * Keys are flat and dotted, and `keySeparator` is off, so `wallet.restore` is
  * one key rather than a path into a nested object. Flat keys grep, and a
@@ -30,8 +43,21 @@ import { profile } from './profile.js';
  */
 export const en = {
   ...nav,
-  ...profile,
+  ...world,
+  ...onboarding,
+  ...discover,
+  ...rails,
+  ...story,
+  ...setup,
+  ...session,
+  ...worldsheet,
   ...library,
+  ...profile,
+  ...characters,
+  ...wallet,
+  ...share,
+  ...misc,
+  ...errors,
 } as const;
 
 /**
