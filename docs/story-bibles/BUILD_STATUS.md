@@ -42,40 +42,54 @@ authoring and the engine rather than between two authored objects:
 
 `hush-house.spec.ts` holds all of it, since none of it was catchable generically.
 
-## In progress
+## Done (continued)
 
-### Window Seven — written, NOT in `LAUNCH_CATALOG`, does not parse
-`packages/test-fixtures/src/window-seven.ts` (untracked as of writing).
+### Window Seven — shipped, in `LAUNCH_CATALOG`
+`packages/test-fixtures/src/window-seven.ts`, `window-seven.spec.ts`.
 
-Substantively finished and authored at standard — 5 characters with nothing
-empty, 8 endings matching the bible one-for-one, one banded invisible resource
-that is the best-behaved in the repo. It has never been run once, and it shows.
+It had never been run once. It was not in `index.ts`, so no test in the repo
+had ever loaded it, and it threw on import: `AbilityDef.requires` is strict and
+has no `hasItems`, and two abilities passed one — the author had copied the
+`QuestPredicate` shape. Registering it first would have caught that in a second.
 
-Known defects, in the order they need fixing:
+Fixed, in the order it mattered:
 
-1. **It throws on import.** `AbilityDef.requires` is `.strict()` and has no
-   `hasItems`; `burn_the_archive` and `publish_it` both pass one. The author
-   copied the `QuestPredicate` shape. Re-express as `flagsSet: ['knows:palisade']`.
-2. **Not registered in `index.ts`**, which is why (1) survived: both catalog
-   specs iterate `LAUNCH_CATALOG`, so no test has ever touched this world.
-3. **`clean_operation` is handed to every run** from `the_first_night.rewards.flags`,
-   and the `rang_her` route's `closesFlags` cannot revoke it — `closesFlags`
-   writes `closed:X` and never unsets `X`. Two endings' central gate is inert.
-   Move it onto the two routes that deserve it.
-4. **`broke_the_brief` has one source**, on night one only, and gates a UNIQUE
-   ending, a RARE ending and a branch of Mara's arc. Contacting the target at
-   any point should set it — put it on the `q_selene` routes.
-5. **Five of eight endings funnel through one item purchase** (`juno_log` →
-   `penthouse_access` → `palisade_drive`). Needs a second way up.
-6. **Selene and Ash are the same voice** — negate-then-correct, contraction-free,
-   numeric tic, identical procedural offer. Ash's declared differentiator ("no
-   contractions") does not differentiate: nobody in the world uses one. Halden's
-   samples contradict his own `speechStyle`.
-7. **The penthouse is in the wrong building.** `orpheum_lobby` connects directly
-   to `voss_penthouse` across a four-lane avenue, and `juno_log` is nine weeks of
-   swipes in the *player's* tower yet unlocks the *target's*.
-8. `whether_she_uses_it` can dead-end; no plain walk-away ending; 0 UNCOMMON
-   across 8 endings; 6 quest steps against a house norm of 10–17.
+- The two `hasItems` ability gates are now `knows:palisade`, which is also what
+  actually makes burning or publishing the archive possible.
+- **`clean_operation` was handed to every run** from the step's rewards, and the
+  route that rang the target on night one could not revoke it, because
+  `closesFlags` writes `closed:X` and never unsets `X`. Two endings gated on
+  having run a clean operation were decorative. It now comes from the two routes
+  that earn it, and Seven Nights Complete also requires `broke_the_brief` unset.
+- **`broke_the_brief` had one source, on night one.** It gates a UNIQUE ending,
+  a RARE ending and a branch of Mara's arc. Rule four of the brief is "make no
+  contact", so every route that reaches Selene now sets it.
+- **Five of eight endings funnelled through one purchase** off the concierge.
+  `over_the_roof` is a second way into the penthouse, and the two abilities that
+  destroy or publish the archive no longer need the drive in hand.
+- **The penthouse was in the wrong building** — a lift in the player's own lobby
+  arriving across a four-lane avenue. Removed; the far building's fire stair is
+  the way up. The access log is nine weeks of swipes in the player's *own*
+  tower, which is what makes it evidence.
+- **`whether_she_uses_it` could dead-end**, so Mara's Order never fired for a
+  player who was simply told about the order. There is now a route that only
+  needs the week to run out.
+- **Selene, Ash and Halden were one voice** — negate, then correct, in
+  contraction-free sentences with a number in them. Ash's declared
+  differentiator was "no contractions", and nobody in the world uses one. Each
+  now has a move belonging to their job: Ash states his procedure and offers you
+  a way to refuse, Selene reframes the question and hands you the data, Halden
+  accumulates four clauses of reassurance and stops dead on the question.
+- **6 quest steps became 10** (33 routes). The middle of the week had no shape;
+  `q_selene` was one step handing out the memoranda, both endgame abilities,
+  `knows:palisade` and 15 reputation in a single transition. There is now a
+  `q_glass` lead, a middle-nights step, and a step for what Voss actually wants.
+- Added the plain walk-away ending the bible asks for and the catalog norm has.
+  Rarities were 7-of-8 RARE-or-above; now spread across all four tiers.
+- Halden spent 1440 minutes at one desk across three blocks, two of which were
+  "at the desk" and "still at the desk". He has a day.
+- Premise opened on an invented institution and put seven proper nouns in its
+  first sixty words. Rewritten to open in the room.
 
 ## Untouched
 

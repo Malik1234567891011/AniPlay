@@ -10,6 +10,7 @@ import { SEVEN_DAYS as SEVEN_DAYS_RAW } from './seven-days.js';
 import { BLACKWAKE as BLACKWAKE_RAW } from './blackwake.js';
 import { LAST_FIVE as LAST_FIVE_RAW } from './last-five.js';
 import { HUSH_HOUSE } from './hush-house.js';
+import { WINDOW_SEVEN } from './window-seven.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -35,6 +36,7 @@ export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
  * somebody runs the generator for them on purpose.
  */
 export { HUSH_HOUSE } from './hush-house.js';
+export { WINDOW_SEVEN } from './window-seven.js';
 
 /**
  * The official launch catalog.
@@ -53,7 +55,8 @@ export { HUSH_HOUSE } from './hush-house.js';
  * is a sport where your position is counted out of what you kept trying and
  * every rival who watches film makes it harder, and Hush House is a building
  * that has spent a hundred years learning how people behave and gets better at
- * imitating the ones you let matter to you.
+ * imitating the ones you let matter to you, and Window Seven is seven nights at
+ * a camera where the brief is the thing every route through the story breaks.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -67,4 +70,5 @@ export const LAUNCH_CATALOG = [
   BLACKWAKE,
   LAST_FIVE,
   HUSH_HOUSE,
+  WINDOW_SEVEN,
 ] as const;
