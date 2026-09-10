@@ -1,0 +1,24 @@
+{
+  "name": "@aniplay/i18n",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./polyfill": "./src/polyfill.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@formatjs/intl-datetimeformat": "^7.6.1",
+    "@formatjs/intl-getcanonicallocales": "^3.2.11",
+    "@formatjs/intl-listformat": "^8.3.13",
+    "@formatjs/intl-locale": "^5.3.10",
+    "@formatjs/intl-numberformat": "^9.4.0",
+    "@formatjs/intl-pluralrules": "^6.3.13"
+  }
+}

@@ -331,27 +331,105 @@ parser; it should be handed to them, not taken.
 
 ## Phase 2 implementation sequence
 
-Starts at `ENGLISH_FREEZE_COMMIT`. Ordered so that each step is verifiable
-before the next depends on it, and so that the riskiest content work happens
-after the infrastructure is proven on one world.
+**`ENGLISH_FREEZE_COMMIT` was over-interpreted and is withdrawn as a gate.**
+The real constraint was never "English must stop changing" — it was *do not
+duplicate or fight unstable core architecture*. French is built in a parallel
+worktree and rebased onto `origin/main` as core fixes land. Only four things
+genuinely wait for a later English stabilisation point: the mass localization
+sweep across every world, final copy polish, App Store metadata and screenshots,
+and release-grade French QA.
 
-| # | Step | Gate |
-| --- | --- | --- |
-| **1** | `Intl` polyfills + `frDate()` + `normalizeForSearch()` + `frCollator`. No strings yet | Formatting snapshot tests pass on iOS **and** Android |
-| **2** | `locale` on `GameState`, frozen at session creation; `expo-localization`; a hidden language switch | An `fr` session round-trips through the API and the database |
-| **3** | i18next + ICU plurals; catalogue scaffolding; **English keys only**, `en` still renders identically | `npm run i18n:extract` reports zero un-keyed user-facing literals |
-| **4** | Server strings → keys + params (§3). Client renders | `Day 3 · 16:15` renders correctly with no client-side string surgery |
-| **5** | **Memory facts → structured (§5)** | No English reaches a French context window. Parity test |
-| **6** | `PlayerIdentity.grammar` + the French `CharacterSetup` question | `Tu es arrivée` renders for a player who asked for it |
-| **7** | fr catalogue populated from `UI_AUDIT` + `PRODUCT_VOICE`; a11y labels included | `npm run fr:lint` clean; layout pass on the six at-risk screens |
-| **8** | `WRITER_POLICY_FR`, `SAFETY_POLICY_FR`, French `worldRules`, in `model-stages.ts`, both paths | `writer-parity.spec.ts` extended and green |
-| **9** | `addressMode` (§6) end to end | T/V lint green across a full playthrough of Seven Days to Midnight |
-| **10** | French `VERB_LEXICON`, `META_PATTERNS`, clitic resolution, stopword guard, `\p{L}` normalisation | `npm run fr:probe` shows no `custom` on the standard French corpus |
-| **11** | Genre-aware French figurative-violence lexicon | French adversarial sweep passes |
-| **12** | **One world in French, end to end.** Recommend **Nine Weeks** — no combat, the richest tu/vous arc, and the texting surface | 30-minute native playtest; no `c'est traduit` |
-| **13** | Response-card cap raised / made locale-aware (`responses.ts:39`) | No silent `null` on French turns |
-| **14** | Remaining nine worlds | Per-world audit in [`STORY_AUDIT.md`](STORY_AUDIT.md) |
-| **15** | Store metadata, screenshots, ASO | [`APP_STORE_FRANCE.md`](APP_STORE_FRANCE.md) |
+> **The hard rule that replaces the freeze: `en` and `fr` are both permanent and
+> first class.** English behaviour is byte-identical when the locale is English.
+> French is added *beside* English through a locale dimension — never by
+> substitution, translation-in-place, or deletion. If a change makes French work
+> by degrading the English path, it is a regression, not a trade-off. This
+> applies to `WRITER_POLICY`/`WRITER_POLICY_FR`, the verb lexicons, `worldRules`,
+> response generation and world content alike.
+
+Ordered so that each step is verifiable before the next depends on it, and so
+that the riskiest content work happens after the infrastructure is proven on one
+world.
+
+Status column: ✅ done · 🟡 partial · ⬜ not started.
+
+| # | Step | Gate | Status |
+| --- | --- | --- | --- |
+| **1** | `Intl` polyfills + `frDate()` + `normalizeForSearch()` + `frCollator`. No strings yet | Formatting snapshot tests pass on iOS **and** Android | ✅ |
+| **2** | `locale` on `GameState`, frozen at session creation; `expo-localization`; a hidden language switch | An `fr` session round-trips through the API and the database | ⬜ |
+| **3** | i18next + ICU plurals; catalogue scaffolding; **English keys only**, `en` still renders identically | `npm run i18n:extract` reports zero un-keyed user-facing literals | ⬜ |
+| **4** | Server strings → keys + params (§3). Client renders | `Day 3 · 16:15` renders correctly with no client-side string surgery | ⬜ |
+| **5** | **Memory facts → structured (§5)** | No English reaches a French context window. Parity test | ⬜ |
+| **6** | `PlayerIdentity.grammar` + the French `CharacterSetup` question | `Tu es arrivée` renders for a player who asked for it | ⬜ |
+| **7** | fr catalogue populated from `UI_AUDIT` + `PRODUCT_VOICE`; a11y labels included | `npm run fr:lint` clean; layout pass on the six at-risk screens | ⬜ |
+| **8** | `WRITER_POLICY_FR`, `SAFETY_POLICY_FR`, French `worldRules`, in `model-stages.ts`, both paths | `writer-parity.spec.ts` extended and green | ⬜ |
+| **9** | `addressMode` (§6) end to end | T/V lint green across a full playthrough of Seven Days to Midnight | ⬜ |
+| **10** | French `VERB_LEXICON`, `META_PATTERNS`, clitic resolution, stopword guard, `\p{L}` normalisation | `npm run fr:probe` shows no `custom` on the standard French corpus | ⬜ |
+| **11** | Genre-aware French figurative-violence lexicon | French adversarial sweep passes | ⬜ |
+| **12** | **One world in French, end to end.** Recommend **Nine Weeks** — no combat, the richest tu/vous arc, and the texting surface | 30-minute native playtest; no `c'est traduit` | ⬜ |
+| **13** | Response-card cap raised / made locale-aware (`responses.ts:39`) | No silent `null` on French turns | ⬜ |
+| **14** | Remaining nine worlds | Per-world audit in [`STORY_AUDIT.md`](STORY_AUDIT.md) | ⬜ |
+| **15** | Store metadata, screenshots, ASO | [`APP_STORE_FRANCE.md`](APP_STORE_FRANCE.md) | ⬜ |
+
+### Step 1, as built — `packages/i18n`
+
+`@aniplay/i18n` is a leaf package with no dependency on any other workspace
+package, so `@aniplay/contracts` can build its `Locale` schema on it without a
+cycle. It holds `locale.ts` (the two locales and the resolution chain),
+`typography.ts` (the named codepoints), `format.ts`, `search.ts`, and
+`conformance.ts`.
+
+**`@aniplay/i18n/polyfill` is a separate entry point and is imported as the
+first line of `apps/mobile/index.ts`.** It installs `getCanonicalLocales`,
+`Locale`, `PluralRules`, `NumberFormat`, `DateTimeFormat` and `ListFormat` with
+`polyfill-force` — unconditionally, on every engine including Node. A
+conditional install would reintroduce exactly the divergence the package exists
+to remove, and would make snapshot tests pass on the machine that wrote them and
+nowhere else.
+
+**The server never formats a display string.** It sends keys and parameters
+(§3), so it needs no polyfill and there is no server/client formatting seam to
+keep in step. That is a rule, not an observation: a server-side `Intl` call is a
+divergence waiting to happen.
+
+`Intl.Collator` is the one piece `@formatjs` does not polyfill. `search.ts`
+probes the engine's collator once against `l'ami`/`l’ami` and `e`/`é` and falls
+back to comparing `normalizeForSearch` output when it fails either, so sorting
+is deterministic even on a Hermes build without full ICU.
+
+**Measured bundle cost**, `npx expo export --platform ios --no-minify`:
+
+| | Hermes bytecode | Modules |
+| --- | ---: | ---: |
+| before | 2.7 MB | 1011 |
+| after | 4.7 MB | 1033 |
+
+**1.37 MB of the 2.0 MB is `add-all-tz`**, the IANA timezone database.
+`add-golden-tz` is 814 KB and was measured to cover every zone France needs —
+`Europe/Paris`, `Indian/Reunion`, `America/Martinique`, `America/Guadeloupe`,
+`America/Cayenne`, `Indian/Mayotte`, `Pacific/Tahiti`, `Pacific/Noumea` all
+format correctly — but it **throws `Invalid timeZoneName` on 4 of 11 exotic
+zones probed** (`America/Argentina/Ushuaia`, `Antarctica/Troll`,
+`Pacific/Kiritimati`, `Etc/GMT+5`), which would silently fall the app back to
+UTC dates for those users. `add-all-tz` was kept on that basis. **If 550 KB
+matters more than a correct date in Ushuaia, this is the one line to change**,
+and the fallback in `setDefaultTimeZone` already handles the throw.
+
+### The conformance suite
+
+Step 1's gate is *"formatting snapshot tests pass on iOS and Android"*, and a
+vitest file cannot satisfy that by itself — it runs on Node, on a laptop. So the
+expectations live in `conformance.ts` as a plain array with no test framework in
+it: `runFormattingConformance()` returns a pass/fail list that the vitest suite
+asserts on **and** a device build can call directly. What makes the
+cross-platform claim true is the first three cases, which assert that
+`Intl.NumberFormat.polyfilled` is `true` and that `formatToParts` returns three
+parts — the two things Hermes/iOS does not do natively.
+
+Expected values are written as escaped codepoints, and the vitest assertions are
+explicit rather than `toMatchSnapshot()`. A recorded snapshot can be regenerated
+by whoever sees it fail, which is precisely what would happen the first time an
+engine produced U+00A0 where CLDR says U+202F.
 
 **Step 12 is the real gate.** Everything before it is infrastructure that can be
 argued about; a French player finishing Nine Weeks without noticing is the only
