@@ -79,7 +79,20 @@ export class ContentBlockedError extends Error {
 export async function submitTurn(args: SubmitTurnArgs): Promise<AcceptedTurn> {
   const { ctx, hub, user, session, story, actionText, qualityTier, clientRevision } = args;
 
-  const state = await ctx.repo.getState(session.sessionId);
+  // Spec §17.10 — these two do not depend on each other, so they do not wait
+  // for each other.
+  //
+  // Loading state is a round trip to Postgres and moderation is a round trip
+  // to the model provider, and they ran back to back in the accept path —
+  // before the turn had started, while the player watched nothing happen. The
+  // ordering guarantees that matter are unchanged: moderation still resolves
+  // before the reserve, so a refused turn still costs nothing, and still
+  // before the parser, so nothing is generated from refused input.
+  const [state, verdict] = await Promise.all([
+    ctx.repo.getState(session.sessionId),
+    ctx.moderator.check(actionText),
+  ]);
+
   if (!state) throw new TurnFailedError('Session state missing', 'SESSION_NOT_FOUND');
 
   // Spec §17.4 — a stale revision means the client is acting on a world that has
@@ -89,9 +102,7 @@ export async function submitTurn(args: SubmitTurnArgs): Promise<AcceptedTurn> {
     throw new StaleRevisionError(state.revision, turns.at(-1)?.turnId ?? null);
   }
 
-  // Spec §29.1 layer 3 / §29.2. Before the reserve, so a refusal costs the
-  // player nothing, and before the parser, so nothing is generated from it.
-  const verdict = await ctx.moderator.check(actionText);
+  // Spec §29.1 layer 3 / §29.2.
   if (verdict.flagged) {
     throw new ContentBlockedError(
       verdict.playerFacingMessage ?? 'That takes the story somewhere it cannot go. Try something else.',
@@ -140,9 +151,12 @@ async function processTurn(
     hub.emit(turnId, 'check.started', { label: 'Resolving' });
 
     // Spec §11.7 — remember where this turn started, so a fork can come back
-    // to it. Saved before anything resolves, because that is the state a
-    // branch from this moment means.
-    await ctx.repo.putStateSnapshot(session.sessionId, state.turnIndex, state);
+    // to it. The state it records is the one already in hand, so nothing is
+    // waiting on this write: awaiting it put a Postgres round trip between the
+    // player pressing send and the first model call starting.
+    const snapshot = ctx.repo
+      .putStateSnapshot(session.sessionId, state.turnIndex, state)
+      .catch(() => undefined);
 
     const seed = deriveTurnSeed(session.sessionSeed, state.turnIndex, session.branchKey);
     const result = await runTurn({
@@ -242,6 +256,10 @@ async function processTurn(
     await ctx.repo.appendEvents(result.events);
     await ctx.repo.appendMemories(session.sessionId, result.newMemories);
     await ctx.repo.updateSession(session.sessionId, { lastPlayedAt: record.createdAt });
+
+    // The pre-turn snapshot has to exist before this turn's result does, or a
+    // fork from this moment would find nothing to fork from.
+    await snapshot;
 
     // Spec §17.1 step 13 — only now does the reserve become a real charge.
     await ctx.wallet.finalize(reservation);
