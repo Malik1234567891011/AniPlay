@@ -20936,5 +20936,1905 @@
       "latencyMs": 35010,
       "createdAt": "2026-09-10T22:18:49.723Z"
     }
+  },
+  "story_pink_tide/cover": {
+    "assetKey": "story_pink_tide/cover",
+    "file": "story_pink_tide/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Pink Tide: Paradise. One week. One missing man.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v3-anime",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a71cffd5-f529-4559-90e2-6acac420fdac",
+      "promptHash": "9e458cc9f6f88a2687849b04d3ad1cf9",
+      "seed": "sv_pink_tide_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 38985,
+      "createdAt": "2026-09-10T22:51:42.857Z"
+    }
+  },
+  "story_pink_tide/key": {
+    "assetKey": "story_pink_tide/key",
+    "file": "story_pink_tide/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Pink Tide",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ab96ce11-c844-4b25-895d-2699a2030bcf",
+      "promptHash": "45c7435157992f2eba8e84cbf4d4b8d9",
+      "seed": "sv_pink_tide_1:key:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 30439,
+      "createdAt": "2026-09-10T22:52:13.957Z"
+    }
+  },
+  "story_pink_tide/stage_the_lobby": {
+    "assetKey": "story_pink_tide/stage_the_lobby",
+    "file": "story_pink_tide/stage_the_lobby.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Lobby: Cool marble after the heat, a wall of glass onto the water, orchids that are replaced every second day, and a front desk with three people behind it who have never once said no to anybody.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ca9d5235-f078-41e6-a20c-64506368190b",
+      "promptHash": "3a0659243d86ea3ccdde2ef570a9ae62",
+      "seed": "sv_pink_tide_1:loc:the_lobby:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 21430,
+      "createdAt": "2026-09-10T22:52:36.096Z"
+    }
+  },
+  "story_pink_tide/stage_infinity_pool": {
+    "assetKey": "story_pink_tide/stage_infinity_pool",
+    "file": "story_pink_tide/stage_infinity_pool.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Infinity Pool: Forty metres of turquoise with no visible far edge, so the water appears to run straight into the ocean.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "84fbdbb6-8ed3-4419-8564-b1126fc5acbc",
+      "promptHash": "8f3def56d171bc8df67ce9d7755e360e",
+      "seed": "sv_pink_tide_1:loc:infinity_pool:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 22333,
+      "createdAt": "2026-09-10T22:52:36.986Z"
+    }
+  },
+  "story_pink_tide/stage_your_room": {
+    "assetKey": "story_pink_tide/stage_your_room",
+    "file": "story_pink_tide/stage_your_room.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Your Room: Better than you expected.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "27747dec-e50a-420e-ab6e-3194d0a9ec4d",
+      "promptHash": "aa68e38149c7fcc3ba625035cb8a8d09",
+      "seed": "sv_pink_tide_1:loc:your_room:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 22883,
+      "createdAt": "2026-09-10T22:52:58.984Z"
+    }
+  },
+  "story_pink_tide/stage_beach_club": {
+    "assetKey": "story_pink_tide/stage_beach_club",
+    "file": "story_pink_tide/stage_beach_club.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Beach Club: White sand, sixty loungers, a volleyball net that gets serious after five, paddleboards stacked by colour, and a kitchen doing plates of grilled fish and cold beer until sunset.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "073ba6a9-02bf-4c45-b618-14099ef6abc5",
+      "promptHash": "e94dd72a8206025a27cab097437f3938",
+      "seed": "sv_pink_tide_1:loc:beach_club:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 32034,
+      "createdAt": "2026-09-10T22:53:09.026Z"
+    }
+  },
+  "story_pink_tide/stage_watersports_shed": {
+    "assetKey": "story_pink_tide/stage_watersports_shed",
+    "file": "story_pink_tide/stage_watersports_shed.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Watersports Shed: Timber, salt-bleached, padlocked at night.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "69fa378f-5dac-4307-beb1-3f230dc7fb38",
+      "promptHash": "437af4cd01b36db17558e649bb734290",
+      "seed": "sv_pink_tide_1:loc:watersports_shed:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 24523,
+      "createdAt": "2026-09-10T22:53:23.515Z"
+    }
+  },
+  "story_pink_tide/stage_dive_centre": {
+    "assetKey": "story_pink_tide/stage_dive_centre",
+    "file": "story_pink_tide/stage_dive_centre.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Dive Centre: Tanks in racks, a compressor that runs at seven, a whiteboard with tide times and today’s sites, and a laminated map of the coast with one area politely crossed out.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1d90c1b8-6c3d-4488-99b5-1928095a8bf2",
+      "promptHash": "a7ab3b20a0c49073afa3eb46183f0729",
+      "seed": "sv_pink_tide_1:loc:dive_centre:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 33312,
+      "createdAt": "2026-09-10T22:53:42.344Z"
+    }
+  },
+  "story_pink_tide/stage_rooftop_bar": {
+    "assetKey": "story_pink_tide/stage_rooftop_bar",
+    "file": "story_pink_tide/stage_rooftop_bar.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Rooftop Bar: Eleven floors up, open to the sky, a pool you are not supposed to swim in and a view of the whole island — the pool, the beach, the marina lights, and the dark unlit stretch of coast to the east that nobody has explained to you.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "52257d7f-4c13-4162-b209-3f31668ed623",
+      "promptHash": "f739fd0615473912e51da52a6e51d003",
+      "seed": "sv_pink_tide_1:loc:rooftop_bar:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 33057,
+      "createdAt": "2026-09-10T22:53:56.581Z"
+    }
+  },
+  "story_pink_tide/stage_service_corridors": {
+    "assetKey": "story_pink_tide/stage_service_corridors",
+    "file": "story_pink_tide/stage_service_corridors.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Service Corridors: Bare concrete and strip light behind all that marble.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "93596a45-b176-4d71-9143-60d9ff1b248c",
+      "promptHash": "318f6749ecd9d5b91d0c31e4e4b922e3",
+      "seed": "sv_pink_tide_1:loc:service_corridors:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 22335,
+      "createdAt": "2026-09-10T22:54:04.692Z"
+    }
+  },
+  "story_pink_tide/stage_adrian_room": {
+    "assetKey": "story_pink_tide/stage_adrian_room",
+    "file": "story_pink_tide/stage_adrian_room.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Ocean Tower 808: Cleaned to a standard the rest of the hotel does not quite reach.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7a9c9b9d-433d-4b0f-9a66-f38d08d01eab",
+      "promptHash": "b6f9dad380d3ae2f9a9eb076d1cc55d7",
+      "seed": "sv_pink_tide_1:loc:adrian_room:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 23303,
+      "createdAt": "2026-09-10T22:54:27.999Z"
+    }
+  },
+  "story_pink_tide/stage_staff_backstep": {
+    "assetKey": "story_pink_tide/stage_staff_backstep",
+    "file": "story_pink_tide/stage_staff_backstep.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Staff Backstep: Three concrete steps, a bin, an ashtray and a view of the generator.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cb09dfd1-4d1f-41ba-8f08-3e155251010d",
+      "promptHash": "ea7cec4ba774f27e3d6a2c553cf92e04",
+      "seed": "sv_pink_tide_1:loc:staff_backstep:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 32690,
+      "createdAt": "2026-09-10T22:54:29.286Z"
+    }
+  },
+  "story_pink_tide/stage_the_marina": {
+    "assetKey": "story_pink_tide/stage_the_marina",
+    "file": "story_pink_tide/stage_the_marina.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Marina: Forty berths, a fuel dock, two resort launches and a row of private boats belonging to people who did not come here on the ferry.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "713f66c7-59b8-4ac0-9b08-9ec4dcebecf2",
+      "promptHash": "044f1eb96f2544b8ee7ccac9d26f6a1c",
+      "seed": "sv_pink_tide_1:loc:the_marina:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34225,
+      "createdAt": "2026-09-10T22:55:02.230Z"
+    }
+  },
+  "story_pink_tide/stage_ferry_dock": {
+    "assetKey": "story_pink_tide/stage_ferry_dock",
+    "file": "story_pink_tide/stage_ferry_dock.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Ferry Dock: A covered berth, a bench, a luggage trolley and a board with four crossings a day on it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1a35773a-13e3-4d80-bf19-9854d58992b8",
+      "promptHash": "da47ba4bf2726c086b15096a32757d2b",
+      "seed": "sv_pink_tide_1:loc:ferry_dock:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 33900,
+      "createdAt": "2026-09-10T22:55:03.199Z"
+    }
+  },
+  "story_pink_tide/stage_east_cove": {
+    "assetKey": "story_pink_tide/stage_east_cove",
+    "file": "story_pink_tide/stage_east_cove.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "East Cove: Closed for marina-expansion surveys, which is partly true.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f84e5055-442a-4b55-b452-e3ff2ae0f55d",
+      "promptHash": "ecebe01f16e3cbac68d352033684b6ee",
+      "seed": "sv_pink_tide_1:loc:east_cove:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16290,
+      "createdAt": "2026-09-10T22:55:19.496Z"
+    }
+  },
+  "story_pink_tide/stage_lighthouse": {
+    "assetKey": "story_pink_tide/stage_lighthouse",
+    "file": "story_pink_tide/stage_lighthouse.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Old Lighthouse: Decommissioned eleven years ago and left standing because it is beautiful.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "39974b99-a66e-4e1f-b928-424812f1341d",
+      "promptHash": "eb993b514c3a6cdfd0b02e9bdea2fdde",
+      "seed": "sv_pink_tide_1:loc:lighthouse:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 18008,
+      "createdAt": "2026-09-10T22:55:37.513Z"
+    }
+  },
+  "story_pink_tide/stage_the_villas": {
+    "assetKey": "story_pink_tide/stage_the_villas",
+    "file": "story_pink_tide/stage_the_villas.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Private Villas: Forty of them along the headland, each with a plunge pool, a golf buggy and a gate.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "21d10d1f-5dad-4b1a-a2b9-95673ab62282",
+      "promptHash": "79da26bb8dc6ed23bac16436bf420fbe",
+      "seed": "sv_pink_tide_1:loc:the_villas:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35590,
+      "createdAt": "2026-09-10T22:55:37.830Z"
+    }
+  },
+  "story_pink_tide/stage_pink_tide_shore": {
+    "assetKey": "story_pink_tide/stage_pink_tide_shore",
+    "file": "story_pink_tide/stage_pink_tide_shore.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Pink Tide Shore: Ten minutes along the sand from the beach club, away from every light the resort owns.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1ba46dd6-738f-4b56-ae87-528a0a90a2e7",
+      "promptHash": "dc903ee24d95a6069d22201d5c70b782",
+      "seed": "sv_pink_tide_1:loc:pink_tide_shore:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 12505,
+      "createdAt": "2026-09-10T22:55:50.343Z"
+    }
+  },
+  "story_pink_tide/stage_sea_cave": {
+    "assetKey": "story_pink_tide/stage_sea_cave",
+    "file": "story_pink_tide/stage_sea_cave.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Sea Cave: A tidal mouth under the east cliffs that is open around low water and closed the rest of the time.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e355c25b-e71b-4e5a-8ad3-ffc8da3f5402",
+      "promptHash": "f94f3330ed8c92990490df845202f7b7",
+      "seed": "sv_pink_tide_1:loc:sea_cave:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35176,
+      "createdAt": "2026-09-10T22:56:12.705Z"
+    }
+  },
+  "story_pink_tide/sora_neutral": {
+    "assetKey": "story_pink_tide/sora_neutral",
+    "file": "story_pink_tide/sora_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7c2ddb79-c127-408e-af3e-5477b4e70b62",
+      "promptHash": "1a283d0322fd5b0106120f4d61edac97",
+      "seed": "pt-sora-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 32353,
+      "createdAt": "2026-09-10T23:15:37.587Z"
+    }
+  },
+  "story_pink_tide/sora": {
+    "assetKey": "story_pink_tide/sora",
+    "file": "story_pink_tide/sora.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, Twenty-three, third summer as a guest-experience host, and the reason most people remember this island",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6bb32fbb-5223-4458-9e7a-7046273dbd7d",
+      "promptHash": "4d23484f74829ae71a5a84b3f5844f4b",
+      "seed": "pt-sora-01",
+      "costUsd": 0.05488,
+      "latencyMs": 31399,
+      "createdAt": "2026-09-10T23:15:36.623Z"
+    }
+  },
+  "story_pink_tide/sora_warm": {
+    "assetKey": "story_pink_tide/sora_warm",
+    "file": "story_pink_tide/sora_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "780e24d4-a113-4aa9-ba1c-04b6990076e2",
+      "promptHash": "ecb20beb70dbf52339bb8b99ae513fbb",
+      "seed": "pt-sora-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 21552,
+      "createdAt": "2026-09-10T23:15:58.185Z"
+    }
+  },
+  "story_pink_tide/sora_confused": {
+    "assetKey": "story_pink_tide/sora_confused",
+    "file": "story_pink_tide/sora_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "70a08ef7-f24a-49d3-b82f-f0c53f632003",
+      "promptHash": "82a8daa51889f2d3643de9c089fe73cb",
+      "seed": "pt-sora-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 31822,
+      "createdAt": "2026-09-10T23:16:30.018Z"
+    }
+  },
+  "story_pink_tide/sora_annoyed": {
+    "assetKey": "story_pink_tide/sora_annoyed",
+    "file": "story_pink_tide/sora_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "769327f0-29e7-456f-af49-b7a89d6b7f24",
+      "promptHash": "86ef57fec7d7d87892ffef08081260ba",
+      "seed": "pt-sora-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 32006,
+      "createdAt": "2026-09-10T23:16:43.754Z"
+    }
+  },
+  "story_pink_tide/sora_worried": {
+    "assetKey": "story_pink_tide/sora_worried",
+    "file": "story_pink_tide/sora_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6c424e00-e59d-4f6f-84bd-c302f228454a",
+      "promptHash": "7be4658cf231af4a01f3b1082840977d",
+      "seed": "pt-sora-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 23006,
+      "createdAt": "2026-09-10T23:17:06.770Z"
+    }
+  },
+  "story_pink_tide/eli": {
+    "assetKey": "story_pink_tide/eli",
+    "file": "story_pink_tide/eli.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, Thirty-one, assistant manager, nine years from the front desk to the fourth floor, and awake since Tuesday",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c9c8b67b-7545-496b-a267-02f0a618addf",
+      "promptHash": "b78841aba2aec1cb952cef21fb2193ec",
+      "seed": "pt-eli-01",
+      "costUsd": 0.01372,
+      "latencyMs": 19217,
+      "createdAt": "2026-09-10T22:58:34.578Z"
+    }
+  },
+  "story_pink_tide/eli_neutral": {
+    "assetKey": "story_pink_tide/eli_neutral",
+    "file": "story_pink_tide/eli_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d772bde6-a2bb-468f-9961-140a2c0da2bf",
+      "promptHash": "cf5f0ea8f42194fb9e450db05e3d3131",
+      "seed": "pt-eli-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 30567,
+      "createdAt": "2026-09-10T22:58:45.942Z"
+    }
+  },
+  "story_pink_tide/eli_warm": {
+    "assetKey": "story_pink_tide/eli_warm",
+    "file": "story_pink_tide/eli_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ba352022-cb15-4f28-8495-9361e66e3805",
+      "promptHash": "0fdbd21081e25eebb77cf6bd730af488",
+      "seed": "pt-eli-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 14346,
+      "createdAt": "2026-09-10T22:58:48.930Z"
+    }
+  },
+  "story_pink_tide/eli_amused": {
+    "assetKey": "story_pink_tide/eli_amused",
+    "file": "story_pink_tide/eli_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "90aa909f-5bff-42c6-90b1-3e28031a46f2",
+      "promptHash": "20759bb43facda8de9c9f729519a7267",
+      "seed": "pt-eli-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 18238,
+      "createdAt": "2026-09-10T22:59:04.191Z"
+    }
+  },
+  "story_pink_tide/eli_surprised": {
+    "assetKey": "story_pink_tide/eli_surprised",
+    "file": "story_pink_tide/eli_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c4a14d54-5252-407d-a557-fa8495f257cf",
+      "promptHash": "8a8567f708caeb6f530419a846175e4e",
+      "seed": "pt-eli-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 31979,
+      "createdAt": "2026-09-10T22:59:20.914Z"
+    }
+  },
+  "story_pink_tide/eli_confused": {
+    "assetKey": "story_pink_tide/eli_confused",
+    "file": "story_pink_tide/eli_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "63c7b83c-bd41-45cc-962a-94c9f6f5a6b1",
+      "promptHash": "8743d8996cc06d24d4405ef19b970dcc",
+      "seed": "pt-eli-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 29864,
+      "createdAt": "2026-09-10T22:59:34.061Z"
+    }
+  },
+  "story_pink_tide/eli_annoyed": {
+    "assetKey": "story_pink_tide/eli_annoyed",
+    "file": "story_pink_tide/eli_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "45b66086-a6ec-4e21-9cb3-2ab83040901f",
+      "promptHash": "7b2efd21c998a1665bb18db5935d89f9",
+      "seed": "pt-eli-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18998,
+      "createdAt": "2026-09-10T22:59:39.922Z"
+    }
+  },
+  "story_pink_tide/eli_worried": {
+    "assetKey": "story_pink_tide/eli_worried",
+    "file": "story_pink_tide/eli_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5e83acb0-4197-4d05-afdf-4942dd3aa87d",
+      "promptHash": "0a6d7b5476df5e6e31e3b57bfeedb2a2",
+      "seed": "pt-eli-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 13331,
+      "createdAt": "2026-09-10T22:59:53.264Z"
+    }
+  },
+  "story_pink_tide/eli_angry": {
+    "assetKey": "story_pink_tide/eli_angry",
+    "file": "story_pink_tide/eli_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Mercer, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dc262d93-0632-4e94-9b12-37959a4c0e9b",
+      "promptHash": "1422ceb7890ce26fe897a5732e5df17d",
+      "seed": "pt-eli-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 31509,
+      "createdAt": "2026-09-10T23:00:05.578Z"
+    }
+  },
+  "story_pink_tide/luka_neutral": {
+    "assetKey": "story_pink_tide/luka_neutral",
+    "file": "story_pink_tide/luka_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c40b1a04-8de2-45be-b125-9477670dd44b",
+      "promptHash": "d2ce73af49a151a7de12b00436e2b57a",
+      "seed": "pt-luka-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19634,
+      "createdAt": "2026-09-10T23:00:26.357Z"
+    }
+  },
+  "story_pink_tide/luka": {
+    "assetKey": "story_pink_tide/luka",
+    "file": "story_pink_tide/luka.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, Twenty-five, dive instructor, and the person who understands the water round this island better than anybody who has ever managed it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "66590a1d-1263-4cef-ae9b-1b5157ca5c08",
+      "promptHash": "2eb597f8151d893f3f4267e22df35851",
+      "seed": "pt-luka-01",
+      "costUsd": 0.02404,
+      "latencyMs": 21743,
+      "createdAt": "2026-09-10T23:00:28.445Z"
+    }
+  },
+  "story_pink_tide/luka_warm": {
+    "assetKey": "story_pink_tide/luka_warm",
+    "file": "story_pink_tide/luka_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f725118a-6713-43dd-bea9-dc009981904c",
+      "promptHash": "faa85f0641e1c0826d51bd8de7dcfdd8",
+      "seed": "pt-luka-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 17712,
+      "createdAt": "2026-09-10T23:00:44.077Z"
+    }
+  },
+  "story_pink_tide/luka_amused": {
+    "assetKey": "story_pink_tide/luka_amused",
+    "file": "story_pink_tide/luka_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0ca2ad13-af8a-4766-a307-435e0ad90fef",
+      "promptHash": "4208f038d4b5c7abe326bdf6cd6bf9f0",
+      "seed": "pt-luka-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 28836,
+      "createdAt": "2026-09-10T23:00:57.290Z"
+    }
+  },
+  "story_pink_tide/luka_surprised": {
+    "assetKey": "story_pink_tide/luka_surprised",
+    "file": "story_pink_tide/luka_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2355cb33-52d4-4f54-a3d8-3b87d8e91b15",
+      "promptHash": "c4b22655096f4a8f1709aeb8a08a8320",
+      "seed": "pt-luka-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 29942,
+      "createdAt": "2026-09-10T23:01:14.027Z"
+    }
+  },
+  "story_pink_tide/luka_confused": {
+    "assetKey": "story_pink_tide/luka_confused",
+    "file": "story_pink_tide/luka_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "50b441cf-1e63-424a-98c2-6c96bffe6e94",
+      "promptHash": "dd0133ce11eddf9f84bb648125e0c962",
+      "seed": "pt-luka-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 30407,
+      "createdAt": "2026-09-10T23:01:27.707Z"
+    }
+  },
+  "story_pink_tide/luka_annoyed": {
+    "assetKey": "story_pink_tide/luka_annoyed",
+    "file": "story_pink_tide/luka_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a034e934-58a1-4248-9c5f-8b738e125ba5",
+      "promptHash": "7e8c5b9acc6b0cfa67845eb446303e76",
+      "seed": "pt-luka-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 33176,
+      "createdAt": "2026-09-10T23:01:47.212Z"
+    }
+  },
+  "story_pink_tide/luka_angry": {
+    "assetKey": "story_pink_tide/luka_angry",
+    "file": "story_pink_tide/luka_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "850a9062-2b4c-462a-b94a-cc49e8e8b3ad",
+      "promptHash": "dacf850bb8713a4c3da7fb2cafefd4e5",
+      "seed": "pt-luka-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 29300,
+      "createdAt": "2026-09-10T23:01:57.013Z"
+    }
+  },
+  "story_pink_tide/luka_worried": {
+    "assetKey": "story_pink_tide/luka_worried",
+    "file": "story_pink_tide/luka_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Luka Reyes, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f491aa5-8cc4-475c-a179-df5934738ea5",
+      "promptHash": "94b7dd30b9dde942c09a867b3aba2568",
+      "seed": "pt-luka-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 33396,
+      "createdAt": "2026-09-10T23:02:20.624Z"
+    }
+  },
+  "story_pink_tide/nami": {
+    "assetKey": "story_pink_tide/nami",
+    "file": "story_pink_tide/nami.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, Twenty-nine, marine biologist contracted to the expansion assessment, and the person who started all of this with one anonymous email",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "86543371-d099-4dc6-a33d-05ec1a5b8579",
+      "promptHash": "d429a6934e375b2a9c8bee7ecfa6f11b",
+      "seed": "pt-nami-01",
+      "costUsd": 0.02404,
+      "latencyMs": 20599,
+      "createdAt": "2026-09-10T23:02:41.891Z"
+    }
+  },
+  "story_pink_tide/nami_neutral": {
+    "assetKey": "story_pink_tide/nami_neutral",
+    "file": "story_pink_tide/nami_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ddea0a8a-2978-4cfd-93b7-69499eb52956",
+      "promptHash": "ae85818168871546b99155f21f832e24",
+      "seed": "pt-nami-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 30423,
+      "createdAt": "2026-09-10T23:02:51.728Z"
+    }
+  },
+  "story_pink_tide/nami_warm": {
+    "assetKey": "story_pink_tide/nami_warm",
+    "file": "story_pink_tide/nami_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "930dd897-fe87-4352-8252-e06011c117e3",
+      "promptHash": "cfdfb13259587bc4f26b8660ca03d011",
+      "seed": "pt-nami-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 20656,
+      "createdAt": "2026-09-10T23:03:02.553Z"
+    }
+  },
+  "story_pink_tide/nami_surprised": {
+    "assetKey": "story_pink_tide/nami_surprised",
+    "file": "story_pink_tide/nami_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1238ea3a-03b2-4354-aa20-580d4194a2d2",
+      "promptHash": "5ee9ee4526910e6c5e693b95d6e99101",
+      "seed": "pt-nami-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 16175,
+      "createdAt": "2026-09-10T23:03:18.740Z"
+    }
+  },
+  "story_pink_tide/nami_amused": {
+    "assetKey": "story_pink_tide/nami_amused",
+    "file": "story_pink_tide/nami_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ec3e1869-d7db-4802-b8d8-44fb54edcb39",
+      "promptHash": "3671ae991df4e1682709af29d466d12b",
+      "seed": "pt-nami-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 35540,
+      "createdAt": "2026-09-10T23:03:27.273Z"
+    }
+  },
+  "story_pink_tide/nami_confused": {
+    "assetKey": "story_pink_tide/nami_confused",
+    "file": "story_pink_tide/nami_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ffd9c12f-eb61-4ab6-96c0-2d2e4c89bf35",
+      "promptHash": "4f3da60beb1259686a9eea70993a6aea",
+      "seed": "pt-nami-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18159,
+      "createdAt": "2026-09-10T23:03:36.907Z"
+    }
+  },
+  "story_pink_tide/nami_annoyed": {
+    "assetKey": "story_pink_tide/nami_annoyed",
+    "file": "story_pink_tide/nami_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf37d7c2-b6ad-4324-8fb5-ba2f4e2b5ad8",
+      "promptHash": "ef4d325c25c3059af39e7d8ad71a47df",
+      "seed": "pt-nami-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 15536,
+      "createdAt": "2026-09-10T23:03:42.820Z"
+    }
+  },
+  "story_pink_tide/nami_angry": {
+    "assetKey": "story_pink_tide/nami_angry",
+    "file": "story_pink_tide/nami_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aa20132b-de12-47a4-bece-71c6e31fb5ae",
+      "promptHash": "fd477b31b96b080ae19300f9e60cec13",
+      "seed": "pt-nami-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 17254,
+      "createdAt": "2026-09-10T23:03:54.171Z"
+    }
+  },
+  "story_pink_tide/nami_worried": {
+    "assetKey": "story_pink_tide/nami_worried",
+    "file": "story_pink_tide/nami_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nami Kuroda, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "af673c65-9aee-44b1-97c8-6ea112b652d8",
+      "promptHash": "09cb1082f93821d7c9389c3fedb8102e",
+      "seed": "pt-nami-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 32284,
+      "createdAt": "2026-09-10T23:04:15.114Z"
+    }
+  },
+  "story_pink_tide/reika": {
+    "assetKey": "story_pink_tide/reika",
+    "file": "story_pink_tide/reika.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, Forty-six, general manager of Aster Cove, and the only person on this island who can halt anything",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2eb0fa77-822a-4088-aeaf-ad2854cc8a00",
+      "promptHash": "95b0b48699a217325632cf4aee3aee07",
+      "seed": "pt-reika-01",
+      "costUsd": 0.02404,
+      "latencyMs": 24696,
+      "createdAt": "2026-09-10T23:04:40.536Z"
+    }
+  },
+  "story_pink_tide/reika_neutral": {
+    "assetKey": "story_pink_tide/reika_neutral",
+    "file": "story_pink_tide/reika_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f963a8a7-58b0-4abc-b845-f88d95bf3d9b",
+      "promptHash": "f34aa31887da2e3b6197cdc10fa16ab8",
+      "seed": "pt-reika-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 28874,
+      "createdAt": "2026-09-10T23:04:44.727Z"
+    }
+  },
+  "story_pink_tide/reika_warm": {
+    "assetKey": "story_pink_tide/reika_warm",
+    "file": "story_pink_tide/reika_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b000ae1d-2340-4a6a-81f0-8ae04216499e",
+      "promptHash": "c17ed027bf0c3ce8789e88b588e7ce66",
+      "seed": "pt-reika-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 13782,
+      "createdAt": "2026-09-10T23:04:54.329Z"
+    }
+  },
+  "story_pink_tide/reika_surprised": {
+    "assetKey": "story_pink_tide/reika_surprised",
+    "file": "story_pink_tide/reika_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7f7cf016-03ad-4855-ad44-bf0e48a69504",
+      "promptHash": "1702df5ac3f78a9ad8ca6463f3bd0fe4",
+      "seed": "pt-reika-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 15236,
+      "createdAt": "2026-09-10T23:05:09.579Z"
+    }
+  },
+  "story_pink_tide/reika_amused": {
+    "assetKey": "story_pink_tide/reika_amused",
+    "file": "story_pink_tide/reika_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6d1820f0-c809-408a-81ee-77e32e14cff8",
+      "promptHash": "8c33e8ad6d4a484ba77ae1ca17c03746",
+      "seed": "pt-reika-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 29385,
+      "createdAt": "2026-09-10T23:05:14.124Z"
+    }
+  },
+  "story_pink_tide/reika_confused": {
+    "assetKey": "story_pink_tide/reika_confused",
+    "file": "story_pink_tide/reika_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "15d1cd06-3eb1-4c07-b7b8-c882056ef53a",
+      "promptHash": "83745ed3f8f1850b4166ee32c34a9e7a",
+      "seed": "pt-reika-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 19995,
+      "createdAt": "2026-09-10T23:05:29.599Z"
+    }
+  },
+  "story_pink_tide/reika_annoyed": {
+    "assetKey": "story_pink_tide/reika_annoyed",
+    "file": "story_pink_tide/reika_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6b156e79-65ef-4ea4-948c-189113acb4ba",
+      "promptHash": "98c58854e66065877045d86154a53bfd",
+      "seed": "pt-reika-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 30092,
+      "createdAt": "2026-09-10T23:05:44.228Z"
+    }
+  },
+  "story_pink_tide/reika_angry": {
+    "assetKey": "story_pink_tide/reika_angry",
+    "file": "story_pink_tide/reika_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5061de28-8185-4deb-9584-88f1d6eb178a",
+      "promptHash": "5523dc07dba7e1b7bd6bf0cbaa03c90c",
+      "seed": "pt-reika-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 15744,
+      "createdAt": "2026-09-10T23:05:45.350Z"
+    }
+  },
+  "story_pink_tide/reika_worried": {
+    "assetKey": "story_pink_tide/reika_worried",
+    "file": "story_pink_tide/reika_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reika Mori, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "51d71c16-17c6-47a2-957c-dc42321d86e9",
+      "promptHash": "b01d3bbc5771cc3c64d124ffed7718a4",
+      "seed": "pt-reika-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 28873,
+      "createdAt": "2026-09-10T23:06:13.107Z"
+    }
+  },
+  "story_pink_tide/marcus": {
+    "assetKey": "story_pink_tide/marcus",
+    "file": "story_pink_tide/marcus.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, Thirty-nine, regional development executive, in villa nine for the expansion meetings",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "248ea6a4-589f-4bf4-a722-ca0f5526806b",
+      "promptHash": "92c348bbcbb83315bb74c2caf325e1ab",
+      "seed": "pt-marcus-01",
+      "costUsd": 0.01372,
+      "latencyMs": 17310,
+      "createdAt": "2026-09-10T23:06:31.212Z"
+    }
+  },
+  "story_pink_tide/marcus_neutral": {
+    "assetKey": "story_pink_tide/marcus_neutral",
+    "file": "story_pink_tide/marcus_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e111d8c6-6348-4b84-a9ef-daceb79643f7",
+      "promptHash": "380fa8b7e753df306c32e6841a37a26f",
+      "seed": "pt-marcus-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 20446,
+      "createdAt": "2026-09-10T23:06:34.363Z"
+    }
+  },
+  "story_pink_tide/marcus_warm": {
+    "assetKey": "story_pink_tide/marcus_warm",
+    "file": "story_pink_tide/marcus_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2630deb6-bb86-4caf-97a0-3b850b9d7da1",
+      "promptHash": "36e67c08ddf3250f5f0b341699ab48f8",
+      "seed": "pt-marcus-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 16216,
+      "createdAt": "2026-09-10T23:06:47.438Z"
+    }
+  },
+  "story_pink_tide/marcus_amused": {
+    "assetKey": "story_pink_tide/marcus_amused",
+    "file": "story_pink_tide/marcus_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fe5f9ba3-b8c4-4126-bbbb-d0b005be8fed",
+      "promptHash": "4b17486c5b4a3d526387e06492540096",
+      "seed": "pt-marcus-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 15266,
+      "createdAt": "2026-09-10T23:06:49.636Z"
+    }
+  },
+  "story_pink_tide/marcus_confused": {
+    "assetKey": "story_pink_tide/marcus_confused",
+    "file": "story_pink_tide/marcus_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0169a3d7-53d3-4143-8360-c39c6d3a4d43",
+      "promptHash": "5d3ed2df181022bd345819c07f705493",
+      "seed": "pt-marcus-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 16728,
+      "createdAt": "2026-09-10T23:07:06.371Z"
+    }
+  },
+  "story_pink_tide/marcus_surprised": {
+    "assetKey": "story_pink_tide/marcus_surprised",
+    "file": "story_pink_tide/marcus_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f623d964-852a-466e-8d74-95fb0754c8e8",
+      "promptHash": "49a94bd89e50a92b584e4280140e00c9",
+      "seed": "pt-marcus-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 31656,
+      "createdAt": "2026-09-10T23:07:19.104Z"
+    }
+  },
+  "story_pink_tide/marcus_annoyed": {
+    "assetKey": "story_pink_tide/marcus_annoyed",
+    "file": "story_pink_tide/marcus_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "21440ba3-d068-486b-9000-c1e2b0ea96b2",
+      "promptHash": "b5d60b00ce9fdbee44400ba733728ced",
+      "seed": "pt-marcus-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 19638,
+      "createdAt": "2026-09-10T23:07:26.019Z"
+    }
+  },
+  "story_pink_tide/marcus_angry": {
+    "assetKey": "story_pink_tide/marcus_angry",
+    "file": "story_pink_tide/marcus_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "efe1ddb6-d439-4b47-80aa-90ebc1385840",
+      "promptHash": "1facb8324595b50ab7004d553a897afe",
+      "seed": "pt-marcus-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 22046,
+      "createdAt": "2026-09-10T23:07:41.158Z"
+    }
+  },
+  "story_pink_tide/marcus_worried": {
+    "assetKey": "story_pink_tide/marcus_worried",
+    "file": "story_pink_tide/marcus_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcus Vane, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ac4e726e-172d-42e0-963e-6c9bdad68628",
+      "promptHash": "df126dd19d6cb5c5748c81528b24ba3c",
+      "seed": "pt-marcus-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 16440,
+      "createdAt": "2026-09-10T23:07:42.466Z"
+    }
+  },
+  "story_pink_tide/celeste_neutral": {
+    "assetKey": "story_pink_tide/celeste_neutral",
+    "file": "story_pink_tide/celeste_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "af56bda5-c34c-401d-8c9a-51d449dfe988",
+      "promptHash": "871b3660fc433fcbb19a8c4778c585d6",
+      "seed": "pt-celeste-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 16843,
+      "createdAt": "2026-09-10T23:07:59.981Z"
+    }
+  },
+  "story_pink_tide/celeste": {
+    "assetKey": "story_pink_tide/celeste",
+    "file": "story_pink_tide/celeste.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, Twenty-seven, fashion influencer on a sponsored stay, and the accidental owner of the only photographs that matter",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1046dc49-c713-4255-b0cf-51f33a454f4d",
+      "promptHash": "f0a2777fa8df523b452034609a899a2b",
+      "seed": "pt-celeste-01",
+      "costUsd": 0.02404,
+      "latencyMs": 22882,
+      "createdAt": "2026-09-10T23:08:06.007Z"
+    }
+  },
+  "story_pink_tide/celeste_amused": {
+    "assetKey": "story_pink_tide/celeste_amused",
+    "file": "story_pink_tide/celeste_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8d581ecc-b029-4ac0-832d-7c9ebf19e5f5",
+      "promptHash": "2e53dd43dfed1bb77788775bca73b09d",
+      "seed": "pt-celeste-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 17343,
+      "createdAt": "2026-09-10T23:08:23.359Z"
+    }
+  },
+  "story_pink_tide/celeste_warm": {
+    "assetKey": "story_pink_tide/celeste_warm",
+    "file": "story_pink_tide/celeste_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8cce904c-1ba3-4bb5-83c5-c2e08fff6018",
+      "promptHash": "26648a8fb3e0b44ff134bbda360ab07f",
+      "seed": "pt-celeste-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 33073,
+      "createdAt": "2026-09-10T23:08:33.066Z"
+    }
+  },
+  "story_pink_tide/celeste_surprised": {
+    "assetKey": "story_pink_tide/celeste_surprised",
+    "file": "story_pink_tide/celeste_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0bdf3f3e-8c20-4735-b924-12621f784a95",
+      "promptHash": "fa4f8c64befb43b08da7d5ba62d8fb69",
+      "seed": "pt-celeste-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 17787,
+      "createdAt": "2026-09-10T23:08:41.156Z"
+    }
+  },
+  "story_pink_tide/celeste_confused": {
+    "assetKey": "story_pink_tide/celeste_confused",
+    "file": "story_pink_tide/celeste_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c9fdbe08-0b7b-4644-a773-8211e769d63e",
+      "promptHash": "ac0043f097833d769279216ff5d7e091",
+      "seed": "pt-celeste-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 22071,
+      "createdAt": "2026-09-10T23:08:55.142Z"
+    }
+  },
+  "story_pink_tide/celeste_annoyed": {
+    "assetKey": "story_pink_tide/celeste_annoyed",
+    "file": "story_pink_tide/celeste_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1590cebb-6062-425f-a423-104be9041237",
+      "promptHash": "7b168f89d28eb13d751651707cfe4ef6",
+      "seed": "pt-celeste-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 32234,
+      "createdAt": "2026-09-10T23:09:13.398Z"
+    }
+  },
+  "story_pink_tide/celeste_angry": {
+    "assetKey": "story_pink_tide/celeste_angry",
+    "file": "story_pink_tide/celeste_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "72de2278-41b3-443b-81f6-160f8a500580",
+      "promptHash": "3c4e1e7803c0a725ca1513272b68a068",
+      "seed": "pt-celeste-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 32722,
+      "createdAt": "2026-09-10T23:09:27.874Z"
+    }
+  },
+  "story_pink_tide/celeste_worried": {
+    "assetKey": "story_pink_tide/celeste_worried",
+    "file": "story_pink_tide/celeste_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Celeste Ward, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "df2ccd26-49c3-49c2-b312-c90cafaa750a",
+      "promptHash": "418b7a61a77063bcad23ba442e6c8ef5",
+      "seed": "pt-celeste-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 17719,
+      "createdAt": "2026-09-10T23:09:31.126Z"
+    }
+  },
+  "story_pink_tide/june": {
+    "assetKey": "story_pink_tide/june",
+    "file": "story_pink_tide/june.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, Twenty-six, night bartender on the roof, and the best-informed person on this island",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1e300325-bbcc-4112-8d44-5b1b85c0be68",
+      "promptHash": "a26650454c4cc1f15b1b7a32b86c44f2",
+      "seed": "pt-june-01",
+      "costUsd": 0.05488,
+      "latencyMs": 31707,
+      "createdAt": "2026-09-10T23:10:03.481Z"
+    }
+  },
+  "story_pink_tide/june_neutral": {
+    "assetKey": "story_pink_tide/june_neutral",
+    "file": "story_pink_tide/june_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2d96f61e-ebd0-4501-9b55-1a2a7f74c68b",
+      "promptHash": "ab81bf2d30ee7ecb454c4fda3dd956c0",
+      "seed": "pt-june-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 32199,
+      "createdAt": "2026-09-10T23:10:03.986Z"
+    }
+  },
+  "story_pink_tide/june_warm": {
+    "assetKey": "story_pink_tide/june_warm",
+    "file": "story_pink_tide/june_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "52ce3af7-471a-41db-b49c-54aa5f2355e1",
+      "promptHash": "da200ef7b3a8f41311e5aa10c2184a93",
+      "seed": "pt-june-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 18885,
+      "createdAt": "2026-09-10T23:10:22.378Z"
+    }
+  },
+  "story_pink_tide/june_amused": {
+    "assetKey": "story_pink_tide/june_amused",
+    "file": "story_pink_tide/june_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7bf95e21-5382-43c9-90fd-e376180b3f4d",
+      "promptHash": "7f82c80609f39fbce58afd4eb3f139d8",
+      "seed": "pt-june-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 31669,
+      "createdAt": "2026-09-10T23:10:35.665Z"
+    }
+  },
+  "story_pink_tide/june_surprised": {
+    "assetKey": "story_pink_tide/june_surprised",
+    "file": "story_pink_tide/june_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a4811438-4b9e-4978-9c89-a05e83f31ed9",
+      "promptHash": "c3a61e1275525202ea1c019f07b6bbea",
+      "seed": "pt-june-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 17245,
+      "createdAt": "2026-09-10T23:10:39.638Z"
+    }
+  },
+  "story_pink_tide/june_confused": {
+    "assetKey": "story_pink_tide/june_confused",
+    "file": "story_pink_tide/june_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "481989bd-3574-4e20-b09f-635f25f85bc7",
+      "promptHash": "bd277ee859c3bcc6d6ec9e7da6e26c7f",
+      "seed": "pt-june-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 22534,
+      "createdAt": "2026-09-10T23:10:58.215Z"
+    }
+  },
+  "story_pink_tide/june_annoyed": {
+    "assetKey": "story_pink_tide/june_annoyed",
+    "file": "story_pink_tide/june_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b26106d6-a532-4cd5-855f-dd31d2ed77ba",
+      "promptHash": "9119b373107620e85de7cf26300448c0",
+      "seed": "pt-june-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 21988,
+      "createdAt": "2026-09-10T23:11:01.636Z"
+    }
+  },
+  "story_pink_tide/june_worried": {
+    "assetKey": "story_pink_tide/june_worried",
+    "file": "story_pink_tide/june_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c05a2641-427b-4613-ac77-32f4a1444f71",
+      "promptHash": "529a0ec79812944320ea5f0105d8ff20",
+      "seed": "pt-june-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 18768,
+      "createdAt": "2026-09-10T23:11:20.413Z"
+    }
+  },
+  "story_pink_tide/june_angry": {
+    "assetKey": "story_pink_tide/june_angry",
+    "file": "story_pink_tide/june_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "June Kato, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2d1bab00-bded-4858-8195-99d917aa8219",
+      "promptHash": "f7d90e63693c19d7571c2dc5efce7ca6",
+      "seed": "pt-june-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 30045,
+      "createdAt": "2026-09-10T23:11:28.267Z"
+    }
+  },
+  "story_pink_tide/adrian_neutral": {
+    "assetKey": "story_pink_tide/adrian_neutral",
+    "file": "story_pink_tide/adrian_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a5c2e873-a4ec-40a2-93f5-5d76fea7bf8b",
+      "promptHash": "d064d314999826e350274132bf62fc16",
+      "seed": "pt-adrian-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 23235,
+      "createdAt": "2026-09-10T23:11:52.184Z"
+    }
+  },
+  "story_pink_tide/adrian": {
+    "assetKey": "story_pink_tide/adrian",
+    "file": "story_pink_tide/adrian.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, Thirty-four, documentary producer, missing since Tuesday night, and alive on a ledge under the east cliffs",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "60ad8172-3a7a-43a9-8eff-89aa38670540",
+      "promptHash": "54579e846b65278c70c528ed88ee3fec",
+      "seed": "pt-adrian-01",
+      "costUsd": 0.05488,
+      "latencyMs": 33458,
+      "createdAt": "2026-09-10T23:12:02.394Z"
+    }
+  },
+  "story_pink_tide/adrian_warm": {
+    "assetKey": "story_pink_tide/adrian_warm",
+    "file": "story_pink_tide/adrian_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1ff75c97-2b10-4036-bd3e-4a184e06d854",
+      "promptHash": "3748398bce7e8f072ae5e9a26c2819c0",
+      "seed": "pt-adrian-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 24869,
+      "createdAt": "2026-09-10T23:12:17.062Z"
+    }
+  },
+  "story_pink_tide/adrian_amused": {
+    "assetKey": "story_pink_tide/adrian_amused",
+    "file": "story_pink_tide/adrian_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "893184bb-1c52-4196-999a-59ebdb6bddc7",
+      "promptHash": "83b573f81fca7f840df5ca6d80d96872",
+      "seed": "pt-adrian-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 21508,
+      "createdAt": "2026-09-10T23:12:23.913Z"
+    }
+  },
+  "story_pink_tide/adrian_surprised": {
+    "assetKey": "story_pink_tide/adrian_surprised",
+    "file": "story_pink_tide/adrian_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6ebf74db-80d6-4bbf-83e1-c362d21906f1",
+      "promptHash": "b2d14ddab3b7cd59c50e68c7b58f31ad",
+      "seed": "pt-adrian-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 34334,
+      "createdAt": "2026-09-10T23:12:51.420Z"
+    }
+  },
+  "story_pink_tide/adrian_confused": {
+    "assetKey": "story_pink_tide/adrian_confused",
+    "file": "story_pink_tide/adrian_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "44b2b580-924b-4658-bab6-d995187e48e9",
+      "promptHash": "9b50b17a3d6849b3645714d34ddcb625",
+      "seed": "pt-adrian-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 33331,
+      "createdAt": "2026-09-10T23:12:57.258Z"
+    }
+  },
+  "story_pink_tide/adrian_annoyed": {
+    "assetKey": "story_pink_tide/adrian_annoyed",
+    "file": "story_pink_tide/adrian_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7aac391-5155-42e8-86e7-fa695df08123",
+      "promptHash": "7cfa6057575a3128157b443ecc633649",
+      "seed": "pt-adrian-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 20114,
+      "createdAt": "2026-09-10T23:13:11.541Z"
+    }
+  },
+  "story_pink_tide/adrian_angry": {
+    "assetKey": "story_pink_tide/adrian_angry",
+    "file": "story_pink_tide/adrian_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5ca6cec9-0c42-44c6-b2f9-81b64448579e",
+      "promptHash": "cf197656236905425d567b5f8ccdb2ac",
+      "seed": "pt-adrian-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 21901,
+      "createdAt": "2026-09-10T23:13:19.171Z"
+    }
+  },
+  "story_pink_tide/adrian_worried": {
+    "assetKey": "story_pink_tide/adrian_worried",
+    "file": "story_pink_tide/adrian_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Adrian Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8158fd66-14be-4d20-8203-2d4fea7a2fd2",
+      "promptHash": "537131b6eb12e8fbd07e7efae2c1b886",
+      "seed": "pt-adrian-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 33209,
+      "createdAt": "2026-09-10T23:13:44.757Z"
+    }
+  },
+  "story_pink_tide/sora_amused": {
+    "assetKey": "story_pink_tide/sora_amused",
+    "file": "story_pink_tide/sora_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b582b2d3-cbbb-4ca3-ae64-8f32402841ac",
+      "promptHash": "edcf03b2436e2bbc743ecd9ccb35b212",
+      "seed": "pt-sora-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 18930,
+      "createdAt": "2026-09-10T23:15:56.528Z"
+    }
+  },
+  "story_pink_tide/sora_surprised": {
+    "assetKey": "story_pink_tide/sora_surprised",
+    "file": "story_pink_tide/sora_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "efa46e5b-3b82-469e-8ff0-7a7f1ffa96aa",
+      "promptHash": "aaf916cdd300836d7a2c7aa315a16a96",
+      "seed": "pt-sora-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 15206,
+      "createdAt": "2026-09-10T23:16:11.742Z"
+    }
+  },
+  "story_pink_tide/sora_angry": {
+    "assetKey": "story_pink_tide/sora_angry",
+    "file": "story_pink_tide/sora_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sora Amemiya, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c102f1fc-aac3-4bec-90a4-53aa0228495a",
+      "promptHash": "c39b6916f6cca9c71c8cfa8e30380342",
+      "seed": "pt-sora-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 32513,
+      "createdAt": "2026-09-10T23:17:02.542Z"
+    }
   }
 }

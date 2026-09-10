@@ -28,7 +28,7 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ✅ 78 assets | ✅ |
 | Second Skin | ✅ `second-skin.ts` | ✅ `second-skin.spec.ts` | ✅ 78 assets | ✅ |
 | Last Service | ✅ `last-service.ts` | ✅ `last-service.spec.ts` | ✅ 79 assets incl. v3 cover | ✅ |
-| Pink Tide | ✅ `pink-tide.ts` | ✅ `pink-tide.spec.ts` | ⏳ generating (100 planned) | ✅ |
+| Pink Tide | ✅ `pink-tide.ts` | ✅ `pink-tide.spec.ts` | ✅ 100 assets incl. v3 cover | ✅ |
 
 All three gates green at the last commit. Catalog is now **23 worlds**. Every
 bible in the queue is built; nothing is untouched.
@@ -211,17 +211,25 @@ in this session. **Keep writing the good word — just add it to the map.**
 
 ## Next
 
-1. **Pink Tide art** is generating: cover (v3 anime direction, using the
-   world's own `coverDirection` brief), key art, 17 stages, 9 portraits and
-   9 reaction decks — 100 assets. Then `optimize-art.ts`, gates, commit, push.
-2. Nothing else outstanding. Every bible assigned to this branch is built,
-   gated, catalogued and illustrated.
+1. **Nothing outstanding on this branch.** Every bible assigned to it is
+   built, gated, catalogued and illustrated, and `origin/main` is merged in
+   as of the studio rename and the shop-window onboarding.
 
 **`coverDirection` (new, on main).** An optional hand-written cover brief that
 replaces the composed prompt while keeping the style spine, framing rule,
 `CAST_APPEAL` block and negatives. It is a `z.string()`, so write it as an
 array of lines and `.join(' ')` the way Itachi does. Pink Tide uses it because
 its bible had a specific image; the other eight let the composer work.
+
+**The safety filter rejects a bikini portrait about a third of the time.**
+Three of Sora's nine reaction frames came back `REJECTED ... safety_violations=[sexual]`
+while six identical-framing ones passed. The prompt for a reaction frame is
+`appearance` + `visualHook` + `silhouette` + `socialStyle`, so that is where to
+fix it: drop the garment nouns and the hip-forward pose from those two fields
+(the linen shirt over a swim top reads exactly as intended and passes), then
+**force-regenerate the whole deck**, because frames made before and after the
+edit do not look like the same person. The cover is unaffected — it goes
+through `coverDirection` and the `CAST_APPEAL` block, and rendered first time.
 
 **The image provider rate-limits hard at about sixty images in a stretch.**
 Fourteen frames failed as `RATE_LIMITED` at concurrency 4 and again

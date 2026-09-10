@@ -886,9 +886,9 @@ const raw = {
         'I flirt with everybody. It is ninety per cent of the job and about half my personality and I am apologising for neither. This is not that, and I would quite like you to know the difference.',
       ],
       appearance:
-        'Twenty-three, long vivid bubblegum-pink hair to the lower back in loose beach waves and usually half wet, warm golden-brown eyes, bronzed skin, a small beauty mark below the left eye, a very curvy hourglass figure, a tiny star earring in the right ear and a fine gold and shell belly chain. Black or white triangle bikini, a low wrap sarong knotted at one hip, an oversized open white linen shirt, sunglasses pushed up into her hair.',
+        'Twenty-three, long vivid bubblegum-pink hair to the lower back in loose beach waves and usually half wet, warm golden-brown eyes, bronzed skin, a small beauty mark below the left eye, a tiny gold star earring in the right ear and a fine shell belly chain. An oversized open white linen shirt over a white swim top, a coral wrap sarong knotted at one hip, sunglasses pushed up into her hair, and the easy posture of somebody who has been in and out of the water since eight.',
       visualHook: 'Bubblegum-pink hair, half wet, and a tiny gold star earring she twists when she is frightened.',
-      silhouette: 'One hip against the pool edge, sunglasses in her hair, gesturing for you to get in.',
+      silhouette: 'Half turned at the pool edge, sunglasses pushed up into her hair, mid-sentence.',
       artSeed: 'pt-sora-01',
       portrait: null,
       expressions: ['neutral', 'flirty', 'delighted', 'suspicious', 'scared', 'quiet'],
