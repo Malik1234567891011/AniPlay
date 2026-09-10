@@ -81,6 +81,15 @@ const POLICY = [
   'Never steer. If the player has walked away from what the story wanted, the responses are about the',
   'life they are living now, not about getting them back. Somebody who quit the team is not offered',
   'three ways to apologise to the coach.',
+  '',
+  'Do not re-ask what has just been asked. `youHaveAlreadyTried` is what the player has said in the',
+  'last few turns: if they put a question to somebody and got deflected, offering a politer version of',
+  'the same question is the story standing still. Press differently, drop it and go at something else,',
+  'or do something instead of asking — but move.',
+  '',
+  'At least one of the three should be able to change the scene: go somewhere, start something, end the',
+  'conversation, involve somebody else. Three ways to keep talking to the same person about the same',
+  'thing is a story that cannot move.',
 ].join('\n');
 
 /**
@@ -107,7 +116,20 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
     },
     inTheRoom: context.presentCharacters.map(speakerBrief),
     /** So a response can pick up a thread rather than restart the conversation. */
-    recently: context.recentTurns.slice(-2).map((t) => t.sceneSummary),
+    recently: context.recentTurns.slice(-3).map((t) => t.sceneSummary),
+    /**
+     * What the player has already tried, in their own words.
+     *
+     * Without this the responses circle. The player asked what Mina's watch
+     * was hiding, she deflected, and the next set opened with "You're hiding
+     * something, Mina. Tell me — what's the story behind that old watch?" —
+     * the same question, one turn later, which is the original checklist
+     * problem wearing a better sentence.
+     */
+    youHaveAlreadyTried: context.recentTurns
+      .slice(-4)
+      .map((t) => t.actionText)
+      .filter((text): text is string => !!text),
     remembered: context.retrievedFacts.map((f) => f.fact.text),
   };
 }
