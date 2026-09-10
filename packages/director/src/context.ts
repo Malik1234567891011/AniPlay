@@ -11,7 +11,9 @@ import type {
 import { QUALITY_TIERS } from '@aniplay/contracts';
 import {
   abandonedObjectiveNote,
+  approachingEndings,
   charactersPresent,
+  eligibleEndings,
   composeStory,
   crewFlag,
   crewRoster,
@@ -132,6 +134,18 @@ export interface TurnContext {
     readonly pacingStage: string;
     readonly tension: number;
     readonly promises: Array<{ id: string; label: string; stage: string; seedHint: string; payoffHint: string; weight: number }>;
+  };
+
+  /**
+   * Where this run could actually end up, from here.
+   *
+   * Destinations, not a route: eligibility is computed from what the player has
+   * already done, and nothing is steered toward. Usually empty, which is
+   * correct — most turns are not near an ending.
+   */
+  readonly endings: {
+    readonly available: ReadonlyArray<{ id: string; name: string; rarity: string; when: string; epilogue: string }>;
+    readonly approaching: ReadonlyArray<{ id: string; name: string; hint: string }>;
   };
 
   // Layer 9 — what the engine already decided.
@@ -257,6 +271,20 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
     tier,
     hardCanon: story.rules.hardCanon,
     toneGuide: story.rules.toneGuide,
+    endings: {
+      available: eligibleEndings(story, state).map(({ def }) => ({
+        id: def.id,
+        name: def.name,
+        rarity: def.rarity,
+        when: def.condition,
+        epilogue: def.epilogue,
+      })),
+      approaching: approachingEndings(story, state).map((def) => ({
+        id: def.id,
+        name: def.name,
+        hint: def.hint,
+      })),
+    },
     scene: {
       locationId: state.player.locationId,
       locationName: location?.name ?? state.player.locationId,

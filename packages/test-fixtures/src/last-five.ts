@@ -1866,6 +1866,130 @@ const raw = {
       placeholder: 'e.g. Left-handed, and about four inches taller than anyone expects from behind.',
     },
   ],
+  /**
+   * Where this can end up.
+   *
+   * Destinations, not a route. Every one of these is reachable from what the
+   * player actually did and none of them is the intended outcome — the world
+   * does not know which of these it is heading for, and neither does the
+   * director. Several are losses. "Nobody Left To Coach" is what happens if the
+   * player is good enough to be scouted and takes the offer, and it is a real
+   * ending rather than a punishment for disloyalty.
+   */
+  endings: [
+    {
+      id: 'end_nationals',
+      name: 'The Program Stays',
+      rarity: 'RARE',
+      minTurn: 40,
+      requires: { flagsSet: ['qualified'] },
+      condition:
+        'Kosei reached Nationals, so the board condition is met and the program survives. Play this ' +
+        'when the season is genuinely over rather than the moment qualification lands — the point is ' +
+        'the room afterwards, not the buzzer.',
+      epilogue:
+        'The board condition was met and nobody at the school mentions it again. The gym is booked for ' +
+        'next season. Whoever is still here got what they came for, and the five who left are somewhere ' +
+        'else, hearing about it.',
+      hint: 'Every road to Nationals runs through one of the five.',
+    },
+    {
+      id: 'end_season_over',
+      name: 'Two Points Short',
+      rarity: 'COMMON',
+      minTurn: 40,
+      requires: { flagsSet: ['season_over'], flagsUnset: ['qualified'] },
+      condition:
+        'The season ended without qualification. The program closes in March. Do not soften this and ' +
+        'do not find a loophole — the story is what these people do on the last night of a thing ' +
+        'that is ending, and it is allowed to be the ending they get.',
+      epilogue:
+        'The board does not need to meet again. Somebody takes the banners down in April, and the ' +
+        'sixth-years who never started a game they did not have to are the last people to leave the gym.',
+      hint: '',
+    },
+    {
+      id: 'end_captain',
+      name: 'The One They Follow',
+      rarity: 'UNCOMMON',
+      minTurn: 30,
+      requires: {
+        flagsSet: ['starting_five'],
+        minFactionReputation: [{ factionId: 'faction_team', value: 60 }],
+        minRelationship: [{ characterId: 'coach', dimension: 'respect', value: 40 }],
+      },
+      condition:
+        'The team is the player\'s now, whether or not anybody has said the word captain. Reachable ' +
+        'alongside any result — winning is not required to have become the person the room turns to.',
+      epilogue:
+        'Nobody votes on it. It is simply true by February that the huddle waits for you to speak, and ' +
+        'Torakawa has stopped explaining things twice.',
+      hint: 'The huddle has started waiting for you.',
+    },
+    {
+      id: 'end_transfer',
+      name: 'Nobody Left To Coach',
+      rarity: 'UNCOMMON',
+      minTurn: 30,
+      requires: { flagsSet: ['scouts_watching', 'left_the_map'] },
+      condition:
+        'The player was seen, and left. This is what the five did, from the inside. Write it without ' +
+        'judgement — it is a real thing a sixteen-year-old does when a better school asks, and the ' +
+        'people left behind are allowed to be furious about it.',
+      epilogue:
+        'The paperwork takes a week. Somebody at Kosei finds out from a group chat. Whatever the ' +
+        'official story becomes, it will not be the true one, which is the part you already knew.',
+      hint: '',
+    },
+    {
+      id: 'end_collapse',
+      name: 'Six Became Four',
+      rarity: 'RARE',
+      minTurn: 25,
+      requires: { flagsSet: ['jun_is_against_you', 'dai_hurt'] },
+      condition:
+        'The team came apart before the season could end it — people stopped turning up, and the ones ' +
+        'who did stopped speaking. Reachable whether or not the player caused it. Do not have anybody ' +
+        'apologise at the end unless they would.',
+      epilogue:
+        'The forfeit is recorded as a forfeit. There is no meeting and no speech, just a practice where ' +
+        'four people wait twenty minutes and then go home.',
+      hint: '',
+    },
+    {
+      id: 'end_reconciliation',
+      name: 'What Actually Happened',
+      rarity: 'UNIQUE',
+      minTurn: 35,
+      requires: {
+        flagsSet: ['knows:denda_existed', 'knows:gora_was_the_example'],
+        minRelationship: [{ characterId: 'coach', dimension: 'trust', value: 50 }],
+      },
+      condition:
+        'The player found out why the five left, from enough sides that it is no longer one person\'s ' +
+        'version. Independent of the season result: this can land in a year that ends in March. The ' +
+        'reason is the story\'s own and it is not flattering to anybody.',
+      epilogue:
+        'The official story stays the official story, because nobody has any reason to correct it. But ' +
+        'the people who know now know, and one of the five stops answering their phone.',
+      hint: 'Somebody resigned in the same month and nobody says his name.',
+    },
+    {
+      id: 'end_quit',
+      name: 'You Stop Going',
+      rarity: 'UNCOMMON',
+      minTurn: 20,
+      requires: { flagsSet: ['left_the_map'], flagsUnset: ['scouts_watching'] },
+      condition:
+        'The player quit. Not a failure state and not a bad ending — write the specific relief and the ' +
+        'specific loss of it, and let the people who wanted them there be hurt without making it a ' +
+        'lesson.',
+      epilogue:
+        'Kosei plays out the season with six. Your name is on a roster in a folder nobody opens. Some ' +
+        'afternoons in March you notice you are not anywhere in particular at half past three.',
+      hint: '',
+    },
+  ],
   opening:
     'The gym smells like floor polish and the heating has not been on since March.\n\n' +
     'There are six people in it. A very tall boy is holding a ball as though somebody handed it to him by mistake. A first-year who cannot weigh fifty kilos is at the far basket, throwing perfect passes to nobody. A third-year in a Kosei reversible is jogging over to you already, hand out, saying your name like he has been practising it.\n\n' +

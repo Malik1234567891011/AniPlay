@@ -2291,6 +2291,18 @@ function resolveDeparture(args: ResolveActionArgs): ActionOutcome {
             reasonCode: 'LEFT_THE_MAP',
             payload: { locationId: promotion.location!.id, firstVisit: true, generated: promotion.location },
           },
+          // Walking out of the authored world is one of the biggest things a
+          // player can do and it left no trace: the move was recorded, the
+          // decision was not. Worlds can now notice — an ending keyed on having
+          // left is a real destination, and it is the same act the five who
+          // walked out of Kosei committed.
+          {
+            mutationId: nextMutationId(),
+            type: 'FLAG_SET',
+            subjectId: 'session',
+            reasonCode: 'LEFT_THE_MAP',
+            payload: { flag: 'left_the_map', value: here?.name ?? true },
+          },
         ],
         observableFacts: [`You leave ${here?.name ?? 'it'} behind.`],
         privateFacts: [

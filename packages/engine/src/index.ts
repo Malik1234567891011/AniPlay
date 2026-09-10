@@ -16,4 +16,5 @@ export * from './tendencies.js';
 export * from './contest.js';
 export * from './generated-world.js';
 export * from './custom-build.js';
+export * from './endings.js';
 export * from './commit.js';

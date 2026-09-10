@@ -1851,6 +1851,130 @@ const raw = {
       placeholder: 'e.g. Sunburn in the shape of a hat I have not owned for a month, and a coat three sizes too big that used to be his.',
     },
   ],
+  /**
+   * Where this can end up.
+   *
+   * Ferro Vane died looking for the Crownless Sea, so reaching it is the
+   * obvious destination and deliberately not the only good one. A crew that
+   * holds together for four years under a commission is a life; so is a yard
+   * with your name on it. "The Crew Buries You Ashore" is what the Drift does
+   * to people who keep sailing into it, and it is reachable without the player
+   * ever having made a mistake.
+   */
+  endings: [
+    {
+      id: 'end_crownless',
+      name: 'The Crownless Sea',
+      rarity: 'RARE',
+      minTurn: 45,
+      requires: { flagsSet: ['chart_complete'], atLocation: 'the_crownless' },
+      condition:
+        'The player finished the chart their father spent his life on and sailed to where it points. ' +
+        'What is actually there is the story\'s own and it is not a treasure — write what forty years ' +
+        'of somebody else\'s certainty looks like when you are standing in it.',
+      epilogue:
+        'The compass stops being useful the moment it is right. Whatever the coast is told about this, ' +
+        'the chart is finished and it is finished in your hand, which is the part Ferro did not get.',
+      hint: 'The compass points somewhere no printed chart admits to.',
+    },
+    {
+      id: 'end_feared',
+      name: 'The Name They Use To Frighten People',
+      rarity: 'UNCOMMON',
+      minTurn: 35,
+      requires: {
+        flagsSet: ['bounty_posted'],
+        minFactionReputation: [{ factionId: 'faction_free_captains', value: 50 }],
+      },
+      condition:
+        'The bounty is large, the Free Captains treat the player as one of the serious ones, and the ' +
+        'Crownless Sea has become something the player talks about rather than sails toward. Not a ' +
+        'failure — it is the life most people in this world would actually choose.',
+      epilogue:
+        'The number on the paper stops being an insult somewhere around the third revision. Ferro\'s ' +
+        'compass stays in a drawer, and there is always another season.',
+      hint: '',
+    },
+    {
+      id: 'end_privateer',
+      name: 'A Flag, In The End',
+      rarity: 'UNCOMMON',
+      minTurn: 30,
+      requires: {
+        flagsSet: ['took_fleet_commission'],
+        minFactionReputation: [{ factionId: 'faction_fleet', value: 40 }],
+      },
+      condition:
+        'The player took the Ninth Fleet\'s commission and kept it — the navy whose blade killed Ferro ' +
+        'Vane. Write what it bought and what it cost, and do not have anybody deliver the verdict on it.',
+      epilogue:
+        'The paperwork makes the same acts legal that the bounty made hanging offences. Nessa does not ' +
+        'come aboard again. The Crownless Sea stays off the charts, which was always what somebody wanted.',
+      hint: '',
+    },
+    {
+      id: 'end_charts_open',
+      name: 'Off The Charts No Longer',
+      rarity: 'UNIQUE',
+      minTurn: 45,
+      requires: {
+        flagsSet: ['chart_complete', 'knows:the_order_came_from_above'],
+        minFactionReputation: [{ factionId: 'faction_houses', value: -20 }],
+      },
+      condition:
+        'The player learned who took the Crownless Sea off the charts and made the chart public rather ' +
+        'than keeping it. This ends the thing Veyra has spent her life protecting, and she is right ' +
+        'about what it costs. Reachable whether or not the player ever sailed there.',
+      epilogue:
+        'It is on a printed chart within the year, badly, in four competing versions. Everything Veyra ' +
+        'said would happen begins happening. Ferro is named on none of them.',
+      hint: 'Somebody took it off the charts on purpose, ninety years ago.',
+    },
+    {
+      id: 'end_crew_gone',
+      name: 'Short-Handed',
+      rarity: 'UNCOMMON',
+      minTurn: 25,
+      requires: { flagsSet: ['nessa_gone', 'rook_gone'] },
+      condition:
+        'The people who signed on have left, one at a time, for their own reasons. The player may still ' +
+        'have a ship and a chart. Do not make this a lesson — write the specific silence of a deck ' +
+        'crewed by strangers.',
+      epilogue:
+        'The ship still sails. Somebody else is at the compass, and they are perfectly competent, and ' +
+        'they never met Ferro Vane.',
+      hint: '',
+    },
+    {
+      id: 'end_ashore',
+      name: 'The Yard With Your Name On It',
+      rarity: 'COMMON',
+      minTurn: 30,
+      requires: { flagsSet: ['left_the_map'], flagsUnset: ['bounty_posted'] },
+      condition:
+        'The player walked out of the hunt with nothing on their head. A quiet, real ending — the one ' +
+        'Ferro never took — and the story should not treat it as giving up.',
+      epilogue:
+        'The compass goes on a shelf where visitors ask about it. You answer honestly and they think it ' +
+        'is a story. Nothing on the coast is looking for you at all.',
+      hint: '',
+    },
+    {
+      id: 'end_drift',
+      name: 'The Crew Buries You Ashore',
+      rarity: 'RARE',
+      minTurn: 25,
+      requires: { flagsSet: ['attuned_stillpoint'], hasItems: ['the_hush'] },
+      condition:
+        'The player kept going into the Drift with relics aboard until it took what it takes. Reachable ' +
+        'without a single mistake having been made — this world says the relics break one rule each and ' +
+        'means it.',
+      epilogue:
+        'The crew do it properly, above the tide line, the way Ferro was not. The Stillpoint goes in ' +
+        'with you because nobody aboard will touch it now.',
+      hint: 'Every relic breaks exactly one rule, and never the one you are watching.',
+    },
+  ],
   opening:
     'The workshop still smells of linseed and it has been eleven days.\n\n' +
     'You are on the quay at Saltmarket at seven in the morning with everything Ferro Vane left you: forty feet of cutter with a cracked keel, a third of a chart with a clean cut down one edge, and a brass compass that is currently pointing at nothing in the east and has been for as long as you have known it.\n\n' +

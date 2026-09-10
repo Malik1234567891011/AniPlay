@@ -717,6 +717,55 @@ export const QuestDef = z
   .strict();
 export type QuestDef = z.infer<typeof QuestDef>;
 
+/**
+ * A place this story could genuinely end up.
+ *
+ * Endings are *eligibility*, never rails. A world does not have a route; it has
+ * destinations, and one becomes reachable because the player's run has actually
+ * arrived somewhere that conclusion makes sense. Nothing herds them toward one,
+ * nothing is failed by not reaching one, and a run that ends somewhere nobody
+ * authored is a legitimate outcome of a world with open edges.
+ *
+ * Two conditions, because they answer different questions. `requires` is the
+ * engine's: a deterministic predicate over flags, quests, relationships and the
+ * clock, checked every turn for nothing, with no model call and no ambiguity.
+ * `condition` is the writer's: what this ending *means*, in words, so that a
+ * state which qualifies on paper is only played when it also lands — a team
+ * reaching Nationals on the last possible night is a different scene from
+ * reaching it comfortably in February, and only the second condition knows that.
+ */
+export const EndingDef = z
+  .object({
+    id: z.string(),
+    /** What this ending is called, in the world's voice. "The Program Stays". */
+    name: z.string().max(60),
+    /**
+     * How far off the common path this is. Not a reward tier and not shown as
+     * one — it tells the director how hard to work to notice the ending is in
+     * reach, and it is what a completion record would eventually be built from.
+     */
+    rarity: z.enum(['COMMON', 'UNCOMMON', 'RARE', 'UNIQUE']).default('COMMON'),
+    /**
+     * The earliest turn this can be offered. A story that can end on turn three
+     * has not been a story yet, however neatly the state lines up.
+     */
+    minTurn: z.number().int().min(0).default(0),
+    /** The engine's half: what must be true before this is even considered. */
+    requires: QuestPredicate,
+    /**
+     * The writer's half: when this is the right ending, said as a person would
+     * say it. Read, never parsed.
+     */
+    condition: z.string(),
+    /** What the world looks like afterwards. The writer expands this; it is not printed raw. */
+    epilogue: z.string(),
+    /** Optional nudge when the run is close, for a world that wants to show one. */
+    hint: z.string().default(''),
+    image: z.string().nullable().default(null),
+  })
+  .strict();
+export type EndingDef = z.infer<typeof EndingDef>;
+
 /** Spec §16.4 — authored promises the director seeds and pays off. */
 export const StoryPromiseDef = z
   .object({
@@ -897,6 +946,11 @@ export const StoryVersion = z
     /** What the world does on its own, at its own hours. */
     worldEvents: z.array(WorldEventDef).default([]),
     promises: z.array(StoryPromiseDef).default([]),
+    /**
+     * Where this story could end up. Empty is legitimate — a world with no
+     * authored destinations simply runs until the player stops.
+     */
+    endings: z.array(EndingDef).default([]),
     archetypes: z.array(ArchetypeDef).default([]),
     setupFields: z.array(CharacterSetupField).default([]),
     /** 50–150 words. Spec §21.3 step 8 / §43.2. */
