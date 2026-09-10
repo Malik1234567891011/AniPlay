@@ -42,6 +42,32 @@ describe('writing somebody out of the room they are standing in', () => {
     }
   });
 
+  it('catches prose that empties a room without naming anybody in it', () => {
+    // Live, in Seven Days: the player asked Mina a question and the beat
+    // answered "The platform is empty except for you and the sound of your own
+    // words." She was standing in front of them.
+    for (const text of [
+      'The platform is empty except for you and the sound of your own words.',
+      'You are alone on the platform.',
+      'There is no one else here.',
+      'The station is completely deserted.',
+    ]) {
+      expect(findAbsenceOfPresent([{ text }], PRESENT), text).toHaveLength(1);
+    }
+  });
+
+  it('still allows a room that is empty apart from the person in it', () => {
+    // The distinction that makes the exemption safe: "except for Torakawa"
+    // means she is there; "except for you" means everybody else has gone.
+    expect(
+      findAbsenceOfPresent([{ text: 'The gym is empty except for Torakawa, who has not moved.' }], PRESENT),
+    ).toEqual([]);
+  });
+
+  it('says nothing when nobody is on stage to contradict', () => {
+    expect(findAbsenceOfPresent([{ text: 'You are alone on the platform.' }], [])).toEqual([]);
+  });
+
   it('says nothing about a character who is not on stage', () => {
     expect(findAbsenceOfPresent([{ text: 'Rei Amagi is not here.' }], PRESENT)).toEqual([]);
   });

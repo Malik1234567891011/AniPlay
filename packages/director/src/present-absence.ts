@@ -42,6 +42,26 @@ const ABSENCE = [
 /** "empty except for her" is a full room of one person, not an absence. */
 const PRESENT_ANYWAY = /\b(?:except|save|apart|but)\s+(?:for|from)\b/i;
 
+/**
+ * Prose that empties the room without naming anybody in it.
+ *
+ * Caught live in Seven Days. The player asked Mina about the clock tower and
+ * the beat answered "The platform is empty except for you and the sound of
+ * your own words." She was standing in front of them. The sentence names
+ * nobody, so the per-character check above never looked at it.
+ *
+ * "Except for you" is the giveaway and the reason the exemption below cannot
+ * be a blanket one: "empty except for Torakawa" means she is there, and "empty
+ * except for you" means everybody else is gone.
+ */
+const EMPTIED_ROOM = [
+  /\b(?:is|are|was|were|stands?|stood|sits?|sat)\s+(?:completely\s+|quite\s+|otherwise\s+)?empty\s+(?:except|save|but)\s+for\s+(?:you|your)\b/i,
+  /\byou\s+are\s+(?:completely\s+|quite\s+|entirely\s+)?alone\b/i,
+  /\b(?:there\s+is|there's)\s+no\s?(?:one|body)\s+(?:else\s+)?(?:here|there|around|left)\b/i,
+  /\bnobody\s+else\s+(?:is|was)\s+(?:here|there|around)\b/i,
+  /\bthe\s+\w+\s+(?:is|was)\s+(?:completely\s+)?deserted\b/i,
+];
+
 export interface AbsenceClaim {
   readonly characterId: string;
   readonly name: string;
@@ -83,6 +103,22 @@ export function findAbsenceOfPresent(
       });
     }
   });
+
+  // And the version that names nobody at all.
+  if (present.length > 0) {
+    blocks.forEach((block, blockIndex) => {
+      for (const sentence of block.text.split(/(?<=[.!?])\s+/)) {
+        if (!EMPTIED_ROOM.some((pattern) => pattern.test(sentence))) continue;
+        claims.push({
+          characterId: present[0]!.id,
+          name: present.map((c) => c.name).join(', '),
+          blockIndex,
+          sentence: sentence.trim().slice(0, 140),
+        });
+        break;
+      }
+    });
+  }
 
   return claims;
 }
