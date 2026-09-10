@@ -6,6 +6,7 @@ import type {
   OrderedBeat,
   SuggestedAction,
 } from '@aniplay/contracts';
+import type { ReactionEmotion } from '@aniplay/contracts';
 import { QUALITY_TIERS } from '@aniplay/contracts';
 import { isSuccess, outcomeLabel, estimateRisk, attributeModifier } from '@aniplay/engine';
 import type { TurnContext, PresentCharacterContext } from './context.js';
@@ -518,6 +519,46 @@ function lowerFirst(value: string): string {
 
 function expressionsChanged(expressions: Record<string, string>): boolean {
   return Object.values(expressions).some((e) => e !== 'neutral');
+}
+
+/**
+ * Spec §19.7 — which cached face to show, decided in no time at all.
+ *
+ * The expression system already picked a mood from check outcomes and
+ * relationship state; this maps that onto the fixed reaction vocabulary, so
+ * the answer is always an asset that either exists or falls back cleanly to
+ * the portrait. It must never be a model call: the whole value of a reaction
+ * frame is that it is on screen while the prose is still being written.
+ */
+export function pickReactionEmotion(
+  character: PresentCharacterContext,
+  context: TurnContext,
+): ReactionEmotion {
+  const { resolution, state } = context;
+  const said = `${context.playerAction}`.toLowerCase();
+
+  // What the player did to them outweighs how they felt a moment ago.
+  if (state.flags[`attacked:${character.def.id}`] || state.encounter) return 'angry';
+  if (/\b(sorry|apolog|thank you|thanks)\b/.test(said)) return 'warm';
+  if (/\b(love|beautiful|kiss|marry|gorgeous)\b/.test(said)) return 'surprised';
+  if (/\b(kill|threaten|hurt|destroy|hate)\b/.test(said)) return 'angry';
+  if (/\b(joke|funny|laugh|lol)\b/.test(said)) return 'amused';
+
+  const rejected = resolution.normalizedActions.some(
+    (a) => (a as { status?: string }).status === 'REJECTED',
+  );
+  if (rejected) return 'confused';
+
+  if (resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS')) return 'surprised';
+  if (resolution.checks.some((c) => c.outcome === 'COMPLICATION')) return 'worried';
+
+  const rel = character.relationship;
+  if (rel.fear > 40) return 'worried';
+  if (rel.rivalry > 40) return 'annoyed';
+  if (rel.affection > 40) return 'warm';
+  if (rel.trust < -10) return 'annoyed';
+
+  return 'neutral';
 }
 
 function pickExpression(character: PresentCharacterContext, context: TurnContext): string {

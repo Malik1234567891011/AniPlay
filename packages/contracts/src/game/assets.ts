@@ -31,3 +31,32 @@ export function playerPortraitAssetKey(storyId: string, displayName: string, var
 export function heroFrameAssetKey(turnId: string): string {
   return `hero/${turnId}`;
 }
+
+/**
+ * Spec §19.7 — the emotions a character can be shown feeling.
+ *
+ * A fixed, small vocabulary because these are *cached assets*, not bespoke
+ * generations: the whole point of a reaction frame is that it is already on
+ * the device when the player needs it. Eight covers the range an ordinary
+ * conversation moves through; a world that wants more can author more, and one
+ * that has none falls back to the character's portrait.
+ */
+export const REACTION_EMOTIONS = [
+  'neutral',
+  'warm',
+  'amused',
+  'surprised',
+  'confused',
+  'annoyed',
+  'angry',
+  'worried',
+] as const;
+export type ReactionEmotion = (typeof REACTION_EMOTIONS)[number];
+
+export function reactionAssetKey(
+  storyId: string,
+  characterId: string,
+  emotion: ReactionEmotion,
+): string {
+  return `${storyId.replace(/^story_/, 'story_')}/${characterId}_${emotion}`;
+}

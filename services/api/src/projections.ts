@@ -180,6 +180,8 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
           portrait: resolveAssetUrl(def.portrait),
           expression: 'neutral',
           speaking: false,
+          reactionUrl: null,
+          reactionEmotion: null,
         };
       })
       .filter((c): c is NonNullable<typeof c> => c !== null),

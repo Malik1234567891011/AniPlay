@@ -17,6 +17,7 @@ import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
 import {
   characterPrompt,
   coverPrompt,
+  reactionPrompt,
   createMediaGatewayFromEnv,
   keyArtPrompt,
   locationPrompt,
@@ -24,7 +25,7 @@ import {
   type GeneratedAsset,
   type ImagePromptSpec,
 } from '@aniplay/director';
-import { coverAssetKey } from '@aniplay/contracts';
+import { coverAssetKey, REACTION_EMOTIONS } from '@aniplay/contracts';
 import { compositeTitle } from './cover-title.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -85,6 +86,8 @@ async function main(): Promise<void> {
   // that finished covers are never regenerated, and "I checked the code" is a
   // worse guarantee than a list of exactly which files would be written.
   const dryRun = args.includes('--dry-run');
+  /** Reaction decks are a large batch, so they are opt-in. */
+  const reactions = args.includes('--reactions');
   const only = args.find((a) => a.startsWith('--only='))?.slice('--only='.length) ?? null;
   const concurrency = Number(args.find((a) => a.startsWith('--concurrency='))?.slice('--concurrency='.length) ?? 3);
 
@@ -100,6 +103,20 @@ async function main(): Promise<void> {
     specs.push(coverPrompt(story), keyArtPrompt(story));
     for (const location of story.locations) specs.push(locationPrompt(story, location));
     for (const character of story.characters) specs.push(characterPrompt(story, character));
+
+    // Spec §19.7 — reaction decks, for characters a player actually talks to.
+    //
+    // Only for the cast with a card blurb: those are the people a world puts
+    // in front of the player, and generating eight faces for a shopkeeper who
+    // appears once is how an art budget disappears. `--only=_react` builds
+    // just these.
+    if (reactions) {
+      for (const character of story.characters.filter((c) => c.cardBlurb.trim().length > 0)) {
+        for (const emotion of REACTION_EMOTIONS) {
+          specs.push(reactionPrompt(story, character, emotion));
+        }
+      }
+    }
   }
 
   const filtered = only ? specs.filter((s) => s.assetKey.includes(only)) : specs;

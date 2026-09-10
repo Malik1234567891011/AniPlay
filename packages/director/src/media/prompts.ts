@@ -1,5 +1,6 @@
 import {
   characterAssetKey,
+  reactionAssetKey,
   coverAssetKey,
   heroFrameAssetKey,
   keyArtAssetKey,
@@ -578,6 +579,75 @@ export function heroFramePrompt(input: {
       `Mood: ${input.story.rules.toneGuide}`,
       'These are established characters with existing reference art. Match face, hair, age, build and ' +
         'costume identity exactly.',
+      NEGATIVES,
+    ]),
+  };
+}
+
+
+// ---------------------------------------------------------------------------
+// Reaction frames
+// ---------------------------------------------------------------------------
+
+/**
+ * How each emotion is played, per character.
+ *
+ * Deliberately not one instruction reused across the cast. An angry reserved
+ * character and an angry loud one are different pictures, and a deck where
+ * every character's anger looks the same is a deck the player stops reading.
+ * The direction below is combined with the character's own `socialStyle`, so
+ * the same emotion is filtered through who they are.
+ */
+const EMOTION_DIRECTION: Record<string, string> = {
+  neutral: 'At rest. Attentive, unreadable, giving nothing away.',
+  warm: 'Openly pleased. The eyes go first, then the mouth.',
+  amused: 'Caught off guard by something funny and not hiding it well.',
+  surprised: 'Genuinely not expecting that. Caught mid-reaction, before composure returns.',
+  confused: 'Trying to make sense of something that does not make sense. Brow working.',
+  annoyed: 'Patience visibly costing them something. Held in.',
+  angry: 'Past holding it in. Whatever this person looks like when they stop being polite.',
+  worried: 'Afraid for somebody, not of them. Attention somewhere else.',
+};
+
+/**
+ * Spec §19.7 — a cached reaction, drawn as the same person every time.
+ *
+ * Identical framing, lens and background to the character's portrait, because
+ * these images sit next to each other in a conversation and any drift reads as
+ * a different person rather than a different mood. The only thing that changes
+ * between them is the face.
+ */
+export function reactionPrompt(
+  story: StoryVersion,
+  character: CharacterDef,
+  emotion: string,
+): ImagePromptSpec {
+  const direction = EMOTION_DIRECTION[emotion] ?? EMOTION_DIRECTION.neutral!;
+
+  return {
+    assetKey: reactionAssetKey(story.storyId, character.id, emotion as never),
+    kind: 'CHARACTER_PORTRAIT',
+    styleVersion: STYLE_SPINE_VERSION,
+    titleSafeArea: null,
+    aspect: 'PORTRAIT',
+    // Anchored to the same seed as the portrait, so the deck is one person.
+    seed: `${character.artSeed ?? `${story.id}:npc:${character.id}`}:${emotion}`,
+    alt: `${character.name}, ${emotion}`,
+    prompt: compose([
+      STYLE_SPINE,
+      PORTRAIT_FRAMING,
+      portraitBackdrop(story),
+      character.visualHook
+        ? `The single defining feature, which must be clearly visible: ${character.visualHook}`
+        : null,
+      character.silhouette ? `Overall silhouette: ${character.silhouette}` : null,
+      `Appearance: ${presentation(character.pronouns)}. ${character.appearance}`,
+      `EXPRESSION — this is the whole point of the image: ${direction}`,
+      character.socialStyle
+        ? `Play it the way this person would: ${character.socialStyle} Not a generic ${emotion} face.`
+        : null,
+      'Identical framing, camera and lighting to their other portraits. Only the expression differs.',
+      'An original character design. Do not resemble any existing anime, manga, game, or film character.',
       NEGATIVES,
     ]),
   };

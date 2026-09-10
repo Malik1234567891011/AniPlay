@@ -3,7 +3,7 @@ import { QUALITY_TIERS } from '@aniplay/contracts';
 import { dayPart, deriveTurnSeed, outcomeLabel, formatCheckMath, dcBandLabel } from '@aniplay/engine';
 import { runTurn } from '@aniplay/director';
 import type { AppContext } from './context.js';
-import { toSceneState } from './projections.js';
+import { resolveAssetUrl, toSceneState } from './projections.js';
 import type { SessionRecord, UserRecord } from './repo/types.js';
 import { InsufficientCreditsError, type Reservation } from './wallet.js';
 import type { TurnStreamHub } from './stream.js';
@@ -173,6 +173,16 @@ async function processTurn(
       fastWriter: ctx.modelGateway,
       onText: (sentence) => {
         hub.emit(turnId, 'text.stream', { text: sentence });
+      },
+      onReaction: (reaction) => {
+        hub.emit(turnId, 'reaction.ready', {
+          characterId: reaction.characterId,
+          name: reaction.name,
+          emotion: reaction.emotion,
+          // Null when this world has no deck for them; the client then keeps
+          // showing the portrait rather than a hole where a face should be.
+          url: resolveAssetUrl(reaction.assetKey),
+        });
       },
       onResolved: (resolution) => {
         for (const check of resolution.checks) {

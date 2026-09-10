@@ -264,6 +264,15 @@ export const SessionSceneState = z
           portrait: z.string().nullable(),
           expression: z.string(),
           speaking: z.boolean(),
+          /**
+           * Spec §19.7 — a cached image of this character feeling the way they
+           * feel about what just happened. Already on the device; the whole
+           * point is that it is visible while the prose is still arriving.
+           * Null when this world has no reaction deck for them, in which case
+           * the portrait is what shows.
+           */
+          reactionUrl: z.string().nullable().default(null),
+          reactionEmotion: z.string().nullable().default(null),
         })
         .strict(),
     ),
@@ -646,6 +655,12 @@ export const TurnStreamEventName = z.enum([
    * the turn commits, so a client can render these immediately and replace
    * them, and can never end up showing a turn that did not land.
    */
+  /**
+   * Spec §19.7 — a cached image of the active character reacting, sent before
+   * a word has been written. It is an asset that already exists, so it can be
+   * on screen while the prose is still arriving.
+   */
+  'reaction.ready',
   'text.stream',
   'text.delta',
   'state.delta',

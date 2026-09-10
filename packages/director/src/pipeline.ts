@@ -23,6 +23,8 @@ import { detectOutOfScope } from './entity-resolution.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { expandElliptical } from './elliptical.js';
 import { writeStreaming } from './fast-writer.js';
+import { pickReactionEmotion } from './director.js';
+import { reactionAssetKey } from '@aniplay/contracts';
 import type { ModelGateway } from './gateway/types.js';
 import { recordMentions } from '@aniplay/engine';
 
@@ -89,6 +91,18 @@ export interface RunTurnOptions {
    * different product from one watching a spinner for twelve.
    */
   readonly onText?: (sentence: string) => void;
+  /**
+   * Fired once the scene is known and before a word has been written. Spec
+   * §19.7 — the reaction frame is a cached asset, so it can be on screen while
+   * the prose is still arriving, which is most of what makes a conversation
+   * feel like it answered you.
+   */
+  readonly onReaction?: (reaction: {
+    characterId: string;
+    name: string;
+    emotion: string;
+    assetKey: string;
+  }) => void;
   /**
    * Set to stream prose instead of waiting for a structured document. The
    * fast path also skips the model director, which plans presentation and
@@ -198,6 +212,22 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   const canonNote = directorNoteFor(canon, story);
   if (canonNote) {
     context.resolution.privateFacts.push({ visibility: 'SELF', fact: canonNote });
+  }
+
+  // Spec §19.7 — who is reacting, and how, decided before any writing starts.
+  //
+  // The active character is whoever the player just addressed, falling back to
+  // whoever is most present. Nobody here means no reaction frame at all: a
+  // random face because the system expects an image is worse than no image.
+  const reacting = reactingCharacter(context, intent);
+  if (reacting) {
+    const emotion = pickReactionEmotion(reacting, context);
+    options.onReaction?.({
+      characterId: reacting.def.id,
+      name: reacting.def.name,
+      emotion,
+      assetKey: reactionAssetKey(story.storyId, reacting.def.id, emotion),
+    });
   }
 
   // Steps 8 and 9 — plan the beat, then write it.
@@ -478,4 +508,37 @@ export function annotateScope(intent: ActionIntent, actionText: string): ActionI
   if (!detectOutOfScope(actionText).detected) return intent;
   if (intent.unsafeOrMetaRequests.includes('out_of_scope')) return intent;
   return { ...intent, unsafeOrMetaRequests: [...intent.unsafeOrMetaRequests, 'out_of_scope'] };
+}
+
+
+/**
+ * Whose face this turn is about.
+ *
+ * Whoever the player addressed, then whoever they have most history with, then
+ * whoever is here. Returns null when the player is alone — an establishing
+ * frame or nothing at all is right there, and showing some character because
+ * the system wants an image is exactly the failure to avoid.
+ */
+function reactingCharacter(
+  context: TurnContext,
+  intent: ActionIntent,
+): TurnContext['presentCharacters'][number] | null {
+  const present = context.presentCharacters;
+  if (present.length === 0) return null;
+
+  const addressed = new Set(
+    intent.actions.flatMap((a) => a.targets.filter((t) => t.entityType === 'npc').map((t) => t.entityId)),
+  );
+  const spokenTo = intent.dialogue.map((d) => d.speaker.entityId);
+  for (const id of [...addressed, ...spokenTo]) {
+    const match = present.find((c) => c.def.id === id);
+    if (match) return match;
+  }
+
+  // Nobody named: whoever this player has the most going on with.
+  return [...present].sort((a, b) => weight(b.relationship) - weight(a.relationship))[0] ?? null;
+}
+
+function weight(rel: { trust: number; affection: number; respect: number; fear: number; rivalry: number }): number {
+  return Math.abs(rel.trust) + Math.abs(rel.affection) + rel.fear + rel.rivalry + rel.respect;
 }
