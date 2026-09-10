@@ -168,6 +168,8 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   const privateFacts: PrivateFact[] = [];
   const normalizedActions: Record<string, unknown>[] = [];
   let totalMinutes = 0;
+  /** The longest single thing done this turn, rather than the sum of them. */
+  let concurrentMinutes = 0;
 
   let mutationCounter = 0;
   const nextMutationId = (): string => `mut_${turnId}_${mutationCounter++}`;
@@ -282,11 +284,29 @@ export function resolveIntent(options: ResolveOptions): Resolution {
       ...(action.itemId ? { itemId: action.itemId } : {}),
     });
 
-    totalMinutes +=
+    // Travel and waiting add up; everything else happens in one moment.
+    //
+    // Summing every action meant a turn cost time per *clause*. "I turn to
+    // Juno. 'You in?'" was two actions and burned 12 minutes of a summer
+    // evening, while walking the length of the camp cost 3 — so asking a friend
+    // a question cost four times as much of the day as crossing it. Response
+    // cards are all written as a stage direction plus a line, so the tax landed
+    // on almost every turn.
+    //
+    // A player who leans in and speaks does both in the same breath. Distance
+    // and waiting are the two things that genuinely take longer the more of
+    // them you do.
+    const cost =
       outcome.overrideMinutes ??
       (outcome.timeCategory === 'TRAVEL'
         ? (outcome.travelMinutes ?? 15)
         : TIME_COST_MINUTES[outcome.timeCategory]);
+
+    if (outcome.overrideMinutes !== undefined || outcome.timeCategory === 'TRAVEL') {
+      totalMinutes += cost;
+    } else {
+      concurrentMinutes = Math.max(concurrentMinutes, cost);
+    }
 
     if (state.encounter) spend(economy, weight);
   }
@@ -297,6 +317,9 @@ export function resolveIntent(options: ResolveOptions): Resolution {
       fact: `Deferred this round (no action left): ${deferred.join('; ')}. Narrate the attempt starting, not completing.`,
     });
   }
+
+  // Fold in the longest single thing done this turn.
+  totalMinutes += concurrentMinutes;
 
   // Dialogue costs a beat of world time even when nothing is rolled.
   if (intent.dialogue.length > 0 && totalMinutes === 0) totalMinutes = TIME_COST_MINUTES.BRIEF;

@@ -159,7 +159,24 @@ const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
       /\bhold\b(?!\s+(?:of|onto|on to|out|up|his|her|their|my|the|a|an|it|them))/i,
     ],
   },
-  { verb: 'interact', patterns: [/\b(open|close|push|pull|turn|touch|pick up|grab|take|unlock|knock|write|draw)\b/i] },
+  {
+    verb: 'interact',
+    // `turn` is split out for the same reason `hold` is above it: turning a key
+    // is an interaction and turning to face somebody is not.
+    //
+    // "I turn to Juno." resolved as a DC 10 `mind` check, failed partially, and
+    // cost stamina — so a line of dialogue in a bar spent two paragraphs of its
+    // beat on being tired, because the writer was handed a resource mutation
+    // for the act of moving the player's head. Every response card is written
+    // as a stage direction plus a line, so this was a tax on the whole choice
+    // system.
+    //
+    // On/off stay: "turn on the lamp" is a real interaction with a real object.
+    patterns: [
+      /\b(open|close|push|pull|touch|pick up|grab|take|unlock|knock|write|draw)\b/i,
+      /\bturn\b(?!\s+(?:to|toward|towards|back|around|away|from))/i,
+    ],
+  },
   { verb: 'speak', patterns: [/\b(say|tell|ask|talk|speak|reply|answer|greet|whisper|shout|call out)\b/i] },
 ];
 

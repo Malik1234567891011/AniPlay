@@ -227,6 +227,11 @@ export function SessionScreen({
     setDraft('');
     void saveDraft(sessionId, '');
     setPending({ turnId: '', actionText: text, streamed: [], reaction: null, heroImageUrl: null, blocks: [], check: null, deltas: [] });
+    // Removing the three response cards shrinks the feed by their whole stack,
+    // and the scroll offset is absolute — so submitting left the reader roughly
+    // 350pt above the newest beat, watching "Resolving…" from two beats up. It
+    // happened on every single submit. Follow the bottom, where the new text is.
+    requestAnimationFrame(() => transcriptRef.current?.scrollToEnd({ animated: true }));
 
     try {
       const accepted = await api.submitTurn(

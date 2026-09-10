@@ -483,16 +483,26 @@ export function buildDeltas(context: TurnContext): StateDeltaPresentation[] {
 
     // Report the dimension that moved most, because that is what the player
     // would actually perceive.
+    //
+    // The middle band used to be one label for everything between -6 and +4, so
+    // "Juno reconsiders you" was shown for a *failed* persuade that cost a point
+    // of respect — the same words a small gain got, and they read as warming.
+    // A player watching the chips could not tell which way the evening had gone.
+    // The band is split by sign now: "reconsiders" is a real re-evaluation and
+    // stays for movement toward you.
+    const warmth = trust + affection + respect;
     const label =
       fear >= 5 && fear >= rivalry
         ? `${firstName} is afraid of you`
         : rivalry >= 5
           ? `${firstName} turns on you`
-          : trust + affection + respect <= -6
+          : warmth <= -6
             ? `${firstName} closes off`
-            : trust + affection + respect >= 4
-              ? `${firstName} warms to you`
-              : `${firstName} reconsiders you`;
+            : warmth < 0
+              ? `${firstName} cools toward you`
+              : warmth >= 4
+                ? `${firstName} warms to you`
+                : `${firstName} reconsiders you`;
 
     deltas.push({ mutationId: entry.mutationId, label, priority: 4 });
   }
