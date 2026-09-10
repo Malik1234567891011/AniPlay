@@ -76,7 +76,20 @@ const POLICY = [
   'they would like to do, not what the engine is doing about it.',
   '',
   'Only people who are actually in the room. Somebody who has left, or is dead, is not somebody to',
-  'address. Use their name the way the prose does.',
+  'address. Use their name the way the prose does. `inTheRoom` is the whole cast available to you.',
+  '',
+  'If `inTheRoom` is EMPTY the player is alone, and none of the three may be a line of dialogue.',
+  'Nobody is there to hear it. A player alone on a dock, offered "Want to come?", has been handed a',
+  'card that cannot work — and one of the three must be a way out of the room, because a scene with',
+  'nobody in it has nothing left to give.',
+  '',
+  'Start from where the player is NOW and what actually happened to them, not from what they tried.',
+  '`howItWentForYou` says which. If the thing they attempted was refused, no response may assume it',
+  'worked. Juno saying "we are not sneaking out those steps" and the next card opening "I step out',
+  'onto the back steps" is the story ignoring its own best moment.',
+  '',
+  'The player owns nothing you have not seen. No cigarette, no drink, no jacket, no knife unless the',
+  'beat put it there. Inventing a prop for a gesture writes a character the player did not.',
   '',
   'Never steer. If the player has walked away from what the story wanted, the responses are about the',
   'life they are living now, not about getting them back. Somebody who quit the team is not offered',
@@ -111,6 +124,17 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
     whatThePlayerDid: context.playerAction,
     where: context.scene.locationName,
     when: context.scene.worldTimeLabel,
+    /**
+     * What actually became of the attempt.
+     *
+     * The payload used to carry only the attempt and the prose, and left the
+     * model to infer the outcome from the writing. It inferred wrong at the
+     * most important moment of a 25-turn run: Juno refused, out loud and in
+     * character, to leave the bar — and all three of the next cards put the
+     * player outside on the steps.
+     */
+    howItWentForYou: outcomeOf(context),
+    youAreAlone: context.presentCharacters.length === 0,
     /**
      * Real exits, by name.
      *
@@ -148,6 +172,46 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
       .filter((text): text is string => !!text),
     remembered: context.retrievedFacts.map((f) => f.fact.text),
   };
+}
+
+
+
+/**
+ * A line of dialogue offered to a player who is standing on their own.
+ *
+ * The policy says not to, and the policy is not enough on its own: turn 17 of
+ * a Nine Weeks run produced a beat that said *"Nobody answers. No Juno, no
+ * Teo, no Nadia"* and then offered *"Maybe a walk down there will clear my
+ * head. Want to come?"* — a question to an empty dock. Eight turns later,
+ * unchanged: *"I wave at Juno with a grin, stepping closer"*, on a beat whose
+ * own prose said Juno had left.
+ *
+ * Dropping the card is better than showing it. Two workable responses beat
+ * three where one cannot function, and if too few survive the caller falls
+ * back to the rule-built suggestions, which only ever address people the
+ * engine has in the room.
+ */
+export function talksToNobody(text: string, peoplePresent: number): boolean {
+  if (peoplePresent > 0) return false;
+  return /["\u201c\u00ab][^"\u201c\u201d\u00ab\u00bb]{2,}["\u201d\u00bb]/.test(text);
+}
+
+/**
+ * One plain sentence about what became of what the player tried.
+ *
+ * Read off the engine, not the prose, so it cannot be talked out of by good
+ * writing. Costs and margins stay out of it — the player is being offered
+ * something to do next, not a scoreboard.
+ */
+export function outcomeOf(context: TurnContext): string {
+  const checks = context.resolution.checks;
+  const refused = checks.some((c) => c.outcome === 'FAILURE' || c.outcome === 'COMPLICATION');
+  const moved = context.resolution.mutations.some((m) => m.type === 'LOCATION_CHANGE');
+
+  if (refused && !moved) return 'It did not work. Do not write a response that assumes it did.';
+  if (moved) return `It worked, and the player is now in ${context.scene.locationName}.`;
+  if (checks.length === 0) return 'Nothing was tested; the scene simply carried on.';
+  return 'It worked.';
 }
 
 /** The places this room actually connects to, as the world names them. */
@@ -196,6 +260,7 @@ export async function generateResponses(
         resourceCostLabel: null,
       }))
       .filter((r) => r.text.length > 0)
+      .filter((r) => !talksToNobody(r.text, inRoom.size))
       .slice(0, 3);
 
     return responses.length >= 2 ? responses : null;
