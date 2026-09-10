@@ -239,26 +239,54 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
 
         {/* Spec §7.2 item 3 — Continue, only when there is something to continue. */}
         {/*
-          Vertical, and never a carousel.
-          
-          A sideways rail hid the second run half off the right edge and cut its
-          objective mid-word, so the one thing this section exists to tell you —
-          what you were in the middle of — was the part you could not read. There
-          are rarely more than a handful of runs, and they are the most important
-          thing on this screen; they get the width.
+          Continue is a rail like the others, because it is a shelf like the
+          others.
+
+          It was horizontal, then vertical, and vertical was wrong for a
+          different reason than horizontal had been: full-width rows with a
+          two-line objective under each made five runs taller than the whole
+          screen, and pushed Trending below the fold. "way too long it should be
+          a horizontal row not vertical. like the same as our trending and
+          stuff, except it says continue."
+
+          So it is the same `StoryCoverCard` at the same `railCardWidth` as every
+          other rail. What made the original horizontal version bad — a cramped
+          260pt card with the objective cut off mid-word — is gone because the
+          card no longer tries to carry the objective at all. The cover does the
+          work, the title is under it, and how far in you are is a caption.
         */}
         {data && data.continueCards.length > 0 ? (
           <Stack gap={spacing.md}>
             <SectionHeader title="Continue" />
-            <Stack gap={spacing.sm} style={{ paddingHorizontal: GUTTER }}>
-              {data.continueCards.map((item) => (
-                <ContinueTile
-                  key={item.sessionId}
-                  card={item}
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={data.continueCards}
+              keyExtractor={(item) => item.sessionId}
+              contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.md }}
+              renderItem={({ item }) => (
+                <StoryCoverCard
+                  story={{
+                    storyId: item.storyId,
+                    title: item.title,
+                    coverImage: item.coverImage,
+                    // The rail's second line. "8 turns in" is what this shelf is
+                    // for; the fantasy label belongs on Discover, not here.
+                    fantasyLabel: `${item.turnCount} ${item.turnCount === 1 ? 'turn' : 'turns'} in`,
+                    badges: [],
+                    // Chrome the Continue shelf has no use for: no creator
+                    // byline, no official pill, no run count. You have already
+                    // chosen this one.
+                    creatorName: '',
+                    official: false,
+                    tags: [],
+                    runs: 0,
+                  }}
+                  width={railCardWidth}
                   onPress={() => navigation.navigate('Session', { sessionId: item.sessionId })}
                 />
-              ))}
-            </Stack>
+              )}
+            />
           </Stack>
         ) : null}
 
