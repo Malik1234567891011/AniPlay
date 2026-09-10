@@ -884,3 +884,79 @@ kind of Itachi are you?" rather than "Who are you?".
 
 Nothing about this reduces freedom: the player can still do anything once they
 are in. It only stops the setup screen asking a question the story has answered.
+
+---
+
+# Itachi playtest — 2026-09-10
+
+Different world, same lens: is the story coherent, does it read well, do the
+images turn up and do they fit.
+
+**The writing is the best this engine has produced.** Turn 6, unprompted:
+
+> *"Are you coming tomorrow. Or not coming."* — no question mark, a seven-year-
+> old who has stopped expecting one.
+> *"There will be food in the box tomorrow. If you are here to eat it."* — Mikoto,
+> saying the entire family situation without naming any of it.
+> *"One hour at the posts. I want an answer now."*
+
+### 40. Mikoto was in two places inside one beat — HIGH (FIXED)
+Turn 5. The engine had her present. The prose put her at the sink draining a
+pot, then had Sasuke say *"She is at the meeting"*, then closed with *"There is
+no answer from the kitchen"* — four sentences apart, while the player was in the
+middle of asking her a direct question.
+
+Neither half was catchable: the absence claim used a pronoun rather than a name,
+and "at the meeting" was not a phrasing `ABSENCE` knew. Both fixed; a pronoun
+sentence now counts inside a block that names the character.
+
+### 41. Sasuke was `delighted` in every beat — HIGH (FIXED)
+Including the one where he says *"You talk to the air. You didn't eat."*
+`pickExpression` fell through to the standing relationship, and Sasuke adores
+his brother, so his affection is permanently above 45 and the picker returned
+`delighted` forever. His deck contains `sulking` and `hurt` and neither was ever
+reached. This turn's relationship movement now outranks the standing one.
+
+Worth stating plainly because it generalises: **a face that never changes is
+worse than no face**, because it sits next to prose that contradicts it.
+
+### 42. A card called Sasuke "nii-san" — MEDIUM (FIXED)
+Turn 6, card 1: *"That's my promise to you, nii-san."* `nii-san` means **older
+brother**. Itachi *is* the older brother. The card had the player say it to the
+one person in the world it cannot mean, in a world whose audience will notice
+instantly.
+
+The generator invented a term of address the story had not used. The policy now
+forbids that outright: use the world's own words for who people are to each
+other, or use their name.
+
+### 43. Three cards, one answer — HIGH (FIXED, verify)
+Sasuke asks a binary question — *"Are you coming tomorrow. Or not coming."* —
+and demands an answer now. All three cards said yes:
+
+1. *"I'll come tomorrow. We'll train the full hour at the posts."*
+2. *"I'm here as much as I can be — no maybe's. I'm coming home."*
+3. *"I'll be out for a while… but I'll come back later. You'll have your hour."*
+
+Three tones, one answer. The player cannot decline, cannot lie, cannot stall —
+in a story whose entire premise is that Itachi *cannot* keep this promise, and
+whose world sheet says "Nobody is a villain". The decision was removed and
+replaced with a delay.
+
+Policy now: when somebody has just asked a two-answer question, at least one card
+has to be able to disappoint them.
+
+### Images
+Working, and fitting. Turn 1 earned a frame — Itachi in the foreground with his
+bag, Sasuke on the step, Mikoto at the stove, sunset through the open door, the
+Uchiha crest on the wall. It matches the beat it belongs to exactly.
+
+The **frames vanishing** problem Malik reported twice is fixed: there was one
+hero slot bound to the newest turn, so an image appeared with its beat and was
+gone the moment the next one landed. Frames render inline with their own turn now
+and stay in history.
+
+Still on the list: the director keeps declining frames it has *just judged worth
+one* — "Worth a frame, but only 3 turns since the last one", three beats running.
+`HERO_SPACING.VIVID` is 5 now, down from 10. Watch whether 5 is still too slow in
+a world with 89 assets.
