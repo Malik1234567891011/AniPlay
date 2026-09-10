@@ -21,12 +21,16 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 |---|---|---|---|---|
 | Itachi | ✅ `itachi.ts` | ✅ `itachi.spec.ts` | ✅ 88 assets | ✅ |
 | Primal Crown | ✅ `primal-crown.ts` | ✅ `primal-crown.spec.ts` | ✅ 69 assets | ✅ |
-| Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ⏳ generating | ✅ |
+| Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ✅ 78 assets | ✅ |
+| The Fourth Beast | ✅ `fourth-beast.ts` | ✅ `fourth-beast.spec.ts` | ⏳ next | ✅ |
 
-All three gates green at the last commit. Catalog is now 16 worlds.
+All three gates green at the last commit. Catalog is now 17 worlds.
 
-**Untouched (6 worlds), in build order:**
-`02_THE_FOURTH_BEAST`, `03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
+**Not mine.** Another agent is generating art for Hush House, Window Seven and
+Good Morning, Husband on `main`. Do not generate for those three.
+
+**Untouched (5 worlds), in build order:**
+`03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
 `06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
 `/Users/malik/Downloads/morestoryideas/`. Copy each bible into
 `docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
@@ -106,6 +110,32 @@ array order on purpose**).
 The licensing/rights flag a previous session left in `BUILD_STATUS.md` has been
 **deleted** per the product owner. Do not raise it again.
 
+### Named vs blank protagonist (applies to every world from here)
+
+A world either has a **blank** protagonist (the player invents somebody, and the
+name / pronouns / appearance setup fields are the point) or a **named** one (the
+character is already written, and asking the player to invent them is a
+fourth-wall break on the first screen).
+
+`protagonist: NAMED | BLANK` is not a schema field yet. Until it is, record it
+here and author the setup screen accordingly:
+
+- **Itachi — NAMED.** Fixed: `pronouns` and `appearance` removed, `displayName`
+  is now optional with the canon name as placeholder and helpText saying you are
+  Itachi Uchiha. What is left is characterisation — what the war left in you,
+  what people get wrong about you, where you start out standing.
+- **Primal Crown — BLANK.** The bible: any faction, mixed heritage, factionless,
+  outsider, captive, or entirely self-authored.
+- **Zero Throne — BLANK.** The bible: civilian, cadet, officer, mechanic,
+  diplomat, mercenary, journalist, famous ace, nobody.
+- **The Fourth Beast — BLANK.** The bible leaves how the player got into Morel's
+  dataset deliberately flexible.
+
+The rule to write by: **the archetype question should be characterisation, not
+identity.** "You were four, on a battlefield, with your father. What did you take
+away from it?" is the right shape. "What do you look like?" is not, in a world
+that has already answered it.
+
 ### Zero Throne — shape
 
 Playable span is the **fortnight after the machine kneels**, on and around one
@@ -160,10 +190,8 @@ every character and an animal cannot have them.
 
 ## Next
 
-1. Zero Throne art is generating in the background. When it finishes:
-   `npx tsx infra/scripts/optimize-art.ts`, re-run gates, commit, push.
-   (`index.ts` already has it on `withDerivedAssetKeys`, so nothing else to flip.)
-2. Build `02_THE_FOURTH_BEAST.md`, then the remaining five in order.
+1. Generate The Fourth Beast art, then `optimize-art.ts`, gates, commit, push.
+2. Build `03_SEVEN_NAMES.md`, then the remaining four in order.
 
 **The per-world loop that works — follow it exactly:**
 

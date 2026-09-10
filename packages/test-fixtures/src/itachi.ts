@@ -2395,9 +2395,32 @@ const raw = {
       startingReputation: [],
     },
   ],
+  /**
+   * A NAMED protagonist, which changes what this screen is for.
+   *
+   * Most worlds here have a blank protagonist and the identity fields are the
+   * point: the player invents somebody. This one does not. The card already
+   * says you are thirteen and the best shinobi your clan has produced in a
+   * generation, and asking that player to type a name, pronouns and a physical
+   * description is the game asking them to invent a character it has already
+   * written. So the name is answered, with an escape hatch for anybody who
+   * wants it, and pronouns and appearance are gone.
+   *
+   * What is left is characterisation rather than identity — what the war left
+   * in you, what people get wrong about you, where you start out standing —
+   * which is the right question to ask somebody stepping into a life that
+   * already exists.
+   */
   setupFields: [
-    { id: 'displayName', label: 'Your name', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'Itachi Uchiha' },
-    { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. he/him' },
+    {
+      id: 'displayName',
+      label: 'Your name',
+      helpText: 'You are Itachi Uchiha. This is here only in case you want the world to call you something else, and most people leave it alone.',
+      kind: 'TEXT',
+      required: false,
+      maxLength: 40,
+      placeholder: 'Itachi Uchiha',
+    },
     {
       id: 'archetype',
       label: 'You were four, on a battlefield, with your father. What did you take away from it?',
@@ -2428,14 +2451,6 @@ const raw = {
         { id: 'undecided', label: 'You genuinely do not know, and that is what the fortnight is for' },
         { id: 'neither_of_them', label: 'Both of these institutions have already spent you once' },
       ],
-    },
-    {
-      id: 'appearance',
-      label: 'What do people see coming down the street?',
-      kind: 'TEXT',
-      advanced: true,
-      maxLength: 200,
-      placeholder: 'e.g. Small for thirteen, lines under the eyes that nobody that age should have, and a school satchel with something heavier than books in it.',
     },
   ],
   /**

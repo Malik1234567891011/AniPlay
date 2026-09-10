@@ -15,6 +15,7 @@ import { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
 import { ITACHI as ITACHI_RAW } from './itachi.js';
 import { PRIMAL_CROWN as PRIMAL_CROWN_RAW } from './primal-crown.js';
 import { ZERO_THRONE as ZERO_THRONE_RAW } from './zero-throne.js';
+import { FOURTH_BEAST as FOURTH_BEAST_RAW } from './fourth-beast.js';
 
 
 export { withDerivedAssetKeys } from './derive-assets.js';
@@ -32,6 +33,7 @@ export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
 export const ITACHI = withDerivedAssetKeys(ITACHI_RAW);
 export const PRIMAL_CROWN = withDerivedAssetKeys(PRIMAL_CROWN_RAW);
 export const ZERO_THRONE = withDerivedAssetKeys(ZERO_THRONE_RAW);
+export const FOURTH_BEAST = withDerivedAssetKeys(FOURTH_BEAST_RAW);
 
 /**
  * Three of the newest worlds ship without generated art, deliberately.
@@ -75,7 +77,9 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * arrangement before the herds arrive, and the animals in it are animals, and
  * Zero Throne is a machine that opened for nobody for eighteen years walking the
  * length of a memorial plaza on turn one and kneeling to somebody who has no
- * idea why.
+ * idea why, and The Fourth Beast is three small creatures in open habitats under
+ * a Paris institute, of which you are choosing one and somebody else is getting
+ * whichever you leave.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -94,4 +98,5 @@ export const LAUNCH_CATALOG = [
   ITACHI,
   PRIMAL_CROWN,
   ZERO_THRONE,
+  FOURTH_BEAST,
 ] as const;
