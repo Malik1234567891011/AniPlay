@@ -51,14 +51,16 @@ export interface EllipsisResult {
 function lastAction(
   recentTurns: readonly TurnRecord[],
   story: StoryVersion,
-): { verb: string; targetName: string | null; raw: string } | null {
+): { verb: string; phrase: string | null; targetName: string | null; raw: string } | null {
   for (let i = recentTurns.length - 1; i >= 0; i--) {
     const turn = recentTurns[i];
     if (!turn?.resolution) continue;
 
     const action = turn.resolution.normalizedActions.find(
       (a) => (a as { status?: string }).status !== 'REJECTED',
-    ) as { verb?: string; targetId?: string; targets?: Array<{ entityId?: string }> } | undefined;
+    ) as
+      | { verb?: string; abilityId?: string; targetId?: string; targets?: Array<{ entityId?: string }> }
+      | undefined;
     if (!action?.verb) continue;
     // A wait is not a thing to do again.
     if (action.verb === 'wait' || action.verb === 'custom') continue;
@@ -67,7 +69,15 @@ function lastAction(
       action.targetId ?? action.targets?.find((t) => typeof t.entityId === 'string')?.entityId ?? null;
     const targetName = targetId ? (story.characters.find((c) => c.id === targetId)?.name ?? null) : null;
 
-    return { verb: action.verb, targetName, raw: turn.actionText ?? '' };
+    // Name the move rather than gesturing at it. "I do that again, harder" is
+    // both vague and easy for a writer to mistake for something the player
+    // said out loud; "I drive again, harder" is the sentence they meant.
+    const ability = action.abilityId
+      ? story.abilities.find((a) => a.id === action.abilityId)
+      : undefined;
+    const phrase = ability ? (ability.affordances[0] ?? ability.name.toLowerCase()) : null;
+
+    return { verb: action.verb, phrase, targetName, raw: turn.actionText ?? '' };
   }
   return null;
 }
@@ -117,7 +127,7 @@ export function expandElliptical(
   const previous = lastAction(recentTurns, story);
   if (!previous) return { text: actionText, expanded: false, note: null };
 
-  const phrase = VERB_PHRASES[previous.verb] ?? previous.verb.replace(/_/g, ' ');
+  const phrase = previous.phrase ?? VERB_PHRASES[previous.verb] ?? previous.verb.replace(/_/g, ' ');
   const target = previous.targetName ? ` ${previous.targetName}` : '';
 
   // The player's own words are kept on the end, because "harder" and "keep
