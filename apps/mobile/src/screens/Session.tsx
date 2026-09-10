@@ -61,6 +61,28 @@ import type { RootNavigation, RootRoute } from '../navigation.jsx';
  * persistent composer (§10.2).
  */
 
+/**
+ * Whether a roll is worth showing the player a card about.
+ *
+ * Spec §26.8 — the reveal used to render on every check, so an ordinary turn
+ * arrived as four descriptions of one event: a card reading "ATTEMPT ·
+ * MODERATE", a "SUCCESS WITH COST" band, prose describing the same thing, and
+ * a resource chip. The card is genuinely good on the turns it is about — a
+ * critical, a complication, a named technique landing — and is noise on the
+ * ones it is not.
+ *
+ * A generic label is the tell. "Attempt" is the engine saying it had no name
+ * for what you did, and a card headed "Attempt" tells the player nothing they
+ * did not watch happen.
+ */
+const GENERIC_CHECK_LABELS = new Set(['attempt', 'interact', 'investigate', 'custom']);
+
+function worthRevealing(check: { label: string; outcome: string } | null | undefined): boolean {
+  if (!check) return false;
+  if (check.outcome === 'CRITICAL_SUCCESS' || check.outcome === 'COMPLICATION') return true;
+  return !GENERIC_CHECK_LABELS.has(check.label.trim().toLowerCase());
+}
+
 interface PendingTurn {
   /** Empty until the server accepts. See the optimistic send below. */
   turnId: string;
@@ -431,7 +453,7 @@ export function SessionScreen({
         {pending ? <PlayerAction text={pending.actionText} /> : null}
         {latest?.actionText && !pending ? <PlayerAction text={latest.actionText} /> : null}
 
-        {pending?.check ? (
+        {worthRevealing(pending?.check) && pending?.check ? (
           <CheckReveal
             label={pending.check.label}
             difficulty={pending.check.difficulty}
@@ -439,7 +461,7 @@ export function SessionScreen({
             outcomeLabel={pending.check.outcomeLabel}
             math={pending.check.math}
           />
-        ) : latest?.checks[0] && !pending ? (
+        ) : latest?.checks[0] && !pending && worthRevealing({ label: latest.checks[0].label, outcome: latest.checks[0].outcome }) ? (
           <CheckReveal
             label={latest.checks[0].label}
             // The committed turn carries the band and, where the world reveals
