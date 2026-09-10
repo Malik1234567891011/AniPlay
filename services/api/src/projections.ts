@@ -162,6 +162,14 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
     worldTimeLabel: formatWorldTime(state.worldMinute),
     worldMinute: state.worldMinute,
     dayNumber: dayNumber(state.worldMinute),
+    // Everybody who is actually here.
+    //
+    // This used to be capped at three, because §10.2 B says the stage carries
+    // at most three portraits — but that is a rule about the portrait row, not
+    // about what the client is allowed to know. Kosei's gym holds six people,
+    // so the coach could speak, legitimately, and the client could not resolve
+    // her name or face for the dialogue block because she was fourth in a list
+    // of three. The cap now lives where the portraits are drawn.
     presentCharacters: charactersPresent(state)
       .map((runtime) => {
         const def = story.characters.find((c) => c.id === runtime.characterId);
@@ -174,9 +182,7 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
           speaking: false,
         };
       })
-      .filter((c): c is NonNullable<typeof c> => c !== null)
-      // Spec §10.2 B — the stage carries at most three portraits.
-      .slice(0, 3),
+      .filter((c): c is NonNullable<typeof c> => c !== null),
     objective: topObjective(state, story),
     resources: visibleResources(story, state),
     encounter: state.encounter,

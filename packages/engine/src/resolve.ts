@@ -332,6 +332,31 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   observableFacts.push(...world.observableFacts);
   privateFacts.push(...world.privateFacts.map((fact: string) => ({ visibility: 'SELF' as const, fact })));
 
+  // Spec §17.6 — you do not get to walk back into a room you started a fight
+  // in and be greeted pleasantly.
+  //
+  // The memory of the attack is stored correctly, retrieved correctly, and
+  // present in the writer's prompt as one line among a dozen things a
+  // character knows — and the adversarial sweep kept catching the writer
+  // treating it as optional. It is not optional, so it stops being one line
+  // among many and becomes an instruction on the turn it matters, every time,
+  // for as long as it is true.
+  for (const characterId of targetedCharacterIds(story, intent)) {
+    if (!state.flags[`attacked:${characterId}`]) continue;
+    const character = story.characters.find((c) => c.id === characterId);
+    if (!character) continue;
+    const rel = state.relationships.find((r) => r.characterId === characterId);
+    privateFacts.push({
+      visibility: 'SELF',
+      fact:
+        `AUTHORITATIVE: the player has attacked ${character.name} before, and ${character.name} has not ` +
+        'forgotten it. They do not greet the player normally, they do not pick up a friendly conversation ' +
+        'where it left off, and they do not need to be reminded. ' +
+        `Right now they are ${describeStanding(rel)}. Whatever they say or do here happens through that. ` +
+        'If they are helping the player, it costs them something to do it.',
+    });
+  }
+
   // And then the people who chose to be here decide whether they still do.
   // Same reasoning as the world events above: a navigator walking off the ship
   // is the loudest thing that happens in the turn, and it has to be in the
@@ -2213,4 +2238,36 @@ function isDeparture(story: StoryVersion, state: GameState, action: IntentAction
   // "Leave and go to the Commons" is a trip. "Walk out through the gate" names
   // the room they are standing in, which is not a destination.
   return !destination || destination.id === state.player.locationId;
+}
+
+
+/** Everyone this turn's actions are aimed at. */
+function targetedCharacterIds(story: StoryVersion, intent: ActionIntent): string[] {
+  const known = new Set(story.characters.map((c) => c.id));
+  const ids = new Set<string>();
+  for (const action of intent.actions) {
+    for (const target of action.targets) {
+      if (target.entityType === 'npc' && known.has(target.entityId)) ids.add(target.entityId);
+    }
+  }
+  return [...ids];
+}
+
+/**
+ * How somebody is holding themselves toward the player, in words.
+ *
+ * A directive that says "trust -20, fear 15" is a stat block; one that says
+ * "wary of you and angry about it" is something a writer can act on.
+ */
+function describeStanding(
+  rel: { trust: number; affection: number; respect: number; fear: number; rivalry: number } | undefined,
+): string {
+  if (!rel) return 'wary of the player';
+  const parts: string[] = [];
+  if (rel.fear >= 10) parts.push('afraid of them');
+  if (rel.rivalry >= 20) parts.push('treating them as an enemy');
+  if (rel.trust <= -10) parts.push('unwilling to trust them');
+  if (rel.affection <= -10) parts.push('with no warmth left');
+  if (rel.respect >= 20) parts.push('grudgingly respecting them');
+  return parts.length > 0 ? parts.join(', ') : 'wary of them';
 }

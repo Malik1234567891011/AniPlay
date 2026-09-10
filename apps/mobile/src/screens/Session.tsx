@@ -736,6 +736,12 @@ export function SessionScreen({
  * to tell "somebody is about to leave" from "everybody is fine" without
  * reading, and should get no more precision than that.
  */
+/** "Dai, Kai and Coach Torakawa" — for the stage's one accessible label. */
+function namesInWords(names: readonly string[]): string {
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+}
+
 const CREW_MOOD_TONE: Record<string, 'neutral' | 'success' | 'warning' | 'danger'> = {
   'with you': 'success',
   steady: 'neutral',
@@ -784,7 +790,9 @@ function Stage({
           gap: spacing.md,
         }}
       >
-        {scene.presentCharacters.map((character) => (
+        {/* Spec §10.2 B — the stage carries at most three portraits. The scene
+            knows about everyone here; only three of them get a face on it. */}
+        {scene.presentCharacters.slice(0, 3).map((character) => (
           <CharacterPortrait
             key={character.id}
             name={character.name}
@@ -853,7 +861,10 @@ function Stage({
         // Spec §27.4 — the stage is one semantic group, not a maze of nodes.
         accessibilityLabel={`Scene: ${scene.locationName}. ${
           scene.presentCharacters.length > 0
-            ? `${scene.presentCharacters.map((c) => c.name).join(' and ')} present.`
+            ? // Now that the scene reports everyone rather than three of them,
+              // "A and B and C and D and E and F" is what a screen reader would
+              // have to say. A list reads as a list.
+              `${namesInWords(scene.presentCharacters.map((c) => c.name))} present.`
             : 'Nobody else here.'
         }`}
         style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: GUTTER, gap: spacing.md }}
