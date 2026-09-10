@@ -167,16 +167,16 @@ function coverComposition(story: StoryVersion): string {
   if (has('sports', 'team')) {
     return (
       'Composition: peak-action sports key visual. One athlete in the foreground mid-drive, low camera, ' +
-      'body torqued, sweat and motion blur on the trailing arm. A rival closing from behind or across them, ' +
-      'eyes locked on the ball. Arena floodlights, blown-out highlights, a packed dark crowd behind. ' +
+      'body torqued, speed lines behind the trailing arm. A rival closing from behind or across them, ' +
+      'eyes locked on the ball. Bright arena colour, a simply drawn crowd behind. ' +
       'Strong diagonal energy — nobody is standing still.'
     );
   }
   if (has('romance', 'slice of life')) {
     return (
       'Composition: two characters close in frame, the space between them doing the work. Eye contact or ' +
-      'a deliberately avoided glance. Shallow depth of field, warm practical light, an ordinary setting ' +
-      'made intimate. Quiet, not dramatic. No action poses.'
+      'a deliberately avoided glance. Bright warm colour, an ordinary setting made intimate. Close and ' +
+      'large in frame — shoulders-up or waist-up, not a wide shot. Appealing, expressive faces.'
     );
   }
   if (has('body horror', 'horror')) {
@@ -281,6 +281,18 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
     prompt: compose([
       COVER_STYLE_SPINE,
       'This is an anime poster / key visual, not an environment painting. Characters are the subject.',
+      // Scale, stated as a rule rather than left to taste.
+      //
+      // Every reference Malik gave — Naruto, One Piece, Jujutsu Kaisen, Hajime
+      // no Ippo, Code Geass, My Hero Academia — has the cast enormous and
+      // frontal, filling the frame corner to corner and cropped by its edges.
+      // Ours had a well-drawn person standing in a well-drawn room, small.
+      // "the chracters in the cover being super frontal taking most of the
+      // space n every exmaple i gave."
+      'FRAMING, THIS MATTERS MOST: the characters fill the frame. They occupy at least three quarters ' +
+        'of the image and are cropped by its edges. Faces are large — a head is roughly a fifth of the ' +
+        'picture height. Shot from the front, near eye level, looking at or just past the viewer. ' +
+        'The setting is a backdrop behind them, small and simple, never the subject.',
       'The characters must pop off the background: strong silhouette separation, rim light or a clean outline.',
       coverComposition(story),
       coverCast(story),
