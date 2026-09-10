@@ -53,6 +53,13 @@ export function createDefaultPipeline(): TurnPipelineDeps {
 }
 
 export interface RunTurnOptions {
+  /**
+   * Called the instant the engine has decided, before the director or writer
+   * run. Spec §17.8 — the outcome is authoritative roughly nine seconds before
+   * the prose describing it exists, and a player staring at a spinner for that
+   * whole time is the difference between a game and a prompt box.
+   */
+  readonly onResolved?: (resolution: Resolution) => void;
   readonly story: StoryVersion;
   readonly state: GameState;
   readonly memories: readonly MemoryFact[];
@@ -107,6 +114,9 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   clock.start('engine');
   const resolution = resolveIntent({ story, state, intent, turnId, seed });
   clock.end('engine');
+
+  // Hand the outcome out immediately. Everything after this is presentation.
+  options.onResolved?.(resolution);
 
   // Step 4 — context assembly, sized by tier.
   //

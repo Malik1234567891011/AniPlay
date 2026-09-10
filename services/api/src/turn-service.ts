@@ -146,6 +146,29 @@ async function processTurn(
 
     const seed = deriveTurnSeed(session.sessionSeed, state.turnIndex, session.branchKey);
     const result = await runTurn({
+      // Spec §17.8 — the engine knows the answer about nine seconds before the
+      // prose describing it exists. Measured: first readable text at a median
+      // of 11.3s, with nothing between 1.8s and then. This closes that gap
+      // with the one thing that is both true and final that early: what
+      // actually happened. Nothing here is ever reversed by the writer — the
+      // writer describes this, it does not overturn it.
+      onResolved: (resolution) => {
+        for (const check of resolution.checks) {
+          hub.emit(turnId, 'check.resolved', {
+            checkId: check.checkId,
+            label: check.label,
+            outcome: check.outcome,
+            outcomeLabel: outcomeLabel(check.outcome),
+            difficultyLabel: dcBandLabel(check.dc),
+            dc: story.rules.revealExactDc ? check.dc : null,
+            math: story.rules.revealCheckMath ? formatCheckMath(check) : null,
+          });
+        }
+        hub.emit(turnId, 'resolution.ready', {
+          facts: resolution.observableFacts.slice(0, 4),
+          minutes: resolution.timeAdvancedMinutes,
+        });
+      },
       story,
       state,
       memories,

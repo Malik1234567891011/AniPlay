@@ -630,6 +630,15 @@ export const TurnStreamEventName = z.enum([
   'turn.accepted',
   'check.started',
   'check.resolved',
+  /**
+   * What actually happened, the instant the engine decided it.
+   *
+   * Spec §17.8 — the outcome is authoritative roughly nine seconds before the
+   * prose describing it exists. Everything in this event is final: the writer
+   * describes it, it never overturns it, so a client can render it without
+   * risking a reversal.
+   */
+  'resolution.ready',
   'text.delta',
   'state.delta',
   'turn.completed',
