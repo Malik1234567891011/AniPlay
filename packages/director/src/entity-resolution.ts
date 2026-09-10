@@ -73,7 +73,21 @@ export function resolveCharacterMention(
   }
 
   // Near match against each word the player typed.
-  const words = lower.replace(/[^a-z\s']/g, ' ').split(/\s+/).filter((w) => w.length > 2);
+  // Only words the player capitalised.
+  //
+  // A misspelled name is still typed as a name, and requiring the capital is
+  // what stops the edit-distance pass firing on ordinary vocabulary. Without
+  // it, in Blackwake, "I take the sale price" and "I look at the vale below"
+  // both resolved to Nessa Vale — one edit away, and then handed a presence
+  // bonus that made them look confident.
+  //
+  // Exact matches below are unaffected: those still work in any case, because
+  // "i talk to nessa" is a real and common way to type it.
+  const words = text
+    .replace(/[^\p{L}\p{M}\s'’]/gu, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 2 && /^\p{Lu}/u.test(w))
+    .map((w) => w.toLowerCase());
   let best: (ResolvedEntity & { distance: number }) | null = null;
   let runnerUpDistance = Infinity;
 
