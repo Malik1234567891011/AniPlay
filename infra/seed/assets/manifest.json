@@ -10277,5 +10277,1563 @@
       "latencyMs": 44443,
       "createdAt": "2026-09-10T16:48:14.444Z"
     }
+  },
+  "story_seven_names/stage_serein_cell": {
+    "assetKey": "story_seven_names/stage_serein_cell",
+    "file": "story_seven_names/stage_serein_cell.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Cell: Four paces by three, a bed, a bucket, and a window too narrow to put a shoulder through.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "918b2347-1cb1-4dd2-8b49-4ab53137b349",
+      "promptHash": "3a7b334afeb0a6d281a3043d2ddf1b51",
+      "seed": "sv_seven_names_1:loc:serein_cell:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 21020,
+      "createdAt": "2026-09-10T16:56:37.934Z"
+    }
+  },
+  "story_seven_names/stage_serein_tunnel": {
+    "assetKey": "story_seven_names/stage_serein_tunnel",
+    "file": "story_seven_names/stage_serein_tunnel.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Tunnel: Six years of work: a crawl through fill and rubble, shored with bed slats, running under two corridors and out through the old cistern to the seaward wall.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf0fdd35-17d5-4f50-b508-94a1854ee152",
+      "promptHash": "76509b8dfd0a7cc070e41e95d95c4d0f",
+      "seed": "sv_seven_names_1:loc:serein_tunnel:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 25777,
+      "createdAt": "2026-09-10T16:56:42.691Z"
+    }
+  },
+  "story_seven_names/key": {
+    "assetKey": "story_seven_names/key",
+    "file": "story_seven_names/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Seven Names",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "82884473-0e0c-436b-85be-faaa71f3b428",
+      "promptHash": "2d29f6bc73fe0956767163542e406bf1",
+      "seed": "sv_seven_names_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41291,
+      "createdAt": "2026-09-10T16:56:58.204Z"
+    }
+  },
+  "story_seven_names/cover": {
+    "assetKey": "story_seven_names/cover",
+    "file": "story_seven_names/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Seven Names: You hang at dawn. Unless you go now.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd66c46c-1847-4e5c-bfaa-ff4e31d0818e",
+      "promptHash": "a81edc3d9cb30f29ee271e4f3d9315f2",
+      "seed": "sv_seven_names_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.05488,
+      "latencyMs": 41615,
+      "createdAt": "2026-09-10T16:56:58.514Z"
+    }
+  },
+  "story_seven_names/stage_the_seaward_wall": {
+    "assetKey": "story_seven_names/stage_the_seaward_wall",
+    "file": "story_seven_names/stage_the_seaward_wall.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Seaward Wall: The bottom of the fortress where the rock meets black water, a gate that has not been opened since the eighties, and eleven kilometres of Mediterranean between here and a coast with lights on it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "41929d9a-5139-4d29-b231-64008b5264ef",
+      "promptHash": "5a5564930d711184bc05ffb760796d76",
+      "seed": "sv_seven_names_1:loc:the_seaward_wall:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38414,
+      "createdAt": "2026-09-10T16:57:16.356Z"
+    }
+  },
+  "story_seven_names/stage_marseille_docks": {
+    "assetKey": "story_seven_names/stage_marseille_docks",
+    "file": "story_seven_names/stage_marseille_docks.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Marseille Docks: Forty berths of coal, wine, soap and people, a customs house that operates on the honour system and a great deal of money, and eleven languages being shouted before six in the morning.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "58e5a43f-1f26-4c6e-a738-e10e8369b34e",
+      "promptHash": "4b90b677fb88c5a5c880f5effeee0f33",
+      "seed": "sv_seven_names_1:loc:marseille_docks:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39603,
+      "createdAt": "2026-09-10T16:57:22.298Z"
+    }
+  },
+  "story_seven_names/stage_marseille_room": {
+    "assetKey": "story_seven_names/stage_marseille_room",
+    "file": "story_seven_names/stage_marseille_room.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Room Over The Laundry: One franc fifty a night, no register, a window onto a courtyard with four exits from it, and steam coming up through the floor at all hours from the laundry below.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0e51ffe1-0780-4972-8956-147186b446ea",
+      "promptHash": "6c5d9fd56a43be7b96a7e8f853d82c9c",
+      "seed": "sv_seven_names_1:loc:marseille_room:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36007,
+      "createdAt": "2026-09-10T16:57:34.216Z"
+    }
+  },
+  "story_seven_names/stage_saint_charles": {
+    "assetKey": "story_seven_names/stage_saint_charles",
+    "file": "story_seven_names/stage_saint_charles.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Saint-Charles Station: A great glass shed at the top of a flight of stairs, with the Paris express standing at platform three for eleven hours a day and two men in plain coats at the barrier who are not railway employees and are not hiding it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4f737900-b1ed-4148-b46e-a5662852851e",
+      "promptHash": "1dda35aee7e6cb844d9e67ae142afcbf",
+      "seed": "sv_seven_names_1:loc:saint_charles:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40035,
+      "createdAt": "2026-09-10T16:57:38.747Z"
+    }
+  },
+  "story_seven_names/stage_the_express": {
+    "assetKey": "story_seven_names/stage_the_express",
+    "file": "story_seven_names/stage_the_express.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Paris Express: Fourteen hours, three classes, a dining car and a corridor that everybody on this train will walk down at least twice.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "787d2b9a-0113-4bfd-a671-4a7cd50b2e7e",
+      "promptHash": "d966e6931cb80774ecf869bf8cf64a7b",
+      "seed": "sv_seven_names_1:loc:the_express:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35472,
+      "createdAt": "2026-09-10T16:57:51.833Z"
+    }
+  },
+  "story_seven_names/stage_service_passage": {
+    "assetKey": "story_seven_names/stage_service_passage",
+    "file": "story_seven_names/stage_service_passage.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Service Passage: Eleven metres of unlit corridor between the kitchens and the cloakrooms, with a door at each end and a bend in the middle.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ae85350d-2831-4400-8622-6bd091570af4",
+      "promptHash": "15f4b6f197a075e961dca11a3b0694dc",
+      "seed": "sv_seven_names_1:loc:service_passage:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20262,
+      "createdAt": "2026-09-10T16:57:59.014Z"
+    }
+  },
+  "story_seven_names/stage_paris_hotel": {
+    "assetKey": "story_seven_names/stage_paris_hotel",
+    "file": "story_seven_names/stage_paris_hotel.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Hôtel Beaumont: Where it happened.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "06c27a1f-156d-4e20-9867-ebdecec4cb18",
+      "promptHash": "ba755734a6dd76305dd7358c29d02431",
+      "seed": "sv_seven_names_1:loc:paris_hotel:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40524,
+      "createdAt": "2026-09-10T16:58:02.826Z"
+    }
+  },
+  "story_seven_names/stage_the_boulevards": {
+    "assetKey": "story_seven_names/stage_the_boulevards",
+    "file": "story_seven_names/stage_the_boulevards.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Boulevards: Cafés, kiosks, a tram, six evening papers on sale by four in the afternoon and a great many people who read all of them.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ba6bb7cb-8a18-4259-ba75-a0fafc65047f",
+      "promptHash": "033a6090872048a93a89f484a1c01a91",
+      "seed": "sv_seven_names_1:loc:the_boulevards:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39744,
+      "createdAt": "2026-09-10T16:58:13.965Z"
+    }
+  },
+  "story_seven_names/stage_le_matin_offices": {
+    "assetKey": "story_seven_names/stage_le_matin_offices",
+    "file": "story_seven_names/stage_le_matin_offices.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Le Matin Français: Six floors of a building that decides what four hundred thousand people think before breakfast.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "59ae127b-ff21-4d4b-bdc0-705ae82d5a67",
+      "promptHash": "0313d344ca72c933c56f957700888ee3",
+      "seed": "sv_seven_names_1:loc:le_matin_offices:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38572,
+      "createdAt": "2026-09-10T16:58:30.409Z"
+    }
+  },
+  "story_seven_names/stage_varenne_house": {
+    "assetKey": "story_seven_names/stage_varenne_house",
+    "file": "story_seven_names/stage_varenne_house.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Varenne House: A private hôtel in the eighth with a courtyard, eleven servants and a first-floor study that has a safe in it, a railway map on the wall and a daughter who is not where anybody thinks she is on any given evening.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2b5fe65e-7d2e-44fe-94ed-d80bc894cdee",
+      "promptHash": "e7002cf080c0e7eb3a2cdffdcab6caef",
+      "seed": "sv_seven_names_1:loc:varenne_house:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38434,
+      "createdAt": "2026-09-10T16:58:37.453Z"
+    }
+  },
+  "story_seven_names/stage_prefecture": {
+    "assetKey": "story_seven_names/stage_prefecture",
+    "file": "story_seven_names/stage_prefecture.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Prefecture: The whole apparatus in one building: records, magistrates, the archive of the Valère case in eleven boxes, and an inspector on the third floor who has never signed off on a drowning he does not believe in.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ccbf91da-589b-45e5-8ca0-530669b07222",
+      "promptHash": "dde8dba71e04b7ef1c735791c99cb05e",
+      "seed": "sv_seven_names_1:loc:prefecture:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36760,
+      "createdAt": "2026-09-10T16:58:50.728Z"
+    }
+  },
+  "story_seven_names/stage_bellier_surgery": {
+    "assetKey": "story_seven_names/stage_bellier_surgery",
+    "file": "story_seven_names/stage_bellier_surgery.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Surgery: Two rooms over a pharmacy south of the river, a waiting bench, and a doctor who takes patients who cannot pay on Tuesdays.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3ea94ca7-4e6f-44d7-bb80-757c79df528d",
+      "promptHash": "65f95ec5b39706462fe0b9018a8ee471",
+      "seed": "sv_seven_names_1:loc:bellier_surgery:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39259,
+      "createdAt": "2026-09-10T16:59:09.673Z"
+    }
+  },
+  "story_seven_names/stage_veyrac_rooms": {
+    "assetKey": "story_seven_names/stage_veyrac_rooms",
+    "file": "story_seven_names/stage_veyrac_rooms.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Rue de Grenelle: Not a house — a set of rooms where a rising man works eighteen hours a day with four secretaries and no wife.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7df8b0e0-df9a-4fea-a7d8-59c0cac89686",
+      "promptHash": "62ea4ffa827ec427bd9f944d4a4e63ef",
+      "seed": "sv_seven_names_1:loc:veyrac_rooms:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43380,
+      "createdAt": "2026-09-10T16:59:20.837Z"
+    }
+  },
+  "story_seven_names/celeste": {
+    "assetKey": "story_seven_names/celeste",
+    "file": "story_seven_names/celeste.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, Twenty-four, a financier’s daughter, and — three nights a week under another name — the best burglar in Paris",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "89c2ad27-aa35-41f2-860c-cdd7a4f2b617",
+      "promptHash": "9021f5f070841b78e0df70a29c0a8fcc",
+      "seed": "sn-celeste-01",
+      "costUsd": 0.00632,
+      "latencyMs": 16904,
+      "createdAt": "2026-09-10T16:59:26.579Z"
+    }
+  },
+  "story_seven_names/veyrac": {
+    "assetKey": "story_seven_names/veyrac",
+    "file": "story_seven_names/veyrac.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, Forty-one, the dead minister’s closest friend, the man who gave the eulogy, and the man who arranged the killing",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7129353d-8020-4481-9367-0e4470f42339",
+      "promptHash": "8cde0672a340e517fe3fd2de416eaa79",
+      "seed": "sn-veyrac-01",
+      "costUsd": 0.01372,
+      "latencyMs": 18789,
+      "createdAt": "2026-09-10T16:59:39.631Z"
+    }
+  },
+  "story_seven_names/stage_the_opera": {
+    "assetKey": "story_seven_names/stage_the_opera",
+    "file": "story_seven_names/stage_the_opera.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Opera: Where everybody who matters is visible for three hours on the same evening, in boxes, at known heights, in a building with more corridors behind the boxes than in front of them.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a65a9032-6f29-4214-86da-7b9212cb95e9",
+      "promptHash": "ad505676c055a6298848c99f43e3fd2e",
+      "seed": "sv_seven_names_1:loc:the_opera:anima-v1",
+      "costUsd": 0.21952,
+      "latencyMs": 100695,
+      "createdAt": "2026-09-10T16:59:43.527Z"
+    }
+  },
+  "story_seven_names/renaud": {
+    "assetKey": "story_seven_names/renaud",
+    "file": "story_seven_names/renaud.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, Inspector, thirty-two, junior on the Valère case, and the only man in France who has never signed off on your drowning",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bfb38c31-69a7-4639-9895-caef18b49d64",
+      "promptHash": "da33a224ae6f2772171c3ab016d8983b",
+      "seed": "sn-renaud-01",
+      "costUsd": 0.05488,
+      "latencyMs": 35840,
+      "createdAt": "2026-09-10T17:00:02.423Z"
+    }
+  },
+  "story_seven_names/marcel": {
+    "assetKey": "story_seven_names/marcel",
+    "file": "story_seven_names/marcel.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, Sixty-three, prisoner forty-seven, a forger by trade, and six years into a tunnel he started before he knew what he would do with it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6236ad4c-0587-41cf-9459-8022726fd681",
+      "promptHash": "4478a0c1948b92e4e1264b0ae158cf06",
+      "seed": "sn-marcel-01",
+      "costUsd": 0.02404,
+      "latencyMs": 24619,
+      "createdAt": "2026-09-10T17:00:04.253Z"
+    }
+  },
+  "story_seven_names/solene": {
+    "assetKey": "story_seven_names/solene",
+    "file": "story_seven_names/solene.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, Forty-four, owner of six newspapers, and the person who turned you from a suspect into a national monster in nine days",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "900367fe-95c2-4f4a-834f-c97cfbb4e5e3",
+      "promptHash": "957c54dabef69aaa2587d8865fb934ff",
+      "seed": "sn-solene-01",
+      "costUsd": 0.05488,
+      "latencyMs": 38046,
+      "createdAt": "2026-09-10T17:00:21.578Z"
+    }
+  },
+  "story_seven_names/varenne": {
+    "assetKey": "story_seven_names/varenne",
+    "file": "story_seven_names/varenne.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, Fifty-five, chairman of a bank, first name on the list, and the man who paid for the network that watched everybody including himself",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "03f597ea-e172-4a2c-8b75-b01f5c532da5",
+      "promptHash": "0bc26ea42a7e211ed5e5e0e92efdcc1c",
+      "seed": "sn-varenne-01",
+      "costUsd": 0.01372,
+      "latencyMs": 19431,
+      "createdAt": "2026-09-10T17:00:23.690Z"
+    }
+  },
+  "story_seven_names/anais": {
+    "assetKey": "story_seven_names/anais",
+    "file": "story_seven_names/anais.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, Thirty-nine, physician, and the woman whose signature made the prosecution’s timeline possible",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "984be42e-1445-42a1-bef7-d3afdfef248b",
+      "promptHash": "21ffe11437621aa61ff30be6c1ae2848",
+      "seed": "sn-anais-01",
+      "costUsd": 0.02404,
+      "latencyMs": 26299,
+      "createdAt": "2026-09-10T17:00:28.726Z"
+    }
+  },
+  "story_seven_names/stage_the_vault": {
+    "assetKey": "story_seven_names/stage_the_vault",
+    "file": "story_seven_names/stage_the_vault.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Vault: Not a vault and not one place: three rooms in three buildings, one of which is a solicitor’s strongroom, one of which is a convent, and one of which is a bank basement with four keyholders and no register of who they are.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1015d0d5-1804-428d-a2ba-be0e252b1933",
+      "promptHash": "ab5e6d745ed82eff7c1ff04832e28822",
+      "seed": "sv_seven_names_1:loc:the_vault:anima-v1",
+      "costUsd": 0.21952,
+      "latencyMs": 105217,
+      "createdAt": "2026-09-10T17:00:35.949Z"
+    }
+  },
+  "story_seven_names/celeste_warm": {
+    "assetKey": "story_seven_names/celeste_warm",
+    "file": "story_seven_names/celeste_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8923d7a5-db74-4fc6-abc2-6567fe30dc10",
+      "promptHash": "cfea91a443d3d92876213e902a9370a6",
+      "seed": "sn-celeste-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 22531,
+      "createdAt": "2026-09-10T17:00:46.225Z"
+    }
+  },
+  "story_seven_names/celeste_amused": {
+    "assetKey": "story_seven_names/celeste_amused",
+    "file": "story_seven_names/celeste_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "648ed047-141d-418c-8a68-625324650460",
+      "promptHash": "ca67de5a62342026fd7e3771ec4cd07f",
+      "seed": "sn-celeste-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 18786,
+      "createdAt": "2026-09-10T17:00:47.516Z"
+    }
+  },
+  "story_seven_names/celeste_neutral": {
+    "assetKey": "story_seven_names/celeste_neutral",
+    "file": "story_seven_names/celeste_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0e018626-ebac-4fbb-91d9-b3958c482166",
+      "promptHash": "9be0b555ac4d88441947f44f2c1364c7",
+      "seed": "sn-celeste-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 34458,
+      "createdAt": "2026-09-10T17:00:56.040Z"
+    }
+  },
+  "story_seven_names/celeste_surprised": {
+    "assetKey": "story_seven_names/celeste_surprised",
+    "file": "story_seven_names/celeste_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d4f08b44-a785-4ad3-a33f-4a5ffc92361b",
+      "promptHash": "6d2674baed8216d4211886f511f3c982",
+      "seed": "sn-celeste-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 31607,
+      "createdAt": "2026-09-10T17:01:07.561Z"
+    }
+  },
+  "story_seven_names/celeste_angry": {
+    "assetKey": "story_seven_names/celeste_angry",
+    "file": "story_seven_names/celeste_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3957a764-6138-4f26-9c7e-b1398dd2f2f0",
+      "promptHash": "ba506455697ff9e771ff10e50d9abc67",
+      "seed": "sn-celeste-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 22544,
+      "createdAt": "2026-09-10T17:01:18.594Z"
+    }
+  },
+  "story_seven_names/celeste_confused": {
+    "assetKey": "story_seven_names/celeste_confused",
+    "file": "story_seven_names/celeste_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f4845286-e4bb-4379-ab4f-6e4de6068c2e",
+      "promptHash": "135ebe7c9d0102e8500cec4b7252f3e4",
+      "seed": "sn-celeste-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 33420,
+      "createdAt": "2026-09-10T17:01:19.648Z"
+    }
+  },
+  "story_seven_names/celeste_worried": {
+    "assetKey": "story_seven_names/celeste_worried",
+    "file": "story_seven_names/celeste_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e6fe4a2c-37fd-498e-b8ef-8953d3ea26a1",
+      "promptHash": "dce55f776b21074cbd788490b1d10560",
+      "seed": "sn-celeste-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 22582,
+      "createdAt": "2026-09-10T17:01:30.148Z"
+    }
+  },
+  "story_seven_names/celeste_annoyed": {
+    "assetKey": "story_seven_names/celeste_annoyed",
+    "file": "story_seven_names/celeste_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Céleste Varenne, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "75ef7cef-a1f4-49b3-af95-7509bd09e021",
+      "promptHash": "03f7bdedf55c4c66e2ae5371ca728fbf",
+      "seed": "sn-celeste-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 45402,
+      "createdAt": "2026-09-10T17:01:32.922Z"
+    }
+  },
+  "story_seven_names/veyrac_warm": {
+    "assetKey": "story_seven_names/veyrac_warm",
+    "file": "story_seven_names/veyrac_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "326fe042-07a4-405e-84fc-d2c069798397",
+      "promptHash": "35a6c37b0441b44a53a8c3e12ef6c6a6",
+      "seed": "sn-veyrac-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 17255,
+      "createdAt": "2026-09-10T17:01:36.913Z"
+    }
+  },
+  "story_seven_names/veyrac_neutral": {
+    "assetKey": "story_seven_names/veyrac_neutral",
+    "file": "story_seven_names/veyrac_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e809d431-7ffd-4cd0-83d1-f6cd258bd97d",
+      "promptHash": "1a6e2d4918f615b9cff8f4e9699054b3",
+      "seed": "sn-veyrac-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 33142,
+      "createdAt": "2026-09-10T17:01:51.740Z"
+    }
+  },
+  "story_seven_names/veyrac_confused": {
+    "assetKey": "story_seven_names/veyrac_confused",
+    "file": "story_seven_names/veyrac_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "77d3741b-83e1-4a23-9332-bf5a2d89581b",
+      "promptHash": "b255c4ef9cfe365601f0c111d3e7d3a4",
+      "seed": "sn-veyrac-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23227,
+      "createdAt": "2026-09-10T17:02:00.146Z"
+    }
+  },
+  "story_seven_names/veyrac_amused": {
+    "assetKey": "story_seven_names/veyrac_amused",
+    "file": "story_seven_names/veyrac_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "557c3eda-17b7-48ca-960b-f178012e753c",
+      "promptHash": "534cc13492e85d7b4e2917bb3978997b",
+      "seed": "sn-veyrac-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 32662,
+      "createdAt": "2026-09-10T17:02:02.821Z"
+    }
+  },
+  "story_seven_names/veyrac_surprised": {
+    "assetKey": "story_seven_names/veyrac_surprised",
+    "file": "story_seven_names/veyrac_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "28459f8e-dae0-49c8-8e7f-54ead088c780",
+      "promptHash": "780fed603b3ad8442bc8f765929aa07f",
+      "seed": "sn-veyrac-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 37695,
+      "createdAt": "2026-09-10T17:02:10.622Z"
+    }
+  },
+  "story_seven_names/veyrac_worried": {
+    "assetKey": "story_seven_names/veyrac_worried",
+    "file": "story_seven_names/veyrac_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "debb6c98-4926-4dc6-90dd-fca33f07acea",
+      "promptHash": "efea1ca8bf4c8312ffa7584c2c4843cd",
+      "seed": "sn-veyrac-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 15196,
+      "createdAt": "2026-09-10T17:02:18.020Z"
+    }
+  },
+  "story_seven_names/veyrac_annoyed": {
+    "assetKey": "story_seven_names/veyrac_annoyed",
+    "file": "story_seven_names/veyrac_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bbb18ea0-82b4-463d-ac25-f4faf2b00ccd",
+      "promptHash": "2beb14b04072c0889076bd863f304611",
+      "seed": "sn-veyrac-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 36961,
+      "createdAt": "2026-09-10T17:02:28.710Z"
+    }
+  },
+  "story_seven_names/renaud_neutral": {
+    "assetKey": "story_seven_names/renaud_neutral",
+    "file": "story_seven_names/renaud_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "878ec2d1-173d-4a14-b365-cfdaafa00a36",
+      "promptHash": "223bac11543a50dd8e26bc399df88ad3",
+      "seed": "sn-renaud-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 18584,
+      "createdAt": "2026-09-10T17:02:29.212Z"
+    }
+  },
+  "story_seven_names/veyrac_angry": {
+    "assetKey": "story_seven_names/veyrac_angry",
+    "file": "story_seven_names/veyrac_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Étienne Veyrac, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "88030991-36f6-4d6a-ada0-a07f34c04b34",
+      "promptHash": "5e1226fb9e58049ef1b29aeac50ede92",
+      "seed": "sn-veyrac-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 32961,
+      "createdAt": "2026-09-10T17:02:33.111Z"
+    }
+  },
+  "story_seven_names/renaud_warm": {
+    "assetKey": "story_seven_names/renaud_warm",
+    "file": "story_seven_names/renaud_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bcf9573a-41c8-4cb4-ade7-272d6b0ce663",
+      "promptHash": "51fa5c9717438aeac8496c4c64b663cb",
+      "seed": "sn-renaud-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 18366,
+      "createdAt": "2026-09-10T17:02:36.388Z"
+    }
+  },
+  "story_seven_names/renaud_amused": {
+    "assetKey": "story_seven_names/renaud_amused",
+    "file": "story_seven_names/renaud_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b79838c9-c1ef-4869-bee4-f99b70d101b8",
+      "promptHash": "0890f85951d329850d16a4887932d665",
+      "seed": "sn-renaud-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 19348,
+      "createdAt": "2026-09-10T17:02:48.066Z"
+    }
+  },
+  "story_seven_names/renaud_annoyed": {
+    "assetKey": "story_seven_names/renaud_annoyed",
+    "file": "story_seven_names/renaud_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f2204b9a-bead-45de-aea5-a1956d12f63f",
+      "promptHash": "bd375e73e284305d1d09d82f61167d29",
+      "seed": "sn-renaud-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 15232,
+      "createdAt": "2026-09-10T17:02:51.631Z"
+    }
+  },
+  "story_seven_names/renaud_confused": {
+    "assetKey": "story_seven_names/renaud_confused",
+    "file": "story_seven_names/renaud_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "75170293-6df8-4362-af7c-bbabd4c1f24e",
+      "promptHash": "1e8778bcdc8902c876e8a08ed6a25c06",
+      "seed": "sn-renaud-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 20742,
+      "createdAt": "2026-09-10T17:02:53.860Z"
+    }
+  },
+  "story_seven_names/renaud_surprised": {
+    "assetKey": "story_seven_names/renaud_surprised",
+    "file": "story_seven_names/renaud_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "959ec769-d223-4bca-a1cc-e0ffe6c1cdbc",
+      "promptHash": "77cd2f07398673c586a4b48a795818a9",
+      "seed": "sn-renaud-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 33134,
+      "createdAt": "2026-09-10T17:03:02.353Z"
+    }
+  },
+  "story_seven_names/renaud_worried": {
+    "assetKey": "story_seven_names/renaud_worried",
+    "file": "story_seven_names/renaud_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "81533c02-9552-4154-9d30-ed38daa1c8b8",
+      "promptHash": "e2b66d1f0970ced67d41eae21850f528",
+      "seed": "sn-renaud-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 19334,
+      "createdAt": "2026-09-10T17:03:10.974Z"
+    }
+  },
+  "story_seven_names/renaud_angry": {
+    "assetKey": "story_seven_names/renaud_angry",
+    "file": "story_seven_names/renaud_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gabriel Renaud, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5b83e0c5-30e2-4af8-9559-788dad9cf5fb",
+      "promptHash": "a7c7ae23b820596eb369b1434b96345d",
+      "seed": "sn-renaud-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 23597,
+      "createdAt": "2026-09-10T17:03:11.668Z"
+    }
+  },
+  "story_seven_names/marcel_neutral": {
+    "assetKey": "story_seven_names/marcel_neutral",
+    "file": "story_seven_names/marcel_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "73b2c6aa-b086-4ebd-a204-d24654466821",
+      "promptHash": "fd9c7a623db0a9e5350a8b8107f20a05",
+      "seed": "sn-marcel-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 17829,
+      "createdAt": "2026-09-10T17:03:11.699Z"
+    }
+  },
+  "story_seven_names/marcel_warm": {
+    "assetKey": "story_seven_names/marcel_warm",
+    "file": "story_seven_names/marcel_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8c532fa7-fcd3-4686-8884-b91f816631ac",
+      "promptHash": "f5d468e887f84d22de641b002b260c36",
+      "seed": "sn-marcel-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 26717,
+      "createdAt": "2026-09-10T17:03:29.074Z"
+    }
+  },
+  "story_seven_names/marcel_confused": {
+    "assetKey": "story_seven_names/marcel_confused",
+    "file": "story_seven_names/marcel_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "da3d32b2-af9a-4616-b565-6701a6741d86",
+      "promptHash": "7d904589230aac97d71b7d808f213f42",
+      "seed": "sn-marcel-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 21504,
+      "createdAt": "2026-09-10T17:03:33.209Z"
+    }
+  },
+  "story_seven_names/marcel_amused": {
+    "assetKey": "story_seven_names/marcel_amused",
+    "file": "story_seven_names/marcel_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf3e775a-898e-488e-8f40-c6a4b815a0b3",
+      "promptHash": "897810448f477680dbdc90250a6a6713",
+      "seed": "sn-marcel-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 36037,
+      "createdAt": "2026-09-10T17:03:47.014Z"
+    }
+  },
+  "story_seven_names/marcel_surprised": {
+    "assetKey": "story_seven_names/marcel_surprised",
+    "file": "story_seven_names/marcel_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9a2d5035-a598-4b27-9fb2-3f0089a904db",
+      "promptHash": "5eb062b4c850fffc69e7d76f5a16f8b9",
+      "seed": "sn-marcel-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 37398,
+      "createdAt": "2026-09-10T17:03:49.071Z"
+    }
+  },
+  "story_seven_names/marcel_annoyed": {
+    "assetKey": "story_seven_names/marcel_annoyed",
+    "file": "story_seven_names/marcel_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a1677900-1ecb-48c1-8cc0-c840ca435442",
+      "promptHash": "8ceb06ad482bf18ace676f3e597a66db",
+      "seed": "sn-marcel-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 23170,
+      "createdAt": "2026-09-10T17:03:52.249Z"
+    }
+  },
+  "story_seven_names/marcel_angry": {
+    "assetKey": "story_seven_names/marcel_angry",
+    "file": "story_seven_names/marcel_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "259ef251-527a-4c81-bf7d-c5edebc24451",
+      "promptHash": "d34630fa46b22f355e32df07faa78cc3",
+      "seed": "sn-marcel-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 21197,
+      "createdAt": "2026-09-10T17:03:54.411Z"
+    }
+  },
+  "story_seven_names/marcel_worried": {
+    "assetKey": "story_seven_names/marcel_worried",
+    "file": "story_seven_names/marcel_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Marcel Bellac, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ce8285f6-d5a2-402f-b064-9ef3e97e89a5",
+      "promptHash": "e214c110dddbd0be18fe63b6468e2df7",
+      "seed": "sn-marcel-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 20469,
+      "createdAt": "2026-09-10T17:04:07.486Z"
+    }
+  },
+  "story_seven_names/solene_amused": {
+    "assetKey": "story_seven_names/solene_amused",
+    "file": "story_seven_names/solene_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2c222a5d-6d81-4d11-af07-f50ee55f6d4b",
+      "promptHash": "db43eff3f055732998d5dbf0899616c5",
+      "seed": "sn-solene-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 19839,
+      "createdAt": "2026-09-10T17:04:14.254Z"
+    }
+  },
+  "story_seven_names/solene_neutral": {
+    "assetKey": "story_seven_names/solene_neutral",
+    "file": "story_seven_names/solene_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3440c139-9ad5-4159-bb69-1f2c0637c789",
+      "promptHash": "323310d28759b660d68c4532f050ce7b",
+      "seed": "sn-solene-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 33684,
+      "createdAt": "2026-09-10T17:04:22.760Z"
+    }
+  },
+  "story_seven_names/solene_warm": {
+    "assetKey": "story_seven_names/solene_warm",
+    "file": "story_seven_names/solene_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5bee8adc-fc4b-42d9-a2a5-e58715dc7394",
+      "promptHash": "92b09f19be21171e37c4f7506a76ca64",
+      "seed": "sn-solene-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 33360,
+      "createdAt": "2026-09-10T17:04:25.615Z"
+    }
+  },
+  "story_seven_names/solene_surprised": {
+    "assetKey": "story_seven_names/solene_surprised",
+    "file": "story_seven_names/solene_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4aaff3b4-6bd1-4481-b8d0-9bb833808b05",
+      "promptHash": "8ac36f994792b46ede28fac1a4dc9e96",
+      "seed": "sn-solene-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 34136,
+      "createdAt": "2026-09-10T17:04:41.626Z"
+    }
+  },
+  "story_seven_names/solene_annoyed": {
+    "assetKey": "story_seven_names/solene_annoyed",
+    "file": "story_seven_names/solene_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09fb9a5f-0125-42ad-95ec-a7abc1b7595f",
+      "promptHash": "2d418f2494be80ede089239c3b59201d",
+      "seed": "sn-solene-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 24855,
+      "createdAt": "2026-09-10T17:04:47.619Z"
+    }
+  },
+  "story_seven_names/solene_confused": {
+    "assetKey": "story_seven_names/solene_confused",
+    "file": "story_seven_names/solene_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c9bc4aba-071b-4909-8636-b9dab8be59b4",
+      "promptHash": "585984d7abb7ad8d2428ab7d91a1f0b3",
+      "seed": "sn-solene-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 33873,
+      "createdAt": "2026-09-10T17:04:48.134Z"
+    }
+  },
+  "story_seven_names/solene_angry": {
+    "assetKey": "story_seven_names/solene_angry",
+    "file": "story_seven_names/solene_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "30951550-dfc1-4582-ad4a-5a3471484d73",
+      "promptHash": "b95555686f186e0014f10d6c2e1728f9",
+      "seed": "sn-solene-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 23389,
+      "createdAt": "2026-09-10T17:04:49.008Z"
+    }
+  },
+  "story_seven_names/anais_warm": {
+    "assetKey": "story_seven_names/anais_warm",
+    "file": "story_seven_names/anais_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ba9621f5-35a3-46b7-b640-64413c7c8b4e",
+      "promptHash": "45b5732eec6e37cf34741aa4caae80c2",
+      "seed": "sn-anais-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 16472,
+      "createdAt": "2026-09-10T17:05:04.613Z"
+    }
+  },
+  "story_seven_names/anais_neutral": {
+    "assetKey": "story_seven_names/anais_neutral",
+    "file": "story_seven_names/anais_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b479c11d-a2bc-40e2-b203-f38bd3c5d740",
+      "promptHash": "a2eefab475d1f0f2ee1018643cd1da28",
+      "seed": "sn-anais-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 17693,
+      "createdAt": "2026-09-10T17:05:05.318Z"
+    }
+  },
+  "story_seven_names/solene_worried": {
+    "assetKey": "story_seven_names/solene_worried",
+    "file": "story_seven_names/solene_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Solène Artois, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c0e01320-42c7-49ac-9022-57a58b8aa0e9",
+      "promptHash": "b3d0980738c96f3dbf65c8828bf79cbe",
+      "seed": "sn-solene-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 24126,
+      "createdAt": "2026-09-10T17:05:05.762Z"
+    }
+  },
+  "story_seven_names/anais_amused": {
+    "assetKey": "story_seven_names/anais_amused",
+    "file": "story_seven_names/anais_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e55b171d-fbfd-4339-9d70-500111b25110",
+      "promptHash": "ff3cedb26da160e358cbc820982d8500",
+      "seed": "sn-anais-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 19806,
+      "createdAt": "2026-09-10T17:05:08.821Z"
+    }
+  },
+  "story_seven_names/anais_surprised": {
+    "assetKey": "story_seven_names/anais_surprised",
+    "file": "story_seven_names/anais_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6df275b6-e810-4c09-84a8-f6f3389f2b24",
+      "promptHash": "783304d8da6961a460391002797b5a33",
+      "seed": "sn-anais-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 24269,
+      "createdAt": "2026-09-10T17:05:28.887Z"
+    }
+  },
+  "story_seven_names/anais_annoyed": {
+    "assetKey": "story_seven_names/anais_annoyed",
+    "file": "story_seven_names/anais_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "707fa786-f843-46f2-9cf3-06c79cb27bbd",
+      "promptHash": "0dfc0d7d4953cec90948229a4d7eb585",
+      "seed": "sn-anais-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 23960,
+      "createdAt": "2026-09-10T17:05:29.727Z"
+    }
+  },
+  "story_seven_names/anais_angry": {
+    "assetKey": "story_seven_names/anais_angry",
+    "file": "story_seven_names/anais_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a9bdd43d-017f-4149-862b-52fb8930d1f1",
+      "promptHash": "451d8201b008e31971007c5bdff7560a",
+      "seed": "sn-anais-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 21014,
+      "createdAt": "2026-09-10T17:05:29.841Z"
+    }
+  },
+  "story_seven_names/anais_confused": {
+    "assetKey": "story_seven_names/anais_confused",
+    "file": "story_seven_names/anais_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e0e78498-46fd-4671-8d8d-ab0e8ed0aa14",
+      "promptHash": "30bd75a20ebbe62b50d2813d65ff4e82",
+      "seed": "sn-anais-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 34264,
+      "createdAt": "2026-09-10T17:05:39.589Z"
+    }
+  },
+  "story_seven_names/varenne_warm": {
+    "assetKey": "story_seven_names/varenne_warm",
+    "file": "story_seven_names/varenne_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "90abb096-ee63-463d-bc66-9bc4a1f50629",
+      "promptHash": "5147bebb41f0ec4f9d3906df5e3982ed",
+      "seed": "sn-varenne-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 16882,
+      "createdAt": "2026-09-10T17:05:46.728Z"
+    }
+  },
+  "story_seven_names/anais_worried": {
+    "assetKey": "story_seven_names/anais_worried",
+    "file": "story_seven_names/anais_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Anaïs Bellier, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "adc2236c-59ff-4b31-9e36-6eb00376028c",
+      "promptHash": "9a146d7f9d97f7bfe52ec6d9ac77f178",
+      "seed": "sn-anais-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 17949,
+      "createdAt": "2026-09-10T17:05:46.846Z"
+    }
+  },
+  "story_seven_names/varenne_neutral": {
+    "assetKey": "story_seven_names/varenne_neutral",
+    "file": "story_seven_names/varenne_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a95a431a-124c-4df2-bb63-728f4e8e3749",
+      "promptHash": "6db93508e9f53dd712e0f647980958b2",
+      "seed": "sn-varenne-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 17693,
+      "createdAt": "2026-09-10T17:05:47.423Z"
+    }
+  },
+  "story_seven_names/varenne_amused": {
+    "assetKey": "story_seven_names/varenne_amused",
+    "file": "story_seven_names/varenne_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9138444d-a8ba-4afd-9b3b-a2d9ac5c528f",
+      "promptHash": "bc402b6a528a46c1a9393c75bb21dc04",
+      "seed": "sn-varenne-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 18990,
+      "createdAt": "2026-09-10T17:05:58.581Z"
+    }
+  },
+  "story_seven_names/varenne_surprised": {
+    "assetKey": "story_seven_names/varenne_surprised",
+    "file": "story_seven_names/varenne_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d1c91f76-066f-44da-8656-fb7d57b47933",
+      "promptHash": "019a551adc0302f893a936447176e994",
+      "seed": "sn-varenne-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 16228,
+      "createdAt": "2026-09-10T17:06:02.961Z"
+    }
+  },
+  "story_seven_names/varenne_annoyed": {
+    "assetKey": "story_seven_names/varenne_annoyed",
+    "file": "story_seven_names/varenne_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "084cd538-2307-4948-8ffa-66397a4eafcd",
+      "promptHash": "08749b28639cdfa1248292a56bf0107b",
+      "seed": "sn-varenne-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 18467,
+      "createdAt": "2026-09-10T17:06:05.896Z"
+    }
+  },
+  "story_seven_names/varenne_confused": {
+    "assetKey": "story_seven_names/varenne_confused",
+    "file": "story_seven_names/varenne_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b0a670c9-7375-4c30-aae8-6861a15249e7",
+      "promptHash": "2b632e83621215374cc34e3fd4471a78",
+      "seed": "sn-varenne-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19724,
+      "createdAt": "2026-09-10T17:06:06.578Z"
+    }
+  },
+  "story_seven_names/varenne_angry": {
+    "assetKey": "story_seven_names/varenne_angry",
+    "file": "story_seven_names/varenne_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8a75261b-dd72-446c-8d27-5ec0cf8d254b",
+      "promptHash": "f8bba205858f81540c0e8f733c710ba5",
+      "seed": "sn-varenne-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 18524,
+      "createdAt": "2026-09-10T17:06:17.108Z"
+    }
+  },
+  "story_seven_names/varenne_worried": {
+    "assetKey": "story_seven_names/varenne_worried",
+    "file": "story_seven_names/varenne_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Henri Varenne, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2506a93a-9be9-4516-8236-cd97aa2b8b24",
+      "promptHash": "a80e61a92d301434ed9e33905b755086",
+      "seed": "sn-varenne-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21660,
+      "createdAt": "2026-09-10T17:06:24.626Z"
+    }
   }
 }
