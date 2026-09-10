@@ -51,7 +51,9 @@ export { HUSH_HOUSE } from './hush-house.js';
  * a week that restarts where the only thing you keep is what you found out, and
  * Blackwake is an ocean where the crew are people who can leave, and Last Five
  * is a sport where your position is counted out of what you kept trying and
- * every rival who watches film makes it harder.
+ * every rival who watches film makes it harder, and Hush House is a building
+ * that has spent a hundred years learning how people behave and gets better at
+ * imitating the ones you let matter to you.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,

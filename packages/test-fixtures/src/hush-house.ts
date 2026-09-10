@@ -32,14 +32,12 @@ const raw = {
   hook: 'The rent is impossibly cheap, the girl in 314 is impossibly attractive, and she has three rules about the hallway that she is not joking about.',
   premise:
     'Hush House is six storeys of dark brick on Bellweather Street, in the old quarter of Morrowgate, and Room 312 is available immediately at a price that should have told you something.\n\n' +
-    'Mrs Vale, who has managed the building for as long as anyone can remember, will not say why the last tenant left. She answers a question next to the one you asked and smiles while she does it.\n\n' +
-    'Your neighbour in 314 is Ayame Kurose. She is twenty-two, dryly funny, visibly not sleeping, and on your first evening she hands you a canned coffee and gives you three rules as casually as somebody explaining the bins.\n\n' +
-    'If the hallway light outside 309 turns red, do not look through the peephole.\n\n' +
-    'If the lift opens onto a floor labelled 0, do not step out.\n\n' +
-    'If somebody knocks at 2:13 in the morning and says they are Ayame, do not open it. She will never knock at that time. She promises.\n\n' +
-    'What breaking one of them costs is not written down anywhere. The tenant who had 312 before you found out on a Thursday in March, and Mrs Vale has still not taken his name off the mailbox.\n\n' +
-    'Ayame’s older sister disappeared from this building four years ago. The police wrote it up as a runaway. Ayame moved in to prove otherwise, she has seen Mika twice since, and she is not going to lose her a second time.\n\n' +
-    'The house was built over something that burned in 1911, and it has spent a hundred years learning how people behave. It does not haunt anybody. It rehearses them, and it gets better at it the more you let somebody matter to you.',
+    'Mrs Vale, who manages it, will not say why the last tenant left. She answers a question next to the one you asked and smiles while she does it.\n\n' +
+    'Your neighbour in 314 is Ayame Kurose: twenty-two, dryly funny, visibly not sleeping. On your first evening she hands you a canned coffee and gives you three rules as casually as somebody explaining the bins.\n\n' +
+    'If the hallway light outside 309 turns red, do not look through the peephole. If the lift opens onto a floor labelled 0, do not step out. If somebody knocks at 2:13 in the morning and says they are Ayame, do not open it. She will never knock at that time. She promises.\n\n' +
+    'What breaking one costs is written down nowhere. The tenant who had 312 before you found out on a Thursday in March, and his name is still on the mailbox.\n\n' +
+    'Her older sister disappeared from this building four years ago. The police wrote it up as a runaway. Ayame moved in to prove otherwise, she has seen Mika twice since, and she is not going to lose her a second time.\n\n' +
+    'The rent is due on the first and you need somewhere to live. Everything else here is a thing you find out.',
   creatorId: 'creator_official',
   creatorName: 'ANIMA Studio',
   official: true,
@@ -95,48 +93,61 @@ const raw = {
     { id: 'care', name: 'Care', attribute: 'presence', description: 'Being the person somebody wakes at four in the morning.' },
   ],
   /**
-   * Two, both invisible, both described as behaviour.
+   * Three, all invisible, all described as behaviour.
    *
    * Ayame's trust is not here on purpose: `startingRelationship` and her gates
    * already say what she will and will not tell you, and a resource that
    * duplicates a relationship dimension is a second source of truth about the
-   * same person. What is left is the pair of pressures no relationship can
-   * carry — how much of the player the building has collected, and what the
-   * city has decided the player is.
+   * same person. What is left is the pressures no relationship can carry — how
+   * much of the player the building has collected, what the city has decided
+   * the player is, and how long they have been awake.
+   *
+   * Sleep is here for a reason that is half fiction and half engine. The
+   * fiction: everybody in this building is tired, and the horror of the place
+   * is that being tired is how it gets in. The engine: `resolveRest` restores
+   * every GOOD_HIGH resource and a world with none printed "you rest, and
+   * recover" while changing nothing, and the generic cost path spends a
+   * GOOD_HIGH first and otherwise raises the first descending resource it
+   * finds — so with no Sleep, every unpriced cost in the game was landing on
+   * House Attention, including being seen fighting in the street.
+   *
+   * Which is also why the order below is not arbitrary. `PUBLIC_VIOLENCE`
+   * takes the first GOOD_LOW resource in this array, and something the street
+   * saw belongs to Public Suspicion, not to the house.
    */
   resources: [
     {
-      id: 'house_attention',
-      name: 'House Attention',
+      id: 'sleep',
+      name: 'Sleep',
       max: 100,
-      start: 8,
-      regenPerHour: -0.25,
-      polarity: 'GOOD_LOW',
+      start: 74,
+      regenPerHour: 1,
+      polarity: 'GOOD_HIGH',
       displayPriority: 1,
       visible: false,
       zeroStateConsequence:
-        'It is an old building with a damp problem and a lift that sticks. Nothing in it knows the player’s name, and for a while that is genuinely a relief.',
-      color: '#7A3B4E',
+        'The player has stopped being a reliable narrator of their own evening. They are not hallucinating; they are simply no longer able to tell a thing they saw from a thing they were told, and the building does not need to do anything clever to a person in this state.',
+      color: '#B9A7CE',
       bands: [
         {
-          upTo: 20,
+          upTo: 25,
           behaviour:
-            'The house has barely registered the player. Anomalies are impersonal and deniable: a door found ajar, a corridor light already on, the smell of smoke on a floor where nobody smokes. None of it is addressed to anyone, and a reasonable person could explain all of it. This is the band where ordinary life should be doing most of the work.',
+            'Three nights deep. Times of day stop being distinguishable, sentences arrive a beat after they were meant to, and the player has begun agreeing with things to end conversations. Write them getting details of their own week wrong — and let another character be the one who notices, because they cannot. Anything the house does now costs it almost no effort.',
         },
         {
-          upTo: 50,
+          upTo: 55,
           behaviour:
-            'It has started copying. Voices in the corridor use the cadence of people the player has actually spoken to. Objects turn up where the player left them yesterday rather than where they left them today. The knocking has a rhythm they recognise. Everything is wrong in one small checkable detail, and checking it is always possible.',
+            'Running on the second wind and aware of it. Sharp in bursts, then absent for a whole exchange. This is the band where somebody offers to sit up instead of them, and whether the player accepts is a real character beat rather than a resource decision.',
         },
         {
           upTo: 80,
           behaviour:
-            'It is rehearsing the player. Room 312 reproduces things from a life it was never shown — a chipped mug from somewhere else, a coat that is nearly the right coat. Somebody the player knows is in the shared kitchen at three in the morning saying something they would say, and getting one word wrong. Ordinary life is still available, and is now the thing the player is protecting rather than the thing they are bored by.',
+            'Tired in the ordinary way everybody in this building is tired. Fine for one more hour on the landing and honest about not wanting to be. Nothing here needs remarking on unless somebody asks.',
         },
         {
           upTo: 100,
           behaviour:
-            'It stages. Whole scenes are built around the player and around whoever they have let matter to them: a conversation replayed with a single line changed, the same person met twice in one corridor, a floor the lift has no button for opening anyway. Anyone the player loves has now given the building enough behaviour to imitate them well. Do not make this constant — it is more frightening as three deliberate incidents in an evening than as weather.',
+            'Rested, which in Hush House is conspicuous. Ayame notices out loud. The player is the only person in the kitchen at nine in the morning who looks like they slept, and how they feel about that is worth a line.',
         },
       ],
     },
@@ -171,6 +182,41 @@ const raw = {
           upTo: 100,
           behaviour:
             'The player is a problem the city intends to solve. Police at the door rather than in the lobby. A letter from a solicitor about the tenancy. Anything the player says about the house is now evidence of something other than the house, and the building is the only place left that treats them as reliable.',
+        },
+      ],
+    },
+    {
+      id: 'house_attention',
+      name: 'House Attention',
+      max: 100,
+      start: 8,
+      regenPerHour: -0.25,
+      polarity: 'GOOD_LOW',
+      displayPriority: 3,
+      visible: false,
+      zeroStateConsequence:
+        'It is an old building with a damp problem and a lift that sticks. Nothing in it knows the player’s name, and for a while that is genuinely a relief.',
+      color: '#7A3B4E',
+      bands: [
+        {
+          upTo: 20,
+          behaviour:
+            'The house has barely registered the player. Anomalies are impersonal and deniable: a door found ajar, a corridor light already on, the smell of smoke on a floor where nobody smokes. None of it is addressed to anyone, and a reasonable person could explain all of it. This is the band where ordinary life should be doing most of the work.',
+        },
+        {
+          upTo: 50,
+          behaviour:
+            'It has started copying. Voices in the corridor use the cadence of people the player has actually spoken to. Objects turn up where the player left them yesterday rather than where they left them today. The knocking has a rhythm they recognise. Everything is wrong in one small checkable detail, and checking it is always possible.',
+        },
+        {
+          upTo: 80,
+          behaviour:
+            'It is rehearsing the player. Room 312 reproduces things from a life it was never shown — a chipped mug from somewhere else, a coat that is nearly the right coat. Somebody the player knows is in the shared kitchen at three in the morning saying something they would say, and getting one word wrong. Ordinary life is still available, and is now the thing the player is protecting rather than the thing they are bored by.',
+        },
+        {
+          upTo: 100,
+          behaviour:
+            'It stages. Whole scenes are built around the player and around whoever they have let matter to them: a conversation replayed with a single line changed, the same person met twice in one corridor, a floor the lift has no button for opening anyway. Anyone the player loves has now given the building enough behaviour to imitate them well. Do not make this constant — it is more frightening as three deliberate incidents in an evening than as weather.',
         },
       ],
     },
@@ -259,7 +305,7 @@ const raw = {
         'wait and see what it does',
         'try to work out where it is coming from',
       ],
-      costs: [],
+      costs: [{ resourceId: 'sleep', amount: 4 }],
       cooldownMinutes: 0,
       targetRule: 'NONE',
       check: { attribute: 'mind', skillId: 'notice', baseDc: 12 },
@@ -283,7 +329,7 @@ const raw = {
         'ignore the knocking',
         'go back to bed',
       ],
-      costs: [],
+      costs: [{ resourceId: 'sleep', amount: 8 }, { resourceId: 'house_attention', amount: 4 }],
       cooldownMinutes: 0,
       targetRule: 'NONE',
       check: { attribute: 'resolve', skillId: 'nerve', baseDc: 13 },
@@ -305,7 +351,7 @@ const raw = {
         'look through the peephole',
         'see who it is',
       ],
-      costs: [],
+      costs: [{ resourceId: 'house_attention', amount: 16 }],
       cooldownMinutes: 0,
       targetRule: 'NONE',
       check: null,
@@ -328,7 +374,7 @@ const raw = {
         'give it my name',
         'copy the rhythm',
       ],
-      costs: [],
+      costs: [{ resourceId: 'house_attention', amount: 11 }, { resourceId: 'sleep', amount: 6 }],
       cooldownMinutes: 0,
       targetRule: 'NONE',
       check: { attribute: 'presence', skillId: 'nerve', baseDc: 14 },
@@ -350,7 +396,7 @@ const raw = {
         'get evidence',
         'document it',
       ],
-      costs: [],
+      costs: [{ resourceId: 'sleep', amount: 3 }],
       cooldownMinutes: 30,
       targetRule: 'NONE',
       check: { attribute: 'agility', skillId: 'quiet', baseDc: 13 },
@@ -371,7 +417,7 @@ const raw = {
         'destroy the seal',
         'pull the stones out',
       ],
-      costs: [],
+      costs: [{ resourceId: 'public_suspicion', amount: 9 }, { resourceId: 'sleep', amount: 6 }],
       cooldownMinutes: 0,
       targetRule: 'SINGLE',
       check: { attribute: 'might', skillId: 'hands', baseDc: 16 },
@@ -396,7 +442,7 @@ const raw = {
         'torch the place',
         'start a fire',
       ],
-      costs: [],
+      costs: [{ resourceId: 'public_suspicion', amount: 26 }, { resourceId: 'house_attention', amount: 14 }],
       cooldownMinutes: 0,
       targetRule: 'AREA',
       check: { attribute: 'resolve', skillId: 'nerve', baseDc: 15 },
@@ -422,7 +468,7 @@ const raw = {
         'refuse it',
         'sever it',
       ],
-      costs: [],
+      costs: [{ resourceId: 'house_attention', amount: 9 }, { resourceId: 'sleep', amount: 5 }],
       cooldownMinutes: 360,
       targetRule: 'NONE',
       check: { attribute: 'presence', skillId: 'talk', baseDc: 15 },
@@ -436,6 +482,68 @@ const raw = {
     },
   ],
   locations: [
+    {
+      id: 'room_309',
+      name: 'Room 309',
+      shortName: '309',
+      description:
+        'Empty for four years and still furnished. A bed stripped to the ticking, a wardrobe with the door open, and a chair set facing the door rather than the window. The wall light out in the corridor is on a different circuit from every other light on this floor, and the switch for it is in here.',
+      artDirection:
+        'A long-unoccupied room in an old apartment building, stripped bed, open wardrobe, one chair turned to face the door, dust in slabs of light, a single dead wall lamp. Utterly still.',
+      connections: [
+        { to: 'hall_third', travelMinutes: 1, label: 'Back into the hallway' },
+      ],
+      discoveredByDefault: false,
+      mapPosition: { x: 1, y: 1 },
+      takeableItems: [
+        { itemId: 'mika_polaroid', qty: 1, ownerId: null, aka: ['polaroid', 'the photograph', 'the picture on the floor'] },
+      ],
+    },
+    {
+      id: 'room_206',
+      name: 'Room 206',
+      shortName: '206',
+      description:
+        'Tomas Reed’s, and the tidiest room in the building because he is almost never in it. Blackout tape over the window, a kettle, a folded green fleece, and a printed rota on the back of the door with more shifts on it than anybody needs.',
+      artDirection:
+        'Small, extremely neat rented room, blackout tape on the window, single bed made hospital-tight, a kettle and one mug, a paper rota pinned to the door. Daylight blocked out at noon.',
+      connections: [
+        { to: 'stairwell', travelMinutes: 1, label: 'Out to the stairs' },
+      ],
+      discoveredByDefault: false,
+      mapPosition: { x: -1, y: 2 },
+    },
+    {
+      id: 'room_405',
+      name: 'Room 405',
+      shortName: '405',
+      description:
+        'Nia Bell’s, and the exact opposite: two monitors on a door laid across trestles, cables taped down the skirting, and a corkboard of stills printed at the library with times written under them in marker.',
+      artDirection:
+        'Cramped student room converted into an edit suite, two monitors on a makeshift desk, cables everywhere, printed video stills pinned to a corkboard, blue screen glow. Chaotic and lived in.',
+      connections: [
+        { to: 'stairwell', travelMinutes: 1, label: 'Down to the stairs' },
+      ],
+      discoveredByDefault: false,
+      mapPosition: { x: 1, y: 2 },
+      takeableItems: [
+        { itemId: 'nia_footage', qty: 1, ownerId: 'nia', aka: ['footage', 'the file', 'nia’s footage', 'the eleven minutes'] },
+      ],
+    },
+    {
+      id: 'morrowgate',
+      name: 'The Rest of Morrowgate',
+      shortName: 'The City',
+      description:
+        'Everything that is not this street: the ambulance station off Carrow Row where Tomas signs on, the art school Nia is technically enrolled at, the records office where Ayame has a job she will not discuss, and about four hundred thousand people who have never heard of Bellweather Street. It takes a quarter of an hour to get anywhere and the whole day to come back.',
+      artDirection:
+        'A large ordinary city in the rain seen from a tram window, wet tarmac, chain shops, an ambulance station forecourt, people who are not thinking about you. Deliberately mundane and slightly too bright.',
+      connections: [
+        { to: 'bellweather', travelMinutes: 14, label: 'Back to Bellweather Street' },
+      ],
+      discoveredByDefault: true,
+      mapPosition: { x: 4, y: 4 },
+    },
     {
       id: 'room_312',
       name: 'Room 312',
@@ -464,6 +572,7 @@ const raw = {
       connections: [
         { to: 'room_312', travelMinutes: 1, label: 'Back into 312' },
         { to: 'room_314', travelMinutes: 1, label: 'Ayame’s door' },
+        { to: 'room_309', travelMinutes: 1, lockedByFlag: 'knows:the_red_light', label: 'The door nobody uses' },
         { to: 'stairwell', travelMinutes: 1, label: 'The stairwell' },
         { to: 'shared_kitchen', travelMinutes: 2, label: 'The shared kitchen' },
         { to: 'lobby', travelMinutes: 3, label: 'Down to the lobby' },
@@ -512,6 +621,8 @@ const raw = {
         'Old stone stairwell wound around a lift shaft, iron banister, a single window at each landing, storage cupboards, cold blue light. Vertical and echoing.',
       connections: [
         { to: 'hall_third', travelMinutes: 1, label: 'The third floor' },
+        { to: 'room_206', travelMinutes: 2, label: 'Down to 206' },
+        { to: 'room_405', travelMinutes: 2, label: 'Up to 405' },
         { to: 'shared_kitchen', travelMinutes: 1, label: 'The kitchen' },
         { to: 'lobby', travelMinutes: 2, label: 'Down to the lobby' },
         { to: 'rooftop', travelMinutes: 4, label: 'Up to the roof' },
@@ -554,6 +665,7 @@ const raw = {
       connections: [
         { to: 'lobby', travelMinutes: 1, label: 'Back inside' },
         { to: 'konbini', travelMinutes: 4, label: 'The konbini on the corner' },
+        { to: 'morrowgate', travelMinutes: 14, label: 'The tram, and the rest of the city' },
       ],
       discoveredByDefault: true,
       mapPosition: { x: 0, y: 4 },
@@ -685,13 +797,13 @@ const raw = {
       expressions: ['neutral', 'amused', 'afraid', 'exhausted'],
       schedule: [
         { startMinute: 0, endMinute: 180, locationId: 'shared_kitchen', activity: 'awake at the kitchen table, not pretending otherwise' },
-        { startMinute: 180, endMinute: 300, locationId: 'room_314', activity: 'finally asleep, badly' },
-        { startMinute: 300, endMinute: 540, locationId: 'room_314', activity: 'asleep' },
+        { startMinute: 180, endMinute: 540, locationId: 'room_314', activity: 'asleep, badly, with the lamp on' },
         { startMinute: 540, endMinute: 600, locationId: 'shared_kitchen', activity: 'coffee, toast, no conversation' },
-        { startMinute: 600, endMinute: 1140, locationId: 'bellweather', activity: 'out — she has a job she never discusses' },
-        { startMinute: 1140, endMinute: 1260, locationId: 'room_314', activity: 'adding to the wall' },
-        { startMinute: 1260, endMinute: 1380, locationId: 'hall_third', activity: 'walking the third floor, counting doors' },
-        { startMinute: 1380, endMinute: 1440, locationId: 'konbini', activity: 'buying two canned coffees' },
+        { startMinute: 600, endMinute: 1170, locationId: 'morrowgate', activity: 'out — she has a job at the records office she never discusses' },
+        { startMinute: 1170, endMinute: 1230, locationId: 'konbini', activity: 'buying two canned coffees, which is never one coffee' },
+        { startMinute: 1230, endMinute: 1290, locationId: 'room_312', activity: 'outside 312 with a coffee in each hand, deciding how much to say' },
+        { startMinute: 1290, endMinute: 1380, locationId: 'hall_third', activity: 'walking the third floor, counting doors' },
+        { startMinute: 1380, endMinute: 1440, locationId: 'room_314', activity: 'adding to the wall' },
       ],
       homeLocationId: 'room_314',
       knowledgeScope: ['hush_house', 'mika', 'the_rules', 'room_309', 'floor_zero', 'bellweather'],
@@ -817,9 +929,10 @@ const raw = {
       speechStyle: 'Clinical and warm at once. Gives you the observation before the conclusion, every time.',
       topics: ['the stairs', 'night shifts', 'his brother', 'the lift', 'what he actually saw'],
       voiceSamples: [
-        'Right. Sit down, drink that, and tell me what you saw in the order you saw it.',
-        'I have carried people down those stairs. I know exactly how long that landing is.',
-        'I am not saying it was nothing. I am saying I have been awake nineteen hours and so have you.',
+        'Sit. Both feet on the floor, head between your knees if it goes grey. Talk when you can talk.',
+        'Airway, breathing, circulation. Then the thing on the landing. In that order, because the first three are the ones I can do something about.',
+        'I have carried people down those stairs. Fourth landing to the lobby is fifty-one seconds with two of you and a chair.',
+        'You want me to tell you what it was. I can tell you your pulse was one-forty and you were not making it up.',
       ],
       appearance: 'Thirty-one, close-cropped hair, green ambulance service fleece he never takes off, forearms of somebody who lifts people for a living.',
       visualHook: 'A green paramedic fleece with the shoulder patch half unstitched, worn indoors at all hours.',
@@ -828,13 +941,13 @@ const raw = {
       portrait: null,
       expressions: ['neutral', 'tired', 'unsettled'],
       schedule: [
-        { startMinute: 0, endMinute: 420, locationId: 'bellweather', activity: 'on shift' },
+        { startMinute: 0, endMinute: 420, locationId: 'morrowgate', activity: 'on the ambulance, somewhere across the river' },
         { startMinute: 420, endMinute: 480, locationId: 'shared_kitchen', activity: 'eating whatever is nearest, coming down off a shift' },
-        { startMinute: 480, endMinute: 1020, locationId: 'stairwell', activity: 'asleep in 206' },
+        { startMinute: 480, endMinute: 1020, locationId: 'room_206', activity: 'asleep behind blackout tape' },
         { startMinute: 1020, endMinute: 1140, locationId: 'shared_kitchen', activity: 'awake, cooking properly for once' },
-        { startMinute: 1140, endMinute: 1440, locationId: 'bellweather', activity: 'on shift' },
+        { startMinute: 1140, endMinute: 1440, locationId: 'morrowgate', activity: 'signed on at the station off Carrow Row' },
       ],
-      homeLocationId: 'shared_kitchen',
+      homeLocationId: 'room_206',
       knowledgeScope: ['hush_house', 'bellweather', 'the_stairs', 'morrowgate'],
       startingRelationship: { trust: 10, affection: 0, respect: 5, fear: 0, rivalry: 0 },
       gates: [
@@ -888,12 +1001,12 @@ const raw = {
       expressions: ['neutral', 'delighted', 'rattled'],
       schedule: [
         { startMinute: 0, endMinute: 180, locationId: 'stairwell', activity: 'filming the stairwell, badly' },
-        { startMinute: 180, endMinute: 660, locationId: 'stairwell', activity: 'asleep in 405' },
-        { startMinute: 660, endMinute: 1080, locationId: 'bellweather', activity: 'at the art school' },
+        { startMinute: 180, endMinute: 660, locationId: 'room_405', activity: 'asleep with both monitors still on' },
+        { startMinute: 660, endMinute: 1080, locationId: 'morrowgate', activity: 'at the art school, technically' },
         { startMinute: 1080, endMinute: 1260, locationId: 'shared_kitchen', activity: 'editing at the kitchen table, talking to nobody' },
         { startMinute: 1260, endMinute: 1440, locationId: 'hall_third', activity: 'wandering with the phone up' },
       ],
-      homeLocationId: 'stairwell',
+      homeLocationId: 'room_405',
       knowledgeScope: ['hush_house', 'floor_zero', 'the_lift', 'bellweather', 'morrowgate'],
       startingRelationship: { trust: 5, affection: 5, respect: 0, fear: 0, rivalry: 0 },
       gates: [
