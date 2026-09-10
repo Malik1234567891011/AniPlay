@@ -20651,5 +20651,271 @@
       "latencyMs": 30997,
       "createdAt": "2026-09-10T21:27:16.585Z"
     }
+  },
+  "story_last_service/daichi_surprised": {
+    "assetKey": "story_last_service/daichi_surprised",
+    "file": "story_last_service/daichi_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "de722e47-ef0c-4276-a581-8cd3c81123d7",
+      "promptHash": "8785ddc9f3cbfc2a706fa234fbdf266f",
+      "seed": "ls-daichi-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 35628,
+      "createdAt": "2026-09-10T21:46:35.542Z"
+    }
+  },
+  "story_last_service/daichi_confused": {
+    "assetKey": "story_last_service/daichi_confused",
+    "file": "story_last_service/daichi_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "69543821-520a-4499-a678-a4c1b1d9e384",
+      "promptHash": "af7c205ae4a9ce00d142bb407e54843b",
+      "seed": "ls-daichi-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 20286,
+      "createdAt": "2026-09-10T21:46:55.835Z"
+    }
+  },
+  "story_last_service/daichi_annoyed": {
+    "assetKey": "story_last_service/daichi_annoyed",
+    "file": "story_last_service/daichi_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "040c36b4-6e8b-4f3f-b469-03970d695342",
+      "promptHash": "1192e965a5487590733ef6d04bf3ea4f",
+      "seed": "ls-daichi-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 17607,
+      "createdAt": "2026-09-10T21:47:13.450Z"
+    }
+  },
+  "story_last_service/daichi_angry": {
+    "assetKey": "story_last_service/daichi_angry",
+    "file": "story_last_service/daichi_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8e118f13-e922-4ab7-911c-28c123cdd957",
+      "promptHash": "18e0c16fc2f8ac49e59bab9800484309",
+      "seed": "ls-daichi-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 21654,
+      "createdAt": "2026-09-10T21:47:35.113Z"
+    }
+  },
+  "story_last_service/daichi_worried": {
+    "assetKey": "story_last_service/daichi_worried",
+    "file": "story_last_service/daichi_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d526ccb2-251f-48f6-8d13-ba4f5d3745e8",
+      "promptHash": "79faac2d75c4572e682419b516a25cd2",
+      "seed": "ls-daichi-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 20929,
+      "createdAt": "2026-09-10T21:47:56.055Z"
+    }
+  },
+  "story_last_service/reina": {
+    "assetKey": "story_last_service/reina",
+    "file": "story_last_service/reina.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, Thirty-five, food critic, and the person in this city whose four hundred words can fill a thirty-seat room for a year",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "16e1e0b9-4794-44e8-b49e-9b80d2390ce3",
+      "promptHash": "20c526c6c24d9d96923ac1c7b63fcc92",
+      "seed": "ls-reina-01",
+      "costUsd": 0.02404,
+      "latencyMs": 19803,
+      "createdAt": "2026-09-10T21:48:16.566Z"
+    }
+  },
+  "story_last_service/reina_neutral": {
+    "assetKey": "story_last_service/reina_neutral",
+    "file": "story_last_service/reina_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d2da984d-db1e-439e-a478-f684d98ffe73",
+      "promptHash": "ab9c6256a61b175f7e05a80afe1312cd",
+      "seed": "ls-reina-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 18075,
+      "createdAt": "2026-09-10T21:48:34.648Z"
+    }
+  },
+  "story_last_service/reina_warm": {
+    "assetKey": "story_last_service/reina_warm",
+    "file": "story_last_service/reina_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "94ccc27f-cc26-4381-a8b7-b192f65e3289",
+      "promptHash": "83d431aa7f129b3d95fd58bf95f6d58b",
+      "seed": "ls-reina-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 17302,
+      "createdAt": "2026-09-10T21:48:51.964Z"
+    }
+  },
+  "story_last_service/reina_amused": {
+    "assetKey": "story_last_service/reina_amused",
+    "file": "story_last_service/reina_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0d5bc3af-0f5e-4bc6-8ba2-9fb75e5da5a0",
+      "promptHash": "e2ce3027af09dd6412fcc0f72b6baaf7",
+      "seed": "ls-reina-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 30596,
+      "createdAt": "2026-09-10T21:49:22.569Z"
+    }
+  },
+  "story_last_service/reina_surprised": {
+    "assetKey": "story_last_service/reina_surprised",
+    "file": "story_last_service/reina_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "93ca22ea-c0c9-4cba-9ce5-265abc5eac77",
+      "promptHash": "ba034e8a699057b2edbe398cf7812541",
+      "seed": "ls-reina-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 21318,
+      "createdAt": "2026-09-10T21:49:43.898Z"
+    }
+  },
+  "story_last_service/reina_confused": {
+    "assetKey": "story_last_service/reina_confused",
+    "file": "story_last_service/reina_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1ca0c54b-5cd7-4d58-9d1c-65acf7be3dcb",
+      "promptHash": "54a70e128d3aa5699870fed78a9ed638",
+      "seed": "ls-reina-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 30407,
+      "createdAt": "2026-09-10T21:50:14.316Z"
+    }
+  },
+  "story_last_service/reina_annoyed": {
+    "assetKey": "story_last_service/reina_annoyed",
+    "file": "story_last_service/reina_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "437132c7-4986-483e-9c07-bdf7d582f6fc",
+      "promptHash": "b103d29493fb7a2e30f5a4422b8f51b9",
+      "seed": "ls-reina-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 19615,
+      "createdAt": "2026-09-10T21:50:33.940Z"
+    }
+  },
+  "story_last_service/reina_angry": {
+    "assetKey": "story_last_service/reina_angry",
+    "file": "story_last_service/reina_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "166c4d12-5aa9-4f78-8e30-e33e3c8207ba",
+      "promptHash": "07b330271091e2279f74d4ced9daf7be",
+      "seed": "ls-reina-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 15570,
+      "createdAt": "2026-09-10T21:50:49.519Z"
+    }
+  },
+  "story_last_service/reina_worried": {
+    "assetKey": "story_last_service/reina_worried",
+    "file": "story_last_service/reina_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f86a98ca-4b5a-4d45-a6d5-70efee7e0010",
+      "promptHash": "a993f696114d4ee9acff425462ef44a3",
+      "seed": "ls-reina-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 20436,
+      "createdAt": "2026-09-10T21:51:09.964Z"
+    }
   }
 }
