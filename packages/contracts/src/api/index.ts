@@ -639,9 +639,19 @@ export const TurnStreamEventName = z.enum([
    * risking a reversal.
    */
   'resolution.ready',
+  /**
+   * Prose as it is being written, a sentence at a time. Spec §17.10.
+   *
+   * Provisional: the authoritative blocks still arrive as `text.delta` after
+   * the turn commits, so a client can render these immediately and replace
+   * them, and can never end up showing a turn that did not land.
+   */
+  'text.stream',
   'text.delta',
   'state.delta',
   'turn.completed',
+  /** Per-stage milliseconds. Diagnostic; clients may ignore it. */
+  'turn.timings',
   'media.queued',
   'media.completed',
   'turn.failed',

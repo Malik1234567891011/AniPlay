@@ -22,6 +22,8 @@ import { classifyClaim, directorNoteFor, proposalFor } from './player-canon.js';
 import { detectOutOfScope } from './entity-resolution.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { expandElliptical } from './elliptical.js';
+import { writeStreaming } from './fast-writer.js';
+import type { ModelGateway } from './gateway/types.js';
 import { recordMentions } from '@aniplay/engine';
 
 /**
@@ -44,6 +46,27 @@ export interface TurnPipelineDeps {
   readonly writer: Writer;
 }
 
+/** Deterministic, instant, and good enough to plan an ordinary beat. */
+const RULE_DIRECTOR = new RuleBasedDirector();
+const RULE_PARSER = new RuleBasedIntentParser();
+
+/**
+ * Whether this sentence is worth 2.4 seconds of a model's attention.
+ *
+ * The rule parser already knows when it is guessing: it reports low
+ * confidence, records ambiguities, and falls back to `custom` when it found no
+ * verb it recognises. Those are the turns a model reads better. Everything
+ * else — the overwhelming majority of ordinary play — it gets right instantly.
+ */
+export function needsModelParse(intent: ActionIntent): boolean {
+  if (intent.confidence < 0.75) return true;
+  if (intent.ambiguities.length > 0) return true;
+  if (intent.actions.length === 0) return true;
+  // No recognised verb: the parser is treating a whole sentence as a shrug.
+  if (intent.actions.every((a) => a.verb === 'custom')) return true;
+  return false;
+}
+
 export function createDefaultPipeline(): TurnPipelineDeps {
   return {
     parser: new RuleBasedIntentParser(),
@@ -60,6 +83,18 @@ export interface RunTurnOptions {
    * whole time is the difference between a game and a prompt box.
    */
   readonly onResolved?: (resolution: Resolution) => void;
+  /**
+   * Called with each complete sentence as the writer produces it. Spec §17.10 —
+   * a player reading the first sentence at a second and a half is in a
+   * different product from one watching a spinner for twelve.
+   */
+  readonly onText?: (sentence: string) => void;
+  /**
+   * Set to stream prose instead of waiting for a structured document. The
+   * fast path also skips the model director, which plans presentation and
+   * costs 2.4s that the player spends looking at nothing.
+   */
+  readonly fastWriter?: ModelGateway | null;
   readonly story: StoryVersion;
   readonly state: GameState;
   readonly memories: readonly MemoryFact[];
@@ -101,7 +136,20 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   // times.
   clock.start('parse');
   const ellipsis = expandElliptical(actionText, options.recentTurns, story);
-  const parsed = await deps.parser.parse(ellipsis.text, { story, state, intentId: `int_${turnId}` });
+
+  // Spec §17.10 — the rules parse first, and the model only when they are
+  // genuinely unsure.
+  //
+  // The model parser costs 2350ms on every turn, and on most turns it agrees
+  // with a rule parse that took no measurable time at all: "I ask Kael about
+  // the ward" is not an ambiguous sentence. It earns its cost on the ones that
+  // are — an unrecognised verb, a name the world does not have, several things
+  // at once — and those are exactly the cases the rule parser already reports
+  // as low confidence.
+  const quick = RULE_PARSER.parseSync(ellipsis.text, { story, state, intentId: `int_${turnId}` });
+  const parsed = needsModelParse(quick)
+    ? await deps.parser.parse(ellipsis.text, { story, state, intentId: `int_${turnId}` })
+    : quick;
   const intent = annotateScope(
     ellipsis.expanded && ellipsis.note
       ? { ...parsed, rawAction: actionText, ambiguities: [...parsed.ambiguities, ellipsis.note] }
@@ -152,14 +200,31 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     context.resolution.privateFacts.push({ visibility: 'SELF', fact: canonNote });
   }
 
-  // Step 8 — the director plans presentation. It cannot change the resolution.
+  // Steps 8 and 9 — plan the beat, then write it.
+  //
+  // Spec §17.10 — the fast path exists because the autopsy was unambiguous.
+  // An ordinary turn cost three serial model calls before a single word
+  // reached the player: parse 2350ms, director 2368ms, writer 2219ms. The
+  // engine, which this whole architecture was built around, took two
+  // milliseconds.
+  //
+  // Only the writer has to run before prose exists. The director plans
+  // presentation, and the rule-based one does that deterministically in no
+  // time at all — so on the fast path it plans, and the model's 2.4s is spent
+  // on nothing. Everything the model director was genuinely better at
+  // (dramatic focus, beat shape) is worth having on a turn that matters, and
+  // is not worth two and a half seconds on "I ask him how long he has worked
+  // this gate".
+  const fast = options.fastWriter ?? null;
+
   clock.start('director');
-  const plan = await deps.director.plan(context);
+  const plan = fast ? RULE_DIRECTOR.planSync(context) : await deps.director.plan(context);
   clock.end('director');
 
-  // Step 9 — the writer renders the plan.
   clock.start('writer');
-  let narrative = await deps.writer.write(context, plan);
+  let narrative = fast
+    ? await writeStreaming(fast, context, plan, { onText: options.onText })
+    : await deps.writer.write(context, plan);
   clock.end('writer');
 
   // Step 10 — validate against authoritative state.

@@ -310,7 +310,10 @@ export function DialogueBlock({
           </Pressable>
         ) : null}
       </Row>
-      <Txt variant="body">{text}</Txt>
+      {/* Speech marks are drawn, not stored. Both writer paths hand over the
+          line itself, so what a character said is the same string whichever
+          one produced it. */}
+      <Txt variant="body">{`\u201C${text}\u201D`}</Txt>
     </View>
   );
 }

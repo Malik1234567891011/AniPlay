@@ -549,3 +549,74 @@ export function reconcilePlan(
     ).map(withRisk),
   };
 }
+
+
+/**
+ * Everything the writer is given, in one place.
+ *
+ * Extracted so the streaming writer and the structured one cannot drift: the
+ * fast path must not quietly receive less context than the slow one, or
+ * "faster" becomes "worse" and nobody notices until the writing does.
+ */
+export function writerPayload(
+  context: TurnContext,
+  plan: BeatPlan,
+): { worldRules: string; state: Record<string, unknown> } {
+  return {
+          worldRules: [
+            `World: ${context.story.title}.`,
+            `Tone: ${context.toneGuide}`,
+            `Immutable canon: ${context.hardCanon.join(' | ')}`,
+          ].join('\n'),
+          state: {
+            beatPlan: plan,
+            scene: context.scene,
+            playerName: context.player.name,
+            playerPronouns: context.player.pronouns,
+            // Who the player said they were at setup. The world was told it
+            // would use this; until it reaches the writer, it does not.
+            playerIs: context.player.archetype,
+            playerAppearance: context.player.appearance,
+            worldKnowsAboutPlayer: context.player.about,
+            playerSetupAnswers: context.player.setupAnswers,
+            // Companions are on the deck whether or not the schedule put them
+            // in the room, and how they are taking it is the difference between
+            // a crew and a list of names.
+            crew: context.crew,
+            speakers: context.presentCharacters.map((c) => ({
+              id: c.def.id,
+              name: c.def.name,
+              pronouns: c.def.pronouns,
+              speechStyle: c.def.speechStyle,
+              voiceSamples: c.def.voiceSamples,
+              // What this person is carrying about the player, and how they
+              // feel about them. The director had both and the writer — the
+              // thing that actually produces the words — had neither, so a
+              // player could attack somebody, walk away, come back, and be
+              // greeted as though none of it had happened.
+              knows: c.knownMemories.map((m) => m.fact.text),
+              feelsAboutYou: { ...c.relationship, label: c.relationshipLabel },
+              mustNotReveal: c.def.secrets
+                .filter((s) => !c.revealableSecrets.some((r) => r.id === s.id))
+                .map((s) => s.id),
+            })),
+            // Everyone the beat could mention, not only who is on stage. A
+            // character who is absent still gets talked about, and the writer
+            // was calling them "him" because it had never been told otherwise.
+            cast: context.story.characters.map((c) => ({
+              id: c.id,
+              name: c.name,
+              pronouns: c.pronouns,
+            })),
+            // Exactly what the player said aloud. Empty means they said
+            // nothing, and their action is narrated rather than quoted.
+            playerSpeech: context.playerDialogue.map((line) => line.text),
+            observableFacts: context.resolution.observableFacts,
+            // Named `directives` rather than `constraints`: these are as often
+            // an instruction to make something happen as a prohibition, and a
+            // model given a list called "constraints" reads the whole list as
+            // things it must not do.
+            directives: context.resolution.privateFacts,
+          }
+  };
+}

@@ -152,6 +152,14 @@ async function processTurn(
       // with the one thing that is both true and final that early: what
       // actually happened. Nothing here is ever reversed by the writer — the
       // writer describes this, it does not overturn it.
+      // Spec §17.10 — stream prose sentence by sentence as it is written.
+      // The blocks are still emitted after commit, so a client can never
+      // render a turn that did not land; these are the same words arriving
+      // ten seconds earlier, marked as provisional.
+      fastWriter: ctx.modelGateway,
+      onText: (sentence) => {
+        hub.emit(turnId, 'text.stream', { text: sentence });
+      },
       onResolved: (resolution) => {
         for (const check of resolution.checks) {
           hub.emit(turnId, 'check.resolved', {
@@ -306,6 +314,10 @@ async function processTurn(
     }
 
     const balance = await ctx.wallet.getBalance(user.userId);
+    // Stage timings, for the latency autopsy. Cheap, and the only honest way
+    // to know which stage is costing the player their eleven seconds.
+    hub.emit(turnId, 'turn.timings', { ...result.timings });
+
     hub.emit(
       turnId,
       'turn.completed',
