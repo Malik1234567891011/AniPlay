@@ -1783,6 +1783,39 @@ function resolveWait(args: ResolveActionArgs): ActionOutcome {
     ? story.characters.filter((c) => c.id === named.entityId)
     : story.characters;
 
+  // Waiting in a conversation is a pause, not an afternoon.
+  //
+  // The schedule walk below exists so "wait for Mira" lands when Mira arrives,
+  // which is right when the player is alone and waiting *for* something. With
+  // people standing in front of them and nobody named, "I wait" means letting
+  // the silence sit — and jumping to the next timetable boundary took a player
+  // from four in the afternoon to eight at night, in the middle of a
+  // handshake, and moved everyone else along with it.
+  // ...unless they said what they are waiting for. "I wait until after
+  // service" is a wait *for* something and must still be able to cross hours,
+  // or no authored schedule is reachable by the one action that exists to
+  // reach it.
+  const waitingForSomething = /\b(?:until|till|til|for|while|through|out)\b/i.test(
+    `${action.method} ${action.declaredOutcome ?? ''}`,
+  );
+  if (!named && !waitingForSomething && charactersPresent(state).length > 0) {
+    return {
+      checks: [],
+      mutations: [],
+      observableFacts: ['You wait.'],
+      privateFacts: [
+        {
+          visibility: 'SELF',
+          fact:
+            'The player is letting the moment sit rather than filling it. Give the pause to somebody ' +
+            'else in the room — a look, a line, a decision to move — rather than skipping ahead in time.',
+        },
+      ],
+      timeCategory: 'BRIEF',
+      normalized: { verb: 'wait', status: 'RESOLVED', minutes: TIME_COST_MINUTES.BRIEF },
+    };
+  }
+
   const minuteOfDay = ((state.worldMinute % 1440) + 1440) % 1440;
   let soonest = MAX_WAIT_MINUTES;
 

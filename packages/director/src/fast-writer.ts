@@ -29,7 +29,16 @@ import { buildDeltas } from './writer.js';
  */
 
 /** Speaker attribution the writer is asked to use, and we parse back out. */
-const SPEAKER_LINE = /^([A-Z][\w'’ -]{0,40}):\s*(.+)$/;
+/**
+ * `Name: "what they say"` at the start of a line.
+ *
+ * Unicode-aware, and tolerant of the space French typography puts before a
+ * colon. The ASCII version — `[A-Z][\w'’ -]` — lost attribution for any
+ * accented name, so a character called Élodie or Renée rendered as narration
+ * with the raw prefix showing, and a French build would have lost it for
+ * `Mako Renn\u00A0: …` on every line.
+ */
+const SPEAKER_LINE = /^(\p{Lu}[\p{L}\p{M}'’ .-]{0,40}?)[\u00A0\u202F\s]*:\s*(.+)$/u;
 
 export interface StreamedBeat {
   readonly blocks: NarrativeBlock[];

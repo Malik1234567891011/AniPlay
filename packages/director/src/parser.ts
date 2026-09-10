@@ -125,7 +125,23 @@ const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
       /\bi will not\b/i,
     ],
   },
-  { verb: 'wait', patterns: [/\b(wait|hold|stay put|do nothing|say nothing|stand still)\b/i] },
+  {
+    verb: 'wait',
+    // `hold` alone is not waiting.
+    //
+    // "I keep hold of his hand a second too long" matched it, resolved as a
+    // wait, and `resolveWait` advanced the clock to the next schedule boundary
+    // — four hours, from four in the afternoon to eight at night, for one line
+    // of dialogue. Same failure as `deck` in the violence lexicon: a word that
+    // is a waiting verb in one construction and an ordinary one everywhere
+    // else. It counts when it is what the player is doing, not when it is how
+    // they are holding something.
+    patterns: [
+      /\b(wait|stay put|do nothing|say nothing|stand still|sit tight|bide)\b/i,
+      /\bhold (?:on|still|fire|off|position|tight)\b/i,
+      /\bhold\b(?!\s+(?:of|onto|on to|out|up|his|her|their|my|the|a|an|it|them))/i,
+    ],
+  },
   { verb: 'interact', patterns: [/\b(open|close|push|pull|turn|touch|pick up|grab|take|unlock|knock|write|draw)\b/i] },
   { verb: 'speak', patterns: [/\b(say|tell|ask|talk|speak|reply|answer|greet|whisper|shout|call out)\b/i] },
 ];

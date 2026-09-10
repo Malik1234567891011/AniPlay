@@ -62,6 +62,20 @@ describe('who said this line', () => {
     expect(blocks[1]!.type).toBe('NARRATION');
   });
 
+  it('hears an accented name, and a French space before the colon', () => {
+    const accented = {
+      story: {
+        ...BLACKWAKE,
+        characters: [{ ...BLACKWAKE.characters[0]!, id: 'elodie', name: 'Élodie Renaud' }],
+      },
+    } as TurnContext;
+    for (const line of ['Élodie: "Assieds-toi."', 'Élodie\u00A0: "Assieds-toi."']) {
+      const block = blocksFrom(line, accented)[0]!;
+      expect(block.type, line).toBe('DIALOGUE');
+      expect(block.speakerId, line).toBe('elodie');
+    }
+  });
+
   it('never rewrites the player’s name inside somebody’s speech', () => {
     const line = 'She does not look up. "I have no wish to explain myself this morning, Sable."';
     expect(toSecondPerson(line, 'Sable Vane')).toBe(line);
