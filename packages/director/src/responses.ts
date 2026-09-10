@@ -28,6 +28,7 @@ import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { buildMessages, SAFETY_POLICY, worldRules } from './model-stages.js';
+import { nameKeys } from '@aniplay/contracts';
 import { speakerBrief } from './speaker-brief.js';
 import { stateBands } from './state-bands.js';
 
@@ -40,6 +41,17 @@ const ResponseSet = z
             text: z.string().max(320),
             /** The attitude this one takes, for the diversity check below. */
             attitude: z.string().max(40),
+            /**
+             * Who this response is aimed at, by id, from `inTheRoom`.
+             *
+             * Not a command language — the text still goes to the interpreter
+             * verbatim, exactly as if it were typed. This is the one fact the
+             * card already knows and a regex has to guess: a tap of *"So it's
+             * pancakes and swims, huh? Sounds like you're dodging"* names
+             * nobody, and in a room of three the parser gave up and created no
+             * speech act at all, so nobody was obliged to answer.
+             */
+            addressedTo: z.string().max(64).nullable(),
           })
           .strict(),
       )
@@ -78,7 +90,31 @@ const POLICY = [
   'behaving; write responses that fit it and never refer to it.',
   '',
   'Only people who are actually in the room. Somebody who has left, or is dead, is not somebody to',
-  'address. Use their name the way the prose does.',
+  'address. Use their name the way the prose does. `inTheRoom` is the whole cast available to you.',
+  '',
+  'If `inTheRoom` is EMPTY the player is alone, and none of the three may be a line of dialogue.',
+  'Nobody is there to hear it. A player alone on a dock, offered "Want to come?", has been handed a',
+  'card that cannot work — and one of the three must be a way out of the room, because a scene with',
+  'nobody in it has nothing left to give.',
+  '',
+  'Start from where the player is NOW and what actually happened to them, not from what they tried.',
+  '`howItWentForYou` says which. If the thing they attempted was refused, no response may assume it',
+  'worked. Juno saying "we are not sneaking out those steps" and the next card opening "I step out',
+  'onto the back steps" is the story ignoring its own best moment.',
+  '',
+  'The player owns nothing you have not seen. No cigarette, no drink, no jacket, no knife unless the',
+  'beat put it there. Inventing a prop for a gesture writes a character the player did not.',
+  '',
+  'Address people the way this story addresses them, and never invent a term of address. An honorific,',
+  'a nickname or a kinship word you were not given is a guess, and a guess lands wrong: a card had a',
+  'thirteen-year-old call his own little brother "nii-san", which means older brother — the player',
+  'saying it to the one person in the world it cannot mean. If the prose has not used a word for who',
+  'these two are to each other, use their name.',
+  '',
+  'When somebody has just asked the player a question with two answers, the three responses must not',
+  'all be the same answer in different tones. Sasuke asks "are you coming tomorrow, or not coming" and',
+  'wants it now; three ways of saying yes is not a choice, it is a cutscene with a delay. At least one',
+  'has to be able to disappoint him.',
   '',
   'Never steer. If the player has walked away from what the story wanted, the responses are about the',
   'life they are living now, not about getting them back. Somebody who quit the team is not offered',
@@ -113,6 +149,17 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
     whatThePlayerDid: context.playerAction,
     where: context.scene.locationName,
     when: context.scene.worldTimeLabel,
+    /**
+     * What actually became of the attempt.
+     *
+     * The payload used to carry only the attempt and the prose, and left the
+     * model to infer the outcome from the writing. It inferred wrong at the
+     * most important moment of a 25-turn run: Juno refused, out loud and in
+     * character, to leave the bar — and all three of the next cards put the
+     * player outside on the steps.
+     */
+    howItWentForYou: outcomeOf(context),
+    youAreAlone: context.presentCharacters.length === 0,
     /**
      * Real exits, by name.
      *
@@ -156,6 +203,66 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
   };
 }
 
+
+
+/**
+ * A response that reaches for somebody who is not in the room.
+ *
+ * The policy says not to, and the policy is not enough on its own: turn 17 of
+ * a Nine Weeks run produced a beat that said *"Nobody answers. No Juno, no
+ * Teo, no Nadia"* and then offered *"Maybe a walk down there will clear my
+ * head. Want to come?"* — a question to an empty dock. Eight turns later,
+ * unchanged: *"I wave at Juno with a grin, stepping closer"*, on a beat whose
+ * own prose said Juno had left.
+ *
+ * Dropping the card is better than showing it — but only the ones that
+ * actually reach. An earlier version dropped every quoted line in an empty
+ * room, which emptied the whole set in Itachi's district and fell the cards
+ * back to the rule-built menu items ("Throw", "Head to The House On The
+ * Corner.") that the prose responses exist to replace. A player alone may
+ * mutter, call out, or read a duty board aloud.
+ */
+export function talksToNobody(
+  text: string,
+  peoplePresent: number,
+  absentNames: readonly string[] = [],
+): boolean {
+  if (peoplePresent > 0) return false;
+
+  const names = absentNames.filter((name) => name.length >= 3);
+  const mentioned = names.find((name) => new RegExp(`\\b${escapeName(name)}\\b`, 'i').test(text));
+  if (!mentioned) return false;
+
+  // Thinking about somebody who is not here is exactly what a player alone
+  // does. Reaching for them is the bug.
+  return !new RegExp(
+    `\\b(?:think|thinking|thought|wonder|wondering|remember|remembering|miss|missing|imagine|picture|recall)\\b[^.!?]{0,40}\\b${escapeName(mentioned)}\\b`,
+    'i',
+  ).test(text);
+}
+
+function escapeName(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * One plain sentence about what became of what the player tried.
+ *
+ * Read off the engine, not the prose, so it cannot be talked out of by good
+ * writing. Costs and margins stay out of it — the player is being offered
+ * something to do next, not a scoreboard.
+ */
+export function outcomeOf(context: TurnContext): string {
+  const checks = context.resolution.checks;
+  const refused = checks.some((c) => c.outcome === 'FAILURE' || c.outcome === 'COMPLICATION');
+  const moved = context.resolution.mutations.some((m) => m.type === 'LOCATION_CHANGE');
+
+  if (refused && !moved) return 'It did not work. Do not write a response that assumes it did.';
+  if (moved) return `It worked, and the player is now in ${context.scene.locationName}.`;
+  if (checks.length === 0) return 'Nothing was tested; the scene simply carried on.';
+  return 'It worked.';
+}
+
 /** The places this room actually connects to, as the world names them. */
 function exitsFrom(context: TurnContext): string[] {
   return context.resolution.newOpportunities
@@ -186,22 +293,32 @@ export async function generateResponses(
         state: payload(context, narrative),
         task:
           'Write three responses the player could send next. Each is first person, 1–3 sentences, ' +
-          'an action and usually a line of dialogue. Give each a one-word attitude.',
+          'an action and usually a line of dialogue. Give each a one-word attitude, and the id of the ' +
+          'person it is addressed to from inTheRoom — null if it is addressed to nobody in particular.',
       }),
       { maxTokens: 700, temperature: 0.9, timeoutMs: 12_000 },
     );
 
+    const inRoom = new Set(context.presentCharacters.map((c) => c.def.id));
+    // Everybody the player might name who is not standing here.
+    // Every word of every absent name, so "Sandoval" is caught as well as
+    // "Teo" — the same helper the absence validator uses.
+    const absentNames = context.story.characters
+      .filter((c) => !inRoom.has(c.id))
+      .flatMap((c) => nameKeys(c.name));
     const responses = result.value.responses
       .map((r) => ({
-        // The interpreter reads this exactly as if it were typed, so the hint
-        // says nothing the words do not: no verb to privilege, no target to
-        // pre-resolve, no separate command language for cards.
+        // The interpreter reads the text exactly as if it were typed — no verb
+        // is privileged and nothing is pre-resolved. The hint carries only the
+        // addressee, and only when the model named somebody who is actually in
+        // the room, so a hallucinated id can never reach the engine.
         text: r.text.trim(),
-        intentHint: 'freeform',
+        intentHint: inRoom.has(r.addressedTo ?? '') ? `speak:${r.addressedTo}` : 'freeform',
         risk: undefined,
         resourceCostLabel: null,
       }))
       .filter((r) => r.text.length > 0)
+      .filter((r) => !talksToNobody(r.text, inRoom.size, absentNames))
       .slice(0, 3);
 
     return responses.length >= 2 ? responses : null;

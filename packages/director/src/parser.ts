@@ -30,6 +30,23 @@ export interface ParseContext {
   readonly story: StoryVersion;
   readonly state: GameState;
   readonly intentId: string;
+  /**
+   * Who this turn is aimed at, when the caller already knows.
+   *
+   * The parser can only guess an addressee from the words, and the words very
+   * often do not contain one: *"So it's pancakes and swims, huh? Sounds like
+   * you're dodging the juicy stuff."* is unmistakably aimed at somebody, and
+   * names nobody. With one companion present that used to fall back correctly
+   * and with three it fell back to nothing at all — so no speech act was
+   * created, nobody was obliged to answer, and the beat came back as the player
+   * talking to a room.
+   *
+   * The pipeline knows better than the sentence does: it has the tapped card's
+   * own intent hint, and failing that, who spoke to the player last. Supplying
+   * it here is not a privileged command language — the addressee is not a
+   * command, it is the one fact a tap already knows and a regex has to guess.
+   */
+  readonly addressee?: string | null;
 }
 
 export interface IntentParser {
@@ -142,7 +159,24 @@ const VERB_LEXICON: Array<{ verb: Verb; patterns: RegExp[] }> = [
       /\bhold\b(?!\s+(?:of|onto|on to|out|up|his|her|their|my|the|a|an|it|them))/i,
     ],
   },
-  { verb: 'interact', patterns: [/\b(open|close|push|pull|turn|touch|pick up|grab|take|unlock|knock|write|draw)\b/i] },
+  {
+    verb: 'interact',
+    // `turn` is split out for the same reason `hold` is above it: turning a key
+    // is an interaction and turning to face somebody is not.
+    //
+    // "I turn to Juno." resolved as a DC 10 `mind` check, failed partially, and
+    // cost stamina — so a line of dialogue in a bar spent two paragraphs of its
+    // beat on being tired, because the writer was handed a resource mutation
+    // for the act of moving the player's head. Every response card is written
+    // as a stage direction plus a line, so this was a tax on the whole choice
+    // system.
+    //
+    // On/off stay: "turn on the lamp" is a real interaction with a real object.
+    patterns: [
+      /\b(open|close|push|pull|touch|pick up|grab|take|unlock|knock|write|draw)\b/i,
+      /\bturn\b(?!\s+(?:to|toward|towards|back|around|away|from))/i,
+    ],
+  },
   { verb: 'speak', patterns: [/\b(say|tell|ask|talk|speak|reply|answer|greet|whisper|shout|call out)\b/i] },
 ];
 
@@ -273,7 +307,7 @@ export class RuleBasedIntentParser implements IntentParser {
       const addressee =
         present(resolveTargets(spoken, context), context) ??
         present(resolveTargets(raw, context), context) ??
-        soleCompanion(context);
+        defaultAddressee(context);
       if (addressee) {
         actions.unshift({
           verb: 'speak',
@@ -388,10 +422,22 @@ function present(
   return kept.length > 0 ? kept : null;
 }
 
-function soleCompanion(context: ParseContext): IntentAction['targets'] | null {
-  const present = charactersPresent(context.state);
-  if (present.length !== 1) return null;
-  const character = context.story.characters.find((c) => c.id === present[0]!.characterId);
+/**
+ * Who to aim a line of dialogue at when the line itself names nobody.
+ *
+ * In order: whoever the caller says the turn is aimed at, then the only other
+ * person in the room. Both are checked against who is actually present, so a
+ * stale hint can never put words in an absent character's ear.
+ */
+function defaultAddressee(context: ParseContext): IntentAction['targets'] | null {
+  const here = charactersPresent(context.state).map((c) => c.characterId);
+
+  const named = context.addressee && here.includes(context.addressee) ? context.addressee : null;
+  const only = here.length === 1 ? here[0]! : null;
+  const id = named ?? only;
+  if (!id) return null;
+
+  const character = context.story.characters.find((c) => c.id === id);
   if (!character) return null;
   return [{ entityType: 'npc', entityId: character.id, displayName: character.name }];
 }

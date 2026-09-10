@@ -61,7 +61,23 @@ export function CharacterSetupScreen({
   const archetype = detail?.archetypes.find((a) => a.id === archetypeId) ?? null;
   const archetypeField = detail?.setupFields.find((f) => f.kind === 'ARCHETYPE') ?? null;
   const usingCustomArchetype = archetypeId === CUSTOM;
-  const canStart = displayName.trim().length > 0 && !starting;
+  /**
+   * Some worlds already know who you are.
+   *
+   * Itachi's own premise reads "you are thirteen, you are the best shinobi your
+   * clan has produced in a generation" — and this screen was still asking the
+   * player to type that name, invent an appearance and choose pronouns, with
+   * placeholders describing Itachi back at them. It was asking the player to
+   * author a character the story had written.
+   *
+   * Nine Weeks is why this is a per-world flag and not a rule: there you are an
+   * unnamed person returning to a summer job, and inventing yourself is the
+   * premise. Both are right; they are different stories.
+   */
+  const named = detail?.protagonist?.kind === 'NAMED';
+  const canonName = detail?.protagonist?.name?.trim() ?? '';
+  const effectiveName = named ? canonName : displayName.trim();
+  const canStart = effectiveName.length > 0 && !starting;
 
   const start = async (): Promise<void> => {
     if (!detail) return;
@@ -74,7 +90,8 @@ export function CharacterSetupScreen({
     for (const [fieldId, value] of Object.entries(choices)) {
       advancedValues[fieldId] = value === CUSTOM ? (customChoices[fieldId] ?? '').trim() : value;
     }
-    if (appearance.trim().length > 0) advancedValues.appearance = appearance.trim();
+    const look = named ? (detail?.protagonist?.description ?? '') : appearance;
+    if (look.trim().length > 0) advancedValues.appearance = look.trim();
     if (usingCustomArchetype && customArchetype.trim().length > 0) {
       advancedValues.customArchetype = customArchetype.trim();
     }
@@ -82,8 +99,8 @@ export function CharacterSetupScreen({
     try {
       const session = await api.createSession(storyId, {
         identity: {
-          displayName: displayName.trim(),
-          pronouns: pronouns.trim() || 'they/them',
+          displayName: effectiveName,
+          pronouns: (named ? detail?.protagonist?.pronouns : pronouns.trim()) || 'they/them',
           ageBand: null,
           // Spec §9.4 — a background you wrote is worth the same as one we
           // wrote. `null` here no longer means "no mechanics": the server reads
@@ -123,30 +140,37 @@ export function CharacterSetupScreen({
           keyboardShouldPersistTaps="handled"
         >
           <Stack gap={spacing.sm}>
-            <Txt variant="display">Who are you?</Txt>
+            <Txt variant="display">
+              {named ? (detail?.protagonist?.setupHeading || `You are ${canonName}.`) : 'Who are you?'}
+            </Txt>
             <Txt variant="bodyCompact" color={colors.text.secondary}>
-              Only your name is required. Everything else is yours to invent, and the world will use whatever
-              you give it.
+              {named
+                ? 'This one you already are. What is left to decide is what you became — and after that, ' +
+                  'everything is open.'
+                : 'Only your name is required. Everything else is yours to invent, and the world will use ' +
+                  'whatever you give it.'}
             </Txt>
           </Stack>
 
-          <Stack gap={spacing.lg}>
-            <Field
-              label="What do they call you?"
-              value={displayName}
-              onChange={setDisplayName}
-              placeholder={placeholderFor(detail, 'displayName', 'e.g. Malik Sarrow')}
-              maxLength={40}
-              required
-            />
-            <Field
-              label="Pronouns"
-              value={pronouns}
-              onChange={setPronouns}
-              placeholder={placeholderFor(detail, 'pronouns', 'e.g. he/him — or write anything')}
-              maxLength={24}
-            />
-          </Stack>
+          {named ? null : (
+            <Stack gap={spacing.lg}>
+              <Field
+                label="What do they call you?"
+                value={displayName}
+                onChange={setDisplayName}
+                placeholder={placeholderFor(detail, 'displayName', 'e.g. Malik Sarrow')}
+                maxLength={40}
+                required
+              />
+              <Field
+                label="Pronouns"
+                value={pronouns}
+                onChange={setPronouns}
+                placeholder={placeholderFor(detail, 'pronouns', 'e.g. he/him — or write anything')}
+                maxLength={24}
+              />
+            </Stack>
+          )}
 
           {(detail?.archetypes.length ?? 0) > 0 ? (
             <Stack gap={spacing.md}>
@@ -260,20 +284,27 @@ export function CharacterSetupScreen({
             multiline
           />
 
-          {/* Drives the generated portrait, so it earns a place in the fast path. */}
-          <Field
-            label="What do you look like?"
-            hint="Used if you generate a portrait later. Skip it and we'll go on what the world sees."
-            value={appearance}
-            onChange={setAppearance}
-            placeholder={placeholderFor(
-              detail,
-              'appearance',
-              'e.g. Short, dark hair cut badly by myself, a coat two sizes too big.',
-            )}
-            maxLength={240}
-            multiline
-          />
+          {/*
+            Drives the generated portrait, so it earns a place in the fast path
+            — unless the world already knows what this person looks like, in
+            which case asking is the fourth-wall break: Itachi's placeholder for
+            this field was a description of Itachi.
+          */}
+          {named ? null : (
+            <Field
+              label="What do you look like?"
+              hint="Used if you generate a portrait later. Skip it and we'll go on what the world sees."
+              value={appearance}
+              onChange={setAppearance}
+              placeholder={placeholderFor(
+                detail,
+                'appearance',
+                'e.g. Short, dark hair cut badly by myself, a coat two sizes too big.',
+              )}
+              maxLength={240}
+              multiline
+            />
+          )}
 
           {advanced ? (
             <Stack gap={spacing.lg}>
@@ -342,14 +373,14 @@ export function CharacterSetupScreen({
           ) : null}
 
           {/* Spec §9.4 — a tiny canon summary, never a stat block. */}
-          {displayName.trim().length > 0 ? (
+          {effectiveName.length > 0 ? (
             <Card>
               <Txt variant="caption" color={colors.text.muted}>
                 YOU'LL ENTER AS
               </Txt>
               <Txt variant="bodyStrong" style={{ marginTop: spacing.xs }}>
                 {[
-                  displayName.trim(),
+                  effectiveName,
                   usingCustomArchetype ? customArchetype.trim().split(/[.,]/)[0] : archetype?.name,
                 ]
                   .filter((part) => part && part.length > 0)

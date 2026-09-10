@@ -139,7 +139,31 @@ function chooseSpeakerOrder(context: TurnContext): string[] {
 
 // --- Beats -----------------------------------------------------------------
 
-function buildBeats(context: TurnContext, beatType: BeatType, speakerOrder: string[]): OrderedBeat[] {
+/**
+ * Whether a resource change actually leaves the player short.
+ *
+ * The threshold is a quarter of the bar, because that is roughly where a number
+ * stops being flavour and starts being a constraint on the next decision. Below
+ * it the player needs to know; above it, spending two points of energy on a
+ * conversation is not news and should not cost a paragraph.
+ *
+ * Only for resources that run *down*. A world may define one where high is bad
+ * (notoriety, corruption), and "you are running low on notoriety" is nonsense.
+ */
+const SHORT_FRACTION = 0.25;
+
+function leavesPlayerShort(
+  mutation: { payload: unknown },
+  context: TurnContext,
+): boolean {
+  const payload = mutation.payload as { resourceId?: string; amount?: number } | undefined;
+  if (!payload?.resourceId || (payload.amount ?? 0) >= 0) return false;
+  const resource = context.player.resources.find((r) => r.id === payload.resourceId);
+  if (!resource || resource.max <= 0 || resource.polarity !== 'GOOD_HIGH') return false;
+  return resource.current / resource.max <= SHORT_FRACTION;
+}
+
+export function buildBeats(context: TurnContext, beatType: BeatType, speakerOrder: string[]): OrderedBeat[] {
   const { resolution } = context;
   const beats: OrderedBeat[] = [];
 
@@ -191,14 +215,41 @@ function buildBeats(context: TurnContext, beatType: BeatType, speakerOrder: stri
     });
   }
 
-  const stateChanges = resolution.mutations.filter(
-    (m) => m.type === 'RESOURCE_DELTA' || m.type === 'ITEM_ADD' || m.type === 'ITEM_REMOVE',
+  // Things the player gained or lost that are worth a sentence.
+  //
+  // Items are: picking something up or losing it is an event. A resource tick
+  // is not, and instructing the writer to dramatise one was the source of the
+  // worst tic in the product. Across a 25-turn Nine Weeks run, six beats spent
+  // their closing paragraph on stamina — *"you paid for the moment of courage
+  // with something you won't get back tonight"*, then *"you're already tired,
+  // like you've spent something you won't get back"* the very next turn — in a
+  // romance world, at a bar, over a conversation. The writer was not being
+  // florid. It was following this instruction, on every turn that spent
+  // anything.
+  //
+  // The instruction's own premise had also gone stale: it promises "the chip in
+  // the UI states the number", and the chips were removed. So nothing stated
+  // the number and the prose stated the cost, every time.
+  //
+  // A resource still earns a beat when it crosses into territory the player
+  // needs to act on — running out is a fact about what they can do next. Losing
+  // two points of energy for asking a friend a question is not.
+  const itemChanges = resolution.mutations.filter(
+    (m) => m.type === 'ITEM_ADD' || m.type === 'ITEM_REMOVE',
   );
+  const criticalResources = resolution.mutations.filter(
+    (m) => m.type === 'RESOURCE_DELTA' && leavesPlayerShort(m, context),
+  );
+  const stateChanges = [...itemChanges, ...criticalResources];
   if (stateChanges.length > 0) {
     beats.push({
       kind: 'STATE_REVEAL',
       factIds: stateChanges.map((m) => m.mutationId),
-      instruction: 'Let the change be felt physically. The chip in the UI states the number; the prose states the cost.',
+      instruction:
+        criticalResources.length > 0
+          ? 'Something the player relies on has run low enough to matter. Say so once, in one clause, ' +
+            'as a fact about what they can still do — not as a paragraph about being tired.'
+          : 'Name what they gained or lost in one clause inside the prose. Do not write an inventory line.',
     });
   }
 
@@ -208,7 +259,10 @@ function buildBeats(context: TurnContext, beatType: BeatType, speakerOrder: stri
 function narrationInstruction(context: TurnContext, beatType: BeatType): string {
   const base = [
     `Tone: ${context.toneGuide}`,
-    `Place: ${context.scene.locationName}, ${context.scene.dayPart.toLowerCase()}.`,
+    // The clock, not just the part of day. "Afternoon" let a 4:44 PM beat open
+    // "out into the dusk"; the header said 4:44 PM at the same moment.
+    `Place: ${context.scene.locationName}, ${context.scene.clock} — ${context.scene.light}.`,
+    'The clock above is what the player can see. Do not contradict it.',
   ];
 
   switch (beatType) {
@@ -552,7 +606,7 @@ function buildMediaPlan(context: TurnContext, beatType: BeatType): MediaPlan {
     expressions[character.def.id] = pickExpression(character, context);
   }
 
-  const hero = heroImageDecision(context, beatType, { locationChanged, firstVisit });
+  const hero = heroImageDecision(context, beatType, { locationChanged, firstVisit }, expressions);
 
   return {
     stageAction: locationChanged ? 'CHANGE_LOCATION' : expressionsChanged(expressions) ? 'CHANGE_VARIANT' : 'KEEP',
@@ -623,12 +677,30 @@ function pickExpression(character: PresentCharacterContext, context: TurnContext
   const failed = context.resolution.checks.some((c) => !isSuccess(c.outcome));
   const critical = context.resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS');
 
+  // How this character felt about *this turn*, not how they feel in general.
+  //
+  // The standing relationship used to be enough on its own, and it outranked
+  // everything the beat had just done: Sasuke adores his brother, so his
+  // affection sits above 45 permanently and every beat rendered him
+  // `delighted` — including the one where Itachi talks past him, he says "You
+  // talk to the air. You didn't eat", and the scene is plainly him being hurt.
+  // A face that never changes is worse than no face, because it contradicts the
+  // prose it is sitting next to.
+  const moved = context.resolution.mutations
+    .filter((m) => m.type === 'RELATIONSHIP_DELTA' && m.subjectId === character.def.id)
+    .reduce((sum, m) => sum + Number((m.payload as { amount?: number }).amount ?? 0), 0);
+
   if (context.state.encounter) return pick('furious', 'alarmed', 'stern', 'serious');
   if (critical) return pick('delighted', 'amused', 'warm', 'grinning');
   if (failed) return pick('suspicious', 'wary', 'stern', 'shifty');
-  if (character.relationship.fear > 50) return pick('alarmed', 'wary');
+  // This turn hurt them, or pleased them.
+  if (moved < 0) return pick('hurt', 'sulking', 'stern', 'wary', 'serious');
+  if (moved > 0) return pick('warm', 'delighted', 'grinning', 'amused', 'eager');
+  if (character.relationship.fear > 50) return pick('alarmed', 'wary', 'frightened');
   if (character.relationship.rivalry > 45) return pick('stern', 'suspicious');
-  if (character.relationship.affection > 45) return pick('warm', 'amused', 'delighted');
+  // Standing fondness is a resting face, not active glee: `delighted` has to be
+  // earned by something that happened, or it is on screen every single turn.
+  if (character.relationship.affection > 45) return pick('warm', 'amused');
   return pick('neutral');
 }
 
@@ -1002,12 +1074,19 @@ export function beatBudget(context: TurnContext, tierBudget: number): number {
  * of somebody's face.
  */
 
-/** Minimum turns between ordinary frames, by tier. */
+/**
+ * Minimum turns between ordinary frames, by tier.
+ *
+ * Halved after a 25-turn Nine Weeks run produced **two** frames — turn 1 and
+ * turn 10 — and none at all in the last fifteen. Vivid is the default tier, so
+ * a spacing of 10 was the number most players would ever experience, and one
+ * image per ten turns is not a product called Playable Anime.
+ */
 const HERO_SPACING: Record<string, number> = {
-  QUICK: 14,
-  VIVID: 10,
-  CINEMATIC: 6,
-  APEX: 4,
+  QUICK: 8,
+  VIVID: 5,
+  CINEMATIC: 3,
+  APEX: 2,
 };
 
 /** Nothing overrides the floor twice running. Even a death gets one frame. */
@@ -1017,6 +1096,7 @@ export function heroImageDecision(
   context: TurnContext,
   beatType: BeatType,
   scene: { locationChanged: boolean; firstVisit: boolean },
+  expressions: Record<string, string> = {},
 ): MediaPlan['heroImage'] {
   const { resolution, tier } = context;
   const since = context.turnsSinceHeroImage;
@@ -1036,11 +1116,35 @@ export function heroImageDecision(
     // Meeting somebody important for the first time.
     context.presentCharacters.some((c) => !context.state.flags[`met:${c.def.id}`] && c.def.cardBlurb !== '');
 
+  // What counts as worth a frame.
+  //
+  // This list used to be REVEAL, CRITICAL_SUCCESS, ENCOUNTER_START and
+  // QUEST_TRANSITION — every term a combat or quest event. Nine Weeks generates
+  // none of them, ever, so in a romance or slice-of-life world the *only* road
+  // to an image was `landmark`, which there reduces to "you walked into a new
+  // room" or "you met somebody new". Once the player had seen the four
+  // locations and met the cast, the world could never show them another
+  // picture. It was not a gate that was slightly too tight; it was a gate with
+  // no term a conversation world could satisfy.
+  //
+  // So: the events a *social* story is made of count too. Somebody's feeling
+  // about you changing is that story's ENCOUNTER_START, and a refusal is its
+  // boss fight — "real rejection" is a thing Nine Weeks promises on its own
+  // world sheet. A visible change of expression counts as well: if the stage is
+  // about to swap somebody's face, that is by definition a beat with a face in
+  // it worth looking at. (`COMPLICATION` is this engine's other failure
+  // outcome; there is no CRITICAL_FAILURE.)
+  const socialTurn =
+    resolution.mutations.some((m) => m.type === 'RELATIONSHIP_DELTA') ||
+    resolution.checks.some((c) => c.outcome === 'FAILURE' || c.outcome === 'COMPLICATION') ||
+    Object.values(expressions).some((e) => e !== 'neutral');
+
   const notable =
     beatType === 'REVEAL' ||
     resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS') ||
     resolution.mutations.some((m) => m.type === 'ENCOUNTER_START') ||
-    resolution.mutations.some((m) => m.type === 'QUEST_TRANSITION');
+    resolution.mutations.some((m) => m.type === 'QUEST_TRANSITION') ||
+    socialTurn;
 
   const spacing = HERO_SPACING[tier] ?? 10;
   const spacedOut = since === null || since >= spacing;

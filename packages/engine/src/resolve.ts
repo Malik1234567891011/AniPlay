@@ -168,6 +168,8 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   const privateFacts: PrivateFact[] = [];
   const normalizedActions: Record<string, unknown>[] = [];
   let totalMinutes = 0;
+  /** The longest single thing done this turn, rather than the sum of them. */
+  let concurrentMinutes = 0;
 
   let mutationCounter = 0;
   const nextMutationId = (): string => `mut_${turnId}_${mutationCounter++}`;
@@ -282,11 +284,29 @@ export function resolveIntent(options: ResolveOptions): Resolution {
       ...(action.itemId ? { itemId: action.itemId } : {}),
     });
 
-    totalMinutes +=
+    // Travel and waiting add up; everything else happens in one moment.
+    //
+    // Summing every action meant a turn cost time per *clause*. "I turn to
+    // Juno. 'You in?'" was two actions and burned 12 minutes of a summer
+    // evening, while walking the length of the camp cost 3 — so asking a friend
+    // a question cost four times as much of the day as crossing it. Response
+    // cards are all written as a stage direction plus a line, so the tax landed
+    // on almost every turn.
+    //
+    // A player who leans in and speaks does both in the same breath. Distance
+    // and waiting are the two things that genuinely take longer the more of
+    // them you do.
+    const cost =
       outcome.overrideMinutes ??
       (outcome.timeCategory === 'TRAVEL'
         ? (outcome.travelMinutes ?? 15)
         : TIME_COST_MINUTES[outcome.timeCategory]);
+
+    if (outcome.overrideMinutes !== undefined || outcome.timeCategory === 'TRAVEL') {
+      totalMinutes += cost;
+    } else {
+      concurrentMinutes = Math.max(concurrentMinutes, cost);
+    }
 
     if (state.encounter) spend(economy, weight);
   }
@@ -297,6 +317,9 @@ export function resolveIntent(options: ResolveOptions): Resolution {
       fact: `Deferred this round (no action left): ${deferred.join('; ')}. Narrate the attempt starting, not completing.`,
     });
   }
+
+  // Fold in the longest single thing done this turn.
+  totalMinutes += concurrentMinutes;
 
   // Dialogue costs a beat of world time even when nothing is rolled.
   if (intent.dialogue.length > 0 && totalMinutes === 0) totalMinutes = TIME_COST_MINUTES.BRIEF;
@@ -347,7 +370,20 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   // treating it as optional. It is not optional, so it stops being one line
   // among many and becomes an instruction on the turn it matters, every time,
   // for as long as it is true.
-  for (const characterId of targetedCharacterIds(story, intent)) {
+  // Everybody it could matter to, not only whoever this turn names.
+  //
+  // This used to be `targetedCharacterIds` alone, so the reminder fired only
+  // when the new action resolved a target on the person who had been hit.
+  // "I go back and find Renna again" resolves no target — it is a `custom` —
+  // so the writer was told nothing and greeted the player normally, five
+  // separate times in one adversarial sweep. Walking back into a room with
+  // somebody you attacked is exactly when it matters, and it is the case the
+  // player will actually produce.
+  const couldRemember = new Set([
+    ...targetedCharacterIds(story, intent),
+    ...charactersPresent(state).map((c) => c.characterId),
+  ]);
+  for (const characterId of couldRemember) {
     if (!state.flags[`attacked:${characterId}`]) continue;
     const character = story.characters.find((c) => c.id === characterId);
     if (!character) continue;
@@ -1730,9 +1766,51 @@ function resolveSpeak(args: ResolveActionArgs): ActionOutcome {
     }
     const present = charactersPresent(state).some((c) => c.characterId === target.entityId);
     if (character && present) {
+      const free = resolveFreeAction(args);
+      // Said in front of other people, and therefore said in public.
+      //
+      // "I climb up onto the bar and shout: 'Everyone! Ask Juno what happened
+      // last September!'" produced `checks: []` and a single TIME_ADVANCE. The
+      // most consequential thing a player did in twenty-five turns left no
+      // trace an ending, a schedule or another character could ever read, in a
+      // world whose own sheet promises "People talk."
+      //
+      // No invented relationship maths — the dice did not roll and should not
+      // be made to. What is recorded is only what is true: it happened, these
+      // people heard it, and the world may use that.
+      const witnesses = charactersPresent(state)
+        .filter((c) => c.characterId !== target.entityId)
+        .map((c) => story.characters.find((sc) => sc.id === c.characterId))
+        .filter((c): c is NonNullable<typeof c> => !!c);
+
+      if (witnesses.length === 0) return { ...free, privateFacts: [standingInFrontOfYou(character.name)] };
+
       return {
-        ...resolveFreeAction(args),
-        privateFacts: [standingInFrontOfYou(character.name)],
+        ...free,
+        mutations: [
+          ...free.mutations,
+          {
+            mutationId: args.nextMutationId(),
+            type: 'FLAG_SET',
+            subjectId: 'session',
+            reasonCode: 'SPOKE_IN_PUBLIC',
+            payload: { flag: `heard:${character.id}`, value: true },
+          },
+        ],
+        observableFacts: [
+          ...free.observableFacts,
+          `Said to ${character.name} in front of ${witnesses.map((w) => w.name).join(' and ')}.`,
+        ],
+        privateFacts: [
+          standingInFrontOfYou(character.name),
+          {
+            visibility: 'SELF',
+            fact:
+              `This was said in public. ${witnesses.map((w) => w.name).join(' and ')} heard it and ` +
+              `${witnesses.length === 1 ? 'is' : 'are'} in the room. They react to having heard it, ` +
+              'even if they say nothing, and they may bring it up later.',
+          },
+        ],
       };
     }
     if (character && !present) {

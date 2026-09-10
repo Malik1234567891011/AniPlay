@@ -93,7 +93,7 @@ export class ApiClient {
    * Asked for a token before every request, so an access token that expired
    * while the app was backgrounded is renewed rather than sent and rejected.
    */
-  #tokenProvider: (() => Promise<string | null>) | null = null;
+  #tokenProvider: ((options?: { force?: boolean }) => Promise<string | null>) | null = null;
 
   constructor(baseUrl = defaultBaseUrl()) {
     this.#baseUrl = baseUrl.replace(/\/$/, '');
@@ -108,7 +108,7 @@ export class ApiClient {
   }
 
   /** Installed once at boot by the auth store. */
-  setTokenProvider(provider: (() => Promise<string | null>) | null): void {
+  setTokenProvider(provider: ((options?: { force?: boolean }) => Promise<string | null>) | null): void {
     this.#tokenProvider = provider;
   }
 
@@ -116,9 +116,9 @@ export class ApiClient {
     return this.#token;
   }
 
-  async #authorization(): Promise<string | null> {
+  async #authorization({ force = false } = {}): Promise<string | null> {
     if (this.#tokenProvider) {
-      const token = await this.#tokenProvider();
+      const token = await this.#tokenProvider({ force });
       this.#token = token;
       return token;
     }
@@ -178,7 +178,10 @@ export class ApiClient {
       const recoverable = error.code === 'TOKEN_EXPIRED' || error.code === 'UNAUTHENTICATED';
       if (response.status === 401 && recoverable && retryOnExpiry) {
         this.#token = null;
-        const renewed = await this.#authorization();
+        // Forced: the server has refused this token, so a provider that only
+        // consults its own expiry clock would hand back the same one and the
+        // retry would fail identically.
+        const renewed = await this.#authorization({ force: true });
         if (renewed) {
           return this.#request<T>(method, path, body, extraHeaders, {
             retryOnExpiry: false,
@@ -287,13 +290,23 @@ export class ApiClient {
 
   submitTurn(
     sessionId: string,
-    body: { actionText: string; qualityTier: QualityTier; sessionRevision: number },
+    body: {
+      actionText: string;
+      qualityTier: QualityTier;
+      sessionRevision: number;
+      /**
+       * The tapped response's `intentHint`, so the server knows who the line is
+       * aimed at rather than re-deriving it from the card's own prose. Null for
+       * typed input, which is parsed from the words as it always was.
+       */
+      selectedSuggestionId?: string | null;
+    },
     idempotencyKey: string,
   ): Promise<SubmitTurnResponse> {
     return this.#request(
       'POST',
       `/v1/sessions/${sessionId}/turns`,
-      { ...body, selectedSuggestionId: null, voicePreferred: false },
+      { selectedSuggestionId: null, ...body, voicePreferred: false },
       { 'idempotency-key': idempotencyKey },
     );
   }

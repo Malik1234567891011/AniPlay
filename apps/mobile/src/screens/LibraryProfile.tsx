@@ -130,7 +130,7 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
             <Stack gap={spacing.md} style={{ padding: GUTTER }}>
               <Txt variant="h3">{managing.title}</Txt>
               <Txt variant="caption" color={colors.text.muted}>
-                {managing.turnCount} turns · started {new Date(managing.createdAt).toLocaleDateString()}
+                {managing.turnCount} {managing.turnCount === 1 ? 'turn' : 'turns'} · started {new Date(managing.createdAt).toLocaleDateString()}
               </Txt>
               <Button
                 label="Fork this run · 120 credits"
@@ -152,7 +152,7 @@ export function LibraryScreen({ navigation }: { navigation: RootNavigation }): R
                   const target = managing;
                   Alert.alert(
                     'Delete this run?',
-                    `"${target.title}" and its ${target.turnCount} turns will be gone. This cannot be undone.`,
+                    `"${target.title}" and its ${target.turnCount} ${target.turnCount === 1 ? 'turn' : 'turns'} will be gone. This cannot be undone.`,
                     [
                       { text: 'Keep it', style: 'cancel' },
                       {
@@ -187,14 +187,18 @@ function SessionCard({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${session.title}, ${session.turnCount} turns. Continue.`}
+      accessibilityLabel={`${session.title}, ${session.turnCount} ${session.turnCount === 1 ? 'turn' : 'turns'}. Continue.`}
       onPress={onPress}
       onLongPress={onManage}
       style={({ pressed }) => ({ opacity: pressed ? 0.85 : 1 })}
     >
       <Card style={{ gap: spacing.md }}>
         <Row gap={spacing.md}>
-          <StoryArt seed={session.storyId} style={{ width: 52, height: 68, borderRadius: radius.control }} />
+          <StoryArt
+            seed={session.storyId}
+            uri={session.coverImage}
+            style={{ width: 52, height: 68, borderRadius: radius.control }}
+          />
           <Stack gap={2} style={{ flex: 1 }}>
             <Txt variant="bodyStrong" numberOfLines={1}>
               {session.title}
@@ -203,7 +207,7 @@ function SessionCard({
               as {session.displayName}
             </Txt>
             <Txt variant="micro" color={colors.text.muted}>
-              {session.turnCount} turns · {new Date(session.lastPlayedAt).toLocaleDateString()}
+              {session.turnCount} {session.turnCount === 1 ? 'turn' : 'turns'} · {new Date(session.lastPlayedAt).toLocaleDateString()}
             </Txt>
             {session.forkedFromSessionId ? <Chip label="Fork" /> : null}
           </Stack>

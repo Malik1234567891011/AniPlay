@@ -128,6 +128,7 @@ export function toStoryDetail(
       ...archetype,
       grants: archetypeGrants(story, archetype),
     })),
+    protagonist: story.protagonist,
   };
 }
 
@@ -170,6 +171,12 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
     // so the coach could speak, legitimately, and the client could not resolve
     // her name or face for the dialogue block because she was fourth in a list
     // of three. The cap now lives where the portraits are drawn.
+    // Everybody, so a line spoken three rooms ago still has a face on it.
+    cast: story.characters.map((c) => ({
+      id: c.id,
+      name: c.name,
+      portrait: resolveAssetUrl(c.portrait),
+    })),
     presentCharacters: charactersPresent(state)
       .map((runtime) => {
         const def = story.characters.find((c) => c.id === runtime.characterId);

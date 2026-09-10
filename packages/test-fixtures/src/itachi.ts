@@ -2396,31 +2396,24 @@ const raw = {
     },
   ],
   /**
-   * A NAMED protagonist, which changes what this screen is for.
+   * You are Itachi. The story says so in its own premise, so the setup screen
+   * does not ask.
    *
-   * Most worlds here have a blank protagonist and the identity fields are the
-   * point: the player invents somebody. This one does not. The card already
-   * says you are thirteen and the best shinobi your clan has produced in a
-   * generation, and asking that player to type a name, pronouns and a physical
-   * description is the game asking them to invent a character it has already
-   * written. So the name is answered, with an escape hatch for anybody who
-   * wants it, and pronouns and appearance are gone.
-   *
-   * What is left is characterisation rather than identity — what the war left
-   * in you, what people get wrong about you, where you start out standing —
-   * which is the right question to ask somebody stepping into a life that
-   * already exists.
+   * What it does still ask is the battlefield question below, which is the one
+   * piece of this that is genuinely the player's: not who you are, but what the
+   * war left in you. Nothing here narrows what you may *do* — the clan, the
+   * village, your brother and the fortnight are all still open.
    */
+  protagonist: {
+    kind: 'NAMED',
+    name: 'Itachi Uchiha',
+    pronouns: 'he/him',
+    description:
+      'Thirteen. Small for it. Lines under the eyes that nobody that age should have, ' +
+      'and a school satchel with something heavier than books in it.',
+    setupHeading: 'What kind of Itachi are you?',
+  },
   setupFields: [
-    {
-      id: 'displayName',
-      label: 'Your name',
-      helpText: 'You are Itachi Uchiha. This is here only in case you want the world to call you something else, and most people leave it alone.',
-      kind: 'TEXT',
-      required: false,
-      maxLength: 40,
-      placeholder: 'Itachi Uchiha',
-    },
     {
       id: 'archetype',
       label: 'You were four, on a battlefield, with your father. What did you take away from it?',

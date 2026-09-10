@@ -9,9 +9,9 @@ import { RED_MOON as RED_MOON_RAW } from './red-moon.js';
 import { SEVEN_DAYS as SEVEN_DAYS_RAW } from './seven-days.js';
 import { BLACKWAKE as BLACKWAKE_RAW } from './blackwake.js';
 import { LAST_FIVE as LAST_FIVE_RAW } from './last-five.js';
-import { HUSH_HOUSE } from './hush-house.js';
-import { WINDOW_SEVEN } from './window-seven.js';
-import { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
+import { HUSH_HOUSE as HUSH_HOUSE_RAW } from './hush-house.js';
+import { WINDOW_SEVEN as WINDOW_SEVEN_RAW } from './window-seven.js';
+import { GOOD_MORNING_HUSBAND as GOOD_MORNING_HUSBAND_RAW } from './good-morning-husband.js';
 import { ITACHI as ITACHI_RAW } from './itachi.js';
 import { PRIMAL_CROWN as PRIMAL_CROWN_RAW } from './primal-crown.js';
 import { ZERO_THRONE as ZERO_THRONE_RAW } from './zero-throne.js';
@@ -46,18 +46,23 @@ export const SECOND_SKIN = withDerivedAssetKeys(SECOND_SKIN_RAW);
 export const LAST_SERVICE = withDerivedAssetKeys(LAST_SERVICE_RAW);
 
 /**
- * Three of the newest worlds ship without generated art, deliberately.
+ * These three shipped with null asset keys on purpose, and no longer need to.
  *
  * `withDerivedAssetKeys` fills in the key the image pipeline *would* produce,
  * which is right for a world whose art exists and wrong for one whose art has
  * not been commissioned: the story would declare a cover, the catalog would ask
- * for it, and every card would show a hole. The covers on the first ten are
- * locked and must not be regenerated, so these four carry null keys until
- * somebody runs the generator for them on purpose.
+ * for it, and every card would show a hole. So they carried null keys "until
+ * somebody runs the generator for them on purpose" — which has now happened,
+ * 180 assets across the three, so they join the rest.
+ *
+ * Worth keeping in mind next time: the gap between generating a world's art and
+ * wrapping it here is invisible everywhere except a screenshot, which is
+ * exactly what `derive-assets.ts` says it wanted to design out. `catalog.spec`
+ * now checks the pair rather than trusting it.
  */
-export { HUSH_HOUSE } from './hush-house.js';
-export { WINDOW_SEVEN } from './window-seven.js';
-export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
+export const HUSH_HOUSE = withDerivedAssetKeys(HUSH_HOUSE_RAW);
+export const WINDOW_SEVEN = withDerivedAssetKeys(WINDOW_SEVEN_RAW);
+export const GOOD_MORNING_HUSBAND = withDerivedAssetKeys(GOOD_MORNING_HUSBAND_RAW);
 
 /**
  * The official launch catalog.

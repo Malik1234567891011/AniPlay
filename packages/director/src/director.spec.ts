@@ -458,7 +458,9 @@ describe('director beat planning', () => {
     const resolution = resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 's' });
 
     const withGap = (turnsSince: number) => {
-      const recentTurns = Array.from({ length: turnsSince + 1 }, (_, i) => ({
+      // `turnsSince` turns of log, the oldest of them framed — so the frame is
+      // exactly that many turns behind the turn being planned.
+      const recentTurns = Array.from({ length: turnsSince }, (_, i) => ({
         ...turnRecord(),
         heroImageUrl: i === 0 ? 'https://example.test/frame.png' : null,
       }));
@@ -489,7 +491,7 @@ describe('director beat planning', () => {
     };
 
     const at = (turnsSince: number) => {
-      const recentTurns = Array.from({ length: turnsSince + 1 }, (_, i) => ({
+      const recentTurns = Array.from({ length: turnsSince }, (_, i) => ({
         ...turnRecord(),
         heroImageUrl: i === 0 ? 'https://example.test/frame.png' : null,
       }));
@@ -501,7 +503,7 @@ describe('director beat planning', () => {
       ).mediaPlan.heroImage;
     };
 
-    // Three turns after the last frame is well short of VIVID's ten, and a
+    // Three turns after the last frame is short of VIVID's spacing, and a
     // death still earns one.
     expect(at(3).eligible).toBe(true);
     expect(at(3).reason).toMatch(/landmark/i);

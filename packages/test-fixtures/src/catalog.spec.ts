@@ -99,3 +99,60 @@ describe('every launch world', () => {
     });
   }
 });
+
+/**
+ * A world whose art exists must actually ask for it.
+ *
+ * `derive-assets.ts` says this failure is "invisible in tests and only shows up
+ * in a screenshot, so it is designed out rather than guarded against". It was
+ * not designed out: Hush House, Window Seven and Good Morning, Husband were
+ * exported raw — correct while their art was uncommissioned, and silently wrong
+ * the moment it was generated. 180 files sat on disk while the catalog served
+ * null and every card drew a gradient.
+ *
+ * So: guarded against, since the design did not hold.
+ */
+describe('worlds that have art declare it', () => {
+  const assetsRoot = new URL('../../../infra/seed/assets/', import.meta.url);
+
+  for (const story of LAUNCH_CATALOG) {
+    it(`${story.title} declares a cover if one has been generated`, async () => {
+      const { existsSync } = await import('node:fs');
+      const generated = existsSync(new URL(`${story.storyId}/cover.webp`, assetsRoot));
+      if (!generated) return; // Art not commissioned yet: null keys are correct.
+      expect(story.coverImage, `${story.title} has cover art on disk but declares none`).toBeTruthy();
+      expect(story.keyArt, `${story.title} has art on disk but declares no key art`).toBeTruthy();
+    });
+  }
+});
+
+/**
+ * Every expression a world authors must resolve to a face that exists.
+ *
+ * Reaction decks are generated from a fixed eight, and worlds name expressions
+ * in their own voice — `sulking`, `implacable`, `unimpressed`. Nothing
+ * reconciled the two, so the director picked an authored word, the asset key
+ * had never been drawn, and the frame 404'd silently. Measured when this was
+ * written: **257 of 374 authored expressions across the catalog had no asset.**
+ * Sixty-four of Itachi's eighty-nine files are reaction frames and only
+ * `neutral` could be reached, which is why a world with eighty-nine images
+ * looked like a world with none.
+ *
+ * `toReactionEmotion` maps the authored word onto one of the eight. This checks
+ * the map actually covers what the catalog says, so a new world introducing a
+ * new word fails here rather than shipping an invisible hole.
+ */
+describe('authored expressions resolve to a real face', () => {
+  for (const story of LAUNCH_CATALOG) {
+    it(`${story.title} uses expressions the generator draws`, async () => {
+      const { knownExpression } = await import('@aniplay/contracts');
+      const unknown = story.characters
+        .flatMap((c) => c.expressions.map((e) => ({ character: c.name, expression: e })))
+        .filter(({ expression }) => !knownExpression(expression));
+      expect(
+        unknown.map((u) => `${u.character}: ${u.expression}`),
+        'add these to EMOTION_SYNONYMS in packages/contracts/src/game/assets.ts',
+      ).toEqual([]);
+    });
+  }
+});

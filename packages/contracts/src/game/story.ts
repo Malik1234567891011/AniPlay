@@ -959,6 +959,46 @@ export const CharacterSetupField = z
   .strict();
 export type CharacterSetupField = z.infer<typeof CharacterSetupField>;
 
+/**
+ * Whether the player invents who they are, or the story already knows.
+ *
+ * Caught on Itachi. Its own premise reads *"you are thirteen, you are the best
+ * shinobi your clan has produced in a generation"* — and the setup screen then
+ * asked the player to type their own name, invent their appearance and choose
+ * pronouns, with placeholder text describing Itachi back at them. The game was
+ * asking the player to author a character the world had already written.
+ *
+ * Nine Weeks is the other case and the reason this is a field rather than a
+ * rule: you are an unnamed person coming back to a summer job, and inventing
+ * yourself is the whole premise. Both are correct; they are different stories.
+ *
+ * `BLANK` is the default, so the fifteen worlds written before this keep the
+ * behaviour they were authored for.
+ *
+ * This changes the *setup screen only*. A named protagonist constrains who you
+ * are, never what you may do — the archetype question, and every choice after
+ * it, stays exactly as free as it was.
+ */
+export const Protagonist = z
+  .object({
+    kind: z.enum(['BLANK', 'NAMED']).default('BLANK'),
+    /** Canon, for a NAMED protagonist. Ignored when BLANK. */
+    name: z.string().default(''),
+    pronouns: z.string().default(''),
+    /** How the world sees them, in place of the player's own description. */
+    description: z.string().default(''),
+    /**
+     * The heading the setup screen uses instead of "Who are you?".
+     *
+     * "What kind of Itachi are you?" is a different and better question, and
+     * only the world knows how to phrase it.
+     */
+    setupHeading: z.string().default(''),
+  })
+  .strict()
+  .default({ kind: 'BLANK', name: '', pronouns: '', description: '', setupHeading: '' });
+export type Protagonist = z.infer<typeof Protagonist>;
+
 export const StoryVersion = z
   .object({
     id: z.string(),
@@ -1003,6 +1043,7 @@ export const StoryVersion = z
     endings: z.array(EndingDef).default([]),
     archetypes: z.array(ArchetypeDef).default([]),
     setupFields: z.array(CharacterSetupField).default([]),
+    protagonist: Protagonist,
     /** 50–150 words. Spec §21.3 step 8 / §43.2. */
     opening: z.string(),
     openingSuggestions: z.array(z.string()).max(3).default([]),
