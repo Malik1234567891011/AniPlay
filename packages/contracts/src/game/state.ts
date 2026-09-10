@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { FactVisibility } from '../ai/primitives.js';
+import { LocaleSchema } from './locale.js';
 import { AttributeKey, CharacterDef, LocationDef } from './story.js';
 
 /**
@@ -321,6 +322,18 @@ export const GameState = z
   .object({
     sessionId: z.string(),
     storyVersionId: z.string(),
+    /**
+     * The language this run is played in. **Frozen at session creation and
+     * never changed**, deliberately: a transcript that switches language
+     * halfway down is unrecoverable, because the memory facts, the authored
+     * canon corrections and the prose are all already in the other language.
+     * Changing the device language, reinstalling or playing on a second device
+     * must not move an existing run.
+     *
+     * Defaulted, so every snapshot written before this field existed loads as
+     * `en` and behaves exactly as it did.
+     */
+    locale: LocaleSchema.default('en'),
     revision: z.number().int().min(0),
     turnIndex: z.number().int().min(0),
     /** Minutes since story epoch. Day = floor(worldMinute / 1440). */

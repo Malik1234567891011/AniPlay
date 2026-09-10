@@ -68,3 +68,32 @@ export function resolveLocale(
 export function intlTag(locale: Locale): string {
   return LOCALE_TAGS[locale];
 }
+
+/**
+ * Whether a player who has never chosen a language may be moved off English by
+ * their device settings alone.
+ *
+ * **`false` until the French catalogue is populated.** The plumbing for device
+ * detection is complete and tested; what is not complete is the French copy
+ * behind it, and silently giving a French-phone owner a half-translated app is
+ * worse than giving them the English one they already had. Until then French is
+ * reachable only by an explicit choice.
+ *
+ * Flipping this to `true` is the single line that turns France on. It belongs
+ * at step 7 of the Phase 2 sequence, once `npm run fr:lint` is clean over a
+ * complete catalogue — not before.
+ */
+export const DEVICE_LOCALE_AUTODETECT = false;
+
+/**
+ * Resolve a locale from the device, honouring `DEVICE_LOCALE_AUTODETECT`.
+ *
+ * Separate from `resolveLocale` on purpose: an *explicit* choice is always
+ * honoured, and only the automatic path is gated.
+ */
+export function resolveDeviceLocale(
+  ...candidates: readonly (string | null | undefined)[]
+): Locale {
+  if (!DEVICE_LOCALE_AUTODETECT) return DEFAULT_LOCALE;
+  return resolveLocale(...candidates);
+}

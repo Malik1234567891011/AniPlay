@@ -3,6 +3,7 @@ import type {
   NarrativeTurn,
   GameState,
   LedgerEntry,
+  Locale,
   MemoryFact,
   SessionSummary,
   StoryVersion,
@@ -35,6 +36,11 @@ export interface UserRecord {
     hapticsEnabled: boolean;
     defaultQualityTier: 'QUICK' | 'VIVID' | 'CINEMATIC' | 'APEX';
     contentFilters: string[];
+    /**
+     * The player's explicit language choice for new runs, or `null` when they
+     * have never made one. Existing runs keep `GameState.locale`.
+     */
+    locale: Locale | null;
   };
   /** Guest sessions migrate into an authenticated account (spec §6.5). */
   migratedFromGuestId: string | null;

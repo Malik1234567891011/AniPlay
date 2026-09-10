@@ -90,7 +90,8 @@
           "backgroundColor": "#0B0D12",
           "resizeMode": "contain"
         }
-      ]
+      ],
+      "expo-localization"
     ]
   }
 }

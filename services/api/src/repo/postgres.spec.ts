@@ -58,6 +58,7 @@ describe.skipIf(!URL)('PostgresRepository', () => {
         hapticsEnabled: true,
         defaultQualityTier: 'VIVID',
         contentFilters: [],
+        locale: null,
       },
       migratedFromGuestId: null,
       deletionRequestedAt: null,

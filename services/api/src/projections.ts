@@ -146,6 +146,9 @@ export function toSessionSummary(record: SessionRecord, story: StoryVersion, sta
     displayName: record.displayName,
     forkedFromSessionId: record.forkedFromSessionId,
     forkedAtTurnIndex: record.forkedAtTurnIndex,
+    // From the state, never from the session row or the request. The run's
+    // locale was frozen when it was created and this is the copy that froze.
+    locale: state.locale,
   };
 }
 

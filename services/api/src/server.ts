@@ -17,6 +17,7 @@ import {
   type StorySummary,
 } from '@aniplay/contracts';
 import { createInitialState, forkState, sha256Hex } from '@aniplay/engine';
+import { resolveDeviceLocale, resolveLocale } from '@aniplay/i18n';
 import {
   applyCorrection,
   buildRecap,
@@ -502,7 +503,27 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       }
     }
 
-    const state = createInitialState({ sessionId, story, identity });
+    // The resolution chain, applied once and then frozen into the state
+    // (`LOCALIZATION_ARCHITECTURE.md` §1). Explicit request first, then the
+    // player's saved setting, then what the browser or device asked for in
+    // `Accept-Language`, then English.
+    //
+    // Deliberately **not** resolved per request. A run whose language could
+    // move would end up with a transcript that switches halfway down, and that
+    // is unrecoverable: the memory facts, the authored canon corrections and
+    // the prose are all already in the other language by then.
+    const locale = resolveLocale(
+      // What the client asked for — already the player's explicit choice where
+      // they have made one.
+      parsed.data.locale,
+      // The saved choice, which is null until they make one.
+      user.settings.locale,
+      // The device, but only once French is real enough to hand someone
+      // unasked. `resolveDeviceLocale` returns `en` while that flag is off.
+      resolveDeviceLocale(request.headers['accept-language']),
+    );
+
+    const state = createInitialState({ sessionId, story, identity, locale });
 
     const record: SessionRecord = {
       sessionId,

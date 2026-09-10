@@ -16,6 +16,7 @@ import {
   spacing,
 } from '@aniplay/ui';
 import { api, ApiError } from '../api/client.js';
+import { useStore } from '../state/store.jsx';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 /**
@@ -40,6 +41,7 @@ export function CharacterSetupScreen({
   route: RootRoute<'CharacterSetup'>;
 }): React.JSX.Element {
   const { storyId } = route.params;
+  const { locale } = useStore();
   const [detail, setDetail] = useState<StoryDetailResponse | null>(null);
   const [advanced, setAdvanced] = useState(false);
   const [starting, setStarting] = useState(false);
@@ -95,6 +97,11 @@ export function CharacterSetupScreen({
           portraitAssetId: null,
         },
         usedQuickSetup: !advanced,
+        // The language this run will be played in, decided here and frozen by
+        // the server into `GameState.locale`. Sent explicitly rather than
+        // inferred from a header, because the interface language the player is
+        // looking at while they fill this in is the one they expect to get.
+        locale,
       });
       navigation.replace('Session', { sessionId: session.session.sessionId });
     } catch (caught) {

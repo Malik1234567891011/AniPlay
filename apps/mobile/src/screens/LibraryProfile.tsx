@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Image, Pressable, ScrollView, Switch, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { MeResponse, SessionSummary } from '@aniplay/contracts';
+import type { Locale, MeResponse, SessionSummary } from '@aniplay/contracts';
+import { LOCALES } from '@aniplay/i18n';
 import {
   Button,
   Card,
@@ -218,11 +219,26 @@ function SessionCard({
   );
 }
 
+/**
+ * The languages, in their own language. Never translated — a language picker
+ * that says "French" to someone looking for "Français" is the one string in the
+ * app that must not be localized.
+ */
+const LANGUAGE_NAMES: Record<Locale, string> = { en: 'English', fr: 'Français' };
+
 /** PR-01 / PR-02 — public and private cleanly separated. */
 export function ProfileScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
-  const { wallet, isGuest, refreshWallet, signOut } = useStore();
+  const { wallet, isGuest, refreshWallet, signOut, locale, localeChoice, setLocale } = useStore();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [characters, setCharacters] = useState<PlayerCharacterCard[]>([]);
+  // The language switch is deliberately not on the screen yet. French exists
+  // as infrastructure and not yet as copy, and a visible control that produced
+  // a half-translated app would be a worse bug than not having one. Seven taps
+  // on the Profile heading reveals it, the way a build number reveals a
+  // developer menu; step 7 of the localization sequence promotes it to a
+  // normal row once `npm run fr:lint` is clean over a full catalogue.
+  const [languageTaps, setLanguageTaps] = useState(0);
+  const languageVisible = languageTaps >= 7 || localeChoice !== null;
 
   const load = useCallback(async () => {
     try {
@@ -254,7 +270,13 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl, paddingBottom: spacing.giant }}>
         <Row style={{ justifyContent: 'space-between' }}>
-          <Txt variant="h1">Profile</Txt>
+          <Pressable
+            onPress={() => setLanguageTaps((n) => n + 1)}
+            accessibilityRole="header"
+            accessibilityLabel="Profile"
+          >
+            <Txt variant="h1">Profile</Txt>
+          </Pressable>
           <CreditBalance balance={wallet?.balance ?? 0} onPress={() => navigation.navigate('Wallet')} />
         </Row>
 
@@ -354,6 +376,33 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
         ) : null}
 
         <Divider />
+
+        {languageVisible ? (
+          <Stack gap={spacing.md}>
+            <Txt variant="h3">Language</Txt>
+            <Txt variant="micro" color={colors.text.muted}>
+              Applies to new stories. A story already started keeps the language it began in.
+            </Txt>
+            <Row gap={spacing.sm}>
+              <Chip
+                label="Device"
+                selected={localeChoice === null}
+                onPress={() => void setLocale(null)}
+              />
+              {LOCALES.map((code) => (
+                <Chip
+                  key={code}
+                  label={LANGUAGE_NAMES[code]}
+                  selected={localeChoice === code}
+                  onPress={() => void setLocale(code)}
+                />
+              ))}
+            </Row>
+            <Txt variant="micro" color={colors.text.muted}>
+              New stories will be in {LANGUAGE_NAMES[locale]}.
+            </Txt>
+          </Stack>
+        ) : null}
 
         <Stack gap={spacing.md}>
           <Txt variant="h3">Gameplay</Txt>

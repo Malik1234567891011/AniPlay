@@ -356,7 +356,7 @@ Status column: ✅ done · 🟡 partial · ⬜ not started.
 | # | Step | Gate | Status |
 | --- | --- | --- | --- |
 | **1** | `Intl` polyfills + `frDate()` + `normalizeForSearch()` + `frCollator`. No strings yet | Formatting snapshot tests pass on iOS **and** Android | ✅ |
-| **2** | `locale` on `GameState`, frozen at session creation; `expo-localization`; a hidden language switch | An `fr` session round-trips through the API and the database | ⬜ |
+| **2** | `locale` on `GameState`, frozen at session creation; `expo-localization`; a hidden language switch | An `fr` session round-trips through the API and the database | ✅ |
 | **3** | i18next + ICU plurals; catalogue scaffolding; **English keys only**, `en` still renders identically | `npm run i18n:extract` reports zero un-keyed user-facing literals | ⬜ |
 | **4** | Server strings → keys + params (§3). Client renders | `Day 3 · 16:15` renders correctly with no client-side string surgery | ⬜ |
 | **5** | **Memory facts → structured (§5)** | No English reaches a French context window. Parity test | ⬜ |
@@ -414,6 +414,69 @@ zones probed** (`America/Argentina/Ushuaia`, `Antarctica/Troll`,
 UTC dates for those users. `add-all-tz` was kept on that basis. **If 550 KB
 matters more than a correct date in Ushuaia, this is the one line to change**,
 and the fallback in `setDefaultTimeZone` already handles the throw.
+
+### Step 2, as built — where the locale actually lives
+
+**`GameState.locale` is the only authoritative copy, and there is no
+`story_sessions.locale` column.** The state is already stored as jsonb in
+`session_snapshots.state`, every route that needs a session's locale has already
+loaded its state, and `toSessionSummary` receives the state, so a denormalized
+column would buy a query nobody makes in exchange for a field that can drift
+from the one the writer and the director read. `locale.spec.ts` asserts that
+`createInitialState` is the **only** place in `packages/` or `services/` that
+assigns to a state's `.locale` — a grep-shaped test, deliberately, because the
+freeze is the invariant and nothing else enforces it.
+
+`forkState` uses `structuredClone`, so a fork inherits the locale for free.
+That is asserted rather than assumed: a fork is the same run taking a different
+turn, and a French run that forked into English would be the language-switching
+transcript this design exists to prevent.
+
+**`user_settings.locale` is nullable with no default.** `NULL` means *this
+player has never chosen a language*, which is not the same as choosing English —
+and defaulting it to `'en'` would have made the device hint permanently
+unreachable, since a saved setting outranks it. Migration `0002_locale.sql`.
+
+The resolution chain at `POST /v1/stories/:id/sessions`:
+
+```
+parsed.data.locale        the client's explicit ask
+user.settings.locale      the saved choice, or null
+resolveDeviceLocale(…)    Accept-Language, gated (below)
+'en'
+```
+
+### `DEVICE_LOCALE_AUTODETECT` — the one line that turns France on
+
+`packages/i18n/src/locale.ts` exports `DEVICE_LOCALE_AUTODETECT = false`, and
+`resolveDeviceLocale()` returns `en` while it is off.
+
+The plumbing for device detection is complete and tested on both sides —
+`expo-localization` on the client, `Accept-Language` on the server. What is not
+complete is the French copy behind it. Handing a French-phone owner a
+half-translated app on the strength of their OS settings is a worse bug than not
+detecting their language at all, and it is one they cannot opt out of.
+
+So until step 7, **French is reachable only by an explicit choice**, and the
+switch that makes that choice is hidden: seven taps on the Profile heading, the
+way a build number reveals a developer menu. Once chosen it stays visible.
+`locale.spec.ts` pins both halves — a French `Accept-Language` gets `en`, and an
+explicit `locale: 'fr'` from that same device gets `fr`.
+
+Flipping the flag and promoting the switch to a normal settings row is the
+step-7 checklist.
+
+### The interface language and the run's language are different things
+
+`AppState.locale` is what the **interface** is in and what a run started from
+this screen will be created as. `GameState.locale` is what an **open run** is
+in, and it does not move when the interface does. A player with an English run
+and a French run sees each in the language it was started in, which is the only
+behaviour that does not corrupt a transcript.
+
+`LANGUAGE_NAMES` in `LibraryProfile.tsx` is the one string in the app that must
+never be localized: a picker that says "French" to somebody looking for
+"Français" has failed at the only job it has.
 
 ### The conformance suite
 

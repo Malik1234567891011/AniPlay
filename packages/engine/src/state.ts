@@ -1,5 +1,6 @@
 import type {
   AttributeKey,
+  Locale,
   CharacterRuntimeState,
   FactionState,
   GameState,
@@ -22,9 +23,24 @@ export interface CreateStateOptions {
   readonly sessionId: string;
   readonly story: StoryVersion;
   readonly identity: PlayerIdentity;
+  /**
+   * The language this run will be played in, resolved by the caller from the
+   * player's explicit choice, their saved setting, then the device.
+   *
+   * This is the **only** place a run's locale is ever set. It is frozen from
+   * here on: nothing in the engine, the director or the API writes
+   * `state.locale` again. Omitted means `en`, which is what every session
+   * created before this field existed is.
+   */
+  readonly locale?: Locale;
 }
 
-export function createInitialState({ sessionId, story, identity }: CreateStateOptions): GameState {
+export function createInitialState({
+  sessionId,
+  story,
+  identity,
+  locale = 'en',
+}: CreateStateOptions): GameState {
   // Spec §9.4 — a background the player wrote is worth the same as one we
   // wrote. A custom description used to grant nothing at all: no attributes, no
   // proficiencies, no starting technique, every skill at zero. The freeform
@@ -142,6 +158,7 @@ export function createInitialState({ sessionId, story, identity }: CreateStateOp
   return {
     sessionId,
     storyVersionId: story.id,
+    locale,
     revision: 0,
     turnIndex: 0,
     worldMinute: story.rules.startWorldMinute,

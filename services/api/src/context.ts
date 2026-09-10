@@ -297,6 +297,10 @@ export function newUserRecord(userId: string, isGuest: boolean, email: string | 
       hapticsEnabled: true,
       defaultQualityTier: 'VIVID',
       contentFilters: [],
+      // Null, not 'en'. A new account has not chosen a language, and writing
+      // one here on their behalf would make the device hint unreachable
+      // forever after.
+      locale: null,
     },
     migratedFromGuestId: null,
     deletionRequestedAt: null,
