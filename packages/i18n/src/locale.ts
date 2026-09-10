@@ -97,3 +97,19 @@ export function resolveDeviceLocale(
   if (!DEVICE_LOCALE_AUTODETECT) return DEFAULT_LOCALE;
   return resolveLocale(...candidates);
 }
+
+/**
+ * How narration agrees with the player.
+ *
+ * Lives here rather than in `@aniplay/contracts` for the same reason `LOCALES`
+ * does: this package is a leaf, contracts depends on it, and one list means the
+ * schema and the agreement helpers cannot disagree about what exists.
+ *
+ * `NEUTRAL` and `UNSPECIFIED` are different answers to different questions.
+ * `NEUTRAL` is a player who chose `iel`; `UNSPECIFIED` is a player who was
+ * never asked or who said it does not matter. Both agree as masculine — the
+ * unmarked form, never a midpoint — but only `NEUTRAL` gets `iel` in the third
+ * person. See `grammar.ts`.
+ */
+export const GRAMMATICAL_GENDERS = ['MASCULINE', 'FEMININE', 'NEUTRAL', 'UNSPECIFIED'] as const;
+export type GrammaticalGender = (typeof GRAMMATICAL_GENDERS)[number];

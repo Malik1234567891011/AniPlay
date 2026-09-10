@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { FactVisibility } from '../ai/primitives.js';
+import { GRAMMATICAL_GENDERS } from '@aniplay/i18n';
 import { LocaleSchema } from './locale.js';
 import { AttributeKey, CharacterDef, LocationDef } from './story.js';
 
@@ -28,7 +29,7 @@ import { AttributeKey, CharacterDef, LocationDef } from './story.js';
  * Present-tense, verb-driven French avoids the participle entirely, which is
  * what `NARRATIVE_STYLE.md` asks for on independent grounds.
  */
-export const GrammaticalGender = z.enum(['MASCULINE', 'FEMININE', 'NEUTRAL', 'UNSPECIFIED']);
+export const GrammaticalGender = z.enum(GRAMMATICAL_GENDERS);
 export type GrammaticalGender = z.infer<typeof GrammaticalGender>;
 
 export const PlayerGrammar = z

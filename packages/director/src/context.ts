@@ -3,13 +3,14 @@ import type {
   GameState,
   IntentDialogue,
   MemoryFact,
+  PlayerGrammar,
   QualityTier,
   RelationshipState,
   Resolution,
   StoryVersion,
   TurnRecord,
 } from '@aniplay/contracts';
-import { QUALITY_TIERS } from '@aniplay/contracts';
+import { QUALITY_TIERS, playerGrammar } from '@aniplay/contracts';
 import {
   abandonedObjectiveNote,
   approachingEndings,
@@ -104,7 +105,17 @@ export interface TurnContext {
   // Layer 3 — the player.
   readonly player: {
     readonly name: string;
+    /** Free text the player wrote. Self-expression, not a grammar signal. */
     readonly pronouns: string;
+    /**
+     * How the narration must agree with this player, declared on setup.
+     *
+     * The grammar signal, as opposed to `pronouns` above. English does not
+     * collect it and reads `UNSPECIFIED`; French cannot write a sentence
+     * without it. `WRITER_POLICY_FR` turns it into a rule; `agree()` in
+     * `@aniplay/i18n` is the deterministic half.
+     */
+    readonly grammar: PlayerGrammar;
     readonly about: string;
     /** The archetype's name, so the prose knows what kind of person this is. */
     readonly archetype: string | null;
@@ -346,6 +357,7 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
     player: {
       name: state.player.identity.displayName,
       pronouns: state.player.identity.pronouns,
+      grammar: playerGrammar(state.player.identity),
       about: state.player.identity.worldKnowsAboutYou,
       // Setup asks four questions and the screen promises the world will use
       // the answers. Only two of them were reaching the prose.
