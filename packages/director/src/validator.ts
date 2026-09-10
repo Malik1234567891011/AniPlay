@@ -6,6 +6,12 @@ import type {
 import { countItem, isSuccess } from '@aniplay/engine';
 import type { TurnContext } from './context.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
+import {
+  NAME_SPAM_MARKER,
+  NAME_SPAM_THRESHOLD,
+  nameCount,
+  stripSurplusVocatives,
+} from './name-spam.js';
 import { narratesPlayerInThirdPerson, toSecondPerson } from './second-person.js';
 
 /**
@@ -178,6 +184,23 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
     }
   }
 
+  // --- NAME_IDENTITY_DRIFT: the chatbot tell ---
+  // A character saying the player's name three times in one line. Reported
+  // under the existing code rather than a new one, because the AI contract's
+  // violation enum is fixed and this is the same thing it names: the player's
+  // name used wrongly. Repaired in place — see `stripSurplusVocatives`.
+  if (playerName.length > 2) {
+    turn.blocks.forEach((block, index) => {
+      if (nameCount(block.text, playerName) < NAME_SPAM_THRESHOLD) return;
+      push(
+        'NAME_IDENTITY_DRIFT',
+        'WARN',
+        `A line ${NAME_SPAM_MARKER} ${nameCount(block.text, playerName)} times.`,
+        index,
+      );
+    });
+  }
+
   // --- INVENTORY_CONTRADICTION ---
   for (const item of story.items) {
     const held = countItem(state, item.id) > 0;
@@ -345,6 +368,21 @@ export function repairNarrative(
     // the whole code out here quietly kept `speakerId: "narrator"` in the turn.
     const isVoice = (v: ConsistencyViolation): boolean =>
       v.code === 'NAME_IDENTITY_DRIFT' && v.description.includes('instead of "you"');
+    const isSpam = (v: ConsistencyViolation): boolean =>
+      v.code === 'NAME_IDENTITY_DRIFT' && v.description.includes(NAME_SPAM_MARKER);
+
+    const spamBlocks = new Set(
+      report.violations.filter((v) => isSpam(v) && typeof v.blockIndex === 'number').map((v) => v.blockIndex as number),
+    );
+    if (spamBlocks.size > 0) {
+      turn = {
+        ...turn,
+        blocks: turn.blocks.map((block, index) =>
+          spamBlocks.has(index) ? { ...block, text: stripSurplusVocatives(block.text, playerName) } : block,
+        ),
+      };
+      report = { ...report, violations: report.violations.filter((v) => !isSpam(v)) };
+    }
     const voiceErrors = new Set(
       report.violations.filter((v) => isVoice(v) && typeof v.blockIndex === 'number').map((v) => v.blockIndex as number),
     );
