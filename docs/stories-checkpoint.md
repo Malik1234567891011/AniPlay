@@ -22,15 +22,16 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | Itachi | ✅ `itachi.ts` | ✅ `itachi.spec.ts` | ✅ 88 assets | ✅ |
 | Primal Crown | ✅ `primal-crown.ts` | ✅ `primal-crown.spec.ts` | ✅ 69 assets | ✅ |
 | Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ✅ 78 assets | ✅ |
-| The Fourth Beast | ✅ `fourth-beast.ts` | ✅ `fourth-beast.spec.ts` | ⏳ next | ✅ |
+| The Fourth Beast | ✅ `fourth-beast.ts` | ✅ `fourth-beast.spec.ts` | ✅ 70 assets | ✅ |
+| Seven Names | ✅ `seven-names.ts` | ✅ `seven-names.spec.ts` | ⏳ next | ✅ |
 
-All three gates green at the last commit. Catalog is now 17 worlds.
+All three gates green at the last commit. Catalog is now 18 worlds.
 
 **Not mine.** Another agent is generating art for Hush House, Window Seven and
 Good Morning, Husband on `main`. Do not generate for those three.
 
-**Untouched (5 worlds), in build order:**
-`03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
+**Untouched (4 worlds), in build order:**
+`04_THE_BLANK_PROPHECY`,
 `06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
 `/Users/malik/Downloads/morestoryideas/`. Copy each bible into
 `docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
@@ -130,6 +131,9 @@ here and author the setup screen accordingly:
   diplomat, mercenary, journalist, famous ace, nobody.
 - **The Fourth Beast — BLANK.** The bible leaves how the player got into Morel's
   dataset deliberately flexible.
+- **Seven Names — BLANK,** and unusually so: the bible forbids hard-canonning
+  even whether the player committed the murder, so the identity field asks what
+  they *say* happened at the Beaumont and the whole conspiracy works from it.
 
 The rule to write by: **the archetype question should be characterisation, not
 identity.** "You were four, on a battlefield, with your father. What did you take
@@ -190,8 +194,8 @@ every character and an animal cannot have them.
 
 ## Next
 
-1. Generate The Fourth Beast art, then `optimize-art.ts`, gates, commit, push.
-2. Build `03_SEVEN_NAMES.md`, then the remaining four in order.
+1. Generate Seven Names art, then `optimize-art.ts`, gates, commit, push.
+2. Build `04_THE_BLANK_PROPHECY.md`, then the remaining three in order.
 
 **The per-world loop that works — follow it exactly:**
 
@@ -234,6 +238,20 @@ the class `BUILD_STATUS.md` gotcha 6 describes:**
 2. Step `find_out_what_they_want` awarded `salt_block` while one of its own
    routes demanded `hasItems: ['salt_block']`. **Fix:** removed the reward; salt
    is already takeable in `market_lanes` (qty 3).
+
+**The single most repeated error, now hit four times — check for it every world:**
+
+An ability with `unlockedByDefault: false` and a `requires.flagsSet` gate, that
+**no step's `rewards.abilities` ever grants**. `requires` restricts an ability
+you already have; it never hands one over. Every quest route keyed on
+`used:<that ability>` is then unreachable and `catalog.spec.ts` catches it.
+
+The fix is always the same shape: **grant broadly, gate by flag.** Put the
+ability in the `rewards.abilities` of the step where the player learns it, and
+leave the `requires.flagsSet` gate on to keep it unusable for anybody who has
+not. Hit by `work_by_fear` (Primal Crown), `tsukuyomi` (Itachi, caught in
+authoring), `go_all_the_way` (Fourth Beast) and `open_the_registry` (Seven
+Names).
 
 **Two more found by `director.spec.ts`:**
 

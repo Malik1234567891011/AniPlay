@@ -16,6 +16,7 @@ import { ITACHI as ITACHI_RAW } from './itachi.js';
 import { PRIMAL_CROWN as PRIMAL_CROWN_RAW } from './primal-crown.js';
 import { ZERO_THRONE as ZERO_THRONE_RAW } from './zero-throne.js';
 import { FOURTH_BEAST as FOURTH_BEAST_RAW } from './fourth-beast.js';
+import { SEVEN_NAMES as SEVEN_NAMES_RAW } from './seven-names.js';
 
 
 export { withDerivedAssetKeys } from './derive-assets.js';
@@ -34,6 +35,7 @@ export const ITACHI = withDerivedAssetKeys(ITACHI_RAW);
 export const PRIMAL_CROWN = withDerivedAssetKeys(PRIMAL_CROWN_RAW);
 export const ZERO_THRONE = withDerivedAssetKeys(ZERO_THRONE_RAW);
 export const FOURTH_BEAST = withDerivedAssetKeys(FOURTH_BEAST_RAW);
+export const SEVEN_NAMES = withDerivedAssetKeys(SEVEN_NAMES_RAW);
 
 /**
  * Three of the newest worlds ship without generated art, deliberately.
@@ -79,7 +81,9 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * length of a memorial plaza on turn one and kneeling to somebody who has no
  * idea why, and The Fourth Beast is three small creatures in open habitats under
  * a Paris institute, of which you are choosing one and somebody else is getting
- * whichever you leave.
+ * whichever you leave, and Seven Names is a list handed to a condemned prisoner
+ * six hours before the execution, by a man who says the first thing to understand
+ * about it is that a name on a list is not a person who deserves to die.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -99,4 +103,5 @@ export const LAUNCH_CATALOG = [
   PRIMAL_CROWN,
   ZERO_THRONE,
   FOURTH_BEAST,
+  SEVEN_NAMES,
 ] as const;
