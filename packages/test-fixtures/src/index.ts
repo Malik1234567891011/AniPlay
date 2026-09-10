@@ -17,6 +17,7 @@ import { PRIMAL_CROWN as PRIMAL_CROWN_RAW } from './primal-crown.js';
 import { ZERO_THRONE as ZERO_THRONE_RAW } from './zero-throne.js';
 import { FOURTH_BEAST as FOURTH_BEAST_RAW } from './fourth-beast.js';
 import { SEVEN_NAMES as SEVEN_NAMES_RAW } from './seven-names.js';
+import { BLANK_PROPHECY as BLANK_PROPHECY_RAW } from './blank-prophecy.js';
 
 
 export { withDerivedAssetKeys } from './derive-assets.js';
@@ -36,6 +37,7 @@ export const PRIMAL_CROWN = withDerivedAssetKeys(PRIMAL_CROWN_RAW);
 export const ZERO_THRONE = withDerivedAssetKeys(ZERO_THRONE_RAW);
 export const FOURTH_BEAST = withDerivedAssetKeys(FOURTH_BEAST_RAW);
 export const SEVEN_NAMES = withDerivedAssetKeys(SEVEN_NAMES_RAW);
+export const BLANK_PROPHECY = withDerivedAssetKeys(BLANK_PROPHECY_RAW);
 
 /**
  * Three of the newest worlds ship without generated art, deliberately.
@@ -83,7 +85,8 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * a Paris institute, of which you are choosing one and somebody else is getting
  * whichever you leave, and Seven Names is a list handed to a condemned prisoner
  * six hours before the execution, by a man who says the first thing to understand
- * about it is that a name on a list is not a person who deserves to die.
+ * about it is that a name on a list is not a person who deserves to die, and The Blank Prophecy is a world that decides who everybody is
+ * going to be by reading a thread, and a person it read and found nothing on.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -104,4 +107,5 @@ export const LAUNCH_CATALOG = [
   ZERO_THRONE,
   FOURTH_BEAST,
   SEVEN_NAMES,
+  BLANK_PROPHECY,
 ] as const;

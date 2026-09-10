@@ -23,15 +23,15 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | Primal Crown | ✅ `primal-crown.ts` | ✅ `primal-crown.spec.ts` | ✅ 69 assets | ✅ |
 | Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ✅ 78 assets | ✅ |
 | The Fourth Beast | ✅ `fourth-beast.ts` | ✅ `fourth-beast.spec.ts` | ✅ 70 assets | ✅ |
-| Seven Names | ✅ `seven-names.ts` | ✅ `seven-names.spec.ts` | ⏳ next | ✅ |
+| Seven Names | ✅ `seven-names.ts` | ✅ `seven-names.spec.ts` | ✅ 82 assets | ✅ |
+| The Blank Prophecy | ✅ `blank-prophecy.ts` | ✅ `blank-prophecy.spec.ts` | ⏳ next | ✅ |
 
-All three gates green at the last commit. Catalog is now 18 worlds.
+All three gates green at the last commit. Catalog is now 19 worlds.
 
 **Not mine.** Another agent is generating art for Hush House, Window Seven and
 Good Morning, Husband on `main`. Do not generate for those three.
 
-**Untouched (4 worlds), in build order:**
-`04_THE_BLANK_PROPHECY`,
+**Untouched (3 worlds), in build order:**
 `06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
 `/Users/malik/Downloads/morestoryideas/`. Copy each bible into
 `docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
@@ -131,6 +131,9 @@ here and author the setup screen accordingly:
   diplomat, mercenary, journalist, famous ace, nobody.
 - **The Fourth Beast — BLANK.** The bible leaves how the player got into Morel's
   dataset deliberately flexible.
+- **The Blank Prophecy — BLANK.** The bible lists eight candidate explanations
+  for why the player is unreadable and instructs that none be fixed early, so
+  the setup offers the theory as an optional lean including "no theory at all".
 - **Seven Names — BLANK,** and unusually so: the bible forbids hard-canonning
   even whether the player committed the murder, so the identity field asks what
   they *say* happened at the Beaumont and the whole conspiracy works from it.
@@ -194,8 +197,8 @@ every character and an animal cannot have them.
 
 ## Next
 
-1. Generate Seven Names art, then `optimize-art.ts`, gates, commit, push.
-2. Build `04_THE_BLANK_PROPHECY.md`, then the remaining three in order.
+1. Generate The Blank Prophecy art, then `optimize-art.ts`, gates, commit, push.
+2. Build `06_THE_RED_FLOOR.md`, then `07_SECOND_SKIN.md`, then `08_LAST_SERVICE.md`.
 
 **The per-world loop that works — follow it exactly:**
 
@@ -252,6 +255,15 @@ leave the `requires.flagsSet` gate on to keep it unusable for anybody who has
 not. Hit by `work_by_fear` (Primal Crown), `tsukuyomi` (Itachi, caught in
 authoring), `go_all_the_way` (Fourth Beast) and `open_the_registry` (Seven
 Names).
+
+**The second most repeated error — hit three times now:**
+
+Using a **`RelationshipGate` id as if it were a flag**, in a world event's
+`cancelledByFlags` or in a quest route's `predicate.flagsSet`. A gate opens a
+topic; it never writes anything. Nothing will ever set it and the event fires
+forever or the route is dead. Hit by `camille_works_with_you` (Fourth Beast),
+`thalia_lends_the_bow` (Blank Prophecy) and `knows:the_real_width` (Primal
+Crown, where the gate existed and nothing wrote the flag it implied).
 
 **Two more found by `director.spec.ts`:**
 
