@@ -276,12 +276,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "543bb11d-c4f9-4f03-87d5-b8c343464861",
-      "promptHash": "0d9c9dcd55fe1c120912e112e7cb2664",
+      "requestId": "8b527b22-204d-4416-b644-ffb204fe64c3",
+      "promptHash": "7d1698d24d6fd6ea04e320cfb9793ad1",
       "seed": "sv_blank_prophecy_1:cover:plotbreak-cover-v3-anime",
-      "costUsd": 0.21952,
-      "latencyMs": 93609,
-      "createdAt": "2026-09-10T21:15:24.878Z"
+      "costUsd": 0.05488,
+      "latencyMs": 37269,
+      "createdAt": "2026-09-10T22:12:52.802Z"
     }
   },
   "story_blank_prophecy/despina": {
@@ -1777,12 +1777,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "abbfe701-e30e-40de-822c-83ae31451f97",
-      "promptHash": "2497d2a85ba86cf3830032dfd0295ead",
+      "requestId": "b1ff51d5-a74e-49a2-bfa3-dc7beda9bdd7",
+      "promptHash": "1255987ed0921a5e849e7c972a130bab",
       "seed": "sv_fourth_beast_1:cover:plotbreak-cover-v3-anime",
-      "costUsd": 0.21952,
-      "latencyMs": 98504,
-      "createdAt": "2026-09-10T21:13:50.790Z"
+      "costUsd": 0.05488,
+      "latencyMs": 38005,
+      "createdAt": "2026-09-10T22:11:59.770Z"
     }
   },
   "story_fourth_beast/key": {
@@ -2936,12 +2936,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "50b8d23e-5903-4332-ba7d-c19de901e0df",
-      "promptHash": "640fc48ffe7850067a785fcbb4b8b938",
+      "requestId": "89ddbb22-e88f-43be-9801-27c7a98b784a",
+      "promptHash": "4778d2a68f198601de1978ad71119c99",
       "seed": "sv_good_morning_husband_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.05488,
-      "latencyMs": 34798,
-      "createdAt": "2026-09-10T21:24:29.204Z"
+      "latencyMs": 34893,
+      "createdAt": "2026-09-10T22:17:59.017Z"
     }
   },
   "story_good_morning_husband/emi": {
@@ -4209,12 +4209,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "ab372a5f-0763-4f69-bbc4-da32c73fef2c",
-      "promptHash": "1e3ca6b5217ce7f10716454f9023e71c",
+      "requestId": "f8ee70c5-95ef-44b8-95b8-1435c406ad47",
+      "promptHash": "159c3c19c52f956a6ca13b8994108d0c",
       "seed": "sv_hush_house_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.05488,
-      "latencyMs": 34704,
-      "createdAt": "2026-09-10T21:23:15.850Z"
+      "latencyMs": 33675,
+      "createdAt": "2026-09-10T22:16:17.123Z"
     }
   },
   "story_hush_house/key": {
@@ -12436,12 +12436,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "faf1e549-87f7-4450-a362-0559754a5f79",
-      "promptHash": "c2890160e94c6cc0c1444a7aa425d2fd",
+      "requestId": "0b38f571-2e22-4d9a-96de-66f14015736d",
+      "promptHash": "a4678cac07c607cbc61209df5a88bcd7",
       "seed": "sv_red_floor_1:cover:plotbreak-cover-v3-anime",
-      "costUsd": 0.21952,
-      "latencyMs": 97213,
-      "createdAt": "2026-09-10T21:17:02.755Z"
+      "costUsd": 0.05488,
+      "latencyMs": 35585,
+      "createdAt": "2026-09-10T22:13:44.208Z"
     }
   },
   "story_red_floor/daigo": {
@@ -14317,12 +14317,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "9861a5f9-413d-4e45-88c5-c44531803ebe",
-      "promptHash": "b3f72cbd1b129397ae38a9743b5d33d2",
+      "requestId": "bf46f6a3-193a-40e0-8074-219e020eacea",
+      "promptHash": "48b45f43163a02c511148497355cd19f",
       "seed": "sv_second_skin_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.05488,
-      "latencyMs": 38684,
-      "createdAt": "2026-09-10T21:19:18.889Z"
+      "latencyMs": 37957,
+      "createdAt": "2026-09-10T22:14:38.001Z"
     }
   },
   "story_second_skin/edran": {
@@ -16464,12 +16464,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "9dbcca15-c437-42cc-8a88-95c6ee4e751a",
-      "promptHash": "998704965d068be600aed033de323dcb",
+      "requestId": "717b6ede-0ab2-42bb-a163-17398e5d6707",
+      "promptHash": "f146a94cb849140790c4e4b6c6919ade",
       "seed": "sv_seven_names_1:cover:plotbreak-cover-v3-anime",
-      "costUsd": 0.21952,
-      "latencyMs": 96098,
-      "createdAt": "2026-09-10T21:18:39.603Z"
+      "costUsd": 0.05488,
+      "latencyMs": 34028,
+      "createdAt": "2026-09-10T22:15:27.715Z"
     }
   },
   "story_seven_names/key": {
@@ -18535,12 +18535,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "2c4fbc3a-a06b-4513-a042-9828b8826591",
-      "promptHash": "139cb2c3fce6eb4440ca76e101f4f7d9",
+      "requestId": "a19902e9-eecf-45c7-aa64-f71dea37800b",
+      "promptHash": "68a6f7eb9bb913aea685747cfeef2663",
       "seed": "sv_window_seven_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.05488,
-      "latencyMs": 37131,
-      "createdAt": "2026-09-10T21:23:53.652Z"
+      "latencyMs": 35582,
+      "createdAt": "2026-09-10T22:17:08.408Z"
     }
   },
   "story_window_seven/halden": {
@@ -19447,12 +19447,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "e5b047dd-bbc5-49ef-a554-26c58fac5492",
-      "promptHash": "0fe66b0c7f3f22dded1bee261f771aef",
+      "requestId": "775019a2-1ded-48cc-b09b-6ada358d3ca0",
+      "promptHash": "d412120d35159e97c1d37c97945b65dc",
       "seed": "sv_zero_throne_1:cover:plotbreak-cover-v3-anime",
-      "costUsd": 0.21952,
-      "latencyMs": 99140,
-      "createdAt": "2026-09-10T21:12:11.362Z"
+      "costUsd": 0.05488,
+      "latencyMs": 37658,
+      "createdAt": "2026-09-10T22:11:06.019Z"
     }
   },
   "story_zero_throne/eli": {
@@ -20929,12 +20929,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "5f62e0fc-44ae-4ed1-8988-f5cc5a015acf",
-      "promptHash": "b184c5190893a4048d1c52608683f3ca",
+      "requestId": "6029a5d9-500a-4491-9dbd-bcf9f4996d34",
+      "promptHash": "47700ef77e7cf62d81d855f01a6642c7",
       "seed": "sv_last_service_1:cover:plotbreak-cover-v3-anime",
-      "costUsd": 0.21952,
-      "latencyMs": 99565,
-      "createdAt": "2026-09-10T21:55:39.702Z"
+      "costUsd": 0.05488,
+      "latencyMs": 35010,
+      "createdAt": "2026-09-10T22:18:49.723Z"
     }
   }
 }
