@@ -51,7 +51,16 @@ export const characters = {
    */
   'characters.no_portrait_yet': 'Pas encore de portrait',
   /** Génitif reconstruit, puis infinitif de label. Voir l’en-tête du fichier. */
-  'characters.portrait_a11y': 'Portrait de {name}. Toucher pour ouvrir la partie.',
+  /**
+   * `{name} en portrait` rather than `Portrait de {name}`.
+   *
+   * `de {name}` renders `de Élodie` on every vowel-initial display name, and
+   * display names are free text so those are ordinary. ICU cannot inspect an
+   * argument's first letter; `elide()` in `@aniplay/i18n` handles the cases
+   * that cannot be restructured, but rule 6 prefers a shape that never needs
+   * it.
+   */
+  'characters.portrait_a11y': '{name} en portrait. Toucher pour ouvrir la partie.',
   /** `pour` ne s’élide pas : cette clé-ci est sûre quel que soit le nom. */
   'characters.no_portrait_a11y': 'Pas encore de portrait pour {name}.',
 

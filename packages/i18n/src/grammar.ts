@@ -28,6 +28,7 @@
  */
 
 import type { GrammaticalGender } from './locale.js';
+import { APOSTROPHE } from './typography.js';
 
 /**
  * Feminine forms that are not `+e`.
@@ -139,4 +140,89 @@ export function thirdPersonPronoun(
  */
 export function hasMidpoint(text: string): boolean {
   return /\p{L}[·.\-]\p{L}\b/u.test(text) && /\p{L}·\p{L}/u.test(text);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Elision                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Words whose `h` is **aspirated**, so they take `de` and `le` rather than
+ * `d'` and `l'`.
+ *
+ * A small closed list, which is why shipping it is possible at all. Everything
+ * else beginning with `h` elides. Proper nouns are the common case here —
+ * `de Hugo`, `le héros` — and getting one wrong is the kind of mistake a French
+ * reader notices immediately.
+ */
+const ASPIRATED_H = new Set([
+  'hache', 'haine', 'halte', 'hameau', 'hanche', 'hangar', 'hantise', 'harde',
+  'hareng', 'hargne', 'haricot', 'harpe', 'hasard', 'hate', 'hausse', 'haut',
+  'hauteur', 'havre', 'heros', 'hetre', 'hibou', 'hierarchie', 'hocher',
+  'hollande', 'homard', 'hongrie', 'honte', 'hoquet', 'hors', 'houle', 'housse',
+  'hublot', 'huit', 'hurlement', 'hutte',
+  // Names that behave the same way.
+  'hugo', 'harry', 'henri', 'hector', 'hannah', 'hilda', 'holland',
+]);
+
+/** Vowels, plus a mute `h`, decided by `ASPIRATED_H`. */
+function elides(word: string): boolean {
+  const first = word.trim().charAt(0).toLowerCase();
+  if ('aeiouyàâäéèêëîïôöùûü'.includes(first)) return true;
+  if (first !== 'h') return false;
+  const bare = word
+    .trim()
+    .split(/[\s'’-]/)[0]!
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase();
+  return !ASPIRATED_H.has(bare);
+}
+
+/**
+ * Join a French preposition or article to a word, contracting and eliding.
+ *
+ * `PLAYER_GRAMMAR.md` rule 6. A naive `` `de ${name}` `` produces `de Élodie`,
+ * and a French reader sees it instantly — display names are free text, so
+ * vowel-initial ones are common rather than exotic.
+ *
+ * ```ts
+ * elide('de', 'Élodie')      // "d’Élodie"
+ * elide('de', 'Mako')        // "de Mako"
+ * elide('de', 'Hugo')        // "de Hugo"     — aspirated h
+ * elide('de', 'le capitaine')// "du capitaine"
+ * elide('à',  'les autres')  // "aux autres"
+ * ```
+ *
+ * ⚠️ **Prefer not needing it.** `PLAYER_GRAMMAR.md` also says the safest
+ * architecture is to put the whole sentence in the catalogue with the name in a
+ * position that needs no elision — `par {name}`, `pour {name}` — because a
+ * message assembled from fragments cannot be reordered by a translator. Reach
+ * for this only where the preposition genuinely cannot be avoided, and never
+ * for a sentence a catalogue key could hold whole.
+ */
+export function elide(preposition: string, word: string): string {
+  const p = preposition.trim().toLowerCase();
+  const target = word.trim();
+  if (target.length === 0) return preposition;
+
+  // Contractions come before elision: `de` + `le` is `du`, not `d’le`.
+  const CONTRACTIONS: Record<string, Record<string, string>> = {
+    de: { le: 'du', les: 'des' },
+    à: { le: 'au', les: 'aux' },
+  };
+  const firstWord = target.split(/\s+/)[0]!.toLowerCase();
+  const contracted = CONTRACTIONS[p]?.[firstWord];
+  if (contracted) {
+    const rest = target.slice(firstWord.length).trim();
+    return rest.length > 0 ? `${contracted} ${rest}` : contracted;
+  }
+
+  const ELIDABLE = new Set(['de', 'le', 'la', 'je', 'me', 'te', 'se', 'ne', 'que', 'ce', 'si']);
+  if (ELIDABLE.has(p) && elides(target)) {
+    // `si` elides only before `il`/`ils`.
+    if (p === 'si' && !/^ils?\b/i.test(target)) return `${preposition} ${target}`;
+    return `${p.slice(0, -1)}${APOSTROPHE}${target}`;
+  }
+  return `${preposition} ${target}`;
 }

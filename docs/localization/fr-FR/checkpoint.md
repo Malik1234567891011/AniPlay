@@ -96,7 +96,7 @@ cycle. `engine`, `director`, `ui`, `api` and `mobile` all depend on it.
 | `packages/i18n/src/polyfill.ts` | side-effecting `Intl` install; **separate entry point** |
 | `packages/i18n/src/format.ts` | `frDate`, `formatNumber`, `formatOrdinal` (`1er`/`1re`), `pluralCategory` |
 | `packages/i18n/src/search.ts` | `normalizeForSearch`, collator with fallback |
-| `packages/i18n/src/grammar.ts` | `agree()`, `thirdPersonPronoun()`, `hasMidpoint()` |
+| `packages/i18n/src/grammar.ts` | `agree()`, `elide()`, `thirdPersonPronoun()`, `hasMidpoint()` |
 | `packages/i18n/src/translate.ts` | one i18next+ICU instance, `translate(locale, key, params)` |
 | `packages/i18n/src/catalog/{en,fr}/*.ts` | 16 area files each, merged in `index.ts` |
 | `packages/director/src/policies-fr.ts` | `WRITER_POLICY_FR`, `SAFETY_POLICY_FR`, `WORLD_RULES_FR` |
@@ -224,6 +224,27 @@ French adjective must agree with the character and `CharacterDef` carries no
 gender, so `Devoue` would be a coin flip on every NPC. Pinned as a whole-ladder
 assertion in `packages/engine/src/locale.spec.ts` — a heuristic cannot tell
 `Devouement` from `Devoue`, so the reviewed list *is* the test.
+
+### Elision: `de {name}` cannot be expressed in a flat catalogue
+
+`PLAYER_GRAMMAR.md` rule 6, and it bit exactly where the rule predicted. A key
+written as `de {name}` renders **`de Élodie`** for every vowel-initial name, and
+display names are free text, so those are ordinary rather than exotic. **ICU
+cannot inspect an argument's first letter**, so no message format fixes it.
+
+Two answers, and the order matters:
+
+1. **Preferred — restructure so no elision is needed.** `par {name}`,
+   `pour {name}`, `{name} en portrait`, `Écouter {speaker} : sa réplique`. This
+   is what `ui.by_creator`, `characters.portrait_a11y`,
+   `characters.no_portrait_a11y` and `ui.play_line_a11y` all do. A message
+   assembled from fragments cannot be reordered by a translator; a whole
+   sentence in the catalogue can.
+2. **`elide(preposition, word)` in `@aniplay/i18n`** for what genuinely cannot
+   be restructured — world content at step 12 will need it. It contracts before
+   it elides (`de` + `le` gives `du`, not `d'le`), and it **ships the aspirated-h
+   list**, which is the half nobody ships: `de Hugo` and `le héros` do not
+   elide, `d'Hélène` and `l'homme` do.
 
 ### Step 5: structure goes in `value`, not a new field
 
@@ -395,12 +416,21 @@ sites, `entity-resolution.ts`, `responses.ts`, `model-stages.ts`,
   the relationship ladder as gender-agreeing adjectives (code deliberately ships
   invariable nouns and explains why). **The code is right; the doc is stale.**
   Reconcile before writing another file against 3.
-- **`fr-lint` FRC002 false-positives** when a value's first token contains no
-  letters — a leading glyph counts as a word, so the correctly capitalised first
-  French word looks like mid-string Title Case. `lintCatalogue` also has no
-  `fr-lint-disable` escape hatch, unlike `lint()`. Two agents worked around it
-  by moving the glyph to the trailing edge; teach the rule to skip a leading
-  non-letter token instead.
+- **`fr-lint` FRC002 has two blind spots, and both distorted the French.**
+  A value whose first token contains no letters reads the correctly capitalised
+  first French word as mid-string Title Case, so `☆ Épingler` fails; two agents
+  worked around it by moving the glyph to the trailing edge. And **any two
+  consecutive capitalised words fail**, which makes a mid-string proper noun
+  impossible — `setup.name_placeholder` is `Ex. : Sarrow` rather than a
+  first-name-plus-surname pair *because of the linter*. `PROPER_NOUNS` is
+  matched against the whole value, so it cannot help a name it does not already
+  know, and `lintCatalogue()` has no `fr-lint-disable` escape hatch, unlike
+  `lint()`. **Fix all three before the next catalogue pass** — the tool is
+  currently shaping the copy.
+- **`fr-lint`'s key/value regex stops at the first string literal**, so a value
+  built by concatenation in English (`error.auth_not_configured`) is only
+  partly linted. The French was written as one literal so the whole value is
+  checked, but the blind spot is real.
 - **`worldsheet.equipped` has no correct answer** until items carry a gender:
   `Equipe` is right on `un sabre` and wrong on `une epee`. Shipped masculine
   with a warning comment. Same gap as the relationship ladder.

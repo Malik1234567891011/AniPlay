@@ -82,7 +82,16 @@ export const ui = {
    * est reconstruit — `la réplique de {speaker}` — et non calqué. Reste le
    * risque d’élision devant `Ayame` ; c’est du VoiceOver seul, et c’est signalé.
    */
-  'ui.play_line_a11y': 'Écouter la réplique de {speaker}',
+  /**
+   * `Écouter {speaker} : sa réplique` rather than `la réplique de {speaker}`.
+   *
+   * `de {speaker}` renders `de Élodie` for every vowel-initial name, and ICU
+   * cannot look at an argument's first letter to decide. `elide()` exists in
+   * `@aniplay/i18n` for the cases that cannot be restructured, but
+   * `PLAYER_GRAMMAR.md` rule 6 prefers a sentence shape that never needs it —
+   * a message assembled from fragments cannot be reordered by a translator.
+   */
+  'ui.play_line_a11y': 'Écouter {speaker} : sa réplique',
 
   /**
    * `Lire la suite`, jamais `Lire plus` — calque, `ENGLISH_CALQUE_BLACKLIST.md`

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { agree, hasMidpoint, thirdPersonPronoun } from './grammar.js';
+import { agree, elide, hasMidpoint, thirdPersonPronoun } from './grammar.js';
 
 /**
  * Step 6's gate is `Tu es arrivée` rendering for a player who asked for it.
@@ -93,5 +93,46 @@ describe('the midpoint detector', () => {
     expect(hasMidpoint('Jour 3 · 16:15')).toBe(false);
     expect(hasMidpoint('un, deux et trois')).toBe(false);
     expect(hasMidpoint('Sur ses gardes')).toBe(false);
+  });
+});
+
+describe('elision', () => {
+  it('elides before a vowel, which a naive template does not', () => {
+    // `de Élodie` is what `de ${name}` produces, and display names are free
+    // text, so vowel-initial ones are ordinary rather than exotic.
+    expect(elide('de', 'Élodie')).toBe('d’Élodie');
+    expect(elide('de', 'Adrien')).toBe('d’Adrien');
+    expect(elide('le', 'ami')).toBe('l’ami');
+  });
+
+  it('does not elide before a consonant', () => {
+    expect(elide('de', 'Mako')).toBe('de Mako');
+    expect(elide('de', 'Rook Arden')).toBe('de Rook Arden');
+  });
+
+  it('knows the aspirated h, which is the half nobody ships', () => {
+    expect(elide('de', 'Hugo')).toBe('de Hugo');
+    expect(elide('le', 'héros')).toBe('le héros');
+    // …and elides before a mute one.
+    expect(elide('de', 'Hélène')).toBe('d’Hélène');
+    expect(elide('le', 'homme')).toBe('l’homme');
+  });
+
+  it('contracts before it elides', () => {
+    // `de` + `le` is `du`, not `d’le`.
+    expect(elide('de', 'le capitaine')).toBe('du capitaine');
+    expect(elide('de', 'les autres')).toBe('des autres');
+    expect(elide('à', 'le pont')).toBe('au pont');
+    expect(elide('à', 'les autres')).toBe('aux autres');
+  });
+
+  it('only elides si before il', () => {
+    expect(elide('si', 'il part')).toBe('s’il part');
+    expect(elide('si', 'elle part')).toBe('si elle part');
+  });
+
+  it('never invents an apostrophe where there is no word', () => {
+    expect(elide('de', '')).toBe('de');
+    expect(elide('de', '   ')).toBe('de');
   });
 });
