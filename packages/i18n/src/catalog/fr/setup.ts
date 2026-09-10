@@ -47,4 +47,11 @@ export const setup = {
   'setup.grammar.note_feminine': 'on parle de toi au féminin',
   'setup.grammar.note_neutral': 'on parle de toi avec iel',
   'setup.grammar.note_unspecified': 'le récit évite la question',
+  'setup.grammar.option_a11y': '{label}. {example}. {note}.',
+  /**
+   * Guillemets, avec U+00A0 à l'intérieur — jamais `"` U+0022, jamais collés.
+   * Écrit en échappement parce qu'une espace insécable est invisible dans un
+   * diff, et c'est exactement le caractère que quelqu'un « nettoie ».
+   */
+  'setup.grammar.quoted_example': '\u00AB\u00A0{example}\u00A0\u00BB',
 } as const;

@@ -216,22 +216,22 @@ export function CharacterSetupScreen({
               maxLength={24}
             />
             {/*
-              The question only French asks, in the French build only.
-
-              It does not replace the free-text field above and is not a
-              translation of it: that field is doing self-expression work a
-              four-value enum must not take over. This one asks the single
-              thing French narration cannot do without — whether to write
-              `Tu es arrivé` or `Tu es arrivée`.
-
-              Each row shows the sentence the player will actually read, which
-              is the only way to make an abstract grammatical question
-              concrete. `Iel` and `Peu importe` show the avoidance form
-              (`Tu viens d'arriver`, present tense, no participle) rather than
-              a midpoint: `arrivé·e` is an administrative register, it was
-              banned from school documents by circular, and it breaks
-              read-aloud on blocks the product marks `voiceEligible`.
-            */}
+             * The question only French asks, in the French build only.
+             *
+             * It does not replace the free-text pronouns field above and is not
+             * a translation of it: that field is doing self-expression work a
+             * four-value enum must not take over. This one asks the single
+             * thing French narration cannot do without.
+             *
+             * Each row shows the sentence the player will actually read, which
+             * is the only way to make an abstract grammatical question
+             * concrete. The neutral and no-preference rows show the avoidance
+             * form — present tense, no participle, nothing to agree — rather
+             * than a midpoint. PLAYER_GRAMMAR rule 4: the midpoint is an
+             * administrative register, it was banned from school documents by
+             * ministerial circular, and it breaks read-aloud on blocks the
+             * product marks voiceEligible.
+             */}
             {asksGrammar ? (
               <Stack gap={spacing.sm}>
                 <Stack gap={spacing.xs}>
@@ -247,7 +247,11 @@ export function CharacterSetupScreen({
                       key={option.gender}
                       accessibilityRole="radio"
                       accessibilityState={{ selected }}
-                      accessibilityLabel={`${t(option.labelKey)}. ${t(option.exampleKey)}. ${t(option.noteKey)}.`}
+                      accessibilityLabel={t('setup.grammar.option_a11y', {
+                        label: t(option.labelKey),
+                        example: t(option.exampleKey),
+                        note: t(option.noteKey),
+                      })}
                       onPress={() => setGrammarGender(option.gender)}
                     >
                       <Card
@@ -264,7 +268,7 @@ export function CharacterSetupScreen({
                             {t(option.labelKey)}
                           </Txt>
                           <Txt variant="bodyCompact" color={colors.text.primary}>
-                            {`« ${t(option.exampleKey)} »`}
+                            {t('setup.grammar.quoted_example', { example: t(option.exampleKey) })}
                           </Txt>
                         </Row>
                         <Txt variant="caption" color={colors.text.muted}>

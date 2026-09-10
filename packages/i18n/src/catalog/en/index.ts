@@ -11,6 +11,7 @@ import { session } from './session.js';
 import { setup } from './setup.js';
 import { share } from './share.js';
 import { story } from './story.js';
+import { ui } from './ui.js';
 import { wallet } from './wallet.js';
 import { world } from './world.js';
 import { worldsheet } from './worldsheet.js';
@@ -58,6 +59,7 @@ export const en = {
   ...share,
   ...misc,
   ...errors,
+  ...ui,
 } as const;
 
 /**

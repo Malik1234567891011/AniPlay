@@ -357,10 +357,10 @@ Status column: ✅ done · 🟡 partial · ⬜ not started.
 | --- | --- | --- | --- |
 | **1** | `Intl` polyfills + `frDate()` + `normalizeForSearch()` + `frCollator`. No strings yet | Formatting snapshot tests pass on iOS **and** Android | ✅ |
 | **2** | `locale` on `GameState`, frozen at session creation; `expo-localization`; a hidden language switch | An `fr` session round-trips through the API and the database | ✅ |
-| **3** | i18next + ICU plurals; catalogue scaffolding; **English keys only**, `en` still renders identically | `npm run i18n:extract` reports zero un-keyed user-facing literals | ⬜ |
-| **4** | Server strings → keys + params (§3). Client renders | `Day 3 · 16:15` renders correctly with no client-side string surgery | ⬜ |
+| **3** | i18next + ICU plurals; catalogue scaffolding; **English keys only**, `en` still renders identically | `npm run i18n:extract` reports zero un-keyed user-facing literals | ✅ |
+| **4** | Server strings → keys + params (§3). Client renders | `Day 3 · 16:15` renders correctly with no client-side string surgery | ✅ |
 | **5** | **Memory facts → structured (§5)** | No English reaches a French context window. Parity test | ⬜ |
-| **6** | `PlayerIdentity.grammar` + the French `CharacterSetup` question | `Tu es arrivée` renders for a player who asked for it | ⬜ |
+| **6** | `PlayerIdentity.grammar` + the French `CharacterSetup` question | `Tu es arrivée` renders for a player who asked for it | ✅ |
 | **7** | fr catalogue populated from `UI_AUDIT` + `PRODUCT_VOICE`; a11y labels included | `npm run fr:lint` clean; layout pass on the six at-risk screens | ⬜ |
 | **8** | `WRITER_POLICY_FR`, `SAFETY_POLICY_FR`, French `worldRules`, in `model-stages.ts`, both paths | `writer-parity.spec.ts` extended and green | ⬜ |
 | **9** | `addressMode` (§6) end to end | T/V lint green across a full playthrough of Seven Days to Midnight | ⬜ |

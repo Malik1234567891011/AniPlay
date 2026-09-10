@@ -94,4 +94,15 @@ export const setup = {
   'setup.grammar.note_feminine': 'the story speaks of you in the feminine',
   'setup.grammar.note_neutral': 'the story speaks of you with iel',
   'setup.grammar.note_unspecified': 'the story avoids the question',
+  /** Read aloud: the option, the sentence it produces, then what it means. */
+  'setup.grammar.option_a11y': '{label}. {example}. {note}.',
+  /**
+   * The quotation marks around the example sentence.
+   *
+   * A key rather than a literal because the convention is not shared: English
+   * uses `“ ”` closed up, French uses `«` and `»` **with U+00A0 inside**. This
+   * is the only place in the app where that convention is written down as a
+   * translatable string rather than hardcoded in JSX.
+   */
+  'setup.grammar.quoted_example': '\u201C{example}\u201D',
 } as const;
