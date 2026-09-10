@@ -238,22 +238,27 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
         ) : null}
 
         {/* Spec §7.2 item 3 — Continue, only when there is something to continue. */}
+        {/*
+          Vertical, and never a carousel.
+          
+          A sideways rail hid the second run half off the right edge and cut its
+          objective mid-word, so the one thing this section exists to tell you —
+          what you were in the middle of — was the part you could not read. There
+          are rarely more than a handful of runs, and they are the most important
+          thing on this screen; they get the width.
+        */}
         {data && data.continueCards.length > 0 ? (
           <Stack gap={spacing.md}>
             <SectionHeader title="Continue" />
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={data.continueCards}
-              keyExtractor={(item) => item.sessionId}
-              contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.md }}
-              renderItem={({ item }) => (
+            <Stack gap={spacing.sm} style={{ paddingHorizontal: GUTTER }}>
+              {data.continueCards.map((item) => (
                 <ContinueTile
+                  key={item.sessionId}
                   card={item}
                   onPress={() => navigation.navigate('Session', { sessionId: item.sessionId })}
                 />
-              )}
-            />
+              ))}
+            </Stack>
           </Stack>
         ) : null}
 
@@ -345,31 +350,48 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
   );
 }
 
+/**
+ * A run you are in the middle of.
+ *
+ * The art is the world's actual cover. It used to be `StoryArt seed={storyId}`
+ * with no `uri`, which draws the procedural gradient placeholder — so the one
+ * section made entirely of worlds the player had already chosen was the only
+ * section showing none of their art, including for worlds whose covers had
+ * shipped months earlier. `coverImage` was on the contract the whole time and
+ * nothing passed it.
+ *
+ * Covers are 2:3, so the thumbnail is too. A 44x56 chip could not read as a
+ * poster at any quality of art.
+ */
 function ContinueTile({ card, onPress }: { card: ContinueCard; onPress: () => void }): React.JSX.Element {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Continue ${card.title}. ${card.currentObjective ?? ''}`}
+      accessibilityLabel={`Continue ${card.title}, ${card.turnCount} turns in. ${card.currentObjective ?? ''}`}
       onPress={onPress}
-      style={({ pressed }) => ({ width: 260, opacity: pressed ? 0.85 : 1 })}
+      style={({ pressed }) => ({ opacity: pressed ? 0.85 : 1 })}
     >
-      <Card style={{ gap: spacing.sm }}>
-        <Row gap={spacing.md}>
-          <StoryArt seed={card.storyId} style={{ width: 44, height: 56, borderRadius: radius.control }} />
-          <View style={{ flex: 1, gap: 2 }}>
+      <Card style={{ padding: spacing.sm }}>
+        <Row gap={spacing.md} align="center">
+          <StoryArt
+            seed={card.storyId}
+            uri={card.coverImage}
+            style={{ width: 64, height: 96, borderRadius: radius.control }}
+          />
+          <View style={{ flex: 1, gap: spacing.xs }}>
             <Txt variant="bodyStrong" numberOfLines={1}>
               {card.title}
             </Txt>
             <Txt variant="micro" color={colors.text.muted}>
-              {card.turnCount} turns
+              {card.turnCount} {card.turnCount === 1 ? 'turn' : 'turns'} in
             </Txt>
+            {card.currentObjective ? (
+              <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>
+                {card.currentObjective}
+              </Txt>
+            ) : null}
           </View>
         </Row>
-        {card.currentObjective ? (
-          <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>
-            {card.currentObjective}
-          </Txt>
-        ) : null}
       </Card>
     </Pressable>
   );
@@ -401,7 +423,11 @@ function QuickPreviewSheet({
       <SafeAreaView edges={['bottom']} style={{ backgroundColor: colors.bg.elevated, borderTopLeftRadius: radius.large, borderTopRightRadius: radius.large }}>
         <View style={{ padding: GUTTER, gap: spacing.lg }}>
           <Row gap={spacing.md}>
-            <StoryArt seed={story.storyId} style={{ width: 56, height: 76, borderRadius: radius.control }} />
+            <StoryArt
+              seed={story.storyId}
+              uri={story.coverImage}
+              style={{ width: 56, height: 76, borderRadius: radius.control }}
+            />
             <View style={{ flex: 1, gap: 2 }}>
               <Txt variant="bodyStrong">{story.title}</Txt>
               <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>

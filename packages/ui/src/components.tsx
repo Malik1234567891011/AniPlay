@@ -138,11 +138,18 @@ export function StoryCoverCard({
 }
 
 /**
- * Deterministic placeholder art.
+ * A world's art, with a deterministic placeholder when it has none.
  *
  * Real cover images are generated assets served from the CDN; until an asset
  * exists this derives a stable gradient from the story id, so a world always
  * looks the same rather than flickering between random colours.
+ *
+ * **Pass `uri` wherever the caller has one.** It is optional so that genuine
+ * empty states ("No portrait yet") can omit it — which also means forgetting it
+ * fails silently and prettily, as a gradient. Three screens did: Continue, the
+ * Library list and the quick-preview sheet all drew placeholders over worlds
+ * whose covers had shipped, and `coverImage` was on all three payloads the whole
+ * time. If a summary has cover art, this needs it.
  */
 export function StoryArt({
   seed,

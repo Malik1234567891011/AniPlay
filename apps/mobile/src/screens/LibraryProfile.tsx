@@ -194,7 +194,11 @@ function SessionCard({
     >
       <Card style={{ gap: spacing.md }}>
         <Row gap={spacing.md}>
-          <StoryArt seed={session.storyId} style={{ width: 52, height: 68, borderRadius: radius.control }} />
+          <StoryArt
+            seed={session.storyId}
+            uri={session.coverImage}
+            style={{ width: 52, height: 68, borderRadius: radius.control }}
+          />
           <Stack gap={2} style={{ flex: 1 }}>
             <Txt variant="bodyStrong" numberOfLines={1}>
               {session.title}
