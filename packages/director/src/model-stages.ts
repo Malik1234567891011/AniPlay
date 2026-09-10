@@ -14,6 +14,7 @@ import { RuleBasedIntentParser, type IntentParser, type ParseContext } from './p
 import { RuleBasedDirector, type Director } from './director.js';
 import { TemplateWriter, buildDeltas, type Writer } from './writer.js';
 import type { TurnContext } from './context.js';
+import { speakerBrief } from './speaker-brief.js';
 
 /**
  * Model-backed pipeline stages.
@@ -309,19 +310,11 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
     // and use them. A companion the director is never told about is a portrait
     // in a sidebar.
     crew: context.crew,
-    // Public-facing NPC data plus only the facts each may know.
+    // Everything the world authored about each person in the room. See
+    // `speaker-brief.ts` for what used to be dropped on the floor here.
     presentCharacters: context.presentCharacters.map((c) => ({
-      id: c.def.id,
-      name: c.def.name,
-      pronouns: c.def.pronouns,
-      publicTraits: c.def.publicTraits,
-      speechStyle: c.def.speechStyle,
-      goals: c.def.goals,
-      boundaries: c.def.boundaries,
-      relationshipLabel: c.relationshipLabel,
+      ...speakerBrief(c),
       openGates: c.openGates,
-      mayReveal: c.revealableSecrets.map((s) => s.id),
-      knows: c.knownMemories.map((m) => m.fact.text),
     })),
     cast: context.story.characters.map((c) => ({ id: c.id, name: c.name, pronouns: c.pronouns })),
     recentTurns: context.recentTurns,
@@ -346,6 +339,19 @@ const WRITER_POLICY = [
   'If a check failed, the attempt failed. Never write an NPC complying after a failed attempt.',
   'Never grant items, levels, or knowledge that is not in the mutations.',
   'Characters have their own goals and may disagree with the player.',
+  '',
+  'Each person in `speakers` is fully authored. Use them.',
+  '`wants` and `privately` are why they are in the scene at all — the first is what they will admit to,',
+  'the second is what is actually moving them and they would never say out loud. `fears` is the pressure',
+  'on them. `wouldRefuse` is a hard line: they do not cross it because the player asked well, and a',
+  'character who refuses is a character, not an obstacle. `socialStyle` is behaviour and `speechStyle` is',
+  'diction — a person who "apologises first, then says the smart thing" does that whatever words you give',
+  'them. `canTell` is what they have decided this player has earned, so it can be said; `mustNotReveal`',
+  'is not yours to spend.',
+  '',
+  'If the speaker names were stripped off the dialogue, the player should still be able to tell who is',
+  'talking. Sentence length, vocabulary, what they joke about, what they will not say, how much they',
+  'hedge. Two characters who would answer a question the same way means one of them is not written yet.',
   'The player says only what is in `playerSpeech`. If it is empty they said nothing aloud, so narrate',
   'what they did rather than quoting their own sentence back as a line of dialogue.',
   '',
@@ -420,23 +426,11 @@ export class ModelWriter implements Writer {
             // in the room, and how they are taking it is the difference between
             // a crew and a list of names.
             crew: context.crew,
-            speakers: context.presentCharacters.map((c) => ({
-              id: c.def.id,
-              name: c.def.name,
-              pronouns: c.def.pronouns,
-              speechStyle: c.def.speechStyle,
-              voiceSamples: c.def.voiceSamples,
-              // What this person is carrying about the player, and how they
-              // feel about them. The director had both and the writer — the
-              // thing that actually produces the words — had neither, so a
-              // player could attack somebody, walk away, come back, and be
-              // greeted as though none of it had happened.
-              knows: c.knownMemories.map((m) => m.fact.text),
-              feelsAboutYou: { ...c.relationship, label: c.relationshipLabel },
-              mustNotReveal: c.def.secrets
-                .filter((s) => !c.revealableSecrets.some((r) => r.id === s.id))
-                .map((s) => s.id),
-            })),
+            // Who these people actually are, not only how they sound. The
+            // writer had a voice and a relationship score and nothing a person
+            // wants, fears, values or would refuse — so the cast was voiced
+            // correctly and motivated not at all. See `speaker-brief.ts`.
+            speakers: context.presentCharacters.map(speakerBrief),
             // Everyone the beat could mention, not only who is on stage. A
             // character who is absent still gets talked about, and the writer
             // was calling them "him" because it had never been told otherwise.
