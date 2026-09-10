@@ -29,6 +29,7 @@ import type { ModelGateway } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { buildMessages, SAFETY_POLICY, worldRules } from './model-stages.js';
 import { speakerBrief } from './speaker-brief.js';
+import { stateBands } from './state-bands.js';
 
 const ResponseSet = z
   .object({
@@ -73,7 +74,8 @@ const POLICY = [
   'weak side and try to get all the way to the rim."',
   '',
   'Never mention dice, difficulty, costs, resources, stats, quests or objectives. The player sees what',
-  'they would like to do, not what the engine is doing about it.',
+  'they would like to do, not what the engine is doing about it. `worldState` says how the world is',
+  'behaving; write responses that fit it and never refer to it.',
   '',
   'Only people who are actually in the room. Somebody who has left, or is dead, is not somebody to',
   'address. Use their name the way the prose does.',
@@ -131,6 +133,10 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
       aboutYou: context.player.setupAnswers,
     },
     inTheRoom: context.presentCharacters.map(speakerBrief),
+    // How the world is behaving right now. A response written against a house
+    // that has started staging scenes around you is a different response from
+    // one written against a house that has barely noticed you.
+    worldState: stateBands(context),
     /** So a response can pick up a thread rather than restart the conversation. */
     recently: context.recentTurns.slice(-3).map((t) => t.sceneSummary),
     /**
