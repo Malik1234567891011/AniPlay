@@ -49,6 +49,10 @@ const NEGATIVES = [
   'Not a digital painting, not oil or gouache texture, no visible brush strokes.',
   'No desaturated or muted palette. No sepia, no washed-out greys.',
   'Not a live-action film poster.',
+  // Non-negotiable, and stated on every prompt rather than only where appeal is
+  // asked for: several of these worlds have children in the cast.
+  'Absolutely no sexualization of minors. Children and teenagers are depicted as children and ' +
+    'teenagers, fully and age-appropriately clothed, never posed or framed suggestively.',
 ].join(' ');
 
 export type ShotKind =
@@ -93,20 +97,19 @@ function compose(parts: readonly (string | null | undefined)[]): string {
 /**
  * Worlds whose covers are finished and must never be regenerated.
  *
- * The v1 direction produced beautiful environment paintings with a small figure
- * lost in them — good pictures, bad covers for something that calls itself
- * Playable Anime. v2 replaces it. These six shipped under v1, they are liked as
- * they are, and treating them as locked is the whole reason the version moved
- * onto the spec instead of staying a global.
+ * Empty, and kept rather than deleted, because the mechanism is still the right
+ * one — a per-story lock is how "this cover is done, leave it alone" stays
+ * enforceable instead of being a promise in a comment.
+ *
+ * Six worlds sat here under the v1 direction. That direction produced beautiful
+ * environment paintings with a small figure lost in them, which was liked at the
+ * time and is not what we want now: Malik, seeing the last of them on the shelf
+ * beside the new ones, asked for them redone too. So the list empties and every
+ * cover in the catalog is made under the anime key-visual standard.
+ *
+ * Put an id back here the moment a cover is one somebody would be sad to lose.
  */
-export const LEGACY_COVER_STORY_IDS: readonly string[] = [
-  'story_ninth_archive',
-  'story_understudy',
-  'story_salt_road',
-  'story_tidewall',
-  'story_unbound',
-  'story_nine_weeks',
-];
+export const LEGACY_COVER_STORY_IDS: readonly string[] = [];
 
 /**
  * What a cover is made of, and it is not what the shared spine makes.
@@ -164,6 +167,70 @@ export const COVER_DIRECTION_VERSION = 'plotbreak-cover-v3-anime';
  * plating back, and `cover-title.ts` is untouched.
  */
 export const TITLE_SAFE_AREA = { top: 0.78, bottom: 1 } as const;
+
+/**
+ * A staging variant, chosen deterministically per story.
+ *
+ * `coverComposition` returns one fixed paragraph per genre, so every romance
+ * world was handed the same instruction and came back looking like the same
+ * cover. Malik: "some of them look very similar to one and other so for the
+ * last one try to be creative a bit while preserving the new principles".
+ *
+ * Keyed off the story id, so a given world always gets the same staging and a
+ * regeneration is reproducible — this is variety between worlds, not randomness
+ * within one.
+ */
+const COVER_STAGINGS: readonly string[] = [
+  'Staging: a tight two-shot, faces close together and near the top of the frame, one turned toward ' +
+    'the viewer and one in profile. Fill the lower frame with their shoulders and clothing.',
+  'Staging: one character enormous in the near foreground, shot slightly from below, the rest of the ' +
+    'cast smaller and stacked behind one shoulder in a diagonal.',
+  'Staging: the cast fanned across the full width in a shallow arc, all facing the viewer, heads at ' +
+    'different heights, bodies overlapping.',
+  'Staging: a single hero portrait, head and shoulders filling most of the frame, the other characters ' +
+    'small and graphic in the background band behind them.',
+  'Staging: an over-the-shoulder from behind one character in the near foreground, cropped large, ' +
+    'looking past them at the others who face the viewer.',
+  'Staging: a vertical stack — one character seated or crouched large in the bottom third, one standing ' +
+    'behind filling the middle, one small at the top.',
+];
+
+const COVER_COLOUR_KEYS: readonly string[] = [
+  'Colour key: a single dominant saturated hue flooding the whole image, as Naruto uses orange.',
+  'Colour key: two complementary saturated colours split across the frame, characters lit by both.',
+  'Colour key: a bright warm background with cool-toned characters in front of it, high contrast.',
+  'Colour key: deep saturated night colour with strong coloured rim light on every character.',
+  'Colour key: a pale bright sky-toned field behind fully saturated characters, poster-clean.',
+];
+
+function pickBy<T>(items: readonly T[], key: string): T {
+  let hash = 0;
+  for (const ch of key) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+  return items[hash % items.length]!;
+}
+
+/**
+ * How appealing the cast should look, and the one line that is not negotiable.
+ *
+ * Anime key art sells on its characters and there is no point pretending
+ * otherwise — the shelf we are competing with is wall-to-wall attractive leads.
+ * So adult characters are drawn attractive, stylish and flattering.
+ *
+ * The exception is absolute and is why this is a function rather than a
+ * sentence: several of these worlds have children and teenagers in the cast —
+ * Itachi is thirteen and Sasuke is seven — and no appeal direction may touch
+ * them. Ages live in free-text `appearance`, so there is nothing to gate on
+ * programmatically; the instruction has to carry the rule itself.
+ */
+const CAST_APPEAL = [
+  'Adult characters are drawn attractive and stylish: flattering silhouettes, well-fitted clothing, ' +
+    'confident posture, expressive good-looking faces. Aim for the appeal of a commercial anime key ' +
+    'visual — alluring, never explicit.',
+  'ABSOLUTE RULE, overriding everything above: any character who is a child or a teenager is drawn as ' +
+    'a child or a teenager. Age-appropriate clothing, age-appropriate build, no glamour, no suggestive ' +
+    'posing or framing of any kind. When the description gives an age under eighteen, or reads as a ' +
+    'student or a younger sibling, none of the appeal direction applies to them.',
+].join(' ');
 
 /**
  * Composition per genre, so nine covers do not turn into nine versions of
@@ -308,6 +375,9 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
         'The setting is a backdrop behind them, small and simple, never the subject.',
       'The characters must pop off the background: strong silhouette separation, rim light or a clean outline.',
       coverComposition(story),
+      pickBy(COVER_STAGINGS, story.storyId),
+      pickBy(COVER_COLOUR_KEYS, `${story.storyId}:colour`),
+      CAST_APPEAL,
       coverCast(story),
       hero ? `Setting behind them: ${hero.artDirection}` : null,
       `It must read at a glance as: ${story.fantasyLabel}`,
