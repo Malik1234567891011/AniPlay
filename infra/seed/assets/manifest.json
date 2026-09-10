@@ -4482,5 +4482,3007 @@
       "latencyMs": 32904,
       "createdAt": "2026-09-10T01:57:01.372Z"
     }
+  },
+  "story_itachi/cover": {
+    "assetKey": "story_itachi/cover",
+    "file": "story_itachi/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Itachi: Both sides already think you are theirs.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6486408f-8bc9-478e-a570-9de36248cc46",
+      "promptHash": "430feaacfcc8e752a8543882584077ef",
+      "seed": "sv_itachi_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.05488,
+      "latencyMs": 42153,
+      "createdAt": "2026-09-10T08:51:13.612Z"
+    }
+  },
+  "story_itachi/stage_naka_shrine": {
+    "assetKey": "story_itachi/stage_naka_shrine",
+    "file": "story_itachi/stage_naka_shrine.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Shrine By The River: A small unstaffed shrine with seven tatami mats in its back room.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "89074736-cc63-4ab5-841c-5eb9a2bc20e0",
+      "promptHash": "d5efb17063c40a3de9e58f409fe4a5ce",
+      "seed": "sv_itachi_1:loc:naka_shrine:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38324,
+      "createdAt": "2026-09-10T08:52:46.596Z"
+    }
+  },
+  "story_itachi/stage_uchiha_house": {
+    "assetKey": "story_itachi/stage_uchiha_house",
+    "file": "story_itachi/stage_uchiha_house.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The House On The Corner: Four rooms, a stove that needs coaxing, and a step at the front that gets the last of the sun.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c68eec4d-1cca-46d6-966d-4bca39df2e12",
+      "promptHash": "6c497a5c8088303e5e35a46d55c5b044",
+      "seed": "sv_itachi_1:loc:uchiha_house:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41164,
+      "createdAt": "2026-09-10T08:52:49.435Z"
+    }
+  },
+  "story_itachi/key": {
+    "assetKey": "story_itachi/key",
+    "file": "story_itachi/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Itachi",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d552abc3-497c-43b2-b262-dd1126abef3a",
+      "promptHash": "00792c83fba643f91ea64399c6240b10",
+      "seed": "sv_itachi_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44193,
+      "createdAt": "2026-09-10T08:52:52.451Z"
+    }
+  },
+  "story_itachi/stage_uchiha_street": {
+    "assetKey": "story_itachi/stage_uchiha_street",
+    "file": "story_itachi/stage_uchiha_street.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The District: Nine streets of clan houses behind a wall that was built to keep something out and now mostly keeps this lot in.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "51d30041-ae12-4cf4-9b5f-0fc0894f7754",
+      "promptHash": "e14cd1363065ec90dd9106ba7450ceec",
+      "seed": "sv_itachi_1:loc:uchiha_street:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44812,
+      "createdAt": "2026-09-10T08:52:53.083Z"
+    }
+  },
+  "story_itachi/stage_training_ground": {
+    "assetKey": "story_itachi/stage_training_ground",
+    "file": "story_itachi/stage_training_ground.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Posts: Three wooden posts in a clearing with a river behind them, scarred to the height a child can reach and again at the height an adult can.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "55de1147-36a8-46d8-bc7f-50e40bb80e8e",
+      "promptHash": "8b52fa7ccaacdae711d8c65183fbad23",
+      "seed": "sv_itachi_1:loc:training_ground:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 19549,
+      "createdAt": "2026-09-10T08:53:08.989Z"
+    }
+  },
+  "story_itachi/stage_izumi_home": {
+    "assetKey": "story_itachi/stage_izumi_home",
+    "file": "story_itachi/stage_izumi_home.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The House On The Fourth Street: Two rooms and a yard the width of a door, kept by a woman who has been on her own in it for nine years and a daughter who has started coming home the long way round.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ab8b15b3-baf4-494e-90db-995733da8bf3",
+      "promptHash": "babe594c3f7547728da3ce17c9f4815a",
+      "seed": "sv_itachi_1:loc:izumi_home:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 25059,
+      "createdAt": "2026-09-10T08:53:17.517Z"
+    }
+  },
+  "story_itachi/stage_police_headquarters": {
+    "assetKey": "story_itachi/stage_police_headquarters",
+    "file": "story_itachi/stage_police_headquarters.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Police Building: Three floors, a duty desk, and an entire institution staffed almost exclusively by one family, which is either an honour or a containment depending on which of them you ask.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "05874ffd-9c31-4fe2-b279-97d7d2ef0609",
+      "promptHash": "0a692b31e1758a87f8e198bb28b706ff",
+      "seed": "sv_itachi_1:loc:police_headquarters:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42176,
+      "createdAt": "2026-09-10T08:53:28.783Z"
+    }
+  },
+  "story_itachi/stage_susuki_teahouse": {
+    "assetKey": "story_itachi/stage_susuki_teahouse",
+    "file": "story_itachi/stage_susuki_teahouse.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Tea Place: Six seats and a counter, run by an old woman who has fed three generations of this clan and has opinions about all of them.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c21eb85f-6f9a-465a-99da-6f8814603930",
+      "promptHash": "5a77c67a0ef6df00a5e206b29198fa72",
+      "seed": "sv_itachi_1:loc:susuki_teahouse:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40352,
+      "createdAt": "2026-09-10T08:53:33.441Z"
+    }
+  },
+  "story_itachi/stage_the_rooftops": {
+    "assetKey": "story_itachi/stage_the_rooftops",
+    "file": "story_itachi/stage_the_rooftops.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Roofs: The fastest way across this village and the only part of it where nobody is on a schedule.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e5b5b49a-f0c7-4c70-b154-6a00ca1e7b3d",
+      "promptHash": "2593a359abaf8f6211b9f86246dd25ea",
+      "seed": "sv_itachi_1:loc:the_rooftops:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42058,
+      "createdAt": "2026-09-10T08:53:51.061Z"
+    }
+  },
+  "story_itachi/stage_the_academy": {
+    "assetKey": "story_itachi/stage_the_academy",
+    "file": "story_itachi/stage_the_academy.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The School: A low building with a yard, a swing, and a wall of graduation photographs going back forty years.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f064c654-06b8-4550-b89b-cfb9bd22332e",
+      "promptHash": "bec830970f4d5d3dce6015144075b224",
+      "seed": "sv_itachi_1:loc:the_academy:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40151,
+      "createdAt": "2026-09-10T08:53:57.713Z"
+    }
+  },
+  "story_itachi/stage_anbu_ready_room": {
+    "assetKey": "story_itachi/stage_anbu_ready_room",
+    "file": "story_itachi/stage_anbu_ready_room.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Ready Room: Underneath the tower: benches, a rack of masks, a board of assignments written in a hand that changes every three weeks, and a rule that nobody uses a name in here.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f7d4dd44-a10b-477c-97d5-13dacf3a6b01",
+      "promptHash": "e6c0cdb43a98aa058b651e17403e09e0",
+      "seed": "sv_itachi_1:loc:anbu_ready_room:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41622,
+      "createdAt": "2026-09-10T08:54:10.411Z"
+    }
+  },
+  "story_itachi/stage_hokage_office": {
+    "assetKey": "story_itachi/stage_hokage_office",
+    "file": "story_itachi/stage_hokage_office.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Tower Office: A round room at the top of the tower with too much paper in it and a window that looks at the whole village at once, which is either the point of the job or the trap in it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f7846aba-5741-4b0d-9944-80a81380cf0f",
+      "promptHash": "fbffd38b404589782370fb9d1344056d",
+      "seed": "sv_itachi_1:loc:hokage_office:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41170,
+      "createdAt": "2026-09-10T08:54:14.617Z"
+    }
+  },
+  "story_itachi/stage_root_chamber": {
+    "assetKey": "story_itachi/stage_root_chamber",
+    "file": "story_itachi/stage_root_chamber.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Room Under The Village: Stone, dry air, and a table with one chair on the far side of it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e78ce8b3-3d3e-42bb-8058-910f1f0c4332",
+      "promptHash": "feb7c2478843fa38044ed382af857072",
+      "seed": "sv_itachi_1:loc:root_chamber:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 24099,
+      "createdAt": "2026-09-10T08:54:15.166Z"
+    }
+  },
+  "story_itachi/stage_nakano_cliff": {
+    "assetKey": "story_itachi/stage_nakano_cliff",
+    "file": "story_itachi/stage_nakano_cliff.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Cliff Over The River: Where the river turns and the rock stands out over it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "22d99283-07c4-4cd4-9b03-ff40aced10f2",
+      "promptHash": "dc8ee0901875b842d495b028eaa18d69",
+      "seed": "sv_itachi_1:loc:nakano_cliff:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 19822,
+      "createdAt": "2026-09-10T08:54:17.546Z"
+    }
+  },
+  "story_itachi/sasuke": {
+    "assetKey": "story_itachi/sasuke",
+    "file": "story_itachi/sasuke.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, Your brother, seven years old, and the only person in this village who wants nothing from you except your time",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b4a95b4b-d5c7-4fe3-ada8-4f89c861395c",
+      "promptHash": "7080b2abf0db2c3237c6f9c3ca9549b1",
+      "seed": "itachi-sasuke-01",
+      "costUsd": 0.00632,
+      "latencyMs": 16933,
+      "createdAt": "2026-09-10T08:54:31.563Z"
+    }
+  },
+  "story_itachi/shisui": {
+    "assetKey": "story_itachi/shisui",
+    "file": "story_itachi/shisui.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, Your closest friend, four years older, and the only person alive who talks to you as though you are a person rather than an instrument",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "23284faa-72c8-4a9f-8e12-7bec1e2335be",
+      "promptHash": "f3f588cb595ffaac1bdd019132b8391a",
+      "seed": "itachi-shisui-01",
+      "costUsd": 0.02404,
+      "latencyMs": 22624,
+      "createdAt": "2026-09-10T08:54:37.796Z"
+    }
+  },
+  "story_itachi/fugaku": {
+    "assetKey": "story_itachi/fugaku",
+    "file": "story_itachi/fugaku.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, Your father, head of the clan, chief of the police the village will not let police anything, and the man organising the coup",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "65b14719-7b00-4196-8945-935d0db2f3e7",
+      "promptHash": "f3cedf465050f9638a379772e91c3602",
+      "seed": "itachi-fugaku-01",
+      "costUsd": 0.01372,
+      "latencyMs": 21472,
+      "createdAt": "2026-09-10T08:54:39.022Z"
+    }
+  },
+  "story_itachi/stage_village_gate": {
+    "assetKey": "story_itachi/stage_village_gate",
+    "file": "story_itachi/stage_village_gate.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The South Gate: Two enormous wooden doors, a booth with two chunin in it who are bored and thorough in that order, and the road out.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "88484b1f-2a41-493e-9f2f-438b30eb91f0",
+      "promptHash": "62a4025f90f2bb5aa95c878af4653dec",
+      "seed": "sv_itachi_1:loc:village_gate:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39894,
+      "createdAt": "2026-09-10T08:54:50.310Z"
+    }
+  },
+  "story_itachi/danzo": {
+    "assetKey": "story_itachi/danzo",
+    "file": "story_itachi/danzo.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, The man who runs the part of the village that does not appear on the chart, and who has been extremely polite to you for two years",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "68de8913-d86c-4bbb-8281-67899ee206d7",
+      "promptHash": "b2e18b5b56541c0efc035ba55db6886c",
+      "seed": "itachi-danzo-01",
+      "costUsd": 0.00632,
+      "latencyMs": 20354,
+      "createdAt": "2026-09-10T08:54:59.379Z"
+    }
+  },
+  "story_itachi/izumi": {
+    "assetKey": "story_itachi/izumi",
+    "file": "story_itachi/izumi.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, A clan girl your own age who has decided, on no encouragement whatsoever, that the two of you are friends",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2561c0ff-4311-467f-9cbc-9ca1069fd0df",
+      "promptHash": "3b55eb606591f4fa310ea24161f8c6a6",
+      "seed": "itachi-izumi-01",
+      "costUsd": 0.01372,
+      "latencyMs": 21630,
+      "createdAt": "2026-09-10T08:54:59.430Z"
+    }
+  },
+  "story_itachi/mikoto": {
+    "assetKey": "story_itachi/mikoto",
+    "file": "story_itachi/mikoto.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, Your mother, a retired shinobi nobody in this house treats as one, and the person best placed to mediate if anyone thinks to ask her",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4fdf77c3-e613-4a3a-b5c9-e9efe20b72e6",
+      "promptHash": "2419ae8a5a8a66feaacb518dd2b92aa1",
+      "seed": "itachi-mikoto-01",
+      "costUsd": 0.05488,
+      "latencyMs": 39235,
+      "createdAt": "2026-09-10T08:55:10.805Z"
+    }
+  },
+  "story_itachi/kakashi": {
+    "assetKey": "story_itachi/kakashi",
+    "file": "story_itachi/kakashi.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, Another prodigy who was handed a war at eleven, four years ahead of you on the same road, and the only person in the ready room who has never asked you anything",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e78ccf37-89ed-4533-a503-fd6ee4420350",
+      "promptHash": "0eab242cbcf6386ade34ec0b01816718",
+      "seed": "itachi-kakashi-01",
+      "costUsd": 0.00632,
+      "latencyMs": 18995,
+      "createdAt": "2026-09-10T08:55:18.385Z"
+    }
+  },
+  "story_itachi/sasuke_neutral": {
+    "assetKey": "story_itachi/sasuke_neutral",
+    "file": "story_itachi/sasuke_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "98d01437-ae1b-4ba9-bec6-fff919b726e7",
+      "promptHash": "5bd85a82d96935d5d1bd53ec78ec1459",
+      "seed": "itachi-sasuke-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 20530,
+      "createdAt": "2026-09-10T08:55:19.966Z"
+    }
+  },
+  "story_itachi/hiruzen": {
+    "assetKey": "story_itachi/hiruzen",
+    "file": "story_itachi/hiruzen.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, The Third Hokage, who wants a settlement, has wanted one for ten years, and has been outmanoeuvred every year by a man he refuses to remove",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9cc7a4d5-9027-42b0-8aa2-9d471dfc24e1",
+      "promptHash": "600a128d4571fc12f7e65999c97b0e8f",
+      "seed": "itachi-hiruzen-01",
+      "costUsd": 0.05488,
+      "latencyMs": 39135,
+      "createdAt": "2026-09-10T08:55:29.450Z"
+    }
+  },
+  "story_itachi/sasuke_amused": {
+    "assetKey": "story_itachi/sasuke_amused",
+    "file": "story_itachi/sasuke_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d313715a-b095-4258-af1c-b3823d6a104e",
+      "promptHash": "fa8dbd7efd90609cd9005921b227aa07",
+      "seed": "itachi-sasuke-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 24542,
+      "createdAt": "2026-09-10T08:55:42.939Z"
+    }
+  },
+  "story_itachi/sasuke_warm": {
+    "assetKey": "story_itachi/sasuke_warm",
+    "file": "story_itachi/sasuke_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "74f3fbbd-9ba0-4fde-90d9-691d0bbcf0ce",
+      "promptHash": "0fc9b63ab80beb4003210465f1bd6623",
+      "seed": "itachi-sasuke-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 36227,
+      "createdAt": "2026-09-10T08:55:47.044Z"
+    }
+  },
+  "story_itachi/sasuke_surprised": {
+    "assetKey": "story_itachi/sasuke_surprised",
+    "file": "story_itachi/sasuke_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b9474231-41fd-4511-8ba6-c0d380a15f64",
+      "promptHash": "f814fe4e4452392fded7e482bd741a3a",
+      "seed": "itachi-sasuke-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 36212,
+      "createdAt": "2026-09-10T08:55:56.189Z"
+    }
+  },
+  "story_itachi/sasuke_annoyed": {
+    "assetKey": "story_itachi/sasuke_annoyed",
+    "file": "story_itachi/sasuke_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "92756a01-d065-42e6-b52e-cfa58fcf4921",
+      "promptHash": "ce50ef2c97eb1dd5345870dc9432dee7",
+      "seed": "itachi-sasuke-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 20044,
+      "createdAt": "2026-09-10T08:56:02.990Z"
+    }
+  },
+  "story_itachi/sasuke_confused": {
+    "assetKey": "story_itachi/sasuke_confused",
+    "file": "story_itachi/sasuke_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "20da6473-d31f-4ec2-892a-51792e570b33",
+      "promptHash": "21bd42ec7769003b24a53a93be2c6f1b",
+      "seed": "itachi-sasuke-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 37413,
+      "createdAt": "2026-09-10T08:56:06.871Z"
+    }
+  },
+  "story_itachi/sasuke_angry": {
+    "assetKey": "story_itachi/sasuke_angry",
+    "file": "story_itachi/sasuke_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d7fe8565-dea2-4e18-8ce0-c119170ba299",
+      "promptHash": "348528e298b22783f9635f3b0aaaaacb",
+      "seed": "itachi-sasuke-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 20686,
+      "createdAt": "2026-09-10T08:56:07.741Z"
+    }
+  },
+  "story_itachi/sasuke_worried": {
+    "assetKey": "story_itachi/sasuke_worried",
+    "file": "story_itachi/sasuke_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sasuke Uchiha, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bdb057b1-4085-4e08-b924-0e95e3e630dc",
+      "promptHash": "a9f35d08a3c97bfc0699ca09e8c35ffc",
+      "seed": "itachi-sasuke-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21389,
+      "createdAt": "2026-09-10T08:56:17.592Z"
+    }
+  },
+  "story_itachi/shisui_neutral": {
+    "assetKey": "story_itachi/shisui_neutral",
+    "file": "story_itachi/shisui_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d9f3f3ca-dccb-4404-8dfb-782cb6ad738e",
+      "promptHash": "b1c5f4837ce45ef56924e0395a2ae65e",
+      "seed": "itachi-shisui-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 15476,
+      "createdAt": "2026-09-10T08:56:18.475Z"
+    }
+  },
+  "story_itachi/shisui_amused": {
+    "assetKey": "story_itachi/shisui_amused",
+    "file": "story_itachi/shisui_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8cc03b00-21c5-468f-8feb-b7724c99de29",
+      "promptHash": "a8092805bef863674d369d6a1b83470f",
+      "seed": "itachi-shisui-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 18077,
+      "createdAt": "2026-09-10T08:56:25.838Z"
+    }
+  },
+  "story_itachi/shisui_warm": {
+    "assetKey": "story_itachi/shisui_warm",
+    "file": "story_itachi/shisui_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c212bef0-be66-4a17-96c1-e78073c2dbe5",
+      "promptHash": "0e476f3c4fa55773dcfacf792b035802",
+      "seed": "itachi-shisui-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 20469,
+      "createdAt": "2026-09-10T08:56:27.355Z"
+    }
+  },
+  "story_itachi/shisui_confused": {
+    "assetKey": "story_itachi/shisui_confused",
+    "file": "story_itachi/shisui_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "50fb8674-16d6-4df4-b407-6bf28a81e892",
+      "promptHash": "3c45b4dc5427e2477299a3ed3b75565f",
+      "seed": "itachi-shisui-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 21394,
+      "createdAt": "2026-09-10T08:56:39.871Z"
+    }
+  },
+  "story_itachi/shisui_surprised": {
+    "assetKey": "story_itachi/shisui_surprised",
+    "file": "story_itachi/shisui_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cad37e35-3acd-4df2-9792-c664aaf83e96",
+      "promptHash": "41c5395fecf942987cd598c0008dc0c7",
+      "seed": "itachi-shisui-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 26055,
+      "createdAt": "2026-09-10T08:56:43.650Z"
+    }
+  },
+  "story_itachi/shisui_angry": {
+    "assetKey": "story_itachi/shisui_angry",
+    "file": "story_itachi/shisui_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cc4fcd87-f717-4746-a3e8-5fe710155080",
+      "promptHash": "731ee598c77d2012e8e0fca66cf3796c",
+      "seed": "itachi-shisui-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 19302,
+      "createdAt": "2026-09-10T08:56:46.665Z"
+    }
+  },
+  "story_itachi/shisui_annoyed": {
+    "assetKey": "story_itachi/shisui_annoyed",
+    "file": "story_itachi/shisui_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "54a9b09c-1321-4c2f-8202-ce024ee66501",
+      "promptHash": "b413426a71161c85ce8b3511681184f4",
+      "seed": "itachi-shisui-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 24162,
+      "createdAt": "2026-09-10T08:56:50.004Z"
+    }
+  },
+  "story_itachi/fugaku_warm": {
+    "assetKey": "story_itachi/fugaku_warm",
+    "file": "story_itachi/fugaku_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c3debd9a-51f2-4004-9822-5da5c93863ba",
+      "promptHash": "9fa123aecae20253033b3963ab633b74",
+      "seed": "itachi-fugaku-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 20989,
+      "createdAt": "2026-09-10T08:57:07.664Z"
+    }
+  },
+  "story_itachi/fugaku_amused": {
+    "assetKey": "story_itachi/fugaku_amused",
+    "file": "story_itachi/fugaku_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f1f30277-a444-457a-a25f-69481a8eec80",
+      "promptHash": "5aa1de4f982581a0608cf2a92d22b1af",
+      "seed": "itachi-fugaku-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 25508,
+      "createdAt": "2026-09-10T08:57:15.526Z"
+    }
+  },
+  "story_itachi/shisui_worried": {
+    "assetKey": "story_itachi/shisui_worried",
+    "file": "story_itachi/shisui_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Shisui Uchiha, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a0473d21-5aab-46b5-a3fb-7675e9abc2a4",
+      "promptHash": "71b65566334df4ec55a57c7a9eb538cc",
+      "seed": "itachi-shisui-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 36688,
+      "createdAt": "2026-09-10T08:57:16.567Z"
+    }
+  },
+  "story_itachi/fugaku_neutral": {
+    "assetKey": "story_itachi/fugaku_neutral",
+    "file": "story_itachi/fugaku_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "666a08c2-a8cd-485a-8cf6-7146cdfd47f3",
+      "promptHash": "2dafa95c640d5167f92088ce70f02680",
+      "seed": "itachi-fugaku-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 40517,
+      "createdAt": "2026-09-10T08:57:24.176Z"
+    }
+  },
+  "story_itachi/fugaku_surprised": {
+    "assetKey": "story_itachi/fugaku_surprised",
+    "file": "story_itachi/fugaku_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a53438e7-2d81-4225-aeb5-c8eee4203ab6",
+      "promptHash": "d0b7494878d85b87601857590b6fad85",
+      "seed": "itachi-fugaku-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20997,
+      "createdAt": "2026-09-10T08:57:28.671Z"
+    }
+  },
+  "story_itachi/fugaku_confused": {
+    "assetKey": "story_itachi/fugaku_confused",
+    "file": "story_itachi/fugaku_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c30d8cc1-8a3f-47e0-9ed7-7d628138b194",
+      "promptHash": "9c7a0e17f6a87841933a3bd3d87b7f00",
+      "seed": "itachi-fugaku-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 25928,
+      "createdAt": "2026-09-10T08:57:41.458Z"
+    }
+  },
+  "story_itachi/fugaku_annoyed": {
+    "assetKey": "story_itachi/fugaku_annoyed",
+    "file": "story_itachi/fugaku_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "76a315d1-085b-416c-86c5-25abf6961da6",
+      "promptHash": "7ddff1a29cc67f44f9758b4c40e8c2c1",
+      "seed": "itachi-fugaku-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 27112,
+      "createdAt": "2026-09-10T08:57:43.687Z"
+    }
+  },
+  "story_itachi/fugaku_worried": {
+    "assetKey": "story_itachi/fugaku_worried",
+    "file": "story_itachi/fugaku_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0db6fea3-07fc-4100-bfd4-53422bf9c38d",
+      "promptHash": "f6e66d9fe2c03c77d7fe06cd4a8e10fb",
+      "seed": "itachi-fugaku-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 19869,
+      "createdAt": "2026-09-10T08:57:48.545Z"
+    }
+  },
+  "story_itachi/mikoto_neutral": {
+    "assetKey": "story_itachi/mikoto_neutral",
+    "file": "story_itachi/mikoto_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "57cdf9f4-bd4d-4fe4-be6a-bcfca18ae5ee",
+      "promptHash": "0210ee6d306a6fb9a23dd29834fbdc94",
+      "seed": "itachi-mikoto-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19961,
+      "createdAt": "2026-09-10T08:58:01.427Z"
+    }
+  },
+  "story_itachi/fugaku_angry": {
+    "assetKey": "story_itachi/fugaku_angry",
+    "file": "story_itachi/fugaku_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Fugaku Uchiha, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d6291377-e8bf-4a24-bc8a-379d11297aea",
+      "promptHash": "e3df75126bbb2d7bc92793d78df18ed5",
+      "seed": "itachi-fugaku-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 42397,
+      "createdAt": "2026-09-10T08:58:06.590Z"
+    }
+  },
+  "story_itachi/mikoto_amused": {
+    "assetKey": "story_itachi/mikoto_amused",
+    "file": "story_itachi/mikoto_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a8f607bc-6825-4311-b364-1a9fa2c7d6de",
+      "promptHash": "f345a68df039e5677a6601eb184a12cd",
+      "seed": "itachi-mikoto-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 20124,
+      "createdAt": "2026-09-10T08:58:08.674Z"
+    }
+  },
+  "story_itachi/mikoto_warm": {
+    "assetKey": "story_itachi/mikoto_warm",
+    "file": "story_itachi/mikoto_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "608b8d53-348d-4cfa-ad3e-641ad56a2517",
+      "promptHash": "3ebe0fb9d00b10fb139ae533895f6d74",
+      "seed": "itachi-mikoto-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 25009,
+      "createdAt": "2026-09-10T08:58:08.702Z"
+    }
+  },
+  "story_itachi/mikoto_surprised": {
+    "assetKey": "story_itachi/mikoto_surprised",
+    "file": "story_itachi/mikoto_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cba60298-98ed-442a-9e91-197887656f56",
+      "promptHash": "5c6e4073349d7952925c435f2824a4f9",
+      "seed": "itachi-mikoto-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 23849,
+      "createdAt": "2026-09-10T08:58:25.282Z"
+    }
+  },
+  "story_itachi/mikoto_confused": {
+    "assetKey": "story_itachi/mikoto_confused",
+    "file": "story_itachi/mikoto_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f0e36a5d-1551-4184-82bc-887f1d2913d5",
+      "promptHash": "55e8314b917fc4ae978d329567538407",
+      "seed": "itachi-mikoto-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 20058,
+      "createdAt": "2026-09-10T08:58:26.653Z"
+    }
+  },
+  "story_itachi/izumi_neutral": {
+    "assetKey": "story_itachi/izumi_neutral",
+    "file": "story_itachi/izumi_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "82193510-db18-4570-bf7e-bce17467deba",
+      "promptHash": "9fa953be7e7ec518e742f620ac3d06ab",
+      "seed": "itachi-izumi-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 20091,
+      "createdAt": "2026-09-10T08:58:46.752Z"
+    }
+  },
+  "story_itachi/mikoto_angry": {
+    "assetKey": "story_itachi/mikoto_angry",
+    "file": "story_itachi/mikoto_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9319c8c4-f93e-4fc9-ba69-737d0b46b2a0",
+      "promptHash": "315e1f72e4b5bcd31cf561ca60967321",
+      "seed": "itachi-mikoto-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 38599,
+      "createdAt": "2026-09-10T08:58:47.308Z"
+    }
+  },
+  "story_itachi/mikoto_annoyed": {
+    "assetKey": "story_itachi/mikoto_annoyed",
+    "file": "story_itachi/mikoto_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f39899f3-edde-41ad-bad4-4a39cb6ef351",
+      "promptHash": "03bdf9ce07e801b560ad2e6539a00752",
+      "seed": "itachi-mikoto-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 38746,
+      "createdAt": "2026-09-10T08:58:47.427Z"
+    }
+  },
+  "story_itachi/mikoto_worried": {
+    "assetKey": "story_itachi/mikoto_worried",
+    "file": "story_itachi/mikoto_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikoto Uchiha, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3a669d44-810f-46bb-a862-9b96c23539e9",
+      "promptHash": "a67f0570effce9a8c970b64256cc8b74",
+      "seed": "itachi-mikoto-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 39819,
+      "createdAt": "2026-09-10T08:59:05.106Z"
+    }
+  },
+  "story_itachi/izumi_amused": {
+    "assetKey": "story_itachi/izumi_amused",
+    "file": "story_itachi/izumi_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9e4fb077-64d3-4cfc-a3ea-252b889dab1c",
+      "promptHash": "0c569650370558de0ff5cc0c19bd5668",
+      "seed": "itachi-izumi-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 20985,
+      "createdAt": "2026-09-10T08:59:08.306Z"
+    }
+  },
+  "story_itachi/izumi_warm": {
+    "assetKey": "story_itachi/izumi_warm",
+    "file": "story_itachi/izumi_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f28071df-8a80-4bb7-a83e-d74c05a71a4d",
+      "promptHash": "d8232de7fca6382d16f181e1bbe9c427",
+      "seed": "itachi-izumi-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 22025,
+      "createdAt": "2026-09-10T08:59:08.786Z"
+    }
+  },
+  "story_itachi/izumi_surprised": {
+    "assetKey": "story_itachi/izumi_surprised",
+    "file": "story_itachi/izumi_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "65c51e6b-2a4a-4ff4-8d09-ee5821725302",
+      "promptHash": "96e81bdd951e3bf49e08928a24e4a260",
+      "seed": "itachi-izumi-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 37101,
+      "createdAt": "2026-09-10T08:59:24.546Z"
+    }
+  },
+  "story_itachi/izumi_annoyed": {
+    "assetKey": "story_itachi/izumi_annoyed",
+    "file": "story_itachi/izumi_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "49f976c5-818a-4337-a7fa-eaad421a20bc",
+      "promptHash": "cb0c865a2b5321904ad2058a6d900c5a",
+      "seed": "itachi-izumi-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 25568,
+      "createdAt": "2026-09-10T08:59:33.890Z"
+    }
+  },
+  "story_itachi/izumi_angry": {
+    "assetKey": "story_itachi/izumi_angry",
+    "file": "story_itachi/izumi_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a1bb07a6-4e47-40a8-bb16-ae213f2de897",
+      "promptHash": "bb1cbb34d58fcea7808bdf4364956aad",
+      "seed": "itachi-izumi-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 26032,
+      "createdAt": "2026-09-10T08:59:34.837Z"
+    }
+  },
+  "story_itachi/izumi_confused": {
+    "assetKey": "story_itachi/izumi_confused",
+    "file": "story_itachi/izumi_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "32308619-f927-48b1-a403-31fdcece920f",
+      "promptHash": "9bbd9c3ce55757e5d6eea6e2ea484769",
+      "seed": "itachi-izumi-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 36727,
+      "createdAt": "2026-09-10T08:59:41.836Z"
+    }
+  },
+  "story_itachi/danzo_warm": {
+    "assetKey": "story_itachi/danzo_warm",
+    "file": "story_itachi/danzo_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f5347773-8e91-4d77-a1ed-37803f86dad9",
+      "promptHash": "989df100fd9249701dba86dd17b186c8",
+      "seed": "itachi-danzo-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 19020,
+      "createdAt": "2026-09-10T08:59:53.862Z"
+    }
+  },
+  "story_itachi/danzo_neutral": {
+    "assetKey": "story_itachi/danzo_neutral",
+    "file": "story_itachi/danzo_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4b8d2b63-a453-4328-839c-e607d09683aa",
+      "promptHash": "540fcabf51200622e6ed3787c2741bdc",
+      "seed": "itachi-danzo-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 20694,
+      "createdAt": "2026-09-10T08:59:54.589Z"
+    }
+  },
+  "story_itachi/izumi_worried": {
+    "assetKey": "story_itachi/izumi_worried",
+    "file": "story_itachi/izumi_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Izumi Uchiha, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c6f4faef-6131-43b9-9e54-d9a514089f87",
+      "promptHash": "03403be011765d4f5f411e290059cdd2",
+      "seed": "itachi-izumi-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 37459,
+      "createdAt": "2026-09-10T09:00:02.026Z"
+    }
+  },
+  "story_itachi/danzo_amused": {
+    "assetKey": "story_itachi/danzo_amused",
+    "file": "story_itachi/danzo_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d87927ef-9164-4a8a-82a2-9c7de66b3f53",
+      "promptHash": "c1e4f62fbf1b28b75ee9f9549aab66f8",
+      "seed": "itachi-danzo-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 25816,
+      "createdAt": "2026-09-10T09:00:07.665Z"
+    }
+  },
+  "story_itachi/danzo_confused": {
+    "assetKey": "story_itachi/danzo_confused",
+    "file": "story_itachi/danzo_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7500cee-e9bc-49ea-868a-7634787da709",
+      "promptHash": "5447cb054630e02ec1d09e4796cecef5",
+      "seed": "itachi-danzo-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 21378,
+      "createdAt": "2026-09-10T09:00:15.971Z"
+    }
+  },
+  "story_itachi/danzo_surprised": {
+    "assetKey": "story_itachi/danzo_surprised",
+    "file": "story_itachi/danzo_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "719ec694-265b-4835-81e3-4bba19a22d5a",
+      "promptHash": "0d5e79ca93fa4477bd092902499f959b",
+      "seed": "itachi-danzo-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 24261,
+      "createdAt": "2026-09-10T09:00:18.131Z"
+    }
+  },
+  "story_itachi/danzo_angry": {
+    "assetKey": "story_itachi/danzo_angry",
+    "file": "story_itachi/danzo_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d5fdfb65-f1d3-4e3d-8e95-96b906bff929",
+      "promptHash": "e7aa8da08d38eac135b8dfdf1d509319",
+      "seed": "itachi-danzo-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 27238,
+      "createdAt": "2026-09-10T09:00:34.917Z"
+    }
+  },
+  "story_itachi/danzo_worried": {
+    "assetKey": "story_itachi/danzo_worried",
+    "file": "story_itachi/danzo_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f766cf56-ede9-40f5-8223-d1bde04a65f4",
+      "promptHash": "cadcf07903cc139d8882c00ea286857a",
+      "seed": "itachi-danzo-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 21240,
+      "createdAt": "2026-09-10T09:00:37.215Z"
+    }
+  },
+  "story_itachi/hiruzen_neutral": {
+    "assetKey": "story_itachi/hiruzen_neutral",
+    "file": "story_itachi/hiruzen_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7aac55a9-9d06-4362-b2a7-cc1e919ba776",
+      "promptHash": "1e670bca0b46615084b2596a4cfba949",
+      "seed": "itachi-hiruzen-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 27621,
+      "createdAt": "2026-09-10T09:00:45.761Z"
+    }
+  },
+  "story_itachi/danzo_annoyed": {
+    "assetKey": "story_itachi/danzo_annoyed",
+    "file": "story_itachi/danzo_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Danzo Shimura, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "04f6e07c-fe13-4c02-9c82-b196cea14412",
+      "promptHash": "2b1c9aa19100bd6038f8bba4d1917e7a",
+      "seed": "itachi-danzo-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 44275,
+      "createdAt": "2026-09-10T09:00:46.308Z"
+    }
+  },
+  "story_itachi/hiruzen_warm": {
+    "assetKey": "story_itachi/hiruzen_warm",
+    "file": "story_itachi/hiruzen_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c9aaacf9-2779-422e-81cf-a6e28dc33bff",
+      "promptHash": "5c1a4f2f3189a6c25a52eaf99f23f445",
+      "seed": "itachi-hiruzen-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 20779,
+      "createdAt": "2026-09-10T09:00:55.702Z"
+    }
+  },
+  "story_itachi/hiruzen_amused": {
+    "assetKey": "story_itachi/hiruzen_amused",
+    "file": "story_itachi/hiruzen_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9453f784-0127-4fa7-af2c-a859d1ffbd0b",
+      "promptHash": "9243aea9c2f8c0d934a518e4f4062e54",
+      "seed": "itachi-hiruzen-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 27734,
+      "createdAt": "2026-09-10T09:01:04.955Z"
+    }
+  },
+  "story_itachi/hiruzen_surprised": {
+    "assetKey": "story_itachi/hiruzen_surprised",
+    "file": "story_itachi/hiruzen_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "65434ccd-b427-480d-aa77-bc3037dc5c30",
+      "promptHash": "8ed87ad2dc86d0367f9d2a426cd7f028",
+      "seed": "itachi-hiruzen-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 40196,
+      "createdAt": "2026-09-10T09:01:25.970Z"
+    }
+  },
+  "story_itachi/hiruzen_confused": {
+    "assetKey": "story_itachi/hiruzen_confused",
+    "file": "story_itachi/hiruzen_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cb315139-3eda-4439-b7fd-de009094ab75",
+      "promptHash": "04b03eee6795d69782ea758f4a199d5e",
+      "seed": "itachi-hiruzen-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 42684,
+      "createdAt": "2026-09-10T09:01:29.016Z"
+    }
+  },
+  "story_itachi/hiruzen_angry": {
+    "assetKey": "story_itachi/hiruzen_angry",
+    "file": "story_itachi/hiruzen_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3b11fb98-b1e4-499f-aa45-7b7504299d9c",
+      "promptHash": "ece1384164e72dec26bcb0d33e4ce87e",
+      "seed": "itachi-hiruzen-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 24675,
+      "createdAt": "2026-09-10T09:01:29.636Z"
+    }
+  },
+  "story_itachi/hiruzen_annoyed": {
+    "assetKey": "story_itachi/hiruzen_annoyed",
+    "file": "story_itachi/hiruzen_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "02180aae-53a9-4d67-9fae-f52c8c25d1fb",
+      "promptHash": "4b6a6528013a08daab98759f24910410",
+      "seed": "itachi-hiruzen-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 38262,
+      "createdAt": "2026-09-10T09:01:33.974Z"
+    }
+  },
+  "story_itachi/kakashi_neutral": {
+    "assetKey": "story_itachi/kakashi_neutral",
+    "file": "story_itachi/kakashi_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d354990c-adf0-4c2e-bbea-88470d290e05",
+      "promptHash": "558de92a62710d67df0447582f164ebc",
+      "seed": "itachi-kakashi-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 17583,
+      "createdAt": "2026-09-10T09:01:46.606Z"
+    }
+  },
+  "story_itachi/kakashi_warm": {
+    "assetKey": "story_itachi/kakashi_warm",
+    "file": "story_itachi/kakashi_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "73f2e46c-6e0d-4d9a-b1ab-956f706ce106",
+      "promptHash": "2811c4ccce336d3fcae94ed2b9ec644f",
+      "seed": "itachi-kakashi-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 19564,
+      "createdAt": "2026-09-10T09:01:49.212Z"
+    }
+  },
+  "story_itachi/hiruzen_worried": {
+    "assetKey": "story_itachi/hiruzen_worried",
+    "file": "story_itachi/hiruzen_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hiruzen Sarutobi, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3f409f42-df84-4d7b-9797-4d434f2599f5",
+      "promptHash": "f48240978719ea2e652e64e93b5e4816",
+      "seed": "itachi-hiruzen-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 26130,
+      "createdAt": "2026-09-10T09:01:52.105Z"
+    }
+  },
+  "story_itachi/kakashi_amused": {
+    "assetKey": "story_itachi/kakashi_amused",
+    "file": "story_itachi/kakashi_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2a9bf738-c6d4-415c-905f-928730392466",
+      "promptHash": "8e16e5c19713357a7f994b8b0afabd52",
+      "seed": "itachi-kakashi-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 19931,
+      "createdAt": "2026-09-10T09:01:53.911Z"
+    }
+  },
+  "story_itachi/kakashi_surprised": {
+    "assetKey": "story_itachi/kakashi_surprised",
+    "file": "story_itachi/kakashi_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "840b9caf-5191-4afe-88cb-3b635370c710",
+      "promptHash": "0e655a1e1d6fdaa8257ee73095d6b7bb",
+      "seed": "itachi-kakashi-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 23309,
+      "createdAt": "2026-09-10T09:02:09.922Z"
+    }
+  },
+  "story_itachi/kakashi_angry": {
+    "assetKey": "story_itachi/kakashi_angry",
+    "file": "story_itachi/kakashi_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7319afbe-7d16-4cb9-ae4f-316a7884cfb0",
+      "promptHash": "c8d850b0a36c7e5794827df504ed2eb5",
+      "seed": "itachi-kakashi-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 20944,
+      "createdAt": "2026-09-10T09:02:14.861Z"
+    }
+  },
+  "story_itachi/kakashi_annoyed": {
+    "assetKey": "story_itachi/kakashi_annoyed",
+    "file": "story_itachi/kakashi_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a11a0a34-49fd-49a5-a66a-885d3e478c3a",
+      "promptHash": "37ff72f175659f0807fba09b3680dce2",
+      "seed": "itachi-kakashi-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 22885,
+      "createdAt": "2026-09-10T09:02:14.994Z"
+    }
+  },
+  "story_itachi/kakashi_confused": {
+    "assetKey": "story_itachi/kakashi_confused",
+    "file": "story_itachi/kakashi_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f57de2ce-ed26-4712-af90-18215025cc2e",
+      "promptHash": "934002f3fdf6a34e5e750f839949f8b9",
+      "seed": "itachi-kakashi-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 38536,
+      "createdAt": "2026-09-10T09:02:27.758Z"
+    }
+  },
+  "story_itachi/kakashi_worried": {
+    "assetKey": "story_itachi/kakashi_worried",
+    "file": "story_itachi/kakashi_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kakashi Hatake, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e9f9aebf-5775-4f2b-a039-086090ef7221",
+      "promptHash": "508a89c05fdec52842cd559c689dc33d",
+      "seed": "itachi-kakashi-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 22459,
+      "createdAt": "2026-09-10T09:02:32.389Z"
+    }
+  },
+  "story_primal_crown/stage_the_stone_circle": {
+    "assetKey": "story_primal_crown/stage_the_stone_circle",
+    "file": "story_primal_crown/stage_the_stone_circle.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Circle: A flat hide the size of a room, pegged into the ground, with five carved river stones laid on it in a pattern forty years old.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4097eac4-af78-488b-b0e2-892c86f16147",
+      "promptHash": "d36346918ae44b1d5cc1807b20edfbfd",
+      "seed": "sv_primal_crown_1:loc:the_stone_circle:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44826,
+      "createdAt": "2026-09-10T16:06:36.034Z"
+    }
+  },
+  "story_primal_crown/key": {
+    "assetKey": "story_primal_crown/key",
+    "file": "story_primal_crown/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Primal Crown",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dd3ce5fc-b4f5-4750-b349-a18a022061c1",
+      "promptHash": "9a770030d1cca251f5e18dd8961a82fe",
+      "seed": "sv_primal_crown_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 48645,
+      "createdAt": "2026-09-10T16:06:39.851Z"
+    }
+  },
+  "story_primal_crown/stage_emberclaw_ground": {
+    "assetKey": "story_primal_crown/stage_emberclaw_ground",
+    "file": "story_primal_crown/stage_emberclaw_ground.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Emberclaw Ground: Not a camp so much as a wide flat area with tents around the edge and a great deal of racing in the middle.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "98a19d12-f533-450f-83f4-0301bace7767",
+      "promptHash": "3aeb773aab625e973970eb6aed44b9cb",
+      "seed": "sv_primal_crown_1:loc:emberclaw_ground:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39820,
+      "createdAt": "2026-09-10T16:07:19.678Z"
+    }
+  },
+  "story_primal_crown/stage_the_picket_lines": {
+    "assetKey": "story_primal_crown/stage_the_picket_lines",
+    "file": "story_primal_crown/stage_the_picket_lines.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Picket Lines: Half a mile of staked ground where four thousand animals are tethered by people who do not entirely trust each other’s animals.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "39c8c6d3-af1f-47c0-8940-7cde5c38e39c",
+      "promptHash": "aca97b17e863b3eb51ed03c9e8174239",
+      "seed": "sv_primal_crown_1:loc:the_picket_lines:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 46112,
+      "createdAt": "2026-09-10T16:07:22.157Z"
+    }
+  },
+  "story_primal_crown/cover": {
+    "assetKey": "story_primal_crown/cover",
+    "file": "story_primal_crown/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Primal Crown: The herds moved early. Somebody loses.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c465810f-dc7d-4e3a-b215-7b289d8833de",
+      "promptHash": "c27f08f3d155bf3d113e79311694cc5b",
+      "seed": "sv_primal_crown_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 111027,
+      "createdAt": "2026-09-10T16:07:42.220Z"
+    }
+  },
+  "story_primal_crown/stage_market_lanes": {
+    "assetKey": "story_primal_crown/stage_market_lanes",
+    "file": "story_primal_crown/stage_market_lanes.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Market Lanes: Six hundred stalls in four crooked rows, roofed with hide against a sun that has not properly arrived yet.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ad3471be-10bc-49cf-b794-52a4e3446c5f",
+      "promptHash": "03d374c2ca3b2c92d3dad08f3a4ce2dd",
+      "seed": "sv_primal_crown_1:loc:market_lanes:anima-v1",
+      "costUsd": 0.21952,
+      "latencyMs": 126609,
+      "createdAt": "2026-09-10T16:07:57.816Z"
+    }
+  },
+  "story_primal_crown/stage_stoneback_wharf": {
+    "assetKey": "story_primal_crown/stage_stoneback_wharf",
+    "file": "story_primal_crown/stage_stoneback_wharf.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Stoneback Wharf: Timber, rope, cranes worked by animals the size of houses, and more written record than the rest of this crossing put together.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9d465010-b427-419b-b99e-0d70024fd71e",
+      "promptHash": "0d1a8882e25c07071a6ad4cbca7c3f6b",
+      "seed": "sv_primal_crown_1:loc:stoneback_wharf:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43623,
+      "createdAt": "2026-09-10T16:08:03.308Z"
+    }
+  },
+  "story_primal_crown/stage_frostfang_fires": {
+    "assetKey": "story_primal_crown/stage_frostfang_fires",
+    "file": "story_primal_crown/stage_frostfang_fires.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Frostfang Fires: Nine fires in a wide ring with sleeping platforms between them, and a quiet you can hear from three hundred feet away.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5e3a3231-977b-4fcc-913a-259096109dcb",
+      "promptHash": "a7c7d5b99587a78494a3c0e7e1acd5a3",
+      "seed": "sv_primal_crown_1:loc:frostfang_fires:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43714,
+      "createdAt": "2026-09-10T16:08:05.879Z"
+    }
+  },
+  "story_primal_crown/stage_blackglass_ridge": {
+    "assetKey": "story_primal_crown/stage_blackglass_ridge",
+    "file": "story_primal_crown/stage_blackglass_ridge.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Blackglass Ridge: A spine of volcanic rock that has been warm underfoot since spring, with new cracks in it and a smell of eggs on the wind.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "70f024aa-9f83-4f54-8fba-99466c5819b7",
+      "promptHash": "198dea7982685d4067340b0db9f99e9e",
+      "seed": "sv_primal_crown_1:loc:blackglass_ridge:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 21792,
+      "createdAt": "2026-09-10T16:08:27.681Z"
+    }
+  },
+  "story_primal_crown/stage_skyfire_perch": {
+    "assetKey": "story_primal_crown/stage_skyfire_perch",
+    "file": "story_primal_crown/stage_skyfire_perch.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Perch: A finger of rock two hundred feet above the crossing with a rope stair up the back of it and no railing anywhere.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bb86c470-aef2-45db-81da-d1ee1ec3d7a4",
+      "promptHash": "432264f9833d6be814ae115aa9cafd9f",
+      "seed": "sv_primal_crown_1:loc:skyfire_perch:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 48284,
+      "createdAt": "2026-09-10T16:08:30.734Z"
+    }
+  },
+  "story_primal_crown/stage_mireborn_landing": {
+    "assetKey": "story_primal_crown/stage_mireborn_landing",
+    "file": "story_primal_crown/stage_mireborn_landing.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Landing: Floating walkways, reed matting and a dozen flat boats poled up from the delta, with hadrosaurs standing chest-deep alongside them chewing.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e8313dc2-561f-4171-9d5c-c64e23094da2",
+      "promptHash": "8c4a02aee9349803bb8bc7e6cbb571bd",
+      "seed": "sv_primal_crown_1:loc:mireborn_landing:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42448,
+      "createdAt": "2026-09-10T16:08:40.270Z"
+    }
+  },
+  "story_primal_crown/stage_the_north_road": {
+    "assetKey": "story_primal_crown/stage_the_north_road",
+    "file": "story_primal_crown/stage_the_north_road.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The North Road: Not a road.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9d2fef04-7bbf-4af4-b42a-8bfb51296788",
+      "promptHash": "660d5622bc793c65fbedf29d199ce607",
+      "seed": "sv_primal_crown_1:loc:the_north_road:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40945,
+      "createdAt": "2026-09-10T16:08:44.260Z"
+    }
+  },
+  "story_primal_crown/stage_the_bone_caves": {
+    "assetKey": "story_primal_crown/stage_the_bone_caves",
+    "file": "story_primal_crown/stage_the_bone_caves.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Bone Caves: Three chambers in a limestone bluff, floored with the bones of animals nobody at this crossing has a name for.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "33692286-972c-4a43-9c0b-03b4f90e0afa",
+      "promptHash": "b78ad087b3f710a60296661d8cabdc6b",
+      "seed": "sv_primal_crown_1:loc:the_bone_caves:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 27818,
+      "createdAt": "2026-09-10T16:08:55.505Z"
+    }
+  },
+  "story_primal_crown/stage_southern_grass": {
+    "assetKey": "story_primal_crown/stage_southern_grass",
+    "file": "story_primal_crown/stage_southern_grass.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Southern Grass: What all of this is about.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cee23fb0-3eb3-4713-9e2a-951ba725e1da",
+      "promptHash": "694c68acb9808b634f9a9c390aca0c49",
+      "seed": "sv_primal_crown_1:loc:southern_grass:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 22788,
+      "createdAt": "2026-09-10T16:09:03.067Z"
+    }
+  },
+  "story_primal_crown/kaia": {
+    "assetKey": "story_primal_crown/kaia",
+    "file": "story_primal_crown/kaia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, Emberclaw raptor rider, the fastest at this crossing, and the one who will still be arguing about the corridor when everybody else has gone to bed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "23e42e95-6aac-424a-a2d8-ced6ca009076",
+      "promptHash": "14baed760b70386125224fb7c1c4e80a",
+      "seed": "pc-kaia-01",
+      "costUsd": 0.00632,
+      "latencyMs": 28536,
+      "createdAt": "2026-09-10T16:09:12.806Z"
+    }
+  },
+  "story_primal_crown/stage_ashen_camp": {
+    "assetKey": "story_primal_crown/stage_ashen_camp",
+    "file": "story_primal_crown/stage_ashen_camp.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Broken Ground: Four hide shelters in a fold of rock below the ridge, three cages, and a great deal of fired clay.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a1b62236-a1c5-41df-8a84-5fbd0defde38",
+      "promptHash": "17d1f1abf7455287e1e677f4e6c89314",
+      "seed": "sv_primal_crown_1:loc:ashen_camp:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 46020,
+      "createdAt": "2026-09-10T16:09:16.762Z"
+    }
+  },
+  "story_primal_crown/suri": {
+    "assetKey": "story_primal_crown/suri",
+    "file": "story_primal_crown/suri.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, Frostfang sabertooth rider, here to secure the northern herd routes, and the person at this crossing who talks least and notices most",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "222c3502-4cbc-4cb6-bb3b-cef0a3a4fd91",
+      "promptHash": "754dde87e1b272f8c1f7df602a843b14",
+      "seed": "pc-suri-01",
+      "costUsd": 0.02404,
+      "latencyMs": 27910,
+      "createdAt": "2026-09-10T16:09:23.425Z"
+    }
+  },
+  "story_primal_crown/ilya": {
+    "assetKey": "story_primal_crown/ilya",
+    "file": "story_primal_crown/ilya.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, Skyfire scout and information broker, who has already sold what he knows about the north to two different peoples and is open to a third",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0528741c-4e18-4130-b1ec-9fccbfa35583",
+      "promptHash": "57538615c033a584c79bf65cdc1ea391",
+      "seed": "pc-ilya-01",
+      "costUsd": 0.02404,
+      "latencyMs": 25703,
+      "createdAt": "2026-09-10T16:09:28.786Z"
+    }
+  },
+  "story_primal_crown/torren": {
+    "assetKey": "story_primal_crown/torren",
+    "file": "story_primal_crown/torren.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, Stoneback heir and negotiator, whose family holds the corridor survey everybody is arguing from, and who is a great deal sharper than his manners suggest",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "375a1d85-4f53-4be5-aa77-6dbc34102711",
+      "promptHash": "6fc5c544e985713ebd2a9ab1d969c701",
+      "seed": "pc-torren-01",
+      "costUsd": 0.01372,
+      "latencyMs": 23579,
+      "createdAt": "2026-09-10T16:09:36.401Z"
+    }
+  },
+  "story_primal_crown/vesh": {
+    "assetKey": "story_primal_crown/vesh",
+    "file": "story_primal_crown/vesh.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, A beast-breaker with no colours who sells difficult animals at the pickets and is extremely good at it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9ad36164-5e9c-4136-ba23-4c6cbad13f3c",
+      "promptHash": "1ddf0897ba49bf8c15e39a00f0ac2d17",
+      "seed": "pc-vesh-01",
+      "costUsd": 0.00632,
+      "latencyMs": 15420,
+      "createdAt": "2026-09-10T16:09:38.856Z"
+    }
+  },
+  "story_primal_crown/mako": {
+    "assetKey": "story_primal_crown/mako",
+    "file": "story_primal_crown/mako.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, Mireborn healer and river guide, who will treat your animal for nothing and then tell you exactly what you did to it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd8a6a54-3701-4695-ac90-7b466fb679e7",
+      "promptHash": "57376864066d10673136c3696628dd28",
+      "seed": "pc-mako-01",
+      "costUsd": 0.02404,
+      "latencyMs": 27156,
+      "createdAt": "2026-09-10T16:09:43.934Z"
+    }
+  },
+  "story_primal_crown/kaia_neutral": {
+    "assetKey": "story_primal_crown/kaia_neutral",
+    "file": "story_primal_crown/kaia_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a3032889-e0cc-4347-85d3-4ae700044b65",
+      "promptHash": "4cdaf4ecea87fd27abec17c2507fe01f",
+      "seed": "pc-kaia-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 24732,
+      "createdAt": "2026-09-10T16:09:53.530Z"
+    }
+  },
+  "story_primal_crown/kaia_surprised": {
+    "assetKey": "story_primal_crown/kaia_surprised",
+    "file": "story_primal_crown/kaia_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5897e6cb-9d92-494d-9008-af9326d140eb",
+      "promptHash": "687ebd15c7aac12a577b4ff70328c330",
+      "seed": "pc-kaia-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 23312,
+      "createdAt": "2026-09-10T16:10:07.254Z"
+    }
+  },
+  "story_primal_crown/kaia_warm": {
+    "assetKey": "story_primal_crown/kaia_warm",
+    "file": "story_primal_crown/kaia_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7e481757-9499-47f4-b09f-7d1c338dd1d8",
+      "promptHash": "f21fa37c0925bdb57aa9b228e586560a",
+      "seed": "pc-kaia-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 36271,
+      "createdAt": "2026-09-10T16:10:12.681Z"
+    }
+  },
+  "story_primal_crown/kaia_amused": {
+    "assetKey": "story_primal_crown/kaia_amused",
+    "file": "story_primal_crown/kaia_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "12d95968-4089-4495-a815-b0464762f036",
+      "promptHash": "b3662faf1bfd71b2784b2806b41176c2",
+      "seed": "pc-kaia-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 38305,
+      "createdAt": "2026-09-10T16:10:17.168Z"
+    }
+  },
+  "story_primal_crown/kaia_confused": {
+    "assetKey": "story_primal_crown/kaia_confused",
+    "file": "story_primal_crown/kaia_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e3579eae-cae3-4510-bbde-e99c814812a4",
+      "promptHash": "67f62b849ee296bb0916a7e1d63495e6",
+      "seed": "pc-kaia-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 38556,
+      "createdAt": "2026-09-10T16:10:32.091Z"
+    }
+  },
+  "story_primal_crown/kaia_worried": {
+    "assetKey": "story_primal_crown/kaia_worried",
+    "file": "story_primal_crown/kaia_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "81d05617-5f27-418e-ac91-26d0a08077ad",
+      "promptHash": "d68a97a3bde7707d18c1c0530f36bf46",
+      "seed": "pc-kaia-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21749,
+      "createdAt": "2026-09-10T16:10:38.919Z"
+    }
+  },
+  "story_primal_crown/kaia_annoyed": {
+    "assetKey": "story_primal_crown/kaia_annoyed",
+    "file": "story_primal_crown/kaia_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c3fc25c1-3533-4a7b-8386-b5fcb56bb350",
+      "promptHash": "57dd15ccd5471bc42af13a040a278bb0",
+      "seed": "pc-kaia-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 35251,
+      "createdAt": "2026-09-10T16:10:42.511Z"
+    }
+  },
+  "story_primal_crown/kaia_angry": {
+    "assetKey": "story_primal_crown/kaia_angry",
+    "file": "story_primal_crown/kaia_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3549d7e4-0c25-43d8-a897-7428f2a8c78e",
+      "promptHash": "d8f917db7dc70ef42d12e35c599ec9ce",
+      "seed": "pc-kaia-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 35397,
+      "createdAt": "2026-09-10T16:10:48.084Z"
+    }
+  },
+  "story_primal_crown/suri_neutral": {
+    "assetKey": "story_primal_crown/suri_neutral",
+    "file": "story_primal_crown/suri_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b787c7b5-7410-4527-abfd-86e0e23a6426",
+      "promptHash": "858ebdbbd2eee2baf7c34c52029c30c1",
+      "seed": "pc-suri-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 23336,
+      "createdAt": "2026-09-10T16:10:55.432Z"
+    }
+  },
+  "story_primal_crown/suri_warm": {
+    "assetKey": "story_primal_crown/suri_warm",
+    "file": "story_primal_crown/suri_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "65a47b87-b51b-4e40-aa19-af3c78de48a3",
+      "promptHash": "3a7a3d8822fe271061e322a5db7252fb",
+      "seed": "pc-suri-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 21092,
+      "createdAt": "2026-09-10T16:11:00.017Z"
+    }
+  },
+  "story_primal_crown/suri_surprised": {
+    "assetKey": "story_primal_crown/suri_surprised",
+    "file": "story_primal_crown/suri_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "114e0377-1350-4854-acfe-07b0c1b1f68f",
+      "promptHash": "d40458e767bec2c685edb2a53e68f113",
+      "seed": "pc-suri-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 28150,
+      "createdAt": "2026-09-10T16:11:16.245Z"
+    }
+  },
+  "story_primal_crown/suri_confused": {
+    "assetKey": "story_primal_crown/suri_confused",
+    "file": "story_primal_crown/suri_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ec5d33e5-f336-4ad4-9a87-18c8f0c94309",
+      "promptHash": "303ad16499b0ee6e4a01871515b672ae",
+      "seed": "pc-suri-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 22027,
+      "createdAt": "2026-09-10T16:11:17.471Z"
+    }
+  },
+  "story_primal_crown/suri_annoyed": {
+    "assetKey": "story_primal_crown/suri_annoyed",
+    "file": "story_primal_crown/suri_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "988588e5-0668-4f35-8a3a-3bd1843ad844",
+      "promptHash": "ff5f807533452b463313821701350460",
+      "seed": "pc-suri-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 19581,
+      "createdAt": "2026-09-10T16:11:19.616Z"
+    }
+  },
+  "story_primal_crown/suri_amused": {
+    "assetKey": "story_primal_crown/suri_amused",
+    "file": "story_primal_crown/suri_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7ec688dc-3e01-42e2-85ad-1bd8fd19fe45",
+      "promptHash": "0f2567f49a71aaf8e559f63ba6c0a94a",
+      "seed": "pc-suri-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 39919,
+      "createdAt": "2026-09-10T16:11:22.442Z"
+    }
+  },
+  "story_primal_crown/suri_worried": {
+    "assetKey": "story_primal_crown/suri_worried",
+    "file": "story_primal_crown/suri_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5d0c34e3-c9be-42d3-a4ed-db7811e0ed87",
+      "promptHash": "2fcca51c29d672c5b5010efc7ebbd34e",
+      "seed": "pc-suri-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 17153,
+      "createdAt": "2026-09-10T16:11:34.633Z"
+    }
+  },
+  "story_primal_crown/suri_angry": {
+    "assetKey": "story_primal_crown/suri_angry",
+    "file": "story_primal_crown/suri_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd4f8d1e-2ec9-42f1-a6cb-2f4cfde03af5",
+      "promptHash": "6f9b9b7b9b6ee3cd9e83372300513c52",
+      "seed": "pc-suri-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 23595,
+      "createdAt": "2026-09-10T16:11:39.853Z"
+    }
+  },
+  "story_primal_crown/ilya_warm": {
+    "assetKey": "story_primal_crown/ilya_warm",
+    "file": "story_primal_crown/ilya_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0380bb5f-eeec-405b-91ae-828c98f0d0d1",
+      "promptHash": "cb92b55cf9e6eb7f5cdb1aa15bc756ee",
+      "seed": "pc-ilya-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 19897,
+      "createdAt": "2026-09-10T16:11:42.342Z"
+    }
+  },
+  "story_primal_crown/ilya_neutral": {
+    "assetKey": "story_primal_crown/ilya_neutral",
+    "file": "story_primal_crown/ilya_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aa3d1ab3-2431-41de-b47c-7ea1cf2fde97",
+      "promptHash": "c49cac655778317d9a7e0d10f1eaf4ce",
+      "seed": "pc-ilya-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 23744,
+      "createdAt": "2026-09-10T16:11:43.377Z"
+    }
+  },
+  "story_primal_crown/ilya_amused": {
+    "assetKey": "story_primal_crown/ilya_amused",
+    "file": "story_primal_crown/ilya_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4351ab3c-b3d3-4e68-8594-74462de27327",
+      "promptHash": "b18bbfe7982051210b825d744f6c5090",
+      "seed": "pc-ilya-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 23241,
+      "createdAt": "2026-09-10T16:11:57.877Z"
+    }
+  },
+  "story_primal_crown/ilya_annoyed": {
+    "assetKey": "story_primal_crown/ilya_annoyed",
+    "file": "story_primal_crown/ilya_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "84678256-5af6-4d29-a001-e03b22dcf3f9",
+      "promptHash": "4efa77898c46fb81f40850cd272f2a4c",
+      "seed": "pc-ilya-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 20602,
+      "createdAt": "2026-09-10T16:12:03.984Z"
+    }
+  },
+  "story_primal_crown/ilya_surprised": {
+    "assetKey": "story_primal_crown/ilya_surprised",
+    "file": "story_primal_crown/ilya_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "56a5a015-8cb4-4a4c-9322-3d706d48b296",
+      "promptHash": "bc872f0539fdf04b38c844a1b219aa28",
+      "seed": "pc-ilya-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 34265,
+      "createdAt": "2026-09-10T16:12:14.127Z"
+    }
+  },
+  "story_primal_crown/ilya_angry": {
+    "assetKey": "story_primal_crown/ilya_angry",
+    "file": "story_primal_crown/ilya_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b97e4697-b9c8-4e80-8dba-889d88593f78",
+      "promptHash": "553a1a86cbf94b755714fba978c1d87e",
+      "seed": "pc-ilya-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 18557,
+      "createdAt": "2026-09-10T16:12:16.438Z"
+    }
+  },
+  "story_primal_crown/ilya_confused": {
+    "assetKey": "story_primal_crown/ilya_confused",
+    "file": "story_primal_crown/ilya_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a218fc15-f08c-4d1e-807b-3d6ead3b4b2b",
+      "promptHash": "15aadb41c5e8493288ca9f4d2ff0ffad",
+      "seed": "pc-ilya-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 36628,
+      "createdAt": "2026-09-10T16:12:18.973Z"
+    }
+  },
+  "story_primal_crown/ilya_worried": {
+    "assetKey": "story_primal_crown/ilya_worried",
+    "file": "story_primal_crown/ilya_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a2ab6ddc-5ae4-4e03-8522-b0e290a62691",
+      "promptHash": "238361250075a4a8ad2aac26defc3659",
+      "seed": "pc-ilya-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 19103,
+      "createdAt": "2026-09-10T16:12:23.090Z"
+    }
+  },
+  "story_primal_crown/torren_warm": {
+    "assetKey": "story_primal_crown/torren_warm",
+    "file": "story_primal_crown/torren_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f9398fe-4444-4c98-bf6e-c773b42b991b",
+      "promptHash": "28e00c2af95b48c41579cdf5ea8897eb",
+      "seed": "pc-torren-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 15329,
+      "createdAt": "2026-09-10T16:12:31.774Z"
+    }
+  },
+  "story_primal_crown/torren_amused": {
+    "assetKey": "story_primal_crown/torren_amused",
+    "file": "story_primal_crown/torren_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "25661109-d3f5-4553-a850-22c47fea0626",
+      "promptHash": "716335c351e515110a857ac6d6ebbd7f",
+      "seed": "pc-torren-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 25559,
+      "createdAt": "2026-09-10T16:12:44.538Z"
+    }
+  },
+  "story_primal_crown/torren_surprised": {
+    "assetKey": "story_primal_crown/torren_surprised",
+    "file": "story_primal_crown/torren_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bc6194b3-24c5-495b-a70a-99101b93235e",
+      "promptHash": "fa94316bf00746d7498c913d609fcf6b",
+      "seed": "pc-torren-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 24002,
+      "createdAt": "2026-09-10T16:12:47.095Z"
+    }
+  },
+  "story_primal_crown/torren_neutral": {
+    "assetKey": "story_primal_crown/torren_neutral",
+    "file": "story_primal_crown/torren_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a5d5b7ff-dee1-4cc8-b196-a1f4f74ade50",
+      "promptHash": "eddfad14a8cf04e4e941056e723d7909",
+      "seed": "pc-torren-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 35306,
+      "createdAt": "2026-09-10T16:12:49.438Z"
+    }
+  },
+  "story_primal_crown/torren_annoyed": {
+    "assetKey": "story_primal_crown/torren_annoyed",
+    "file": "story_primal_crown/torren_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "da4a8126-88c1-42b7-8332-d47af10721a3",
+      "promptHash": "4c9b7433661d16317915bd7cf037ec55",
+      "seed": "pc-torren-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 19650,
+      "createdAt": "2026-09-10T16:13:04.194Z"
+    }
+  },
+  "story_primal_crown/torren_confused": {
+    "assetKey": "story_primal_crown/torren_confused",
+    "file": "story_primal_crown/torren_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a5bc73f8-af0f-43df-91aa-a43153523152",
+      "promptHash": "25e0b0212e66c502deb7e3ef24321dc3",
+      "seed": "pc-torren-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 36920,
+      "createdAt": "2026-09-10T16:13:08.696Z"
+    }
+  },
+  "story_primal_crown/torren_worried": {
+    "assetKey": "story_primal_crown/torren_worried",
+    "file": "story_primal_crown/torren_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e6368216-b459-49c4-bd05-709f40b21335",
+      "promptHash": "e7b9c760a09deb77ba41cb23a2a65674",
+      "seed": "pc-torren-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 27325,
+      "createdAt": "2026-09-10T16:13:16.769Z"
+    }
+  },
+  "story_primal_crown/mako_neutral": {
+    "assetKey": "story_primal_crown/mako_neutral",
+    "file": "story_primal_crown/mako_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e4a9412c-d73e-4d7e-a3f0-29abdb376a6d",
+      "promptHash": "e77fa0b80ae57cb20a3c7de0651b10a2",
+      "seed": "pc-mako-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 18430,
+      "createdAt": "2026-09-10T16:13:22.627Z"
+    }
+  },
+  "story_primal_crown/torren_angry": {
+    "assetKey": "story_primal_crown/torren_angry",
+    "file": "story_primal_crown/torren_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "80a3d3b6-6574-4444-9663-8bb1d1097cdc",
+      "promptHash": "04265b8cf985b31fc98466cdb43e6236",
+      "seed": "pc-torren-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 35939,
+      "createdAt": "2026-09-10T16:13:23.039Z"
+    }
+  },
+  "story_primal_crown/mako_amused": {
+    "assetKey": "story_primal_crown/mako_amused",
+    "file": "story_primal_crown/mako_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3454c017-e399-4657-bea0-e931f3a0bb2b",
+      "promptHash": "5f6981c6a813556645525c1c94dd26e5",
+      "seed": "pc-mako-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 21173,
+      "createdAt": "2026-09-10T16:13:37.948Z"
+    }
+  },
+  "story_primal_crown/mako_surprised": {
+    "assetKey": "story_primal_crown/mako_surprised",
+    "file": "story_primal_crown/mako_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "30626cf8-e7a7-4d28-8ca0-27af6c2f68fc",
+      "promptHash": "96f998c04b01fc8fe5009d4228952723",
+      "seed": "pc-mako-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 17727,
+      "createdAt": "2026-09-10T16:13:40.360Z"
+    }
+  },
+  "story_primal_crown/mako_warm": {
+    "assetKey": "story_primal_crown/mako_warm",
+    "file": "story_primal_crown/mako_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "96d7aac5-0c75-48df-9226-95f5c16648bb",
+      "promptHash": "2bdd3b5c191a520409cd0d3f6453feb8",
+      "seed": "pc-mako-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 35869,
+      "createdAt": "2026-09-10T16:13:44.577Z"
+    }
+  },
+  "story_primal_crown/mako_confused": {
+    "assetKey": "story_primal_crown/mako_confused",
+    "file": "story_primal_crown/mako_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "34a081a4-a04d-4900-93e6-12be6a51d189",
+      "promptHash": "94f774837704864732686656d9a46b0e",
+      "seed": "pc-mako-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23404,
+      "createdAt": "2026-09-10T16:13:46.448Z"
+    }
+  },
+  "story_primal_crown/mako_annoyed": {
+    "assetKey": "story_primal_crown/mako_annoyed",
+    "file": "story_primal_crown/mako_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd99c642-9512-4ee0-bf2a-b53a9094f471",
+      "promptHash": "4cd3d2198ebb635c59130ea3e128f99c",
+      "seed": "pc-mako-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 19654,
+      "createdAt": "2026-09-10T16:13:57.610Z"
+    }
+  },
+  "story_primal_crown/mako_angry": {
+    "assetKey": "story_primal_crown/mako_angry",
+    "file": "story_primal_crown/mako_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09ece214-0eed-4073-8b77-8153e2be89f5",
+      "promptHash": "1274757589e4b8d81a018cc308104a18",
+      "seed": "pc-mako-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 22980,
+      "createdAt": "2026-09-10T16:14:03.346Z"
+    }
+  },
+  "story_primal_crown/mako_worried": {
+    "assetKey": "story_primal_crown/mako_worried",
+    "file": "story_primal_crown/mako_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "07badd98-6358-4ef0-aa3d-5de74844cbe7",
+      "promptHash": "74a20710624cf53451b242eb2e23b1a2",
+      "seed": "pc-mako-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21035,
+      "createdAt": "2026-09-10T16:14:05.620Z"
+    }
+  },
+  "story_primal_crown/vesh_warm": {
+    "assetKey": "story_primal_crown/vesh_warm",
+    "file": "story_primal_crown/vesh_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c74b6e94-c567-47b5-9616-2c41b8390e2a",
+      "promptHash": "bc66f67c87a1d1dcf9c7efd8ef916380",
+      "seed": "pc-vesh-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 20023,
+      "createdAt": "2026-09-10T16:14:17.646Z"
+    }
+  },
+  "story_primal_crown/vesh_neutral": {
+    "assetKey": "story_primal_crown/vesh_neutral",
+    "file": "story_primal_crown/vesh_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e04fe0a5-5f83-4afa-b6f9-71a091c14cad",
+      "promptHash": "e05686456e88cfa9ae5bdf22797519dc",
+      "seed": "pc-vesh-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 35134,
+      "createdAt": "2026-09-10T16:14:21.588Z"
+    }
+  },
+  "story_primal_crown/vesh_amused": {
+    "assetKey": "story_primal_crown/vesh_amused",
+    "file": "story_primal_crown/vesh_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8846085a-584d-4ba5-8d01-bf3e747b4b0e",
+      "promptHash": "9cf98df4ccf4481bc138dbd5a94fb10b",
+      "seed": "pc-vesh-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 19330,
+      "createdAt": "2026-09-10T16:14:22.680Z"
+    }
+  },
+  "story_primal_crown/vesh_surprised": {
+    "assetKey": "story_primal_crown/vesh_surprised",
+    "file": "story_primal_crown/vesh_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cc5a0ebf-d9a4-4707-995a-eb9deef587e6",
+      "promptHash": "6840acbd3dd22197e79d856a3a734791",
+      "seed": "pc-vesh-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21753,
+      "createdAt": "2026-09-10T16:14:27.381Z"
+    }
+  },
+  "story_primal_crown/vesh_annoyed": {
+    "assetKey": "story_primal_crown/vesh_annoyed",
+    "file": "story_primal_crown/vesh_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ff01d092-8baa-4d06-9cbd-a69f637062ba",
+      "promptHash": "0f7e4f56038f3e14e61ba725f98419d4",
+      "seed": "pc-vesh-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 18309,
+      "createdAt": "2026-09-10T16:14:39.901Z"
+    }
+  },
+  "story_primal_crown/vesh_confused": {
+    "assetKey": "story_primal_crown/vesh_confused",
+    "file": "story_primal_crown/vesh_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "af87e6de-288a-4ae7-92e7-bdf07012547f",
+      "promptHash": "6143c55e09fd896cb6805e4f6221a306",
+      "seed": "pc-vesh-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 22692,
+      "createdAt": "2026-09-10T16:14:40.342Z"
+    }
+  },
+  "story_primal_crown/vesh_angry": {
+    "assetKey": "story_primal_crown/vesh_angry",
+    "file": "story_primal_crown/vesh_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c1d2cdec-72fb-434f-94f1-fb93e754305f",
+      "promptHash": "2a4c24799d4457a6a6ca3a894190ab28",
+      "seed": "pc-vesh-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 19271,
+      "createdAt": "2026-09-10T16:14:41.953Z"
+    }
+  },
+  "story_primal_crown/vesh_worried": {
+    "assetKey": "story_primal_crown/vesh_worried",
+    "file": "story_primal_crown/vesh_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2524de56-2d30-4f9e-a428-3742ce6a7e9f",
+      "promptHash": "d1ad50e61f8d90df14451ef0e78cac3c",
+      "seed": "pc-vesh-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 30550,
+      "createdAt": "2026-09-10T16:14:57.937Z"
+    }
+  },
+  "story_zero_throne/stage_vesper_hangar": {
+    "assetKey": "story_zero_throne/stage_vesper_hangar",
+    "file": "story_zero_throne/stage_vesper_hangar.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Memorial Hangar: Sealed for eighteen years and no longer sealed.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e280c28d-99f0-49aa-ae8f-82f065363f30",
+      "promptHash": "cc19f756bdafaa2f25c250ea18b38499",
+      "seed": "sv_zero_throne_1:loc:vesper_hangar:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 24125,
+      "createdAt": "2026-09-10T16:23:03.968Z"
+    }
   }
 }
