@@ -35,6 +35,8 @@ function makeContext(now: () => Date = () => new Date()): AppContext {
     // Pinned to the rule-based pipeline so tests never depend on a provider key.
     pipeline: createDefaultPipeline(),
     modelProvider: null,
+    // No model in tests, so the engine's deterministic derivation is what runs.
+    modelGateway: null,
     // No handlers registered, so media jobs are inert in tests.
     jobs: new JobQueue(),
     // The development verifier: the token is the user id. Production cannot

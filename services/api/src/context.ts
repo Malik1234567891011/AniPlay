@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CONTRACT_VERSION } from '@aniplay/contracts';
+import type { ModelGateway } from '@aniplay/director';
 import { createGatewayFromEnv, createModerator, ModelDirector, ModelIntentParser, ModelWriter, createDefaultPipeline, type Moderator, type TurnPipelineDeps } from '@aniplay/director';
 import { createMediaGatewayFromEnv } from '@aniplay/director';
 import { JobQueue, registerHandlers } from '@aniplay/worker';
@@ -71,6 +72,8 @@ export function assertProductionReady(
 }
 
 export interface AppContext {
+  /** Spec §9.4 — used once per session, at character creation. */
+  readonly modelGateway: ModelGateway | null;
   readonly config: AppConfig;
   readonly repo: Repository;
   readonly wallet: WalletService;
@@ -184,6 +187,10 @@ export function createAppContext(overrides: Partial<AppContext> = {}): AppContex
     wallet,
     pipeline,
     modelProvider: overrides.modelProvider ?? gateway?.name ?? null,
+    // Exposed so the one non-turn place that needs a model — reading a
+    // background the player wrote, once, at character creation — can reach it
+    // without another factory. Spec §9.4.
+    modelGateway: gateway ?? null,
     jobs,
     storeVerifier: overrides.storeVerifier ?? createStoreVerifierFromEnv(config),
     auth: overrides.auth ?? createTokenVerifierFromEnv(config),

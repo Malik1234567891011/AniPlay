@@ -85,8 +85,10 @@ export function CharacterSetupScreen({
           displayName: displayName.trim(),
           pronouns: pronouns.trim() || 'they/them',
           ageBand: null,
-          // A custom archetype grants no mechanical package, so writing your own
-          // is a narrative choice rather than a way to dodge the stat budget.
+          // Spec §9.4 — a background you wrote is worth the same as one we
+          // wrote. `null` here no longer means "no mechanics": the server reads
+          // what was written in `advanced.customArchetype` and spends the same
+          // budget the authored archetypes were written to.
           archetypeId: usingCustomArchetype ? null : archetypeId,
           worldKnowsAboutYou: about.trim().slice(0, 300),
           advanced: advancedValues,

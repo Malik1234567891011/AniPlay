@@ -55,6 +55,7 @@ import {
   toTimeline,
   toWorldSheet,
 } from './projections.js';
+import { deriveCustomBuildWithModel } from '@aniplay/director';
 import { availableCategories, categoriesFor, searchCatalog } from './catalog-taxonomy.js';
 import { registerMediaRoutes } from './media-routes.js';
 import type { SessionRecord, StorySignals } from './repo/types.js';
@@ -457,7 +458,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const user = await resolveUser(ctx, request);
     if (!user) return sendError(reply, 401, 'UNAUTHENTICATED', 'We could not confirm who you are. Check your connection and try again.');
 
-    const story = await ctx.repo.getStoryByStoryId(request.params.storyId);
+    let story = await ctx.repo.getStoryByStoryId(request.params.storyId);
     if (!story) return sendError(reply, 404, 'NOT_FOUND', 'That world does not exist.');
 
     const parsed = CreateSessionRequest.safeParse(request.body);
@@ -481,7 +482,27 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     }
 
     const sessionId = `sess_${crypto.randomUUID()}`;
-    const state = createInitialState({ sessionId, story, identity: parsed.data.identity });
+
+    // Spec §9.4 — a background the player wrote gets read properly.
+    //
+    // The engine's deterministic derivation is good where a world's
+    // affordances use plain language and poor against evocative prose, so the
+    // model reads it here — once, at character creation, which is the cheapest
+    // place a model call can happen. It chooses which skills; the budget comes
+    // from the world's own archetypes and is enforced, so freeform is exactly
+    // as strong as a preset and never stronger. Falls back to the engine's
+    // version when there is no gateway or the call fails.
+    let identity = parsed.data.identity;
+    const written = identity.advanced.customArchetype?.trim();
+    if (identity.archetypeId === null && written && ctx.modelGateway) {
+      const derived = await deriveCustomBuildWithModel(ctx.modelGateway, story, written).catch(() => null);
+      if (derived) {
+        story = { ...story, archetypes: [...story.archetypes, derived] };
+        identity = { ...identity, archetypeId: derived.id };
+      }
+    }
+
+    const state = createInitialState({ sessionId, story, identity });
 
     const record: SessionRecord = {
       sessionId,

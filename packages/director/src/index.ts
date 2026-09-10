@@ -12,3 +12,4 @@ export * from './narrative-clarity.js';
 export * from './choice-clarity.js';
 export * from './pipeline.js';
 export * from './model-stages.js';
+export * from './custom-build-stage.js';

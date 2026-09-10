@@ -13,6 +13,7 @@ import type {
 } from '@aniplay/contracts';
 import { ATTRIBUTE_KEYS } from '@aniplay/contracts';
 import { crewSkillModifier } from './crew.js';
+import { deriveCustomBuild } from './custom-build.js';
 import { attributeModifier } from './check.js';
 
 /** Construction and read helpers for the authoritative session snapshot. */
@@ -24,7 +25,17 @@ export interface CreateStateOptions {
 }
 
 export function createInitialState({ sessionId, story, identity }: CreateStateOptions): GameState {
-  const archetype = story.archetypes.find((a) => a.id === identity.archetypeId) ?? null;
+  // Spec §9.4 — a background the player wrote is worth the same as one we
+  // wrote. A custom description used to grant nothing at all: no attributes, no
+  // proficiencies, no starting technique, every skill at zero. The freeform
+  // path is one of this product's central promises and cannot be the weak
+  // option, so the same budget the authored archetypes were written to is
+  // derived from what the player actually described.
+  const archetype =
+    story.archetypes.find((a) => a.id === identity.archetypeId) ??
+    (identity.archetypeId === null
+      ? deriveCustomBuild(story, identity.advanced.customArchetype ?? identity.worldKnowsAboutYou ?? '')
+      : null);
 
   const attributes = {} as Record<AttributeKey, number>;
   for (const key of ATTRIBUTE_KEYS) {
