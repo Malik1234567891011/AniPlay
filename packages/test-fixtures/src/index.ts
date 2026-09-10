@@ -18,6 +18,7 @@ import { ZERO_THRONE as ZERO_THRONE_RAW } from './zero-throne.js';
 import { FOURTH_BEAST as FOURTH_BEAST_RAW } from './fourth-beast.js';
 import { SEVEN_NAMES as SEVEN_NAMES_RAW } from './seven-names.js';
 import { BLANK_PROPHECY as BLANK_PROPHECY_RAW } from './blank-prophecy.js';
+import { RED_FLOOR as RED_FLOOR_RAW } from './red-floor.js';
 
 
 export { withDerivedAssetKeys } from './derive-assets.js';
@@ -38,6 +39,7 @@ export const ZERO_THRONE = withDerivedAssetKeys(ZERO_THRONE_RAW);
 export const FOURTH_BEAST = withDerivedAssetKeys(FOURTH_BEAST_RAW);
 export const SEVEN_NAMES = withDerivedAssetKeys(SEVEN_NAMES_RAW);
 export const BLANK_PROPHECY = withDerivedAssetKeys(BLANK_PROPHECY_RAW);
+export const RED_FLOOR = withDerivedAssetKeys(RED_FLOOR_RAW);
 
 /**
  * Three of the newest worlds ship without generated art, deliberately.
@@ -86,7 +88,9 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * whichever you leave, and Seven Names is a list handed to a condemned prisoner
  * six hours before the execution, by a man who says the first thing to understand
  * about it is that a name on a list is not a person who deserves to die, and The Blank Prophecy is a world that decides who everybody is
- * going to be by reading a thread, and a person it read and found nothing on.
+ * going to be by reading a thread, and a person it read and found nothing on, and The Red Floor is a storage level under an ageing gym where
+ * fighters from every discipline meet after midnight and nothing that happens
+ * down there has ever been written down.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -108,4 +112,5 @@ export const LAUNCH_CATALOG = [
   FOURTH_BEAST,
   SEVEN_NAMES,
   BLANK_PROPHECY,
+  RED_FLOOR,
 ] as const;

@@ -24,15 +24,16 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ✅ 78 assets | ✅ |
 | The Fourth Beast | ✅ `fourth-beast.ts` | ✅ `fourth-beast.spec.ts` | ✅ 70 assets | ✅ |
 | Seven Names | ✅ `seven-names.ts` | ✅ `seven-names.spec.ts` | ✅ 82 assets | ✅ |
-| The Blank Prophecy | ✅ `blank-prophecy.ts` | ✅ `blank-prophecy.spec.ts` | ⏳ next | ✅ |
+| The Blank Prophecy | ✅ `blank-prophecy.ts` | ✅ `blank-prophecy.spec.ts` | ✅ 70 assets | ✅ |
+| The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ⏳ next | ✅ |
 
-All three gates green at the last commit. Catalog is now 19 worlds.
+All three gates green at the last commit. Catalog is now 20 worlds.
 
 **Not mine.** Another agent is generating art for Hush House, Window Seven and
 Good Morning, Husband on `main`. Do not generate for those three.
 
-**Untouched (3 worlds), in build order:**
-`06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
+**Untouched (2 worlds), in build order:**
+`07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
 `/Users/malik/Downloads/morestoryideas/`. Copy each bible into
 `docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
 `05_ZERO_THRONE.md`, that folder's index → `00_MORESTORYIDEAS_INDEX.md`).
@@ -197,8 +198,8 @@ every character and an animal cannot have them.
 
 ## Next
 
-1. Generate The Blank Prophecy art, then `optimize-art.ts`, gates, commit, push.
-2. Build `06_THE_RED_FLOOR.md`, then `07_SECOND_SKIN.md`, then `08_LAST_SERVICE.md`.
+1. Generate The Red Floor art, then `optimize-art.ts`, gates, commit, push.
+2. Build `07_SECOND_SKIN.md`, then `08_LAST_SERVICE.md`. That is the last of them.
 
 **The per-world loop that works — follow it exactly:**
 
@@ -264,6 +265,18 @@ topic; it never writes anything. Nothing will ever set it and the event fires
 forever or the route is dead. Hit by `camille_works_with_you` (Fourth Beast),
 `thalia_lends_the_bow` (Blank Prophecy) and `knows:the_real_width` (Primal
 Crown, where the gate existed and nothing wrote the flag it implied).
+
+**Third recurring class: a location with an edge out and none in.**
+`director.spec.ts` walks reachability from `rules.startingLocationId` through
+`connections`, and edges are one-way. Authoring `the_hill -> the_waterfront`
+without the return edge makes the hill unreachable. Hit twice in The Red Floor
+alone (`the_hill`, `daigo_camp`). Check every new location has somebody
+pointing at it.
+
+**Fourth: an inert `GOOD_LOW` resource.** Attention shipped with four bands of
+prose and no ability costing it, which reads as finished and is dead. Every
+descending resource needs at least one ability whose `costs` raise it — the
+per-world spec test for this has now earned its place four times.
 
 **Two more found by `director.spec.ts`:**
 
