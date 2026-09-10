@@ -29,6 +29,9 @@ import { speakerBrief } from './speaker-brief.js';
  * Spec §18.2 — every call is assembled in this order, and user text is always
  * passed as data rather than concatenated into privileged instructions (§18.3).
  */
+import type { Locale } from '@aniplay/i18n';
+import { SAFETY_POLICY_FR, WORLD_RULES_FR, WRITER_POLICY_FR } from './policies-fr.js';
+
 export function buildMessages(parts: {
   rolePolicy: string;
   safety: string;
@@ -72,6 +75,11 @@ export function buildMessages(parts: {
  * paid for once per conversation rather than once per turn.
  */
 export function worldRules(context: TurnContext): string {
+  // The French half is a table in `policies-fr.ts` rather than a second copy of
+  // this function, so that a rule added here is visibly missing there. A French
+  // `worldRules` that quietly fell a paragraph behind is exactly the kind of
+  // drift this codebase keeps finding.
+  if (context.state.locale === 'fr') return worldRulesFr(context);
   return [
     `World: ${context.story.title}.`,
     `The fantasy: ${context.story.fantasyLabel}`,
@@ -118,6 +126,50 @@ export function worldRules(context: TurnContext): string {
       'choice is the wrong one because it leads away. An ending is played only when the player walks ' +
       'into it, and a run that ends somewhere nobody named is a perfectly good run.',
   ].join('\n');
+}
+
+/**
+ * The same rules, in French, from the table in `policies-fr.ts`.
+ *
+ * The world's own content — title, premise, tone, canon — passes through
+ * untranslated on purpose. It is authored data and it is translated with its
+ * world, not with the app.
+ */
+function worldRulesFr(context: TurnContext): string {
+  return [
+    WORLD_RULES_FR.world(context.story.title),
+    WORLD_RULES_FR.fantasy(context.story.fantasyLabel),
+    '',
+    WORLD_RULES_FR.whatThisIs,
+    context.story.premise,
+    '',
+    WORLD_RULES_FR.tone(context.toneGuide),
+    WORLD_RULES_FR.canon(context.hardCanon.join(' | ')),
+    WORLD_RULES_FR.openSpace,
+    WORLD_RULES_FR.noWalls,
+    WORLD_RULES_FR.nameThings,
+    WORLD_RULES_FR.pressures,
+    WORLD_RULES_FR.endings,
+  ].join('\n');
+}
+
+/**
+ * The policies for one locale.
+ *
+ * **One function, used by both writer paths.** `model-stages.ts` and
+ * `fast-writer.ts` are two implementations of the same stage and the fast one
+ * is what production runs, so a French rule that reached only one of them would
+ * be invisible: nothing fails, the prose just gets worse, on the path almost
+ * every beat actually takes. `writer-parity.spec.ts` locks that for `fr` the
+ * same way it already does for `en`.
+ *
+ * The French is **authored, not translated** — see the head of `policies-fr.ts`
+ * for why a translated policy is worse than no policy.
+ */
+export function policyFor(locale: Locale): { writer: string; safety: string } {
+  return locale === 'fr'
+    ? { writer: WRITER_POLICY_FR, safety: SAFETY_POLICY_FR }
+    : { writer: WRITER_POLICY, safety: SAFETY_POLICY };
 }
 
 export const SAFETY_POLICY = [
@@ -189,7 +241,7 @@ export class ModelIntentParser implements IntentParser {
         ActionIntent,
         buildMessages({
           rolePolicy: PARSER_POLICY,
-          safety: SAFETY_POLICY,
+          safety: policyFor(context.state.locale).safety,
           worldRules: `World: ${story.title}. ${story.rules.toneGuide}`,
           state: vocabulary,
           task: `Produce an ActionIntent with intentId "${context.intentId}" and schemaVersion "1.0". Set rawAction to the player input verbatim.`,
@@ -293,7 +345,7 @@ export class ModelDirector implements Director {
         BeatPlan,
         buildMessages({
           rolePolicy: DIRECTOR_POLICY,
-          safety: SAFETY_POLICY,
+          safety: policyFor(context.state.locale).safety,
           worldRules: worldRules(context),
           state: directorPayload(context),
           task:
@@ -459,8 +511,8 @@ export class ModelWriter implements Writer {
         config.writerRole,
         NarrativeTurn,
         buildMessages({
-          rolePolicy: WRITER_POLICY,
-          safety: SAFETY_POLICY,
+          rolePolicy: policyFor(context.state.locale).writer,
+          safety: policyFor(context.state.locale).safety,
           worldRules: worldRules(context),
           state: {
             beatPlan: plan,

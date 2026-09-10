@@ -2,7 +2,8 @@ import type { NarrativeBlock, NarrativeTurn } from '@aniplay/contracts';
 import type { BeatPlan } from '@aniplay/contracts';
 import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
-import { buildMessages, SAFETY_POLICY, WRITER_POLICY, writerPayload } from './model-stages.js';
+import { buildMessages, policyFor, writerPayload } from './model-stages.js';
+import type { Locale } from '@aniplay/i18n';
 import { nameKeys } from '@aniplay/contracts';
 import { buildDeltas } from './writer.js';
 
@@ -196,8 +197,8 @@ export async function writeStreaming(
 ): Promise<NarrativeTurn> {
   const payload = writerPayload(context, plan);
   const messages = buildMessages({
-    rolePolicy: FAST_WRITER_POLICY,
-    safety: SAFETY_POLICY,
+    rolePolicy: fastWriterPolicy(context.state.locale),
+    safety: policyFor(context.state.locale).safety,
     worldRules: payload.worldRules,
     state: payload.state,
     task:
@@ -263,16 +264,39 @@ export async function writeStreaming(
  * It is a system message and it does not change within a session, so sharing it
  * costs a cache read rather than a thinking budget.
  */
-const FAST_WRITER_POLICY = [
-  WRITER_POLICY,
-  '',
-  'You are writing plain prose, not JSON. Put each character’s speech on its own line as',
-  'Name: "what they say". Everything else is narration. No headings, no lists, no stage directions in',
-  'brackets, and no commentary about the story.',
-].join('\n');
+const FORMAT_NOTE: Record<Locale, readonly string[]> = {
+  en: [
+    'You are writing plain prose, not JSON. Put each character’s speech on its own line as',
+    'Name: "what they say". Everything else is narration. No headings, no lists, no stage directions in',
+    'brackets, and no commentary about the story.',
+  ],
+  fr: [
+    'Tu écris de la prose, pas du JSON. Mets chaque réplique sur sa propre ligne, sous la forme',
+    'Nom : « ce qu’il dit ». Tout le reste est de la narration. Pas de titres, pas de listes, pas de',
+    'didascalies entre crochets, aucun commentaire sur l’histoire.',
+  ],
+};
+
+/**
+ * Built per locale, from `policyFor`, so the streaming writer and the
+ * structured one cannot be told different things.
+ *
+ * This is the writer on the fast path — the one that writes almost every beat a
+ * player ever reads — so a French rule that landed only in `model-stages.ts`
+ * would be invisible: nothing fails, the prose just gets worse, on the path
+ * production actually runs. `writer-parity.spec.ts` locks it for both locales.
+ */
+function fastWriterPolicy(locale: Locale): string {
+  return [policyFor(locale).writer, '', ...FORMAT_NOTE[locale]].join('\n');
+}
 
 /** Exported for the parity test only. */
-export const FAST_WRITER_POLICY_FOR_TEST = FAST_WRITER_POLICY;
+export function fastWriterPolicyForTest(locale: Locale): string {
+  return fastWriterPolicy(locale);
+}
+
+/** @deprecated Kept so the existing English parity assertions still read naturally. */
+export const FAST_WRITER_POLICY_FOR_TEST = fastWriterPolicy('en');
 
 
 /** `"…"` → `…`. The speech marks are the renderer's business. */

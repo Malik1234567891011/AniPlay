@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { WRITER_POLICY } from './model-stages.js';
-import { FAST_WRITER_POLICY_FOR_TEST } from './fast-writer.js';
+import { policyFor, WRITER_POLICY } from './model-stages.js';
+import { FAST_WRITER_POLICY_FOR_TEST, fastWriterPolicyForTest } from './fast-writer.js';
+import { FRENCH_EMPTY_CONSEQUENCES } from './policies-fr.js';
 
 /**
  * The two writers must be told the same things.
@@ -51,5 +52,73 @@ describe('both writers are told the same things', () => {
     const extra = FAST_WRITER_POLICY_FOR_TEST.replace(WRITER_POLICY, '');
     expect(extra).toContain('plain prose, not JSON');
     expect(extra.length).toBeLessThan(400);
+  });
+});
+
+/**
+ * The same trap, in French.
+ *
+ * `WRITER_POLICY_FR` is authored rather than translated, so it cannot be
+ * checked by diffing it against the English. What *can* be checked is the thing
+ * that actually goes wrong: a rule reaching one writer and not the other. The
+ * streaming writer is production; a French rule that landed only on the
+ * structured path would fail silently and forever.
+ */
+describe('both writers are told the same things in French too', () => {
+  it('the streaming writer carries the whole French policy', () => {
+    expect(fastWriterPolicyForTest('fr')).toContain(policyFor('fr').writer);
+  });
+
+  it('does not hand the French writer the English policy', () => {
+    // The failure this catches: `policyFor` falling back to `en` for an
+    // unrecognised locale, which would look like nothing at all.
+    expect(policyFor('fr').writer).not.toBe(policyFor('en').writer);
+    expect(policyFor('fr').safety).not.toBe(policyFor('en').safety);
+    expect(fastWriterPolicyForTest('fr')).not.toContain(policyFor('en').writer);
+  });
+
+  it('carries the rules that only French needs', () => {
+    for (const rule of [
+      // Présent de narration, and the passé simple ban that goes with it.
+      'présent de narration',
+      'passé simple',
+      // tu, always, even when a character vouvoies the player.
+      'Le narrateur ne vouvoie jamais',
+      // Rhythm is content — three short sentences stay three short sentences.
+      'Trois phrases courtes restent trois phrases courtes',
+      // `du coup` is a fault in narration, fine in dialogue.
+      'du coup',
+      // The -ment adverb cap, which is machine translation's fingerprint.
+      'adverbe en -ment par beat',
+      // Never spell the sound.
+      'n’écris pas le son',
+      // Agreement with the player, and the midpoint ban.
+      'playerGrammar.gender',
+      'N’écris JAMAIS de point médian',
+      // Length is a floor, not a ceiling.
+      'valoir la peine d’être lu',
+    ]) {
+      expect(fastWriterPolicyForTest('fr'), rule).toContain(rule);
+    }
+  });
+
+  it('gives the French writer the French empty-consequence list', () => {
+    // A translated blocklist does not catch the French set: these are the
+    // phrases a French model reaches for, and they are a different list.
+    for (const phrase of FRENCH_EMPTY_CONSEQUENCES) {
+      expect(fastWriterPolicyForTest('fr'), phrase).toContain(phrase);
+    }
+    // And the English writer is not carrying French it cannot use.
+    expect(fastWriterPolicyForTest('en')).not.toContain('quelque chose change entre vous');
+  });
+
+  it('tells the French writer, in French, that it is not translating', () => {
+    expect(policyFor('fr').writer).toContain('Tu ne traduis pas');
+  });
+
+  it('leaves the English policy exactly as it was', () => {
+    // Adding a locale dimension must not have moved English by one character.
+    expect(policyFor('en').writer).toBe(WRITER_POLICY);
+    expect(fastWriterPolicyForTest('en')).toBe(FAST_WRITER_POLICY_FOR_TEST);
   });
 });
