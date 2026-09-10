@@ -6,6 +6,7 @@ import {
   generatedId,
   isGenerated,
   matchMention,
+  matchMentionHere,
   mentionFlag,
   mentionedNames,
   promoteCharacter,
@@ -76,19 +77,21 @@ describe('composition', () => {
 describe('what the story has put in front of the player', () => {
   it('records proper nouns from a beat', () => {
     const text = 'You push out past the gate and the street opens up. The Moonlight Café is still lit.';
-    const mutations = recordMentions(text, NINTH_ARCHIVE, nextId);
+    const mutations = recordMentions(text, NINTH_ARCHIVE, 'gate_arch', nextId);
     const names = mutations.map((m) => m.payload.value);
-    expect(names).toContain('Moonlight Café');
+    // Recorded with the room that said it, so a person can only be made real
+    // where they were introduced.
+    expect(names).toContain('Moonlight Café@gate_arch');
   });
 
   it('ignores names the world already has', () => {
     const text = 'Mira is at the Gate Arch.';
-    expect(recordMentions(text, NINTH_ARCHIVE, nextId)).toEqual([]);
+    expect(recordMentions(text, NINTH_ARCHIVE, 'gate_arch', nextId)).toEqual([]);
   });
 
   it('ignores ordinary sentence starters', () => {
     const text = 'You look around. There is nothing here. Nobody speaks.';
-    expect(recordMentions(text, NINTH_ARCHIVE, nextId)).toEqual([]);
+    expect(recordMentions(text, NINTH_ARCHIVE, 'gate_arch', nextId)).toEqual([]);
   });
 
   it('matches what the player is pointing at, longest name first', () => {
@@ -176,6 +179,77 @@ describe('promotion happens because the player made it happen', () => {
     // On the stage, addressable, and a legal target.
     expect(charactersPresent(s).map((c) => c.characterId)).toContain(riku.id);
     expect(composed.characters.find((c) => c.id === riku.id)!.name).toBe('Riku Sato');
+  });
+});
+
+describe('the person the story introduced and then disowned', () => {
+  const talkTo = (s: GameState, name: string) =>
+    resolveIntent({
+      story: composeStory(NINTH_ARCHIVE, s), state: s, turnId: 't', seed: 'talk',
+      intent: {
+        schemaVersion: '1.0', intentId: 'i', rawAction: `I ask ${name} what happens next.`,
+        dialogue: [], confidence: 0.9, ambiguities: [], unsafeOrMetaRequests: [],
+        actions: [{
+          verb: 'speak', actor: { entityType: 'player', entityId: 'player' },
+          targets: [{ entityType: 'npc', entityId: 'nobody', displayName: name }],
+          method: `ask ${name} what happens next`, declaredOutcome: '', timeIntent: 'NOW',
+        }],
+      },
+    });
+
+  it('turns someone the beat named into someone you can actually talk to', () => {
+    const s = state();
+    s.flags[mentionFlag('Riku Sato')] = `Riku Sato@${s.player.locationId}`;
+
+    const resolution = talkTo(s, 'Riku Sato');
+    expect(resolution.normalizedActions[0]).toMatchObject({ status: 'RESOLVED' });
+
+    const after = commitTurn({ story: NINTH_ARCHIVE, state: s, resolution, turnId: 't' }).state;
+    const riku = generatedId('npc', 'Riku Sato');
+
+    // Exists, is in the room, and is a legal target for everything else.
+    expect(after.generated.characters.map((c) => c.id)).toContain(riku);
+    expect(charactersPresent(after).map((c) => c.characterId)).toContain(riku);
+    expect(after.generated.origins.some((o) => o.entityId === riku && o.kind === 'CHARACTER')).toBe(true);
+    expect(composeStory(NINTH_ARCHIVE, after).characters.find((c) => c.id === riku)!.name).toBe('Riku Sato');
+  });
+
+  it('keeps them across the reload that used to erase them', () => {
+    const s = state();
+    s.flags[mentionFlag('Riku Sato')] = `Riku Sato@${s.player.locationId}`;
+    const after = commitTurn({
+      story: NINTH_ARCHIVE, state: s, resolution: talkTo(s, 'Riku Sato'), turnId: 't',
+    }).state;
+
+    const reloaded = GameState.parse(JSON.parse(JSON.stringify(after)));
+    expect(composeStory(NINTH_ARCHIVE, reloaded).characters.some((c) => c.name === 'Riku Sato')).toBe(true);
+    expect(charactersPresent(reloaded).map((c) => c.characterId)).toContain(generatedId('npc', 'Riku Sato'));
+  });
+
+  // Speaking a name into the air is never *refused* — the player is allowed to
+  // address anyone, and the writer narrates the words landing on nobody. What
+  // must not happen is a permanent person appearing out of it.
+  const promoted = (s: GameState, name: string) =>
+    commitTurn({ story: NINTH_ARCHIVE, state: s, resolution: talkTo(s, name), turnId: 't' })
+      .state.generated.characters;
+
+  it('will not conjure someone who was only talked about somewhere else', () => {
+    const s = state();
+    s.flags[mentionFlag('Riku Sato')] = 'Riku Sato@somewhere_else';
+    expect(promoted(s, 'Riku Sato')).toEqual([]);
+  });
+
+  it('makes nobody real from a name the story never said', () => {
+    expect(promoted(state(), 'Atlantis Jones')).toEqual([]);
+  });
+
+  it('promotes a place from anywhere, because you can walk to it', () => {
+    // The asymmetry is deliberate: being talked about is not being here, but a
+    // place you heard about two rooms ago is still somewhere you can go.
+    const s = state();
+    s.flags[mentionFlag('Moonlight Café')] = 'Moonlight Café@somewhere_else';
+    expect(matchMention('go to the moonlight café', s)).toBe('Moonlight Café');
+    expect(matchMentionHere('talk to the moonlight café', s)).toBeNull();
   });
 });
 

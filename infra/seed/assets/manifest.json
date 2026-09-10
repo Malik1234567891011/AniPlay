@@ -3285,5 +3285,1202 @@
       "latencyMs": 14014,
       "createdAt": "2026-09-10T01:51:24.786Z"
     }
+  },
+  "story_last_five/coach_neutral": {
+    "assetKey": "story_last_five/coach_neutral",
+    "file": "story_last_five/coach_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ena Torakawa, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b5200efe-15d6-4340-8e4c-2b9949ff0cee",
+      "promptHash": "faf7f38c7ebaf4b40169d59ee3512f7f",
+      "seed": "lastfive-coach-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 32988,
+      "createdAt": "2026-09-10T01:51:29.511Z"
+    }
+  },
+  "story_last_five/jun_worried": {
+    "assetKey": "story_last_five/jun_worried",
+    "file": "story_last_five/jun_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jun Hasabe, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "14678a85-39b5-4ddc-91a3-eb8d2a23cf46",
+      "promptHash": "97549954e88c06a0973ec9b253677d24",
+      "seed": "lastfive-jun-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 35393,
+      "createdAt": "2026-09-10T01:51:30.971Z"
+    }
+  },
+  "story_last_five/coach_surprised": {
+    "assetKey": "story_last_five/coach_surprised",
+    "file": "story_last_five/coach_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ena Torakawa, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "31450605-6377-4d21-bcfd-4b1410c97ef3",
+      "promptHash": "a5cc4abbac9727bb9feef6e76b96ff73",
+      "seed": "lastfive-coach-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21824,
+      "createdAt": "2026-09-10T01:51:41.779Z"
+    }
+  },
+  "story_last_five/coach_annoyed": {
+    "assetKey": "story_last_five/coach_annoyed",
+    "file": "story_last_five/coach_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ena Torakawa, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e69b00b4-1a37-41f2-aaee-d1f7b58425ba",
+      "promptHash": "e0764b4c9871c03e22581d0931478197",
+      "seed": "lastfive-coach-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 19513,
+      "createdAt": "2026-09-10T01:51:49.028Z"
+    }
+  },
+  "story_last_five/coach_angry": {
+    "assetKey": "story_last_five/coach_angry",
+    "file": "story_last_five/coach_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ena Torakawa, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "491fd839-b662-451e-b788-db0c59fba5b7",
+      "promptHash": "c54c5a58991a410b87bef4eaa05e9814",
+      "seed": "lastfive-coach-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 18512,
+      "createdAt": "2026-09-10T01:51:49.488Z"
+    }
+  },
+  "story_last_five/coach_confused": {
+    "assetKey": "story_last_five/coach_confused",
+    "file": "story_last_five/coach_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ena Torakawa, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8be9ef08-a0a4-461e-9132-c84aca794315",
+      "promptHash": "6b7442fc365fe00e8e8186bec5f5f8cc",
+      "seed": "lastfive-coach-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 28345,
+      "createdAt": "2026-09-10T01:51:53.145Z"
+    }
+  },
+  "story_last_five/bo_warm": {
+    "assetKey": "story_last_five/bo_warm",
+    "file": "story_last_five/bo_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5d974a66-1348-490f-aa16-9c7971535c65",
+      "promptHash": "d2d3e05057100dbe0002f1e5ae41fd6a",
+      "seed": "lastfive-bo-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 16743,
+      "createdAt": "2026-09-10T01:52:06.236Z"
+    }
+  },
+  "story_last_five/bo_neutral": {
+    "assetKey": "story_last_five/bo_neutral",
+    "file": "story_last_five/bo_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3cb8b564-31bc-4255-9e36-8f3440811f57",
+      "promptHash": "df9d34aeac1cf6c220bcb41c687aa0a3",
+      "seed": "lastfive-bo-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 18515,
+      "createdAt": "2026-09-10T01:52:07.547Z"
+    }
+  },
+  "story_last_five/coach_worried": {
+    "assetKey": "story_last_five/coach_worried",
+    "file": "story_last_five/coach_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ena Torakawa, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a7b234ab-b175-4b50-9092-6056bae68c4d",
+      "promptHash": "a54bf0fc3db7ea8f075a072182bd6418",
+      "seed": "lastfive-coach-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 27876,
+      "createdAt": "2026-09-10T01:52:09.660Z"
+    }
+  },
+  "story_last_five/bo_amused": {
+    "assetKey": "story_last_five/bo_amused",
+    "file": "story_last_five/bo_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e5c9cee0-b68c-4afa-a995-c31a1f05e9e2",
+      "promptHash": "2e2e9a4d3367be0c8abd6804fbfd6c47",
+      "seed": "lastfive-bo-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 18168,
+      "createdAt": "2026-09-10T01:52:11.315Z"
+    }
+  },
+  "story_last_five/bo_surprised": {
+    "assetKey": "story_last_five/bo_surprised",
+    "file": "story_last_five/bo_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cb04583a-86e4-49ca-8414-4340c49be20c",
+      "promptHash": "73144865f9b474ba7c6fd6523a983e1c",
+      "seed": "lastfive-bo-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 16763,
+      "createdAt": "2026-09-10T01:52:23.006Z"
+    }
+  },
+  "story_last_five/bo_angry": {
+    "assetKey": "story_last_five/bo_angry",
+    "file": "story_last_five/bo_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dd035206-8e92-4c74-a258-64f4ad526a9a",
+      "promptHash": "a8c8e91da5555a37363832be1f2df641",
+      "seed": "lastfive-bo-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 14802,
+      "createdAt": "2026-09-10T01:52:26.128Z"
+    }
+  },
+  "story_last_five/bo_annoyed": {
+    "assetKey": "story_last_five/bo_annoyed",
+    "file": "story_last_five/bo_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2a5b827b-4265-494c-864b-437a85a08e86",
+      "promptHash": "7dee593ce95b5812e14b1ca745655aaa",
+      "seed": "lastfive-bo-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 19442,
+      "createdAt": "2026-09-10T01:52:29.109Z"
+    }
+  },
+  "story_last_five/bo_confused": {
+    "assetKey": "story_last_five/bo_confused",
+    "file": "story_last_five/bo_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f6093824-b3cc-4ab3-b44e-278000ba8dc9",
+      "promptHash": "e5bf9e5858711ff0ca031273bbc0e4af",
+      "seed": "lastfive-bo-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 21785,
+      "createdAt": "2026-09-10T01:52:29.335Z"
+    }
+  },
+  "story_last_five/bo_worried": {
+    "assetKey": "story_last_five/bo_worried",
+    "file": "story_last_five/bo_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Bo Ferrand, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2fbdaeac-f4f0-4a66-9cf1-6fa18b00ccb0",
+      "promptHash": "74e116565ae483a37ea262852c3a1e40",
+      "seed": "lastfive-bo-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 16877,
+      "createdAt": "2026-09-10T01:52:39.887Z"
+    }
+  },
+  "story_last_five/nori_neutral": {
+    "assetKey": "story_last_five/nori_neutral",
+    "file": "story_last_five/nori_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "50d27353-983b-4978-acbd-545ea5d1fff8",
+      "promptHash": "cb72e7356a5c65aaa1ee5a949974413d",
+      "seed": "lastfive-nori-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 18902,
+      "createdAt": "2026-09-10T01:52:45.035Z"
+    }
+  },
+  "story_last_five/nori_warm": {
+    "assetKey": "story_last_five/nori_warm",
+    "file": "story_last_five/nori_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0cc41412-cb63-4bc4-9987-1156bb1fb889",
+      "promptHash": "75380bbf8b85ba7bb5c5152874bff39a",
+      "seed": "lastfive-nori-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 16604,
+      "createdAt": "2026-09-10T01:52:45.716Z"
+    }
+  },
+  "story_last_five/nori_amused": {
+    "assetKey": "story_last_five/nori_amused",
+    "file": "story_last_five/nori_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4b1caf73-a4c3-46b3-9bd4-1c829aa09932",
+      "promptHash": "b6a1804a54b14ba1bae27038bab109c5",
+      "seed": "lastfive-nori-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 16865,
+      "createdAt": "2026-09-10T01:52:46.204Z"
+    }
+  },
+  "story_last_five/nori_surprised": {
+    "assetKey": "story_last_five/nori_surprised",
+    "file": "story_last_five/nori_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ad59fa3f-c175-45b3-9137-458d2c9acf03",
+      "promptHash": "1c0d4c221c51aeb8ad0bb481203b302f",
+      "seed": "lastfive-nori-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 14775,
+      "createdAt": "2026-09-10T01:52:54.668Z"
+    }
+  },
+  "story_last_five/nori_annoyed": {
+    "assetKey": "story_last_five/nori_annoyed",
+    "file": "story_last_five/nori_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8565c0e1-45d5-4f77-bc9c-5f8af3e8610c",
+      "promptHash": "d76a4d81096eeea1226228d528c4ab52",
+      "seed": "lastfive-nori-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18893,
+      "createdAt": "2026-09-10T01:53:04.623Z"
+    }
+  },
+  "story_last_five/nori_confused": {
+    "assetKey": "story_last_five/nori_confused",
+    "file": "story_last_five/nori_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "87e79a83-fb6f-4d77-904e-8de25711e44f",
+      "promptHash": "694c8c347a98a089367ee8518cdc1e32",
+      "seed": "lastfive-nori-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 22932,
+      "createdAt": "2026-09-10T01:53:07.973Z"
+    }
+  },
+  "story_last_five/nori_angry": {
+    "assetKey": "story_last_five/nori_angry",
+    "file": "story_last_five/nori_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cb425b72-659a-423f-9599-a5cbfaa5a092",
+      "promptHash": "67bccd3983c1d67645e329298d78dd4c",
+      "seed": "lastfive-nori-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 25782,
+      "createdAt": "2026-09-10T01:53:11.990Z"
+    }
+  },
+  "story_last_five/nori_worried": {
+    "assetKey": "story_last_five/nori_worried",
+    "file": "story_last_five/nori_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nori Abe, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "10761106-1a64-4412-9afd-22b1f4fc6cff",
+      "promptHash": "90d2031b482607b23b23bf95bdab2ff0",
+      "seed": "lastfive-nori-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 24436,
+      "createdAt": "2026-09-10T01:53:19.111Z"
+    }
+  },
+  "story_last_five/rei_neutral": {
+    "assetKey": "story_last_five/rei_neutral",
+    "file": "story_last_five/rei_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1d81b3c2-1966-4cd6-a7bd-c3267c059ff6",
+      "promptHash": "1590431623f16ec591654ec9d1740a5a",
+      "seed": "lastfive-rei-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 16032,
+      "createdAt": "2026-09-10T01:53:20.661Z"
+    }
+  },
+  "story_last_five/rei_warm": {
+    "assetKey": "story_last_five/rei_warm",
+    "file": "story_last_five/rei_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "32c6a7fe-2686-40b7-b458-59b0791b6e47",
+      "promptHash": "accd3945e6f379ebc81209404dd4e82c",
+      "seed": "lastfive-rei-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 18456,
+      "createdAt": "2026-09-10T01:53:26.431Z"
+    }
+  },
+  "story_last_five/rei_surprised": {
+    "assetKey": "story_last_five/rei_surprised",
+    "file": "story_last_five/rei_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "99df9df5-5bf4-4a71-90bc-c009bde8b142",
+      "promptHash": "0fa78e3309398cf2b0ea4a7893578e47",
+      "seed": "lastfive-rei-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 18031,
+      "createdAt": "2026-09-10T01:53:37.149Z"
+    }
+  },
+  "story_last_five/rei_confused": {
+    "assetKey": "story_last_five/rei_confused",
+    "file": "story_last_five/rei_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "42969a9a-baa9-4938-8912-d608f6b19a9f",
+      "promptHash": "70768994c91114276e89419d225a58bc",
+      "seed": "lastfive-rei-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 17656,
+      "createdAt": "2026-09-10T01:53:38.326Z"
+    }
+  },
+  "story_last_five/rei_amused": {
+    "assetKey": "story_last_five/rei_amused",
+    "file": "story_last_five/rei_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "725882c7-f197-4a63-9840-f7e525c051fb",
+      "promptHash": "0d3bf08bfd214d7da2eb2bedd9e4a138",
+      "seed": "lastfive-rei-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34474,
+      "createdAt": "2026-09-10T01:53:46.467Z"
+    }
+  },
+  "story_last_five/rei_angry": {
+    "assetKey": "story_last_five/rei_angry",
+    "file": "story_last_five/rei_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "abdb12c6-907d-4dea-9bf0-76eea7c0ca5a",
+      "promptHash": "9a903fc103a9608541738c2f18f0474e",
+      "seed": "lastfive-rei-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 21967,
+      "createdAt": "2026-09-10T01:53:59.128Z"
+    }
+  },
+  "story_last_five/rei_annoyed": {
+    "assetKey": "story_last_five/rei_annoyed",
+    "file": "story_last_five/rei_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3ac579eb-0913-4d13-9e83-27e183d858df",
+      "promptHash": "2dca54c11684f9ff5600f95b231dc29a",
+      "seed": "lastfive-rei-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 34619,
+      "createdAt": "2026-09-10T01:54:01.062Z"
+    }
+  },
+  "story_last_five/tsubame_neutral": {
+    "assetKey": "story_last_five/tsubame_neutral",
+    "file": "story_last_five/tsubame_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4a3a793c-4b2b-47c5-b838-baabf8971f72",
+      "promptHash": "aa12f62bf30e47f4fd1132e2a3a1869b",
+      "seed": "lastfive-tsubame-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 24083,
+      "createdAt": "2026-09-10T01:54:10.557Z"
+    }
+  },
+  "story_last_five/rei_worried": {
+    "assetKey": "story_last_five/rei_worried",
+    "file": "story_last_five/rei_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rei Amagi, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "22254dfe-c914-4dd1-a2aa-0c5d5aca5a13",
+      "promptHash": "d6fc0493ebf5e5be057008d60a7fefc4",
+      "seed": "lastfive-rei-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 35535,
+      "createdAt": "2026-09-10T01:54:13.872Z"
+    }
+  },
+  "story_last_five/tsubame_warm": {
+    "assetKey": "story_last_five/tsubame_warm",
+    "file": "story_last_five/tsubame_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "29b7b0d8-f97c-4847-bb69-2524c11e431c",
+      "promptHash": "b31dea4d1c2dbb0698a2872146bee58b",
+      "seed": "lastfive-tsubame-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 20022,
+      "createdAt": "2026-09-10T01:54:19.160Z"
+    }
+  },
+  "story_last_five/tsubame_amused": {
+    "assetKey": "story_last_five/tsubame_amused",
+    "file": "story_last_five/tsubame_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "90b416d8-bdbe-45fe-b87a-f136b2541649",
+      "promptHash": "15b93a197eb8e0f9ed331d3f318e526b",
+      "seed": "lastfive-tsubame-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 19109,
+      "createdAt": "2026-09-10T01:54:20.178Z"
+    }
+  },
+  "story_last_five/tsubame_surprised": {
+    "assetKey": "story_last_five/tsubame_surprised",
+    "file": "story_last_five/tsubame_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2709e5d9-ac14-441a-b262-0d9a8cd7ba54",
+      "promptHash": "d51bc329669e46436b15060c68380590",
+      "seed": "lastfive-tsubame-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20904,
+      "createdAt": "2026-09-10T01:54:31.466Z"
+    }
+  },
+  "story_last_five/tsubame_confused": {
+    "assetKey": "story_last_five/tsubame_confused",
+    "file": "story_last_five/tsubame_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d08e1f76-a87e-4b6a-b42b-b93d82991efa",
+      "promptHash": "e5971df3702beec2ce2b6d4f043e3f12",
+      "seed": "lastfive-tsubame-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 21051,
+      "createdAt": "2026-09-10T01:54:34.931Z"
+    }
+  },
+  "story_last_five/tsubame_angry": {
+    "assetKey": "story_last_five/tsubame_angry",
+    "file": "story_last_five/tsubame_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "174e963e-0b79-49ab-a104-909ddbc1c2bc",
+      "promptHash": "c8b42a714fca14c2e4e75c13cc2eb626",
+      "seed": "lastfive-tsubame-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 17431,
+      "createdAt": "2026-09-10T01:54:37.620Z"
+    }
+  },
+  "story_last_five/tsubame_annoyed": {
+    "assetKey": "story_last_five/tsubame_annoyed",
+    "file": "story_last_five/tsubame_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a5942f0c-6c0a-426a-bdc2-e7d901b88585",
+      "promptHash": "aa5953fa0d42b3f08d73b50818cdf496",
+      "seed": "lastfive-tsubame-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 25048,
+      "createdAt": "2026-09-10T01:54:44.217Z"
+    }
+  },
+  "story_last_five/gora_warm": {
+    "assetKey": "story_last_five/gora_warm",
+    "file": "story_last_five/gora_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5d37c7ed-9ea3-4989-b91a-03331888a822",
+      "promptHash": "ef6ba5b0e7f9c7e084d8a1250af02f51",
+      "seed": "lastfive-gora-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 13592,
+      "createdAt": "2026-09-10T01:54:51.221Z"
+    }
+  },
+  "story_last_five/tsubame_worried": {
+    "assetKey": "story_last_five/tsubame_worried",
+    "file": "story_last_five/tsubame_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tsubame Kirisawa, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "39f0f4f5-6646-4799-9c8b-2ce72fef145b",
+      "promptHash": "9f8e9622238145660fd979b60ec33c1c",
+      "seed": "lastfive-tsubame-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21544,
+      "createdAt": "2026-09-10T01:54:53.022Z"
+    }
+  },
+  "story_last_five/gora_neutral": {
+    "assetKey": "story_last_five/gora_neutral",
+    "file": "story_last_five/gora_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "926a7dac-0959-41ef-93ad-16329d8a64bc",
+      "promptHash": "e18a89e827a830f32adf816f7a2e11a3",
+      "seed": "lastfive-gora-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 20616,
+      "createdAt": "2026-09-10T01:54:55.558Z"
+    }
+  },
+  "story_last_five/gora_amused": {
+    "assetKey": "story_last_five/gora_amused",
+    "file": "story_last_five/gora_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1c2b1cfb-e24e-4f00-aabf-a524e011ff77",
+      "promptHash": "90651ded450723e2e003e4311926f642",
+      "seed": "lastfive-gora-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 18701,
+      "createdAt": "2026-09-10T01:55:02.930Z"
+    }
+  },
+  "story_last_five/gora_surprised": {
+    "assetKey": "story_last_five/gora_surprised",
+    "file": "story_last_five/gora_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7d5ed20e-5476-424e-af95-9e8cc1bd22f4",
+      "promptHash": "29735be1e7ff45d6381999700d359259",
+      "seed": "lastfive-gora-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 13499,
+      "createdAt": "2026-09-10T01:55:04.725Z"
+    }
+  },
+  "story_last_five/gora_confused": {
+    "assetKey": "story_last_five/gora_confused",
+    "file": "story_last_five/gora_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cc8b4da5-6c56-442f-9f89-4f5585c205e7",
+      "promptHash": "fb2db615ac872323bc1101b831e0dca4",
+      "seed": "lastfive-gora-01:confused",
+      "costUsd": 0.00632,
+      "latencyMs": 15050,
+      "createdAt": "2026-09-10T01:55:08.078Z"
+    }
+  },
+  "story_last_five/gora_annoyed": {
+    "assetKey": "story_last_five/gora_annoyed",
+    "file": "story_last_five/gora_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a354da9b-2d60-4e22-8511-b5805fdc6e7a",
+      "promptHash": "9be7ad3b417dfd9dba21f226ed666f5d",
+      "seed": "lastfive-gora-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 16381,
+      "createdAt": "2026-09-10T01:55:11.944Z"
+    }
+  },
+  "story_last_five/gora_worried": {
+    "assetKey": "story_last_five/gora_worried",
+    "file": "story_last_five/gora_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09c8a61b-bc08-44b3-998d-ec5b5151c6a6",
+      "promptHash": "cf9a1eac2c12b50e21b39d4f5a1b6c88",
+      "seed": "lastfive-gora-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 14958,
+      "createdAt": "2026-09-10T01:55:19.691Z"
+    }
+  },
+  "story_last_five/gora_angry": {
+    "assetKey": "story_last_five/gora_angry",
+    "file": "story_last_five/gora_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Gora Vance, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a08de59f-ca56-4280-b5e7-fa5d3a6bb1fc",
+      "promptHash": "d1c416e94fc4cf92a460b49655921c9e",
+      "seed": "lastfive-gora-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 20927,
+      "createdAt": "2026-09-10T01:55:23.863Z"
+    }
+  },
+  "story_last_five/mikael_warm": {
+    "assetKey": "story_last_five/mikael_warm",
+    "file": "story_last_five/mikael_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4f9b64ab-394c-4bf5-9d1b-83c15573dd77",
+      "promptHash": "58121a310deb6046f1b68c034802ad37",
+      "seed": "lastfive-mikael-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 15889,
+      "createdAt": "2026-09-10T01:55:27.835Z"
+    }
+  },
+  "story_last_five/mikael_neutral": {
+    "assetKey": "story_last_five/mikael_neutral",
+    "file": "story_last_five/mikael_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9566e2ed-2c3a-42ee-bdbc-79f76e8bba82",
+      "promptHash": "0d37466a4e38d7985f6aa072706436c6",
+      "seed": "lastfive-mikael-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 24008,
+      "createdAt": "2026-09-10T01:55:32.095Z"
+    }
+  },
+  "story_last_five/mikael_surprised": {
+    "assetKey": "story_last_five/mikael_surprised",
+    "file": "story_last_five/mikael_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "916b6120-62d4-42d9-9a5d-44d21a95d061",
+      "promptHash": "7afdb24eebf0c5d8c6ff4c84e430c9c0",
+      "seed": "lastfive-mikael-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21338,
+      "createdAt": "2026-09-10T01:55:45.209Z"
+    }
+  },
+  "story_last_five/mikael_confused": {
+    "assetKey": "story_last_five/mikael_confused",
+    "file": "story_last_five/mikael_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "59e41726-d150-4a2a-9243-d327e0cf6fd0",
+      "promptHash": "1f146995305a3a9931c032ad93f39470",
+      "seed": "lastfive-mikael-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23708,
+      "createdAt": "2026-09-10T01:55:51.550Z"
+    }
+  },
+  "story_last_five/mikael_amused": {
+    "assetKey": "story_last_five/mikael_amused",
+    "file": "story_last_five/mikael_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b1572e56-5f1f-4842-8ace-9b1cc6a3ff3f",
+      "promptHash": "28bd69daca9d8f79207d1d3e7bf9496f",
+      "seed": "lastfive-mikael-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 36953,
+      "createdAt": "2026-09-10T01:55:56.648Z"
+    }
+  },
+  "story_last_five/mikael_angry": {
+    "assetKey": "story_last_five/mikael_angry",
+    "file": "story_last_five/mikael_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4f5f91e3-ec0d-4e1f-8223-d05004ec9338",
+      "promptHash": "a4837836e728243a65d282643d3f3e5f",
+      "seed": "lastfive-mikael-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 18459,
+      "createdAt": "2026-09-10T01:56:03.671Z"
+    }
+  },
+  "story_last_five/mikael_annoyed": {
+    "assetKey": "story_last_five/mikael_annoyed",
+    "file": "story_last_five/mikael_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "13d32c20-4d9e-40d4-a42e-beb5476814c8",
+      "promptHash": "c84252b0bb412a09140fb3b7a7ed768d",
+      "seed": "lastfive-mikael-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 35460,
+      "createdAt": "2026-09-10T01:56:07.557Z"
+    }
+  },
+  "story_last_five/mikael_worried": {
+    "assetKey": "story_last_five/mikael_worried",
+    "file": "story_last_five/mikael_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mikael Sorrel, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0371a6c8-74f3-495d-8b9e-99adfe7dc8cb",
+      "promptHash": "c1e06830f7b44e41a1392ef5de6fe433",
+      "seed": "lastfive-mikael-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 20594,
+      "createdAt": "2026-09-10T01:56:12.149Z"
+    }
+  },
+  "story_last_five/yuki_neutral": {
+    "assetKey": "story_last_five/yuki_neutral",
+    "file": "story_last_five/yuki_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8579e0c0-7b1b-4096-8f34-e0f33afc6dc7",
+      "promptHash": "c37be795727121e3a6d2d5f854d33726",
+      "seed": "lastfive-yuki-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 18126,
+      "createdAt": "2026-09-10T01:56:14.779Z"
+    }
+  },
+  "story_last_five/yuki_warm": {
+    "assetKey": "story_last_five/yuki_warm",
+    "file": "story_last_five/yuki_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09c71b5d-5ebc-49e7-ab3b-d48360c8e7aa",
+      "promptHash": "3a51ab724a1fdebf3317342c4d3fe611",
+      "seed": "lastfive-yuki-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 18398,
+      "createdAt": "2026-09-10T01:56:22.073Z"
+    }
+  },
+  "story_last_five/yuki_amused": {
+    "assetKey": "story_last_five/yuki_amused",
+    "file": "story_last_five/yuki_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7fc9f74b-5ab0-448d-9443-d549dda4b113",
+      "promptHash": "2b031efd338aa2288f446855c1cb98a0",
+      "seed": "lastfive-yuki-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 20901,
+      "createdAt": "2026-09-10T01:56:28.462Z"
+    }
+  },
+  "story_last_five/yuki_surprised": {
+    "assetKey": "story_last_five/yuki_surprised",
+    "file": "story_last_five/yuki_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2676374d-84c2-4318-8413-580dfd0917e7",
+      "promptHash": "157de80e58f62e476fd2ea47ae68c09d",
+      "seed": "lastfive-yuki-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21228,
+      "createdAt": "2026-09-10T01:56:33.384Z"
+    }
+  },
+  "story_last_five/yuki_confused": {
+    "assetKey": "story_last_five/yuki_confused",
+    "file": "story_last_five/yuki_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "387f72cd-976f-40bc-a82e-af2519431b15",
+      "promptHash": "770078bfc415250d1897b2d7a38601ca",
+      "seed": "lastfive-yuki-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 22332,
+      "createdAt": "2026-09-10T01:56:37.115Z"
+    }
+  },
+  "story_last_five/yuki_worried": {
+    "assetKey": "story_last_five/yuki_worried",
+    "file": "story_last_five/yuki_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9200f9fe-ecba-40ad-bf88-e6752deecf7f",
+      "promptHash": "d283212e81ebaa67a93500bbdde839b2",
+      "seed": "lastfive-yuki-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 15410,
+      "createdAt": "2026-09-10T01:56:48.806Z"
+    }
+  },
+  "story_last_five/yuki_annoyed": {
+    "assetKey": "story_last_five/yuki_annoyed",
+    "file": "story_last_five/yuki_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dabba4b9-6891-459e-90aa-2e2bd741aa1c",
+      "promptHash": "b995576a4a755fe39ba104baaf51033d",
+      "seed": "lastfive-yuki-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 34714,
+      "createdAt": "2026-09-10T01:56:56.791Z"
+    }
+  },
+  "story_last_five/yuki_angry": {
+    "assetKey": "story_last_five/yuki_angry",
+    "file": "story_last_five/yuki_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Yuki Hoshizawa, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f5eba2c8-7d7b-45a8-b54f-74b366ac0607",
+      "promptHash": "14b51dc930a1e4e4f81a028a0256a4bf",
+      "seed": "lastfive-yuki-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 32904,
+      "createdAt": "2026-09-10T01:57:01.372Z"
+    }
   }
 }

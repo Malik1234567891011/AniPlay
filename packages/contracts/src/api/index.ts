@@ -285,6 +285,13 @@ export const SessionSceneState = z
           name: z.string(),
           current: z.number(),
           max: z.number(),
+          /**
+           * Where this resource began. Carried so the client can tell a
+           * resource that has *fallen* from one that simply starts low and is
+           * earned — "Minutes" opens at 10/100 in a sports world and warning
+           * that it is nearly gone on turn one is a lie.
+           */
+          start: z.number(),
           color: z.string().nullable(),
           polarity: z.enum(['GOOD_HIGH', 'GOOD_LOW']),
         })

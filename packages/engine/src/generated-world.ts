@@ -94,7 +94,12 @@ export function mentionFlag(name: string): string {
  * Deliberately cheap and deliberately lossy. It is a shortlist of things the
  * player might reasonably point at next turn, not an attempt to parse fiction.
  */
-export function recordMentions(text: string, story: StoryVersion, nextMutationId: () => string): StateMutation[] {
+export function recordMentions(
+  text: string,
+  story: StoryVersion,
+  locationId: string,
+  nextMutationId: () => string,
+): StateMutation[] {
   // Every word of every authored name, so "Mira" is recognised as part of
   // "Mira Senn" and "Gate Arch" as part of "The Gate Arch". Matching whole
   // names only meant the world's own cast was recorded as new discoveries.
@@ -127,8 +132,30 @@ export function recordMentions(text: string, story: StoryVersion, nextMutationId
     type: 'FLAG_SET' as const,
     subjectId: 'session',
     reasonCode: 'MENTIONED',
-    payload: { flag: mentionFlag(name), value: name },
+    payload: { flag: mentionFlag(name), value: encodeMention(name, locationId) },
   }));
+}
+
+/**
+ * Where a name was said, carried alongside it.
+ *
+ * A place can be walked to from anywhere, so travel does not care. A person
+ * cannot: if the coach mentions her old rival Domoto while you are on the
+ * roof, "I talk to Domoto" must not conjure him onto the roof. Recording the
+ * room a name was said in is what lets the engine tell "the third-year who was
+ * jogging over to me" from "a person named two scenes ago somewhere else".
+ *
+ * Values written before this existed are bare names, and read back as
+ * unplaced — which is the old behaviour, and the safe one.
+ */
+function encodeMention(name: string, locationId: string): string {
+  return locationId ? `${name}@${locationId}` : name;
+}
+
+function decodeMention(value: string): { name: string; locationId: string } {
+  const at = value.lastIndexOf('@');
+  if (at <= 0) return { name: value, locationId: '' };
+  return { name: value.slice(0, at), locationId: value.slice(at + 1) };
 }
 
 /** Words that start sentences and are not names. */
@@ -141,19 +168,42 @@ const SENTENCE_STARTERS = new Set([
 
 /** Everything the story has named to this player that is not authored. */
 export function mentionedNames(state: GameState): string[] {
+  return mentions(state).map((m) => m.name);
+}
+
+function mentions(state: GameState): { name: string; locationId: string }[] {
   return Object.entries(state.flags)
     .filter(([flag]) => flag.startsWith('mentioned:'))
-    .map(([, value]) => (typeof value === 'string' ? value : ''))
-    .filter(Boolean);
+    .map(([, value]) => (typeof value === 'string' ? decodeMention(value) : null))
+    .filter((m): m is { name: string; locationId: string } => !!m && m.name.length > 0);
 }
 
 /** Finds a mentioned name the player's words are pointing at. */
 export function matchMention(spoken: string, state: GameState): string | null {
+  return match(spoken, mentionedNames(state));
+}
+
+/**
+ * The same, restricted to names this room has said.
+ *
+ * Used by anything that would put a person in front of the player, because
+ * being talked about is not the same as being here.
+ */
+export function matchMentionHere(spoken: string, state: GameState): string | null {
+  const here = mentions(state)
+    .filter((m) => m.locationId === state.player.locationId)
+    .map((m) => m.name);
+  return match(spoken, here);
+}
+
+function match(spoken: string, names: readonly string[]): string | null {
   const text = spoken.toLowerCase();
-  const names = mentionedNames(state)
-    // Longest first, so "Moonlight Café" beats "Moonlight".
-    .sort((a, b) => b.length - a.length);
-  return names.find((name) => text.includes(name.toLowerCase())) ?? null;
+  return (
+    [...names]
+      // Longest first, so "Moonlight Café" beats "Moonlight".
+      .sort((a, b) => b.length - a.length)
+      .find((name) => text.includes(name.toLowerCase())) ?? null
+  );
 }
 
 export interface Promotion {
@@ -226,6 +276,15 @@ export function promoteCharacter(
         subjectId: id,
         reasonCode: 'WORLD_PROMOTED',
         payload: { flag: `promoted:${id}`, value: name },
+      },
+      // Carries the definition and puts them in the room in one move, the way
+      // a promoted location arrives with the travel that reached it.
+      {
+        mutationId: nextMutationId(),
+        type: 'LOCATION_CHANGE',
+        subjectId: id,
+        reasonCode: 'WORLD_PROMOTED',
+        payload: { locationId: state.player.locationId, generatedCharacter: character },
       },
     ],
     note:

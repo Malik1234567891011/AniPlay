@@ -23,7 +23,13 @@ import {
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
 import { fireWorldEvents } from './world-events.js';
 import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
-import { composeStory, matchMention, promoteCharacter, promoteLocation } from './generated-world.js';
+import {
+  composeStory,
+  matchMention,
+  matchMentionHere,
+  promoteCharacter,
+  promoteLocation,
+} from './generated-world.js';
 import { scoutingPressure, tendencyMutations } from './tendencies.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
 import {
@@ -992,6 +998,48 @@ function resolveTravel(args: ResolveActionArgs): ActionOutcome {
 }
 
 /**
+ * Spec §11.9 — the character half of the Moonlight Café.
+ *
+ * The writer put a third-year in a Kosei reversible in front of the player and
+ * called him Yuuto. The player said "I ask Yuuto what the coach is like". Yuuto
+ * is not in the cast, so the engine either refused — the story disowning, one
+ * turn later, a person it had just introduced by name — or, worse, resolved it
+ * as a free action and left the writer to improvise him again from nothing,
+ * differently, every turn.
+ *
+ * Speaking to someone is what makes them real, because it is the moment the
+ * player has decided they matter. Only names *this room* said: being talked
+ * about somewhere else is not being here.
+ */
+function promoteAddressee(args: ResolveActionArgs): ActionOutcome | null {
+  const { state, action, nextMutationId } = args;
+  const target = action.targets.find((t) => t.entityType === 'npc');
+  const spoken = `${action.method} ${action.declaredOutcome ?? ''} ${target?.displayName ?? ''}`;
+  const mentioned = matchMentionHere(spoken, state);
+  if (!mentioned) return null;
+
+  const promotion = promoteCharacter(state, mentioned, 'stopped and spoke to them', nextMutationId);
+  const id = promotion.character!.id;
+  return {
+    checks: [],
+    mutations: [
+      ...promotion.mutations,
+      {
+        mutationId: nextMutationId(),
+        type: 'FLAG_SET',
+        subjectId: 'session',
+        reasonCode: 'SOCIAL',
+        payload: { flag: `spoke:${id}`, value: true },
+      },
+    ],
+    observableFacts: [`You speak to ${mentioned}.`],
+    privateFacts: [{ visibility: 'SELF', fact: promotion.note }],
+    timeCategory: 'BRIEF',
+    normalized: { verb: action.verb, status: 'RESOLVED', targetId: id },
+  };
+}
+
+/**
  * Spec §14.2 — social actions never set relationship numbers directly. The
  * check produces a severity, `clampRelationshipDelta` decides the real change.
  */
@@ -1001,6 +1049,9 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
   const target = action.targets.find((t) => t.entityType === 'npc');
   const character = story.characters.find((c) => c.id === target?.entityId);
   if (!character) {
+    const promoted = promoteAddressee(args);
+    if (promoted) return promoted;
+
     return refusal(
       action,
       'UNKNOWN_TARGET',
@@ -1649,6 +1700,14 @@ function resolveSpeak(args: ResolveActionArgs): ActionOutcome {
 
   if (target) {
     const character = story.characters.find((c) => c.id === target.entityId);
+    // Someone the beat named but the cast does not contain. This is the common
+    // case, not the exotic one: `speak` is the verb the parser produces for
+    // most conversation, and without this it fell through to a free action —
+    // resolved, unacknowledged, and re-improvised from scratch next turn.
+    if (!character) {
+      const promoted = promoteAddressee(args);
+      if (promoted) return promoted;
+    }
     const present = charactersPresent(state).some((c) => c.characterId === target.entityId);
     if (character && !present) {
       const runtime = state.characters.find((c) => c.characterId === character.id);

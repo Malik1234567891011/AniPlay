@@ -211,6 +211,7 @@ function visibleResources(story: StoryVersion, state: GameState): SessionSceneSt
         name: def.name,
         current: r.current,
         max: r.max,
+        start: def.start,
         color: def.color,
         polarity: def.polarity,
         priority: def.displayPriority,

@@ -1268,8 +1268,19 @@ function ContextStrip({ scene }: { scene: SessionSceneState }): React.JSX.Elemen
 
   // Otherwise: only what is nearly gone, and said as a state of the body
   // rather than as a number. "Your legs are going" beats "Legs 18".
+  //
+  // A resource only "fails" if it has fallen. Some worlds open a resource low
+  // on purpose because earning it is the story — Last Five starts Minutes at
+  // 10/100 — and telling that player their minutes are nearly gone before they
+  // have taken a shot is worse than saying nothing.
   const failing = scene.resources
-    .filter((r) => r.polarity === 'GOOD_HIGH' && r.max > 0 && r.current / r.max <= 0.25)
+    .filter(
+      (r) =>
+        r.polarity === 'GOOD_HIGH' &&
+        r.max > 0 &&
+        r.current / r.max <= 0.25 &&
+        r.current < r.start,
+    )
     .slice(0, 2);
   if (failing.length === 0) return null;
 

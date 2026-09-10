@@ -316,6 +316,9 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   const mentionMutations = recordMentions(
     narrative.blocks.map((b) => b.text).join(' '),
     story,
+    // Where the beat left the player, not where it started: a name said on the
+    // way out of a room belongs to the room the player is now standing in.
+    projected.player.locationId,
     () => `mut_${turnId}_men${mentionCounter++}`,
   );
 

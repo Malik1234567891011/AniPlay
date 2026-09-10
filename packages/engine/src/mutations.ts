@@ -123,7 +123,9 @@ export function validateMutations(
         // to. Spec §11.9 — the destination cannot already be in the story,
         // because the player is inventing it by walking into it, and rejecting
         // it here was silently discarding every generated location.
-        const carriesDefinition = Boolean((p.generated as { id?: string } | undefined)?.id);
+        const carriesDefinition =
+          Boolean((p.generated as { id?: string } | undefined)?.id) ||
+          Boolean((p.generatedCharacter as { id?: string } | undefined)?.id);
         if (!locationId || (!carriesDefinition && !story.locations.some((l) => l.id === locationId))) {
           reject(mutation, `unknown location "${String(p.locationId)}"`);
           continue;
@@ -344,6 +346,21 @@ function applyOne(state: GameState, story: StoryVersion, mutation: StateMutation
         });
       }
 
+      // The same move for a person the story invented. Putting somebody in a
+      // room is exactly what promoting them means — they exist, and they are
+      // here — so this rides the mutation that already says that rather than
+      // inventing a nineteenth type the AI contract does not have.
+      const generatedCharacter = p.generatedCharacter as { id?: string } | undefined;
+      if (generatedCharacter?.id && !state.generated.characters.some((c) => c.id === generatedCharacter.id)) {
+        state.generated.characters.push(generatedCharacter as (typeof state.generated.characters)[number]);
+        state.generated.origins.push({
+          entityId: generatedCharacter.id,
+          kind: 'CHARACTER',
+          promotedAtTurn: state.turnIndex,
+          reason: mutation.reasonCode,
+        });
+      }
+
       if (mutation.subjectId === 'player') {
         state.player.locationId = locationId;
         if (!state.discoveredLocationIds.includes(locationId)) {
@@ -351,7 +368,21 @@ function applyOne(state: GameState, story: StoryVersion, mutation: StateMutation
         }
       } else {
         const character = state.characters.find((c) => c.characterId === mutation.subjectId);
-        if (character) character.locationId = locationId;
+        if (character) {
+          character.locationId = locationId;
+        } else if (generatedCharacter?.id === mutation.subjectId) {
+          // A promoted NPC needs a runtime row as well as a definition, or
+          // nothing in the engine can see them standing there.
+          state.characters.push({
+            characterId: mutation.subjectId,
+            locationId,
+            alive: true,
+            health: null,
+            statuses: [],
+            revealedSecretIds: [],
+            learnedFactIds: [],
+          });
+        }
       }
       return;
     }
