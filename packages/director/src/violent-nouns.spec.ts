@@ -64,3 +64,31 @@ describe('violence needs somebody on the end of it', () => {
     }
   });
 });
+
+describe('waiting needs to be what the player is doing', () => {
+  it('does not read holding something as waiting', () => {
+    // Live, in Last Five: "I keep hold of his hand a second too long" resolved
+    // as a wait and advanced the clock four hours, from four in the afternoon
+    // to eight at night, for one line of dialogue.
+    for (const text of [
+      'I keep hold of his hand a second too long.',
+      'I hold the ball and look at him.',
+      'I hold her gaze.',
+      'I hold onto the rail.',
+      'I hold out my hand.',
+    ]) {
+      expect(verbOf(LAST_FIVE, text), text).not.toBe('wait');
+    }
+  });
+
+  it('still hears it when the player means to wait', () => {
+    for (const text of [
+      'I wait for her to say something.',
+      'I hold on and let him finish.',
+      'I hold still.',
+      'I stay put and say nothing.',
+    ]) {
+      expect(verbOf(LAST_FIVE, text), text).toBe('wait');
+    }
+  });
+});

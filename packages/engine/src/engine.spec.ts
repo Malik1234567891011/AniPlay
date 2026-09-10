@@ -954,13 +954,16 @@ describe('relationship labels say something', () => {
 });
 
 describe('waiting actually moves the world', () => {
-  const waitIntent = (targets: { entityType: 'npc'; entityId: string }[] = []) =>
+  const waitIntent = (
+    targets: { entityType: 'npc'; entityId: string }[] = [],
+    method = 'wait',
+  ) =>
     intent([
       {
         verb: 'wait',
         actor: player,
         targets,
-        method: 'wait',
+        method,
         declaredOutcome: null,
         timeIntent: 'NOW',
       },
@@ -970,11 +973,18 @@ describe('waiting actually moves the world', () => {
     // The bug: "I wait until after service" advanced the clock by six minutes,
     // so a player could not wait for anything and every authored schedule was
     // unreachable by the one action that exists to reach it.
+    //
+    // The method carries the player's own words now, because a *qualified*
+    // wait — until, till, for, while — is the one that has to be able to cross
+    // hours. A bare "I wait" with people standing in front of you is a pause;
+    // see the sibling case below. That distinction came out of a live session
+    // where an unqualified wait took a handshake from four in the afternoon to
+    // eight at night and moved the whole gym along with it.
     const state = baseState();
     const result = resolveIntent({
       story: STORY,
       state,
-      intent: waitIntent(),
+      intent: waitIntent([], 'wait until after service'),
       turnId: 't_wait',
       seed: 'wait-seed',
     });
