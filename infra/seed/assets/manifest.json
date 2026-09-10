@@ -6154,5 +6154,1316 @@
       "latencyMs": 22459,
       "createdAt": "2026-09-10T09:02:32.389Z"
     }
+  },
+  "story_primal_crown/stage_the_stone_circle": {
+    "assetKey": "story_primal_crown/stage_the_stone_circle",
+    "file": "story_primal_crown/stage_the_stone_circle.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Circle: A flat hide the size of a room, pegged into the ground, with five carved river stones laid on it in a pattern forty years old.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4097eac4-af78-488b-b0e2-892c86f16147",
+      "promptHash": "d36346918ae44b1d5cc1807b20edfbfd",
+      "seed": "sv_primal_crown_1:loc:the_stone_circle:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 44826,
+      "createdAt": "2026-09-10T16:06:36.034Z"
+    }
+  },
+  "story_primal_crown/key": {
+    "assetKey": "story_primal_crown/key",
+    "file": "story_primal_crown/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Primal Crown",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dd3ce5fc-b4f5-4750-b349-a18a022061c1",
+      "promptHash": "9a770030d1cca251f5e18dd8961a82fe",
+      "seed": "sv_primal_crown_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 48645,
+      "createdAt": "2026-09-10T16:06:39.851Z"
+    }
+  },
+  "story_primal_crown/stage_emberclaw_ground": {
+    "assetKey": "story_primal_crown/stage_emberclaw_ground",
+    "file": "story_primal_crown/stage_emberclaw_ground.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Emberclaw Ground: Not a camp so much as a wide flat area with tents around the edge and a great deal of racing in the middle.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "98a19d12-f533-450f-83f4-0301bace7767",
+      "promptHash": "3aeb773aab625e973970eb6aed44b9cb",
+      "seed": "sv_primal_crown_1:loc:emberclaw_ground:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39820,
+      "createdAt": "2026-09-10T16:07:19.678Z"
+    }
+  },
+  "story_primal_crown/stage_the_picket_lines": {
+    "assetKey": "story_primal_crown/stage_the_picket_lines",
+    "file": "story_primal_crown/stage_the_picket_lines.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Picket Lines: Half a mile of staked ground where four thousand animals are tethered by people who do not entirely trust each other’s animals.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "39c8c6d3-af1f-47c0-8940-7cde5c38e39c",
+      "promptHash": "aca97b17e863b3eb51ed03c9e8174239",
+      "seed": "sv_primal_crown_1:loc:the_picket_lines:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 46112,
+      "createdAt": "2026-09-10T16:07:22.157Z"
+    }
+  },
+  "story_primal_crown/cover": {
+    "assetKey": "story_primal_crown/cover",
+    "file": "story_primal_crown/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Primal Crown: The herds moved early. Somebody loses.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c465810f-dc7d-4e3a-b215-7b289d8833de",
+      "promptHash": "c27f08f3d155bf3d113e79311694cc5b",
+      "seed": "sv_primal_crown_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 111027,
+      "createdAt": "2026-09-10T16:07:42.220Z"
+    }
+  },
+  "story_primal_crown/stage_market_lanes": {
+    "assetKey": "story_primal_crown/stage_market_lanes",
+    "file": "story_primal_crown/stage_market_lanes.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Market Lanes: Six hundred stalls in four crooked rows, roofed with hide against a sun that has not properly arrived yet.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ad3471be-10bc-49cf-b794-52a4e3446c5f",
+      "promptHash": "03d374c2ca3b2c92d3dad08f3a4ce2dd",
+      "seed": "sv_primal_crown_1:loc:market_lanes:anima-v1",
+      "costUsd": 0.21952,
+      "latencyMs": 126609,
+      "createdAt": "2026-09-10T16:07:57.816Z"
+    }
+  },
+  "story_primal_crown/stage_stoneback_wharf": {
+    "assetKey": "story_primal_crown/stage_stoneback_wharf",
+    "file": "story_primal_crown/stage_stoneback_wharf.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Stoneback Wharf: Timber, rope, cranes worked by animals the size of houses, and more written record than the rest of this crossing put together.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9d465010-b427-419b-b99e-0d70024fd71e",
+      "promptHash": "0d1a8882e25c07071a6ad4cbca7c3f6b",
+      "seed": "sv_primal_crown_1:loc:stoneback_wharf:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43623,
+      "createdAt": "2026-09-10T16:08:03.308Z"
+    }
+  },
+  "story_primal_crown/stage_frostfang_fires": {
+    "assetKey": "story_primal_crown/stage_frostfang_fires",
+    "file": "story_primal_crown/stage_frostfang_fires.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Frostfang Fires: Nine fires in a wide ring with sleeping platforms between them, and a quiet you can hear from three hundred feet away.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5e3a3231-977b-4fcc-913a-259096109dcb",
+      "promptHash": "a7c7d5b99587a78494a3c0e7e1acd5a3",
+      "seed": "sv_primal_crown_1:loc:frostfang_fires:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43714,
+      "createdAt": "2026-09-10T16:08:05.879Z"
+    }
+  },
+  "story_primal_crown/stage_blackglass_ridge": {
+    "assetKey": "story_primal_crown/stage_blackglass_ridge",
+    "file": "story_primal_crown/stage_blackglass_ridge.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Blackglass Ridge: A spine of volcanic rock that has been warm underfoot since spring, with new cracks in it and a smell of eggs on the wind.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "70f024aa-9f83-4f54-8fba-99466c5819b7",
+      "promptHash": "198dea7982685d4067340b0db9f99e9e",
+      "seed": "sv_primal_crown_1:loc:blackglass_ridge:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 21792,
+      "createdAt": "2026-09-10T16:08:27.681Z"
+    }
+  },
+  "story_primal_crown/stage_skyfire_perch": {
+    "assetKey": "story_primal_crown/stage_skyfire_perch",
+    "file": "story_primal_crown/stage_skyfire_perch.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Perch: A finger of rock two hundred feet above the crossing with a rope stair up the back of it and no railing anywhere.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bb86c470-aef2-45db-81da-d1ee1ec3d7a4",
+      "promptHash": "432264f9833d6be814ae115aa9cafd9f",
+      "seed": "sv_primal_crown_1:loc:skyfire_perch:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 48284,
+      "createdAt": "2026-09-10T16:08:30.734Z"
+    }
+  },
+  "story_primal_crown/stage_mireborn_landing": {
+    "assetKey": "story_primal_crown/stage_mireborn_landing",
+    "file": "story_primal_crown/stage_mireborn_landing.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Landing: Floating walkways, reed matting and a dozen flat boats poled up from the delta, with hadrosaurs standing chest-deep alongside them chewing.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e8313dc2-561f-4171-9d5c-c64e23094da2",
+      "promptHash": "8c4a02aee9349803bb8bc7e6cbb571bd",
+      "seed": "sv_primal_crown_1:loc:mireborn_landing:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42448,
+      "createdAt": "2026-09-10T16:08:40.270Z"
+    }
+  },
+  "story_primal_crown/stage_the_north_road": {
+    "assetKey": "story_primal_crown/stage_the_north_road",
+    "file": "story_primal_crown/stage_the_north_road.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The North Road: Not a road.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9d2fef04-7bbf-4af4-b42a-8bfb51296788",
+      "promptHash": "660d5622bc793c65fbedf29d199ce607",
+      "seed": "sv_primal_crown_1:loc:the_north_road:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40945,
+      "createdAt": "2026-09-10T16:08:44.260Z"
+    }
+  },
+  "story_primal_crown/stage_the_bone_caves": {
+    "assetKey": "story_primal_crown/stage_the_bone_caves",
+    "file": "story_primal_crown/stage_the_bone_caves.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Bone Caves: Three chambers in a limestone bluff, floored with the bones of animals nobody at this crossing has a name for.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "33692286-972c-4a43-9c0b-03b4f90e0afa",
+      "promptHash": "b78ad087b3f710a60296661d8cabdc6b",
+      "seed": "sv_primal_crown_1:loc:the_bone_caves:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 27818,
+      "createdAt": "2026-09-10T16:08:55.505Z"
+    }
+  },
+  "story_primal_crown/stage_southern_grass": {
+    "assetKey": "story_primal_crown/stage_southern_grass",
+    "file": "story_primal_crown/stage_southern_grass.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Southern Grass: What all of this is about.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cee23fb0-3eb3-4713-9e2a-951ba725e1da",
+      "promptHash": "694c68acb9808b634f9a9c390aca0c49",
+      "seed": "sv_primal_crown_1:loc:southern_grass:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 22788,
+      "createdAt": "2026-09-10T16:09:03.067Z"
+    }
+  },
+  "story_primal_crown/kaia": {
+    "assetKey": "story_primal_crown/kaia",
+    "file": "story_primal_crown/kaia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, Emberclaw raptor rider, the fastest at this crossing, and the one who will still be arguing about the corridor when everybody else has gone to bed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "23e42e95-6aac-424a-a2d8-ced6ca009076",
+      "promptHash": "14baed760b70386125224fb7c1c4e80a",
+      "seed": "pc-kaia-01",
+      "costUsd": 0.00632,
+      "latencyMs": 28536,
+      "createdAt": "2026-09-10T16:09:12.806Z"
+    }
+  },
+  "story_primal_crown/stage_ashen_camp": {
+    "assetKey": "story_primal_crown/stage_ashen_camp",
+    "file": "story_primal_crown/stage_ashen_camp.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Broken Ground: Four hide shelters in a fold of rock below the ridge, three cages, and a great deal of fired clay.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a1b62236-a1c5-41df-8a84-5fbd0defde38",
+      "promptHash": "17d1f1abf7455287e1e677f4e6c89314",
+      "seed": "sv_primal_crown_1:loc:ashen_camp:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 46020,
+      "createdAt": "2026-09-10T16:09:16.762Z"
+    }
+  },
+  "story_primal_crown/suri": {
+    "assetKey": "story_primal_crown/suri",
+    "file": "story_primal_crown/suri.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, Frostfang sabertooth rider, here to secure the northern herd routes, and the person at this crossing who talks least and notices most",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "222c3502-4cbc-4cb6-bb3b-cef0a3a4fd91",
+      "promptHash": "754dde87e1b272f8c1f7df602a843b14",
+      "seed": "pc-suri-01",
+      "costUsd": 0.02404,
+      "latencyMs": 27910,
+      "createdAt": "2026-09-10T16:09:23.425Z"
+    }
+  },
+  "story_primal_crown/ilya": {
+    "assetKey": "story_primal_crown/ilya",
+    "file": "story_primal_crown/ilya.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, Skyfire scout and information broker, who has already sold what he knows about the north to two different peoples and is open to a third",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0528741c-4e18-4130-b1ec-9fccbfa35583",
+      "promptHash": "57538615c033a584c79bf65cdc1ea391",
+      "seed": "pc-ilya-01",
+      "costUsd": 0.02404,
+      "latencyMs": 25703,
+      "createdAt": "2026-09-10T16:09:28.786Z"
+    }
+  },
+  "story_primal_crown/torren": {
+    "assetKey": "story_primal_crown/torren",
+    "file": "story_primal_crown/torren.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, Stoneback heir and negotiator, whose family holds the corridor survey everybody is arguing from, and who is a great deal sharper than his manners suggest",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "375a1d85-4f53-4be5-aa77-6dbc34102711",
+      "promptHash": "6fc5c544e985713ebd2a9ab1d969c701",
+      "seed": "pc-torren-01",
+      "costUsd": 0.01372,
+      "latencyMs": 23579,
+      "createdAt": "2026-09-10T16:09:36.401Z"
+    }
+  },
+  "story_primal_crown/vesh": {
+    "assetKey": "story_primal_crown/vesh",
+    "file": "story_primal_crown/vesh.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, A beast-breaker with no colours who sells difficult animals at the pickets and is extremely good at it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9ad36164-5e9c-4136-ba23-4c6cbad13f3c",
+      "promptHash": "1ddf0897ba49bf8c15e39a00f0ac2d17",
+      "seed": "pc-vesh-01",
+      "costUsd": 0.00632,
+      "latencyMs": 15420,
+      "createdAt": "2026-09-10T16:09:38.856Z"
+    }
+  },
+  "story_primal_crown/mako": {
+    "assetKey": "story_primal_crown/mako",
+    "file": "story_primal_crown/mako.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, Mireborn healer and river guide, who will treat your animal for nothing and then tell you exactly what you did to it",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd8a6a54-3701-4695-ac90-7b466fb679e7",
+      "promptHash": "57376864066d10673136c3696628dd28",
+      "seed": "pc-mako-01",
+      "costUsd": 0.02404,
+      "latencyMs": 27156,
+      "createdAt": "2026-09-10T16:09:43.934Z"
+    }
+  },
+  "story_primal_crown/kaia_neutral": {
+    "assetKey": "story_primal_crown/kaia_neutral",
+    "file": "story_primal_crown/kaia_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a3032889-e0cc-4347-85d3-4ae700044b65",
+      "promptHash": "4cdaf4ecea87fd27abec17c2507fe01f",
+      "seed": "pc-kaia-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 24732,
+      "createdAt": "2026-09-10T16:09:53.530Z"
+    }
+  },
+  "story_primal_crown/kaia_surprised": {
+    "assetKey": "story_primal_crown/kaia_surprised",
+    "file": "story_primal_crown/kaia_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5897e6cb-9d92-494d-9008-af9326d140eb",
+      "promptHash": "687ebd15c7aac12a577b4ff70328c330",
+      "seed": "pc-kaia-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 23312,
+      "createdAt": "2026-09-10T16:10:07.254Z"
+    }
+  },
+  "story_primal_crown/kaia_warm": {
+    "assetKey": "story_primal_crown/kaia_warm",
+    "file": "story_primal_crown/kaia_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7e481757-9499-47f4-b09f-7d1c338dd1d8",
+      "promptHash": "f21fa37c0925bdb57aa9b228e586560a",
+      "seed": "pc-kaia-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 36271,
+      "createdAt": "2026-09-10T16:10:12.681Z"
+    }
+  },
+  "story_primal_crown/kaia_amused": {
+    "assetKey": "story_primal_crown/kaia_amused",
+    "file": "story_primal_crown/kaia_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "12d95968-4089-4495-a815-b0464762f036",
+      "promptHash": "b3662faf1bfd71b2784b2806b41176c2",
+      "seed": "pc-kaia-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 38305,
+      "createdAt": "2026-09-10T16:10:17.168Z"
+    }
+  },
+  "story_primal_crown/kaia_confused": {
+    "assetKey": "story_primal_crown/kaia_confused",
+    "file": "story_primal_crown/kaia_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e3579eae-cae3-4510-bbde-e99c814812a4",
+      "promptHash": "67f62b849ee296bb0916a7e1d63495e6",
+      "seed": "pc-kaia-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 38556,
+      "createdAt": "2026-09-10T16:10:32.091Z"
+    }
+  },
+  "story_primal_crown/kaia_worried": {
+    "assetKey": "story_primal_crown/kaia_worried",
+    "file": "story_primal_crown/kaia_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "81d05617-5f27-418e-ac91-26d0a08077ad",
+      "promptHash": "d68a97a3bde7707d18c1c0530f36bf46",
+      "seed": "pc-kaia-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21749,
+      "createdAt": "2026-09-10T16:10:38.919Z"
+    }
+  },
+  "story_primal_crown/kaia_annoyed": {
+    "assetKey": "story_primal_crown/kaia_annoyed",
+    "file": "story_primal_crown/kaia_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c3fc25c1-3533-4a7b-8386-b5fcb56bb350",
+      "promptHash": "57dd15ccd5471bc42af13a040a278bb0",
+      "seed": "pc-kaia-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 35251,
+      "createdAt": "2026-09-10T16:10:42.511Z"
+    }
+  },
+  "story_primal_crown/kaia_angry": {
+    "assetKey": "story_primal_crown/kaia_angry",
+    "file": "story_primal_crown/kaia_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kaia Thorn, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3549d7e4-0c25-43d8-a897-7428f2a8c78e",
+      "promptHash": "d8f917db7dc70ef42d12e35c599ec9ce",
+      "seed": "pc-kaia-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 35397,
+      "createdAt": "2026-09-10T16:10:48.084Z"
+    }
+  },
+  "story_primal_crown/suri_neutral": {
+    "assetKey": "story_primal_crown/suri_neutral",
+    "file": "story_primal_crown/suri_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b787c7b5-7410-4527-abfd-86e0e23a6426",
+      "promptHash": "858ebdbbd2eee2baf7c34c52029c30c1",
+      "seed": "pc-suri-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 23336,
+      "createdAt": "2026-09-10T16:10:55.432Z"
+    }
+  },
+  "story_primal_crown/suri_warm": {
+    "assetKey": "story_primal_crown/suri_warm",
+    "file": "story_primal_crown/suri_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "65a47b87-b51b-4e40-aa19-af3c78de48a3",
+      "promptHash": "3a7a3d8822fe271061e322a5db7252fb",
+      "seed": "pc-suri-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 21092,
+      "createdAt": "2026-09-10T16:11:00.017Z"
+    }
+  },
+  "story_primal_crown/suri_surprised": {
+    "assetKey": "story_primal_crown/suri_surprised",
+    "file": "story_primal_crown/suri_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "114e0377-1350-4854-acfe-07b0c1b1f68f",
+      "promptHash": "d40458e767bec2c685edb2a53e68f113",
+      "seed": "pc-suri-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 28150,
+      "createdAt": "2026-09-10T16:11:16.245Z"
+    }
+  },
+  "story_primal_crown/suri_confused": {
+    "assetKey": "story_primal_crown/suri_confused",
+    "file": "story_primal_crown/suri_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ec5d33e5-f336-4ad4-9a87-18c8f0c94309",
+      "promptHash": "303ad16499b0ee6e4a01871515b672ae",
+      "seed": "pc-suri-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 22027,
+      "createdAt": "2026-09-10T16:11:17.471Z"
+    }
+  },
+  "story_primal_crown/suri_annoyed": {
+    "assetKey": "story_primal_crown/suri_annoyed",
+    "file": "story_primal_crown/suri_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "988588e5-0668-4f35-8a3a-3bd1843ad844",
+      "promptHash": "ff5f807533452b463313821701350460",
+      "seed": "pc-suri-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 19581,
+      "createdAt": "2026-09-10T16:11:19.616Z"
+    }
+  },
+  "story_primal_crown/suri_amused": {
+    "assetKey": "story_primal_crown/suri_amused",
+    "file": "story_primal_crown/suri_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7ec688dc-3e01-42e2-85ad-1bd8fd19fe45",
+      "promptHash": "0f2567f49a71aaf8e559f63ba6c0a94a",
+      "seed": "pc-suri-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 39919,
+      "createdAt": "2026-09-10T16:11:22.442Z"
+    }
+  },
+  "story_primal_crown/suri_worried": {
+    "assetKey": "story_primal_crown/suri_worried",
+    "file": "story_primal_crown/suri_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5d0c34e3-c9be-42d3-a4ed-db7811e0ed87",
+      "promptHash": "2fcca51c29d672c5b5010efc7ebbd34e",
+      "seed": "pc-suri-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 17153,
+      "createdAt": "2026-09-10T16:11:34.633Z"
+    }
+  },
+  "story_primal_crown/suri_angry": {
+    "assetKey": "story_primal_crown/suri_angry",
+    "file": "story_primal_crown/suri_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Suri Snow, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd4f8d1e-2ec9-42f1-a6cb-2f4cfde03af5",
+      "promptHash": "6f9b9b7b9b6ee3cd9e83372300513c52",
+      "seed": "pc-suri-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 23595,
+      "createdAt": "2026-09-10T16:11:39.853Z"
+    }
+  },
+  "story_primal_crown/ilya_warm": {
+    "assetKey": "story_primal_crown/ilya_warm",
+    "file": "story_primal_crown/ilya_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0380bb5f-eeec-405b-91ae-828c98f0d0d1",
+      "promptHash": "cb92b55cf9e6eb7f5cdb1aa15bc756ee",
+      "seed": "pc-ilya-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 19897,
+      "createdAt": "2026-09-10T16:11:42.342Z"
+    }
+  },
+  "story_primal_crown/ilya_neutral": {
+    "assetKey": "story_primal_crown/ilya_neutral",
+    "file": "story_primal_crown/ilya_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aa3d1ab3-2431-41de-b47c-7ea1cf2fde97",
+      "promptHash": "c49cac655778317d9a7e0d10f1eaf4ce",
+      "seed": "pc-ilya-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 23744,
+      "createdAt": "2026-09-10T16:11:43.377Z"
+    }
+  },
+  "story_primal_crown/ilya_amused": {
+    "assetKey": "story_primal_crown/ilya_amused",
+    "file": "story_primal_crown/ilya_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4351ab3c-b3d3-4e68-8594-74462de27327",
+      "promptHash": "b18bbfe7982051210b825d744f6c5090",
+      "seed": "pc-ilya-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 23241,
+      "createdAt": "2026-09-10T16:11:57.877Z"
+    }
+  },
+  "story_primal_crown/ilya_annoyed": {
+    "assetKey": "story_primal_crown/ilya_annoyed",
+    "file": "story_primal_crown/ilya_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "84678256-5af6-4d29-a001-e03b22dcf3f9",
+      "promptHash": "4efa77898c46fb81f40850cd272f2a4c",
+      "seed": "pc-ilya-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 20602,
+      "createdAt": "2026-09-10T16:12:03.984Z"
+    }
+  },
+  "story_primal_crown/ilya_surprised": {
+    "assetKey": "story_primal_crown/ilya_surprised",
+    "file": "story_primal_crown/ilya_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "56a5a015-8cb4-4a4c-9322-3d706d48b296",
+      "promptHash": "bc872f0539fdf04b38c844a1b219aa28",
+      "seed": "pc-ilya-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 34265,
+      "createdAt": "2026-09-10T16:12:14.127Z"
+    }
+  },
+  "story_primal_crown/ilya_angry": {
+    "assetKey": "story_primal_crown/ilya_angry",
+    "file": "story_primal_crown/ilya_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b97e4697-b9c8-4e80-8dba-889d88593f78",
+      "promptHash": "553a1a86cbf94b755714fba978c1d87e",
+      "seed": "pc-ilya-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 18557,
+      "createdAt": "2026-09-10T16:12:16.438Z"
+    }
+  },
+  "story_primal_crown/ilya_confused": {
+    "assetKey": "story_primal_crown/ilya_confused",
+    "file": "story_primal_crown/ilya_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a218fc15-f08c-4d1e-807b-3d6ead3b4b2b",
+      "promptHash": "15aadb41c5e8493288ca9f4d2ff0ffad",
+      "seed": "pc-ilya-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 36628,
+      "createdAt": "2026-09-10T16:12:18.973Z"
+    }
+  },
+  "story_primal_crown/ilya_worried": {
+    "assetKey": "story_primal_crown/ilya_worried",
+    "file": "story_primal_crown/ilya_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ilya Crest, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a2ab6ddc-5ae4-4e03-8522-b0e290a62691",
+      "promptHash": "238361250075a4a8ad2aac26defc3659",
+      "seed": "pc-ilya-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 19103,
+      "createdAt": "2026-09-10T16:12:23.090Z"
+    }
+  },
+  "story_primal_crown/torren_warm": {
+    "assetKey": "story_primal_crown/torren_warm",
+    "file": "story_primal_crown/torren_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f9398fe-4444-4c98-bf6e-c773b42b991b",
+      "promptHash": "28e00c2af95b48c41579cdf5ea8897eb",
+      "seed": "pc-torren-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 15329,
+      "createdAt": "2026-09-10T16:12:31.774Z"
+    }
+  },
+  "story_primal_crown/torren_amused": {
+    "assetKey": "story_primal_crown/torren_amused",
+    "file": "story_primal_crown/torren_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "25661109-d3f5-4553-a850-22c47fea0626",
+      "promptHash": "716335c351e515110a857ac6d6ebbd7f",
+      "seed": "pc-torren-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 25559,
+      "createdAt": "2026-09-10T16:12:44.538Z"
+    }
+  },
+  "story_primal_crown/torren_surprised": {
+    "assetKey": "story_primal_crown/torren_surprised",
+    "file": "story_primal_crown/torren_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bc6194b3-24c5-495b-a70a-99101b93235e",
+      "promptHash": "fa94316bf00746d7498c913d609fcf6b",
+      "seed": "pc-torren-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 24002,
+      "createdAt": "2026-09-10T16:12:47.095Z"
+    }
+  },
+  "story_primal_crown/torren_neutral": {
+    "assetKey": "story_primal_crown/torren_neutral",
+    "file": "story_primal_crown/torren_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a5d5b7ff-dee1-4cc8-b196-a1f4f74ade50",
+      "promptHash": "eddfad14a8cf04e4e941056e723d7909",
+      "seed": "pc-torren-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 35306,
+      "createdAt": "2026-09-10T16:12:49.438Z"
+    }
+  },
+  "story_primal_crown/torren_annoyed": {
+    "assetKey": "story_primal_crown/torren_annoyed",
+    "file": "story_primal_crown/torren_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "da4a8126-88c1-42b7-8332-d47af10721a3",
+      "promptHash": "4c9b7433661d16317915bd7cf037ec55",
+      "seed": "pc-torren-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 19650,
+      "createdAt": "2026-09-10T16:13:04.194Z"
+    }
+  },
+  "story_primal_crown/torren_confused": {
+    "assetKey": "story_primal_crown/torren_confused",
+    "file": "story_primal_crown/torren_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a5bc73f8-af0f-43df-91aa-a43153523152",
+      "promptHash": "25e0b0212e66c502deb7e3ef24321dc3",
+      "seed": "pc-torren-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 36920,
+      "createdAt": "2026-09-10T16:13:08.696Z"
+    }
+  },
+  "story_primal_crown/torren_worried": {
+    "assetKey": "story_primal_crown/torren_worried",
+    "file": "story_primal_crown/torren_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e6368216-b459-49c4-bd05-709f40b21335",
+      "promptHash": "e7b9c760a09deb77ba41cb23a2a65674",
+      "seed": "pc-torren-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 27325,
+      "createdAt": "2026-09-10T16:13:16.769Z"
+    }
+  },
+  "story_primal_crown/mako_neutral": {
+    "assetKey": "story_primal_crown/mako_neutral",
+    "file": "story_primal_crown/mako_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e4a9412c-d73e-4d7e-a3f0-29abdb376a6d",
+      "promptHash": "e77fa0b80ae57cb20a3c7de0651b10a2",
+      "seed": "pc-mako-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 18430,
+      "createdAt": "2026-09-10T16:13:22.627Z"
+    }
+  },
+  "story_primal_crown/torren_angry": {
+    "assetKey": "story_primal_crown/torren_angry",
+    "file": "story_primal_crown/torren_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Torren Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "80a3d3b6-6574-4444-9663-8bb1d1097cdc",
+      "promptHash": "04265b8cf985b31fc98466cdb43e6236",
+      "seed": "pc-torren-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 35939,
+      "createdAt": "2026-09-10T16:13:23.039Z"
+    }
+  },
+  "story_primal_crown/mako_amused": {
+    "assetKey": "story_primal_crown/mako_amused",
+    "file": "story_primal_crown/mako_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3454c017-e399-4657-bea0-e931f3a0bb2b",
+      "promptHash": "5f6981c6a813556645525c1c94dd26e5",
+      "seed": "pc-mako-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 21173,
+      "createdAt": "2026-09-10T16:13:37.948Z"
+    }
+  },
+  "story_primal_crown/mako_surprised": {
+    "assetKey": "story_primal_crown/mako_surprised",
+    "file": "story_primal_crown/mako_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "30626cf8-e7a7-4d28-8ca0-27af6c2f68fc",
+      "promptHash": "96f998c04b01fc8fe5009d4228952723",
+      "seed": "pc-mako-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 17727,
+      "createdAt": "2026-09-10T16:13:40.360Z"
+    }
+  },
+  "story_primal_crown/mako_warm": {
+    "assetKey": "story_primal_crown/mako_warm",
+    "file": "story_primal_crown/mako_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "96d7aac5-0c75-48df-9226-95f5c16648bb",
+      "promptHash": "2bdd3b5c191a520409cd0d3f6453feb8",
+      "seed": "pc-mako-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 35869,
+      "createdAt": "2026-09-10T16:13:44.577Z"
+    }
+  },
+  "story_primal_crown/mako_confused": {
+    "assetKey": "story_primal_crown/mako_confused",
+    "file": "story_primal_crown/mako_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "34a081a4-a04d-4900-93e6-12be6a51d189",
+      "promptHash": "94f774837704864732686656d9a46b0e",
+      "seed": "pc-mako-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23404,
+      "createdAt": "2026-09-10T16:13:46.448Z"
+    }
+  },
+  "story_primal_crown/mako_annoyed": {
+    "assetKey": "story_primal_crown/mako_annoyed",
+    "file": "story_primal_crown/mako_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bd99c642-9512-4ee0-bf2a-b53a9094f471",
+      "promptHash": "4cd3d2198ebb635c59130ea3e128f99c",
+      "seed": "pc-mako-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 19654,
+      "createdAt": "2026-09-10T16:13:57.610Z"
+    }
+  },
+  "story_primal_crown/mako_angry": {
+    "assetKey": "story_primal_crown/mako_angry",
+    "file": "story_primal_crown/mako_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09ece214-0eed-4073-8b77-8153e2be89f5",
+      "promptHash": "1274757589e4b8d81a018cc308104a18",
+      "seed": "pc-mako-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 22980,
+      "createdAt": "2026-09-10T16:14:03.346Z"
+    }
+  },
+  "story_primal_crown/mako_worried": {
+    "assetKey": "story_primal_crown/mako_worried",
+    "file": "story_primal_crown/mako_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mako Reed, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "07badd98-6358-4ef0-aa3d-5de74844cbe7",
+      "promptHash": "74a20710624cf53451b242eb2e23b1a2",
+      "seed": "pc-mako-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21035,
+      "createdAt": "2026-09-10T16:14:05.620Z"
+    }
+  },
+  "story_primal_crown/vesh_warm": {
+    "assetKey": "story_primal_crown/vesh_warm",
+    "file": "story_primal_crown/vesh_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c74b6e94-c567-47b5-9616-2c41b8390e2a",
+      "promptHash": "bc66f67c87a1d1dcf9c7efd8ef916380",
+      "seed": "pc-vesh-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 20023,
+      "createdAt": "2026-09-10T16:14:17.646Z"
+    }
+  },
+  "story_primal_crown/vesh_neutral": {
+    "assetKey": "story_primal_crown/vesh_neutral",
+    "file": "story_primal_crown/vesh_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e04fe0a5-5f83-4afa-b6f9-71a091c14cad",
+      "promptHash": "e05686456e88cfa9ae5bdf22797519dc",
+      "seed": "pc-vesh-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 35134,
+      "createdAt": "2026-09-10T16:14:21.588Z"
+    }
+  },
+  "story_primal_crown/vesh_amused": {
+    "assetKey": "story_primal_crown/vesh_amused",
+    "file": "story_primal_crown/vesh_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8846085a-584d-4ba5-8d01-bf3e747b4b0e",
+      "promptHash": "9cf98df4ccf4481bc138dbd5a94fb10b",
+      "seed": "pc-vesh-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 19330,
+      "createdAt": "2026-09-10T16:14:22.680Z"
+    }
+  },
+  "story_primal_crown/vesh_surprised": {
+    "assetKey": "story_primal_crown/vesh_surprised",
+    "file": "story_primal_crown/vesh_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cc5a0ebf-d9a4-4707-995a-eb9deef587e6",
+      "promptHash": "6840acbd3dd22197e79d856a3a734791",
+      "seed": "pc-vesh-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21753,
+      "createdAt": "2026-09-10T16:14:27.381Z"
+    }
+  },
+  "story_primal_crown/vesh_annoyed": {
+    "assetKey": "story_primal_crown/vesh_annoyed",
+    "file": "story_primal_crown/vesh_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ff01d092-8baa-4d06-9cbd-a69f637062ba",
+      "promptHash": "0f7e4f56038f3e14e61ba725f98419d4",
+      "seed": "pc-vesh-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 18309,
+      "createdAt": "2026-09-10T16:14:39.901Z"
+    }
+  },
+  "story_primal_crown/vesh_confused": {
+    "assetKey": "story_primal_crown/vesh_confused",
+    "file": "story_primal_crown/vesh_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "af87e6de-288a-4ae7-92e7-bdf07012547f",
+      "promptHash": "6143c55e09fd896cb6805e4f6221a306",
+      "seed": "pc-vesh-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 22692,
+      "createdAt": "2026-09-10T16:14:40.342Z"
+    }
+  },
+  "story_primal_crown/vesh_angry": {
+    "assetKey": "story_primal_crown/vesh_angry",
+    "file": "story_primal_crown/vesh_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c1d2cdec-72fb-434f-94f1-fb93e754305f",
+      "promptHash": "2a4c24799d4457a6a6ca3a894190ab28",
+      "seed": "pc-vesh-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 19271,
+      "createdAt": "2026-09-10T16:14:41.953Z"
+    }
+  },
+  "story_primal_crown/vesh_worried": {
+    "assetKey": "story_primal_crown/vesh_worried",
+    "file": "story_primal_crown/vesh_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Vesh Ardan, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2524de56-2d30-4f9e-a428-3742ce6a7e9f",
+      "promptHash": "d1ad50e61f8d90df14451ef0e78cac3c",
+      "seed": "pc-vesh-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 30550,
+      "createdAt": "2026-09-10T16:14:57.937Z"
+    }
   }
 }
