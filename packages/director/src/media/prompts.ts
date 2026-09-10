@@ -42,6 +42,13 @@ const NEGATIVES = [
   'No text, no lettering, no captions, no watermarks, no logos, no signatures, no UI.',
   'No real people or celebrity likenesses.',
   'Not photorealistic. No 3D render look.',
+  // Named because we kept getting them. Our covers came back as muted painted
+  // illustrations next to a shelf of Naruto and My Hero Academia, and "not
+  // photorealistic" was not enough to prevent it — the model will happily paint
+  // something that is neither a photograph nor an anime.
+  'Not a digital painting, not oil or gouache texture, no visible brush strokes.',
+  'No desaturated or muted palette. No sepia, no washed-out greys.',
+  'Not a live-action film poster.',
 ].join(' ');
 
 export type ShotKind =
@@ -101,8 +108,39 @@ export const LEGACY_COVER_STORY_IDS: readonly string[] = [
   'story_nine_weeks',
 ];
 
+/**
+ * What a cover is made of, and it is not what the shared spine makes.
+ *
+ * Malik, with Naruto, One Piece, Jujutsu Kaisen, Hajime no Ippo, Code Geass and
+ * My Hero Academia next to our shelf: "theyre much more bubbly and anime esque
+ * where ours look more realistic… the cover arts dont ressmeble animes."
+ *
+ * He is right, and the cause was in our own words. `STYLE_SPINE` asks for a
+ * "**painterly** cel-shaded style", "**cinematic** composition, **film-grade
+ * lighting**", a "**restrained palette**" and "subtle **grain**" — every one of
+ * those pulls toward a film poster and away from a television key visual. We
+ * were commissioning the thing he does not want, precisely.
+ *
+ * What those six references actually share, which is a *medium* and not a mood:
+ * flat cel shading in two or three hard steps with no airbrushed gradient, a
+ * visible black ink outline on every character, high-chroma colour, a flat or
+ * simply-graded background rather than a painted environment, and the cast
+ * large in frame facing the viewer. Naruto is orange. My Hero Academia is
+ * yellow. Neither is restrained and neither has grain.
+ */
+const COVER_STYLE_SPINE = [
+  'Anime television key visual, in the style of a 1990s-2010s TV anime poster.',
+  'Cel shading only: flat areas of colour, hard-edged shadow shapes, two or three tone steps.',
+  'No airbrushed gradients on skin or cloth. No painterly brushwork. No film grain.',
+  'Bold clean black ink outlines on every character, thicker on the silhouette.',
+  'High-chroma saturated colour. Bright, confident, poster-like.',
+  'Background is flat or a simple graded colour field, or a lightly drawn setting — never a detailed painting.',
+  'Characters large in frame, near the picture plane, faces clearly readable at thumbnail size.',
+  'Large expressive anime eyes with visible highlights. Clean simplified features.',
+].join(' ');
+
 /** The character-forward cover standard. Everything new is made under this. */
-export const COVER_DIRECTION_VERSION = 'plotbreak-cover-v2';
+export const COVER_DIRECTION_VERSION = 'plotbreak-cover-v3-anime';
 
 /**
  * The lower band of a cover is left deliberately quiet so the wordmark can be
@@ -241,8 +279,9 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
     styleVersion: COVER_DIRECTION_VERSION,
     titleSafeArea: { ...TITLE_SAFE_AREA },
     prompt: compose([
-      STYLE_SPINE,
+      COVER_STYLE_SPINE,
       'This is an anime poster / key visual, not an environment painting. Characters are the subject.',
+      'The characters must pop off the background: strong silhouette separation, rim light or a clean outline.',
       coverComposition(story),
       coverCast(story),
       hero ? `Setting behind them: ${hero.artDirection}` : null,
