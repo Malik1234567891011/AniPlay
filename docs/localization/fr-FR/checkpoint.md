@@ -19,30 +19,46 @@ final copy polish, store metadata and release QA wait for English to settle.
 
 ## State
 
-Steps 1, 2, 3, 4 and 6 are done, verified and pushed. Step 5 is the only one of
-1–6 outstanding.
+**Steps 1-6 are all done, verified and pushed.** Working tree clean.
+`origin/main` has nothing this branch lacks.
 
 | # | Step | Status |
 |---|---|---|
-| 1 | `Intl` polyfills, `frDate`, `normalizeForSearch`, `frCollator` | ✅ done |
-| 2 | `locale` on `GameState`, `expo-localization`, hidden switch | ✅ done |
-| 3 | i18next + ICU, catalogue, English keys only | ✅ **gate green — zero un-keyed client strings** |
-| 4 | Server strings → keys + params | ✅ done |
-| 5 | Memory facts → structured | ⬜ **next** |
-| 6 | `PlayerIdentity.grammar` + French `CharacterSetup` question | ✅ done |
-| 7–12 | French catalogue, policies, `addressMode`, parser, pilot world | ⬜ |
+| 1 | `Intl` polyfills, `frDate`, `normalizeForSearch`, `frCollator` | done |
+| 2 | `locale` on `GameState`, `expo-localization`, hidden switch | done |
+| 3 | i18next + ICU, catalogue, English keys only | done, gate green |
+| 4 | Server strings to keys + params | done |
+| 5 | Memory facts to structured | done, parity spec green |
+| 6 | `PlayerIdentity.grammar` + French `CharacterSetup` question | done |
+| 7 | fr catalogue populated + a11y labels | NEXT |
+| 8 | `WRITER_POLICY_FR`, `SAFETY_POLICY_FR`, French `worldRules`, both paths | todo |
+| 9 | `addressMode` end to end | todo |
+| 10 | French `VERB_LEXICON`, clitics, Unicode-aware normalisation | todo |
+| 11 | Genre-aware French figurative-violence lexicon | todo |
+| 12 | **One world in French, end to end** - the real gate | todo |
 
-**Gates, all by exit code:** `npm run typecheck` 0 · `npm test` 0 ·
-`npm run lint` 0 · `npx tsx infra/scripts/i18n-extract.ts --gate` **0**
-(47 exempt, 207 server, 1085 model) · `npm run fr:lint -- --self-test` 0 ·
-`npm run fr:probe` 0 (still 37/39 `custom` — that is step 10) ·
-`npx expo export --platform ios` 0, 5.0 MB / 1076 modules.
+**Gates, by exit code:** `npm run typecheck` 0 - `npm test` 0 - `npm run lint` 0 -
+`npx tsx infra/scripts/i18n-extract.ts --gate` **0** (47 exempt, 207 server,
+1085 model) - `npm run fr:lint -- --self-test` 0 - `npm run fr:probe` 0
+(37/39 still `custom`, which is step 10) - `npx expo export --platform ios` 0,
+5.0 MB / 1076 modules.
 
-Everything is committed and pushed. Working tree clean.
+**Catalogue:** 16 English area files under `packages/i18n/src/catalog/en/`,
+~600 keys, each carrying its exact shipped English. French has `world`,
+`memory`, `profile`, `setup` - step 7 populates the rest.
 
-**Catalogue size:** 15 English area files under
-`packages/i18n/src/catalog/en/`, ~600 keys. French has `world`, `profile`,
-`setup` only — step 7 populates the rest.
+**Proof it is real**, one turn played through the rule-based pipeline in both:
+
+```
+en  clock: Day 1 - 3:30 PM   daypart: Afternoon   rel: Dai=Familiar
+    - Dai Okonkwo was treated badly by player: Elodie threatened and
+      belittled Dai Okonkwo at The Kosei Gym, Day 1 - 3:30 PM.
+fr  clock: Jour 1 - 15:30    daypart: Apres-midi  rel: Dai=Familiarite
+    - Dai Okonkwo a ete maltraite par le joueur : Elodie a menace et
+      rabaisse Dai Okonkwo a The Kosei Gym, Jour 1 - 15:30.
+```
+
+(Accents stripped in this block only, to keep the file diffable.)
 
 ---
 
@@ -237,42 +253,97 @@ measured across 285 728 values, `Intl` compact disagrees with the hand-rolled
 French takes a separate branch, because `10 k` lowercase-with-a-space is not
 producible by suffix concatenation.
 
+### Step 5: the structure goes in `value`, not in a new field
+
+`MemoryProposal` is a **stage-3 AI contract** - `packages/contracts/ai_contracts.json`
+is authoritative and CLAUDE.md forbids the Zod twin diverging. Adding a field
+would have meant changing what the model is asked to emit for a reason that has
+nothing to do with the model. `value` is already `z.unknown()`: it is the escape
+hatch, and a structured fact is what it was for. A proposal whose `value` is a
+plain string - which is what a model produces - renders exactly as it did.
+
+`text` is rendered **at storage time in the run's frozen locale**, not at each
+read. A run's locale can never change, so a stored sentence can never be the
+wrong language for the session reading it, and this is a far smaller diff than
+making `text` computed at all eight read sites. The structure stays beside it,
+so `renderFactText(proposal, story, name, 'en')` re-renders a French run in
+English whenever QA needs to compare.
+
+`HOSTILE_VERBS` was a table of English phrases and is now a list of verb ids.
+The verb was always an id; it just had a sentence stapled to it. The wording is
+an ICU `select` under `memory.hostile_act`.
+
+### English-visible changes, the complete list
+
+Everything else is byte-identical. These are the exceptions:
+
+1. **ICU plurals corrected `1 turns` to `1 turn`** in eight keys:
+   `discover.continue_turns`, `worldsheet.milestones`, `worldsheet.map_a11y`,
+   `worldsheet.fork_insufficient_credits`, `session.turns_left`,
+   `session.more_credits_needed`, `characters.story_and_turns`,
+   `characters.draw_for_credits`. Reproducing the old output would mean writing
+   `one {# turns left}` - deliberately encoding a grammar bug. Where English
+   never inflected and was already correct, `one` and `other` were given
+   identical English instead (the wallet keys).
+2. **`formatCredits` uncompacted** was `value.toLocaleString()` with no locale,
+   so an English session on a French phone rendered `10 000`. It now names its
+   locale: identical on an English phone, correct on a French one.
+3. **The credit-balance a11y label** in `components.tsx` had the same bug and
+   spoke a French number to VoiceOver in an English session.
+
+`formatCredits` **compact** keeps its own arithmetic for English on purpose:
+measured across 285728 values, `Intl` compact disagrees with the hand-rolled
+K/M on about 10 percent of them. French takes a separate branch.
+
+### Found but deliberately not fixed
+
+- `Dai Okonkwo cooled toward player: SOCIAL:threaten:FAILURE` - the
+  warmed/cooled facts render `mutation.reasonCode` raw, so a database
+  identifier reaches the writer as prose. Language-neutral, so not a French
+  bug, but a bad prompt line **in English too**. Fixing it changes English.
+- `abilities[].affordances` are parser-matched phrases. Translating an ability
+  name while leaving them makes 86 abilities silently unreachable. Belongs with
+  step 10.
+- `Share.tsx` truncates at the last plain space, which in French can strand a
+  non-breaking space before `!` or `?`. UI_AUDIT 2.5.
+- `NarrationBlock` folds at 90 **words**; French carries the same beat in ~1.11x
+  the words. Should be measured in rendered lines. Marked `i18n-exempt`.
+- Brand still ambiguous: `app.json` says AniPlay, `rail.new` says
+  "New on Plotbreak". The France store listing cannot be prepared around it.
+
 ---
 
 ## Next
 
-**Step 5 — memory facts must stop being English prose.** This is the change
-`LOCALIZATION_ARCHITECTURE.md` §5 calls the worst finding in the audit, and it
-is worth doing for the English side regardless.
+Steps 7-12. Step 12 is the goal: a French player finishing a world without once
+thinking *c'est traduit*.
 
-`packages/director/src/director.ts` ~670–740 builds facts as English sentences:
+1. **Step 7 - populate the French catalogue.** ~600 keys across 16 area files in
+   `packages/i18n/src/catalog/fr/`. `world`, `memory`, `profile` and `setup`
+   exist; the rest are missing and fall back to English at runtime.
+   Parallelise the way step 3 was - one agent per area file, no shared writes,
+   with `fr/index.ts` pre-wired first. Sources: `LANGUAGE_BIBLE.md`,
+   `PRODUCT_VOICE.md` (tu always, sentence case), `TERMINOLOGY.md`,
+   `ENGLISH_CALQUE_BLACKLIST.md`. Then flip `DEVICE_LOCALE_AUTODETECT` and
+   promote the language switch out of its seven taps.
+2. **Step 8 - `WRITER_POLICY_FR` / `SAFETY_POLICY_FR` / French `worldRules`.**
+   `model-stages.ts` is on the forbidden list, so the seam is a
+   `policyFor(locale)` in that module with the smallest possible diff, and
+   `writer-parity.spec.ts` extended so a French rule cannot land on one path
+   only. **The parity trap is the whole risk**: two implementations of every AI
+   stage and the fast one is production.
+3. **Step 9 - `addressMode`** in `speaker-brief.ts`, which exists precisely so
+   both model stages cannot drift.
+4. **Step 10 - French parser.** `parser.ts` and `entity-resolution.ts` are
+   forbidden, so the lexicon is selected by locale rather than replaced.
+   **Never translate `VERB_LEXICON`** - the English one has hard-won fixes
+   (deck, beat, kick, hold) and French has a different set of
+   figurative-violence traps. `npm run fr:probe` is the gate: 37/39 `custom`.
+5. **Step 12 - the pilot world.** Nine Weeks was the recommendation (no combat,
+   richest tu/vous arc, texting surface). Re-check against the catalogue as it
+   stands before committing.
 
-```ts
-const HOSTILE_VERBS = { threaten: 'threatened and belittled', … };
-value: `${player.name} ${what} ${char.name} at ${scene.locationName}, ${scene.worldTimeLabel}.`
-```
-
-They are stored, retrieved, and handed to the writer as `speakers[].knows` and
-to the choice generator as `remembered` — so in a French session the model reads
-English sentences in its own context window **every turn**, and it compounds
-because memory accumulates.
-
-The fix: store the structure (`kind`, `actorId`, `targetId`, `verb`,
-`locationId`, `worldMinute`), render `text` at **retrieval** time in the session
-locale through the same catalogue. `MemoryFact` already has `predicate`, `value`
-and `text` fields in `packages/contracts/src/game/state.ts` — `value` is
-`z.unknown()`, which is where the structure goes, and `text` becomes derived
-rather than stored.
-
-`director.ts` is **not** on the forbidden list. `model-stages.ts`,
-`fast-writer.ts`, `responses.ts`, `parser.ts` and `entity-resolution.ts` are —
-and `context.ts` is the seam that reaches both model paths without touching
-them, exactly as it did for step 4.
-
-Then steps 7–12: French catalogue, `WRITER_POLICY_FR`, `addressMode`, the French
-verb lexicon, and the pilot world.
-
-Merge `origin/main` — never rebase.
+Merge `origin/main` - never rebase.
 
 ---
 
