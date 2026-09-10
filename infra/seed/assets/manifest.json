@@ -7484,5 +7484,1468 @@
       "latencyMs": 24125,
       "createdAt": "2026-09-10T16:23:03.968Z"
     }
+  },
+  "story_zero_throne/key": {
+    "assetKey": "story_zero_throne/key",
+    "file": "story_zero_throne/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Zero Throne",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2e4ec5e7-53fb-48c4-9649-e664de4ae2d9",
+      "promptHash": "391a7f4b8834892b3f806d79950b8f73",
+      "seed": "sv_zero_throne_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41801,
+      "createdAt": "2026-09-10T16:23:21.643Z"
+    }
+  },
+  "story_zero_throne/stage_memorial_plaza": {
+    "assetKey": "story_zero_throne/stage_memorial_plaza",
+    "file": "story_zero_throne/stage_memorial_plaza.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Memorial Plaza: A hundred and forty metres of polished floor under a curved viewport with the planet turning in it, ringed by the names of the Lysandra dead in letters the height of a hand.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09201dc9-6ef3-45db-aeb8-e75c5845efb2",
+      "promptHash": "bcdf6b73f0015b81129eb1a62a057752",
+      "seed": "sv_zero_throne_1:loc:memorial_plaza:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 45088,
+      "createdAt": "2026-09-10T16:23:24.930Z"
+    }
+  },
+  "story_zero_throne/stage_meridian_concourse": {
+    "assetKey": "story_zero_throne/stage_meridian_concourse",
+    "file": "story_zero_throne/stage_meridian_concourse.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Concourse: The public spine of the station: shops, a transit ring, three competing news screens and forty thousand people who live here and have opinions about all of this.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "188dab3e-2688-4cc7-acc2-820c19283914",
+      "promptHash": "95c57475490fb9d5be9cc92641c835a8",
+      "seed": "sv_zero_throne_1:loc:meridian_concourse:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41798,
+      "createdAt": "2026-09-10T16:23:45.772Z"
+    }
+  },
+  "story_zero_throne/stage_pilot_bar": {
+    "assetKey": "story_zero_throne/stage_pilot_bar",
+    "file": "story_zero_throne/stage_pilot_bar.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Low Ring: Eleven tables under a bulkhead somebody has decorated with forty years of squadron patches from both sides, and one rule enforced by the woman behind the counter: nobody asks anybody what they did in the war.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2499ae28-f2eb-4716-a093-9398788eb538",
+      "promptHash": "bb355e836512d901c9feebb1c02da34a",
+      "seed": "sv_zero_throne_1:loc:pilot_bar:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39421,
+      "createdAt": "2026-09-10T16:24:04.361Z"
+    }
+  },
+  "story_zero_throne/stage_observation_lounge": {
+    "assetKey": "story_zero_throne/stage_observation_lounge",
+    "file": "story_zero_throne/stage_observation_lounge.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Observation Lounge: A quiet curved room high on the ring with the whole planet in the window and almost nobody in it, because everybody who works here stopped looking out of windows years ago.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4cd125e9-1989-4811-9d8f-6aa4f288db89",
+      "promptHash": "54ecf62046541045c254c87be131ae9a",
+      "seed": "sv_zero_throne_1:loc:observation_lounge:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 19740,
+      "createdAt": "2026-09-10T16:24:05.520Z"
+    }
+  },
+  "story_zero_throne/stage_main_hangar": {
+    "assetKey": "story_zero_throne/stage_main_hangar",
+    "file": "story_zero_throne/stage_main_hangar.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Hangar Four: A working bay: six berths, a gantry crane that squeals on the third pass, and Mina Sorel’s crew, who have been told a machine is coming and have not been told which one.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a70e8364-d833-4191-9205-38182beb455f",
+      "promptHash": "7abf88d2ffe573a6bd334beb382221c3",
+      "seed": "sv_zero_throne_1:loc:main_hangar:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 48742,
+      "createdAt": "2026-09-10T16:24:10.392Z"
+    }
+  },
+  "story_zero_throne/cover": {
+    "assetKey": "story_zero_throne/cover",
+    "file": "story_zero_throne/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Zero Throne: It knelt. Every camera saw it choose you.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf1bda3f-6542-413f-b9bc-f46a69cac56e",
+      "promptHash": "f31ed15f1dfcb9d29c4910a0e35610dc",
+      "seed": "sv_zero_throne_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 105062,
+      "createdAt": "2026-09-10T16:24:24.890Z"
+    }
+  },
+  "story_zero_throne/stage_freewake_berth": {
+    "assetKey": "story_zero_throne/stage_freewake_berth",
+    "file": "story_zero_throne/stage_freewake_berth.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Far Berths: Three ships that belong to nobody, tied together by walkways somebody welded on without asking, with a galley in the middle that has been running continuously for nine years.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "782987ae-00a3-4851-afe2-1fe2e977b29b",
+      "promptHash": "601c774427bf82cc7fc6c6386200fce3",
+      "seed": "sv_zero_throne_1:loc:freewake_berth:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 27929,
+      "createdAt": "2026-09-10T16:24:38.335Z"
+    }
+  },
+  "story_zero_throne/stage_authority_offices": {
+    "assetKey": "story_zero_throne/stage_authority_offices",
+    "file": "story_zero_throne/stage_authority_offices.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Authority Offices: Eleven floors of neutral administration: customs, arbitration, the armistice secretariat, and an investigations division of nine people who have been quietly aware for years that their neutrality rests on something they have never been allowed to read.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "04b0f06f-8a2b-40b1-bb2f-5396cd6d5511",
+      "promptHash": "beb3963d829093f9f6827549dc4456f1",
+      "seed": "sv_zero_throne_1:loc:authority_offices:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34463,
+      "createdAt": "2026-09-10T16:24:38.837Z"
+    }
+  },
+  "story_zero_throne/stage_meridian_docks": {
+    "assetKey": "story_zero_throne/stage_meridian_docks",
+    "file": "story_zero_throne/stage_meridian_docks.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Docks: Forty berths of freight, three of them permanently occupied by ships that have never filed a route.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6a379801-1e0e-443e-b24c-414153d5e2d4",
+      "promptHash": "e4ed6df2d1d38f8bdc14e2ae5c8452ff",
+      "seed": "sv_zero_throne_1:loc:meridian_docks:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38945,
+      "createdAt": "2026-09-10T16:24:44.471Z"
+    }
+  },
+  "story_zero_throne/stage_lysandra_ruins": {
+    "assetKey": "story_zero_throne/stage_lysandra_ruins",
+    "file": "story_zero_throne/stage_lysandra_ruins.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Lysandra: Four million people lived here.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b8d22c55-5ef2-4c88-8de9-bc9046d0fcd0",
+      "promptHash": "fb53a2a09dd90d19a893f69cab41d1df",
+      "seed": "sv_zero_throne_1:loc:lysandra_ruins:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 24162,
+      "createdAt": "2026-09-10T16:25:02.502Z"
+    }
+  },
+  "story_zero_throne/stage_the_bunker": {
+    "assetKey": "story_zero_throne/stage_the_bunker",
+    "file": "story_zero_throne/stage_the_bunker.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Command Level: Nine metres under a city that no longer exists, dry, dark and structurally perfect.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "23c19068-f905-4ffe-b7c9-0e7b909d01a7",
+      "promptHash": "23320017a1d3b5095eed4171221c7c5d",
+      "seed": "sv_zero_throne_1:loc:the_bunker:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 23990,
+      "createdAt": "2026-09-10T16:25:02.834Z"
+    }
+  },
+  "story_zero_throne/stage_debris_belt": {
+    "assetKey": "story_zero_throne/stage_debris_belt",
+    "file": "story_zero_throne/stage_debris_belt.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Belt: Eighteen years of a war’s worth of wreckage in a slow orbit, plus everything both sides quietly stopped declaring afterwards.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8ddd9c39-f1cb-4a60-bb79-50e7fc659265",
+      "promptHash": "fb69b398eea9b6bf2cf373e0b1e48269",
+      "seed": "sv_zero_throne_1:loc:debris_belt:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39714,
+      "createdAt": "2026-09-10T16:25:04.785Z"
+    }
+  },
+  "story_zero_throne/stage_ghost_archive": {
+    "assetKey": "story_zero_throne/stage_ghost_archive",
+    "file": "story_zero_throne/stage_ghost_archive.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Ghost Archive: A floor of the Authority building that is not on the directory, holding the material both governments handed over in the forty-eight hours before the armistice on the understanding that nobody would ever look at it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "71cec859-1d83-400e-acce-2cb6530248e5",
+      "promptHash": "05985258d8c6c7734c69bedebd2f9def",
+      "seed": "sv_zero_throne_1:loc:ghost_archive:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35010,
+      "createdAt": "2026-09-10T16:25:19.488Z"
+    }
+  },
+  "story_zero_throne/mina": {
+    "assetKey": "story_zero_throne/mina",
+    "file": "story_zero_throne/mina.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, Lead mechanic in Hangar Four, twenty-three, raised in salvage yards, and the first person on this station to treat the machine as a machine",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b3cf8ab7-3204-47c7-be6a-1ab814354569",
+      "promptHash": "22311e1e1c766a2861df69705adcac56",
+      "seed": "zt-mina-01",
+      "costUsd": 0.02404,
+      "latencyMs": 24897,
+      "createdAt": "2026-09-10T16:25:27.735Z"
+    }
+  },
+  "story_zero_throne/talon": {
+    "assetKey": "story_zero_throne/talon",
+    "file": "story_zero_throne/talon.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, Outer Compact ace, twenty-six, here officially as an observer and unofficially to make sure Helion does not walk off with the machine",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ec9aa4fd-befd-4a5f-aa28-ff2f980f74f5",
+      "promptHash": "c93c02884e4a836a03e1747b6f831a1c",
+      "seed": "zt-talon-01",
+      "costUsd": 0.02404,
+      "latencyMs": 25224,
+      "createdAt": "2026-09-10T16:25:30.014Z"
+    }
+  },
+  "story_zero_throne/rhea": {
+    "assetKey": "story_zero_throne/rhea",
+    "file": "story_zero_throne/rhea.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, Helion ace, twenty-four, decorated, and the only other person in the plaza who did not run when the machine came through the glass",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "242354eb-0489-47a2-afd6-13f8576881e5",
+      "promptHash": "0e80f6340ae83e296acc59c3d22487a9",
+      "seed": "zt-rhea-01",
+      "costUsd": 0.05488,
+      "latencyMs": 33970,
+      "createdAt": "2026-09-10T16:25:36.477Z"
+    }
+  },
+  "story_zero_throne/orin": {
+    "assetKey": "story_zero_throne/orin",
+    "file": "story_zero_throne/orin.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, Helion commander, fifty-one, flew with Aren Vale, and has spent eighteen years being the reasonable man in rooms where that was not enough",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "718f31d5-945e-4ad2-8dd5-96f7b16e8518",
+      "promptHash": "928119d3f3807380d1e3c35bcd3d0cda",
+      "seed": "zt-orin-01",
+      "costUsd": 0.01372,
+      "latencyMs": 17621,
+      "createdAt": "2026-09-10T16:25:37.125Z"
+    }
+  },
+  "story_zero_throne/morrow": {
+    "assetKey": "story_zero_throne/morrow",
+    "file": "story_zero_throne/morrow.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, Vesper Zero’s onboard intelligence, awake in the dark for eighteen years, and the reason the machine chose anybody at all",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0348a0c8-390d-464b-a803-d781e1e0a76c",
+      "promptHash": "3a31a741d01568543b54dda9b8e0606c",
+      "seed": "zt-morrow-01",
+      "costUsd": 0.01372,
+      "latencyMs": 18171,
+      "createdAt": "2026-09-10T16:25:48.188Z"
+    }
+  },
+  "story_zero_throne/eli": {
+    "assetKey": "story_zero_throne/eli",
+    "file": "story_zero_throne/eli.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, Nineteen, a student, and the grandson of the most hated man in the system, which is the only fact anybody has ever wanted from him",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b84643bf-a312-4b01-ab18-e2214190a892",
+      "promptHash": "01461c160b27af15e167482cede806fd",
+      "seed": "zt-eli-01",
+      "costUsd": 0.01372,
+      "latencyMs": 20898,
+      "createdAt": "2026-09-10T16:25:57.379Z"
+    }
+  },
+  "story_zero_throne/venn": {
+    "assetKey": "story_zero_throne/venn",
+    "file": "story_zero_throne/venn.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, Helion intelligence director, thirty-eight, on this station to recover the machine without a public crisis, and the only person alive who has read the whole file",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b68c5934-7757-4040-bb25-d1d3460a391b",
+      "promptHash": "c334c2b89e762b156676ee381617ebfe",
+      "seed": "zt-venn-01",
+      "costUsd": 0.05488,
+      "latencyMs": 35050,
+      "createdAt": "2026-09-10T16:26:02.790Z"
+    }
+  },
+  "story_zero_throne/rhea_warm": {
+    "assetKey": "story_zero_throne/rhea_warm",
+    "file": "story_zero_throne/rhea_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7b62b7b-82ca-4ffe-af90-9458b2705c31",
+      "promptHash": "e28fc46f7268ad3c1e25d0e2bdb66d03",
+      "seed": "zt-rhea-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 25066,
+      "createdAt": "2026-09-10T16:26:13.261Z"
+    }
+  },
+  "story_zero_throne/rhea_neutral": {
+    "assetKey": "story_zero_throne/rhea_neutral",
+    "file": "story_zero_throne/rhea_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "02c58ed9-af32-4353-a148-3c2b11f8f38b",
+      "promptHash": "66053718be0e55b9422996f6f50fd949",
+      "seed": "zt-rhea-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 36218,
+      "createdAt": "2026-09-10T16:26:13.346Z"
+    }
+  },
+  "story_zero_throne/rhea_amused": {
+    "assetKey": "story_zero_throne/rhea_amused",
+    "file": "story_zero_throne/rhea_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0cf4afbd-e390-4e32-8575-532ca1e511b4",
+      "promptHash": "cc6a71adb5712b0b9da5e22409d3a3cc",
+      "seed": "zt-rhea-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 21001,
+      "createdAt": "2026-09-10T16:26:18.386Z"
+    }
+  },
+  "story_zero_throne/rhea_surprised": {
+    "assetKey": "story_zero_throne/rhea_surprised",
+    "file": "story_zero_throne/rhea_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "26730620-cf44-4a57-9977-f4bbc04c2c35",
+      "promptHash": "6409aa5e6c5f394fbd54cc12dffc28cf",
+      "seed": "zt-rhea-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20134,
+      "createdAt": "2026-09-10T16:26:22.929Z"
+    }
+  },
+  "story_zero_throne/rhea_confused": {
+    "assetKey": "story_zero_throne/rhea_confused",
+    "file": "story_zero_throne/rhea_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2e8a1642-704a-497f-835a-7afa0d8d3c64",
+      "promptHash": "fec55565ff72f908ce379a1e6338f3b0",
+      "seed": "zt-rhea-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19736,
+      "createdAt": "2026-09-10T16:26:33.003Z"
+    }
+  },
+  "story_zero_throne/rhea_angry": {
+    "assetKey": "story_zero_throne/rhea_angry",
+    "file": "story_zero_throne/rhea_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "50a08faa-7e44-4deb-ad9c-45aa53ee2299",
+      "promptHash": "270a2a6a47fa98d7383b016170ff6a69",
+      "seed": "zt-rhea-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 24756,
+      "createdAt": "2026-09-10T16:26:43.147Z"
+    }
+  },
+  "story_zero_throne/rhea_worried": {
+    "assetKey": "story_zero_throne/rhea_worried",
+    "file": "story_zero_throne/rhea_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f39d7463-db15-4e15-ae38-48ffb610f7cf",
+      "promptHash": "15a1efe544b7d826f772b87731d8a24f",
+      "seed": "zt-rhea-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21192,
+      "createdAt": "2026-09-10T16:26:44.128Z"
+    }
+  },
+  "story_zero_throne/rhea_annoyed": {
+    "assetKey": "story_zero_throne/rhea_annoyed",
+    "file": "story_zero_throne/rhea_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Rhea Kaine, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "908018d7-d8bb-49f1-8e3a-db74ba5a4980",
+      "promptHash": "9e981a01332aa1438b61e3ffd916c564",
+      "seed": "zt-rhea-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 36138,
+      "createdAt": "2026-09-10T16:26:49.489Z"
+    }
+  },
+  "story_zero_throne/mina_neutral": {
+    "assetKey": "story_zero_throne/mina_neutral",
+    "file": "story_zero_throne/mina_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a72dfc4e-0786-42cc-8784-58446c341f81",
+      "promptHash": "1cd1d30c19a9334e8c247289ebab474b",
+      "seed": "zt-mina-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 17727,
+      "createdAt": "2026-09-10T16:26:50.735Z"
+    }
+  },
+  "story_zero_throne/mina_amused": {
+    "assetKey": "story_zero_throne/mina_amused",
+    "file": "story_zero_throne/mina_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6255e7bc-13db-431d-91a7-3b490c1bc537",
+      "promptHash": "b16289fa72013a1cf5b5e06f5d59b59e",
+      "seed": "zt-mina-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 17315,
+      "createdAt": "2026-09-10T16:27:01.446Z"
+    }
+  },
+  "story_zero_throne/mina_confused": {
+    "assetKey": "story_zero_throne/mina_confused",
+    "file": "story_zero_throne/mina_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "af54ce8c-4d34-4da4-9be5-ca920de48aa8",
+      "promptHash": "92e73ae54938eabe01d7cdff17cb1af9",
+      "seed": "zt-mina-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23313,
+      "createdAt": "2026-09-10T16:27:14.050Z"
+    }
+  },
+  "story_zero_throne/mina_warm": {
+    "assetKey": "story_zero_throne/mina_warm",
+    "file": "story_zero_throne/mina_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "101df7f2-a399-43f9-9dce-1adfbb9d3b15",
+      "promptHash": "0f4003ad52c4580ecd176e465c8475bc",
+      "seed": "zt-mina-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 34450,
+      "createdAt": "2026-09-10T16:27:17.600Z"
+    }
+  },
+  "story_zero_throne/mina_annoyed": {
+    "assetKey": "story_zero_throne/mina_annoyed",
+    "file": "story_zero_throne/mina_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "702fd1f0-747f-46a8-a9c6-febfb059bb9c",
+      "promptHash": "da2cc5a66ea9915e6e3be645a704bedd",
+      "seed": "zt-mina-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 20350,
+      "createdAt": "2026-09-10T16:27:21.799Z"
+    }
+  },
+  "story_zero_throne/mina_surprised": {
+    "assetKey": "story_zero_throne/mina_surprised",
+    "file": "story_zero_throne/mina_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9b526244-2075-4836-95f7-5f19daba3961",
+      "promptHash": "5baa0aee4080d8885e9fab60f9cf9f14",
+      "seed": "zt-mina-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 38969,
+      "createdAt": "2026-09-10T16:27:28.462Z"
+    }
+  },
+  "story_zero_throne/mina_worried": {
+    "assetKey": "story_zero_throne/mina_worried",
+    "file": "story_zero_throne/mina_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3482acd9-3201-4556-94d4-2dfc690bf653",
+      "promptHash": "2230d5e75431c8d5124bf151ffd75c53",
+      "seed": "zt-mina-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 16172,
+      "createdAt": "2026-09-10T16:27:33.776Z"
+    }
+  },
+  "story_zero_throne/mina_angry": {
+    "assetKey": "story_zero_throne/mina_angry",
+    "file": "story_zero_throne/mina_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Sorel, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "331b4316-20ed-44d3-acc0-4db371941a20",
+      "promptHash": "bec396b802e4f3f4b6eadcdf9b6caccb",
+      "seed": "zt-mina-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 23154,
+      "createdAt": "2026-09-10T16:27:37.208Z"
+    }
+  },
+  "story_zero_throne/talon_neutral": {
+    "assetKey": "story_zero_throne/talon_neutral",
+    "file": "story_zero_throne/talon_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bc4e3be7-e10a-4fcb-9414-03ffc03266ec",
+      "promptHash": "793ddf73c77cc6644c8ef3a4c3f00af9",
+      "seed": "zt-talon-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 33411,
+      "createdAt": "2026-09-10T16:27:55.215Z"
+    }
+  },
+  "story_zero_throne/talon_warm": {
+    "assetKey": "story_zero_throne/talon_warm",
+    "file": "story_zero_throne/talon_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4fd8b744-859c-4fb9-bf03-25d6ea27898f",
+      "promptHash": "54336b3522fa09dc31a04e72ae913440",
+      "seed": "zt-talon-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 33691,
+      "createdAt": "2026-09-10T16:28:02.157Z"
+    }
+  },
+  "story_zero_throne/talon_amused": {
+    "assetKey": "story_zero_throne/talon_amused",
+    "file": "story_zero_throne/talon_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "17805cad-ab75-48c0-b104-08309b6c61dc",
+      "promptHash": "8783a1995ee879f4bd434fa93dbb24dd",
+      "seed": "zt-talon-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34580,
+      "createdAt": "2026-09-10T16:28:08.361Z"
+    }
+  },
+  "story_zero_throne/talon_surprised": {
+    "assetKey": "story_zero_throne/talon_surprised",
+    "file": "story_zero_throne/talon_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "948f9c9a-fdc3-4f34-86c4-79251a2a6294",
+      "promptHash": "8bd79a1abdaa25e4e7664993fdb2468c",
+      "seed": "zt-talon-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 32717,
+      "createdAt": "2026-09-10T16:28:09.929Z"
+    }
+  },
+  "story_zero_throne/talon_annoyed": {
+    "assetKey": "story_zero_throne/talon_annoyed",
+    "file": "story_zero_throne/talon_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3b77f39e-90dc-4de1-b7b6-450f452d5af1",
+      "promptHash": "031f25171af107a947f4f4e722305c82",
+      "seed": "zt-talon-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18087,
+      "createdAt": "2026-09-10T16:28:20.247Z"
+    }
+  },
+  "story_zero_throne/talon_confused": {
+    "assetKey": "story_zero_throne/talon_confused",
+    "file": "story_zero_throne/talon_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "529fc01c-09c2-4706-b4b1-54ec7b09aadc",
+      "promptHash": "41196223092d30bfbb964ea52ce98a5d",
+      "seed": "zt-talon-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 33312,
+      "createdAt": "2026-09-10T16:28:28.543Z"
+    }
+  },
+  "story_zero_throne/talon_angry": {
+    "assetKey": "story_zero_throne/talon_angry",
+    "file": "story_zero_throne/talon_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c1fead1a-d216-4765-9f4e-d6477d47c7e6",
+      "promptHash": "da32efe3ab87596877fe92bceb7f65d5",
+      "seed": "zt-talon-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 26698,
+      "createdAt": "2026-09-10T16:28:35.064Z"
+    }
+  },
+  "story_zero_throne/talon_worried": {
+    "assetKey": "story_zero_throne/talon_worried",
+    "file": "story_zero_throne/talon_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Talon Reeve, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "db1ef098-37a3-44bb-8203-a9876e520cbf",
+      "promptHash": "ba122ed67269f6730f7767041cb6170c",
+      "seed": "zt-talon-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 32678,
+      "createdAt": "2026-09-10T16:28:42.609Z"
+    }
+  },
+  "story_zero_throne/orin_neutral": {
+    "assetKey": "story_zero_throne/orin_neutral",
+    "file": "story_zero_throne/orin_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "633fc1c2-1dbe-45dc-b8ea-66605450d923",
+      "promptHash": "bc82d8d521c9ed7c9fc8aafe841cd68e",
+      "seed": "zt-orin-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 34659,
+      "createdAt": "2026-09-10T16:28:54.912Z"
+    }
+  },
+  "story_zero_throne/orin_amused": {
+    "assetKey": "story_zero_throne/orin_amused",
+    "file": "story_zero_throne/orin_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "05a3fab8-5b65-4a61-b80d-962bc0151ec4",
+      "promptHash": "e60d5b9dcf788b6da2a2d656c38c5451",
+      "seed": "zt-orin-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 24732,
+      "createdAt": "2026-09-10T16:28:59.801Z"
+    }
+  },
+  "story_zero_throne/orin_warm": {
+    "assetKey": "story_zero_throne/orin_warm",
+    "file": "story_zero_throne/orin_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8ab7e3de-19cd-42e0-b0e8-84da74642678",
+      "promptHash": "801fdcd8193458c8cb9ea8859cc5a376",
+      "seed": "zt-orin-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 35271,
+      "createdAt": "2026-09-10T16:29:03.819Z"
+    }
+  },
+  "story_zero_throne/orin_surprised": {
+    "assetKey": "story_zero_throne/orin_surprised",
+    "file": "story_zero_throne/orin_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4ac19718-010a-4e2a-9209-2a55141684cb",
+      "promptHash": "461e35eb8ed77221ffa99ca74e07f26a",
+      "seed": "zt-orin-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 22898,
+      "createdAt": "2026-09-10T16:29:05.522Z"
+    }
+  },
+  "story_zero_throne/orin_confused": {
+    "assetKey": "story_zero_throne/orin_confused",
+    "file": "story_zero_throne/orin_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "86533cba-48b9-4458-ab49-d59846677acd",
+      "promptHash": "ddd7f9d1b7f69a1614f8cb69235d9d8b",
+      "seed": "zt-orin-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23708,
+      "createdAt": "2026-09-10T16:29:18.625Z"
+    }
+  },
+  "story_zero_throne/orin_annoyed": {
+    "assetKey": "story_zero_throne/orin_annoyed",
+    "file": "story_zero_throne/orin_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2576e91a-cb18-47cf-96d2-6227495355fc",
+      "promptHash": "d16bbeee233e63f37d502766eb44e29a",
+      "seed": "zt-orin-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 23942,
+      "createdAt": "2026-09-10T16:29:23.751Z"
+    }
+  },
+  "story_zero_throne/orin_angry": {
+    "assetKey": "story_zero_throne/orin_angry",
+    "file": "story_zero_throne/orin_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4e189037-ef5c-462b-8dea-ab3f6bffb84d",
+      "promptHash": "6546578ef72cac0de54f40c9bef23658",
+      "seed": "zt-orin-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 24434,
+      "createdAt": "2026-09-10T16:29:28.263Z"
+    }
+  },
+  "story_zero_throne/venn_neutral": {
+    "assetKey": "story_zero_throne/venn_neutral",
+    "file": "story_zero_throne/venn_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1038a358-a86c-4862-989b-aabb392e5d25",
+      "promptHash": "83930e928542ef51b1c05c90b545f80f",
+      "seed": "zt-venn-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 15873,
+      "createdAt": "2026-09-10T16:29:34.506Z"
+    }
+  },
+  "story_zero_throne/orin_worried": {
+    "assetKey": "story_zero_throne/orin_worried",
+    "file": "story_zero_throne/orin_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Jace Orin, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5815a849-073e-4173-ad3e-8d98ed670225",
+      "promptHash": "f0178eb71e022b592f6a4d33d294ac3d",
+      "seed": "zt-orin-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 33535,
+      "createdAt": "2026-09-10T16:29:39.061Z"
+    }
+  },
+  "story_zero_throne/venn_amused": {
+    "assetKey": "story_zero_throne/venn_amused",
+    "file": "story_zero_throne/venn_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3ca2981d-6f95-429a-b302-d8d34f9a7b6a",
+      "promptHash": "67916f59dab2a09f5b7fe09bc9d1acc7",
+      "seed": "zt-venn-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 17847,
+      "createdAt": "2026-09-10T16:29:46.117Z"
+    }
+  },
+  "story_zero_throne/venn_warm": {
+    "assetKey": "story_zero_throne/venn_warm",
+    "file": "story_zero_throne/venn_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f56e7ef7-fb8e-4a69-80cc-ef1c5cd26fdf",
+      "promptHash": "714af494fe260e0d2b9723ca99568659",
+      "seed": "zt-venn-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 33576,
+      "createdAt": "2026-09-10T16:29:57.333Z"
+    }
+  },
+  "story_zero_throne/venn_confused": {
+    "assetKey": "story_zero_throne/venn_confused",
+    "file": "story_zero_throne/venn_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1ed45ba8-9ab9-4736-b577-3d2fb26c94da",
+      "promptHash": "692d9205df8ddcc95d0f4e2ec05f9743",
+      "seed": "zt-venn-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18392,
+      "createdAt": "2026-09-10T16:29:57.458Z"
+    }
+  },
+  "story_zero_throne/venn_annoyed": {
+    "assetKey": "story_zero_throne/venn_annoyed",
+    "file": "story_zero_throne/venn_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c50359fd-ef8a-452c-89e9-b60e1bab9595",
+      "promptHash": "aa1fab8d0d059d958269a3e319242311",
+      "seed": "zt-venn-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18292,
+      "createdAt": "2026-09-10T16:30:04.416Z"
+    }
+  },
+  "story_zero_throne/venn_surprised": {
+    "assetKey": "story_zero_throne/venn_surprised",
+    "file": "story_zero_throne/venn_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "03586827-69ec-41ae-8dc9-b7a876aed2bb",
+      "promptHash": "a2fb6dcc74366509d09ff74cb39307f7",
+      "seed": "zt-venn-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 30676,
+      "createdAt": "2026-09-10T16:30:05.186Z"
+    }
+  },
+  "story_zero_throne/venn_worried": {
+    "assetKey": "story_zero_throne/venn_worried",
+    "file": "story_zero_throne/venn_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8c9ab1ae-ca9e-44b9-a472-5c527f5ac4fe",
+      "promptHash": "88594898b970bc1f73a827cbd7bd9f9d",
+      "seed": "zt-venn-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 19215,
+      "createdAt": "2026-09-10T16:30:16.686Z"
+    }
+  },
+  "story_zero_throne/morrow_warm": {
+    "assetKey": "story_zero_throne/morrow_warm",
+    "file": "story_zero_throne/morrow_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d92fe70b-070f-4d7f-8942-43dbeb45ea01",
+      "promptHash": "64929363b971c7100aa8af672149d0a3",
+      "seed": "zt-morrow-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 18691,
+      "createdAt": "2026-09-10T16:30:23.884Z"
+    }
+  },
+  "story_zero_throne/morrow_neutral": {
+    "assetKey": "story_zero_throne/morrow_neutral",
+    "file": "story_zero_throne/morrow_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "333a3bba-18a3-44fd-a2d8-0c311c689a10",
+      "promptHash": "6894ec14459df9b936a6037d0d4fe883",
+      "seed": "zt-morrow-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 21973,
+      "createdAt": "2026-09-10T16:30:26.394Z"
+    }
+  },
+  "story_zero_throne/venn_angry": {
+    "assetKey": "story_zero_throne/venn_angry",
+    "file": "story_zero_throne/venn_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Sera Venn, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3c9f5f9a-1daf-45d0-8552-f17b61ea2e6d",
+      "promptHash": "0555c277399a939679f8b1c04aa07d4d",
+      "seed": "zt-venn-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 33088,
+      "createdAt": "2026-09-10T16:30:30.426Z"
+    }
+  },
+  "story_zero_throne/morrow_amused": {
+    "assetKey": "story_zero_throne/morrow_amused",
+    "file": "story_zero_throne/morrow_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "61d2673a-6441-48af-ba4e-3d8316606b15",
+      "promptHash": "cccfb6345cb4b620201e08deb7d8408a",
+      "seed": "zt-morrow-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 17979,
+      "createdAt": "2026-09-10T16:30:34.672Z"
+    }
+  },
+  "story_zero_throne/morrow_surprised": {
+    "assetKey": "story_zero_throne/morrow_surprised",
+    "file": "story_zero_throne/morrow_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3340fdc2-4ba9-42c0-a9b3-6b2fb4ab1067",
+      "promptHash": "237331f766b2fd777fb038b0a172a7e9",
+      "seed": "zt-morrow-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 18349,
+      "createdAt": "2026-09-10T16:30:42.238Z"
+    }
+  },
+  "story_zero_throne/morrow_confused": {
+    "assetKey": "story_zero_throne/morrow_confused",
+    "file": "story_zero_throne/morrow_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "93f017c9-f06e-49db-82b5-e7b0bf429c3c",
+      "promptHash": "73e85dbcd404b77cd97f04ad266f2f33",
+      "seed": "zt-morrow-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18074,
+      "createdAt": "2026-09-10T16:30:44.474Z"
+    }
+  },
+  "story_zero_throne/morrow_annoyed": {
+    "assetKey": "story_zero_throne/morrow_annoyed",
+    "file": "story_zero_throne/morrow_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ccfc9442-9bbb-44de-beb7-f502795b8f0c",
+      "promptHash": "2a15535c50edc7447427c32101b02c89",
+      "seed": "zt-morrow-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 16871,
+      "createdAt": "2026-09-10T16:30:47.300Z"
+    }
+  },
+  "story_zero_throne/morrow_angry": {
+    "assetKey": "story_zero_throne/morrow_angry",
+    "file": "story_zero_throne/morrow_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c72fc54a-cb67-4fa0-813e-8fb68e3d7611",
+      "promptHash": "a0d38165d585eeba1109dbf944a656c5",
+      "seed": "zt-morrow-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 18505,
+      "createdAt": "2026-09-10T16:30:53.180Z"
+    }
+  },
+  "story_zero_throne/morrow_worried": {
+    "assetKey": "story_zero_throne/morrow_worried",
+    "file": "story_zero_throne/morrow_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Morrow, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f4632214-a45f-4c2f-9ba0-b0dbd463e25e",
+      "promptHash": "a474fbf54c4362a78eb2279c0832a771",
+      "seed": "zt-morrow-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 15064,
+      "createdAt": "2026-09-10T16:30:57.305Z"
+    }
+  },
+  "story_zero_throne/eli_warm": {
+    "assetKey": "story_zero_throne/eli_warm",
+    "file": "story_zero_throne/eli_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5e1f2270-0be1-419b-ba33-4b28a96a089f",
+      "promptHash": "632db276a6c074a2c0e2bdaa62c6a478",
+      "seed": "zt-eli-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 17370,
+      "createdAt": "2026-09-10T16:31:04.677Z"
+    }
+  },
+  "story_zero_throne/eli_neutral": {
+    "assetKey": "story_zero_throne/eli_neutral",
+    "file": "story_zero_throne/eli_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "89e1b2e8-c3a1-494e-9b52-58d2d6e0e259",
+      "promptHash": "56e1b747e98b28a7d20b9441eb7299cb",
+      "seed": "zt-eli-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 21529,
+      "createdAt": "2026-09-10T16:31:06.006Z"
+    }
+  },
+  "story_zero_throne/eli_amused": {
+    "assetKey": "story_zero_throne/eli_amused",
+    "file": "story_zero_throne/eli_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ea5a43fc-368a-4fb5-856d-e65cfa7cca84",
+      "promptHash": "ba3a1981f30ae687031e76935e4b58f3",
+      "seed": "zt-eli-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 22388,
+      "createdAt": "2026-09-10T16:31:15.576Z"
+    }
+  },
+  "story_zero_throne/eli_surprised": {
+    "assetKey": "story_zero_throne/eli_surprised",
+    "file": "story_zero_throne/eli_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a7ae8a53-c891-42d0-bf94-51f308d7297d",
+      "promptHash": "ebfcbb14aabc2283345fb6ddeeb35720",
+      "seed": "zt-eli-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 24695,
+      "createdAt": "2026-09-10T16:31:22.006Z"
+    }
+  },
+  "story_zero_throne/eli_annoyed": {
+    "assetKey": "story_zero_throne/eli_annoyed",
+    "file": "story_zero_throne/eli_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "33282b21-54cd-48e6-bfcb-3328df611f8a",
+      "promptHash": "1510268d78284b05e580524df05d31da",
+      "seed": "zt-eli-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 19133,
+      "createdAt": "2026-09-10T16:31:25.148Z"
+    }
+  },
+  "story_zero_throne/eli_angry": {
+    "assetKey": "story_zero_throne/eli_angry",
+    "file": "story_zero_throne/eli_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "18e748b8-1564-4d04-a307-ef93c9083411",
+      "promptHash": "734c370caebb4888d85c0f635d1c3a4d",
+      "seed": "zt-eli-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 20102,
+      "createdAt": "2026-09-10T16:31:35.690Z"
+    }
+  },
+  "story_zero_throne/eli_confused": {
+    "assetKey": "story_zero_throne/eli_confused",
+    "file": "story_zero_throne/eli_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "31ba54c9-1687-4f9a-a080-a05a71b3aa5e",
+      "promptHash": "73037b047b6a66540613140879658906",
+      "seed": "zt-eli-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 38783,
+      "createdAt": "2026-09-10T16:31:43.464Z"
+    }
+  },
+  "story_zero_throne/eli_worried": {
+    "assetKey": "story_zero_throne/eli_worried",
+    "file": "story_zero_throne/eli_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Eli Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c9132889-b6e3-4870-af7b-c105ce77843d",
+      "promptHash": "ef8342c0b7299592897e8289028ed374",
+      "seed": "zt-eli-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 36683,
+      "createdAt": "2026-09-10T16:31:58.692Z"
+    }
   }
 }
