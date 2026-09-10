@@ -188,6 +188,7 @@ export function toSceneState(rawStory: StoryVersion, state: GameState): SessionS
     objective: topObjective(state, story),
     resources: visibleResources(story, state),
     encounter: state.encounter,
+    contest: state.contest,
     // Whoever is sailing with the player, in the order they came aboard.
     crew: crewRoster(state, story).map((member) => ({
       id: member.def.id,

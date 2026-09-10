@@ -88,6 +88,10 @@ interface PendingTurn {
   turnId: string;
   /** What the player typed, shown the instant they hit send. */
   actionText: string;
+  /** Sentences as the writer produces them, before the turn commits. */
+  streamed: string[];
+  /** Spec §19.7 — the cached face, which arrives before any prose. */
+  reaction: { name: string; url: string | null; emotion: string } | null;
   /** Spec §19.1 — arrives after the turn, never blocking it. */
   heroImageUrl: string | null;
   blocks: NarrativeBlock[];
@@ -208,7 +212,7 @@ export function SessionScreen({
     // typed is not in question, so it does not need permission to appear.
     setDraft('');
     void saveDraft(sessionId, '');
-    setPending({ turnId: '', actionText: text, heroImageUrl: null, blocks: [], check: null, deltas: [] });
+    setPending({ turnId: '', actionText: text, streamed: [], reaction: null, heroImageUrl: null, blocks: [], check: null, deltas: [] });
 
     try {
       const accepted = await api.submitTurn(
@@ -228,6 +232,30 @@ export function SessionScreen({
         accepted.streamToken,
         {
           onEvent: (event, data) => {
+            if (event === 'reaction.ready') {
+              // Lands roughly a second and a half before the first sentence,
+              // which is most of what makes a conversation feel answered.
+              setPending((current) =>
+                current
+                  ? {
+                      ...current,
+                      reaction: {
+                        name: String(data.name ?? ''),
+                        url: typeof data.url === 'string' ? data.url : null,
+                        emotion: String(data.emotion ?? 'neutral'),
+                      },
+                    }
+                  : current,
+              );
+            }
+            if (event === 'text.stream') {
+              const sentence = String(data.text ?? '').trim();
+              if (sentence.length > 0) {
+                setPending((current) =>
+                  current ? { ...current, streamed: [...current.streamed, sentence] } : current,
+                );
+              }
+            }
             if (event === 'check.resolved') {
               haptic('medium');
               setPending((current) =>
@@ -414,16 +442,23 @@ export function SessionScreen({
         </Row>
       </SafeAreaView>
 
-      {/* B. Stage — 35–48% of usable height (§10.2 B). */}
-      {scene ? (
-        <Stage
-          scene={scene}
-          sessionId={sessionId}
-          navigation={navigation}
-          playerPortraitUrl={playerPortraitUrl}
-          onOpenPortrait={() => navigation.navigate('Characters')}
-        />
-      ) : null}
+      {/*
+        The stage used to live here, permanently, taking 35–48% of the screen:
+        environment art, a portrait row, four resource bars and an objective
+        strip. All of it was true and none of it was what the player needed in
+        front of them while deciding what to say.
+
+        A visible metric turns the player's attention toward the system. Ours
+        is a freedom fantasy, so it has to point the other way — at the story
+        and at the person they are talking to. What is here now is the story,
+        the character reacting, and a box that says anything is allowed.
+
+        Nothing was deleted. Resources, objectives, cast and location all live
+        in the World Sheet, one tap away, and surface here when they actually
+        matter — a match clock during a match, a warning when something is
+        nearly gone.
+      */}
+      {scene ? <ContextStrip scene={scene} /> : null}
 
       {/* C. Story beat / transcript (§10.2 C). */}
       <ScrollView
@@ -494,11 +529,43 @@ export function SessionScreen({
           </Pressable>
         ) : null}
 
+        {/*
+          Spec §19.7 — the face, edge to edge, the way a scene would cut to it.
+          It is a cached asset and arrives about a second and a half before the
+          first sentence, so the story is visibly answering while it is still
+          being written.
+        */}
+        {pending?.reaction?.url ? (
+          <Pressable
+            accessibilityRole="imagebutton"
+            accessibilityLabel={`${pending.reaction.name}, ${pending.reaction.emotion}. Tap to view full screen.`}
+            onPress={() => setFullScreenImage(pending.reaction!.url!)}
+            style={{ marginHorizontal: -GUTTER }}
+          >
+            <Image
+              source={{ uri: pending.reaction.url }}
+              style={{ width: '100%', aspectRatio: 3 / 4 }}
+              resizeMode="cover"
+            />
+          </Pressable>
+        ) : null}
+
         {visibleBlocks.map((block, index) => (
           <Block key={`${pending?.turnId ?? latest?.turnId}_${index}`} block={block} scene={scene} />
         ))}
 
-        {pending && pending.blocks.length === 0 ? (
+        {/*
+          Sentences as they are written. Replaced by the committed blocks the
+          moment the turn lands, so nothing here can end up being the record of
+          a turn that did not commit — it is the same words, ten seconds early.
+        */}
+        {pending && pending.blocks.length === 0 && pending.streamed.length > 0
+          ? pending.streamed.map((sentence, index) => (
+              <NarrationBlock key={`stream_${index}`} text={sentence} />
+            ))
+          : null}
+
+        {pending && pending.blocks.length === 0 && pending.streamed.length === 0 ? (
           <Row gap={spacing.sm}>
             <ActivityIndicator size="small" color={colors.text.muted} />
             {/* Spec §25.12 — an honest state, not theatrical loading copy. */}
@@ -1170,4 +1237,47 @@ function outcomeText(outcome: string): string {
     .split('_')
     .map((part, index) => (index === 0 ? part.charAt(0) + part.slice(1).toLowerCase() : part.toLowerCase()))
     .join(' ');
+}
+
+/**
+ * Mechanics, only when they are the thing the player is deciding about.
+ *
+ * The rule this replaces was "show everything, always": Blackwake put Stamina,
+ * Hull, Notoriety and Supplies on screen during a conversation in a tavern.
+ * The rule now is that a number has to be load-bearing for the *next* decision
+ * or it does not appear, and where fiction can carry it, fiction does.
+ */
+function ContextStrip({ scene }: { scene: SessionSceneState }): React.JSX.Element | null {
+  const contest = scene.contest ?? null;
+
+  // A match has a score and a clock, and during one they are the whole point.
+  if (contest && !contest.finished) {
+    return (
+      <Row
+        style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.sm, justifyContent: 'space-between' }}
+      >
+        <Txt variant="bodyStrong">
+          {contest.playerScore}–{contest.opponentScore}
+        </Txt>
+        <Txt variant="caption" color={colors.text.secondary}>
+          {contest.opponentName}
+        </Txt>
+      </Row>
+    );
+  }
+
+  // Otherwise: only what is nearly gone, and said as a state of the body
+  // rather than as a number. "Your legs are going" beats "Legs 18".
+  const failing = scene.resources
+    .filter((r) => r.polarity === 'GOOD_HIGH' && r.max > 0 && r.current / r.max <= 0.25)
+    .slice(0, 2);
+  if (failing.length === 0) return null;
+
+  return (
+    <Row gap={spacing.sm} style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.sm, flexWrap: 'wrap' }}>
+      {failing.map((resource) => (
+        <Chip key={resource.id} label={`${resource.name} is nearly gone`} tone="warning" />
+      ))}
+    </Row>
+  );
 }

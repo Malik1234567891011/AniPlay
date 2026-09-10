@@ -14,6 +14,7 @@ import {
 import { ArchetypeDef, ContentDescriptor, StorySummary, StoryVersion } from '../game/story.js';
 import { LedgerEntry, QualityTier, StoreOffer, WalletSummary } from '../game/economy.js';
 import {
+  ContestState,
   EncounterState,
   FactionState,
   GameEvent,
@@ -290,6 +291,12 @@ export const SessionSceneState = z
         .strict(),
     ),
     encounter: EncounterState.nullable(),
+    /**
+     * Spec §13.8 — a match in progress. The one case where a score and a clock
+     * are the thing the player is deciding about, so the one case they belong
+     * on the gameplay screen.
+     */
+    contest: ContestState.nullable().default(null),
     /**
      * Who is travelling with the player. Spec §14.7.
      *
