@@ -29,26 +29,19 @@ Next: French. Play it, judge it, make it better than the English.
 
 ---
 
-## Worlds — 16 in the catalog
+## Worlds — 21 in the catalog, 22 with Last Service
 
-**The original ten**, all with locked covers that must not be regenerated:
-Blackwake, Last Five, Nine Weeks, Red Moon Brigade, Seven Days to Midnight,
-The Ninth Archive, The Salt Road, The Tidewall, The Unbound, The Understudy.
+**The original ten.** Six of them (Ninth Archive, Understudy, Salt Road,
+Tidewall, Unbound, Nine Weeks) are in `LEGACY_COVER_STORY_IDS` — covers locked,
+never regenerate. The other four (Blackwake, Last Five, Red Moon, Seven Days)
+are fair game.
 
-**Six newer:**
+**Eleven newer, all built, arted, seeded and live:** Itachi, Primal Crown, Zero
+Throne, Hush House, Window Seven, Good Morning Husband, The Fourth Beast, The
+Blank Prophecy, The Red Floor, Second Skin, Seven Names.
 
-| World | Code | Spec | Art | Notes |
-|---|---|---|---|---|
-| Itachi | ✅ | ✅ | ✅ 89 assets | Best-written world we have. `protagonist: NAMED`. |
-| Primal Crown | ✅ | ✅ | ✅ 70 assets | |
-| Zero Throne | ✅ | ✅ | ⏳ in flight | Stories agent is generating; cover 404s until it lands. |
-| Hush House | ✅ | ✅ | ✅ 63 assets | Art generated this session. |
-| Window Seven | ✅ | ✅ | ✅ 58 assets | Art generated this session. |
-| Good Morning, Husband | ✅ | ✅ | ✅ 59 assets | Art generated this session. |
-
-**Still to build** (bibles in `/Users/malik/Downloads/morestoryideas/`, agent has
-the queue): `02_THE_FOURTH_BEAST`, `03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
-`06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE`.
+**In flight:** Last Service — 2,245 lines written, needs its spec, catalog entry
+and art. The stories agent has it.
 
 **Art recipe** (~$2.60 and ~20–35 min per world, concurrency 4):
 ```bash
@@ -57,9 +50,7 @@ npx tsx infra/scripts/generate-art.ts --only=story_<id> --reactions --concurrenc
 npx tsx infra/scripts/optimize-art.ts
 npm run migrate   # REQUIRED — asset keys are baked into a story version
 ```
-No text is baked into the art. The wordmark is composited afterwards over the
-reserved bottom 22%, and `cover.raw.png` keeps the un-plated master so French
-re-plates rather than regenerates.
+Nothing is baked into the art, including the title — see the addendum.
 
 ---
 
@@ -108,16 +99,9 @@ frames. Now relationship changes, refusals and visible expression changes count,
 `HERO_SPACING.VIVID` is 5 rather than 10, and `turnsSinceHeroImage` no longer
 reports every gap one turn short.
 
-**Open image bug — hero frames do not stay in the feed (HIGH).** Reported by
-Malik and confirmed in the code. `Session.tsx:424`:
-```ts
-const heroImageUrl = pending ? pending.heroImageUrl : (latest?.heroImageUrl ?? null);
-```
-There is exactly **one** hero image on screen and it belongs to the newest turn,
-rendered in a fixed slot rather than inline in the transcript. So an image
-appears with its beat and vanishes the moment the next turn lands. The fix is to
-render the frame inline, attached to its own turn, so it stays in history — which
-is what the reference apps do. **Not yet fixed.**
+**Hero frames stay in the feed now.** There used to be exactly one on screen,
+in a fixed slot bound to the newest turn, so a frame appeared with its beat and
+vanished when the next turn landed. They render inline with their own turn.
 
 ---
 
