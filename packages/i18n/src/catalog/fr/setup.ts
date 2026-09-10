@@ -183,4 +183,17 @@ export const setup = {
    * diff, et c'est exactement le caractère que quelqu'un « nettoie ».
    */
   'setup.grammar.quoted_example': '\u00AB\u00A0{example}\u00A0\u00BB',
+  /**
+   * Le monde sait déjà qui tu es. `setup.heading` pose la question, ces deux-ci
+   * donnent la réponse.
+   *
+   * `Celui-là, tu l\u2019es déjà` plutôt que `Celui-ci` : le français de tous les
+   * jours a perdu l\u2019opposition ci/là et dit `celui-là` pour ce qu\u2019on vient de
+   * nommer. Et `ce que tu es devenu` reste au masculin par défaut — la seule
+   * forme dont on soit sûr est celle que `PlayerIdentity.grammar` fixe, et ici
+   * c\u2019est le monde qui la fixe : voir `canonGrammar` dans `CharacterSetup`.
+   */
+  'setup.heading_named': 'Tu es {name}.',
+  'setup.subheading_named':
+    'Ça, tu l\u2019es déjà. Ce qui reste à décider, c\u2019est ce que tu en as fait \u2014 et après ça, tout est ouvert.',
 } as const;

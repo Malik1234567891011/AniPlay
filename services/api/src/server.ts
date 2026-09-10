@@ -921,6 +921,9 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
         actionText: parsed.data.actionText,
         qualityTier: parsed.data.qualityTier,
         clientRevision: parsed.data.sessionRevision,
+        // The tapped card's own intent hint. Typed input sends null and is
+        // parsed from the words, unchanged.
+        selectedIntentHint: parsed.data.selectedSuggestionId,
       });
 
       const body = {

@@ -25,6 +25,8 @@ import {
   topObjective,
   dayPart,
   dayPartLabel,
+  formatClock,
+  lightAt,
 } from '@aniplay/engine';
 import type { DayPart, RelationshipTone } from '@aniplay/engine';
 import { retrieveLore } from './authored-lore.js';
@@ -99,6 +101,10 @@ export interface TurnContext {
     readonly dayPart: string;
     /** The id — `AFTERNOON`. For branching. */
     readonly dayPartId: DayPart;
+    /** `4:44 PM`, `16:44` — the clock the header is showing the player. */
+    readonly clock: string;
+    /** What the light is doing, so the prose cannot contradict the clock. */
+    readonly light: string;
     readonly presentCharacterIds: readonly string[];
   };
 
@@ -346,12 +352,14 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
       locationName: location?.name ?? state.player.locationId,
       locationDescription: location?.description ?? '',
       artDirection: location?.artDirection ?? '',
-      // In the session's locale, not the interface's: this string is read by
-      // the writer as well as shown on the HUD, and the run's language is the
-      // one the prose is in.
+      // In the session's locale, not the interface's: these strings are read
+      // by the writer as well as shown on the HUD, and the run's language is
+      // the one the prose is in.
       worldTimeLabel: formatWorldTime(state.worldMinute, state.locale),
       dayPart: dayPartLabel(state.worldMinute, state.locale),
       dayPartId: dayPart(state.worldMinute),
+      clock: formatClock(state.worldMinute, state.locale),
+      light: lightAt(state.worldMinute, state.locale),
       presentCharacterIds: presentIds,
     },
     player: {
@@ -450,7 +458,11 @@ export function estimateTokens(value: unknown): number {
  */
 function turnsSinceHeroImage(recentTurns: readonly TurnRecord[]): number | null {
   for (let i = recentTurns.length - 1; i >= 0; i--) {
-    if (recentTurns[i]?.heroImageUrl) return recentTurns.length - 1 - i;
+    // Distance to the turn being planned, which is not in `recentTurns` — so
+    // a frame on the immediately previous turn is one turn ago, not zero. The
+    // off-by-one here made every gap read one turn shorter than it was, and
+    // the spacing rule reject frames it should have allowed.
+    if (recentTurns[i]?.heroImageUrl) return recentTurns.length - i;
   }
   return null;
 }

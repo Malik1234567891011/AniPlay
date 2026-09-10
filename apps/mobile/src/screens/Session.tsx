@@ -202,7 +202,7 @@ export function SessionScreen({
 
   // `override` is how the turn menu re-sends an action that is no longer in
   // the composer. GP-04 retry is a new turn, not a rewind.
-  const send = useCallback(async (override?: string) => {
+  const send = useCallback(async (override?: string, intentHint?: string | null) => {
     const text = (override ?? draft).trim();
     if (text.length === 0 || sending) return;
 
@@ -230,11 +230,16 @@ export function SessionScreen({
     setDraft('');
     void saveDraft(sessionId, '');
     setPending({ turnId: '', actionText: text, streamed: [], reaction: null, heroImageUrl: null, blocks: [], check: null, deltas: [] });
+    // Removing the three response cards shrinks the feed by their whole stack,
+    // and the scroll offset is absolute — so submitting left the reader roughly
+    // 350pt above the newest beat, watching "Resolving…" from two beats up. It
+    // happened on every single submit. Follow the bottom, where the new text is.
+    requestAnimationFrame(() => transcriptRef.current?.scrollToEnd({ animated: true }));
 
     try {
       const accepted = await api.submitTurn(
         sessionId,
-        { actionText: text, qualityTier, sessionRevision: revision },
+        { actionText: text, qualityTier, sessionRevision: revision, selectedSuggestionId: intentHint ?? null },
         idempotencyKey,
       );
 
@@ -494,6 +499,18 @@ export function SessionScreen({
         {turns.slice(0, -1).map((turn) => (
           <View key={turn.turnId} style={{ gap: spacing.sm }}>
             {turn.actionText ? <PlayerAction text={turn.actionText} /> : null}
+            {/*
+              The frame belongs to the beat that earned it.
+              
+              There used to be exactly one hero image on screen, in a fixed slot
+              below the feed, showing whichever turn was newest — so an image
+              appeared with its beat and vanished the moment the next turn
+              landed. Scrolling back through the story showed none of the art it
+              had shown you live. A frame is part of the beat; it stays with it.
+            */}
+            {turn.heroImageUrl ? (
+              <HeroFrame uri={turn.heroImageUrl} onPress={() => setFullScreenImage(turn.heroImageUrl!)} />
+            ) : null}
             {turn.blocks.map((block, index) => (
               <Block key={index} block={block} scene={scene} />
             ))}
@@ -526,22 +543,7 @@ export function SessionScreen({
 
         {/* Spec §19.1 tier 2 — a hero frame for a beat that earned one. */}
         {heroImageUrl ? (
-          <Pressable
-            accessibilityRole="imagebutton"
-            accessibilityLabel={t('session.scene_image_a11y')}
-            onPress={() => setFullScreenImage(heroImageUrl)}
-          >
-            <Image
-              source={{ uri: heroImageUrl }}
-              style={{
-                width: '100%',
-                aspectRatio: 3 / 2,
-                borderRadius: radius.card,
-                backgroundColor: colors.bg.elevated,
-              }}
-              resizeMode="cover"
-            />
-          </Pressable>
+          <HeroFrame uri={heroImageUrl} onPress={() => setFullScreenImage(heroImageUrl)} />
         ) : null}
 
         {/*
@@ -621,7 +623,11 @@ export function SessionScreen({
                 // the lean-back way of playing can afford.
                 onPress={() => {
                   setSuggestions([]);
-                  void send(item.text);
+                  // The card's hint goes up with it. A tapped response was
+                  // written by a stage that knew who it was addressed to, and
+                  // re-deriving that from its own prose is how "Fancy the
+                  // company?" invited nobody.
+                  void send(item.text, item.intentHint);
                 }}
                 onEdit={() => {
                   setSuggestions([]);
@@ -665,6 +671,24 @@ export function SessionScreen({
               placeholder={composerPlaceholder(t, scene)}
               placeholderTextColor={colors.text.muted}
               multiline
+              /*
+                iOS autocorrect rewrote what the player actually typed: a line
+                beginning I-apostrophe-ll be at the dock came back with the
+                contraction replaced by the word love, twice, in testing — and this is a game whose entire input is prose full of
+                invented proper nouns (Torakawa, Sandoval, Blackwake), which is
+                the worst possible case for a dictionary that has never heard of
+                them. Spell check stays on, so a typo is still underlined; what
+                stops is the app silently replacing a word the player chose.
+
+                French makes this worse, not better: iOS Smart Punctuation is on
+                by default and swaps the straight apostrophe for the curly one
+                mid-word, so both spellings of j-apostrophe-attends reach the
+                parser. `lexicon-fr.ts` accepts
+                either — see step 10 — but autocorrect on top of that was
+                rewriting the verb itself.
+              */
+              autoCorrect={false}
+              spellCheck
               accessibilityLabel={t('session.what_do_you_do')}
               editable={!pending}
               style={{
@@ -1038,7 +1062,15 @@ const StyleSheetAbsolute = { position: 'absolute' as const, top: 0, left: 0, rig
 function Block({ block, scene }: { block: NarrativeBlock; scene: SessionSceneState | null }): React.JSX.Element {
   const t = useT();
   if (block.type === 'DIALOGUE') {
-    const character = scene?.presentCharacters.find((c) => c.id === block.speakerId);
+    // Resolved against the whole cast, not who is in the room now.
+    //
+    // The feed is history. Looking a speaker up in `presentCharacters` meant
+    // that walking out of a room retroactively stripped the name and face off
+    // every line already on screen — "mikoto", lowercase, beside a letter
+    // avatar, for a scene that had rendered correctly a turn earlier.
+    const character =
+      scene?.cast.find((c) => c.id === block.speakerId) ??
+      scene?.presentCharacters.find((c) => c.id === block.speakerId);
     return (
       <DialogueBlock
         speaker={
@@ -1060,6 +1092,29 @@ function Block({ block, scene }: { block: NarrativeBlock; scene: SessionSceneSta
     );
   }
   return <NarrationBlock text={block.text} />;
+}
+
+/** A beat's hero frame. Rendered inline with its turn, so it stays in the feed. */
+function HeroFrame({ uri, onPress }: { uri: string; onPress: () => void }): React.JSX.Element {
+  const t = useT();
+  return (
+    <Pressable
+      accessibilityRole="imagebutton"
+      accessibilityLabel={t('session.scene_image_a11y')}
+      onPress={onPress}
+    >
+      <Image
+        source={{ uri }}
+        style={{
+          width: '100%',
+          aspectRatio: 3 / 2,
+          borderRadius: radius.card,
+          backgroundColor: colors.bg.elevated,
+        }}
+        resizeMode="cover"
+      />
+    </Pressable>
+  );
 }
 
 function PlayerAction({ text }: { text: string }): React.JSX.Element {

@@ -113,4 +113,17 @@ export const world = {
   'world.relationship.warm': 'Sympathie',
   'world.relationship.familiar': 'Familiarité',
   'world.relationship.wary': 'Sur ses gardes',
+  /**
+   * Authored, not translated. The English is a run of participles ("the light
+   * going", "sunset has not happened") and calquing them gives the flat
+   * present-progressive a French writer never uses. These are relative clauses
+   * instead, which is how French says the same thing.
+   */
+  'world.light.full_dark_early': 'nuit noire, le jour est encore loin',
+  'world.light.first_light': 'les premi\u00e8res lueurs, le ciel qui passe du gris \u00e0 la couleur',
+  'world.light.broad_day': 'plein jour \u2014 la nuit ne tombe pas, et ne tombera pas avant des heures',
+  'world.light.gold_and_low': 'encore le jour, une lumi\u00e8re basse et dor\u00e9e\u202f; le soleil n\u2019est pas couch\u00e9',
+  'world.light.going': 'la lumi\u00e8re s\u2019en va, le soleil est bas ou vient de dispara\u00eetre',
+  'world.light.lamps': 'la nuit, avec les lampes que cet endroit veut bien avoir',
+  'world.light.full_dark_late': 'nuit noire, et tard',
 } as const;

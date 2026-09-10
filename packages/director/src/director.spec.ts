@@ -458,7 +458,9 @@ describe('director beat planning', () => {
     const resolution = resolveIntent({ story: STORY, state, intent, turnId: 't1', seed: 's' });
 
     const withGap = (turnsSince: number) => {
-      const recentTurns = Array.from({ length: turnsSince + 1 }, (_, i) => ({
+      // `turnsSince` turns of log, the oldest of them framed — so the frame is
+      // exactly that many turns behind the turn being planned.
+      const recentTurns = Array.from({ length: turnsSince }, (_, i) => ({
         ...turnRecord(),
         heroImageUrl: i === 0 ? 'https://example.test/frame.png' : null,
       }));
@@ -489,7 +491,7 @@ describe('director beat planning', () => {
     };
 
     const at = (turnsSince: number) => {
-      const recentTurns = Array.from({ length: turnsSince + 1 }, (_, i) => ({
+      const recentTurns = Array.from({ length: turnsSince }, (_, i) => ({
         ...turnRecord(),
         heroImageUrl: i === 0 ? 'https://example.test/frame.png' : null,
       }));
@@ -501,7 +503,7 @@ describe('director beat planning', () => {
       ).mediaPlan.heroImage;
     };
 
-    // Three turns after the last frame is well short of VIVID's ten, and a
+    // Three turns after the last frame is short of VIVID's spacing, and a
     // death still earns one.
     expect(at(3).eligible).toBe(true);
     expect(at(3).reason).toMatch(/landmark/i);
@@ -1569,20 +1571,45 @@ describe('generated art stays in sync with the stories that declare it', () => {
 
     // A story that declares an asset key the generator would never produce ends
     // up with a blank image in the app, and nothing catches it until a screenshot.
+    //
+    // A story that declares none is a different and legitimate thing: art that
+    // has not been commissioned yet, which the app renders as a deliberate
+    // placeholder rather than as a hole. What must never happen is the state in
+    // between — a cover with no portraits behind it, or portraits under no
+    // cover — because that is the version that looks finished on the shelf and
+    // is full of gaps once you open it. So each world is all or nothing.
     for (const story of LAUNCH_CATALOG) {
-      expect(story.coverImage, story.title).toBe(coverPrompt(story).assetKey);
-      expect(story.keyArt, story.title).toBe(keyArtPrompt(story).assetKey);
+      const declared = story.coverImage !== null;
+
+      expect(story.coverImage, story.title).toBe(declared ? coverPrompt(story).assetKey : null);
+      expect(story.keyArt, story.title).toBe(declared ? keyArtPrompt(story).assetKey : null);
 
       for (const location of story.locations) {
         expect(location.stageImage, `${story.title}/${location.id}`).toBe(
-          locationPrompt(story, location).assetKey,
+          declared ? locationPrompt(story, location).assetKey : null,
         );
       }
       for (const character of story.characters) {
         expect(character.portrait, `${story.title}/${character.id}`).toBe(
-          characterPrompt(story, character).assetKey,
+          declared ? characterPrompt(story, character).assetKey : null,
         );
       }
+    }
+  });
+
+  it('still has art on every world that shipped with it', async () => {
+    const { coverPrompt } = await import('./media/prompts.js');
+
+    // The all-or-nothing rule above must not become a way to silently drop a
+    // cover that already exists. These ten are generated and locked.
+    const SHIPPED_WITH_ART = [
+      'The Ninth Archive', 'The Understudy', 'The Salt Road', 'The Tidewall', 'The Unbound',
+      'Nine Weeks', 'Red Moon Brigade', 'Seven Days to Midnight', 'Blackwake', 'Last Five',
+    ];
+    for (const title of SHIPPED_WITH_ART) {
+      const story = LAUNCH_CATALOG.find((s) => s.title === title);
+      expect(story, title).toBeDefined();
+      expect(story!.coverImage, title).toBe(coverPrompt(story!).assetKey);
     }
   });
 });

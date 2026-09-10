@@ -153,4 +153,12 @@ export const discover = {
   'discover.search_prompt_title': 'Cherche un monde',
   'discover.search_prompt_body':
     'Un titre, un créateur, un mot-clé, un point de départ ou un personnage dont tu te souviens.',
+  /**
+   * La deuxième ligne du rayon Reprendre.
+   *
+   * L\u2019anglais dit `8 turns in`, avec une préposition qui n\u2019a pas d\u2019équivalent :
+   * `dans 8 tours` veut dire le contraire (dans le futur). `8 tours joués` dit
+   * la même chose et se lit tout seul. Zéro prend le singulier.
+   */
+  'discover.continue_turns_in': '{count, plural, one {# tour joué} other {# tours joués}}',
 } as const;

@@ -101,6 +101,39 @@ export function dayPartLabel(worldMinute: number, locale: Locale = 'en'): string
   return translate(locale, DAY_PART_KEY[dayPart(worldMinute)]);
 }
 
+/**
+ * What the light is doing, in words a writer can put in a sentence.
+ *
+ * `dayPart` alone was all the writer got, and "afternoon" is vague enough to
+ * reach for atmosphere: a beat at **4:44 PM** at a summer lake camp opened "out
+ * into the dusk… the air already shifting toward night", and one at 5:32 PM
+ * managed "the hush of late afternoon" and "the sun is down behind the lake" in
+ * the same breath. The header said the time the whole while.
+ *
+ * Deliberately conservative and deliberately not seasonal. We do not model
+ * latitude or time of year, so this says only what is true almost anywhere:
+ * mid-afternoon is not dusk, and eight in the evening is not noon. A world that
+ * wants "dark by four" can say so in its tone guide, which the writer also gets.
+ *
+ * Localized rather than translated at the seam. This is prose the writer reads
+ * and echoes, so an English phrase here teaches a French beat the English
+ * rhythm — the same reason `WRITER_POLICY_FR` is authored and not translated.
+ */
+const LIGHT_KEY = [
+  [5, 'world.light.full_dark_early'],
+  [7, 'world.light.first_light'],
+  [16, 'world.light.broad_day'],
+  [18, 'world.light.gold_and_low'],
+  [20, 'world.light.going'],
+  [22, 'world.light.lamps'],
+] as const;
+
+export function lightAt(worldMinute: number, locale: Locale = 'en'): string {
+  const hour = Math.floor(minuteOfDay(worldMinute) / 60);
+  const band = LIGHT_KEY.find(([until]) => hour < until);
+  return translate(locale, band ? band[1] : 'world.light.full_dark_late');
+}
+
 /** Header label: `Day 2 · 4:15 PM`, `Jour 2 · 16:15`. Spec §10.2 A. */
 export function formatWorldTime(worldMinute: number, locale: Locale = 'en'): string {
   return translate(locale, 'world.time_label', {

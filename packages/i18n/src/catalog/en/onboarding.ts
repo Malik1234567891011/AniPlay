@@ -29,11 +29,11 @@ export const onboarding = {
   'onboarding.age_band_18_24': '18 – 24',
   'onboarding.age_band_25_plus': '25 or older',
   /**
-   * Shown when the player picks "Under 13". ANIMA is the product name and is
+   * Shown when the player picks "Under 13". PLOTBREAK is the product name and is
    * never translated. Warm, not scolding — they told the truth.
    */
   'onboarding.age_too_young':
-    'ANIMA is built for players aged 13 and over. Thanks for being honest with us.',
+    'PLOTBREAK is built for players aged 13 and over. Thanks for being honest with us.',
   /** Advance to the next step of onboarding. */
   'onboarding.continue': 'Continue',
   /** Link to the published privacy policy. The document, not the concept. */
@@ -59,4 +59,11 @@ export const onboarding = {
     'Up to five. This decides what the top of Discover shows you — nothing is hidden either way, and you can change it whenever you like. Skipping is fine.',
   /** Skip this optional step — `Passer`, not "jump" and not "skip a beat". */
   'onboarding.skip': 'Skip',
+  /**
+   * OB-04, the shop window. Five worlds, and a way past them.
+   */
+  'onboarding.showcase_title': 'All set! Choose a title and play now.',
+  'onboarding.showcase_body': 'We picked a few to start you off.',
+  'onboarding.showcase_card_a11y': '{title}. Start this story.',
+  'onboarding.see_all_stories': 'See all stories',
 } as const;

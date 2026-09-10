@@ -118,6 +118,16 @@ export interface RunTurnOptions {
   readonly qualityTier: QualityTier;
   readonly turnId: string;
   readonly seed: string;
+  /**
+   * The `intentHint` of the response card the player tapped, when they tapped
+   * one. `null` for typed input.
+   *
+   * The card was written by a model that knew exactly who it was addressed to.
+   * Throwing that away and re-deriving it from the card's own prose is how a
+   * tap of *"Fancy the company?"* became a targetless `custom` that invited
+   * nobody — see `addresseeFrom`.
+   */
+  readonly selectedIntentHint?: string | null;
   readonly deps?: TurnPipelineDeps;
   readonly now?: () => string;
 }
@@ -135,6 +145,35 @@ export interface TurnPipelineResult {
   readonly commit: CommitResult;
   readonly context: TurnContext;
   readonly timings: Record<string, number>;
+}
+
+
+/**
+ * Who the turn is aimed at, when the sentence does not say.
+ *
+ * Two sources, in order of confidence:
+ *
+ * 1. **The card the player tapped.** Its `intentHint` is `verb:characterId`,
+ *    written by the stage that generated the card and knew who it was for.
+ * 2. **Whoever spoke to the player last.** In a room of three, a reply with no
+ *    name on it goes to the person who just said something — which is how
+ *    conversation works and what a player means by it.
+ *
+ * Neither is trusted blindly: the parser checks the result against who is
+ * actually present before it puts words in anybody's ear.
+ */
+export function addresseeFrom(options: {
+  readonly selectedIntentHint?: string | null;
+  readonly recentTurns: readonly TurnRecord[];
+}): string | null {
+  const hinted = options.selectedIntentHint?.split(':')[1]?.trim();
+  if (hinted) return hinted;
+
+  const last = options.recentTurns.at(-1);
+  for (const block of [...(last?.blocks ?? [])].reverse()) {
+    if (block.type === 'DIALOGUE' && block.speakerId) return block.speakerId;
+  }
+  return null;
 }
 
 export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResult> {
@@ -161,9 +200,15 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   // are — an unrecognised verb, a name the world does not have, several things
   // at once — and those are exactly the cases the rule parser already reports
   // as low confidence.
-  const quick = RULE_PARSER.parseSync(ellipsis.text, { story, state, intentId: `int_${turnId}` });
+  const parseContext = {
+    story,
+    state,
+    intentId: `int_${turnId}`,
+    addressee: addresseeFrom(options),
+  };
+  const quick = RULE_PARSER.parseSync(ellipsis.text, parseContext);
   const parsed = needsModelParse(quick)
-    ? await deps.parser.parse(ellipsis.text, { story, state, intentId: `int_${turnId}` })
+    ? await deps.parser.parse(ellipsis.text, parseContext)
     : quick;
   const intent = annotateScope(
     ellipsis.expanded && ellipsis.note

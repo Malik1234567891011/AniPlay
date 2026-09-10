@@ -49,6 +49,15 @@ export interface SubmitTurnArgs {
   readonly actionText: string;
   readonly qualityTier: QualityTier;
   readonly clientRevision: number;
+  /**
+   * The `intentHint` of the response the player tapped, when they tapped one.
+   *
+   * Carried on the request as `selectedSuggestionId`, a field that had existed
+   * on the wire since the first API and was hardcoded to `null` by the client
+   * and ignored by the server. It says who the line is aimed at, which the
+   * card's own prose very often does not.
+   */
+  readonly selectedIntentHint?: string | null;
 }
 
 export interface AcceptedTurn {
@@ -143,6 +152,7 @@ async function processTurn(
   },
 ): Promise<void> {
   const { ctx, hub, user, session, story, actionText, qualityTier, turnId, reservation, state } = args;
+  const selectedIntentHint = args.selectedIntentHint ?? null;
 
   try {
     const memories = await ctx.repo.listMemories(session.sessionId);
@@ -207,6 +217,7 @@ async function processTurn(
       recentTurns,
       actionText,
       qualityTier,
+      selectedIntentHint,
       turnId,
       seed,
       deps: ctx.pipeline,

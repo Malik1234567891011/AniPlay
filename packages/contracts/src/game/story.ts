@@ -32,6 +32,38 @@ export const SkillDef = z
   .strict();
 export type SkillDef = z.infer<typeof SkillDef>;
 
+/**
+ * What a resource *does* while it sits in a particular range.
+ *
+ * A variable exists to change behaviour, not to be displayed. Authors already
+ * think in these terms — every story bible in `docs/story-bibles` describes its
+ * state as behaviour bands, "Ayame Trust low: guarded, shares only survival
+ * rules / high: shares Mika evidence, takes personal risks" — and `ResourceDef`
+ * could express exactly one point of that range, `zeroStateConsequence`, which
+ * is the band nobody spends the story in.
+ *
+ * So the useful half of the idea had nowhere to live and the writer received a
+ * number with a noun on it. "House Attention: 62 / 100" tells a model nothing;
+ * "the building is staging scenes around the people you care about" tells it
+ * what the next beat is.
+ *
+ * `upTo` is the inclusive top of the band. Bands are read in ascending order
+ * and the first one the value fits is the one that applies, so the last band
+ * should reach `max`.
+ */
+export const ResourceBand = z
+  .object({
+    /** Inclusive upper bound. A value at or below this is in this band. */
+    upTo: z.number().int(),
+    /**
+     * How the world behaves in this range, in the same words a writer would
+     * use. Never a measurement, never shown to the player as text.
+     */
+    behaviour: z.string(),
+  })
+  .strict();
+export type ResourceBand = z.infer<typeof ResourceBand>;
+
 export const ResourceDef = z
   .object({
     id: z.string(),
@@ -47,9 +79,27 @@ export const ResourceDef = z
     visible: z.boolean().default(true),
     zeroStateConsequence: z.string().nullable().default(null),
     color: z.string().nullable().default(null),
+    /**
+     * What this resource does at each level, ascending. Empty on a resource
+     * that is genuinely only a number — Legs is legs.
+     */
+    bands: z.array(ResourceBand).default([]),
   })
   .strict();
 export type ResourceDef = z.infer<typeof ResourceDef>;
+
+/**
+ * The band a value is currently in, or null if the resource has no bands.
+ *
+ * Derived rather than stored, for the same reason `archetypeGrants` is: a band
+ * written into state would drift the moment the author changed a threshold, and
+ * the drift would be invisible.
+ */
+export function resourceBand(def: ResourceDef, value: number): ResourceBand | null {
+  if (def.bands.length === 0) return null;
+  const ascending = [...def.bands].sort((a, b) => a.upTo - b.upTo);
+  return ascending.find((band) => value <= band.upTo) ?? ascending.at(-1) ?? null;
+}
 
 export const ItemDef = z
   .object({
@@ -909,6 +959,46 @@ export const CharacterSetupField = z
   .strict();
 export type CharacterSetupField = z.infer<typeof CharacterSetupField>;
 
+/**
+ * Whether the player invents who they are, or the story already knows.
+ *
+ * Caught on Itachi. Its own premise reads *"you are thirteen, you are the best
+ * shinobi your clan has produced in a generation"* — and the setup screen then
+ * asked the player to type their own name, invent their appearance and choose
+ * pronouns, with placeholder text describing Itachi back at them. The game was
+ * asking the player to author a character the world had already written.
+ *
+ * Nine Weeks is the other case and the reason this is a field rather than a
+ * rule: you are an unnamed person coming back to a summer job, and inventing
+ * yourself is the whole premise. Both are correct; they are different stories.
+ *
+ * `BLANK` is the default, so the fifteen worlds written before this keep the
+ * behaviour they were authored for.
+ *
+ * This changes the *setup screen only*. A named protagonist constrains who you
+ * are, never what you may do — the archetype question, and every choice after
+ * it, stays exactly as free as it was.
+ */
+export const Protagonist = z
+  .object({
+    kind: z.enum(['BLANK', 'NAMED']).default('BLANK'),
+    /** Canon, for a NAMED protagonist. Ignored when BLANK. */
+    name: z.string().default(''),
+    pronouns: z.string().default(''),
+    /** How the world sees them, in place of the player's own description. */
+    description: z.string().default(''),
+    /**
+     * The heading the setup screen uses instead of "Who are you?".
+     *
+     * "What kind of Itachi are you?" is a different and better question, and
+     * only the world knows how to phrase it.
+     */
+    setupHeading: z.string().default(''),
+  })
+  .strict()
+  .default({ kind: 'BLANK', name: '', pronouns: '', description: '', setupHeading: '' });
+export type Protagonist = z.infer<typeof Protagonist>;
+
 export const StoryVersion = z
   .object({
     id: z.string(),
@@ -953,6 +1043,18 @@ export const StoryVersion = z
     endings: z.array(EndingDef).default([]),
     archetypes: z.array(ArchetypeDef).default([]),
     setupFields: z.array(CharacterSetupField).default([]),
+    protagonist: Protagonist,
+    /**
+     * A hand-written brief for this world's cover, replacing the generated one.
+     *
+     * Covers are normally composed — a genre composition, a staging picked per
+     * story, the cast read out of the schema. That is right for twenty worlds
+     * and wrong for the one somebody has actually art-directed. When this is
+     * set, it replaces the composed middle of the prompt; the style spine, the
+     * framing rule, the appeal direction and the negatives still apply, because
+     * those are the house rules rather than the subject.
+     */
+    coverDirection: z.string().default(''),
     /** 50–150 words. Spec §21.3 step 8 / §43.2. */
     opening: z.string(),
     openingSuggestions: z.array(z.string()).max(3).default([]),

@@ -56,14 +56,11 @@ export const onboarding = {
    * age floor; `est destiné aux joueurs de 13 ans et plus` is how a legal
    * notice says it.
    *
-   * ⚠️ `ANIMA` is kept exactly as the English catalogue has it, because brand
-   * names are never translated — **but this is a third brand name.** `app.json`
-   * says `AniPlay`, `server.ts:330` says `Plotbreak`, every localization
-   * document says `PLOTBREAK`, and this string says `ANIMA`. English-side
-   * decision (TERMINOLOGY §1.4); flagged, not resolved here.
-   */
+   * La marque est tranchée : le produit s’appelle PLOTBREAK partout — `app.json`,
+   * `server.ts`, l’icône, la doc. Un nom de marque ne se traduit pas, ne
+   * s’accentue pas et ne s’espace pas.*/
   'onboarding.age_too_young':
-    'ANIMA, c’est à partir de 13 ans. Merci d’être honnête avec nous.',
+    'PLOTBREAK, c’est à partir de 13 ans. Merci d’être honnête avec nous.',
   /**
    * The imperative, per PRODUCT_VOICE rule 2 — onboarding is momentum, and this
    * button is ours rather than Apple's, so it is not the infinitive
@@ -105,4 +102,20 @@ export const onboarding = {
     'Cinq maximum. Découvrir mettra ça en haut de la page — rien n’est caché pour autant, et ça se change quand tu veux. Tu peux aussi passer.',
   /** `Passer` is the step. `Sauter` is a jump and `Ignorer` is a snub. */
   'onboarding.skip': 'Passer',
+  /**
+   * OB-04, la vitrine.
+   *
+   * `Tout est prêt\u202f!` et non `Prêt\u202f!` : l\u2019anglais félicite le joueur d\u2019avoir
+   * fini un formulaire, et le français fait ça en parlant de la chose, pas de
+   * la personne. `Choisis` à l\u2019impératif — c\u2019est un bouton qui s\u2019adresse au
+   * joueur, pas une étiquette.
+   *
+   * `See all stories` devient `Voir tous les mondes` : le produit dit `monde`
+   * partout ailleurs (TERMINOLOGY §2.1), et `histoires` ici rouvrirait une
+   * question de vocabulaire déjà tranchée.
+   */
+  'onboarding.showcase_title': 'Tout est prêt\u202f! Choisis un titre et lance-toi.',
+  'onboarding.showcase_body': 'On t\u2019en a mis quelques-uns de côté pour commencer.',
+  'onboarding.showcase_card_a11y': '{title}. Lancer cette histoire.',
+  'onboarding.see_all_stories': 'Voir tous les mondes',
 } as const;

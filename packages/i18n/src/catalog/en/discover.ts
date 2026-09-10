@@ -96,4 +96,10 @@ export const discover = {
   'discover.search_prompt_title': 'Search for a world',
   'discover.search_prompt_body':
     'Search by title, creator, tag, premise, or a character you remember.',
+  /**
+   * The Continue rail's second line, in the slot a cover card usually gives the
+   * fantasy label. Shares its wording with `discover.continue_turns`, which is
+   * the same sentence in the vertical card.
+   */
+  'discover.continue_turns_in': '{count, plural, one {# turn} other {# turns}} in',
 } as const;

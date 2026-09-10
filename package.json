@@ -25,7 +25,8 @@
     "fr:probe": "tsx infra/scripts/fr-parser-probe.ts",
     "art": "tsx infra/scripts/generate-art.ts",
     "brand": "tsx infra/scripts/generate-brand.ts",
-    "migrate": "tsx infra/scripts/migrate.ts"
+    "migrate": "tsx infra/scripts/migrate.ts",
+    "playtest": "node infra/scripts/playtest-read.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

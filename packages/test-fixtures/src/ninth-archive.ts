@@ -26,7 +26,7 @@ const raw = {
     'The gate turns red, which is the signal for a student who should be stopped. A prefect named Kael is ordered to investigate you. An archive assistant named Mira quietly covers for you, and clearly knows more than she says. The Warden who signs off on record changes is extremely kind to you, which is the part that worries you most.\n\n' +
     'You have a term to find out who erased you and why, before the gate stops treating it as an error and starts treating you as an intruder. Students here are never expelled. They are transferred, and the transfers do not arrive anywhere.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'ninth-archive/cover',
   keyArt: 'ninth-archive/key',

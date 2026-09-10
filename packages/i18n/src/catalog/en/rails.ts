@@ -24,7 +24,7 @@ export const rails = {
   'rail.for_you_because': 'Because you picked {tags}',
   /** Real play behind it, not an editorial claim. */
   'rail.trending': 'Trending now',
-  /** ⚠️ Carries the brand name, which is unsettled: app.json says AniPlay. */
+  /** Carries the brand name. Settled: the product is Plotbreak everywhere. */
   'rail.new': 'New on Plotbreak',
   'rail.all': 'All worlds',
 } as const;

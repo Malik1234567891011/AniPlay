@@ -50,7 +50,7 @@ const raw = {
     'Nobody remembers. You have seven days, and you have had them before.\n\n' +
     'The only thing you keep is what you worked out.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'seven_days/cover',
   keyArt: 'seven_days/key',

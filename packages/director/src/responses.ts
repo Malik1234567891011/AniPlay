@@ -28,7 +28,9 @@ import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { buildMessages, SAFETY_POLICY, worldRules } from './model-stages.js';
+import { nameKeys } from '@aniplay/contracts';
 import { speakerBrief } from './speaker-brief.js';
+import { stateBands } from './state-bands.js';
 
 const ResponseSet = z
   .object({
@@ -84,7 +86,8 @@ const POLICY = [
   'weak side and try to get all the way to the rim."',
   '',
   'Never mention dice, difficulty, costs, resources, stats, quests or objectives. The player sees what',
-  'they would like to do, not what the engine is doing about it.',
+  'they would like to do, not what the engine is doing about it. `worldState` says how the world is',
+  'behaving; write responses that fit it and never refer to it.',
   '',
   'Only people who are actually in the room. Somebody who has left, or is dead, is not somebody to',
   'address. Use their name the way the prose does. `inTheRoom` is the whole cast available to you.',
@@ -101,6 +104,17 @@ const POLICY = [
   '',
   'The player owns nothing you have not seen. No cigarette, no drink, no jacket, no knife unless the',
   'beat put it there. Inventing a prop for a gesture writes a character the player did not.',
+  '',
+  'Address people the way this story addresses them, and never invent a term of address. An honorific,',
+  'a nickname or a kinship word you were not given is a guess, and a guess lands wrong: a card had a',
+  'thirteen-year-old call his own little brother "nii-san", which means older brother — the player',
+  'saying it to the one person in the world it cannot mean. If the prose has not used a word for who',
+  'these two are to each other, use their name.',
+  '',
+  'When somebody has just asked the player a question with two answers, the three responses must not',
+  'all be the same answer in different tones. Sasuke asks "are you coming tomorrow, or not coming" and',
+  'wants it now; three ways of saying yes is not a choice, it is a cutscene with a delay. At least one',
+  'has to be able to disappoint him.',
   '',
   'Never steer. If the player has walked away from what the story wanted, the responses are about the',
   'life they are living now, not about getting them back. Somebody who quit the team is not offered',
@@ -166,6 +180,10 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
       aboutYou: context.player.setupAnswers,
     },
     inTheRoom: context.presentCharacters.map(speakerBrief),
+    // How the world is behaving right now. A response written against a house
+    // that has started staging scenes around you is a different response from
+    // one written against a house that has barely noticed you.
+    worldState: stateBands(context),
     /** So a response can pick up a thread rather than restart the conversation. */
     recently: context.recentTurns.slice(-3).map((t) => t.sceneSummary),
     /**
@@ -188,7 +206,7 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
 
 
 /**
- * A line of dialogue offered to a player who is standing on their own.
+ * A response that reaches for somebody who is not in the room.
  *
  * The policy says not to, and the policy is not enough on its own: turn 17 of
  * a Nine Weeks run produced a beat that said *"Nobody answers. No Juno, no
@@ -197,14 +215,34 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
  * unchanged: *"I wave at Juno with a grin, stepping closer"*, on a beat whose
  * own prose said Juno had left.
  *
- * Dropping the card is better than showing it. Two workable responses beat
- * three where one cannot function, and if too few survive the caller falls
- * back to the rule-built suggestions, which only ever address people the
- * engine has in the room.
+ * Dropping the card is better than showing it — but only the ones that
+ * actually reach. An earlier version dropped every quoted line in an empty
+ * room, which emptied the whole set in Itachi's district and fell the cards
+ * back to the rule-built menu items ("Throw", "Head to The House On The
+ * Corner.") that the prose responses exist to replace. A player alone may
+ * mutter, call out, or read a duty board aloud.
  */
-export function talksToNobody(text: string, peoplePresent: number): boolean {
+export function talksToNobody(
+  text: string,
+  peoplePresent: number,
+  absentNames: readonly string[] = [],
+): boolean {
   if (peoplePresent > 0) return false;
-  return /["\u201c\u00ab][^"\u201c\u201d\u00ab\u00bb]{2,}["\u201d\u00bb]/.test(text);
+
+  const names = absentNames.filter((name) => name.length >= 3);
+  const mentioned = names.find((name) => new RegExp(`\\b${escapeName(name)}\\b`, 'i').test(text));
+  if (!mentioned) return false;
+
+  // Thinking about somebody who is not here is exactly what a player alone
+  // does. Reaching for them is the bug.
+  return !new RegExp(
+    `\\b(?:think|thinking|thought|wonder|wondering|remember|remembering|miss|missing|imagine|picture|recall)\\b[^.!?]{0,40}\\b${escapeName(mentioned)}\\b`,
+    'i',
+  ).test(text);
+}
+
+function escapeName(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
@@ -262,6 +300,12 @@ export async function generateResponses(
     );
 
     const inRoom = new Set(context.presentCharacters.map((c) => c.def.id));
+    // Everybody the player might name who is not standing here.
+    // Every word of every absent name, so "Sandoval" is caught as well as
+    // "Teo" — the same helper the absence validator uses.
+    const absentNames = context.story.characters
+      .filter((c) => !inRoom.has(c.id))
+      .flatMap((c) => nameKeys(c.name));
     const responses = result.value.responses
       .map((r) => ({
         // The interpreter reads the text exactly as if it were typed — no verb
@@ -274,7 +318,7 @@ export async function generateResponses(
         resourceCostLabel: null,
       }))
       .filter((r) => r.text.length > 0)
-      .filter((r) => !talksToNobody(r.text, inRoom.size))
+      .filter((r) => !talksToNobody(r.text, inRoom.size, absentNames))
       .slice(0, 3);
 
     return responses.length >= 2 ? responses : null;

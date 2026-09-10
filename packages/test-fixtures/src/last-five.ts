@@ -36,7 +36,7 @@ const raw = {
     'Nobody has seen you play. The coach has forty minutes of practice to decide whether that is a good thing.\n\n' +
     'And every road to Nationals runs through one of the five who left.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'last_five/cover',
   keyArt: 'last_five/key',

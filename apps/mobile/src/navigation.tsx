@@ -1,11 +1,16 @@
 import React from 'react';
 import { View } from 'react-native';
-import { NavigationContainer, type NavigatorScreenParams, type RouteProp } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+  type NavigatorScreenParams,
+  type RouteProp,
+} from '@react-navigation/native';
 import { createNativeStackNavigator, type NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Txt, colors, spacing } from '@aniplay/ui';
 import { useStore } from './state/store.jsx';
-import { AgeGateScreen, SplashScreen, TasteScreen } from './screens/Onboarding.jsx';
+import { AgeGateScreen, ShowcaseScreen, SplashScreen, TasteScreen } from './screens/Onboarding.jsx';
 import { DiscoverScreen, SearchScreen } from './screens/Discover.jsx';
 import { StoryDetailScreen } from './screens/StoryDetail.jsx';
 import { CharacterSetupScreen } from './screens/CharacterSetup.jsx';
@@ -145,6 +150,11 @@ function Tabs(): React.JSX.Element {
 export function Navigation(): React.JSX.Element {
   const { ready, ageVerified, onboardingComplete } = useStore();
   const [tasteDone, setTasteDone] = React.useState(false);
+  const [showcaseDone, setShowcaseDone] = React.useState(false);
+  // A story chosen on the showcase, opened once the navigator exists. Onboarding
+  // renders instead of the navigator, so it has nothing to navigate with.
+  const [openStoryId, setOpenStoryId] = React.useState<string | null>(null);
+  const navigationRef = useNavigationContainerRef<RootParamList>();
 
   // OB-01 — no artificial delay; the splash lasts exactly as long as boot.
   if (!ready) return <SplashScreen />;
@@ -152,9 +162,30 @@ export function Navigation(): React.JSX.Element {
   if (!ageVerified) return <AgeGateScreen />;
   // OB-03 — optional and skippable.
   if (onboardingComplete && !tasteDone) return <TasteScreen onDone={() => setTasteDone(true)} />;
+  // OB-04 — five worlds and a way in, rather than dropping somebody who has
+  // just told us what they like onto a shelf of twenty-three.
+  if (onboardingComplete && !showcaseDone) {
+    return (
+      <ShowcaseScreen
+        onSeeAll={() => setShowcaseDone(true)}
+        onOpen={(storyId) => {
+          setOpenStoryId(storyId);
+          setShowcaseDone(true);
+        }}
+      />
+    );
+  }
 
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer
+      ref={navigationRef}
+      theme={navigationTheme}
+      onReady={() => {
+        if (!openStoryId) return;
+        navigationRef.navigate('StoryDetail', { storyId: openStoryId });
+        setOpenStoryId(null);
+      }}
+    >
       {/*
        * Route names below are identifiers: the keys of `RootParamList`, and
        * what `navigate()` is passed. Nothing here is displayed — every screen

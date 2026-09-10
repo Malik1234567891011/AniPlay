@@ -32,7 +32,7 @@ const raw = {
     'The season is nine weeks. You share a kitchen, a bathroom and a shift rota with all of these people, and by the third week everybody knows everything about everybody.\n\n' +
     'So you have nine weeks to work out what you actually want, and whether you are willing to cost somebody else something to get it. Some of these people will still be in your life in October. Which ones is not decided.',
   creatorId: 'creator_official',
-  creatorName: 'ANIMA Studio',
+  creatorName: 'Plotbreak Studios',
   official: true,
   coverImage: 'nine-weeks/cover',
   keyArt: 'nine-weeks/key',

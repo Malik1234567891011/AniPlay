@@ -105,4 +105,12 @@ export const setup = {
    * translatable string rather than hardcoded in JSX.
    */
   'setup.grammar.quoted_example': '\u201C{example}\u201D',
+  /**
+   * A world that already knows who you are. `setup.heading` asks the question;
+   * these two state the answer, and a world may override the heading entirely
+   * with its own `protagonist.setupHeading`.
+   */
+  'setup.heading_named': 'You are {name}.',
+  'setup.subheading_named':
+    'This one you already are. What is left to decide is what you became \u2014 and after that, everything is open.',
 } as const;

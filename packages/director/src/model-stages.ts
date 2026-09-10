@@ -15,6 +15,7 @@ import { RuleBasedDirector, type Director } from './director.js';
 import { TemplateWriter, buildDeltas, type Writer } from './writer.js';
 import type { TurnContext } from './context.js';
 import { speakerBrief } from './speaker-brief.js';
+import { stateBands, STATE_BAND_RULES } from './state-bands.js';
 
 /**
  * Model-backed pipeline stages.
@@ -326,6 +327,8 @@ const DIRECTOR_POLICY = [
   'Suggested actions are buttons, not prose. Each one says plainly what the player would be doing and,',
   'where it matters, to whom — "Ask Renna who signed for you", not "Pursue the question of the signature".',
   CHOICE_CLARITY_RULES,
+  '',
+  STATE_BAND_RULES,
 ].join(' ');
 
 export class ModelDirector implements Director {
@@ -391,6 +394,9 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
   return {
     scene: context.scene,
     player: context.player,
+    // How the world's own variables are behaving, as behaviour. See
+    // `state-bands.ts` for why a number with a noun on it was not enough.
+    worldState: stateBands(context),
     objective: context.objective,
     activeQuests: context.activeQuests,
     // Who is travelling with the player, so the plan can put them in the scene
@@ -493,6 +499,8 @@ export const WRITER_POLICY = [
   'The player must always be able to say what literally just happened. Mystery is not knowing WHY;',
   'confusion is not knowing WHAT. Write mystery, never confusion. Specifically:',
   `- ${NARRATIVE_CLARITY_RULES}`,
+  '',
+  STATE_BAND_RULES,
 ].join('\n');
 
 export class ModelWriter implements Writer {
@@ -506,6 +514,11 @@ export class ModelWriter implements Writer {
   async write(context: TurnContext, plan: BeatPlan): Promise<NarrativeTurn> {
     const config = QUALITY_TIERS[context.tier];
 
+    // The same projection the streaming writer uses. Built once, in
+    // `writerPayload`, so the path that writes almost every beat a player reads
+    // cannot quietly receive less than this one.
+    const payload = writerPayload(context, plan);
+
     try {
       const result = await this.#gateway.generateStructured(
         config.writerRole,
@@ -513,48 +526,8 @@ export class ModelWriter implements Writer {
         buildMessages({
           rolePolicy: policyFor(context.state.locale).writer,
           safety: policyFor(context.state.locale).safety,
-          worldRules: worldRules(context),
-          state: {
-            beatPlan: plan,
-            scene: context.scene,
-            playerName: context.player.name,
-            playerPronouns: context.player.pronouns,
-            // Who the player said they were at setup. The world was told it
-            // would use this; until it reaches the writer, it does not.
-            playerIs: context.player.archetype,
-            playerAppearance: context.player.appearance,
-            worldKnowsAboutPlayer: context.player.about,
-            playerSetupAnswers: context.player.setupAnswers,
-            // Companions are on the deck whether or not the schedule put them
-            // in the room, and how they are taking it is the difference between
-            // a crew and a list of names.
-            crew: context.crew,
-            // Who these people actually are, not only how they sound. The
-            // writer had a voice and a relationship score and nothing a person
-            // wants, fears, values or would refuse — so the cast was voiced
-            // correctly and motivated not at all. See `speaker-brief.ts`.
-            speakers: context.presentCharacters.map(speakerBrief),
-            // Everyone the beat could mention, not only who is on stage. A
-            // character who is absent still gets talked about, and the writer
-            // was calling them "him" because it had never been told otherwise.
-            cast: context.story.characters.map((c) => ({
-              id: c.id,
-              name: c.name,
-              pronouns: c.pronouns,
-            })),
-            // Exactly what the player said aloud. Empty means they said
-            // nothing, and their action is narrated rather than quoted.
-            // Usually empty. When it is not, this run has genuinely arrived
-            // somewhere the world has a name for.
-            endings: context.endings,
-            playerSpeech: context.playerDialogue.map((line) => line.text),
-            observableFacts: context.resolution.observableFacts,
-            // Named `directives` rather than `constraints`: these are as often
-            // an instruction to make something happen as a prohibition, and a
-            // model given a list called "constraints" reads the whole list as
-            // things it must not do.
-            directives: context.resolution.privateFacts,
-          },
+          worldRules: payload.worldRules,
+          state: payload.state,
           task:
             // Both ends stated. Given only a maximum, a writer treats it as a
             // target and every turn arrives at the same length; the budget is
@@ -669,6 +642,13 @@ export function reconcilePlan(
  * Extracted so the streaming writer and the structured one cannot drift: the
  * fast path must not quietly receive less context than the slow one, or
  * "faster" becomes "worse" and nobody notices until the writing does.
+ *
+ * It had drifted anyway, in the direction that is hardest to see. Both writers
+ * were handed a `speakers` list, but the structured one built its from
+ * `speakerBrief` — everything the world authored about a person — while this
+ * one carried five fields and a relationship score. Both stages now read the
+ * same projection, and `ModelWriter` calls this function rather than assembling
+ * a second copy beside it.
  */
 export function writerPayload(
   context: TurnContext,
@@ -687,27 +667,20 @@ export function writerPayload(
             playerAppearance: context.player.appearance,
             worldKnowsAboutPlayer: context.player.about,
             playerSetupAnswers: context.player.setupAnswers,
+            // How the world is behaving, from its own variables, as behaviour
+            // rather than as numbers. A resource the author gave bands to says
+            // what is true at this level; one they did not is left out, because
+            // a model told "Legs: 44/100" invents a meaning for it.
+            worldState: stateBands(context),
             // Companions are on the deck whether or not the schedule put them
             // in the room, and how they are taking it is the difference between
             // a crew and a list of names.
             crew: context.crew,
-            speakers: context.presentCharacters.map((c) => ({
-              id: c.def.id,
-              name: c.def.name,
-              pronouns: c.def.pronouns,
-              speechStyle: c.def.speechStyle,
-              voiceSamples: c.def.voiceSamples,
-              // What this person is carrying about the player, and how they
-              // feel about them. The director had both and the writer — the
-              // thing that actually produces the words — had neither, so a
-              // player could attack somebody, walk away, come back, and be
-              // greeted as though none of it had happened.
-              knows: c.knownMemories.map((m) => m.fact.text),
-              feelsAboutYou: { ...c.relationship, label: c.relationshipLabel },
-              mustNotReveal: c.def.secrets
-                .filter((s) => !c.revealableSecrets.some((r) => r.id === s.id))
-                .map((s) => s.id),
-            })),
+            // Who these people actually are, not only how they sound. The
+            // writer had a voice and a relationship score and nothing a person
+            // wants, fears, values or would refuse — so the cast was voiced
+            // correctly and motivated not at all. See `speaker-brief.ts`.
+            speakers: context.presentCharacters.map(speakerBrief),
             // Everyone the beat could mention, not only who is on stage. A
             // character who is absent still gets talked about, and the writer
             // was calling them "him" because it had never been told otherwise.
@@ -716,6 +689,9 @@ export function writerPayload(
               name: c.name,
               pronouns: c.pronouns,
             })),
+            // Usually empty. When it is not, this run has genuinely arrived
+            // somewhere the world has a name for.
+            endings: context.endings,
             // Exactly what the player said aloud. Empty means they said
             // nothing, and their action is narrated rather than quoted.
             playerSpeech: context.playerDialogue.map((line) => line.text),

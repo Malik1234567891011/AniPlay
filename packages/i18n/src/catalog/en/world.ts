@@ -122,4 +122,16 @@ export const world = {
   'world.relationship.familiar': 'Familiar',
   /** The default. Guarded, not hostile. */
   'world.relationship.wary': 'Wary',
+  /**
+   * What the light is doing, for the writer. Conservative on purpose: we model
+   * neither latitude nor season, so these say only what is true almost
+   * anywhere.
+   */
+  'world.light.full_dark_early': 'full dark, hours from any light',
+  'world.light.first_light': 'first light, the sky going grey then colour',
+  'world.light.broad_day': 'broad daylight \u2014 it is not getting dark and will not for hours',
+  'world.light.gold_and_low': 'daylight still, going gold and low; sunset has not happened',
+  'world.light.going': 'the light going, sun low or just gone',
+  'world.light.lamps': 'dark, with whatever lamps this place has',
+  'world.light.full_dark_late': 'full dark and late',
 } as const;

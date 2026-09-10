@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "AniPlay",
-    "slug": "aniplay",
+    "name": "Plotbreak",
+    "slug": "plotbreak",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.aniplay.app",
+      "bundleIdentifier": "com.plotbreak.app",
       "usesAppleSignIn": true,
       "config": {
         "usesNonExemptEncryption": false
@@ -65,7 +65,7 @@
       }
     },
     "android": {
-      "package": "com.aniplay.app",
+      "package": "com.plotbreak.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
@@ -75,7 +75,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "aniplay",
+    "scheme": "plotbreak",
     "backgroundColor": "#0B0D12",
     "plugins": [
       "expo-font",

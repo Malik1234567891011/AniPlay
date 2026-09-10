@@ -243,6 +243,23 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
         ) : null}
 
         {/* Spec §7.2 item 3 — Continue, only when there is something to continue. */}
+        {/*
+          Continue is a rail like the others, because it is a shelf like the
+          others.
+
+          It was horizontal, then vertical, and vertical was wrong for a
+          different reason than horizontal had been: full-width rows with a
+          two-line objective under each made five runs taller than the whole
+          screen, and pushed Trending below the fold. "way too long it should be
+          a horizontal row not vertical. like the same as our trending and
+          stuff, except it says continue."
+
+          So it is the same `StoryCoverCard` at the same `railCardWidth` as every
+          other rail. What made the original horizontal version bad — a cramped
+          260pt card with the objective cut off mid-word — is gone because the
+          card no longer tries to carry the objective at all. The cover does the
+          work, the title is under it, and how far in you are is a caption.
+        */}
         {data && data.continueCards.length > 0 ? (
           <Stack gap={spacing.md}>
             <SectionHeader title={t('discover.continue')} />
@@ -253,8 +270,24 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
               keyExtractor={(item) => item.sessionId}
               contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.md }}
               renderItem={({ item }) => (
-                <ContinueTile
-                  card={item}
+                <StoryCoverCard
+                  story={{
+                    storyId: item.storyId,
+                    title: item.title,
+                    coverImage: item.coverImage,
+                    // The rail's second line. "8 turns in" is what this shelf is
+                    // for; the fantasy label belongs on Discover, not here.
+                    fantasyLabel: t('discover.continue_turns_in', { count: item.turnCount }),
+                    badges: [],
+                    // Chrome the Continue shelf has no use for: no creator
+                    // byline, no official pill, no run count. You have already
+                    // chosen this one.
+                    creatorName: '',
+                    official: false,
+                    tags: [],
+                    runs: 0,
+                  }}
+                  width={railCardWidth}
                   onPress={() => navigation.navigate('Session', { sessionId: item.sessionId })}
                 />
               )}
@@ -350,6 +383,19 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
   );
 }
 
+/**
+ * A run you are in the middle of.
+ *
+ * The art is the world's actual cover. It used to be `StoryArt seed={storyId}`
+ * with no `uri`, which draws the procedural gradient placeholder — so the one
+ * section made entirely of worlds the player had already chosen was the only
+ * section showing none of their art, including for worlds whose covers had
+ * shipped months earlier. `coverImage` was on the contract the whole time and
+ * nothing passed it.
+ *
+ * Covers are 2:3, so the thumbnail is too. A 44x56 chip could not read as a
+ * poster at any quality of art.
+ */
 function ContinueTile({ card, onPress }: { card: ContinueCard; onPress: () => void }): React.JSX.Element {
   const t = useT();
 
@@ -361,25 +407,29 @@ function ContinueTile({ card, onPress }: { card: ContinueCard; onPress: () => vo
         objective: card.currentObjective ?? '',
       })}
       onPress={onPress}
-      style={({ pressed }) => ({ width: 260, opacity: pressed ? 0.85 : 1 })}
+      style={({ pressed }) => ({ opacity: pressed ? 0.85 : 1 })}
     >
-      <Card style={{ gap: spacing.sm }}>
-        <Row gap={spacing.md}>
-          <StoryArt seed={card.storyId} style={{ width: 44, height: 56, borderRadius: radius.control }} />
-          <View style={{ flex: 1, gap: 2 }}>
+      <Card style={{ padding: spacing.sm }}>
+        <Row gap={spacing.md} align="center">
+          <StoryArt
+            seed={card.storyId}
+            uri={card.coverImage}
+            style={{ width: 64, height: 96, borderRadius: radius.control }}
+          />
+          <View style={{ flex: 1, gap: spacing.xs }}>
             <Txt variant="bodyStrong" numberOfLines={1}>
               {card.title}
             </Txt>
             <Txt variant="micro" color={colors.text.muted}>
               {t('discover.continue_turns', { count: card.turnCount })}
             </Txt>
+            {card.currentObjective ? (
+              <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>
+                {card.currentObjective}
+              </Txt>
+            ) : null}
           </View>
         </Row>
-        {card.currentObjective ? (
-          <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>
-            {card.currentObjective}
-          </Txt>
-        ) : null}
       </Card>
     </Pressable>
   );
@@ -412,7 +462,11 @@ function QuickPreviewSheet({
       <SafeAreaView edges={['bottom']} style={{ backgroundColor: colors.bg.elevated, borderTopLeftRadius: radius.large, borderTopRightRadius: radius.large }}>
         <View style={{ padding: GUTTER, gap: spacing.lg }}>
           <Row gap={spacing.md}>
-            <StoryArt seed={story.storyId} style={{ width: 56, height: 76, borderRadius: radius.control }} />
+            <StoryArt
+              seed={story.storyId}
+              uri={story.coverImage}
+              style={{ width: 56, height: 76, borderRadius: radius.control }}
+            />
             <View style={{ flex: 1, gap: 2 }}>
               <Txt variant="bodyStrong">{story.title}</Txt>
               <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>

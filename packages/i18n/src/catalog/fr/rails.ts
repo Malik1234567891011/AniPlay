@@ -33,12 +33,7 @@ export const rails = {
   /** `Tendance maintenant` est le mot-à-mot. Un rayon français dit `Tendances`. */
   'rail.trending': 'Tendances',
   /**
-   * ⚠️ Cette clé porte le nom de marque, et le nom de marque n’est pas tranché
-   * côté anglais : `app.json` dit `AniPlay`, `services/api/src/server.ts:330`
-   * dit `Plotbreak`, et toute la doc dit Plotbreak (UI_AUDIT §2.9,
-   * APP_STORE_FRANCE, TERMINOLOGY §1.4). On garde ici exactement la marque que
-   * porte la clé anglaise. Le jour où l’anglais tranche, cette valeur bouge
-   * avec lui — et si la réponse est `AniPlay`, c’est `Nouveautés sur AniPlay`.
+   * Cette clé porte le nom de marque, et la marque est tranchée : Plotbreak.
    * Un nom de marque ne se traduit pas, ne s’accentue pas, ne s’espace pas.
    */
   'rail.new': 'Nouveautés sur Plotbreak',

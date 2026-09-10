@@ -53,7 +53,7 @@ export function StoryCoverCard({
   // The genre says something the cover cannot always carry, and it is the
   // thing a browsing player is actually sorting on. A run count joins it only
   // when somebody has genuinely played the world, and a community creator's
-  // name matters in a way "ANIMA Studio" on all nine cards does not.
+  // name matters in a way "Plotbreak Studios" on all nine cards does not.
   const metaLine = [
     story.tags[0] ?? null,
     story.runs > 0
@@ -65,12 +65,20 @@ export function StoryCoverCard({
     .join(' · ');
 
   // Spec §7.3 — the accessible name reads as one coherent label, not five nodes.
+  //
+  // Attribution is dropped when there is no creator to attribute to. The
+  // Continue rail reuses this card for a run the player is already in, where
+  // the byline is not the point — and passing an empty creator produced
+  // "Hush House. 3 turns in. by . Community world", which both reads as broken
+  // and calls an official world a community one.
   const a11yLabel = [
     story.title,
     story.fantasyLabel,
-    t('ui.by_creator', { name: story.creatorName }),
-    t(story.official ? 'ui.official_world' : 'ui.community_world'),
-  ].join('. ');
+    story.creatorName ? t('ui.by_creator', { name: story.creatorName }) : null,
+    story.creatorName ? t(story.official ? 'ui.official_world' : 'ui.community_world') : null,
+  ]
+    .filter((part): part is string => !!part)
+    .join('. ');
 
   const cover = (
     <StoryArt
@@ -142,11 +150,18 @@ export function StoryCoverCard({
 }
 
 /**
- * Deterministic placeholder art.
+ * A world's art, with a deterministic placeholder when it has none.
  *
  * Real cover images are generated assets served from the CDN; until an asset
  * exists this derives a stable gradient from the story id, so a world always
  * looks the same rather than flickering between random colours.
+ *
+ * **Pass `uri` wherever the caller has one.** It is optional so that genuine
+ * empty states ("No portrait yet") can omit it — which also means forgetting it
+ * fails silently and prettily, as a gradient. Three screens did: Continue, the
+ * Library list and the quick-preview sheet all drew placeholders over worlds
+ * whose covers had shipped, and `coverImage` was on all three payloads the whole
+ * time. If a summary has cover art, this needs it.
  */
 export function StoryArt({
   seed,

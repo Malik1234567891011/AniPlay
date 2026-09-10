@@ -52,21 +52,34 @@ describe('telling the cards what actually happened', () => {
 });
 
 describe('not handing dialogue to a player standing alone', () => {
-  it('drops a question asked of an empty room', () => {
+  // As `nameKeys` produces them: every word, plus the full name.
+  const ABSENT = ['juno vale', 'juno', 'vale', 'teo sandoval', 'teo', 'sandoval'];
+
+  it('drops a card that speaks to somebody who is not there', () => {
     expect(
-      talksToNobody('I take a deep breath and turn toward the trail. "Maybe a walk will clear my head. Want to come?"', 0),
+      talksToNobody('I wave at Juno with a grin, stepping closer in the dim light.', 0, ABSENT),
     ).toBe(true);
   });
 
+  it('drops it on the surname too', () => {
+    expect(talksToNobody('I call after Sandoval. "Wait!"', 0, ABSENT)).toBe(true);
+  });
+
   it('keeps an action that needs nobody', () => {
-    expect(talksToNobody('I sit down on the end of the dock and let my feet hang over the water.', 0)).toBe(false);
+    expect(
+      talksToNobody('I sit down on the end of the dock and let my feet hang over the water.', 0, ABSENT),
+    ).toBe(false);
+  });
+
+  it('lets a player alone speak into the air, which people do', () => {
+    // Dropping every quoted line in an empty room emptied the whole set, and
+    // the cards fell back to the rule-built menu items the prose responses
+    // exist to replace.
+    expect(talksToNobody('I read the duty board aloud. "Three cousins. All steady."', 0, ABSENT)).toBe(false);
+    expect(talksToNobody('I wave at the dark. “Anyone out there?”', 0, ABSENT)).toBe(false);
   });
 
   it('leaves dialogue alone when there is somebody to hear it', () => {
-    expect(talksToNobody('I turn to Juno. "You in?"', 2)).toBe(false);
-  });
-
-  it('catches curly quotes, which is what the model actually writes', () => {
-    expect(talksToNobody('I wave at the dark. “Anyone out there?”', 0)).toBe(true);
+    expect(talksToNobody('I turn to Juno. "You in?"', 2, ABSENT)).toBe(false);
   });
 });
