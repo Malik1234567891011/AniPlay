@@ -59,7 +59,7 @@ classique et distancié »* — the exact opposite of what this product sells.
 
 The English rules hold and are not restated: short paragraphs, hard sentence
 variation, name the cost, nobody says the player's name three times. See
-[`../authoring-principles.md`](../authoring-principles.md).
+[`../authoring-principles.md`](../../authoring-principles.md).
 
 What changes in French:
 

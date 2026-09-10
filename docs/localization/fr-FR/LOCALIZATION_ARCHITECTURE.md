@@ -162,7 +162,7 @@ policy is mostly examples.
 
 > *"Two implementations of every AI stage, and the fast path is production. Any
 > rule added to one silently misses the other."*
-> — [`../authoring-principles.md`](../authoring-principles.md)
+> — [`../authoring-principles.md`](../../authoring-principles.md)
 
 `ModelWriter` and `fastWrite` both read `WRITER_POLICY`, `SAFETY_POLICY` and
 `worldRules()` from `model-stages.ts`. **The French policies must live in the
