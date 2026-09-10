@@ -26,18 +26,18 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | Seven Names | ✅ `seven-names.ts` | ✅ `seven-names.spec.ts` | ✅ 82 assets | ✅ |
 | The Blank Prophecy | ✅ `blank-prophecy.ts` | ✅ `blank-prophecy.spec.ts` | ✅ 70 assets | ✅ |
 | The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ✅ 78 assets | ✅ |
-| Second Skin | ✅ `second-skin.ts` | ✅ `second-skin.spec.ts` | ⏳ next | ✅ |
+| Second Skin | ✅ `second-skin.ts` | ✅ `second-skin.spec.ts` | ✅ 78 assets | ✅ |
+| Last Service | ✅ `last-service.ts` | ✅ `last-service.spec.ts` | ⏳ generating (no cover — see below) | ✅ |
 
-All three gates green at the last commit. Catalog is now 21 worlds.
+All three gates green at the last commit. Catalog is now **22 worlds**. Every
+bible in the queue is built; nothing is untouched.
 
 **Not mine.** Another agent is generating art for Hush House, Window Seven and
 Good Morning, Husband on `main`. Do not generate for those three.
 
-**Untouched (1 world):**
-`08_LAST_SERVICE` — the last one. — all in
-`/Users/malik/Downloads/morestoryideas/`. Copy each bible into
-`docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
-`05_ZERO_THRONE.md`, that folder's index → `00_MORESTORYIDEAS_INDEX.md`).
+**Untouched: none.** All nine bibles assigned to this branch are built,
+gated and in the catalog, and each one's bible is copied into
+`docs/story-bibles/` (Last Service → `12_LAST_SERVICE.md`).
 
 Three worlds from **previous** sessions (Hush House, Window Seven, Good Morning
 Husband) are shipped and gated but have **no art** and export raw with null
@@ -197,10 +197,43 @@ every character and an animal cannot have them.
 
 ---
 
+### Authored expressions have to resolve to one of eight faces
+
+`CharacterDef.expressions` is free text and reads beautifully — `immovable`,
+`sardonic`, `undefended` — but the reaction generator only ever draws the eight
+in `REACTION_EMOTIONS`. An unmapped word becomes an asset key nobody drew and
+the frame 404s in silence; 69% of the catalog was unreachable before this was
+found. `EMOTION_SYNONYMS` in `packages/contracts/src/game/assets.ts` maps the
+authored word onto a drawn face, and `catalog.spec` now fails with the
+character and the word. Thirty-two words from the last six worlds were mapped
+in this session. **Keep writing the good word — just add it to the map.**
+
 ## Next
 
-1. Generate Second Skin art, then `optimize-art.ts`, gates, commit, push.
-2. Build `08_LAST_SERVICE.md`. That is the last bible.
+1. **Last Service cover.** Everything else of its art is generating now. The
+   cover was deliberately skipped: the coordinator's v3 anime direction
+   (`COVER_STYLE_SPINE`, `plotbreak-cover-v3-anime`, cover `titleSafeArea`
+   null, cast filling three quarters of the frame) is **not on `origin/main`
+   yet** — main still reads `plotbreak-cover-v2` with the title-safe band on.
+   When v3 lands, `git checkout origin/main -- packages/director/src/media/prompts.ts`
+   and run
+   `npx tsx infra/scripts/generate-art.ts --only=story_last_service/cover`.
+   Do not re-enable wordmark plating.
+2. `optimize-art.ts`, gates, commit, push once the deck finishes.
+3. Offered but not taken: populating `protagonist` on the eight worlds this
+   branch built. The schema is on main and defaults to `BLANK`, which is
+   correct for all of them except Itachi, which already declares `NAMED`.
+
+**Art runs need the key.** There is no `.env` in this worktree; git worktrees
+do not share untracked files. Prefix any generate run with
+`set -a; . /Users/malik/AniPlay/.env; set +a` (read-only; that is the only
+thing this branch ever reads out of that checkout). Without it the script
+exits 1 with "No OPENAI_API_KEY configured" and a loop over filters will
+silently generate nothing.
+
+**Never overwrite a shell script that a running background job is reading** —
+bash re-reads the file by byte offset and dies with a syntax error partway
+through. Use a new filename.
 
 **The per-world loop that works — follow it exactly:**
 
