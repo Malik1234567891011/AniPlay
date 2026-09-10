@@ -24,7 +24,7 @@ const PRESENT = [
   character('jun', 'Jun Hasabe', 0),
 ];
 
-const context = (present = PRESENT) => ({ presentCharacters: present }) as TurnContext;
+const context = (present = PRESENT) => ({ presentCharacters: present }) as unknown as TurnContext;
 
 const intent = (rawAction: string, targetId?: string): ActionIntent =>
   ({
