@@ -154,7 +154,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
 
     // Every request asks the auth store for a token, so one that expired while
     // the app was backgrounded is renewed rather than sent and rejected.
-    api.setTokenProvider(() => auth.accessToken());
+    api.setTokenProvider((options) => auth.accessToken(options));
 
     void (async () => {
       const [identity, ageVerified, tastes, quality] = await Promise.all([

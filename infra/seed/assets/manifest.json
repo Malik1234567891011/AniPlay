@@ -8605,5 +8605,461 @@
       "latencyMs": 19159,
       "createdAt": "2026-09-10T16:41:03.806Z"
     }
+  },
+  "story_hush_house/mika_angry": {
+    "assetKey": "story_hush_house/mika_angry",
+    "file": "story_hush_house/mika_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ecc531e8-5835-4a3c-a17e-4a22f6c14369",
+      "promptHash": "42583cb038671ab291836d4d3e17c6f6",
+      "seed": "hush-mika-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 22928,
+      "createdAt": "2026-09-10T16:41:22.161Z"
+    }
+  },
+  "story_hush_house/mika_annoyed": {
+    "assetKey": "story_hush_house/mika_annoyed",
+    "file": "story_hush_house/mika_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5f02c2dc-1e5e-4412-9626-1797863fab8a",
+      "promptHash": "00728a0e07d600217371c9831586becf",
+      "seed": "hush-mika-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 40246,
+      "createdAt": "2026-09-10T16:41:28.804Z"
+    }
+  },
+  "story_hush_house/mika_worried": {
+    "assetKey": "story_hush_house/mika_worried",
+    "file": "story_hush_house/mika_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09b66c5a-311f-4921-8db9-f9b7a18d0dd7",
+      "promptHash": "534df9680ae9e5cca440304b77c4951b",
+      "seed": "hush-mika-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 35007,
+      "createdAt": "2026-09-10T16:41:38.636Z"
+    }
+  },
+  "story_window_seven/stage_orpheum_corridor": {
+    "assetKey": "story_window_seven/stage_orpheum_corridor",
+    "file": "story_window_seven/stage_orpheum_corridor.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Seventh Floor: Carpet that eats sound, eleven doors, and a service riser at the far end with a lock that has been picked before.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6feaefd6-2dba-4a16-85b0-adb11ecaee3b",
+      "promptHash": "36f3990c459df37905240e5325d9e256",
+      "seed": "sv_window_seven_1:loc:orpheum_corridor:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20680,
+      "createdAt": "2026-09-10T16:41:59.966Z"
+    }
+  },
+  "story_window_seven/stage_apt_7c": {
+    "assetKey": "story_window_seven/stage_apt_7c",
+    "file": "story_window_seven/stage_apt_7c.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Apartment 7C: Blackout on every window but one, and a slit in that one the width of a lens.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aa6bfeed-5f77-4fbe-a674-bacde5d677bd",
+      "promptHash": "98340093d09468c633d21d6244173fcb",
+      "seed": "sv_window_seven_1:loc:apt_7c:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20719,
+      "createdAt": "2026-09-10T16:42:00.004Z"
+    }
+  },
+  "story_window_seven/key": {
+    "assetKey": "story_window_seven/key",
+    "file": "story_window_seven/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Window Seven",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c5686fb8-47e1-4287-828a-2a872006daa0",
+      "promptHash": "93480007867e6dbfe8cc1d31bf7c0e0e",
+      "seed": "sv_window_seven_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39577,
+      "createdAt": "2026-09-10T16:42:18.863Z"
+    }
+  },
+  "story_window_seven/stage_the_avenue": {
+    "assetKey": "story_window_seven/stage_the_avenue",
+    "file": "story_window_seven/stage_the_avenue.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Kellis Avenue: Four lanes, a tram line down the middle, and eleven floors of glass on the far side.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "faaca34f-8b19-4437-a857-f844ad42dcaa",
+      "promptHash": "dea1c2f1c31e80fecf00dd623e7cb9ba",
+      "seed": "sv_window_seven_1:loc:the_avenue:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20398,
+      "createdAt": "2026-09-10T16:42:20.406Z"
+    }
+  },
+  "story_window_seven/stage_orpheum_lobby": {
+    "assetKey": "story_window_seven/stage_orpheum_lobby",
+    "file": "story_window_seven/stage_orpheum_lobby.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Orpheum Lobby: Marble, a desk, and Juno Vale behind it at every hour anybody has ever checked.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2ffdbe95-fe2f-414c-9819-cd90aa24883e",
+      "promptHash": "8e004675a4e875243f08d1b7e55e45e2",
+      "seed": "sv_window_seven_1:loc:orpheum_lobby:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 24938,
+      "createdAt": "2026-09-10T16:42:24.915Z"
+    }
+  },
+  "story_window_seven/stage_voss_tower": {
+    "assetKey": "story_window_seven/stage_voss_tower",
+    "file": "story_window_seven/stage_voss_tower.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Far Building: Newer than Orpheum and better staffed.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d0dabf27-991a-4b1a-a5ff-7de310f5686e",
+      "promptHash": "f273203f6302729f532abcd8c3f2f338",
+      "seed": "sv_window_seven_1:loc:voss_tower:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20221,
+      "createdAt": "2026-09-10T16:42:39.092Z"
+    }
+  },
+  "story_window_seven/stage_orpheum_roof": {
+    "assetKey": "story_window_seven/stage_orpheum_roof",
+    "file": "story_window_seven/stage_orpheum_roof.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Orpheum Roof: Plant machinery, a parapet, and a line of sight into the penthouse that the flat does not have.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f0b246f9-8cbe-47e2-a97c-991d4d3adbb0",
+      "promptHash": "a97ed45f256db11dd1b8466ef168d960",
+      "seed": "sv_window_seven_1:loc:orpheum_roof:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 17185,
+      "createdAt": "2026-09-10T16:42:42.107Z"
+    }
+  },
+  "story_window_seven/stage_voss_penthouse": {
+    "assetKey": "story_window_seven/stage_voss_penthouse",
+    "file": "story_window_seven/stage_voss_penthouse.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Penthouse: Eleven floors up and the whole of the avenue in one window.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1867460d-a4a2-4c69-a62f-a77e4451769a",
+      "promptHash": "b4121da038df1f671468f067d5722986",
+      "seed": "sv_window_seven_1:loc:voss_penthouse:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34420,
+      "createdAt": "2026-09-10T16:42:54.833Z"
+    }
+  },
+  "story_window_seven/stage_riverside": {
+    "assetKey": "story_window_seven/stage_riverside",
+    "file": "story_window_seven/stage_riverside.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Riverside: Old wharves converted into nothing in particular, a footbridge, and the third bollard from the east end with a cavity behind the plate.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3f4cf978-4601-4d37-aec7-6f22c8cf813d",
+      "promptHash": "b93744ee23c872073d157209ec50972c",
+      "seed": "sv_window_seven_1:loc:riverside:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 19738,
+      "createdAt": "2026-09-10T16:43:01.848Z"
+    }
+  },
+  "story_window_seven/stage_directorate": {
+    "assetKey": "story_window_seven/stage_directorate",
+    "file": "story_window_seven/stage_directorate.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Directorate Nine: Two floors under a building that is legally a records agency.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a1317d91-b4e1-4cfa-8864-e7532f1e7a19",
+      "promptHash": "df7d55acf1d084a15d874cb5dcb8a500",
+      "seed": "sv_window_seven_1:loc:directorate:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 15436,
+      "createdAt": "2026-09-10T16:43:10.272Z"
+    }
+  },
+  "story_window_seven/cover": {
+    "assetKey": "story_window_seven/cover",
+    "file": "story_window_seven/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Window Seven: Seven nights. One window. She waved.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c685394f-f470-4e8d-a22f-6401c6936d9a",
+      "promptHash": "b73f3094c7ffdf047b80b2c7d1ff468a",
+      "seed": "sv_window_seven_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 91770,
+      "createdAt": "2026-09-10T16:43:11.042Z"
+    }
+  },
+  "story_window_seven/stage_the_subway": {
+    "assetKey": "story_window_seven/stage_the_subway",
+    "file": "story_window_seven/stage_the_subway.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Halberd Street Platform: Two lines, four exits, and a service every eleven minutes until one in the morning.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7f6484f-afd5-49ee-9ddf-521a5d2f03ce",
+      "promptHash": "bd05c7b6f89081823f4480ce112f3a5c",
+      "seed": "sv_window_seven_1:loc:the_subway:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37552,
+      "createdAt": "2026-09-10T16:43:16.648Z"
+    }
+  },
+  "story_window_seven/mara": {
+    "assetKey": "story_window_seven/mara",
+    "file": "story_window_seven/mara.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, Your partner for seven nights. Four long-duration operations, no failures on paper",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3c29340b-8080-44c3-9ffa-4ba2ba0a8e01",
+      "promptHash": "c02647f5909fe64c85babcd64a8fa090",
+      "seed": "window7-mara-01",
+      "costUsd": 0.01372,
+      "latencyMs": 19187,
+      "createdAt": "2026-09-10T16:43:21.041Z"
+    }
+  },
+  "story_window_seven/selene": {
+    "assetKey": "story_window_seven/selene",
+    "file": "story_window_seven/selene.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, The target. Cybernetics researcher, policy adviser, and the person who built the thing she is trying to destroy",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4e291582-eca9-4a8b-89b9-3dccccba9125",
+      "promptHash": "723e84a1d71ece0654d9b04608068327",
+      "seed": "window7-selene-01",
+      "costUsd": 0.00632,
+      "latencyMs": 17063,
+      "createdAt": "2026-09-10T16:43:27.338Z"
+    }
+  },
+  "story_window_seven/halden": {
+    "assetKey": "story_window_seven/halden",
+    "file": "story_window_seven/halden.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, Your handler. Twenty-nine years in the service and every one of them deniable",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a271a913-d139-4ba3-939c-ac9b76c71c2b",
+      "promptHash": "cbbca47dc8602d2b1c58b581e383906e",
+      "seed": "window7-halden-01",
+      "costUsd": 0.00632,
+      "latencyMs": 16438,
+      "createdAt": "2026-09-10T16:43:27.657Z"
+    }
+  },
+  "story_window_seven/juno": {
+    "assetKey": "story_window_seven/juno",
+    "file": "story_window_seven/juno.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, Orpheum Tower concierge, and the only person on this avenue who knows everybody’s business",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "366b0533-954e-4671-8e69-2bc5adcaafb0",
+      "promptHash": "5ef55c64889395c3dece23c343d3a406",
+      "seed": "window7-juno-01",
+      "costUsd": 0.01372,
+      "latencyMs": 18293,
+      "createdAt": "2026-09-10T16:43:34.946Z"
+    }
+  },
+  "story_window_seven/ash": {
+    "assetKey": "story_window_seven/ash",
+    "file": "story_window_seven/ash.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, Directorate internal security. He is not on this operation and he is on this street",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d45ddad8-0a4f-4b1b-8ecc-79fb5debedaf",
+      "promptHash": "2d79b7f5feac5b3b08106c16f07fd5f0",
+      "seed": "window7-ash-01",
+      "costUsd": 0.00632,
+      "latencyMs": 15414,
+      "createdAt": "2026-09-10T16:43:36.460Z"
+    }
+  },
+  "story_window_seven/mara_surprised": {
+    "assetKey": "story_window_seven/mara_surprised",
+    "file": "story_window_seven/mara_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7abe038-3b4b-42dd-874c-c16334814529",
+      "promptHash": "eaa0001c701fbfbb58474365a27f4359",
+      "seed": "window7-mara-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 22099,
+      "createdAt": "2026-09-10T16:43:58.572Z"
+    }
+  },
+  "story_window_seven/mara_warm": {
+    "assetKey": "story_window_seven/mara_warm",
+    "file": "story_window_seven/mara_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b45cf60f-1b98-412d-9c21-83605ea731e3",
+      "promptHash": "eb6e42ee7edbf94b3c64896290ac0a01",
+      "seed": "window7-mara-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 31907,
+      "createdAt": "2026-09-10T16:43:59.572Z"
+    }
+  },
+  "story_window_seven/mara_neutral": {
+    "assetKey": "story_window_seven/mara_neutral",
+    "file": "story_window_seven/mara_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9f0467ba-09b8-4090-9dff-b0983e73c99d",
+      "promptHash": "3e002b41459385a32bd9609a14622686",
+      "seed": "window7-mara-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 34968,
+      "createdAt": "2026-09-10T16:44:02.310Z"
+    }
+  },
+  "story_window_seven/mara_amused": {
+    "assetKey": "story_window_seven/mara_amused",
+    "file": "story_window_seven/mara_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "584d7507-e85c-4d0d-8060-ed3bd1e22344",
+      "promptHash": "3467ca7732da8e9fad9a3ecffca0cdb0",
+      "seed": "window7-mara-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34625,
+      "createdAt": "2026-09-10T16:44:09.574Z"
+    }
   }
 }

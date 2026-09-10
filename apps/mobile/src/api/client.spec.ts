@@ -142,3 +142,44 @@ describe('a 401 the client cannot fix, it explains', () => {
     });
   });
 });
+
+/**
+ * The 401 that could not be recovered from.
+ *
+ * A guest's token was rejected by the server while the auth store's own clock
+ * still considered it valid. The retry cleared the client's cached copy and
+ * asked the provider again — which returned the same token, because nothing had
+ * told it the server disagreed. Every request for the rest of the process
+ * failed the same way, and the only offered fix was to sign in: to a player who
+ * was a guest and had never signed in at all.
+ *
+ * Malik, on the simulator: "weve been playing the entire time not signed in why
+ * tf do i gotta do it now j make it work".
+ */
+describe('a token the server has refused', () => {
+  it('asks the provider for a genuinely new one, not its cached answer', async () => {
+    const asked: Array<{ force?: boolean } | undefined> = [];
+    let issued = 0;
+    const api = client();
+    api.setTokenProvider(async (options) => {
+      asked.push(options);
+      // A provider that only trusts its own clock: same token unless forced.
+      return options?.force ? `fresh-${++issued}` : 'stale';
+    });
+
+    const seen: string[] = [];
+    globalThis.fetch = (async (_url: string, init: { headers: Record<string, string> }) => {
+      seen.push(init.headers.authorization ?? '');
+      const bad = init.headers.authorization === 'Bearer stale';
+      return {
+        ok: !bad,
+        status: bad ? 401 : 200,
+        text: async () => (bad ? JSON.stringify({ code: 'UNAUTHENTICATED' }) : JSON.stringify({ sessions: [] })),
+      };
+    }) as never;
+
+    await expect(api.wallet()).resolves.toEqual({ sessions: [] });
+    expect(seen).toEqual(['Bearer stale', 'Bearer fresh-1']);
+    expect(asked.at(-1)).toEqual({ force: true });
+  });
+});

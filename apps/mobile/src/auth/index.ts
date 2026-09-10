@@ -116,10 +116,18 @@ export class AuthStore {
    * Concurrent callers share one refresh: a screen that fires three requests at
    * once should not spend three refresh tokens, and GoTrue rotates them.
    */
-  async accessToken(): Promise<string | null> {
+  async accessToken({ force = false } = {}): Promise<string | null> {
     if (!this.#client) return this.#devToken;
     const session = this.#session;
-    if (session && session.expiresAt - Date.now() > REFRESH_MARGIN_MS) return session.accessToken;
+    // `force` is the server telling us this token is no good, which outranks
+    // our own clock. Without it a rejected-but-unexpired token was handed back
+    // unchanged to the 401 retry, so the retry re-sent exactly what had just
+    // been refused and the player sat on "We could not confirm who you are"
+    // for the life of the process, with no way out that did not involve
+    // signing in — for a guest, who had never signed in to begin with.
+    if (!force && session && session.expiresAt - Date.now() > REFRESH_MARGIN_MS) {
+      return session.accessToken;
+    }
     this.#inFlight ??= this.#renew().finally(() => {
       this.#inFlight = null;
     });
