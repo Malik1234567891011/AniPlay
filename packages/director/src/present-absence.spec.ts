@@ -236,3 +236,52 @@ describe('writing somebody into a room they are not in', () => {
     ).toEqual([]);
   });
 });
+
+/**
+ * The beat that put Mikoto in two places at once.
+ *
+ * Turn 5 of an Itachi run, verbatim. The engine had her present. The prose put
+ * her at the sink, then had Sasuke say she was at a meeting across the
+ * district, then said the kitchen did not answer — in one beat, four sentences
+ * apart. The player had just asked her a direct question.
+ *
+ * Neither half was catchable before: "She is at the meeting" carries no name,
+ * and "at the meeting" was not an absence phrasing the list knew.
+ */
+describe('a character in two places in one beat', () => {
+  const PRESENT_HOUSE = [
+    { id: 'mikoto', name: 'Mikoto Uchiha' },
+    { id: 'sasuke', name: 'Sasuke Uchiha' },
+  ];
+
+  it('catches an absence claim made with a pronoun', () => {
+    const block = {
+      text:
+        'Mikoto’s back is to you as she drains a pot in the sink. ' +
+        'She is at the meeting. You said you would be back before dark.',
+    };
+    const [claim] = findAbsenceOfPresent([block], PRESENT_HOUSE);
+    expect(claim).toBeDefined();
+    expect(claim!.characterId).toBe('mikoto');
+  });
+
+  it('does not read an ordinary pronoun sentence as an absence', () => {
+    const block = {
+      text: 'Mikoto turns from the sink. She looks at you for a long moment, then goes back to the pot.',
+    };
+    expect(findAbsenceOfPresent([block], PRESENT_HOUSE)).toEqual([]);
+  });
+
+  it('needs the block to name them before a pronoun counts', () => {
+    // Somebody else entirely, in a block that never mentions Mikoto.
+    expect(
+      findAbsenceOfPresent([{ text: 'The neighbour is not here; she is at the meeting.' }], [PRESENT_HOUSE[0]!]),
+    ).toEqual([]);
+  });
+
+  it('catches "went out" as well as "at the meeting"', () => {
+    expect(
+      findAbsenceOfPresent([{ text: 'Sasuke shrugs. Mikoto went out an hour ago.' }], PRESENT_HOUSE),
+    ).toHaveLength(1);
+  });
+});

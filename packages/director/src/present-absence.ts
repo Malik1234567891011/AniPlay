@@ -51,7 +51,14 @@ const ABSENCE = [
   // reading "there is no answer" as somebody having left the room; the sentence
   // is already known to name a present character before we get here.
   /\b(?:there\s+)?(?:is|are|was|were)\s+no\s+\p{Lu}[\p{Ll}\p{M}'’-]+/u,
+  // Somewhere else, named. "She is at the meeting" — said of a character the
+  // engine has standing at the sink two sentences earlier, in the same beat.
+  /\b(?:is|are|was|were)\s+(?:still\s+|away\s+)?at\s+(?:the|her|his|their)\s+\w+/i,
+  /\b(?:went|has\s+gone|had\s+gone|stepped)\s+(?:out|off|away|to)\b/i,
 ];
+
+/** A sentence carrying a third-person subject, for blocks that already name them. */
+const PRONOUN = /\b(?:he|she|they|him|her|them|his|their)\b/i;
 
 /** "empty except for her" is a full room of one person, not an absence. */
 const PRESENT_ANYWAY = /\b(?:except|save|apart|but)\s+(?:for|from)\b/i;
@@ -110,9 +117,16 @@ export function findAbsenceOfPresent(
     const sentences = block.text.split(/(?<=[.!?])\s+/);
     for (const character of present) {
       const names = usableNames(character.name);
+      const named = (text: string): boolean =>
+        names.some((name) => new RegExp(`\\b${escape(name)}\\b`, 'i').test(text));
+      // A block that names somebody and then says "she is at the meeting" is
+      // talking about her. Requiring the name in the same *sentence* missed it:
+      // Mikoto was written draining a pot at the sink and, four sentences later,
+      // placed at a meeting across the district, in one beat.
+      const aboutThem = named(block.text);
       const sentence = sentences.find(
         (candidate) =>
-          names.some((name) => new RegExp(`\\b${escape(name)}\\b`, 'i').test(candidate)) &&
+          (named(candidate) || (aboutThem && PRONOUN.test(candidate))) &&
           !PRESENT_ANYWAY.test(candidate) &&
           ABSENCE.some((pattern) => pattern.test(candidate)),
       );

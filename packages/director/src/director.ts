@@ -674,12 +674,30 @@ function pickExpression(character: PresentCharacterContext, context: TurnContext
   const failed = context.resolution.checks.some((c) => !isSuccess(c.outcome));
   const critical = context.resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS');
 
+  // How this character felt about *this turn*, not how they feel in general.
+  //
+  // The standing relationship used to be enough on its own, and it outranked
+  // everything the beat had just done: Sasuke adores his brother, so his
+  // affection sits above 45 permanently and every beat rendered him
+  // `delighted` — including the one where Itachi talks past him, he says "You
+  // talk to the air. You didn't eat", and the scene is plainly him being hurt.
+  // A face that never changes is worse than no face, because it contradicts the
+  // prose it is sitting next to.
+  const moved = context.resolution.mutations
+    .filter((m) => m.type === 'RELATIONSHIP_DELTA' && m.subjectId === character.def.id)
+    .reduce((sum, m) => sum + Number((m.payload as { amount?: number }).amount ?? 0), 0);
+
   if (context.state.encounter) return pick('furious', 'alarmed', 'stern', 'serious');
   if (critical) return pick('delighted', 'amused', 'warm', 'grinning');
   if (failed) return pick('suspicious', 'wary', 'stern', 'shifty');
-  if (character.relationship.fear > 50) return pick('alarmed', 'wary');
+  // This turn hurt them, or pleased them.
+  if (moved < 0) return pick('hurt', 'sulking', 'stern', 'wary', 'serious');
+  if (moved > 0) return pick('warm', 'delighted', 'grinning', 'amused', 'eager');
+  if (character.relationship.fear > 50) return pick('alarmed', 'wary', 'frightened');
   if (character.relationship.rivalry > 45) return pick('stern', 'suspicious');
-  if (character.relationship.affection > 45) return pick('warm', 'amused', 'delighted');
+  // Standing fondness is a resting face, not active glee: `delighted` has to be
+  // earned by something that happened, or it is on screen every single turn.
+  if (character.relationship.affection > 45) return pick('warm', 'amused');
   return pick('neutral');
 }
 
