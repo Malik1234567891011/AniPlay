@@ -9,6 +9,8 @@ import type {
 } from '@aniplay/contracts';
 import { nameKeys } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
+import type { Locale } from '@aniplay/i18n';
+import { CLAUSE_SPLIT_FR, META_PATTERNS_FR, VERB_LEXICON_FR } from './lexicon-fr.js';
 import {
   detectOutOfScope,
   detectWorldAuthoring,
@@ -173,7 +175,11 @@ export class RuleBasedIntentParser implements IntentParser {
     const { story, state, intentId } = context;
     const raw = text.trim().slice(0, 4000);
 
-    const unsafeOrMetaRequests = META_PATTERNS.filter((m) => m.pattern.test(raw)).map((m) => m.label);
+    // Both lists, always. A French player can type an English injection and a
+    // French one, and the English patterns cost nothing on French input.
+    const metaPatterns =
+      state.locale === 'fr' ? [...META_PATTERNS, ...META_PATTERNS_FR] : META_PATTERNS;
+    const unsafeOrMetaRequests = metaPatterns.filter((m) => m.pattern.test(raw)).map((m) => m.label);
 
     // A goal stated as though it were a single action. Marked here so the
     // engine refuses to settle a campaign with one die roll.
@@ -219,7 +225,7 @@ export class RuleBasedIntentParser implements IntentParser {
     }
 
     const { dialogue, remainder } = extractDialogue(raw, state, story);
-    const clauses = splitClauses(remainder || raw);
+    const clauses = splitClauses(remainder || raw, state.locale);
 
     const ambiguities: string[] = [];
     const actions: IntentAction[] = [];
@@ -332,7 +338,7 @@ export class RuleBasedIntentParser implements IntentParser {
     }
 
     const item = matchItem(trimmed, story, state);
-    const verb = matchVerb(trimmed) ?? (item ? 'use_item' : 'custom');
+    const verb = matchVerb(trimmed, state.locale) ?? (item ? 'use_item' : 'custom');
 
     if (verb === 'custom') {
       ambiguities.push(`Unclear intent: "${trimmed.slice(0, 60)}"`);
@@ -358,8 +364,28 @@ export class RuleBasedIntentParser implements IntentParser {
 
 // --- Matching helpers ------------------------------------------------------
 
-function matchVerb(clause: string): Verb | null {
-  for (const entry of VERB_LEXICON) {
+/**
+ * The lexicon for a locale.
+ *
+ * **Selected, never translated.** The English lexicon carries fixes earned from
+ * live bugs about English words that are both violence and furniture — `deck`,
+ * `beat`, `kick`, `hold`. French has a different set of traps entirely, so
+ * `VERB_LEXICON_FR` is authored against them rather than ported. See the head
+ * of `lexicon-fr.ts`.
+ */
+function lexiconFor(locale: Locale): Array<{ verb: Verb; patterns: RegExp[] }> {
+  // French first, then English as a fallback — a French player who types an
+  // English verb, or a loanword the French list does not carry, still gets an
+  // action rather than `custom`. Order matters: French wins every tie, so an
+  // English pattern can only ever add a match the French list did not make.
+  //
+  // Never the other way round. English sessions see only the English lexicon,
+  // so nothing about English behaviour moves.
+  return locale === 'fr' ? [...VERB_LEXICON_FR, ...VERB_LEXICON] : VERB_LEXICON;
+}
+
+function matchVerb(clause: string, locale: Locale = 'en'): Verb | null {
+  for (const entry of lexiconFor(locale)) {
     for (const pattern of entry.patterns) {
       if (pattern.test(clause)) return entry.verb;
     }
@@ -595,9 +621,9 @@ function detectTimeIntent(clause: string): IntentAction['timeIntent'] {
   return 'NOW';
 }
 
-function splitClauses(text: string): string[] {
+function splitClauses(text: string, locale: Locale = 'en'): string[] {
   return text
-    .split(CLAUSE_SPLIT)
+    .split(locale === 'fr' ? CLAUSE_SPLIT_FR : CLAUSE_SPLIT)
     .map((c) => c.trim())
     .filter((c) => c.length > 1);
 }

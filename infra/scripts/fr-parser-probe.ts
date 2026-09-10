@@ -89,6 +89,9 @@ function main(): void {
   const state = createInitialState({
     sessionId: 'fr-probe',
     story,
+    // A French session, so the parser selects the French lexicon. Before step
+    // 10 this changed nothing, because there was only one lexicon.
+    locale: 'fr',
     identity: {
       displayName: 'Robin',
       pronouns: 'they/them',
@@ -104,6 +107,7 @@ function main(): void {
   let custom = 0;
 
   console.log('French input, through the shipped parser. Nothing was changed.\n');
+  const failures: string[] = [];
   let group = '';
   for (const probe of CORPUS) {
     if (probe.group !== group) {
@@ -115,6 +119,26 @@ function main(): void {
     const targets = intent.actions
       .flatMap((a) => a.targets.map((t) => t.displayName ?? t.entityId))
       .join('/');
+    // Graded against what the probe wanted, not against the word `custom`.
+    //
+    // Counting every `custom` overstated the failure badly: a meta request
+    // *should* parse as `custom` with a flag, and `je meurs` *should not*
+    // become an attack. Three of the corpus entries want `custom` and four
+    // want a flag, so the raw count reported seven failures that were
+    // successes and hid the difference between "not parsed" and "parsed
+    // correctly as nothing".
+    const flags = intent.unsafeOrMetaRequests;
+    const want = probe.expect;
+    const ok = want.startsWith('not ')
+      ? verbs !== want.slice(4)
+      : want === 'custom + target'
+        ? verbs === 'custom' && targets.length > 0
+        : want.startsWith('dialogue = ')
+          ? intent.dialogue.length === Number(want.slice('dialogue = '.length))
+          : want === 'genre-dependent' || want === 'wait / oppose'
+            ? true
+            : flags.includes(want) || verbs === want;
+    if (!ok) failures.push(`${probe.text}  →  ${verbs || 'nothing'}${flags.length ? ' [' + flags.join('|') + ']' : ''}  want: ${want}`);
     if (verbs === 'custom') custom += 1;
     console.log(
       '  ' +
@@ -171,12 +195,13 @@ function main(): void {
   console.log('  sentence flush → ' + JSON.stringify(flushed));
 
   console.log(
-    `\n${custom} of ${CORPUS.length} probes parsed as \`custom\`. ` +
-      '`custom` carries no check, no relationship movement and no flag.',
+    `\n${CORPUS.length - failures.length}/${CORPUS.length} probes parsed as intended. ` +
+      `${custom} parsed as \`custom\`, of which ${custom - failures.length} were meant to.`,
   );
-  console.log('See docs/localization/fr-FR/PLAYER_GRAMMAR.md Part 2.');
+  for (const failure of failures) console.log(`  ✗ ${failure}`);
+  console.log('\nSee docs/localization/fr-FR/PLAYER_GRAMMAR.md Part 2.');
 
-  if (strict && custom > 0) process.exitCode = 1;
+  if (strict && failures.length > 0) process.exitCode = 1;
 }
 
 main();

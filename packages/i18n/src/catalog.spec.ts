@@ -59,7 +59,14 @@ describe('plurals, and the zero that is singular in French', () => {
   it('falls back to English for a key French has not got yet', () => {
     // A half-built catalogue must render English, not the key. A screen full
     // of `profile.haptics` is not a useful intermediate state.
-    expect(translate('fr', 'profile.haptics')).toBe(en['profile.haptics']);
+    //
+    // The key is *found* rather than named. `profile.haptics` was written here
+    // as the example and stopped being untranslated the moment `fr/profile.ts`
+    // was written — any key named here has the same fate, so the test asks the
+    // catalogue which key is still missing instead of remembering one.
+    const untranslated = TRANSLATION_KEYS.find((key) => !(key in fr));
+    if (!untranslated) throw new Error('the French catalogue is complete — this test has done its job and can go');
+    expect(translate('fr', untranslated)).toBe(en[untranslated]);
   });
 
   it('renders a French key French has got', () => {
