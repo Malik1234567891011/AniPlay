@@ -22,7 +22,7 @@
  *   npm run fr:lint -- locales/fr/*.json
  *   npm run fr:lint -- --json <files...>
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ROOT = new URL('../..', import.meta.url).pathname.replace(/\/$/, '');
@@ -424,6 +424,156 @@ function selfTest(): number {
   return failures;
 }
 
+
+// --- the catalogue ---------------------------------------------------------
+
+/**
+ * Lint the shipped French message catalogue, and report how much of it exists.
+ *
+ * The 30 rules above were written against prose. A UI catalogue needs four more
+ * that only make sense for interface copy, and they are the four that decide
+ * whether an app reads as French or as English wearing French words:
+ *
+ * - **`tu`, always.** `PRODUCT_VOICE.md` rule 2. A settings screen that says
+ *   `vous` next to a story that says `tu` is the wobble that must never happen,
+ *   and it is invisible until you see two screens side by side.
+ * - **Sentence case.** `Nouvelle partie`, never `Nouvelle Partie`. Apple's
+ *   French UI is uniformly sentence case; Title Case is an English import.
+ * - **No `n === 1` thinking.** An ICU plural with an `=1` branch is the English
+ *   rule in disguise and is wrong in French at zero.
+ * - **No midpoint.** `arrivé·e` in UI as well as in prose.
+ *
+ * Coverage is printed rather than enforced, because a partial catalogue falls
+ * back to English and that is a correct intermediate state.
+ */
+function lintCatalogue(json: boolean): boolean {
+  const enDir = join(ROOT, 'packages/i18n/src/catalog/en');
+  const frDir = join(ROOT, 'packages/i18n/src/catalog/fr');
+
+  const keysIn = (dir: string): Map<string, { file: string; line: number; value: string }> => {
+    const found = new Map<string, { file: string; line: number; value: string }>();
+    for (const name of readdirSync(dir)) {
+      if (!name.endsWith('.ts') || name === 'index.ts') continue;
+      // Comments first: a localizer note is prose *about* the string and would
+      // otherwise be linted as if it were the string.
+      const raw = readFileSync(join(dir, name), 'utf8')
+        .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '))
+        .replace(/\/\/[^\n]*/g, (m) => ' '.repeat(m.length));
+      // Matched over the whole file rather than line by line, because a long
+      // value legitimately wraps onto the line after its key.
+      const pattern = /'([a-z0-9_.]+)':\s*(['"])((?:\\.|(?!\2)[^\\])*)\2/g;
+      for (const match of raw.matchAll(pattern)) {
+        const key = match[1];
+        const value = match[3];
+        if (!key || value === undefined) continue;
+        const line = raw.slice(0, match.index ?? 0).split('\n').length;
+        found.set(key, { file: `${dir.endsWith('/fr') ? 'fr' : 'en'}/${name}`, line, value });
+      }
+    }
+    return found;
+  };
+
+  const en = keysIn(enDir);
+  const fr = keysIn(frDir);
+
+  interface CatalogueFinding {
+    readonly key: string;
+    readonly file: string;
+    readonly line: number;
+    readonly value: string;
+    readonly rule: string;
+    readonly why: string;
+  }
+  const findings: CatalogueFinding[] = [];
+  const add = (key: string, meta: { file: string; line: number; value: string }, rule: string, why: string): void => {
+    findings.push({ key, file: meta.file, line: meta.line, value: meta.value, rule, why });
+  };
+
+  for (const [key, meta] of fr) {
+    const value = meta.value;
+
+    if (!en.has(key)) {
+      add(key, meta, 'FRC005', 'key does not exist in the English catalogue — stale or misspelled');
+    }
+
+    // `vous` addressing the player. `PRODUCT_VOICE.md` rule 2.
+    if (/\b(vous|votre|vos)\b/i.test(value)) {
+      add(key, meta, 'FRC001', 'the product speaks tu, always — never vous, and never mixed between screens');
+    }
+
+    // French Title Case.
+    //
+    // Only fires on a capitalised word that does **not** start a sentence — a
+    // string can legitimately contain two sentences, and `Choisis` after a full
+    // stop is correct. Placeholders and known proper nouns are skipped, since
+    // `{name}` and `Plotbreak` are capitalised for reasons of their own.
+    const words = value.replace(/\{[^}]*\}/g, '\u0000').split(/\s+/).filter(Boolean);
+    const titled: string[] = [];
+    for (let i = 1; i < words.length; i += 1) {
+      // A sentence ends on the *previous* token — `l'extraordinaire.` — so the
+      // punctuation is glued to the word before, not sitting on its own.
+      const previous = words[i - 1] ?? '';
+      if (/[.!?…:»]$/.test(previous)) continue;
+      const word = words[i] ?? '';
+      if (/^[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ]{2,}/.test(word)) titled.push(word);
+    }
+    if (titled.length > 0 && !PROPER_NOUNS.some((n) => value.includes(n))) {
+      add(key, meta, 'FRC002', `sentence case: «${titled[0]}» is capitalised mid-string — French UI is not Title Case`);
+    }
+
+    // An ICU plural that special-cases 1 is the English rule wearing ICU.
+    if (/\{[^}]*plural[^}]*=1\s*\{/.test(value)) {
+      add(key, meta, 'FRC003', 'an =1 branch is the English plural rule — French is singular at zero too');
+    }
+
+    // Midpoint, in UI as well as in prose. PLAYER_GRAMMAR rule 4.
+    if (/\p{L}·\p{L}/u.test(value)) {
+      add(key, meta, 'FRC004', 'no midpoint in the interface: administrative register, and it breaks read-aloud');
+    }
+  }
+
+  const missing = [...en.keys()].filter((k) => !fr.has(k));
+
+  if (json) {
+    console.log(JSON.stringify({ findings, coverage: { translated: fr.size, total: en.size, missing } }, null, 2));
+    return findings.length === 0;
+  }
+
+  for (const f of findings) {
+    console.log(`error ${f.rule}  ${f.file}:${f.line}  ${f.key}  «${f.value}»\n        — ${f.why}`);
+  }
+
+  const pct = en.size === 0 ? 0 : Math.round((fr.size / en.size) * 100);
+  console.log(
+    `\nfr catalogue: ${fr.size}/${en.size} keys (${pct}%), ${findings.length} rule violation(s).`,
+  );
+  if (missing.length > 0) {
+    const byArea = new Map<string, number>();
+    for (const key of missing) {
+      const area = key.split('.')[0] ?? '?';
+      byArea.set(area, (byArea.get(area) ?? 0) + 1);
+    }
+    const worst = [...byArea].sort((a, b) => b[1] - a[1]);
+    console.log(
+      'still English: ' + worst.map(([area, n]) => `${area} ${n}`).join(', '),
+    );
+    console.log('A missing key falls back to English, which is correct while the catalogue is partial.');
+  }
+  return findings.length === 0;
+}
+
+/** Names that are capitalised because they are names. `TERMINOLOGY.md` §1. */
+const PROPER_NOUNS = [
+  'Plotbreak',
+  'AniPlay',
+  'Apple',
+  'App Store',
+  'Google',
+  'VoiceOver',
+  'Face ID',
+  'Touch ID',
+];
+
 // --- main ------------------------------------------------------------------
 
 function main(): void {
@@ -432,13 +582,19 @@ function main(): void {
   const fenced = argv.includes('--fenced');
   const files = argv.filter((a) => !a.startsWith('--'));
 
+  if (argv.includes('--catalog')) {
+    process.exitCode = lintCatalogue(json) ? 0 : 1;
+    return;
+  }
+
   if (argv.includes('--self-test') || files.length === 0) {
     const failures = selfTest();
     if (files.length === 0 && !argv.includes('--self-test')) {
       console.log(
-        '\nNo files given. There is no fr catalogue yet — this ran the self-test instead.\n' +
-          'Once locales/fr exists:  npm run fr:lint -- locales/fr/*.json\n' +
-          'French inside a doc:     npm run fr:lint -- --fenced <file.md>',
+        '\nNo files given. Try:\n' +
+          '  npm run fr:lint -- --catalog      the fr message catalogue\n' +
+          '  npm run fr:lint -- --fenced <f>   French inside a markdown doc\n' +
+          '  npm run fr:lint -- --self-test    the rules, against known-bad samples',
       );
     }
     process.exitCode = failures > 0 ? 1 : 0;
