@@ -10954,12 +10954,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "06a547f6-95d1-4b04-8d3d-8ac13d9aa034",
-      "promptHash": "b65aa4f497f5ab54cf7783f8d4b0d8bc",
+      "requestId": "5f980c4f-e3f0-47b9-b38e-dd21800dabb2",
+      "promptHash": "a4e40b7b88d935048946f957a11dab14",
       "seed": "sv_primal_crown_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.21952,
-      "latencyMs": 110231,
-      "createdAt": "2026-09-10T21:22:40.404Z"
+      "latencyMs": 105297,
+      "createdAt": "2026-09-10T22:10:12.768Z"
     }
   },
   "story_primal_crown/ilya": {

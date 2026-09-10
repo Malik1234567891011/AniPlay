@@ -61,12 +61,20 @@ export function StoryCoverCard({
     .join(' · ');
 
   // Spec §7.3 — the accessible name reads as one coherent label, not five nodes.
+  //
+  // Attribution is dropped when there is no creator to attribute to. The
+  // Continue rail reuses this card for a run the player is already in, where
+  // the byline is not the point — and passing an empty creator produced
+  // "Hush House. 3 turns in. by . Community world", which both reads as broken
+  // and calls an official world a community one.
   const a11yLabel = [
     story.title,
     story.fantasyLabel,
-    `by ${story.creatorName}`,
-    story.official ? 'Official world' : 'Community world',
-  ].join('. ');
+    story.creatorName ? `by ${story.creatorName}` : null,
+    story.creatorName ? (story.official ? 'Official world' : 'Community world') : null,
+  ]
+    .filter((part): part is string => !!part)
+    .join('. ');
 
   const cover = (
     <StoryArt
