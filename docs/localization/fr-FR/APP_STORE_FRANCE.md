@@ -55,7 +55,7 @@ French line under it. `anime` is already a French noun (`un anime`, `des
 animes`), so this is not an anglicism — it is the French word plus an English
 adjective, which is exactly how French youth marketing reads as modern.
 
-```
+```fr
 PLAYABLE ANIME
 Ton anime. Tes choix. Ton histoire.
 ```
@@ -109,31 +109,31 @@ capitals, no apology, no Title Case.
 **The first three lines are all most people read.** Everything else is for the
 person who tapped *plus*.
 
-```
+```fr
 PLAYABLE ANIME
 Ton anime. Tes choix. Ton histoire.
 
 Choisis un monde. Deviens qui tu veux. Fais ce que tu veux.
 
-Plotbreak, ce n'est pas une histoire à trous où tu tapes sur trois boutons.
+Plotbreak, ce n’est pas une histoire à trous où tu tapes sur trois boutons.
 Tu écris ce que tu fais, avec tes mots, et le monde répond vraiment.
 
 ── DIS OU FAIS CE QUE TU VEUX ──
-Une barre de texte. Pas de menu. Tu peux mentir, partir, embrasser quelqu'un,
+Une barre de texte. Pas de menu. Tu peux mentir, partir, embrasser quelqu’un,
 casser une porte, refuser la quête. Personne ne te ramène sur les rails.
 
 ── DES MONDES ÉCRITS, PAS GÉNÉRÉS ──
 Dix mondes originaux, chacun avec ses personnages, ses tensions et ses fins.
 Une équipe de basket qui a perdu ses cinq titulaires. Un navire dont
-l'équipage peut partir. Une semaine qui recommence tous les dimanches à
+l’équipage peut partir. Une semaine qui recommence tous les dimanches à
 minuit.
 
 ── DES GENS, PAS DES DISTRIBUTEURS DE QUÊTES ──
-Chaque personnage a ce qu'il veut, ce qu'il cache et ce qu'il ne fera jamais.
+Chaque personnage a ce qu’il veut, ce qu’il cache et ce qu’il ne fera jamais.
 Ils se souviennent de ce que tu as dit. Ils peuvent refuser.
 
 ── TES CHOIX COMPTENT VRAIMENT ──
-Rien n'est écrit d'avance. Certaines fins sont des défaites. Partir en est
+Rien n’est écrit d’avance. Certaines fins sont des défaites. Partir en est
 une aussi.
 
 ── TROIS FAÇONS DE JOUER ──
@@ -160,10 +160,10 @@ Notes on the copy, because they are the decisions:
 
 ### Promotional text (~170 characters, changeable without review)
 
-```
+```fr
 Nouveau : trois mondes de plus. Un lycée qui a perdu son cinq majeur, un
 navire sans équipage, et une semaine qui recommence. Choisis. Écris. Casse
-l'histoire.
+l’histoire.
 ```
 
 ## 5. Screenshots

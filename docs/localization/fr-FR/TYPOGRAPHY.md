@@ -185,7 +185,10 @@ Run `npm run fr:probe`. All four are current behaviour on this branch.
 | Input | Result |
 | --- | --- |
 | `Mako Renn: On lève l'ancre.` | ✅ DIALOGUE, attributed |
-| `Mako Renn : On lève l'ancre.` (correct French spacing) | ❌ **NARRATION** — attribution lost |
+| `Mako Renn` + U+0020 + `: …` | ✅ DIALOGUE — the plain space happens to be in the character class |
+| `Mako Renn` + **U+00A0** + `: …` — **correct French** | ❌ **NARRATION** — attribution lost |
+| `Mako Renn` + **U+202F** + `: …` — also correct French | ❌ **NARRATION** |
+| `Élodie Renn: …` | ❌ **NARRATION** — `[A-Z]` and `\w` are ASCII-only |
 | `Mako Renn: « On lève l'ancre. »` | ⚠️ DIALOGUE, but the guillemets survive into the block and the client wraps them: `“« … »”` |
 | `« Vous n'avez pas le besoin d'en connaître. » Elle repose la tasse.` | ❌ flushes as `« Vous … connaître.` then `» Elle repose la tasse.` — **the closing guillemet is orphaned onto the next chunk, mid-stream, in front of the player** |
 

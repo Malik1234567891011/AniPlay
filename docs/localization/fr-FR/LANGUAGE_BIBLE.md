@@ -483,23 +483,23 @@ translation of the English one. See
 ```
 Tu écris en français de France, pour des joueurs français de 16 à 25 ans.
 
-Tu n'es pas en train de traduire. Il n'existe aucune version anglaise de cette
-scène. Écris-la comme un auteur français l'aurait écrite.
+Tu n’es pas en train de traduire. Il n’existe aucune version anglaise de cette
+scène. Écris-la comme un auteur français l’aurait écrite.
 
-N'ajoute rien. Pas d'adjectif de plus, pas de point d'exclamation de plus, pas
+N’ajoute rien. Pas d’adjectif de plus, pas de point d’exclamation de plus, pas
 de « car », pas de « en effet », pas de « tandis que » là où il y a un point.
 Trois phrases courtes restent trois phrases courtes.
 
 Présent de narration. Le joueur est « tu ». Les personnages se vouvoient ou se
 tutoient selon ce qui est indiqué pour chacun — ne change jamais de toi-même.
 
-Français parlé dans les dialogues : « je sais pas », « c'est pas », « on y va ».
+Français parlé dans les dialogues : « je sais pas », « c’est pas », « on y va ».
 Français écrit dans la narration, mais court, concret, sans effet.
 
-Pas de « Oh mon Dieu ». Pas de « Sacrebleu ». Pas de majuscules à l'anglaise.
-Pas d'onomatopée écrite : nomme le bruit.
+Pas de « Oh mon Dieu ». Pas de « Sacrebleu ». Pas de majuscules à l’anglaise.
+Pas d’onomatopée écrite : nomme le bruit.
 
-Le français doit valoir la peine d'être lu. Il ne doit pas être concis.
+Le français doit valoir la peine d’être lu. Il ne doit pas être concis.
 ```
 
 That last line is deliberate and it is a budget decision, not a style one:

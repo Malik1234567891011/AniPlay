@@ -195,13 +195,16 @@ The question was asked explicitly, so it is answered explicitly.
 
 # PART 2 — Player input, audited
 
-**Method.** The shipped `RuleBasedIntentParser` was run against French input on
-Blackwake with the default cast. Reproduce with `npm run fr:probe`. Nothing was
+**Method.** The shipped `RuleBasedIntentParser` was run against a 39-sentence
+French corpus on Blackwake with the default cast. Reproduce with
+`npm run fr:probe`; `--strict` makes it exit non-zero while French still falls
+through, which is what turns this audit into a gate in Phase 2. Nothing was
 changed in code.
 
 ## 2.1 The headline result
 
-**Twenty-eight of twenty-nine ordinary French inputs parsed as `custom`.**
+**37 of the 39 probes in the standard French corpus parse as `custom`. The two
+that do not are the English control sentences.**
 
 ```
 "I talk to Mako"                  → speak    tgt=Mako Renn
@@ -270,6 +273,21 @@ quote is the one who is understood.
 // packages/director/src/entity-resolution.ts
 const words = lower.replace(/[^a-z\s']/g, ' ').split(/\s+/).filter((w) => w.length > 2);
 ```
+
+The same ASCII assumption runs through `fast-writer.ts`, where it costs speaker
+attribution:
+
+```
+plain colon                            → DIALOGUE, attributed
+U+00A0 before colon — correct French   → NARRATION, attribution lost
+U+202F before colon — also correct     → NARRATION
+accented speaker name (Élodie Renn:)   → NARRATION
+```
+
+A French model writing correct French typography is precisely the one that loses
+the speaker's portrait, the speaker's name on screen, and — per that file's own
+comment — the line itself, because narration containing the player's name is
+rewritten to "you".
 
 Two French-specific failures fall out of this line.
 
