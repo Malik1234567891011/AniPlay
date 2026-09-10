@@ -32,6 +32,38 @@ export const SkillDef = z
   .strict();
 export type SkillDef = z.infer<typeof SkillDef>;
 
+/**
+ * What a resource *does* while it sits in a particular range.
+ *
+ * A variable exists to change behaviour, not to be displayed. Authors already
+ * think in these terms — every story bible in `docs/story-bibles` describes its
+ * state as behaviour bands, "Ayame Trust low: guarded, shares only survival
+ * rules / high: shares Mika evidence, takes personal risks" — and `ResourceDef`
+ * could express exactly one point of that range, `zeroStateConsequence`, which
+ * is the band nobody spends the story in.
+ *
+ * So the useful half of the idea had nowhere to live and the writer received a
+ * number with a noun on it. "House Attention: 62 / 100" tells a model nothing;
+ * "the building is staging scenes around the people you care about" tells it
+ * what the next beat is.
+ *
+ * `upTo` is the inclusive top of the band. Bands are read in ascending order
+ * and the first one the value fits is the one that applies, so the last band
+ * should reach `max`.
+ */
+export const ResourceBand = z
+  .object({
+    /** Inclusive upper bound. A value at or below this is in this band. */
+    upTo: z.number().int(),
+    /**
+     * How the world behaves in this range, in the same words a writer would
+     * use. Never a measurement, never shown to the player as text.
+     */
+    behaviour: z.string(),
+  })
+  .strict();
+export type ResourceBand = z.infer<typeof ResourceBand>;
+
 export const ResourceDef = z
   .object({
     id: z.string(),
@@ -47,9 +79,27 @@ export const ResourceDef = z
     visible: z.boolean().default(true),
     zeroStateConsequence: z.string().nullable().default(null),
     color: z.string().nullable().default(null),
+    /**
+     * What this resource does at each level, ascending. Empty on a resource
+     * that is genuinely only a number — Legs is legs.
+     */
+    bands: z.array(ResourceBand).default([]),
   })
   .strict();
 export type ResourceDef = z.infer<typeof ResourceDef>;
+
+/**
+ * The band a value is currently in, or null if the resource has no bands.
+ *
+ * Derived rather than stored, for the same reason `archetypeGrants` is: a band
+ * written into state would drift the moment the author changed a threshold, and
+ * the drift would be invisible.
+ */
+export function resourceBand(def: ResourceDef, value: number): ResourceBand | null {
+  if (def.bands.length === 0) return null;
+  const ascending = [...def.bands].sort((a, b) => a.upTo - b.upTo);
+  return ascending.find((band) => value <= band.upTo) ?? ascending.at(-1) ?? null;
+}
 
 export const ItemDef = z
   .object({

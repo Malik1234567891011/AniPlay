@@ -9,6 +9,7 @@ import { RED_MOON as RED_MOON_RAW } from './red-moon.js';
 import { SEVEN_DAYS as SEVEN_DAYS_RAW } from './seven-days.js';
 import { BLACKWAKE as BLACKWAKE_RAW } from './blackwake.js';
 import { LAST_FIVE as LAST_FIVE_RAW } from './last-five.js';
+import { HUSH_HOUSE } from './hush-house.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -22,6 +23,18 @@ export const RED_MOON = withDerivedAssetKeys(RED_MOON_RAW);
 export const SEVEN_DAYS = withDerivedAssetKeys(SEVEN_DAYS_RAW);
 export const BLACKWAKE = withDerivedAssetKeys(BLACKWAKE_RAW);
 export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
+
+/**
+ * The four newest worlds ship without generated art, deliberately.
+ *
+ * `withDerivedAssetKeys` fills in the key the image pipeline *would* produce,
+ * which is right for a world whose art exists and wrong for one whose art has
+ * not been commissioned: the story would declare a cover, the catalog would ask
+ * for it, and every card would show a hole. The covers on the first ten are
+ * locked and must not be regenerated, so these four carry null keys until
+ * somebody runs the generator for them on purpose.
+ */
+export { HUSH_HOUSE } from './hush-house.js';
 
 /**
  * The official launch catalog.
@@ -51,4 +64,5 @@ export const LAUNCH_CATALOG = [
   SEVEN_DAYS,
   BLACKWAKE,
   LAST_FIVE,
+  HUSH_HOUSE,
 ] as const;
