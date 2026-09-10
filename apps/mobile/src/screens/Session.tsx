@@ -598,24 +598,32 @@ export function SessionScreen({
             paddingBottom: Math.max(insets.bottom, spacing.md),
           }}
         >
-          {/* 0–3 suggestions above the composer (§10.4). */}
+          {/* Three responses above the composer.
+              
+              Stacked rather than in a horizontal rail: these are sentences the
+              protagonist says, not chips, and a rail cut them off mid-thought.
+              Hidden entirely while a turn resolves, so a set the player has
+              already chosen from never sits there looking unfinished. */}
           {suggestions.length > 0 && !pending ? (
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={suggestions}
-              keyExtractor={(item, index) => `${item.intentHint}_${index}`}
-              contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.sm, paddingBottom: spacing.md }}
-              renderItem={({ item }) => (
+            <Stack gap={spacing.sm} style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.md }}>
+              {suggestions.map((item, index) => (
                 <ActionSuggestion
+                  key={`${item.text}_${index}`}
                   text={item.text}
-                  risk={item.risk}
-                  costLabel={item.resourceCostLabel}
-                  // Tapping fills the composer; it never spends credits (§10.4).
-                  onPress={() => setDraft(item.text)}
+                  // Tapping sends. The old behaviour filled the composer and
+                  // waited for a second tap on Send, which is one tap more than
+                  // the lean-back way of playing can afford.
+                  onPress={() => {
+                    setSuggestions([]);
+                    void send(item.text);
+                  }}
+                  onEdit={() => {
+                    setSuggestions([]);
+                    setDraft(item.text);
+                  }}
                 />
-              )}
-            />
+              ))}
+            </Stack>
           ) : null}
 
           <Row gap={spacing.sm} style={{ paddingHorizontal: GUTTER }} align="flex-end">

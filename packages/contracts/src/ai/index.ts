@@ -178,9 +178,20 @@ export const OrderedBeat = z
   .strict();
 export type OrderedBeat = z.infer<typeof OrderedBeat>;
 
+/**
+ * A ready-to-play response: something the protagonist actually says and does.
+ *
+ * Not a command. "Ask Dai about the five" is a menu item; "I lean against the
+ * scorer's table. 'Everyone talks about those five like they were untouchable.
+ * What were they actually like?'" is a line the player can feel they wrote.
+ *
+ * 180 characters could not hold both an action and a line of dialogue, so every
+ * response was forced down to a label. Raised to 320 — enough for a gesture and
+ * two sentences, and still short enough that a card cannot become a paragraph.
+ */
 export const SuggestedAction = z
   .object({
-    text: z.string().max(180),
+    text: z.string().max(320),
     intentHint: z.string(),
     risk: RiskLabel.optional(),
     resourceCostLabel: z.string().nullable().optional(),

@@ -26,6 +26,7 @@ import { writeStreaming } from './fast-writer.js';
 import { pickReactionEmotion } from './director.js';
 import { reactionAssetKey } from '@aniplay/contracts';
 import type { ModelGateway } from './gateway/types.js';
+import { generateResponses } from './responses.js';
 import { recordMentions } from '@aniplay/engine';
 
 /**
@@ -248,7 +249,7 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   const fast = options.fastWriter ?? null;
 
   clock.start('director');
-  const plan = fast ? RULE_DIRECTOR.planSync(context) : await deps.director.plan(context);
+  let plan = fast ? RULE_DIRECTOR.planSync(context) : await deps.director.plan(context);
   clock.end('director');
 
   clock.start('writer');
@@ -303,6 +304,18 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     report = validateNarrative({ context, turn: narrative });
   }
   clock.end('validate');
+
+  // Step 11.5 — what the player could say next, written from what just
+  // happened rather than from what is mechanically available.
+  //
+  // Deliberately here, after the prose has finished streaming: the player is
+  // already reading, so this is off the first-text path entirely and only
+  // delays the cards. See `responses.ts` for why the old affordance-derived
+  // suggestions read as a checklist.
+  clock.start('responses');
+  const generated = fast ? await generateResponses(fast, context, narrative) : null;
+  if (generated) plan = { ...plan, suggestedActions: generated };
+  clock.end('responses');
 
   // Step 12 — commit. Memory proposals are materialised only for the facts the
   // surviving prose actually supports.

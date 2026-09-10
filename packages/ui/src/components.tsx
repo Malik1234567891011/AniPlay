@@ -410,57 +410,88 @@ export function StateDeltaRow({
 
 // --- §26.6 ActionSuggestion ------------------------------------------------
 
+/**
+ * A ready-to-play response.
+ *
+ * This was a horizontal chip carrying a two-line label and an engine readout —
+ * "Guard him — Jun" over "Risky · 9 Legs". Two things were wrong with that. The
+ * readout puts dice and resource costs on the one screen that is supposed to be
+ * story, and a 280pt chip cannot hold a sentence a person would actually say,
+ * so every response was compressed into a command.
+ *
+ * Now it is full width and stacked, because these are two to four lines of the
+ * protagonist's own words. Tapping sends. The pencil opens it in the composer
+ * first, so "that is basically what I wanted, but I would change one sentence"
+ * is one tap away — and either route goes through the same freeform pipeline as
+ * typing it by hand.
+ */
 export function ActionSuggestion({
   text,
-  risk,
-  costLabel,
   onPress,
   onEdit,
 }: {
   text: string;
-  risk?: string;
-  costLabel?: string | null;
   onPress: () => void;
   onEdit?: () => void;
 }): React.JSX.Element {
-  const meta = [risk && risk !== 'SAFE' ? titleCase(risk) : null, costLabel].filter(Boolean) as string[];
-
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={[text, ...meta].join('. ')}
-      accessibilityHint="Fills the composer. Does not send."
-      onPress={() => {
-        haptic('light');
-        onPress();
-      }}
-      style={({ pressed }) => ({
-        minHeight: 44,
-        maxWidth: 280,
-        paddingHorizontal: spacing.lg,
-        paddingVertical: spacing.md,
-        borderRadius: radius.control,
-        backgroundColor: colors.bg.elevated,
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: colors.border.subtle,
-        justifyContent: 'center',
-        gap: 4,
-        opacity: pressed ? 0.8 : 1,
-      })}
-    >
-      {/* Two lines, not three. These chips sit between the story and the
-          composer, so every line they take is a line of prose the player
-          cannot see — and a skill suggestion carrying its full description
-          would otherwise run to four. */}
-      <Txt variant="bodyCompact" numberOfLines={2}>
-        {text}
-      </Txt>
-      {meta.length > 0 ? (
-        <Txt variant="micro" color={riskColor(risk)}>
-          {meta.join(' · ')}
-        </Txt>
+    <Row gap={spacing.sm} align="stretch">
+      {onEdit ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Edit this response before sending"
+          onPress={() => {
+            haptic('light');
+            onEdit();
+          }}
+          style={({ pressed }) => ({
+            width: 40,
+            borderRadius: radius.control,
+            backgroundColor: colors.bg.raised,
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: pressed ? 0.7 : 1,
+          })}
+        >
+          <Txt variant="bodyCompact" color={colors.text.muted}>
+            ✎
+          </Txt>
+        </Pressable>
       ) : null}
-    </Pressable>
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={text}
+        accessibilityHint="Sends this as your action."
+        onPress={() => {
+          haptic('light');
+          onPress();
+        }}
+        style={({ pressed }) => ({
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: spacing.md,
+          minHeight: 44,
+          paddingHorizontal: spacing.lg,
+          paddingVertical: spacing.md,
+          borderRadius: radius.control,
+          backgroundColor: colors.bg.elevated,
+          borderWidth: StyleSheet.hairlineWidth,
+          borderColor: colors.border.subtle,
+          opacity: pressed ? 0.8 : 1,
+        })}
+      >
+        {/* No line clamp. The whole point of these is that the player can read
+            what they are about to say before they say it. */}
+        <Txt variant="bodyCompact" style={{ flex: 1 }}>
+          {text}
+        </Txt>
+        <Txt variant="bodyCompact" color={colors.text.muted}>
+          ↑
+        </Txt>
+      </Pressable>
+    </Row>
   );
 }
 

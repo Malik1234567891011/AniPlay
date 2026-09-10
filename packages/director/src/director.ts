@@ -292,13 +292,67 @@ function chooseReveals(context: TurnContext): string[] {
  * prose. Every one of these maps to an affordance the engine just confirmed
  * exists, so tapping one can never produce "you cannot do that".
  */
+/** Verbs that all amount to "you talked to them this turn". */
+const SOCIAL_VERBS = new Set(['speak', 'persuade', 'deceive', 'threaten', 'help', 'oppose', 'custom']);
+const SOCIAL_HINTS = new Set(['persuade', 'speak_to', 'deceive', 'threaten']);
+
 function buildSuggestions(context: TurnContext): SuggestedAction[] {
   const { story, state, resolution } = context;
   const suggestions: SuggestedAction[] = [];
   const seen = new Set<string>();
 
+  // What the player just did, so it is not offered back to them.
+  //
+  // These are built from standing affordances — who is here, what is
+  // affordable — which have no memory of the turn, so "Ask Dai about the five."
+  // regenerated verbatim on the turn immediately after the player asked Dai
+  // about the five, and read on screen as an unfinished task. The model path in
+  // `responses.ts` does not have this problem because it writes from the beat;
+  // this is the deterministic floor underneath it and it needs the same rule.
+  //
+  // Matched on the resolution rather than on the words, because the player
+  // rarely uses the card's phrasing: "I ask Dai what the five were actually
+  // like" and "Ask Dai about the five." share almost no vocabulary and are the
+  // same move.
+  const justDid = new Set(
+    resolution.normalizedActions.flatMap((action) => {
+      const a = action as {
+        verb?: string;
+        targetId?: string;
+        locationId?: string;
+        abilityId?: string;
+        targets?: Array<{ entityType?: string; entityId?: string }>;
+      };
+      // The normalised shape carries the target either flat or in a list,
+      // depending on which resolver produced it.
+      const targetIds = [
+        a.targetId,
+        ...(a.targets ?? []).filter((t) => t.entityType === 'npc').map((t) => t.entityId),
+      ].filter((id): id is string => !!id);
+
+      const keys: string[] = [];
+      // Every way of addressing somebody is the same move as far as "you just
+      // did that" is concerned.
+      for (const id of targetIds) {
+        if (SOCIAL_VERBS.has(a.verb ?? '')) keys.push(`spoke:${id}`);
+        if (a.verb === 'attack') keys.push(`attack:${id}`);
+      }
+      if (a.abilityId) keys.push(`use_ability:${a.abilityId}`);
+      if (a.locationId) keys.push(`travel_to:${a.locationId}`);
+      return keys;
+    }),
+  );
+
+  const alreadyDone = (hint: string): boolean => {
+    const [verb, id] = hint.split(':');
+    if (!id) return false;
+    if (SOCIAL_HINTS.has(verb ?? '')) return justDid.has(`spoke:${id}`);
+    return justDid.has(hint);
+  };
+
   const push = (s: SuggestedAction): void => {
     if (suggestions.length >= 3 || seen.has(s.text)) return;
+    if (alreadyDone(s.intentHint)) return;
     seen.add(s.text);
     suggestions.push(s);
   };

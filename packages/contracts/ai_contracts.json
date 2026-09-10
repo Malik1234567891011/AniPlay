@@ -497,7 +497,7 @@
             "properties": {
               "text": {
                 "type": "string",
-                "maxLength": 180
+                "maxLength": 320
               },
               "intentHint": {
                 "type": "string"
