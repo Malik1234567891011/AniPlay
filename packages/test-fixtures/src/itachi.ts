@@ -2396,12 +2396,21 @@ const raw = {
     },
   ],
   /**
+  /**
    * You are Itachi. The story says so in its own premise, so the setup screen
    * does not ask.
    *
-   * What it does still ask is the battlefield question below, which is the one
-   * piece of this that is genuinely the player's: not who you are, but what the
-   * war left in you. Nothing here narrows what you may *do* — the clan, the
+   * Most worlds here have a blank protagonist and the identity fields are the
+   * point: the player invents somebody. This one does not. The card already
+   * says you are thirteen and the best shinobi your clan has produced in a
+   * generation, and asking that player to type a name, pronouns and a physical
+   * description is the game asking them to invent a character it has already
+   * written.
+   *
+   * What is left is characterisation rather than identity — what the war left
+   * in you, what people get wrong about you, where you start out standing —
+   * which is the right question to ask somebody stepping into a life that
+   * already exists. Nothing here narrows what you may *do*: the clan, the
    * village, your brother and the fortnight are all still open.
    */
   protagonist: {

@@ -21,13 +21,20 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 |---|---|---|---|---|
 | Itachi | ✅ `itachi.ts` | ✅ `itachi.spec.ts` | ✅ 88 assets | ✅ |
 | Primal Crown | ✅ `primal-crown.ts` | ✅ `primal-crown.spec.ts` | ✅ 69 assets | ✅ |
-| Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ⏳ generating | ✅ |
+| Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ✅ 78 assets | ✅ |
+| The Fourth Beast | ✅ `fourth-beast.ts` | ✅ `fourth-beast.spec.ts` | ✅ 70 assets | ✅ |
+| Seven Names | ✅ `seven-names.ts` | ✅ `seven-names.spec.ts` | ✅ 82 assets | ✅ |
+| The Blank Prophecy | ✅ `blank-prophecy.ts` | ✅ `blank-prophecy.spec.ts` | ✅ 70 assets | ✅ |
+| The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ✅ 78 assets | ✅ |
+| Second Skin | ✅ `second-skin.ts` | ✅ `second-skin.spec.ts` | ⏳ next | ✅ |
 
-All three gates green at the last commit. Catalog is now 16 worlds.
+All three gates green at the last commit. Catalog is now 21 worlds.
 
-**Untouched (6 worlds), in build order:**
-`02_THE_FOURTH_BEAST`, `03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
-`06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
+**Not mine.** Another agent is generating art for Hush House, Window Seven and
+Good Morning, Husband on `main`. Do not generate for those three.
+
+**Untouched (1 world):**
+`08_LAST_SERVICE` — the last one. — all in
 `/Users/malik/Downloads/morestoryideas/`. Copy each bible into
 `docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
 `05_ZERO_THRONE.md`, that folder's index → `00_MORESTORYIDEAS_INDEX.md`).
@@ -106,6 +113,38 @@ array order on purpose**).
 The licensing/rights flag a previous session left in `BUILD_STATUS.md` has been
 **deleted** per the product owner. Do not raise it again.
 
+### Named vs blank protagonist (applies to every world from here)
+
+A world either has a **blank** protagonist (the player invents somebody, and the
+name / pronouns / appearance setup fields are the point) or a **named** one (the
+character is already written, and asking the player to invent them is a
+fourth-wall break on the first screen).
+
+`protagonist: NAMED | BLANK` is not a schema field yet. Until it is, record it
+here and author the setup screen accordingly:
+
+- **Itachi — NAMED.** Fixed: `pronouns` and `appearance` removed, `displayName`
+  is now optional with the canon name as placeholder and helpText saying you are
+  Itachi Uchiha. What is left is characterisation — what the war left in you,
+  what people get wrong about you, where you start out standing.
+- **Primal Crown — BLANK.** The bible: any faction, mixed heritage, factionless,
+  outsider, captive, or entirely self-authored.
+- **Zero Throne — BLANK.** The bible: civilian, cadet, officer, mechanic,
+  diplomat, mercenary, journalist, famous ace, nobody.
+- **The Fourth Beast — BLANK.** The bible leaves how the player got into Morel's
+  dataset deliberately flexible.
+- **The Blank Prophecy — BLANK.** The bible lists eight candidate explanations
+  for why the player is unreadable and instructs that none be fixed early, so
+  the setup offers the theory as an optional lean including "no theory at all".
+- **Seven Names — BLANK,** and unusually so: the bible forbids hard-canonning
+  even whether the player committed the murder, so the identity field asks what
+  they *say* happened at the Beaumont and the whole conspiracy works from it.
+
+The rule to write by: **the archetype question should be characterisation, not
+identity.** "You were four, on a battlefield, with your father. What did you take
+away from it?" is the right shape. "What do you look like?" is not, in a world
+that has already answered it.
+
 ### Zero Throne — shape
 
 Playable span is the **fortnight after the machine kneels**, on and around one
@@ -160,10 +199,8 @@ every character and an animal cannot have them.
 
 ## Next
 
-1. Zero Throne art is generating in the background. When it finishes:
-   `npx tsx infra/scripts/optimize-art.ts`, re-run gates, commit, push.
-   (`index.ts` already has it on `withDerivedAssetKeys`, so nothing else to flip.)
-2. Build `02_THE_FOURTH_BEAST.md`, then the remaining five in order.
+1. Generate Second Skin art, then `optimize-art.ts`, gates, commit, push.
+2. Build `08_LAST_SERVICE.md`. That is the last bible.
 
 **The per-world loop that works — follow it exactly:**
 
@@ -206,6 +243,52 @@ the class `BUILD_STATUS.md` gotcha 6 describes:**
 2. Step `find_out_what_they_want` awarded `salt_block` while one of its own
    routes demanded `hasItems: ['salt_block']`. **Fix:** removed the reward; salt
    is already takeable in `market_lanes` (qty 3).
+
+**The single most repeated error, now hit four times — check for it every world:**
+
+An ability with `unlockedByDefault: false` and a `requires.flagsSet` gate, that
+**no step's `rewards.abilities` ever grants**. `requires` restricts an ability
+you already have; it never hands one over. Every quest route keyed on
+`used:<that ability>` is then unreachable and `catalog.spec.ts` catches it.
+
+The fix is always the same shape: **grant broadly, gate by flag.** Put the
+ability in the `rewards.abilities` of the step where the player learns it, and
+leave the `requires.flagsSet` gate on to keep it unusable for anybody who has
+not. Hit by `work_by_fear` (Primal Crown), `tsukuyomi` (Itachi, caught in
+authoring), `go_all_the_way` (Fourth Beast) and `open_the_registry` (Seven
+Names).
+
+**The second most repeated error — hit three times now:**
+
+Using a **`RelationshipGate` id as if it were a flag**, in a world event's
+`cancelledByFlags` or in a quest route's `predicate.flagsSet`. A gate opens a
+topic; it never writes anything. Nothing will ever set it and the event fires
+forever or the route is dead. Hit by `camille_works_with_you` (Fourth Beast),
+`thalia_lends_the_bow` (Blank Prophecy) and `knows:the_real_width` (Primal
+Crown, where the gate existed and nothing wrote the flag it implied).
+
+**Do these three greps before running any suite on a new world.** They catch
+the errors that have recurred most and each takes one command:
+
+```bash
+# 1. Every gated ability must be granted by some step's rewards.abilities.
+grep -n "unlockedByDefault: false" -B12 packages/test-fixtures/src/<w>.ts | grep "id: '"
+grep -n "abilities: \[" packages/test-fixtures/src/<w>.ts
+# 2. Every cardBlurb must contain "you" or "your".
+# 3. Every location must have an inbound connection, not just an outbound one.
+```
+
+**Third recurring class: a location with an edge out and none in.**
+`director.spec.ts` walks reachability from `rules.startingLocationId` through
+`connections`, and edges are one-way. Authoring `the_hill -> the_waterfront`
+without the return edge makes the hill unreachable. Hit twice in The Red Floor
+alone (`the_hill`, `daigo_camp`). Check every new location has somebody
+pointing at it.
+
+**Fourth: an inert `GOOD_LOW` resource.** Attention shipped with four bands of
+prose and no ability costing it, which reads as finished and is dead. Every
+descending resource needs at least one ability whose `costs` raise it — the
+per-world spec test for this has now earned its place four times.
 
 **Two more found by `director.spec.ts`:**
 
