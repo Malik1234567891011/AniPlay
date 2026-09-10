@@ -230,6 +230,46 @@ export class RuleBasedIntentParser implements IntentParser {
       }
     }
 
+    // Speaking is what the turn is about, whatever else the sentence says.
+    //
+    // "I stop walking. \u201cWho\u2019s Ivy? You said she chased koi out of a bus
+    // shelter with an umbrella. I want to meet her.\u201d" produced a single
+    // `custom` action for the stage direction and no speech at all — so the
+    // engine had no addressee, the writer had no directive that anybody was
+    // being spoken to, and the low-confidence `custom` sent the turn to the
+    // model parser, which advanced the clock three hours and walked the person
+    // being addressed off down the platform.
+    //
+    // If the player put words in quotes, somebody is being spoken to. The
+    // stage direction stays as its own action; this adds the half that matters.
+    // An existing *speech* act, not merely an existing target. "I turn to her.
+    // \u201cSo what happens on Sunday?\u201d" gives the turning action a target,
+    // and that is not somebody being spoken to.
+    const alreadySpeech = actions.some(
+      (a) => SPEECH_VERBS.has(a.verb) && a.targets.some((t) => t.entityType === 'npc'),
+    );
+    if (dialogue.length > 0 && !alreadySpeech) {
+      const spoken = dialogue.map((line) => line.text).join(' ');
+      // Only somebody who is actually here. "Who's Ivy?" names Ivy and is
+      // addressed to whoever the player is standing with — matching the name
+      // in the question would aim the sentence at an absent person and have
+      // the engine refuse a turn that was perfectly sensible.
+      const addressee =
+        present(resolveTargets(spoken, context), context) ??
+        present(resolveTargets(raw, context), context) ??
+        soleCompanion(context);
+      if (addressee) {
+        actions.unshift({
+          verb: 'speak',
+          actor: { entityType: 'player', entityId: 'player' },
+          targets: addressee,
+          method: spoken.slice(0, 240),
+          declaredOutcome: '',
+          timeIntent: 'NOW',
+        });
+      }
+    }
+
     // An action that resolved no person, in a sentence that clearly named one,
     // has to be distinguishable from one that named nobody at all. The engine
     // continues a fight for the second and refuses the first.
@@ -309,6 +349,35 @@ function matchVerb(clause: string): Verb | null {
     }
   }
   return null;
+}
+
+/**
+ * The one person in the room, when there is exactly one.
+ *
+ * Speaking without naming anybody is normal — you do not say your friend's name
+ * every time you talk to them — and with one other person present there is no
+ * ambiguity about who was addressed.
+ */
+/** Verbs that already carry the player's words to somebody. */
+const SPEECH_VERBS = new Set(['speak', 'persuade', 'deceive', 'threaten', 'help', 'oppose']);
+
+/** The subset of these targets who are in the room, or null if none are. */
+function present(
+  targets: IntentAction['targets'] | null,
+  context: ParseContext,
+): IntentAction['targets'] | null {
+  if (!targets) return null;
+  const here = new Set(charactersPresent(context.state).map((c) => c.characterId));
+  const kept = targets.filter((t) => t.entityType === 'npc' && here.has(t.entityId));
+  return kept.length > 0 ? kept : null;
+}
+
+function soleCompanion(context: ParseContext): IntentAction['targets'] | null {
+  const present = charactersPresent(context.state);
+  if (present.length !== 1) return null;
+  const character = context.story.characters.find((c) => c.id === present[0]!.characterId);
+  if (!character) return null;
+  return [{ entityType: 'npc', entityId: character.id, displayName: character.name }];
 }
 
 /** Matches against the story's own authored affordance phrases (spec §12.10). */
@@ -427,6 +496,23 @@ function resolveTargets(clause: string, context: ParseContext): IntentAction['ta
 }
 
 /** Pulls quoted speech out and records who it is aimed at. */
+/**
+ * Speech in quotes, whatever kind of quotes the keyboard produced.
+ *
+ * This was ASCII-only — plain " and ' — and iOS turns typed quotes into curly
+ * ones by default. So on an actual phone the player's dialogue was never
+ * extracted at all. "I stop walking. \u201cWho\u2019s Ivy? I want to meet
+ * her.\u201d" came through as one unrecognised `custom` action with nobody
+ * being addressed, which then went to the model parser as a low-confidence
+ * turn and came back having advanced the clock three hours.
+ *
+ * Apostrophes are no longer delimiters. Treating ' as an opening quote meant
+ * "Who's" ended the speech in the middle of the second word. Guillemets are
+ * here for the French build, which is coming.
+ */
+const QUOTED_SPEECH = /["\u201c\u00ab]([^"\u201c\u201d\u00ab\u00bb]{2,600})["\u201d\u00bb]/g;
+const OUTER_QUOTES = /^["\u201c\u00ab]|["\u201d\u00bb]$/g;
+
 function extractDialogue(
   raw: string,
   state: GameState,
@@ -435,10 +521,10 @@ function extractDialogue(
   const dialogue: IntentDialogue[] = [];
   let remainder = raw;
 
-  const quoted = raw.match(/[""']([^""']{2,600})[""']|"([^"]{2,600})"/g);
+  const quoted = raw.match(QUOTED_SPEECH);
   if (quoted) {
     for (const match of quoted) {
-      const text = match.replace(/^[""'"]|[""'"]$/g, '').trim();
+      const text = match.replace(OUTER_QUOTES, '').trim();
       if (text.length === 0) continue;
       dialogue.push({
         speaker: {
