@@ -111,6 +111,11 @@ groupSynonyms('neutral', 'engaged', 'awake');
 // Reina is a critic being watched eat.
 groupSynonyms('annoyed', 'shut down');
 groupSynonyms('worried', 'uncomfortable');
+// Pink Tide, where half the cast is on holiday and the other half is working.
+groupSynonyms('warm', 'flirty', 'affable', 'grateful');
+groupSynonyms('amused', 'easy');
+groupSynonyms('worried', 'scared', 'strained');
+groupSynonyms('neutral', 'plain', 'lucid');
 
 /** Every authored word this knows how to draw, for the catalog spec to check. */
 export function knownExpression(expression: string): boolean {

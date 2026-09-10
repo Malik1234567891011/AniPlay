@@ -21,6 +21,7 @@ import { BLANK_PROPHECY as BLANK_PROPHECY_RAW } from './blank-prophecy.js';
 import { RED_FLOOR as RED_FLOOR_RAW } from './red-floor.js';
 import { SECOND_SKIN as SECOND_SKIN_RAW } from './second-skin.js';
 import { LAST_SERVICE as LAST_SERVICE_RAW } from './last-service.js';
+import { PINK_TIDE as PINK_TIDE_RAW } from './pink-tide.js';
 
 
 export { withDerivedAssetKeys } from './derive-assets.js';
@@ -44,6 +45,7 @@ export const BLANK_PROPHECY = withDerivedAssetKeys(BLANK_PROPHECY_RAW);
 export const RED_FLOOR = withDerivedAssetKeys(RED_FLOOR_RAW);
 export const SECOND_SKIN = withDerivedAssetKeys(SECOND_SKIN_RAW);
 export const LAST_SERVICE = withDerivedAssetKeys(LAST_SERVICE_RAW);
+export const PINK_TIDE = withDerivedAssetKeys(PINK_TIDE_RAW);
 
 /**
  * These three shipped with null asset keys on purpose, and no longer need to.
@@ -102,7 +104,8 @@ export const GOOD_MORNING_HUSBAND = withDerivedAssetKeys(GOOD_MORNING_HUSBAND_RA
  * down there has ever been written down, and Second Skin is a world where everybody chooses which animal
  * they become at sixteen and keeps it for life, and a woman who has done it twice
  * comes through the ceremony window, and Last Service is a thirty-seat family
- * restaurant with thirty days left on a loan and a hood that is making a noise.
+ * restaurant with thirty days left on a loan and a hood that is making a noise, and Pink Tide is seven nights at an adults-only
+ * island resort where a guest checked out this morning without leaving.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -127,4 +130,5 @@ export const LAUNCH_CATALOG = [
   RED_FLOOR,
   SECOND_SKIN,
   LAST_SERVICE,
+  PINK_TIDE,
 ] as const;
