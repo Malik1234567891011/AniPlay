@@ -96,6 +96,18 @@ groupSynonyms('neutral', 'serious', 'level', 'flat', 'still', 'quiet', 'silent',
   'focused', 'absorbed', 'attentive', 'direct', 'candid', 'precise', 'technical', 'determined',
   'resolved', 'decisive', 'careful', 'conceding');
 
+// The six worlds written after the map above brought thirty-two more words with
+// them. Same rule: the authored word stays, it just has to land on a face.
+groupSynonyms('warm', 'fond', 'engaged', 'enthusiastic', 'interested', 'unburdened', 'unguarded');
+groupSynonyms('amused', 'sardonic', 'animated');
+groupSynonyms('surprised', 'exposed', 'undone', 'undefended', 'awake');
+groupSynonyms('confused', 'curious', 'deflecting');
+groupSynonyms('annoyed', 'bored', 'immovable', 'shut down', 'contemptuous');
+groupSynonyms('worried', 'anxious', 'breaking', 'failing', 'lost', 'uncomfortable', 'unnerved',
+  'wretched');
+groupSynonyms('neutral', 'absent', 'brisk', 'clinical', 'decided', 'dogged', 'exact',
+  'informative');
+
 /** Every authored word this knows how to draw, for the catalog spec to check. */
 export function knownExpression(expression: string): boolean {
   const key = expression.trim().toLowerCase();

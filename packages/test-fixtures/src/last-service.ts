@@ -950,7 +950,7 @@ const raw = {
         'A hundred and twenty covers, every night, good. That is the job. The best plate you will ever cook is not the job and it is what everybody comes into this trade wanting.',
         'My first place had the reviews of the year. It closed in fourteen months owing four suppliers, and two of those men are still working, and I still see them.',
         'She can execute anything. I have not yet seen her run a room that was going wrong, which is the only part of this I cannot teach her, so I have entered her in something that will go wrong.',
-        'You have thirty seats and a hood that is out of code. I am not going to be delicate about that. Fix the hood first and the rest of it second.',
+        'Thirty seats, and a hood that is out of code. Forgive me for being blunt about it. Fix the hood, then worry about menus.',
       ],
       appearance:
         'Forty-eight, compact and completely still, short greying hair, a plain white jacket with no name on it, forearms scarred the way everybody’s are, and reading glasses he uses only for a rota.',
@@ -1264,7 +1264,7 @@ const raw = {
       voiceSamples: [
         'I am not going to tell you what I am writing. Not tonight, not after, not ever, and if you ask again I will have to stop coming, which neither of us wants.',
         'A critic owes the eater the truth. Not the chef a kindness. Those get confused constantly and almost always by people who have not paid for their own dinner in a decade.',
-        'Twenty-two seats. I gave it four hundred words in my second year and it filled up with people who wanted the story rather than the food, and the regulars went, and it closed in eleven months. That is what a review can do.',
+        'A piece of mine puts a queue outside a twenty-two-seat dining room for about six weeks. That queue is not made of its customers. When it moves on, the customers have moved on with it, and I have watched precisely that happen twice.',
         'Three visits. Always three, always paid, always under a name that is not mine. It is the only part of this job I have never once cut a corner on.',
       ],
       appearance:
