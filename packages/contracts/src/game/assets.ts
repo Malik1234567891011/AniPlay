@@ -107,6 +107,10 @@ groupSynonyms('annoyed', 'contemptuous', 'brisk', 'bored', 'clinical', 'exact', 
   'immovable', 'dogged', 'decided');
 groupSynonyms('worried', 'anxious', 'wretched', 'failing');
 groupSynonyms('neutral', 'engaged', 'awake');
+// Last Service arrived after that: Daichi goes silent when he is annoyed, and
+// Reina is a critic being watched eat.
+groupSynonyms('annoyed', 'shut down');
+groupSynonyms('worried', 'uncomfortable');
 
 /** Every authored word this knows how to draw, for the catalog spec to check. */
 export function knownExpression(expression: string): boolean {

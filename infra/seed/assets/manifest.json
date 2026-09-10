@@ -9005,6 +9005,1431 @@
       "createdAt": "2026-09-10T01:56:48.806Z"
     }
   },
+  "story_last_service/daichi": {
+    "assetKey": "story_last_service/daichi",
+    "file": "story_last_service/daichi.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, Twenty-two, on the Akari line for four years, and reliable in a way nobody has ever thanked him for",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cfda79da-961b-4bc8-af40-753f8b2b0d42",
+      "promptHash": "6d9aa1e602c1f8f5c41eb3b7c445e265",
+      "seed": "ls-daichi-01",
+      "costUsd": 0.05488,
+      "latencyMs": 30997,
+      "createdAt": "2026-09-10T21:27:16.585Z"
+    }
+  },
+  "story_last_service/daichi_amused": {
+    "assetKey": "story_last_service/daichi_amused",
+    "file": "story_last_service/daichi_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f3c272e4-e405-47d1-af19-ac063e645e8b",
+      "promptHash": "6ece9067c9f34a248a2a3e0333d7f595",
+      "seed": "ls-daichi-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23109,
+      "createdAt": "2026-09-10T21:27:08.714Z"
+    }
+  },
+  "story_last_service/daichi_angry": {
+    "assetKey": "story_last_service/daichi_angry",
+    "file": "story_last_service/daichi_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8e118f13-e922-4ab7-911c-28c123cdd957",
+      "promptHash": "18e0c16fc2f8ac49e59bab9800484309",
+      "seed": "ls-daichi-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 21654,
+      "createdAt": "2026-09-10T21:47:35.113Z"
+    }
+  },
+  "story_last_service/daichi_annoyed": {
+    "assetKey": "story_last_service/daichi_annoyed",
+    "file": "story_last_service/daichi_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "040c36b4-6e8b-4f3f-b469-03970d695342",
+      "promptHash": "1192e965a5487590733ef6d04bf3ea4f",
+      "seed": "ls-daichi-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 17607,
+      "createdAt": "2026-09-10T21:47:13.450Z"
+    }
+  },
+  "story_last_service/daichi_confused": {
+    "assetKey": "story_last_service/daichi_confused",
+    "file": "story_last_service/daichi_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "69543821-520a-4499-a678-a4c1b1d9e384",
+      "promptHash": "af7c205ae4a9ce00d142bb407e54843b",
+      "seed": "ls-daichi-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 20286,
+      "createdAt": "2026-09-10T21:46:55.835Z"
+    }
+  },
+  "story_last_service/daichi_neutral": {
+    "assetKey": "story_last_service/daichi_neutral",
+    "file": "story_last_service/daichi_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fa5e5527-119c-441d-bcbb-9728f52f6e69",
+      "promptHash": "3b607fef388cabeaa9d4ced986fccdc5",
+      "seed": "ls-daichi-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 18800,
+      "createdAt": "2026-09-10T21:27:04.404Z"
+    }
+  },
+  "story_last_service/daichi_surprised": {
+    "assetKey": "story_last_service/daichi_surprised",
+    "file": "story_last_service/daichi_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "de722e47-ef0c-4276-a581-8cd3c81123d7",
+      "promptHash": "8785ddc9f3cbfc2a706fa234fbdf266f",
+      "seed": "ls-daichi-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 35628,
+      "createdAt": "2026-09-10T21:46:35.542Z"
+    }
+  },
+  "story_last_service/daichi_warm": {
+    "assetKey": "story_last_service/daichi_warm",
+    "file": "story_last_service/daichi_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b2facb56-4a74-4241-8adb-7e6c949b2a34",
+      "promptHash": "c4a61bde248351996f13a56c492516c0",
+      "seed": "ls-daichi-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 21918,
+      "createdAt": "2026-09-10T21:27:07.522Z"
+    }
+  },
+  "story_last_service/daichi_worried": {
+    "assetKey": "story_last_service/daichi_worried",
+    "file": "story_last_service/daichi_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Daichi Ren, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d526ccb2-251f-48f6-8d13-ba4f5d3745e8",
+      "promptHash": "79faac2d75c4572e682419b516a25cd2",
+      "seed": "ls-daichi-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 20929,
+      "createdAt": "2026-09-10T21:47:56.055Z"
+    }
+  },
+  "story_last_service/emi": {
+    "assetKey": "story_last_service/emi",
+    "file": "story_last_service/emi.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, Twenty-one, the entire front of house, and the reason this kitchen gets away with anything",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5b716115-20fd-4bef-9b62-745ffd53b1f5",
+      "promptHash": "63c575c3337695c2c77c9c9499c66935",
+      "seed": "ls-emi-01",
+      "costUsd": 0.02404,
+      "latencyMs": 21086,
+      "createdAt": "2026-09-10T21:25:56.157Z"
+    }
+  },
+  "story_last_service/emi_amused": {
+    "assetKey": "story_last_service/emi_amused",
+    "file": "story_last_service/emi_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b2e0028d-c62e-44d8-853f-127194907890",
+      "promptHash": "f9dd3b83075d3ad464bc1a9f238b3e44",
+      "seed": "ls-emi-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 29479,
+      "createdAt": "2026-09-10T21:26:04.565Z"
+    }
+  },
+  "story_last_service/emi_angry": {
+    "assetKey": "story_last_service/emi_angry",
+    "file": "story_last_service/emi_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "94ef511a-0b68-4f2a-afb1-510517a3cfaf",
+      "promptHash": "d924ed73f90392b37e4bd8b6c6045ee7",
+      "seed": "ls-emi-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 30005,
+      "createdAt": "2026-09-10T21:26:37.245Z"
+    }
+  },
+  "story_last_service/emi_annoyed": {
+    "assetKey": "story_last_service/emi_annoyed",
+    "file": "story_last_service/emi_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1de2323f-15ec-4197-b095-e28f8440366d",
+      "promptHash": "39fca4c19edbca0dc8439430c4f9eea5",
+      "seed": "ls-emi-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 30731,
+      "createdAt": "2026-09-10T21:26:35.315Z"
+    }
+  },
+  "story_last_service/emi_confused": {
+    "assetKey": "story_last_service/emi_confused",
+    "file": "story_last_service/emi_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "47bb9dfc-7092-4234-9b60-2af4d642b0a7",
+      "promptHash": "cadd238f18c2884af2f6b2b8ad7a136c",
+      "seed": "ls-emi-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23101,
+      "createdAt": "2026-09-10T21:26:19.264Z"
+    }
+  },
+  "story_last_service/emi_neutral": {
+    "assetKey": "story_last_service/emi_neutral",
+    "file": "story_last_service/emi_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b1239955-69fd-4112-a959-4353fa8684ea",
+      "promptHash": "ca0ff742d39a0557c7091bbc9d74d802",
+      "seed": "ls-emi-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 32140,
+      "createdAt": "2026-09-10T21:26:07.225Z"
+    }
+  },
+  "story_last_service/emi_surprised": {
+    "assetKey": "story_last_service/emi_surprised",
+    "file": "story_last_service/emi_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "701ce402-a944-45b9-9d0f-dda11aab7f65",
+      "promptHash": "678143028053ec3f2d531e7cd8034e12",
+      "seed": "ls-emi-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 19699,
+      "createdAt": "2026-09-10T21:26:15.530Z"
+    }
+  },
+  "story_last_service/emi_warm": {
+    "assetKey": "story_last_service/emi_warm",
+    "file": "story_last_service/emi_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "91fe2ae9-992a-49cf-8e94-a474048a4b5b",
+      "promptHash": "146c03010d779f3b5f4a6b80546454d2",
+      "seed": "ls-emi-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 20738,
+      "createdAt": "2026-09-10T21:25:55.824Z"
+    }
+  },
+  "story_last_service/emi_worried": {
+    "assetKey": "story_last_service/emi_worried",
+    "file": "story_last_service/emi_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Nakahara, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7fcd3543-9a99-4a95-a766-b5a13cbf4a4b",
+      "promptHash": "b8e0472bc4d4677ab5f0a7f3ee226117",
+      "seed": "ls-emi-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 29247,
+      "createdAt": "2026-09-10T21:26:44.786Z"
+    }
+  },
+  "story_last_service/haruto": {
+    "assetKey": "story_last_service/haruto",
+    "file": "story_last_service/haruto.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, Forty-eight, executive chef at VANTA, and the most formidable person in this story because he is not trying to be",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e55d2fcd-0e61-4a97-89cf-1949b8de5643",
+      "promptHash": "76f9a4d66f003e4565287cc772b9c75a",
+      "seed": "ls-haruto-01",
+      "costUsd": 0.01372,
+      "latencyMs": 17347,
+      "createdAt": "2026-09-10T21:23:58.185Z"
+    }
+  },
+  "story_last_service/haruto_amused": {
+    "assetKey": "story_last_service/haruto_amused",
+    "file": "story_last_service/haruto_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e6fb061c-89dc-46e9-9f62-0c66fb65d49b",
+      "promptHash": "9f7fa693af03a58de63c1bea547ab5b5",
+      "seed": "ls-haruto-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 12873,
+      "createdAt": "2026-09-10T21:23:53.725Z"
+    }
+  },
+  "story_last_service/haruto_angry": {
+    "assetKey": "story_last_service/haruto_angry",
+    "file": "story_last_service/haruto_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a0ed49bb-10d5-41d7-b508-87a95567f2ae",
+      "promptHash": "9147658cfab2633c97a7fb230354c0cd",
+      "seed": "ls-haruto-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 30716,
+      "createdAt": "2026-09-10T21:24:31.005Z"
+    }
+  },
+  "story_last_service/haruto_annoyed": {
+    "assetKey": "story_last_service/haruto_annoyed",
+    "file": "story_last_service/haruto_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "02656e94-b037-4ac5-b960-4b00f7062d98",
+      "promptHash": "0b30b631d9b9d1d617e45fb2093007c4",
+      "seed": "ls-haruto-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 17050,
+      "createdAt": "2026-09-10T21:24:15.245Z"
+    }
+  },
+  "story_last_service/haruto_confused": {
+    "assetKey": "story_last_service/haruto_confused",
+    "file": "story_last_service/haruto_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "914ce005-1ea9-4481-a336-735f5449587c",
+      "promptHash": "639396f4d64d3c94e1531affd1ca76ee",
+      "seed": "ls-haruto-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 21777,
+      "createdAt": "2026-09-10T21:24:15.510Z"
+    }
+  },
+  "story_last_service/haruto_neutral": {
+    "assetKey": "story_last_service/haruto_neutral",
+    "file": "story_last_service/haruto_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "526c1c06-40cc-478f-812b-4c6732dc0c09",
+      "promptHash": "647fa24549a980fc4cc3547fca535265",
+      "seed": "ls-haruto-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19431,
+      "createdAt": "2026-09-10T21:24:00.281Z"
+    }
+  },
+  "story_last_service/haruto_surprised": {
+    "assetKey": "story_last_service/haruto_surprised",
+    "file": "story_last_service/haruto_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e420edfe-2dd3-45e0-8fec-b8e223f7b3ac",
+      "promptHash": "ea560b7a1a6f89d6dc19a06f2c5fa309",
+      "seed": "ls-haruto-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 18627,
+      "createdAt": "2026-09-10T21:24:11.547Z"
+    }
+  },
+  "story_last_service/haruto_warm": {
+    "assetKey": "story_last_service/haruto_warm",
+    "file": "story_last_service/haruto_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "44d53820-da48-4ea2-9beb-2d7a6de45386",
+      "promptHash": "ac788d1e9ee667f9df6f811ade18f42b",
+      "seed": "ls-haruto-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 12056,
+      "createdAt": "2026-09-10T21:23:52.907Z"
+    }
+  },
+  "story_last_service/haruto_worried": {
+    "assetKey": "story_last_service/haruto_worried",
+    "file": "story_last_service/haruto_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Haruto Gin, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4a4db9b2-cced-4a7d-a5b8-97428ae8606e",
+      "promptHash": "2ec7c5dc0f58cde44ba9eaf94015d5b6",
+      "seed": "ls-haruto-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 13588,
+      "createdAt": "2026-09-10T21:24:25.145Z"
+    }
+  },
+  "story_last_service/keiko": {
+    "assetKey": "story_last_service/keiko",
+    "file": "story_last_service/keiko.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, Forty-six, your aunt, and the person who has kept this restaurant open for nineteen years",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2c54201a-a1ea-46ff-af38-7ef67bb129f8",
+      "promptHash": "f6f4feb14617c84feaaf48008d3af1ba",
+      "seed": "ls-keiko-01",
+      "costUsd": 0.02404,
+      "latencyMs": 21043,
+      "createdAt": "2026-09-10T21:24:52.481Z"
+    }
+  },
+  "story_last_service/keiko_amused": {
+    "assetKey": "story_last_service/keiko_amused",
+    "file": "story_last_service/keiko_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "55dc838e-eb70-42b2-a5d7-ccf57794f851",
+      "promptHash": "178cefd887deb2aae92ee8007001a778",
+      "seed": "ls-keiko-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 21456,
+      "createdAt": "2026-09-10T21:24:52.908Z"
+    }
+  },
+  "story_last_service/keiko_angry": {
+    "assetKey": "story_last_service/keiko_angry",
+    "file": "story_last_service/keiko_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "add8d52c-7af7-4a2c-a532-9e797eedd4ca",
+      "promptHash": "e092734e1bbf84df1eaa87fc76020a52",
+      "seed": "ls-keiko-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 21932,
+      "createdAt": "2026-09-10T21:25:15.875Z"
+    }
+  },
+  "story_last_service/keiko_annoyed": {
+    "assetKey": "story_last_service/keiko_annoyed",
+    "file": "story_last_service/keiko_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3b1914f0-29e3-49a0-8233-48cf4679deca",
+      "promptHash": "e5211e735a2649233c456d95e21aa1c1",
+      "seed": "ls-keiko-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 29298,
+      "createdAt": "2026-09-10T21:25:22.214Z"
+    }
+  },
+  "story_last_service/keiko_confused": {
+    "assetKey": "story_last_service/keiko_confused",
+    "file": "story_last_service/keiko_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4bbaa3ec-7f22-4425-bd6e-2253d460eb8f",
+      "promptHash": "b93175f8f1dc15bc8a9d0e07f8a3d622",
+      "seed": "ls-keiko-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 20428,
+      "createdAt": "2026-09-10T21:25:12.916Z"
+    }
+  },
+  "story_last_service/keiko_neutral": {
+    "assetKey": "story_last_service/keiko_neutral",
+    "file": "story_last_service/keiko_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c11823ad-dcb7-44dd-8c09-e55549e370fe",
+      "promptHash": "4dc4898707e3edfa8be0dea68bb6bafc",
+      "seed": "ls-keiko-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 22481,
+      "createdAt": "2026-09-10T21:24:53.932Z"
+    }
+  },
+  "story_last_service/keiko_surprised": {
+    "assetKey": "story_last_service/keiko_surprised",
+    "file": "story_last_service/keiko_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "963acc14-55e6-424f-bdd9-4ee45bf5d386",
+      "promptHash": "c016ebacff4345fcaddd523533668269",
+      "seed": "ls-keiko-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 29838,
+      "createdAt": "2026-09-10T21:25:18.391Z"
+    }
+  },
+  "story_last_service/keiko_warm": {
+    "assetKey": "story_last_service/keiko_warm",
+    "file": "story_last_service/keiko_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e68c9fd0-16c8-452b-8982-6f3fb6fb5911",
+      "promptHash": "0666c8bf34d796083d5250621c5aeed4",
+      "seed": "ls-keiko-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 17094,
+      "createdAt": "2026-09-10T21:24:48.546Z"
+    }
+  },
+  "story_last_service/keiko_worried": {
+    "assetKey": "story_last_service/keiko_worried",
+    "file": "story_last_service/keiko_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Keiko, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f25c8f85-3524-412d-8720-725b50a89330",
+      "promptHash": "67e0819d92dc49dfc6255456e2be2d93",
+      "seed": "ls-keiko-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 21544,
+      "createdAt": "2026-09-10T21:25:34.469Z"
+    }
+  },
+  "story_last_service/key": {
+    "assetKey": "story_last_service/key",
+    "file": "story_last_service/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Last Service",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9c1a6381-ea1c-4405-a405-4b28f799f6ba",
+      "promptHash": "15b04ba7c1daf256fcff0f746984f669",
+      "seed": "sv_last_service_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37135,
+      "createdAt": "2026-09-10T21:19:08.968Z"
+    }
+  },
+  "story_last_service/mina": {
+    "assetKey": "story_last_service/mina",
+    "file": "story_last_service/mina.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, Twenty-four, sous-chef at the best restaurant in the city, and the one they call the knife that never hesitates",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0241225f-7cd9-4812-b6c9-0e8e25a9fc6c",
+      "promptHash": "28d53cbe89dff86fa1f405c638a6513c",
+      "seed": "ls-mina-01",
+      "costUsd": 0.02404,
+      "latencyMs": 22363,
+      "createdAt": "2026-09-10T21:21:40.984Z"
+    }
+  },
+  "story_last_service/mina_amused": {
+    "assetKey": "story_last_service/mina_amused",
+    "file": "story_last_service/mina_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b157101b-b973-45cb-b446-43a0613707d0",
+      "promptHash": "4de451b6ca2735139cdfdaebd4192891",
+      "seed": "ls-mina-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23013,
+      "createdAt": "2026-09-10T21:21:41.648Z"
+    }
+  },
+  "story_last_service/mina_angry": {
+    "assetKey": "story_last_service/mina_angry",
+    "file": "story_last_service/mina_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b22501a0-ab6f-4f71-b03f-5c0d8c174ea6",
+      "promptHash": "176d4592b3a7cb8eac2ca37bfea2af39",
+      "seed": "ls-mina-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 29862,
+      "createdAt": "2026-09-10T21:22:19.197Z"
+    }
+  },
+  "story_last_service/mina_annoyed": {
+    "assetKey": "story_last_service/mina_annoyed",
+    "file": "story_last_service/mina_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "471af3f7-6816-4cfc-ae21-9a15a71bba90",
+      "promptHash": "ede8e00a645b456446eaa350d4c51a17",
+      "seed": "ls-mina-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 23250,
+      "createdAt": "2026-09-10T21:22:12.583Z"
+    }
+  },
+  "story_last_service/mina_confused": {
+    "assetKey": "story_last_service/mina_confused",
+    "file": "story_last_service/mina_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c8746a48-fe4a-429e-bf31-71871eec7511",
+      "promptHash": "36bf5e348cf95118bc504179edf5e7a6",
+      "seed": "ls-mina-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 22701,
+      "createdAt": "2026-09-10T21:22:12.035Z"
+    }
+  },
+  "story_last_service/mina_neutral": {
+    "assetKey": "story_last_service/mina_neutral",
+    "file": "story_last_service/mina_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "48973e6e-5f87-4d20-af3c-b064b5b8c42a",
+      "promptHash": "9ff4484e6886762a33387ec48eb77edc",
+      "seed": "ls-mina-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 19889,
+      "createdAt": "2026-09-10T21:21:38.522Z"
+    }
+  },
+  "story_last_service/mina_surprised": {
+    "assetKey": "story_last_service/mina_surprised",
+    "file": "story_last_service/mina_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "38c4ffbc-79ec-45c8-a6e8-0c45d95bb3d9",
+      "promptHash": "ecacde6383e021f37ae99dd571036b93",
+      "seed": "ls-mina-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 31001,
+      "createdAt": "2026-09-10T21:22:20.321Z"
+    }
+  },
+  "story_last_service/mina_warm": {
+    "assetKey": "story_last_service/mina_warm",
+    "file": "story_last_service/mina_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "09809e2a-29f4-4bef-ad49-b95bbe3b082a",
+      "promptHash": "0e118adf5c5e267cc75b7ecf11fd5c54",
+      "seed": "ls-mina-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 30065,
+      "createdAt": "2026-09-10T21:21:48.699Z"
+    }
+  },
+  "story_last_service/mina_worried": {
+    "assetKey": "story_last_service/mina_worried",
+    "file": "story_last_service/mina_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mina Saegusa, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6bd25e75-bb46-4653-856f-32eecf5fb13b",
+      "promptHash": "2a99e8211fb0638567f5e93674b97581",
+      "seed": "ls-mina-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 29852,
+      "createdAt": "2026-09-10T21:22:41.897Z"
+    }
+  },
+  "story_last_service/reina": {
+    "assetKey": "story_last_service/reina",
+    "file": "story_last_service/reina.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, Thirty-five, food critic, and the person in this city whose four hundred words can fill a thirty-seat room for a year",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "16e1e0b9-4794-44e8-b49e-9b80d2390ce3",
+      "promptHash": "20c526c6c24d9d96923ac1c7b63fcc92",
+      "seed": "ls-reina-01",
+      "costUsd": 0.02404,
+      "latencyMs": 19803,
+      "createdAt": "2026-09-10T21:48:16.566Z"
+    }
+  },
+  "story_last_service/reina_amused": {
+    "assetKey": "story_last_service/reina_amused",
+    "file": "story_last_service/reina_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0d5bc3af-0f5e-4bc6-8ba2-9fb75e5da5a0",
+      "promptHash": "e2ce3027af09dd6412fcc0f72b6baaf7",
+      "seed": "ls-reina-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 30596,
+      "createdAt": "2026-09-10T21:49:22.569Z"
+    }
+  },
+  "story_last_service/reina_angry": {
+    "assetKey": "story_last_service/reina_angry",
+    "file": "story_last_service/reina_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "166c4d12-5aa9-4f78-8e30-e33e3c8207ba",
+      "promptHash": "07b330271091e2279f74d4ced9daf7be",
+      "seed": "ls-reina-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 15570,
+      "createdAt": "2026-09-10T21:50:49.519Z"
+    }
+  },
+  "story_last_service/reina_annoyed": {
+    "assetKey": "story_last_service/reina_annoyed",
+    "file": "story_last_service/reina_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "437132c7-4986-483e-9c07-bdf7d582f6fc",
+      "promptHash": "b103d29493fb7a2e30f5a4422b8f51b9",
+      "seed": "ls-reina-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 19615,
+      "createdAt": "2026-09-10T21:50:33.940Z"
+    }
+  },
+  "story_last_service/reina_confused": {
+    "assetKey": "story_last_service/reina_confused",
+    "file": "story_last_service/reina_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1ca0c54b-5cd7-4d58-9d1c-65acf7be3dcb",
+      "promptHash": "54a70e128d3aa5699870fed78a9ed638",
+      "seed": "ls-reina-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 30407,
+      "createdAt": "2026-09-10T21:50:14.316Z"
+    }
+  },
+  "story_last_service/reina_neutral": {
+    "assetKey": "story_last_service/reina_neutral",
+    "file": "story_last_service/reina_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d2da984d-db1e-439e-a478-f684d98ffe73",
+      "promptHash": "ab9c6256a61b175f7e05a80afe1312cd",
+      "seed": "ls-reina-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 18075,
+      "createdAt": "2026-09-10T21:48:34.648Z"
+    }
+  },
+  "story_last_service/reina_surprised": {
+    "assetKey": "story_last_service/reina_surprised",
+    "file": "story_last_service/reina_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "93ca22ea-c0c9-4cba-9ce5-265abc5eac77",
+      "promptHash": "ba034e8a699057b2edbe398cf7812541",
+      "seed": "ls-reina-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 21318,
+      "createdAt": "2026-09-10T21:49:43.898Z"
+    }
+  },
+  "story_last_service/reina_warm": {
+    "assetKey": "story_last_service/reina_warm",
+    "file": "story_last_service/reina_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "94ccc27f-cc26-4381-a8b7-b192f65e3289",
+      "promptHash": "83d431aa7f129b3d95fd58bf95f6d58b",
+      "seed": "ls-reina-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 17302,
+      "createdAt": "2026-09-10T21:48:51.964Z"
+    }
+  },
+  "story_last_service/reina_worried": {
+    "assetKey": "story_last_service/reina_worried",
+    "file": "story_last_service/reina_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Reina Kado, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f86a98ca-4b5a-4d45-a6d5-70efee7e0010",
+      "promptHash": "a993f696114d4ee9acff425462ef44a3",
+      "seed": "ls-reina-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 20436,
+      "createdAt": "2026-09-10T21:51:09.964Z"
+    }
+  },
+  "story_last_service/stage_akari_dining": {
+    "assetKey": "story_last_service/stage_akari_dining",
+    "file": "story_last_service/stage_akari_dining.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Akari Dining Room: Thirty seats: eleven at the counter, five tables of two, three of four.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e361d591-4c82-4b48-ab28-b766992c3784",
+      "promptHash": "bf3697f6eb5fe775ea0943fd02d83606",
+      "seed": "sv_last_service_1:loc:akari_dining:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36428,
+      "createdAt": "2026-09-10T21:20:09.374Z"
+    }
+  },
+  "story_last_service/stage_akari_kitchen": {
+    "assetKey": "story_last_service/stage_akari_kitchen",
+    "file": "story_last_service/stage_akari_kitchen.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Akari Kitchen: Six metres by three.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ded33ee3-8ebe-43bb-856e-6fcfcd16dc1f",
+      "promptHash": "e8efb4400087d5ac29520bf9bed9cd22",
+      "seed": "sv_last_service_1:loc:akari_kitchen:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 36260,
+      "createdAt": "2026-09-10T21:20:09.193Z"
+    }
+  },
+  "story_last_service/stage_akari_office": {
+    "assetKey": "story_last_service/stage_akari_office",
+    "file": "story_last_service/stage_akari_office.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Office: A cupboard with a desk in it, a chair that came from the dining room in 2011, a filing box, a wall calendar with a date circled in it, and one page from a ventilation firm that has been sitting on the desk for five weeks.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "39e4d42b-e939-4782-94ed-ef0c16c9ec7e",
+      "promptHash": "6c7e504153478409c3d240be5cf720fb",
+      "seed": "sv_last_service_1:loc:akari_office:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35283,
+      "createdAt": "2026-09-10T21:20:08.230Z"
+    }
+  },
+  "story_last_service/stage_culinary_school": {
+    "assetKey": "story_last_service/stage_culinary_school",
+    "file": "story_last_service/stage_culinary_school.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Culinary School: Four teaching kitchens, a demonstration theatre and a hundred and forty students who mostly will not still be cooking in six years.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dcb994e7-79e4-43b0-8291-96a29fb6e06a",
+      "promptHash": "ee10c6d0a5bd57d83137cd1aef0ecf3e",
+      "seed": "sv_last_service_1:loc:culinary_school:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34088,
+      "createdAt": "2026-09-10T21:21:17.198Z"
+    }
+  },
+  "story_last_service/stage_fish_market": {
+    "assetKey": "story_last_service/stage_fish_market",
+    "file": "story_last_service/stage_fish_market.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Fish Market: Five in the morning, wet concrete, forty stalls and an auction floor.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "93d0d2bd-4a8f-45c3-a81a-522f5afda362",
+      "promptHash": "5c0dcb4ed8861bffb3ee52ad65ce7a95",
+      "seed": "sv_last_service_1:loc:fish_market:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37112,
+      "createdAt": "2026-09-10T21:20:44.163Z"
+    }
+  },
+  "story_last_service/stage_night_market": {
+    "assetKey": "story_last_service/stage_night_market",
+    "file": "story_last_service/stage_night_market.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Night Market: Forty stalls, one street, and a queue outside one of them that has not been under twenty people since March.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9b08d2ca-8dd7-4d6f-a516-2ee562ad3ba6",
+      "promptHash": "51b4f18b9ca5d78591f1acdca8578d62",
+      "seed": "sv_last_service_1:loc:night_market:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40197,
+      "createdAt": "2026-09-10T21:20:49.405Z"
+    }
+  },
+  "story_last_service/stage_supplier_yard": {
+    "assetKey": "story_last_service/stage_supplier_yard",
+    "file": "story_last_service/stage_supplier_yard.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Supplier’s Yard: A loading bay, a cold store and a small office with a man in it who has known this family for eleven years, likes them, and has an accounts department that does not care about that at all.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f0b070c3-f423-4b0e-b8eb-b1585d98d937",
+      "promptHash": "84b4394b1d152b51fff4fe6aad7e1004",
+      "seed": "sv_last_service_1:loc:supplier_yard:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34861,
+      "createdAt": "2026-09-10T21:20:43.105Z"
+    }
+  },
+  "story_last_service/stage_the_arcade_street": {
+    "assetKey": "story_last_service/stage_the_arcade_street",
+    "file": "story_last_service/stage_the_arcade_street.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Street: A tram line, a covered arcade, a laundry, a bar with eleven seats and three other places that serve food.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b614b0c2-2059-41e0-b075-ab0bdd4fe9d2",
+      "promptHash": "91a5e84337f94bbb9e0fba8b82bdb098",
+      "seed": "sv_last_service_1:loc:the_arcade_street:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34094,
+      "createdAt": "2026-09-10T21:20:07.041Z"
+    }
+  },
+  "story_last_service/stage_the_back_alley": {
+    "assetKey": "story_last_service/stage_the_back_alley",
+    "file": "story_last_service/stage_the_back_alley.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Back Alley: Two metres of wet concrete between the back door and the bins, with a crate everybody sits on, an extractor outlet above it and a view of exactly one strip of sky.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5be296b7-d476-44c4-a72e-9194d5f4db3b",
+      "promptHash": "e1cd3e242124bf36cff9d050e4e6ee6a",
+      "seed": "sv_last_service_1:loc:the_back_alley:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 18469,
+      "createdAt": "2026-09-10T21:19:28.139Z"
+    }
+  },
+  "story_last_service/stage_the_hotel": {
+    "assetKey": "story_last_service/stage_the_hotel",
+    "file": "story_last_service/stage_the_hotel.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Hotel Kitchen: A banquet operation doing four hundred covers of one menu, with a brigade of twenty and a system that works whether or not anybody in it is inspired.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "146660e7-d4a8-47d3-ae8d-074c2b19f279",
+      "promptHash": "1fa59f1c0abfb552337189805e4c02e5",
+      "seed": "sv_last_service_1:loc:the_hotel:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 33803,
+      "createdAt": "2026-09-10T21:21:17.971Z"
+    }
+  },
+  "story_last_service/stage_vanta": {
+    "assetKey": "story_last_service/stage_vanta",
+    "file": "story_last_service/stage_vanta.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "VANTA: Eighteen covers a sitting, two sittings, a kitchen with eleven people in it and a pass that never raises its voice.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5eeda7d0-041d-48f6-b33a-1a13ebd577fb",
+      "promptHash": "7c2e759cc77a839ba0f141761b279255",
+      "seed": "sv_last_service_1:loc:vanta:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 31223,
+      "createdAt": "2026-09-10T21:20:40.614Z"
+    }
+  },
+  "story_last_service/takumi": {
+    "assetKey": "story_last_service/takumi",
+    "file": "story_last_service/takumi.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, Twenty-three, one burner and a griddle at the night market, four hundred covers a night, and a queue that has not been under twenty since March",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "7166048a-b149-4561-87c9-2ef9192a7116",
+      "promptHash": "e9674e805dec6f4d80e2d1eb6401c5a1",
+      "seed": "ls-takumi-01",
+      "costUsd": 0.01372,
+      "latencyMs": 16779,
+      "createdAt": "2026-09-10T21:22:59.248Z"
+    }
+  },
+  "story_last_service/takumi_amused": {
+    "assetKey": "story_last_service/takumi_amused",
+    "file": "story_last_service/takumi_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1c1cb974-8c42-46c4-ac69-0ffbee9a6324",
+      "promptHash": "87bcf9137ed2d78400573f90227d16cf",
+      "seed": "ls-takumi-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 19067,
+      "createdAt": "2026-09-10T21:23:01.552Z"
+    }
+  },
+  "story_last_service/takumi_angry": {
+    "assetKey": "story_last_service/takumi_angry",
+    "file": "story_last_service/takumi_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2224d88d-f0c1-48db-bed6-e9e34c5de209",
+      "promptHash": "ebc012e2b671558476406d13c9454477",
+      "seed": "ls-takumi-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 16990,
+      "createdAt": "2026-09-10T21:23:22.504Z"
+    }
+  },
+  "story_last_service/takumi_annoyed": {
+    "assetKey": "story_last_service/takumi_annoyed",
+    "file": "story_last_service/takumi_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1884141b-259f-4618-8d2d-a893e52bd55f",
+      "promptHash": "a154d7bad0d95cee5e09076285c2d354",
+      "seed": "ls-takumi-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 15701,
+      "createdAt": "2026-09-10T21:23:20.421Z"
+    }
+  },
+  "story_last_service/takumi_confused": {
+    "assetKey": "story_last_service/takumi_confused",
+    "file": "story_last_service/takumi_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "29a73093-1d45-4dd6-b988-e2a7402d3513",
+      "promptHash": "1933163e2d9dee0d5e3a70fd2cd887e9",
+      "seed": "ls-takumi-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 17286,
+      "createdAt": "2026-09-10T21:23:18.844Z"
+    }
+  },
+  "story_last_service/takumi_neutral": {
+    "assetKey": "story_last_service/takumi_neutral",
+    "file": "story_last_service/takumi_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a558e955-0212-422b-a8df-946083e9a7ae",
+      "promptHash": "ed12ebd0068d5eef6f08315f0182e836",
+      "seed": "ls-takumi-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 23024,
+      "createdAt": "2026-09-10T21:23:05.507Z"
+    }
+  },
+  "story_last_service/takumi_surprised": {
+    "assetKey": "story_last_service/takumi_surprised",
+    "file": "story_last_service/takumi_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8c531399-a242-4fd6-9b36-6f2fc5f15da4",
+      "promptHash": "6f4cd17ee4e47f2513ccbdc4de99c1de",
+      "seed": "ls-takumi-01:surprised",
+      "costUsd": 0.05488,
+      "latencyMs": 30967,
+      "createdAt": "2026-09-10T21:23:30.223Z"
+    }
+  },
+  "story_last_service/takumi_warm": {
+    "assetKey": "story_last_service/takumi_warm",
+    "file": "story_last_service/takumi_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bfbf9aa1-5d7f-4438-bfcb-7cc9cdfee21f",
+      "promptHash": "488f67f926681a18533bf03bdda5eb6f",
+      "seed": "ls-takumi-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 22226,
+      "createdAt": "2026-09-10T21:23:04.710Z"
+    }
+  },
+  "story_last_service/takumi_worried": {
+    "assetKey": "story_last_service/takumi_worried",
+    "file": "story_last_service/takumi_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Takumi Arashi, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4fd2f183-d7b5-42a9-bc10-cdb98bdacfcf",
+      "promptHash": "9e4058a3985bcd0ecd714fe39f46cd79",
+      "seed": "ls-takumi-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 21476,
+      "createdAt": "2026-09-10T21:23:40.331Z"
+    }
+  },
   "story_nine_weeks/cass": {
     "assetKey": "story_nine_weeks/cass",
     "file": "story_nine_weeks/cass.png",
@@ -19491,6 +20916,25 @@
       "costUsd": 0.01372,
       "latencyMs": 19215,
       "createdAt": "2026-09-10T16:30:16.686Z"
+    }
+  },
+  "story_last_service/cover": {
+    "assetKey": "story_last_service/cover",
+    "file": "story_last_service/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Last Service: Thirty seats. Thirty days. One kitchen.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v3-anime",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5f62e0fc-44ae-4ed1-8988-f5cc5a015acf",
+      "promptHash": "b184c5190893a4048d1c52608683f3ca",
+      "seed": "sv_last_service_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.21952,
+      "latencyMs": 99565,
+      "createdAt": "2026-09-10T21:55:39.702Z"
     }
   }
 }
