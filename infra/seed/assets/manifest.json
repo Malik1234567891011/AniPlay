@@ -9061,5 +9061,1791 @@
       "latencyMs": 34625,
       "createdAt": "2026-09-10T16:44:09.574Z"
     }
+  },
+  "story_window_seven/mara_confused": {
+    "assetKey": "story_window_seven/mara_confused",
+    "file": "story_window_seven/mara_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5f2d3e3e-0e71-4097-a7df-4c4adeae7c8e",
+      "promptHash": "882ef2eb05dbdd3c5f4350a987e51094",
+      "seed": "window7-mara-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18735,
+      "createdAt": "2026-09-10T16:44:17.311Z"
+    }
+  },
+  "story_window_seven/mara_angry": {
+    "assetKey": "story_window_seven/mara_angry",
+    "file": "story_window_seven/mara_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "605f4d09-a7b4-4ab3-a954-38e83facfaf1",
+      "promptHash": "5ae563faab0449b9456052a84834d160",
+      "seed": "window7-mara-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 15588,
+      "createdAt": "2026-09-10T16:44:17.905Z"
+    }
+  },
+  "story_window_seven/mara_annoyed": {
+    "assetKey": "story_window_seven/mara_annoyed",
+    "file": "story_window_seven/mara_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b73f232f-a6eb-4ea5-b03a-6a098908b430",
+      "promptHash": "b474c5d5447298edd38bc4eb5dcf2004",
+      "seed": "window7-mara-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 37026,
+      "createdAt": "2026-09-10T16:44:36.607Z"
+    }
+  },
+  "story_window_seven/selene_neutral": {
+    "assetKey": "story_window_seven/selene_neutral",
+    "file": "story_window_seven/selene_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "28b5d0fc-5561-4435-b1d8-a93b362fea56",
+      "promptHash": "7c40e0da859f5bcb5706bc6fcecb2e28",
+      "seed": "window7-selene-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19404,
+      "createdAt": "2026-09-10T16:44:36.722Z"
+    }
+  },
+  "story_window_seven/mara_worried": {
+    "assetKey": "story_window_seven/mara_worried",
+    "file": "story_window_seven/mara_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mara Ellison, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e094f4f3-1baf-462e-bba1-8d804a1745c5",
+      "promptHash": "5542c2b18776294961118aef676e5ce8",
+      "seed": "window7-mara-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 32912,
+      "createdAt": "2026-09-10T16:44:42.492Z"
+    }
+  },
+  "story_window_seven/selene_amused": {
+    "assetKey": "story_window_seven/selene_amused",
+    "file": "story_window_seven/selene_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b9315d65-12c3-465b-9247-57ab999b5a8d",
+      "promptHash": "b439d47e5025c2b3781448a43534e2bd",
+      "seed": "window7-selene-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 16189,
+      "createdAt": "2026-09-10T16:44:52.802Z"
+    }
+  },
+  "story_window_seven/selene_warm": {
+    "assetKey": "story_window_seven/selene_warm",
+    "file": "story_window_seven/selene_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2a25f315-a6e1-4e05-91d3-a1314f63df6d",
+      "promptHash": "5c010bb6ff6dafa0c3f4f1f30337eb43",
+      "seed": "window7-selene-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 35557,
+      "createdAt": "2026-09-10T16:44:53.468Z"
+    }
+  },
+  "story_window_seven/selene_surprised": {
+    "assetKey": "story_window_seven/selene_surprised",
+    "file": "story_window_seven/selene_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f461e604-5841-44b4-980a-b3d047558316",
+      "promptHash": "b2ee6362af9d0dcebd74d82f34aaf49f",
+      "seed": "window7-selene-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20124,
+      "createdAt": "2026-09-10T16:44:56.849Z"
+    }
+  },
+  "story_window_seven/selene_confused": {
+    "assetKey": "story_window_seven/selene_confused",
+    "file": "story_window_seven/selene_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "de5b1e8a-dec4-48e2-acc5-5cf72b1f8d64",
+      "promptHash": "5510dee41c02f537de282b9597d827fc",
+      "seed": "window7-selene-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18546,
+      "createdAt": "2026-09-10T16:45:01.048Z"
+    }
+  },
+  "story_window_seven/selene_annoyed": {
+    "assetKey": "story_window_seven/selene_annoyed",
+    "file": "story_window_seven/selene_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "68f7f99f-38ed-4105-8f19-4d88fb68603c",
+      "promptHash": "0ec93c194e2056b9443743172d196de4",
+      "seed": "window7-selene-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 17974,
+      "createdAt": "2026-09-10T16:45:10.779Z"
+    }
+  },
+  "story_window_seven/selene_worried": {
+    "assetKey": "story_window_seven/selene_worried",
+    "file": "story_window_seven/selene_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cf860fa6-667e-493e-96d4-43838124481c",
+      "promptHash": "ebe1d54d1b32ca28c5fb7aaeddee8def",
+      "seed": "window7-selene-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 15522,
+      "createdAt": "2026-09-10T16:45:12.374Z"
+    }
+  },
+  "story_window_seven/selene_angry": {
+    "assetKey": "story_window_seven/selene_angry",
+    "file": "story_window_seven/selene_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Dr Selene Voss, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bf4b856b-3281-4c26-9efa-bc2b046e051b",
+      "promptHash": "fe14da6873746c726937798dfcba6581",
+      "seed": "window7-selene-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 35022,
+      "createdAt": "2026-09-10T16:45:28.492Z"
+    }
+  },
+  "story_window_seven/halden_neutral": {
+    "assetKey": "story_window_seven/halden_neutral",
+    "file": "story_window_seven/halden_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8049e60d-06ab-4242-be70-5cd642ac7d14",
+      "promptHash": "921b13075a37cecaa440fdb1ab7beef3",
+      "seed": "window7-halden-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 33523,
+      "createdAt": "2026-09-10T16:45:34.575Z"
+    }
+  },
+  "story_window_seven/halden_amused": {
+    "assetKey": "story_window_seven/halden_amused",
+    "file": "story_window_seven/halden_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c3686d94-985b-45c5-ae6c-e3439b34fe04",
+      "promptHash": "bda17f87941b707059f090ef968c74eb",
+      "seed": "window7-halden-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 22226,
+      "createdAt": "2026-09-10T16:45:34.603Z"
+    }
+  },
+  "story_window_seven/halden_warm": {
+    "assetKey": "story_window_seven/halden_warm",
+    "file": "story_window_seven/halden_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "23d997b0-762b-46c7-b240-583e9bc0340c",
+      "promptHash": "7687b0879d0ce856c1bd8cdf6bcacd9d",
+      "seed": "window7-halden-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 33054,
+      "createdAt": "2026-09-10T16:45:43.838Z"
+    }
+  },
+  "story_window_seven/halden_surprised": {
+    "assetKey": "story_window_seven/halden_surprised",
+    "file": "story_window_seven/halden_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6f4de69f-aeb0-4e06-a8f8-0c28665a9a1a",
+      "promptHash": "122b73d55c03ba794a2a8c02bd4ccd0e",
+      "seed": "window7-halden-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 19986,
+      "createdAt": "2026-09-10T16:45:48.480Z"
+    }
+  },
+  "story_window_seven/halden_annoyed": {
+    "assetKey": "story_window_seven/halden_annoyed",
+    "file": "story_window_seven/halden_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "68d06a07-a448-464d-b4ab-aeeb8cb2883f",
+      "promptHash": "e0ebdc06d3d8bde8e35c1df99a35441a",
+      "seed": "window7-halden-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18529,
+      "createdAt": "2026-09-10T16:45:53.139Z"
+    }
+  },
+  "story_window_seven/halden_confused": {
+    "assetKey": "story_window_seven/halden_confused",
+    "file": "story_window_seven/halden_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "14f91713-0899-4e9f-bc82-f7a8747ef2cb",
+      "promptHash": "959ac20a4803935b076873a78a84bca7",
+      "seed": "window7-halden-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 20139,
+      "createdAt": "2026-09-10T16:45:54.719Z"
+    }
+  },
+  "story_window_seven/halden_angry": {
+    "assetKey": "story_window_seven/halden_angry",
+    "file": "story_window_seven/halden_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e45a2dbb-7625-48ef-a6f8-fbf48f2634e8",
+      "promptHash": "fe3d93b0529157bb994f0580e3d49aa9",
+      "seed": "window7-halden-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 23701,
+      "createdAt": "2026-09-10T16:46:07.542Z"
+    }
+  },
+  "story_window_seven/juno_neutral": {
+    "assetKey": "story_window_seven/juno_neutral",
+    "file": "story_window_seven/juno_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d00b6ff8-e2bc-4db4-8191-588f6dd0912d",
+      "promptHash": "b5f697d999b524e2f8c7fbe1128bd569",
+      "seed": "window7-juno-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 21093,
+      "createdAt": "2026-09-10T16:46:14.240Z"
+    }
+  },
+  "story_window_seven/juno_warm": {
+    "assetKey": "story_window_seven/juno_warm",
+    "file": "story_window_seven/juno_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0ba08d5e-66c2-4e4e-a903-df2ceb9c516f",
+      "promptHash": "71718f9c26ed823174dcaaca87abe2d9",
+      "seed": "window7-juno-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 21454,
+      "createdAt": "2026-09-10T16:46:16.176Z"
+    }
+  },
+  "story_window_seven/halden_worried": {
+    "assetKey": "story_window_seven/halden_worried",
+    "file": "story_window_seven/halden_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Director Elias Halden, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "54ae1803-72f2-4702-b2bd-f882de56c3d5",
+      "promptHash": "cbbe932185e6978b61d95efc6d78e3e9",
+      "seed": "window7-halden-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 32547,
+      "createdAt": "2026-09-10T16:46:21.043Z"
+    }
+  },
+  "story_window_seven/juno_surprised": {
+    "assetKey": "story_window_seven/juno_surprised",
+    "file": "story_window_seven/juno_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4b07e15c-f4ec-4eb0-8100-a849b3e135dc",
+      "promptHash": "de41cd34f64af8827dbcbb181de1cc7f",
+      "seed": "window7-juno-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20618,
+      "createdAt": "2026-09-10T16:46:34.867Z"
+    }
+  },
+  "story_window_seven/juno_confused": {
+    "assetKey": "story_window_seven/juno_confused",
+    "file": "story_window_seven/juno_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "059cf7b4-cbaf-43c6-b3c7-3a84b4570f69",
+      "promptHash": "118a41e2f88402b5b20ae58c2c95d4d4",
+      "seed": "window7-juno-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 25325,
+      "createdAt": "2026-09-10T16:46:41.510Z"
+    }
+  },
+  "story_window_seven/juno_annoyed": {
+    "assetKey": "story_window_seven/juno_annoyed",
+    "file": "story_window_seven/juno_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d30c4e68-2f87-4c09-ada9-dd568466d6a8",
+      "promptHash": "5dc61c0c424e89639263337ae88d9005",
+      "seed": "window7-juno-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 20597,
+      "createdAt": "2026-09-10T16:46:41.646Z"
+    }
+  },
+  "story_window_seven/juno_amused": {
+    "assetKey": "story_window_seven/juno_amused",
+    "file": "story_window_seven/juno_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fc8a3f85-8885-4d53-a478-95c61ba802c2",
+      "promptHash": "dd133daade47c9fb795d62724cec7a0b",
+      "seed": "window7-juno-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34124,
+      "createdAt": "2026-09-10T16:46:41.668Z"
+    }
+  },
+  "story_window_seven/juno_angry": {
+    "assetKey": "story_window_seven/juno_angry",
+    "file": "story_window_seven/juno_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d37c1399-fc7c-430f-8bbe-4ce9b1ea897d",
+      "promptHash": "1b307b797fb68f16f812a484d0b0ce6a",
+      "seed": "window7-juno-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 19585,
+      "createdAt": "2026-09-10T16:46:54.461Z"
+    }
+  },
+  "story_window_seven/ash_warm": {
+    "assetKey": "story_window_seven/ash_warm",
+    "file": "story_window_seven/ash_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "30114ec3-984d-48b8-aead-5556a9ac5bd1",
+      "promptHash": "0d8dab4d0acda417a180e62ddc467d6c",
+      "seed": "window7-ash-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 19721,
+      "createdAt": "2026-09-10T16:47:01.393Z"
+    }
+  },
+  "story_window_seven/ash_neutral": {
+    "assetKey": "story_window_seven/ash_neutral",
+    "file": "story_window_seven/ash_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0cdab629-0a01-4e8e-ab1e-34d845bdc9f2",
+      "promptHash": "7798f0bed7351e158481d2b545bba204",
+      "seed": "window7-ash-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 20013,
+      "createdAt": "2026-09-10T16:47:01.665Z"
+    }
+  },
+  "story_window_seven/juno_worried": {
+    "assetKey": "story_window_seven/juno_worried",
+    "file": "story_window_seven/juno_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Juno Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "aa0482e8-27ba-4ce4-968a-bf3273a1f4a0",
+      "promptHash": "35f53d200f1572a8489fda7b36fd69fa",
+      "seed": "window7-juno-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 20396,
+      "createdAt": "2026-09-10T16:47:01.913Z"
+    }
+  },
+  "story_window_seven/ash_annoyed": {
+    "assetKey": "story_window_seven/ash_annoyed",
+    "file": "story_window_seven/ash_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4ded9add-5ff1-4992-8683-77acd468696a",
+      "promptHash": "437a591c426f76fef24c8aeab76632f1",
+      "seed": "window7-ash-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 17196,
+      "createdAt": "2026-09-10T16:47:19.114Z"
+    }
+  },
+  "story_window_seven/ash_surprised": {
+    "assetKey": "story_window_seven/ash_surprised",
+    "file": "story_window_seven/ash_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b69c5510-a318-422f-a19d-bd595c6ed621",
+      "promptHash": "aa325a43bcaff4fdcfe53bf360e23f97",
+      "seed": "window7-ash-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20092,
+      "createdAt": "2026-09-10T16:47:21.490Z"
+    }
+  },
+  "story_window_seven/ash_amused": {
+    "assetKey": "story_window_seven/ash_amused",
+    "file": "story_window_seven/ash_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "11d1b08d-672b-4fe5-9cba-105a812736bc",
+      "promptHash": "6b1bb26aadd8442046b2afdb756a2df9",
+      "seed": "window7-ash-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 37400,
+      "createdAt": "2026-09-10T16:47:31.875Z"
+    }
+  },
+  "story_window_seven/ash_angry": {
+    "assetKey": "story_window_seven/ash_angry",
+    "file": "story_window_seven/ash_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fa087303-3e3a-4c08-8651-ed7c325f5df2",
+      "promptHash": "0f28050c03fa530ce666e494ef1b3467",
+      "seed": "window7-ash-01:angry",
+      "costUsd": 0.00632,
+      "latencyMs": 15789,
+      "createdAt": "2026-09-10T16:47:34.906Z"
+    }
+  },
+  "story_window_seven/ash_confused": {
+    "assetKey": "story_window_seven/ash_confused",
+    "file": "story_window_seven/ash_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e1232a5c-bd8c-481f-9c59-e16f68a82c90",
+      "promptHash": "93c4514d4cb8f629a530131cbf06be49",
+      "seed": "window7-ash-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 34092,
+      "createdAt": "2026-09-10T16:47:35.769Z"
+    }
+  },
+  "story_window_seven/ash_worried": {
+    "assetKey": "story_window_seven/ash_worried",
+    "file": "story_window_seven/ash_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tobin Ash, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9144691e-6708-45dc-9ec7-fc48014d6310",
+      "promptHash": "e4cd39ef0048834225cd8f30524f84ed",
+      "seed": "window7-ash-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 20153,
+      "createdAt": "2026-09-10T16:47:41.648Z"
+    }
+  },
+  "story_good_morning_husband/stage_the_kitchen": {
+    "assetKey": "story_good_morning_husband/stage_the_kitchen",
+    "file": "story_good_morning_husband/stage_the_kitchen.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Kitchen: Four steps from the bed and the brightest room in the flat.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "bb5dd659-8756-48f8-9744-550b1ce11774",
+      "promptHash": "d23719e71842d1cb7a4024009867c96d",
+      "seed": "sv_good_morning_husband_1:loc:the_kitchen:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 22767,
+      "createdAt": "2026-09-10T16:48:04.972Z"
+    }
+  },
+  "story_good_morning_husband/stage_the_spare_room": {
+    "assetKey": "story_good_morning_husband/stage_the_spare_room",
+    "file": "story_good_morning_husband/stage_the_spare_room.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Spare Room: Eleven square metres containing a drying rack, four boxes nobody has opened since the move, a folded cot still in its packaging, and an exercise bike.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "2ec899c4-8355-437c-8f25-4bfaeac4d39f",
+      "promptHash": "524ec644218f26e9eb38e1d41a15f580",
+      "seed": "sv_good_morning_husband_1:loc:the_spare_room:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16318,
+      "createdAt": "2026-09-10T16:48:21.296Z"
+    }
+  },
+  "story_good_morning_husband/key": {
+    "assetKey": "story_good_morning_husband/key",
+    "file": "story_good_morning_husband/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Good Morning, Husband",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "fa016930-4373-46bc-876c-b9230210c1d1",
+      "promptHash": "b46c707e55eb545a15a06ab9bc09e62b",
+      "seed": "sv_good_morning_husband_1:key:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 41934,
+      "createdAt": "2026-09-10T16:48:24.138Z"
+    }
+  },
+  "story_good_morning_husband/stage_apartment_8b": {
+    "assetKey": "story_good_morning_husband/stage_apartment_8b",
+    "file": "story_good_morning_husband/stage_apartment_8b.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Apartment 8B: A living room with a good sofa and a bad rug, eight floors up over a street with a tram on it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "25e9c52f-d388-4905-9a57-206fac9235cc",
+      "promptHash": "f5e2335c76cc955bee257da040987b8c",
+      "seed": "sv_good_morning_husband_1:loc:apartment_8b:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 43023,
+      "createdAt": "2026-09-10T16:48:25.228Z"
+    }
+  },
+  "story_good_morning_husband/stage_the_balcony": {
+    "assetKey": "story_good_morning_husband/stage_the_balcony",
+    "file": "story_good_morning_husband/stage_the_balcony.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Balcony: Big enough for two chairs if one person turns sideways.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5055da6f-bc7f-41ca-844b-341689d61a14",
+      "promptHash": "026cc1e372f29cb3521f45f401fa83e4",
+      "seed": "sv_good_morning_husband_1:loc:the_balcony:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 25931,
+      "createdAt": "2026-09-10T16:48:47.232Z"
+    }
+  },
+  "story_good_morning_husband/stage_riverside_park": {
+    "assetKey": "story_good_morning_husband/stage_riverside_park",
+    "file": "story_good_morning_husband/stage_riverside_park.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Riverside Park: A long green strip beside brown water, a running path, and a bench with a plaque on it that the two of you have a joke about.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ff1de2bd-4793-4327-9f0d-78db0e4b7296",
+      "promptHash": "7d1ba490a23b9d059a5ee4b7b8634bc7",
+      "seed": "sv_good_morning_husband_1:loc:riverside_park:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16607,
+      "createdAt": "2026-09-10T16:49:03.843Z"
+    }
+  },
+  "story_good_morning_husband/stage_aster_market": {
+    "assetKey": "story_good_morning_husband/stage_aster_market",
+    "file": "story_good_morning_husband/stage_aster_market.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Aster Market Street: Four blocks of greengrocer, hardware shop, a bakery with a queue, and the launderette where the machines are better than the one in the building.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6bf789a4-385a-42e6-b346-a5087416809f",
+      "promptHash": "f1b445df330987def7859634ffeee11a",
+      "seed": "sv_good_morning_husband_1:loc:aster_market:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39911,
+      "createdAt": "2026-09-10T16:49:04.055Z"
+    }
+  },
+  "story_good_morning_husband/stage_the_usual_place": {
+    "assetKey": "story_good_morning_husband/stage_the_usual_place",
+    "file": "story_good_morning_husband/stage_the_usual_place.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Usual Place: Nine tables, a specials board nobody has updated since spring, and a couple who run it and have opinions about the two of you.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1eff38ed-9fc0-4dfc-9233-429a75ecef4c",
+      "promptHash": "0d975322d782799c3a0fc05556b2f6a7",
+      "seed": "sv_good_morning_husband_1:loc:the_usual_place:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 38848,
+      "createdAt": "2026-09-10T16:49:04.081Z"
+    }
+  },
+  "story_good_morning_husband/cover": {
+    "assetKey": "story_good_morning_husband/cover",
+    "file": "story_good_morning_husband/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Good Morning, Husband: Four years married. You just met her.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3463c853-b852-40a2-9d84-febdb9f3ffb7",
+      "promptHash": "babe4a9f4dcb81cccb3ecdfa034def74",
+      "seed": "sv_good_morning_husband_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.21952,
+      "latencyMs": 101031,
+      "createdAt": "2026-09-10T16:49:23.222Z"
+    }
+  },
+  "story_good_morning_husband/stage_platform_eleven": {
+    "assetKey": "story_good_morning_husband/stage_platform_eleven",
+    "file": "story_good_morning_husband/stage_platform_eleven.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Platform 11: A platform at the end of the station that the map does not have and the board does not list.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3e61819d-1f75-4e0c-8c58-3a3ff623b4f8",
+      "promptHash": "21cfcc84d36299a409d20909aa8239ad",
+      "seed": "sv_good_morning_husband_1:loc:platform_eleven:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 16923,
+      "createdAt": "2026-09-10T16:49:40.354Z"
+    }
+  },
+  "story_good_morning_husband/stage_central_station": {
+    "assetKey": "story_good_morning_husband/stage_central_station",
+    "file": "story_good_morning_husband/stage_central_station.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Aster City Central: Ten platforms under a glass roof, a board that flicks, and a night staff of about four.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9db83dda-d04e-468a-8d6e-4b85dae95159",
+      "promptHash": "16c979b114a694a7761be86d16547f2d",
+      "seed": "sv_good_morning_husband_1:loc:central_station:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40452,
+      "createdAt": "2026-09-10T16:49:44.536Z"
+    }
+  },
+  "story_good_morning_husband/stage_mori_house": {
+    "assetKey": "story_good_morning_husband/stage_mori_house",
+    "file": "story_good_morning_husband/stage_mori_house.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Mori House: A narrow house on a hill with too many shoes in the hall and a kitchen that runs at a volume nobody in it considers loud.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "190ec59c-c72d-4ee0-9320-375d57caad5b",
+      "promptHash": "2fb72c4304cb496f363c268fdd246eeb",
+      "seed": "sv_good_morning_husband_1:loc:mori_house:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 42406,
+      "createdAt": "2026-09-10T16:49:46.466Z"
+    }
+  },
+  "story_good_morning_husband/stage_hana_studio": {
+    "assetKey": "story_good_morning_husband/stage_hana_studio",
+    "file": "story_good_morning_husband/stage_hana_studio.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Studio: One floor of a converted print works, eleven people, and a wall of models made out of card.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0c06655f-5e1a-4d4c-9226-3e8d5ea858f1",
+      "promptHash": "728cd75d7e343b927f127a3cdb29bdb6",
+      "seed": "sv_good_morning_husband_1:loc:hana_studio:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 45819,
+      "createdAt": "2026-09-10T16:49:49.667Z"
+    }
+  },
+  "story_good_morning_husband/hana": {
+    "assetKey": "story_good_morning_husband/hana",
+    "file": "story_good_morning_husband/hana.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, Your wife of four years. Product designer, and the person this whole life is arranged around",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "78a2c0c7-4860-4688-88f8-ce0840ea7290",
+      "promptHash": "26a23d21738c74e08d492deb33c2abc8",
+      "seed": "gmh-hana-01",
+      "costUsd": 0.02404,
+      "latencyMs": 23157,
+      "createdAt": "2026-09-10T16:50:03.514Z"
+    }
+  },
+  "story_good_morning_husband/emi": {
+    "assetKey": "story_good_morning_husband/emi",
+    "file": "story_good_morning_husband/emi.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, Hana’s closest friend since art school, and not yours",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0c376212-2aa7-471c-9a4d-aa3f953a8cc1",
+      "promptHash": "9979fe466b5ae33cf0663ecf76f8c32f",
+      "seed": "gmh-emi-01",
+      "costUsd": 0.00632,
+      "latencyMs": 20027,
+      "createdAt": "2026-09-10T16:50:04.568Z"
+    }
+  },
+  "story_good_morning_husband/kenji": {
+    "assetKey": "story_good_morning_husband/kenji",
+    "file": "story_good_morning_husband/kenji.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, Hana’s older brother. Runs a flooring firm with four vans and eleven opinions",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4abd7e0b-6920-4340-a983-60ecfa9c6560",
+      "promptHash": "39dd839982d5ae73673d41482a61b2e8",
+      "seed": "gmh-kenji-01",
+      "costUsd": 0.01372,
+      "latencyMs": 20156,
+      "createdAt": "2026-09-10T16:50:06.628Z"
+    }
+  },
+  "story_good_morning_husband/nao": {
+    "assetKey": "story_good_morning_husband/nao",
+    "file": "story_good_morning_husband/nao.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, Night supervisor at the station, and the only person who will say the platform number out loud",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "97bb1eb3-6c71-4586-9413-05944285caf5",
+      "promptHash": "984355e44ab8cb3ef490cbc3eef1c7ce",
+      "seed": "gmh-nao-01",
+      "costUsd": 0.00632,
+      "latencyMs": 18592,
+      "createdAt": "2026-09-10T16:50:22.111Z"
+    }
+  },
+  "story_good_morning_husband/lucia": {
+    "assetKey": "story_good_morning_husband/lucia",
+    "file": "story_good_morning_husband/lucia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, Your best friend in this life, which is a fact you are taking on trust",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "644532f7-2462-42b0-9047-d4d451e3457a",
+      "promptHash": "438c130bc47391005faf0007974b9539",
+      "seed": "gmh-lucia-01",
+      "costUsd": 0.05488,
+      "latencyMs": 35693,
+      "createdAt": "2026-09-10T16:50:25.380Z"
+    }
+  },
+  "story_good_morning_husband/hana_warm": {
+    "assetKey": "story_good_morning_husband/hana_warm",
+    "file": "story_good_morning_husband/hana_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e27d2043-90f8-4b12-96f9-49c401a19d61",
+      "promptHash": "baaa79435da988c213c2d19d5a36c93c",
+      "seed": "gmh-hana-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 26000,
+      "createdAt": "2026-09-10T16:50:32.631Z"
+    }
+  },
+  "story_good_morning_husband/hana_neutral": {
+    "assetKey": "story_good_morning_husband/hana_neutral",
+    "file": "story_good_morning_husband/hana_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "934d2bad-50f3-4b28-ae14-4556469b39ec",
+      "promptHash": "10ad88da3fdc7a431c6abf3ec7cd1e68",
+      "seed": "gmh-hana-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 34926,
+      "createdAt": "2026-09-10T16:50:39.498Z"
+    }
+  },
+  "story_good_morning_husband/hana_surprised": {
+    "assetKey": "story_good_morning_husband/hana_surprised",
+    "file": "story_good_morning_husband/hana_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c8be9702-fe93-4714-8d1c-b042f83ef57b",
+      "promptHash": "26fdb00e5ee2e9f3245bf02305a6ea02",
+      "seed": "gmh-hana-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 21547,
+      "createdAt": "2026-09-10T16:50:46.932Z"
+    }
+  },
+  "story_good_morning_husband/hana_amused": {
+    "assetKey": "story_good_morning_husband/hana_amused",
+    "file": "story_good_morning_husband/hana_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8f760c5e-db04-47e7-81f5-f6f8f253ce51",
+      "promptHash": "b71b586a7c7626ec55f28ac4dba64958",
+      "seed": "gmh-hana-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34582,
+      "createdAt": "2026-09-10T16:50:56.696Z"
+    }
+  },
+  "story_good_morning_husband/hana_confused": {
+    "assetKey": "story_good_morning_husband/hana_confused",
+    "file": "story_good_morning_husband/hana_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "136f4dec-7fb4-46cb-87da-a0a05ea03180",
+      "promptHash": "65aa4fd2c417dc176b6f8a5c2c046a83",
+      "seed": "gmh-hana-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 24787,
+      "createdAt": "2026-09-10T16:50:57.421Z"
+    }
+  },
+  "story_good_morning_husband/hana_angry": {
+    "assetKey": "story_good_morning_husband/hana_angry",
+    "file": "story_good_morning_husband/hana_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1bcce93a-07ab-46bc-bfa2-76bfc6b63fb4",
+      "promptHash": "fe99258dffcca3e27a0a3fd5ccd4771e",
+      "seed": "gmh-hana-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 18883,
+      "createdAt": "2026-09-10T16:51:05.820Z"
+    }
+  },
+  "story_good_morning_husband/hana_annoyed": {
+    "assetKey": "story_good_morning_husband/hana_annoyed",
+    "file": "story_good_morning_husband/hana_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3e322669-dba9-4381-8e6f-4a35404e6c30",
+      "promptHash": "1e56a2f2f508a74334f0e4e48acc4e06",
+      "seed": "gmh-hana-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 33221,
+      "createdAt": "2026-09-10T16:51:12.723Z"
+    }
+  },
+  "story_good_morning_husband/emi_neutral": {
+    "assetKey": "story_good_morning_husband/emi_neutral",
+    "file": "story_good_morning_husband/emi_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "98bef859-d404-447f-9875-b70eeabc179d",
+      "promptHash": "8dfec0cd04bcdd47b4a0d3ebcda93545",
+      "seed": "gmh-emi-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 18897,
+      "createdAt": "2026-09-10T16:51:16.323Z"
+    }
+  },
+  "story_good_morning_husband/emi_warm": {
+    "assetKey": "story_good_morning_husband/emi_warm",
+    "file": "story_good_morning_husband/emi_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "03a4689d-d7eb-4d11-bc2b-c9a7add477f0",
+      "promptHash": "e1ebeb36c28d4ccd43294cefc54a1952",
+      "seed": "gmh-emi-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 19083,
+      "createdAt": "2026-09-10T16:51:24.908Z"
+    }
+  },
+  "story_good_morning_husband/emi_amused": {
+    "assetKey": "story_good_morning_husband/emi_amused",
+    "file": "story_good_morning_husband/emi_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6c24bb24-c848-4366-93a7-f6fdccaea4a2",
+      "promptHash": "f392cb06d6d099be59931d6e6e165adf",
+      "seed": "gmh-emi-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 17051,
+      "createdAt": "2026-09-10T16:51:29.782Z"
+    }
+  },
+  "story_good_morning_husband/hana_worried": {
+    "assetKey": "story_good_morning_husband/hana_worried",
+    "file": "story_good_morning_husband/hana_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Hana Mori, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f19fba84-40c7-4a31-93c7-1c4f7251c9b7",
+      "promptHash": "1bae6b663851a44bc7ed62a626281dec",
+      "seed": "gmh-hana-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 33819,
+      "createdAt": "2026-09-10T16:51:30.521Z"
+    }
+  },
+  "story_good_morning_husband/emi_surprised": {
+    "assetKey": "story_good_morning_husband/emi_surprised",
+    "file": "story_good_morning_husband/emi_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d4ef6843-cac1-4d92-a35b-e87fb2361673",
+      "promptHash": "32cfa7e923cecc2e77313f12dccf5af8",
+      "seed": "gmh-emi-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 15388,
+      "createdAt": "2026-09-10T16:51:31.719Z"
+    }
+  },
+  "story_good_morning_husband/emi_annoyed": {
+    "assetKey": "story_good_morning_husband/emi_annoyed",
+    "file": "story_good_morning_husband/emi_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3ed932f8-7463-4fee-959f-01aeba6d9973",
+      "promptHash": "8b3758355725b1147abf9a76b66a2b91",
+      "seed": "gmh-emi-01:annoyed",
+      "costUsd": 0.00632,
+      "latencyMs": 13752,
+      "createdAt": "2026-09-10T16:51:43.537Z"
+    }
+  },
+  "story_good_morning_husband/emi_confused": {
+    "assetKey": "story_good_morning_husband/emi_confused",
+    "file": "story_good_morning_husband/emi_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b85c73c1-06a8-43d1-8751-120c75bda2f7",
+      "promptHash": "bdacbf31abef5f23a9e0cacfa876dfac",
+      "seed": "gmh-emi-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18756,
+      "createdAt": "2026-09-10T16:51:43.668Z"
+    }
+  },
+  "story_good_morning_husband/emi_angry": {
+    "assetKey": "story_good_morning_husband/emi_angry",
+    "file": "story_good_morning_husband/emi_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ebbf1c77-cdff-40b5-8897-12e606717509",
+      "promptHash": "17529db106ba974578a236dc1f1c0b59",
+      "seed": "gmh-emi-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 18257,
+      "createdAt": "2026-09-10T16:51:48.783Z"
+    }
+  },
+  "story_good_morning_husband/kenji_warm": {
+    "assetKey": "story_good_morning_husband/kenji_warm",
+    "file": "story_good_morning_husband/kenji_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5daf62f4-125c-45f0-b580-3a83453e7045",
+      "promptHash": "a63718fe1ff21dc4653ec279f219b57c",
+      "seed": "gmh-kenji-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 18098,
+      "createdAt": "2026-09-10T16:52:01.775Z"
+    }
+  },
+  "story_good_morning_husband/emi_worried": {
+    "assetKey": "story_good_morning_husband/emi_worried",
+    "file": "story_good_morning_husband/emi_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Emi Takeda, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "53f18b87-bd82-4ce0-b373-a432ea5635bc",
+      "promptHash": "aad24b7be412d362e2046db0d15f7adf",
+      "seed": "gmh-emi-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 34903,
+      "createdAt": "2026-09-10T16:52:06.625Z"
+    }
+  },
+  "story_good_morning_husband/kenji_amused": {
+    "assetKey": "story_good_morning_husband/kenji_amused",
+    "file": "story_good_morning_husband/kenji_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "89957a3b-741a-4141-9e07-06a78be8948d",
+      "promptHash": "ca022393c6c4a82d70f9ce9713a562eb",
+      "seed": "gmh-kenji-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 18381,
+      "createdAt": "2026-09-10T16:52:07.172Z"
+    }
+  },
+  "story_good_morning_husband/kenji_neutral": {
+    "assetKey": "story_good_morning_husband/kenji_neutral",
+    "file": "story_good_morning_husband/kenji_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a4d873e8-1570-4652-b4a6-19a3c7394946",
+      "promptHash": "01500eb86135b48c70f48eac20918a49",
+      "seed": "gmh-kenji-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 34613,
+      "createdAt": "2026-09-10T16:52:18.157Z"
+    }
+  },
+  "story_good_morning_husband/kenji_surprised": {
+    "assetKey": "story_good_morning_husband/kenji_surprised",
+    "file": "story_good_morning_husband/kenji_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "96c9d3af-1a16-47b6-b8f8-41f42b89f9fe",
+      "promptHash": "89bb15c613b7c603ef92802e45bc15a1",
+      "seed": "gmh-kenji-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 21428,
+      "createdAt": "2026-09-10T16:52:23.207Z"
+    }
+  },
+  "story_good_morning_husband/kenji_confused": {
+    "assetKey": "story_good_morning_husband/kenji_confused",
+    "file": "story_good_morning_husband/kenji_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3ceb6346-b9f8-4031-ba53-47767d81b20d",
+      "promptHash": "409b8a97b46fb710aef24c8ef5ff6c59",
+      "seed": "gmh-kenji-01:confused",
+      "costUsd": 0.00632,
+      "latencyMs": 16950,
+      "createdAt": "2026-09-10T16:52:23.579Z"
+    }
+  },
+  "story_good_morning_husband/lucia_neutral": {
+    "assetKey": "story_good_morning_husband/lucia_neutral",
+    "file": "story_good_morning_husband/lucia_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "acf82ac6-598a-435f-99be-73701772a40b",
+      "promptHash": "f3accd02cc60216116fe771da27b897d",
+      "seed": "gmh-lucia-01:neutral",
+      "costUsd": 0.00632,
+      "latencyMs": 16943,
+      "createdAt": "2026-09-10T16:52:40.528Z"
+    }
+  },
+  "story_good_morning_husband/kenji_annoyed": {
+    "assetKey": "story_good_morning_husband/kenji_annoyed",
+    "file": "story_good_morning_husband/kenji_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "29c3aa0a-84a8-4516-b8dc-17fcb0730633",
+      "promptHash": "be217aca27df77aedc6a47c5dea7b7dc",
+      "seed": "gmh-kenji-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 35107,
+      "createdAt": "2026-09-10T16:52:42.285Z"
+    }
+  },
+  "story_good_morning_husband/kenji_angry": {
+    "assetKey": "story_good_morning_husband/kenji_angry",
+    "file": "story_good_morning_husband/kenji_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "517b1f55-e3e5-4acd-aa83-6b772019ae7c",
+      "promptHash": "aed19cf6d80c5a66f76cd634e34d6020",
+      "seed": "gmh-kenji-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 33930,
+      "createdAt": "2026-09-10T16:52:52.091Z"
+    }
+  },
+  "story_good_morning_husband/lucia_warm": {
+    "assetKey": "story_good_morning_husband/lucia_warm",
+    "file": "story_good_morning_husband/lucia_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "52a90087-4162-4a6b-b970-a63702710a04",
+      "promptHash": "81bb2d20dc550057f4e314e715650e87",
+      "seed": "gmh-lucia-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 16004,
+      "createdAt": "2026-09-10T16:52:56.540Z"
+    }
+  },
+  "story_good_morning_husband/kenji_worried": {
+    "assetKey": "story_good_morning_husband/kenji_worried",
+    "file": "story_good_morning_husband/kenji_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Kenji Mori, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "8990b53f-5fd9-4bec-b7e6-0c8f9cce8f90",
+      "promptHash": "dc86b0468f670c1cf173c24d98c41588",
+      "seed": "gmh-kenji-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 35842,
+      "createdAt": "2026-09-10T16:52:59.053Z"
+    }
+  },
+  "story_good_morning_husband/lucia_amused": {
+    "assetKey": "story_good_morning_husband/lucia_amused",
+    "file": "story_good_morning_husband/lucia_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "13aa7de3-3443-4d81-9b1c-e36e25174e0a",
+      "promptHash": "1ff316325e21880424b5a5234c253771",
+      "seed": "gmh-lucia-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 18705,
+      "createdAt": "2026-09-10T16:53:00.995Z"
+    }
+  },
+  "story_good_morning_husband/lucia_surprised": {
+    "assetKey": "story_good_morning_husband/lucia_surprised",
+    "file": "story_good_morning_husband/lucia_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cc43577e-49a3-4c7d-9926-b6e3508cf858",
+      "promptHash": "2fcff3b94b484efc7c93732c7d09a951",
+      "seed": "gmh-lucia-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20161,
+      "createdAt": "2026-09-10T16:53:12.257Z"
+    }
+  },
+  "story_good_morning_husband/lucia_confused": {
+    "assetKey": "story_good_morning_husband/lucia_confused",
+    "file": "story_good_morning_husband/lucia_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "002a7822-6e70-4807-90b3-de59a2793e01",
+      "promptHash": "9bce286ff32b2f8701e2f8e0753ad519",
+      "seed": "gmh-lucia-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 21065,
+      "createdAt": "2026-09-10T16:53:17.615Z"
+    }
+  },
+  "story_good_morning_husband/lucia_angry": {
+    "assetKey": "story_good_morning_husband/lucia_angry",
+    "file": "story_good_morning_husband/lucia_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "01afa9a1-1540-41c3-b811-37c23d0824c5",
+      "promptHash": "9b63b5f20486347c0b0deb4de7eca62c",
+      "seed": "gmh-lucia-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 32053,
+      "createdAt": "2026-09-10T16:53:33.054Z"
+    }
+  },
+  "story_good_morning_husband/lucia_worried": {
+    "assetKey": "story_good_morning_husband/lucia_worried",
+    "file": "story_good_morning_husband/lucia_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b2ae29d7-3e58-4a2e-ae04-9f8d4711c9bf",
+      "promptHash": "37cab50bf1a5d56a5258da3693d9a210",
+      "seed": "gmh-lucia-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 21451,
+      "createdAt": "2026-09-10T16:53:33.714Z"
+    }
+  },
+  "story_good_morning_husband/lucia_annoyed": {
+    "assetKey": "story_good_morning_husband/lucia_annoyed",
+    "file": "story_good_morning_husband/lucia_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Lucia Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6facbd81-17c9-42f0-adcb-50786882dec3",
+      "promptHash": "2fc76534b20738130cc492d9aee03a32",
+      "seed": "gmh-lucia-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 35658,
+      "createdAt": "2026-09-10T16:53:34.716Z"
+    }
+  },
+  "story_good_morning_husband/nao_warm": {
+    "assetKey": "story_good_morning_husband/nao_warm",
+    "file": "story_good_morning_husband/nao_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "25b55535-d59d-4772-8f8e-d4d965d88c04",
+      "promptHash": "189250d4269fc1451976e9e95023a411",
+      "seed": "gmh-nao-01:warm",
+      "costUsd": 0.01372,
+      "latencyMs": 18690,
+      "createdAt": "2026-09-10T16:53:51.751Z"
+    }
+  },
+  "story_good_morning_husband/nao_neutral": {
+    "assetKey": "story_good_morning_husband/nao_neutral",
+    "file": "story_good_morning_husband/nao_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "02bd9f01-4e98-4a78-91f2-8178aaefd2c3",
+      "promptHash": "1bdfbd407a1dacea775cfced07fcd5f3",
+      "seed": "gmh-nao-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 34733,
+      "createdAt": "2026-09-10T16:53:52.356Z"
+    }
+  },
+  "story_good_morning_husband/nao_surprised": {
+    "assetKey": "story_good_morning_husband/nao_surprised",
+    "file": "story_good_morning_husband/nao_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f824926c-9bca-4ee3-8885-f0d3e40d4f53",
+      "promptHash": "a09ab9305cc54998cf53b7b8bd3251ba",
+      "seed": "gmh-nao-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 18241,
+      "createdAt": "2026-09-10T16:53:52.963Z"
+    }
+  },
+  "story_good_morning_husband/nao_amused": {
+    "assetKey": "story_good_morning_husband/nao_amused",
+    "file": "story_good_morning_husband/nao_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "88a9268f-063c-43f2-90a3-3ca887c3044f",
+      "promptHash": "7219e8e834bea3a16b35bd4e66a9b5df",
+      "seed": "gmh-nao-01:amused",
+      "costUsd": 0.01372,
+      "latencyMs": 19734,
+      "createdAt": "2026-09-10T16:53:53.452Z"
+    }
+  },
+  "story_good_morning_husband/nao_confused": {
+    "assetKey": "story_good_morning_husband/nao_confused",
+    "file": "story_good_morning_husband/nao_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "14c92689-87b9-4b88-9cd4-01d70924ce29",
+      "promptHash": "ce8b13918168c114dd6b92b0704f613d",
+      "seed": "gmh-nao-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19864,
+      "createdAt": "2026-09-10T16:54:11.623Z"
+    }
+  },
+  "story_good_morning_husband/nao_worried": {
+    "assetKey": "story_good_morning_husband/nao_worried",
+    "file": "story_good_morning_husband/nao_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b2d9e838-46d5-4776-baee-9c3fadb09ee9",
+      "promptHash": "9db7ebd78e8f67562f55c10606afe3c4",
+      "seed": "gmh-nao-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 25258,
+      "createdAt": "2026-09-10T16:54:18.725Z"
+    }
+  },
+  "story_good_morning_husband/nao_annoyed": {
+    "assetKey": "story_good_morning_husband/nao_annoyed",
+    "file": "story_good_morning_husband/nao_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0bc1109b-5350-449d-a873-d8f78864eba9",
+      "promptHash": "49fe234bdb00e03a3ff848450a863fa1",
+      "seed": "gmh-nao-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 35510,
+      "createdAt": "2026-09-10T16:54:27.873Z"
+    }
+  },
+  "story_good_morning_husband/nao_angry": {
+    "assetKey": "story_good_morning_husband/nao_angry",
+    "file": "story_good_morning_husband/nao_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nao Ibarra, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4e86b5d8-d7ab-4c1c-8580-1012da816314",
+      "promptHash": "9dfb240b52acec7b17d16368d8c2d4f4",
+      "seed": "gmh-nao-01:angry",
+      "costUsd": 0.05488,
+      "latencyMs": 36544,
+      "createdAt": "2026-09-10T16:54:29.512Z"
+    }
   }
 }
