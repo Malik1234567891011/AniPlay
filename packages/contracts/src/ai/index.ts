@@ -200,7 +200,14 @@ export const BeatPlan = z
     mediaPlan: MediaPlan,
     memoryProposals: z.array(MemoryProposal),
     arcUpdates: z.array(z.record(z.unknown())),
-    wordBudget: z.number().int().min(20).max(220),
+    /**
+     * 500 is a ceiling, not a target. Raised from 220 with the product owner's
+     * explicit sign-off so a genuinely cinematic beat — a death, a betrayal, a
+     * season's turning point — can be written at the length it deserves. The
+     * per-turn budget is still computed from what actually happened, so
+     * ordinary play did not get longer when this number did.
+     */
+    wordBudget: z.number().int().min(20).max(500),
   })
   .strict();
 export type BeatPlan = z.infer<typeof BeatPlan>;

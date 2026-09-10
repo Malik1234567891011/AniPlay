@@ -17,6 +17,7 @@ import type {
 import {
   attributeModifier,
   charactersPresent,
+  composeStory,
   crewRoster,
   dcBandLabel,
   formatCheckMath,
@@ -148,7 +149,10 @@ export function toSessionSummary(record: SessionRecord, story: StoryVersion, sta
   };
 }
 
-export function toSceneState(story: StoryVersion, state: GameState): SessionSceneState {
+export function toSceneState(rawStory: StoryVersion, state: GameState): SessionSceneState {
+  // Spec §11.9 — the client sees the composed world, or a player standing in a
+  // place they made turns into a raw id on the HUD.
+  const story = composeStory(rawStory, state);
   const location = story.locations.find((l) => l.id === state.player.locationId);
 
   return {

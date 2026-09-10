@@ -249,6 +249,15 @@ export class ModelDirector implements Director {
             'Never invent an obstacle whose purpose is to keep the player inside the authored material. ' +
               'If they walk out, they are out, and where they arrive is somewhere you make up. If they ' +
               'abandon what the story wanted, the story is now about what they did instead.',
+            // Spec §11.9 — a name is what makes an invented thing reachable.
+            // A beat that says "the world outside is open and raw" is lovely
+            // and leaves the player nothing to walk into; one that says "the
+            // Ashgate Road" gives them somewhere to go, and the engine can
+            // make it real the moment they go there.
+            'When you invent a place or a person, NAME them, with a proper name, the first time they ' +
+              'appear — "the Moonlight Café", "Riku Sato", "the Ashgate Road" — not "a café" or "a man ' +
+              'behind the counter". A named thing is somewhere the player can go and someone they can ' +
+              'come back to; an unnamed one is scenery they cannot reach for.',
           ].join('\n'),
           state: directorPayload(context),
           task:

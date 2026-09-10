@@ -781,9 +781,10 @@ function capitalize(value: string): string {
  * the engine already decided, so nothing here is guesswork about importance —
  * it is a count of what actually occurred.
  *
- * The ceiling is 220 because the AI contract says so (`BeatPlan.wordBudget`,
- * maximum 220). Genuinely cinematic 400-word moments would need that contract
- * raised, which is not a change to make quietly.
+ * The ceiling is 500 (`BeatPlan.wordBudget`), raised from 220 deliberately so
+ * a death or a betrayal can be written at the length it deserves. Ordinary
+ * play did not get longer when that number did: the multiplier below is a
+ * count of what actually happened, and a quiet turn still lands near 60.
  */
 export function beatBudget(context: TurnContext, tierBudget: number): number {
   const { resolution, arc } = context;
@@ -838,8 +839,11 @@ export function beatBudget(context: TurnContext, tierBudget: number): number {
     weight += 0.4;
   }
 
-  const budget = Math.round(tierBudget * Math.max(0.5, Math.min(2.4, weight)));
-  return Math.max(30, Math.min(220, budget));
+  // The ceiling is 500 (raised from 220 with sign-off), and it is a ceiling
+  // rather than a target: only a turn that has genuinely earned it gets near.
+  // The multiplier is what decides, and it is a count of what happened.
+  const budget = Math.round(tierBudget * Math.max(0.5, Math.min(2.6, weight)));
+  return Math.max(30, Math.min(500, budget));
 }
 
 

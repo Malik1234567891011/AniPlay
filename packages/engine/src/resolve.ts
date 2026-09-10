@@ -400,7 +400,7 @@ function resolveAction(args: ResolveActionArgs): ActionOutcome {
       return resolveItemUse(args);
     case 'travel':
     case 'move':
-      return resolveTravel(args);
+      return isDeparture(args.story, args.state, action) ? resolveDeparture(args) : resolveTravel(args);
     case 'persuade':
     case 'deceive':
     case 'threaten':
@@ -421,7 +421,12 @@ function resolveAction(args: ResolveActionArgs): ActionOutcome {
     case 'wait':
       return resolveWait(args);
     default:
-      return resolveGenericCheck(args);
+      // "I leave and never come back" has no verb the parser recognises and
+      // used to become a generic check, which is how a decision to walk out of
+      // the story turned into a die roll and no movement.
+      return isDeparture(args.story, args.state, action)
+        ? resolveDeparture(args)
+        : resolveGenericCheck(args);
   }
 }
 
@@ -887,6 +892,14 @@ function resolveTravel(args: ResolveActionArgs): ActionOutcome {
       .map((edge) => story.locations.find((l) => l.id === edge.to)?.name)
       .filter((name): name is string => !!name);
 
+    // Spec §11.9 — someone who is plainly leaving is not making a mistake.
+    //
+    // This branch used to say "narrate the player reconsidering, invent no
+    // barrier and no new rule", which is the correct answer for a typo and the
+    // wrong one for somebody walking out of the story. Told to invent nothing,
+    // the writer produced beautiful unreachable scenery — "the world outside is
+    // open and raw" — and named nothing, so there was nothing for the player to
+    // walk into and nothing the engine could ever make real.
     return refusal(
       action,
       'UNKNOWN_LOCATION',
@@ -2126,3 +2139,78 @@ function undertakingId(raw: string): string {
 
 /** How long it takes to get somewhere the story only just mentioned. */
 const TRAVEL_TO_NEW_MINUTES = 25;
+
+/**
+ * Language that means "out", rather than "to a specific wrong place".
+ *
+ * The distinction the travel branch needs: "I go to the arhcive" is a typo and
+ * should be corrected; "I leave and never come back" is a decision and should
+ * be honoured.
+ */
+const LEAVING =
+  /\b(?:leave|leaving|walk out|walk away|get out|go away|run away|never (?:come|go) back|out of (?:here|town|the \w+)|away from|somewhere else|anywhere else|keep (?:going|walking)|put .* behind me)\b/i;
+
+/**
+ * Spec §11.9 — somebody who is plainly leaving is not making a mistake.
+ *
+ * Reached from the dispatcher rather than from inside `resolveTravel`, because
+ * the two ways a player actually writes this both used to miss it. "I walk out
+ * through the gate" resolves the gate they are standing in and became a
+ * no-op — "you are already at The Gate Arch" — and "I leave and never come
+ * back" carries no destination at all and fell through to a generic check.
+ * Both produced lovely prose about departing and a player who had not moved.
+ */
+function resolveDeparture(args: ResolveActionArgs): ActionOutcome {
+  const { story, state, action, nextMutationId } = args;
+  const here = story.locations.find((l) => l.id === state.player.locationId);
+      // They get somewhere, not just a paragraph about having gone. The name is
+      // derived from where they came from rather than invented — an address,
+      // not fiction — so the place is immediately real, returnable, and
+      // persistent, and the writer fills in what it is actually like.
+      const name = `Beyond ${here?.name ?? 'here'}`;
+      const promotion = promoteLocation(state, name, 'left', TRAVEL_TO_NEW_MINUTES, nextMutationId);
+
+      return {
+        checks: [],
+        mutations: [
+          ...promotion.mutations,
+          {
+            mutationId: nextMutationId(),
+            type: 'LOCATION_CHANGE',
+            subjectId: 'player',
+            reasonCode: 'LEFT_THE_MAP',
+            payload: { locationId: promotion.location!.id, firstVisit: true, generated: promotion.location },
+          },
+        ],
+        observableFacts: [`You leave ${here?.name ?? 'it'} behind.`],
+        privateFacts: [
+          {
+            visibility: 'SELF',
+            fact:
+              'The player is leaving the part of the world that was written for them, and that is allowed. ' +
+              'Do not stop them, do not invent a barrier, and do not have anyone call them back. ' +
+              'They are now somewhere new and it is yours to establish. NAME what is here — a proper name, ' +
+              '"the Ashgate Road", "the Moonlight Café" — and name anyone they meet, first time, every ' +
+              'time. A named place is somewhere they can go back to and the world can keep; an unnamed one ' +
+              'is scenery they can never reach for again.',
+          },
+        ],
+        timeCategory: 'SCENE',
+        normalized: { verb: 'travel', status: 'RESOLVED', locationId: promotion.location!.id, leaving: true },
+      };
+}
+
+/**
+ * Whether this turn is a departure rather than a trip.
+ *
+ * True only when the player used leaving language *and* is not heading
+ * somewhere real: naming a destination means they want that place, not out.
+ */
+function isDeparture(story: StoryVersion, state: GameState, action: IntentAction): boolean {
+  if (!LEAVING.test(`${action.method} ${action.declaredOutcome ?? ''}`)) return false;
+  const target = action.targets.find((t) => t.entityType === 'location');
+  const destination = story.locations.find((l) => l.id === target?.entityId);
+  // "Leave and go to the Commons" is a trip. "Walk out through the gate" names
+  // the room they are standing in, which is not a destination.
+  return !destination || destination.id === state.player.locationId;
+}

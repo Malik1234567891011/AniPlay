@@ -107,8 +107,8 @@ describe('length follows what happened', () => {
   });
 
   it('stays inside what the AI contract allows', () => {
-    // BeatPlan.wordBudget is 20–220 in ai_contracts.json. Everything, however
-    // dramatic, has to fit.
+    // BeatPlan.wordBudget is 20–500 in ai_contracts.json, raised from 220 with
+    // sign-off. Everything, however dramatic, still has to fit.
     const enormous = resolution({
       mutations: [
         mutation({ reasonCode: 'KILLED_BY_PLAYER' }),
@@ -121,13 +121,33 @@ describe('length follows what happened', () => {
       ],
     });
     const budget = budgetFor(enormous, 190);
-    expect(budget).toBeLessThanOrEqual(220);
+    expect(budget).toBeLessThanOrEqual(500);
     expect(budget).toBeGreaterThanOrEqual(30);
   });
 
   it('still respects what the player paid for', () => {
     const res = resolution({ mutations: [mutation({ type: 'QUEST_TRANSITION' })] });
     expect(budgetFor(res, 190)).toBeGreaterThan(budgetFor(res, 60));
+  });
+
+  it('lets a genuinely cinematic turn past the old 220 ceiling', () => {
+    const enormous = resolution({
+      mutations: [
+        mutation({ reasonCode: 'KILLED_BY_PLAYER' }),
+        mutation({ type: 'QUEST_TRANSITION' }),
+        mutation({ reasonCode: 'CREW_BETRAYAL' }),
+        mutation({ reasonCode: 'UNDERTAKING_BEGUN' }),
+        mutation({}), mutation({}), mutation({}),
+      ],
+      checks: [{ checkId: 'c', label: 'l', attribute: 'mind', skill: null, dc: 12, advantageLevel: 0, rolls: [20], keptRoll: 20, modifier: 2, total: 22, margin: 10, outcome: 'CRITICAL_SUCCESS' as never }],
+    });
+    expect(budgetFor(enormous, 190)).toBeGreaterThan(220);
+  });
+
+  it('does not make ordinary play longer just because the cap moved', () => {
+    // The whole risk of raising a ceiling. A quiet turn still gets a quiet
+    // amount of writing.
+    expect(budgetFor(resolution())).toBeLessThan(90);
   });
 
   it('produces real variance across a plausible run of turns', () => {
