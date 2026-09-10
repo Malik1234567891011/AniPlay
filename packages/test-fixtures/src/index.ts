@@ -12,7 +12,7 @@ import { LAST_FIVE as LAST_FIVE_RAW } from './last-five.js';
 import { HUSH_HOUSE } from './hush-house.js';
 import { WINDOW_SEVEN } from './window-seven.js';
 import { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
-import { ITACHI } from './itachi.js';
+import { ITACHI as ITACHI_RAW } from './itachi.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -26,9 +26,10 @@ export const RED_MOON = withDerivedAssetKeys(RED_MOON_RAW);
 export const SEVEN_DAYS = withDerivedAssetKeys(SEVEN_DAYS_RAW);
 export const BLACKWAKE = withDerivedAssetKeys(BLACKWAKE_RAW);
 export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
+export const ITACHI = withDerivedAssetKeys(ITACHI_RAW);
 
 /**
- * The four newest worlds ship without generated art, deliberately.
+ * Three of the newest worlds ship without generated art, deliberately.
  *
  * `withDerivedAssetKeys` fills in the key the image pipeline *would* produce,
  * which is right for a world whose art exists and wrong for one whose art has
@@ -40,7 +41,6 @@ export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
 export { HUSH_HOUSE } from './hush-house.js';
 export { WINDOW_SEVEN } from './window-seven.js';
 export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
-export { ITACHI } from './itachi.js';
 
 /**
  * The official launch catalog.
