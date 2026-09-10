@@ -6,16 +6,16 @@
     "alt": "Cover art for Blackwake: A broken ship. Nobody knows your name.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "db812673-174b-4e35-aab1-aab9d5244f3b",
-      "promptHash": "4eeaa6bd94541b64d8a32bc8b631bd1a",
-      "seed": "sv_blackwake_1:cover:plotbreak-cover-v2",
+      "requestId": "ea3598cd-4eed-469f-b793-c05094af1268",
+      "promptHash": "c10018d9f73e8478cdb01be631aac515",
+      "seed": "sv_blackwake_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.21952,
-      "latencyMs": 105400,
-      "createdAt": "2026-09-09T21:43:47.985Z"
+      "latencyMs": 95743,
+      "createdAt": "2026-09-10T21:55:04.652Z"
     }
   },
   "story_blackwake/harrow_bell": {
@@ -5216,12 +5216,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "4a49c552-6baf-4923-8836-5076db80a2b1",
-      "promptHash": "aa099aaef46e900e27c80b71ea344ffc",
+      "requestId": "53e73c34-df21-42ca-b71d-59c5db44c6c3",
+      "promptHash": "85ba65d7b566c8267a8fcc455aaa2087",
       "seed": "sv_itachi_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.21952,
-      "latencyMs": 89996,
-      "createdAt": "2026-09-10T21:20:49.476Z"
+      "latencyMs": 92428,
+      "createdAt": "2026-09-10T22:03:19.070Z"
     }
   },
   "story_itachi/danzo": {
@@ -7226,16 +7226,16 @@
     "alt": "Cover art for Last Five: Rebuild the team. Beat the five who left.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "21012507-d1a8-43c6-8047-790e8fcf210c",
-      "promptHash": "3a11467ec020d0bfb665bdbab43fd095",
-      "seed": "sv_last_five_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.21952,
-      "latencyMs": 96718,
-      "createdAt": "2026-09-09T22:21:20.883Z"
+      "requestId": "88fe3781-08bb-4ff2-89bf-0b833857e09f",
+      "promptHash": "7787fe172e4765d6b8212440cec72620",
+      "seed": "sv_last_five_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 34195,
+      "createdAt": "2026-09-10T21:55:54.765Z"
     }
   },
   "story_last_five/dai": {
@@ -9031,16 +9031,16 @@
     "alt": "Cover art for Nine Weeks: You came back. So did they.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "anima-v1",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "0f617ce1-b1c2-42d8-bd75-13d61e86e80f",
-      "promptHash": "a695d610badca8864ff779c18bc7d892",
-      "seed": "sv_nine_weeks_1:cover:anima-v1",
-      "costUsd": 0.02404,
-      "latencyMs": 30249,
-      "createdAt": "2026-09-09T08:57:55.801Z"
+      "requestId": "9c66f247-874a-4908-94b5-fdd1ec637fed",
+      "promptHash": "774858d9590446db1645a8c8cc6ac078",
+      "seed": "sv_nine_weeks_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.21952,
+      "latencyMs": 92975,
+      "createdAt": "2026-09-10T21:53:13.090Z"
     }
   },
   "story_nine_weeks/juno": {
@@ -9282,12 +9282,12 @@
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "1fc1d8fa-e691-43b1-b552-533932238e7f",
+      "requestId": "cdec3190-532b-4e2d-8f2a-1ab85345101c",
       "promptHash": "753d77426d57fb7629b95d8a69aff5f8",
       "seed": "sv_ninth_archive_1:cover:plotbreak-cover-v3-anime",
       "costUsd": 0.05488,
-      "latencyMs": 35961,
-      "createdAt": "2026-09-10T21:44:02.205Z"
+      "latencyMs": 35705,
+      "createdAt": "2026-09-10T21:46:57.568Z"
     }
   },
   "story_ninth_archive/kael": {
@@ -12318,16 +12318,16 @@
     "alt": "Cover art for Red Moon Brigade: You hunt monsters. You are becoming one.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "a6497fec-d4e7-41ad-b675-e0a85a3378bc",
-      "promptHash": "a26737376dc4f2402fa4892cf2c7cd0e",
-      "seed": "sv_red_moon_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.21952,
-      "latencyMs": 94524,
-      "createdAt": "2026-09-09T21:43:37.093Z"
+      "requestId": "7cc4c72f-5548-45df-92cd-6b83707d2437",
+      "promptHash": "5990b2bb60baa76171970cef78a2bd0c",
+      "seed": "sv_red_moon_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 36801,
+      "createdAt": "2026-09-10T21:56:47.273Z"
     }
   },
   "story_red_moon/elian": {
@@ -12698,16 +12698,16 @@
     "alt": "Cover art for The Salt Road: Eleven days of road. Nine days of water.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "anima-v1",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "4a801887-f305-43ec-8298-6374d9ef3124",
-      "promptHash": "0f02d800887a2a83c5f1ac9cfa972459",
-      "seed": "sv_salt_road_1:cover:anima-v1",
-      "costUsd": 0.00632,
-      "latencyMs": 17437,
-      "createdAt": "2026-09-09T05:54:01.329Z"
+      "requestId": "6ab4072a-f2fd-4f27-952b-7611515e6424",
+      "promptHash": "d5efd39412ed30aee89dfa3e72d83ee6",
+      "seed": "sv_salt_road_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.21952,
+      "latencyMs": 97098,
+      "createdAt": "2026-09-10T21:49:42.543Z"
     }
   },
   "story_salt_road/ferrow": {
@@ -14370,16 +14370,16 @@
     "alt": "Cover art for Seven Days to Midnight: The city ends Sunday. Only you remember.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "plotbreak-cover-v2",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "faf77885-ca81-493c-a0f8-011d380312d5",
-      "promptHash": "eecd55406d1a1eea18a9315e39a05be6",
-      "seed": "sv_seven_days_1:cover:plotbreak-cover-v2",
-      "costUsd": 0.21952,
-      "latencyMs": 99391,
-      "createdAt": "2026-09-09T21:43:41.975Z"
+      "requestId": "f2b9923c-109b-461c-807c-94597855c6da",
+      "promptHash": "0fd9036a22601855f7d0f52c5806d67d",
+      "seed": "sv_seven_days_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 38825,
+      "createdAt": "2026-09-10T21:57:41.782Z"
     }
   },
   "story_seven_days/elias": {
@@ -16289,16 +16289,16 @@
     "alt": "Cover art for The Tidewall: Your sister died holding the wall.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "anima-v1",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "f9d04306-789c-47cb-a7c5-58628932b564",
-      "promptHash": "70904aa2a2b6c320eb775cc0ea9bf89b",
-      "seed": "sv_tidewall_1:cover:anima-v1",
-      "costUsd": 0.01372,
-      "latencyMs": 22190,
-      "createdAt": "2026-09-09T08:52:46.425Z"
+      "requestId": "45cf5564-022f-4400-a7da-237785d30b6e",
+      "promptHash": "d632f76e02c57b11aa9ea03cf997052e",
+      "seed": "sv_tidewall_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 35988,
+      "createdAt": "2026-09-10T21:50:34.277Z"
     }
   },
   "story_tidewall/hollis": {
@@ -16517,16 +16517,16 @@
     "alt": "Cover art for The Unbound: Your school was dissolved. You were not.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "anima-v1",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "bae4edf7-3a3f-467b-a423-2fbb4b333355",
-      "promptHash": "9fc7a42a17a271e6f4391c1ab8414fc4",
-      "seed": "sv_unbound_1:cover:anima-v1",
-      "costUsd": 0.02404,
-      "latencyMs": 30607,
-      "createdAt": "2026-09-09T08:55:20.881Z"
+      "requestId": "b7d2408f-6182-4644-ac7e-656da58f3c4d",
+      "promptHash": "ed317dbf97adcd371e87750e71b23578",
+      "seed": "sv_unbound_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 34258,
+      "createdAt": "2026-09-10T21:51:24.310Z"
     }
   },
   "story_unbound/key": {
@@ -16742,19 +16742,19 @@
     "assetKey": "story_understudy/cover",
     "file": "story_understudy/cover.png",
     "kind": "COVER",
-    "alt": "Cover art for The Understudy: You know every line. Nobody knows you.",
+    "alt": "Cover art for The Understudy: You know the part. You are second choice.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "anima-v1",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "27aaf67c-db4f-4bed-bf5c-b98b027e9d8d",
-      "promptHash": "c5605ed71cc3356b65b579cb28bef2a3",
-      "seed": "sv_understudy_1:cover:anima-v1",
-      "costUsd": 0.00632,
-      "latencyMs": 17183,
-      "createdAt": "2026-09-09T05:52:44.663Z"
+      "requestId": "5e427a65-6d06-4961-9e53-8ce0ede75a2d",
+      "promptHash": "0435a73ad64329963dd04f95162c4c7b",
+      "seed": "sv_understudy_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 36356,
+      "createdAt": "2026-09-10T21:47:49.734Z"
     }
   },
   "story_understudy/key": {
