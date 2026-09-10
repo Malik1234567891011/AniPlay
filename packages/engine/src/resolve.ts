@@ -370,7 +370,20 @@ export function resolveIntent(options: ResolveOptions): Resolution {
   // treating it as optional. It is not optional, so it stops being one line
   // among many and becomes an instruction on the turn it matters, every time,
   // for as long as it is true.
-  for (const characterId of targetedCharacterIds(story, intent)) {
+  // Everybody it could matter to, not only whoever this turn names.
+  //
+  // This used to be `targetedCharacterIds` alone, so the reminder fired only
+  // when the new action resolved a target on the person who had been hit.
+  // "I go back and find Renna again" resolves no target — it is a `custom` —
+  // so the writer was told nothing and greeted the player normally, five
+  // separate times in one adversarial sweep. Walking back into a room with
+  // somebody you attacked is exactly when it matters, and it is the case the
+  // player will actually produce.
+  const couldRemember = new Set([
+    ...targetedCharacterIds(story, intent),
+    ...charactersPresent(state).map((c) => c.characterId),
+  ]);
+  for (const characterId of couldRemember) {
     if (!state.flags[`attacked:${characterId}`]) continue;
     const character = story.characters.find((c) => c.id === characterId);
     if (!character) continue;
@@ -1753,9 +1766,51 @@ function resolveSpeak(args: ResolveActionArgs): ActionOutcome {
     }
     const present = charactersPresent(state).some((c) => c.characterId === target.entityId);
     if (character && present) {
+      const free = resolveFreeAction(args);
+      // Said in front of other people, and therefore said in public.
+      //
+      // "I climb up onto the bar and shout: 'Everyone! Ask Juno what happened
+      // last September!'" produced `checks: []` and a single TIME_ADVANCE. The
+      // most consequential thing a player did in twenty-five turns left no
+      // trace an ending, a schedule or another character could ever read, in a
+      // world whose own sheet promises "People talk."
+      //
+      // No invented relationship maths — the dice did not roll and should not
+      // be made to. What is recorded is only what is true: it happened, these
+      // people heard it, and the world may use that.
+      const witnesses = charactersPresent(state)
+        .filter((c) => c.characterId !== target.entityId)
+        .map((c) => story.characters.find((sc) => sc.id === c.characterId))
+        .filter((c): c is NonNullable<typeof c> => !!c);
+
+      if (witnesses.length === 0) return { ...free, privateFacts: [standingInFrontOfYou(character.name)] };
+
       return {
-        ...resolveFreeAction(args),
-        privateFacts: [standingInFrontOfYou(character.name)],
+        ...free,
+        mutations: [
+          ...free.mutations,
+          {
+            mutationId: args.nextMutationId(),
+            type: 'FLAG_SET',
+            subjectId: 'session',
+            reasonCode: 'SPOKE_IN_PUBLIC',
+            payload: { flag: `heard:${character.id}`, value: true },
+          },
+        ],
+        observableFacts: [
+          ...free.observableFacts,
+          `Said to ${character.name} in front of ${witnesses.map((w) => w.name).join(' and ')}.`,
+        ],
+        privateFacts: [
+          standingInFrontOfYou(character.name),
+          {
+            visibility: 'SELF',
+            fact:
+              `This was said in public. ${witnesses.map((w) => w.name).join(' and ')} heard it and ` +
+              `${witnesses.length === 1 ? 'is' : 'are'} in the room. They react to having heard it, ` +
+              'even if they say nothing, and they may bring it up later.',
+          },
+        ],
       };
     }
     if (character && !present) {
