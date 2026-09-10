@@ -17,7 +17,7 @@ import type { TurnContext } from './context.js';
  * have no wish to explain myself to the Fleet this morning, you."
  */
 
-const context = { story: BLACKWAKE } as TurnContext;
+const context = { story: { ...BLACKWAKE, characters: [...BLACKWAKE.characters, { ...BLACKWAKE.characters[0]!, id: 'mina', name: 'Mina Arclight' }] } } as TurnContext;
 
 const speakerOf = (line: string) => blocksFrom(line, context)[0];
 
@@ -47,6 +47,19 @@ describe('who said this line', () => {
     } as TurnContext;
     expect(blocksFrom('Captain: "Move."', twoCaptains)[0]!.type).toBe('NARRATION');
     expect(blocksFrom('Alia: "Move."', twoCaptains)[0]!.speakerId).toBe('a');
+  });
+
+  it('keeps a speech that runs over several lines in one block', () => {
+    // Caught live: a long answer broke across newlines and arrived as four
+    // blocks, only the first of which knew who was talking.
+    const blocks = blocksFrom(
+      'Mina: "Honestly?\nSunday is low-key here.\nSome people go down to the market."\nA gull lands on the roof.',
+      context,
+    );
+    expect(blocks).toHaveLength(2);
+    expect(blocks[0]!.type).toBe('DIALOGUE');
+    expect(blocks[0]!.text).toContain('Some people go down to the market');
+    expect(blocks[1]!.type).toBe('NARRATION');
   });
 
   it('never rewrites the player’s name inside somebody’s speech', () => {

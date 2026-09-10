@@ -398,14 +398,17 @@ export function buildDeltas(context: TurnContext): StateDeltaPresentation[] {
     const p = mutation.payload as Record<string, unknown>;
     switch (mutation.type) {
       case 'RESOURCE_DELTA': {
-        const def = context.story.resources.find((r) => r.id === p.resourceId);
-        const amount = Number(p.amount ?? 0);
-        if (!def || amount === 0) break;
-        deltas.push({
-          mutationId: mutation.mutationId,
-          label: `${amount > 0 ? '+' : ''}${Math.round(amount)} ${def.name}`,
-          priority: 1,
-        });
+        // Deliberately no chip.
+        //
+        // "−10 Energy" appeared directly beneath prose that had just said "you
+        // feel it physically, a deep tiredness behind your eyes, as if you'd
+        // run for the train instead of just arriving". The prose is better at
+        // it, and a number with a resource name on it is the engine talking on
+        // the one screen that is supposed to be story — the same objection as
+        // "Risky · 9 Legs".
+        //
+        // What genuinely changed between people still gets a chip below, and
+        // the exact figures are on the world sheet for anyone who wants them.
         break;
       }
       case 'QUEST_TRANSITION': {

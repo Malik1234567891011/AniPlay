@@ -65,7 +65,7 @@ export function blocksFrom(text: string, context: TurnContext): NarrativeBlock[]
   const blocks: NarrativeBlock[] = [];
   const byName = speakerIndex(context);
 
-  for (const paragraph of text.split(/\n+/).map((p) => p.trim()).filter(Boolean)) {
+  for (const paragraph of paragraphs(text)) {
     const speech = SPEAKER_LINE.exec(paragraph);
     const speakerId = speech ? byName.get(speech[1]!.trim().toLowerCase()) : undefined;
 
@@ -91,6 +91,46 @@ export function blocksFrom(text: string, context: TurnContext): NarrativeBlock[]
     }
   }
   return blocks;
+}
+
+/**
+ * Paragraphs, with a speech that runs over several lines kept together.
+ *
+ * A writer that broke a long line of dialogue across newlines produced four
+ * blocks from one speech, and only the first carried the speaker — so Mina's
+ * answer arrived as `Mina: "Honestly?` followed by three orphan paragraphs of
+ * narration that were actually still her talking.
+ *
+ * A line whose quote has not closed keeps consuming the lines after it.
+ */
+function paragraphs(text: string): string[] {
+  const out: string[] = [];
+  let open: string | null = null;
+
+  for (const line of text.split(/\n+/).map((l) => l.trim()).filter(Boolean)) {
+    if (open !== null) {
+      open = `${open} ${line}`;
+      if (balancedQuotes(open)) {
+        out.push(open);
+        open = null;
+      }
+      continue;
+    }
+    if (SPEAKER_LINE.test(line) && !balancedQuotes(line)) {
+      open = line;
+      continue;
+    }
+    out.push(line);
+  }
+
+  if (open !== null) out.push(open);
+  return out;
+}
+
+/** Whether every quote opened in this text has been closed again. */
+function balancedQuotes(text: string): boolean {
+  const marks = text.match(/[“”"]/g) ?? [];
+  return marks.length % 2 === 0;
 }
 
 /**
