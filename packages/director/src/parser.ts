@@ -7,6 +7,7 @@ import type {
   Verb,
   Visibility,
 } from '@aniplay/contracts';
+import { nameKeys } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
 import {
   detectOutOfScope,
@@ -353,11 +354,13 @@ function resolveTargets(clause: string, context: ParseContext): IntentAction['ta
   // NPCs — exact first, then a tolerated near-match. Presence is the engine's
   // call; the parser's job is to say who was meant, including when the player
   // mistyped the name.
+  // Every word of a name, not only the first: a player who types "Veyra" means
+  // Captain Veyra Sol, and matching on "Captain" alone found nobody.
   for (const character of story.characters) {
-    const first = character.name.split(/\s+/)[0]!.toLowerCase();
-    if (lower.includes(character.name.toLowerCase()) || new RegExp(`\\b${escapeRegex(first)}\\b`, 'i').test(lower)) {
-      targets.push({ entityType: 'npc', entityId: character.id, displayName: character.name });
-    }
+    const matched = nameKeys(character.name).some((key) =>
+      new RegExp(`\\b${escapeRegex(key)}\\b`, 'i').test(lower),
+    );
+    if (matched) targets.push({ entityType: 'npc', entityId: character.id, displayName: character.name });
   }
 
   if (targets.length === 0) {

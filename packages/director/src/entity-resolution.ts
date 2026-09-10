@@ -1,4 +1,5 @@
 import type { ActionIntent, CharacterDef, GameState, StoryVersion } from '@aniplay/contracts';
+import { nameKeys } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
 
 /**
@@ -61,9 +62,7 @@ export function resolveCharacterMention(
 
   const candidates: Array<{ character: CharacterDef; name: string }> = [];
   for (const character of story.characters) {
-    candidates.push({ character, name: character.name.toLowerCase() });
-    const first = character.name.split(/\s+/)[0]?.toLowerCase();
-    if (first && first.length > 2) candidates.push({ character, name: first });
+    for (const key of nameKeys(character.name)) candidates.push({ character, name: key });
   }
 
   // Exact, on a word boundary.

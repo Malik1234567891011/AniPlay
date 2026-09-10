@@ -3,6 +3,7 @@ import type { BeatPlan } from '@aniplay/contracts';
 import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { buildMessages, SAFETY_POLICY, WRITER_POLICY, writerPayload } from './model-stages.js';
+import { nameKeys } from '@aniplay/contracts';
 import { buildDeltas } from './writer.js';
 
 /**
@@ -112,11 +113,7 @@ function speakerIndex(context: TurnContext): Map<string, string> {
   const ambiguous = new Set<string>();
 
   for (const character of context.story.characters) {
-    const keys = [character.name, ...character.name.split(/\s+/)]
-      .map((part) => part.toLowerCase())
-      .filter((part) => part.length >= 3);
-
-    for (const key of keys) {
+    for (const key of nameKeys(character.name)) {
       if (ambiguous.has(key)) continue;
       const existing = index.get(key);
       if (existing !== undefined && existing !== character.id) {

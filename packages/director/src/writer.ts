@@ -4,6 +4,7 @@ import type {
   NarrativeTurn,
   StateDeltaPresentation,
 } from '@aniplay/contracts';
+import { shortName } from '@aniplay/contracts';
 import { SeededRng, isSuccess, outcomeLabel } from '@aniplay/engine';
 import type { PresentCharacterContext, TurnContext } from './context.js';
 
@@ -245,8 +246,8 @@ function narrationSentence(context: TurnContext, rng: SeededRng): string {
     const witness = context.presentCharacters[0];
     const openers = witness
       ? [
-          `${witness.def.name.split(/\s+/)[0]} waits you out.`,
-          `${witness.def.name.split(/\s+/)[0]} has not moved.`,
+          `${shortName(witness.def.name)} waits you out.`,
+          `${shortName(witness.def.name)} has not moved.`,
           `The pause goes on a beat longer than it should.`,
         ]
       : [
@@ -299,7 +300,7 @@ function dialogueLine(
     (m) => m.reasonCode === 'ATTACKED_BY_PLAYER' || m.reasonCode === 'WITNESSED_VIOLENCE',
   );
   if (violence) {
-    const firstName = character.def.name.split(/\s+/)[0]!;
+    const firstName = shortName(character.def.name);
     const wasAttacked = context.resolution.mutations.some(
       (m) => m.reasonCode === 'ATTACKED_BY_PLAYER' && m.subjectId === character.def.id,
     );
@@ -474,7 +475,7 @@ export function buildDeltas(context: TurnContext): StateDeltaPresentation[] {
   for (const [characterId, entry] of byCharacter) {
     const character = context.story.characters.find((c) => c.id === characterId);
     if (!character) continue;
-    const firstName = character.name.split(' ')[0]!;
+    const firstName = shortName(character.name);
     const { trust = 0, affection = 0, respect = 0, fear = 0, rivalry = 0 } = entry.totals;
 
     // Report the dimension that moved most, because that is what the player

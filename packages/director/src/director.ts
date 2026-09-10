@@ -7,7 +7,7 @@ import type {
   SuggestedAction,
 } from '@aniplay/contracts';
 import type { ReactionEmotion } from '@aniplay/contracts';
-import { QUALITY_TIERS } from '@aniplay/contracts';
+import { QUALITY_TIERS, shortName } from '@aniplay/contracts';
 import { isSuccess, outcomeLabel, estimateRisk, attributeModifier } from '@aniplay/engine';
 import type { TurnContext, PresentCharacterContext } from './context.js';
 import { renderableFacts } from './writer.js';
@@ -314,7 +314,7 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
   if (confront) {
     const character = context.presentCharacters.find((c) => c.def.id === confront.slice('confront:'.length));
     if (character) {
-      const firstName = character.def.name.split(/\s+/)[0]!;
+      const firstName = shortName(character.def.name);
       push({
         text: `Back off and let ${firstName} decide what happens next.`,
         intentHint: `wait:${character.def.id}`,
@@ -345,7 +345,7 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
   if (strained) {
     const character = context.presentCharacters.find((c) => c.def.id === strained.subjectId);
     if (character && opportunities.includes(`speak_to:${character.def.id}`)) {
-      const firstName = character.def.name.split(/\s+/)[0]!;
+      const firstName = shortName(character.def.name);
       push({
         text: `Take it back to ${firstName}.`,
         intentHint: `persuade:${character.def.id}`,
@@ -362,7 +362,7 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
   }
 
   if (speaker && opportunities.includes(`speak_to:${speaker.def.id}`)) {
-    const firstName = speaker.def.name.split(/\s+/)[0]!;
+    const firstName = shortName(speaker.def.name);
     const topic = speaker.def.topics[0];
     // Authored topics read naturally; without one, fall back to a phrasing that
     // is grammatical for any character rather than splicing quest copy.
@@ -424,7 +424,7 @@ function buildSuggestions(context: TurnContext): SuggestedAction[] {
     // than the system's name for the move.
     const phrase = ability.affordances[0] ?? lowerFirst(ability.name);
     const text = target
-      ? `${capitalize(phrase)} — ${target.def.name.split(/\s+/)[0]}`
+      ? `${capitalize(phrase)} — ${shortName(target.def.name)}`
       : capitalize(phrase);
 
     push({
