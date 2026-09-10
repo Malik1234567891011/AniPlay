@@ -7484,5 +7484,1126 @@
       "latencyMs": 24125,
       "createdAt": "2026-09-10T16:23:03.968Z"
     }
+  },
+  "story_hush_house/stage_room_309": {
+    "assetKey": "story_hush_house/stage_room_309",
+    "file": "story_hush_house/stage_room_309.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Room 309: Empty for four years and still furnished.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cce4c554-3ee7-435c-b0c2-5187aedc2b4b",
+      "promptHash": "15b2b4e4a968fb21320571ed148b82ba",
+      "seed": "sv_hush_house_1:loc:room_309:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 19509,
+      "createdAt": "2026-09-10T16:34:33.266Z"
+    }
+  },
+  "story_hush_house/stage_room_206": {
+    "assetKey": "story_hush_house/stage_room_206",
+    "file": "story_hush_house/stage_room_206.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Room 206: Tomas Reed’s, and the tidiest room in the building because he is almost never in it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "66bc38c9-d1ff-4e7f-afae-444c4a9f71df",
+      "promptHash": "9f2fbf4eb8ef7ec164f8edeff7e1535a",
+      "seed": "sv_hush_house_1:loc:room_206:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 20738,
+      "createdAt": "2026-09-10T16:34:34.496Z"
+    }
+  },
+  "story_hush_house/key": {
+    "assetKey": "story_hush_house/key",
+    "file": "story_hush_house/key.png",
+    "kind": "KEY_ART",
+    "alt": "Key art for Hush House",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "46a237fd-33ab-41f9-a119-552ad2310504",
+      "promptHash": "639d026ef7d0b76e6702a5d25c0814d9",
+      "seed": "sv_hush_house_1:key:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 26887,
+      "createdAt": "2026-09-10T16:34:40.644Z"
+    }
+  },
+  "story_hush_house/cover": {
+    "assetKey": "story_hush_house/cover",
+    "file": "story_hush_house/cover.png",
+    "kind": "COVER",
+    "alt": "Cover art for Hush House: Do not open the door at 2:13 a.m.",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "plotbreak-cover-v2",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "6fa02a0d-6f08-4910-b777-9c3efaed6b0c",
+      "promptHash": "1d7df8e110132efcf0ec3f691113774e",
+      "seed": "sv_hush_house_1:cover:plotbreak-cover-v2",
+      "costUsd": 0.05488,
+      "latencyMs": 36139,
+      "createdAt": "2026-09-10T16:34:49.879Z"
+    }
+  },
+  "story_hush_house/stage_hall_third": {
+    "assetKey": "story_hush_house/stage_hall_third",
+    "file": "story_hush_house/stage_hall_third.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Third-Floor Hallway: Six doors, a runner carpet worn down the middle, and a wall light outside 309 that is on a different circuit from all the others.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e46d3c66-4423-4733-bd6a-8daeb9f49673",
+      "promptHash": "7a6bf8d143d780b914f916ab25686694",
+      "seed": "sv_hush_house_1:loc:hall_third:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 18222,
+      "createdAt": "2026-09-10T16:35:19.328Z"
+    }
+  },
+  "story_hush_house/stage_room_312": {
+    "assetKey": "story_hush_house/stage_room_312",
+    "file": "story_hush_house/stage_room_312.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Room 312: Better than the price suggests: hardwood, a tall bay window over the street, a radiator that comes on by itself at ten.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "c47637c6-376c-4946-87dc-740eaba0069b",
+      "promptHash": "d1a2ccde0f17c94e690822c162f2ecc2",
+      "seed": "sv_hush_house_1:loc:room_312:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 19441,
+      "createdAt": "2026-09-10T16:35:20.546Z"
+    }
+  },
+  "story_hush_house/stage_morrowgate": {
+    "assetKey": "story_hush_house/stage_morrowgate",
+    "file": "story_hush_house/stage_morrowgate.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Rest of Morrowgate: Everything that is not this street: the ambulance station off Carrow Row where Tomas signs on, the art school Nia is technically enrolled at, the records office where Ayame has a job she will not discuss, and about four hundred thousand people who have never heard of Bellweather Street.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a967aa99-6012-4c9d-af88-c2ad63351664",
+      "promptHash": "77988718582baaeabdd8a1abe638dd31",
+      "seed": "sv_hush_house_1:loc:morrowgate:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 37578,
+      "createdAt": "2026-09-10T16:35:38.683Z"
+    }
+  },
+  "story_hush_house/stage_room_405": {
+    "assetKey": "story_hush_house/stage_room_405",
+    "file": "story_hush_house/stage_room_405.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Room 405: Nia Bell’s, and the exact opposite: two monitors on a door laid across trestles, cables taped down the skirting, and a corkboard of stills printed at the library with times written under them in marker.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9e32b7d4-3e56-42da-80d7-fe1ad296a7b0",
+      "promptHash": "652c611402acceea17e7ca370ad70fff",
+      "seed": "sv_hush_house_1:loc:room_405:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 40915,
+      "createdAt": "2026-09-10T16:35:42.007Z"
+    }
+  },
+  "story_hush_house/stage_shared_kitchen": {
+    "assetKey": "story_hush_house/stage_shared_kitchen",
+    "file": "story_hush_house/stage_shared_kitchen.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Shared Kitchen: Half a floor of the third storey, from when this was a boarding house properly.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a60dcbdb-4efd-4733-be3d-0445251412ec",
+      "promptHash": "09369a3be83a3f699d4b8fbee76e63a4",
+      "seed": "sv_hush_house_1:loc:shared_kitchen:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35072,
+      "createdAt": "2026-09-10T16:35:55.623Z"
+    }
+  },
+  "story_hush_house/stage_room_314": {
+    "assetKey": "story_hush_house/stage_room_314",
+    "file": "story_hush_house/stage_room_314.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Room 314: Ayame’s.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b0005eaf-1b95-493f-8bd5-f9d4fcb2c970",
+      "promptHash": "a0af18b155fc05ef3ddf85b82e1d6b9a",
+      "seed": "sv_hush_house_1:loc:room_314:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 39751,
+      "createdAt": "2026-09-10T16:35:59.085Z"
+    }
+  },
+  "story_hush_house/stage_stairwell": {
+    "assetKey": "story_hush_house/stage_stairwell",
+    "file": "story_hush_house/stage_stairwell.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Stairwell: Stone treads, an iron rail, and a landing cupboard between every floor.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "94beb19e-f951-4ceb-92a0-8a20b9815687",
+      "promptHash": "9e217397e93cb0555914a202baccd36e",
+      "seed": "sv_hush_house_1:loc:stairwell:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 28300,
+      "createdAt": "2026-09-10T16:36:06.988Z"
+    }
+  },
+  "story_hush_house/stage_lobby": {
+    "assetKey": "story_hush_house/stage_lobby",
+    "file": "story_hush_house/stage_lobby.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Lobby: Black and white tiles, a lift with a folding brass gate, and Mrs Vale’s desk under the stairs with a lamp on it whatever the hour.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a8e5743f-0e74-4d3e-84d8-8b83769449ac",
+      "promptHash": "6ef481abfc1431d7cb78d1ea947428b4",
+      "seed": "sv_hush_house_1:loc:lobby:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 34245,
+      "createdAt": "2026-09-10T16:36:16.257Z"
+    }
+  },
+  "story_hush_house/stage_bellweather": {
+    "assetKey": "story_hush_house/stage_bellweather",
+    "file": "story_hush_house/stage_bellweather.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Bellweather Street: Wet brick, tram wire, two newer buildings crowding Hush House on either side, and a police precinct four hundred metres down where a four-year-old file sits in a drawer.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "df18346c-1af7-44e6-93e6-da95ac8a09f9",
+      "promptHash": "92bb0176995f2b5718259fb42dc65d52",
+      "seed": "sv_hush_house_1:loc:bellweather:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 23443,
+      "createdAt": "2026-09-10T16:36:19.069Z"
+    }
+  },
+  "story_hush_house/stage_rooftop": {
+    "assetKey": "story_hush_house/stage_rooftop",
+    "file": "story_hush_house/stage_rooftop.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Roof: Asphalt, a water tank, and a view over the old quarter to the harbour.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "396d5c6f-5f9d-4795-90af-5b9a7387a6ae",
+      "promptHash": "148c9e453e858a6318c0a69217cff0ef",
+      "seed": "sv_hush_house_1:loc:rooftop:anima-v1",
+      "costUsd": 0.01372,
+      "latencyMs": 18352,
+      "createdAt": "2026-09-10T16:36:25.347Z"
+    }
+  },
+  "story_hush_house/stage_floor_zero": {
+    "assetKey": "story_hush_house/stage_floor_zero",
+    "file": "story_hush_house/stage_floor_zero.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "Floor 0: The lift opens on a corridor with a window at the end of it.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b6de9293-3376-4e51-9535-cec1100d7af4",
+      "promptHash": "bea13dbc7566f5f8b2bb036116b73933",
+      "seed": "sv_hush_house_1:loc:floor_zero:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 15686,
+      "createdAt": "2026-09-10T16:36:31.948Z"
+    }
+  },
+  "story_hush_house/stage_konbini": {
+    "assetKey": "story_hush_house/stage_konbini",
+    "file": "story_hush_house/stage_konbini.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Konbini: Open all night, lit like an operating theatre, and the only place on this street where nothing has ever happened.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b347c9c0-e030-499f-b0c9-756ce1394033",
+      "promptHash": "b93fc0938ec24d1f7e8ba4a7aa5bfd4d",
+      "seed": "sv_hush_house_1:loc:konbini:anima-v1",
+      "costUsd": 0.05488,
+      "latencyMs": 35436,
+      "createdAt": "2026-09-10T16:36:34.524Z"
+    }
+  },
+  "story_hush_house/stage_sub_basement": {
+    "assetKey": "story_hush_house/stage_sub_basement",
+    "file": "story_hush_house/stage_sub_basement.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Sub-Basement: Below the legal basement, behind a bricked arch, the floor stops being concrete and becomes dressed stone.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5928485d-ebf9-45b1-a926-b2723de2fd5f",
+      "promptHash": "f0ba7a8cbee868667d41465db2519fcc",
+      "seed": "sv_hush_house_1:loc:sub_basement:anima-v1",
+      "costUsd": 0.00632,
+      "latencyMs": 22237,
+      "createdAt": "2026-09-10T16:36:41.320Z"
+    }
+  },
+  "story_hush_house/vale": {
+    "assetKey": "story_hush_house/vale",
+    "file": "story_hush_house/vale.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, Landlady, fourth of her family to hold the agreement",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "104ae0c0-d085-4c39-bbb7-32ea8dcc340f",
+      "promptHash": "a53674ffc854b07348889fae1d875e29",
+      "seed": "hush-vale-01",
+      "costUsd": 0.00632,
+      "latencyMs": 18063,
+      "createdAt": "2026-09-10T16:36:50.018Z"
+    }
+  },
+  "story_hush_house/ayame": {
+    "assetKey": "story_hush_house/ayame",
+    "file": "story_hush_house/ayame.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, Room 314. Four years into an investigation nobody asked her to run",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "68137d77-212c-4752-812e-45d3204b99ee",
+      "promptHash": "68918b5239e2e760e13ba4768758840e",
+      "seed": "hush-ayame-01",
+      "costUsd": 0.05488,
+      "latencyMs": 33495,
+      "createdAt": "2026-09-10T16:36:58.851Z"
+    }
+  },
+  "story_hush_house/tomas": {
+    "assetKey": "story_hush_house/tomas",
+    "file": "story_hush_house/tomas.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, Room 206. Paramedic, nights",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1ba5e5a2-09de-4219-afe2-8a8cc3804749",
+      "promptHash": "66386640002fee30cdd18834c2766fe3",
+      "seed": "hush-tomas-01",
+      "costUsd": 0.05488,
+      "latencyMs": 34020,
+      "createdAt": "2026-09-10T16:37:08.549Z"
+    }
+  },
+  "story_hush_house/nia": {
+    "assetKey": "story_hush_house/nia",
+    "file": "story_hush_house/nia.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, Room 405. Art student, and the building’s uninvited documentarian",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "43d1254a-77c4-43cd-bb9d-2d0e9d39c8b7",
+      "promptHash": "0c1c7530ccae0c42603c6d441163d1f6",
+      "seed": "hush-nia-01",
+      "costUsd": 0.05488,
+      "latencyMs": 38546,
+      "createdAt": "2026-09-10T16:37:19.869Z"
+    }
+  },
+  "story_hush_house/ayame_warm": {
+    "assetKey": "story_hush_house/ayame_warm",
+    "file": "story_hush_house/ayame_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dec71b62-884d-453c-81cd-634387a9620b",
+      "promptHash": "c067598ed3b4e214257a009087137c24",
+      "seed": "hush-ayame-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 14508,
+      "createdAt": "2026-09-10T16:37:23.065Z"
+    }
+  },
+  "story_hush_house/mika": {
+    "assetKey": "story_hush_house/mika",
+    "file": "story_hush_house/mika.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, Missing four years. Present more often than that should allow",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e7d0fc21-1578-4b22-83d9-04ee513797d4",
+      "promptHash": "f9fabcacbe4c2906396d29db7ff7475d",
+      "seed": "hush-mika-01",
+      "costUsd": 0.05488,
+      "latencyMs": 35699,
+      "createdAt": "2026-09-10T16:37:25.723Z"
+    }
+  },
+  "story_hush_house/ayame_neutral": {
+    "assetKey": "story_hush_house/ayame_neutral",
+    "file": "story_hush_house/ayame_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f4c0c906-6c98-42f8-b6b4-70e6e9401d91",
+      "promptHash": "4ec47bb053b4b4fa6d5eec22e57bd4bd",
+      "seed": "hush-ayame-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 33842,
+      "createdAt": "2026-09-10T16:37:32.696Z"
+    }
+  },
+  "story_hush_house/ayame_amused": {
+    "assetKey": "story_hush_house/ayame_amused",
+    "file": "story_hush_house/ayame_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "9c509520-d962-492e-a719-bd4d59b11e3a",
+      "promptHash": "d4556c5b8eb474aaa4a1c6f09a85d38c",
+      "seed": "hush-ayame-01:amused",
+      "costUsd": 0.00632,
+      "latencyMs": 18175,
+      "createdAt": "2026-09-10T16:37:38.052Z"
+    }
+  },
+  "story_hush_house/ayame_confused": {
+    "assetKey": "story_hush_house/ayame_confused",
+    "file": "story_hush_house/ayame_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "72beebcc-43fd-46d6-9da0-9e5dcba27b3a",
+      "promptHash": "614e8eb76627fb72dca09cb49e6b254e",
+      "seed": "hush-ayame-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 18246,
+      "createdAt": "2026-09-10T16:37:43.979Z"
+    }
+  },
+  "story_hush_house/ayame_surprised": {
+    "assetKey": "story_hush_house/ayame_surprised",
+    "file": "story_hush_house/ayame_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "89e1dffe-b455-4219-9f89-27ba73345805",
+      "promptHash": "db4a8b255f3fbabf74b70efacbc7b26b",
+      "seed": "hush-ayame-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 20987,
+      "createdAt": "2026-09-10T16:37:44.060Z"
+    }
+  },
+  "story_hush_house/ayame_annoyed": {
+    "assetKey": "story_hush_house/ayame_annoyed",
+    "file": "story_hush_house/ayame_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "be4fac9c-9f2a-47da-ab1d-c9e5cf67b94a",
+      "promptHash": "06c17d735506d557d0edcf793a47a383",
+      "seed": "hush-ayame-01:annoyed",
+      "costUsd": 0.02404,
+      "latencyMs": 23369,
+      "createdAt": "2026-09-10T16:37:57.186Z"
+    }
+  },
+  "story_hush_house/ayame_angry": {
+    "assetKey": "story_hush_house/ayame_angry",
+    "file": "story_hush_house/ayame_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "b74ae4af-630c-45de-9f64-c4980c3c44a8",
+      "promptHash": "c64839f96658604f2557d399b457f9df",
+      "seed": "hush-ayame-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 22894,
+      "createdAt": "2026-09-10T16:38:00.956Z"
+    }
+  },
+  "story_hush_house/ayame_worried": {
+    "assetKey": "story_hush_house/ayame_worried",
+    "file": "story_hush_house/ayame_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Ayame Kurose, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "31150719-b34d-4781-8248-5b50b3649d21",
+      "promptHash": "5682dd6a6dda95409b505379632643c8",
+      "seed": "hush-ayame-01:worried",
+      "costUsd": 0.02404,
+      "latencyMs": 24108,
+      "createdAt": "2026-09-10T16:38:08.096Z"
+    }
+  },
+  "story_hush_house/vale_neutral": {
+    "assetKey": "story_hush_house/vale_neutral",
+    "file": "story_hush_house/vale_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d811b4c0-6fe2-4d80-865e-2f7951131da3",
+      "promptHash": "abce2d014ffa5b3cc381fb43657538f4",
+      "seed": "hush-vale-01:neutral",
+      "costUsd": 0.02404,
+      "latencyMs": 24344,
+      "createdAt": "2026-09-10T16:38:08.415Z"
+    }
+  },
+  "story_hush_house/vale_warm": {
+    "assetKey": "story_hush_house/vale_warm",
+    "file": "story_hush_house/vale_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "21d7fc29-149c-46fc-93fc-3b2f5b84eb65",
+      "promptHash": "552205d59ead176201c4480c10d83c78",
+      "seed": "hush-vale-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 16955,
+      "createdAt": "2026-09-10T16:38:14.151Z"
+    }
+  },
+  "story_hush_house/vale_surprised": {
+    "assetKey": "story_hush_house/vale_surprised",
+    "file": "story_hush_house/vale_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1c3d991c-e8b6-4fa7-8a63-6b8f4eceac9d",
+      "promptHash": "fb313fcd7b909fce37aa2b4cd9609483",
+      "seed": "hush-vale-01:surprised",
+      "costUsd": 0.02404,
+      "latencyMs": 23081,
+      "createdAt": "2026-09-10T16:38:31.190Z"
+    }
+  },
+  "story_hush_house/vale_amused": {
+    "assetKey": "story_hush_house/vale_amused",
+    "file": "story_hush_house/vale_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ca4a7a62-791e-42f0-a140-86711cc03dc8",
+      "promptHash": "fb35835ff75524ed0da5eea450fd3d89",
+      "seed": "hush-vale-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 33981,
+      "createdAt": "2026-09-10T16:38:34.943Z"
+    }
+  },
+  "story_hush_house/vale_confused": {
+    "assetKey": "story_hush_house/vale_confused",
+    "file": "story_hush_house/vale_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "80724c65-1f55-43a2-9992-dbded3ee4607",
+      "promptHash": "3ca931db7e1613470f559298555396b7",
+      "seed": "hush-vale-01:confused",
+      "costUsd": 0.05488,
+      "latencyMs": 33996,
+      "createdAt": "2026-09-10T16:38:42.426Z"
+    }
+  },
+  "story_hush_house/vale_annoyed": {
+    "assetKey": "story_hush_house/vale_annoyed",
+    "file": "story_hush_house/vale_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "f60e07c0-3b83-47c7-9776-5b980ea1ce9c",
+      "promptHash": "7a2e4a727f2b5e791d7bc614534d3d04",
+      "seed": "hush-vale-01:annoyed",
+      "costUsd": 0.05488,
+      "latencyMs": 35986,
+      "createdAt": "2026-09-10T16:38:50.162Z"
+    }
+  },
+  "story_hush_house/vale_angry": {
+    "assetKey": "story_hush_house/vale_angry",
+    "file": "story_hush_house/vale_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "d4659496-da63-4e6b-bfb8-b7e469213b31",
+      "promptHash": "5f748b49a49b457b6172367ad7677907",
+      "seed": "hush-vale-01:angry",
+      "costUsd": 0.02404,
+      "latencyMs": 23324,
+      "createdAt": "2026-09-10T16:38:54.544Z"
+    }
+  },
+  "story_hush_house/tomas_neutral": {
+    "assetKey": "story_hush_house/tomas_neutral",
+    "file": "story_hush_house/tomas_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "cb51221b-5692-4b07-be1c-b4b06c1a823f",
+      "promptHash": "d5091d58778fce0f8459cb85349ef38c",
+      "seed": "hush-tomas-01:neutral",
+      "costUsd": 0.01372,
+      "latencyMs": 19075,
+      "createdAt": "2026-09-10T16:39:01.512Z"
+    }
+  },
+  "story_hush_house/vale_worried": {
+    "assetKey": "story_hush_house/vale_worried",
+    "file": "story_hush_house/vale_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mrs Elara Vale, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "91e8cdec-ea3f-4dff-9352-de32a3750ae9",
+      "promptHash": "84a0d6588588994eb6fa14fd96e9ef58",
+      "seed": "hush-vale-01:worried",
+      "costUsd": 0.05488,
+      "latencyMs": 32716,
+      "createdAt": "2026-09-10T16:39:07.692Z"
+    }
+  },
+  "story_hush_house/tomas_amused": {
+    "assetKey": "story_hush_house/tomas_amused",
+    "file": "story_hush_house/tomas_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "29b6cb5e-bd06-43b1-a4d9-ec06d52173d1",
+      "promptHash": "668b1da1bb1af68867ec0e52f7c406bd",
+      "seed": "hush-tomas-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23928,
+      "createdAt": "2026-09-10T16:39:18.475Z"
+    }
+  },
+  "story_hush_house/tomas_surprised": {
+    "assetKey": "story_hush_house/tomas_surprised",
+    "file": "story_hush_house/tomas_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "11a0b4ef-5df8-4bb0-81b9-9a4e5e9be0a1",
+      "promptHash": "d8e332f85b534ec8e74bdb31dc175a1c",
+      "seed": "hush-tomas-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 17902,
+      "createdAt": "2026-09-10T16:39:19.424Z"
+    }
+  },
+  "story_hush_house/tomas_warm": {
+    "assetKey": "story_hush_house/tomas_warm",
+    "file": "story_hush_house/tomas_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "50168589-6a76-4f0b-bbd1-f57976e3bf27",
+      "promptHash": "d4cb2000d4cf089364f6673c679f6d24",
+      "seed": "hush-tomas-01:warm",
+      "costUsd": 0.05488,
+      "latencyMs": 36547,
+      "createdAt": "2026-09-10T16:39:26.745Z"
+    }
+  },
+  "story_hush_house/tomas_confused": {
+    "assetKey": "story_hush_house/tomas_confused",
+    "file": "story_hush_house/tomas_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "5b366967-c559-4ed9-bec5-e002348762d6",
+      "promptHash": "d9413a397df7a8ebf880350a91dd145a",
+      "seed": "hush-tomas-01:confused",
+      "costUsd": 0.02404,
+      "latencyMs": 23602,
+      "createdAt": "2026-09-10T16:39:31.297Z"
+    }
+  },
+  "story_hush_house/tomas_annoyed": {
+    "assetKey": "story_hush_house/tomas_annoyed",
+    "file": "story_hush_house/tomas_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ac503d35-415b-47bc-8670-961bdf3d0b89",
+      "promptHash": "2eb5ee84d28f3614e25f88dca1e52084",
+      "seed": "hush-tomas-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 18226,
+      "createdAt": "2026-09-10T16:39:36.712Z"
+    }
+  },
+  "story_hush_house/tomas_angry": {
+    "assetKey": "story_hush_house/tomas_angry",
+    "file": "story_hush_house/tomas_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "a0b2112f-e2ef-4638-b557-f4e995249175",
+      "promptHash": "2c82deb2df6af8fcaeff468c6bb4cfa6",
+      "seed": "hush-tomas-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 19085,
+      "createdAt": "2026-09-10T16:39:38.515Z"
+    }
+  },
+  "story_hush_house/tomas_worried": {
+    "assetKey": "story_hush_house/tomas_worried",
+    "file": "story_hush_house/tomas_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Tomas Reed, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "862d0c33-8658-4e54-941e-b9596abbade4",
+      "promptHash": "a9784090288b6c2054b28c57f93df8d9",
+      "seed": "hush-tomas-01:worried",
+      "costUsd": 0.01372,
+      "latencyMs": 20489,
+      "createdAt": "2026-09-10T16:39:47.244Z"
+    }
+  },
+  "story_hush_house/nia_warm": {
+    "assetKey": "story_hush_house/nia_warm",
+    "file": "story_hush_house/nia_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "685a36a9-6b73-43cc-a25d-c1bb757d60ce",
+      "promptHash": "4ea8ed63550f76d65f896c644bd49dff",
+      "seed": "hush-nia-01:warm",
+      "costUsd": 0.00632,
+      "latencyMs": 17620,
+      "createdAt": "2026-09-10T16:39:54.342Z"
+    }
+  },
+  "story_hush_house/nia_amused": {
+    "assetKey": "story_hush_house/nia_amused",
+    "file": "story_hush_house/nia_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ce67b26c-a5e9-4736-8efb-6e91c391a959",
+      "promptHash": "098e7f4fff7dfb950c070374d8e163f8",
+      "seed": "hush-nia-01:amused",
+      "costUsd": 0.02404,
+      "latencyMs": 23056,
+      "createdAt": "2026-09-10T16:40:01.575Z"
+    }
+  },
+  "story_hush_house/nia_surprised": {
+    "assetKey": "story_hush_house/nia_surprised",
+    "file": "story_hush_house/nia_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "150ae768-479b-4536-92c7-873582a27ce8",
+      "promptHash": "4cc77e152587ffcbed54ae34192dd127",
+      "seed": "hush-nia-01:surprised",
+      "costUsd": 0.00632,
+      "latencyMs": 16578,
+      "createdAt": "2026-09-10T16:40:03.829Z"
+    }
+  },
+  "story_hush_house/nia_neutral": {
+    "assetKey": "story_hush_house/nia_neutral",
+    "file": "story_hush_house/nia_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "3edb8c4c-a1c8-46be-a133-759367cd406a",
+      "promptHash": "97d4c088e9b275cb29698ce9be910879",
+      "seed": "hush-nia-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 37224,
+      "createdAt": "2026-09-10T16:40:08.528Z"
+    }
+  },
+  "story_hush_house/nia_confused": {
+    "assetKey": "story_hush_house/nia_confused",
+    "file": "story_hush_house/nia_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "1a4e00e5-8ec0-4774-a5bd-3c132f480b27",
+      "promptHash": "027fd57a4d778a2d93278a5367dd6c29",
+      "seed": "hush-nia-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19227,
+      "createdAt": "2026-09-10T16:40:13.673Z"
+    }
+  },
+  "story_hush_house/nia_annoyed": {
+    "assetKey": "story_hush_house/nia_annoyed",
+    "file": "story_hush_house/nia_annoyed.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, annoyed",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "ca227a62-5f7e-493d-a3cf-96d1b4e4f5db",
+      "promptHash": "a712f6f5d7e3a26f8625c49eece8171e",
+      "seed": "hush-nia-01:annoyed",
+      "costUsd": 0.01372,
+      "latencyMs": 20754,
+      "createdAt": "2026-09-10T16:40:22.335Z"
+    }
+  },
+  "story_hush_house/nia_worried": {
+    "assetKey": "story_hush_house/nia_worried",
+    "file": "story_hush_house/nia_worried.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, worried",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4447b9a0-493d-4234-8541-857cdbd926a1",
+      "promptHash": "a67570088be71d853046a3631336e42e",
+      "seed": "hush-nia-01:worried",
+      "costUsd": 0.00632,
+      "latencyMs": 20556,
+      "createdAt": "2026-09-10T16:40:29.091Z"
+    }
+  },
+  "story_hush_house/nia_angry": {
+    "assetKey": "story_hush_house/nia_angry",
+    "file": "story_hush_house/nia_angry.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Nia Bell, angry",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "389c0aec-6983-436c-a103-e2705c72acc9",
+      "promptHash": "b03e1f002e435b9d62dd7401d6c238c5",
+      "seed": "hush-nia-01:angry",
+      "costUsd": 0.01372,
+      "latencyMs": 36201,
+      "createdAt": "2026-09-10T16:40:40.039Z"
+    }
+  },
+  "story_hush_house/mika_warm": {
+    "assetKey": "story_hush_house/mika_warm",
+    "file": "story_hush_house/mika_warm.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, warm",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "25f4c493-5cc8-497b-903d-4b08c73bb63d",
+      "promptHash": "ca8379da5ced6dcd5fe6409543685d97",
+      "seed": "hush-mika-01:warm",
+      "costUsd": 0.02404,
+      "latencyMs": 22258,
+      "createdAt": "2026-09-10T16:40:44.619Z"
+    }
+  },
+  "story_hush_house/mika_neutral": {
+    "assetKey": "story_hush_house/mika_neutral",
+    "file": "story_hush_house/mika_neutral.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, neutral",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4d826457-f78f-4b5f-a27b-282c2c1b421f",
+      "promptHash": "9cf2f2dbc9ec821fffe033a8beea4a36",
+      "seed": "hush-mika-01:neutral",
+      "costUsd": 0.05488,
+      "latencyMs": 34855,
+      "createdAt": "2026-09-10T16:40:48.548Z"
+    }
+  },
+  "story_hush_house/mika_surprised": {
+    "assetKey": "story_hush_house/mika_surprised",
+    "file": "story_hush_house/mika_surprised.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, surprised",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "dee1196f-6f46-47e6-bd5c-fb0ffaff7027",
+      "promptHash": "ab984996e63e0f019d4cabf9dce05c89",
+      "seed": "hush-mika-01:surprised",
+      "costUsd": 0.01372,
+      "latencyMs": 19166,
+      "createdAt": "2026-09-10T16:40:59.223Z"
+    }
+  },
+  "story_hush_house/mika_amused": {
+    "assetKey": "story_hush_house/mika_amused",
+    "file": "story_hush_house/mika_amused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, amused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "4afde72b-5170-40e9-8045-c9e00a839762",
+      "promptHash": "d0b9e10e56a02275a78d6d52fd9882dc",
+      "seed": "hush-mika-01:amused",
+      "costUsd": 0.05488,
+      "latencyMs": 34521,
+      "createdAt": "2026-09-10T16:41:03.618Z"
+    }
+  },
+  "story_hush_house/mika_confused": {
+    "assetKey": "story_hush_house/mika_confused",
+    "file": "story_hush_house/mika_confused.png",
+    "kind": "CHARACTER_PORTRAIT",
+    "alt": "Mika Kurose, confused",
+    "width": 1024,
+    "height": 1536,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "0c2d2606-4647-4d6f-be0b-a4620ad3608c",
+      "promptHash": "b5af8469ba9a1f9301890c6911be6728",
+      "seed": "hush-mika-01:confused",
+      "costUsd": 0.01372,
+      "latencyMs": 19159,
+      "createdAt": "2026-09-10T16:41:03.806Z"
+    }
   }
 }

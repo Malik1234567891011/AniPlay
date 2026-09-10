@@ -214,6 +214,8 @@ export const StoryDetailResponse = z
     activeSessionId: z.string().nullable(),
     setupFields: StoryVersion.shape.setupFields,
     archetypes: z.array(SetupArchetype),
+    /** Whether the setup screen should ask who the player is, or already knows. */
+    protagonist: StoryVersion.shape.protagonist,
   })
   .strict();
 export type StoryDetailResponse = z.infer<typeof StoryDetailResponse>;

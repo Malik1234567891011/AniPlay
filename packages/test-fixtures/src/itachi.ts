@@ -2395,9 +2395,25 @@ const raw = {
       startingReputation: [],
     },
   ],
+  /**
+   * You are Itachi. The story says so in its own premise, so the setup screen
+   * does not ask.
+   *
+   * What it does still ask is the battlefield question below, which is the one
+   * piece of this that is genuinely the player's: not who you are, but what the
+   * war left in you. Nothing here narrows what you may *do* — the clan, the
+   * village, your brother and the fortnight are all still open.
+   */
+  protagonist: {
+    kind: 'NAMED',
+    name: 'Itachi Uchiha',
+    pronouns: 'he/him',
+    description:
+      'Thirteen. Small for it. Lines under the eyes that nobody that age should have, ' +
+      'and a school satchel with something heavier than books in it.',
+    setupHeading: 'What kind of Itachi are you?',
+  },
   setupFields: [
-    { id: 'displayName', label: 'Your name', kind: 'TEXT', required: true, maxLength: 40, placeholder: 'Itachi Uchiha' },
-    { id: 'pronouns', label: 'Pronouns', kind: 'TEXT', required: false, maxLength: 24, placeholder: 'e.g. he/him' },
     {
       id: 'archetype',
       label: 'You were four, on a battlefield, with your father. What did you take away from it?',
@@ -2428,14 +2444,6 @@ const raw = {
         { id: 'undecided', label: 'You genuinely do not know, and that is what the fortnight is for' },
         { id: 'neither_of_them', label: 'Both of these institutions have already spent you once' },
       ],
-    },
-    {
-      id: 'appearance',
-      label: 'What do people see coming down the street?',
-      kind: 'TEXT',
-      advanced: true,
-      maxLength: 200,
-      placeholder: 'e.g. Small for thirteen, lines under the eyes that nobody that age should have, and a school satchel with something heavier than books in it.',
     },
   ],
   /**

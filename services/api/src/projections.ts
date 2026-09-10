@@ -128,6 +128,7 @@ export function toStoryDetail(
       ...archetype,
       grants: archetypeGrants(story, archetype),
     })),
+    protagonist: story.protagonist,
   };
 }
 
