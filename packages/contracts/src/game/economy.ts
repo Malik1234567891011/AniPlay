@@ -21,6 +21,21 @@ export interface QualityTierConfig {
 /**
  * Spec §20.3. The engine is identical across tiers — paying more must not buy
  * better dice. Only presentation depth, memory budget, and media change.
+ *
+ * `wordBudget` is the *middle* of a range, not a cap — `beatBudget` moves
+ * within it from a count of what actually happened, and the hard ceiling is 500.
+ *
+ * These were 60 / 95 / 130 / 190, and they were far too low. Measured against a
+ * competitor's ordinary turn, one screenful was already longer than an entire
+ * Vivid beat here, and Vivid is the default tier. What that costs is not
+ * "brevity" — it is that a scene cannot breathe: the writer gets ninety-five
+ * words to establish a room, react in character, carry two people's dialogue
+ * and leave the player somewhere to go, so it does the last of those badly and
+ * everything reads clipped. Length is the cheapest thing we were withholding.
+ *
+ * The rhythm rules in the writer policy matter more than the numbers do. Four
+ * hundred words in three paragraphs is a wall on a phone; the same four hundred
+ * in twelve short ones reads fast.
  */
 export const QUALITY_TIERS: Record<QualityTier, QualityTierConfig> = {
   QUICK: {
@@ -28,7 +43,7 @@ export const QUALITY_TIERS: Record<QualityTier, QualityTierConfig> = {
     label: 'Quick',
     costCredits: 30,
     promise: 'Fast, concise turn',
-    wordBudget: 60,
+    wordBudget: 140,
     memoryBudget: 4,
     heroImageEligible: false,
     directorRole: 'director_standard',
@@ -39,7 +54,7 @@ export const QUALITY_TIERS: Record<QualityTier, QualityTierConfig> = {
     label: 'Vivid',
     costCredits: 60,
     promise: 'Richer dialogue and direction',
-    wordBudget: 95,
+    wordBudget: 260,
     memoryBudget: 8,
     heroImageEligible: false,
     directorRole: 'director_standard',
@@ -50,7 +65,7 @@ export const QUALITY_TIERS: Record<QualityTier, QualityTierConfig> = {
     label: 'Cinematic',
     costCredits: 90,
     promise: 'Best balance of immersion and speed',
-    wordBudget: 130,
+    wordBudget: 360,
     memoryBudget: 14,
     heroImageEligible: true,
     directorRole: 'director_standard',
@@ -61,7 +76,7 @@ export const QUALITY_TIERS: Record<QualityTier, QualityTierConfig> = {
     label: 'Apex',
     costCredits: 195,
     promise: 'Deepest reasoning and premium storytelling',
-    wordBudget: 190,
+    wordBudget: 430,
     memoryBudget: 20,
     heroImageEligible: true,
     directorRole: 'director_premium',

@@ -2,7 +2,7 @@ import type { NarrativeBlock, NarrativeTurn } from '@aniplay/contracts';
 import type { BeatPlan } from '@aniplay/contracts';
 import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
-import { buildMessages, SAFETY_POLICY, writerPayload } from './model-stages.js';
+import { buildMessages, SAFETY_POLICY, WRITER_POLICY, writerPayload } from './model-stages.js';
 
 /**
  * Spec §17.10 — prose that arrives while it is being written.
@@ -158,13 +158,29 @@ export async function writeStreaming(
   } as NarrativeTurn;
 }
 
+/**
+ * The same policy the structured writer gets, plus what differs about streaming.
+ *
+ * This used to be five sentences of its own — and this is the writer that runs
+ * on the fast path, which is to say the one that writes almost every beat a
+ * player ever reads. Every rule earned the hard way lived in `WRITER_POLICY`
+ * and reached the writer that production does not use: how characters use the
+ * player's name, that people in the room cannot be written out of it, what to
+ * do with what a character wants and fears, how long a paragraph should be.
+ *
+ * It is a system message and it does not change within a session, so sharing it
+ * costs a cache read rather than a thinking budget.
+ */
 const FAST_WRITER_POLICY = [
-  'You write one beat of an ongoing story, in second person, addressing the player as "you".',
-  'The engine has already decided what happened. Describe it. Never contradict it and never overturn it.',
-  'Answer what the player actually did, specifically. Never write a generic reaction.',
-  'Characters speak in their own voice, and only characters who are present.',
-  'Nobody in this story knows they are in a game, or that anything is generated.',
-].join(' ');
+  WRITER_POLICY,
+  '',
+  'You are writing plain prose, not JSON. Put each character’s speech on its own line as',
+  'Name: "what they say". Everything else is narration. No headings, no lists, no stage directions in',
+  'brackets, and no commentary about the story.',
+].join('\n');
+
+/** Exported for the parity test only. */
+export const FAST_WRITER_POLICY_FOR_TEST = FAST_WRITER_POLICY;
 
 
 /** `"…"` → `…`. The speech marks are the renderer's business. */

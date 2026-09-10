@@ -371,7 +371,7 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
 
 // --- Writing ---------------------------------------------------------------
 
-const WRITER_POLICY = [
+export const WRITER_POLICY = [
   'You write the visible prose for one beat of an interactive story, following the beat plan exactly.',
   'Everything in the resolution has already happened. Do not change it, soften it, or add to it.',
   'If a check failed, the attempt failed. Never write an NPC complying after a failed attempt.',
@@ -420,6 +420,18 @@ const WRITER_POLICY = [
   'Give the reason the resolution gives, or let a character give it. Never invent a new rule to',
   'explain it — no barrier that was not there, no power nobody has, no physics the world lacks.',
   'A road the player cannot take is a road that leads somewhere else, or a person standing in it.',
+  '',
+  'Write in short paragraphs. One or two sentences is a paragraph. A beat of four hundred words in',
+  'three blocks is a wall on a phone; the same four hundred in twelve short ones reads fast and pulls',
+  'the eye down the page. Break on a change of subject, a change of speaker, or a beat of movement.',
+  '',
+  'Vary the sentences hard. A fragment is a sentence. "He makes the next block. Slows. Breathes." does',
+  'work that "He made it to the next block, where he slowed down and caught his breath" does not. Let',
+  'a short one land after a long one. Never write three sentences of the same shape in a row.',
+  '',
+  'Use the room. What it smells like, what the light is doing, what is underfoot, what somebody is',
+  'doing with their hands while they talk. Specific physical detail is most of the difference between',
+  'prose that feels written and prose that feels generated, and it is what the word budget is for.',
   '',
   'The player must always be able to say what literally just happened. Mystery is not knowing WHY;',
   'confusion is not knowing WHAT. Write mystery, never confusion. Specifically:',
