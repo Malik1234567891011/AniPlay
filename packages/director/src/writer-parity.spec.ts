@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { WRITER_POLICY } from './model-stages.js';
 import { FAST_WRITER_POLICY_FOR_TEST } from './fast-writer.js';
@@ -34,6 +35,16 @@ describe('both writers are told the same things', () => {
     ]) {
       expect(FAST_WRITER_POLICY_FOR_TEST, rule).toContain(rule);
     }
+  });
+
+  it('shows the player what changed, on the path that actually runs', () => {
+    // `stateDeltaPresentation` was hardcoded empty on the streaming writer, so
+    // on every ordinary turn the world moved and nobody was told: insulting
+    // someone to their face produced a relationship delta the engine recorded
+    // and the screen never mentioned. Fourteen of these in one sweep.
+    const source = readFileSync(new URL('./fast-writer.ts', import.meta.url), 'utf8');
+    expect(source).toContain('stateDeltaPresentation: buildDeltas(context)');
+    expect(source).not.toContain('stateDeltaPresentation: []');
   });
 
   it('adds only what is genuinely different about streaming', () => {

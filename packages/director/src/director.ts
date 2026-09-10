@@ -607,6 +607,18 @@ function musicFor(beatType: BeatType, context: TurnContext): string | null {
  * Spec §16.2 — the director proposes memories. They are still validated and
  * stored by the engine layer, never written directly.
  */
+/**
+ * Social acts an NPC would carry with them, and how to say what happened.
+ *
+ * Described from the verb rather than from the player's own sentence: the raw
+ * text is untrusted, and a memory is something the world asserts.
+ */
+const HOSTILE_VERBS: Record<string, string> = {
+  threaten: 'threatened and belittled',
+  deceive: 'lied to',
+  oppose: 'refused and stood against',
+};
+
 function proposeMemories(context: TurnContext): MemoryProposal[] {
   const proposals: MemoryProposal[] = [];
   const { resolution, state } = context;
@@ -644,6 +656,35 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
       visibility: 'NPC_PRIVATE',
       importance: 1,
       sourceEventIds: [mutation.mutationId],
+    });
+  }
+
+  // The same, for aggression that never touches anybody.
+  //
+  // Only `ATTACKED_BY_PLAYER` was recorded, so in the four launch worlds where
+  // `allowsCombat` is false the cruellest thing a player can do left no trace
+  // at all: told in front of the whole company that they were a fraud, an NPC
+  // moved two points of respect and remembered nothing, and greeted the player
+  // warmly four turns later.
+  const hostile = new Map<string, string>();
+  for (const mutation of resolution.mutations) {
+    if (mutation.type !== 'RELATIONSHIP_DELTA') continue;
+    const verb = mutation.reasonCode.startsWith('SOCIAL:') ? mutation.reasonCode.split(':')[1] : null;
+    if (!verb || !HOSTILE_VERBS[verb]) continue;
+    hostile.set(mutation.subjectId, HOSTILE_VERBS[verb]!);
+  }
+  for (const [characterId, what] of hostile) {
+    const character = context.story.characters.find((c) => c.id === characterId);
+    if (!character) continue;
+    proposals.push({
+      subjectId: character.id,
+      predicate: 'was_treated_badly_by_player',
+      value: `${context.player.name} ${what} ${character.name} at ${context.scene.locationName}, ${context.scene.worldTimeLabel}.`,
+      // Theirs specifically, and important enough that it does not decay out of
+      // their context before the player comes back.
+      visibility: 'NPC_PRIVATE',
+      importance: 0.95,
+      sourceEventIds: [],
     });
   }
 

@@ -3,6 +3,7 @@ import type { BeatPlan } from '@aniplay/contracts';
 import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { buildMessages, SAFETY_POLICY, WRITER_POLICY, writerPayload } from './model-stages.js';
+import { buildDeltas } from './writer.js';
 
 /**
  * Spec §17.10 — prose that arrives while it is being written.
@@ -153,7 +154,15 @@ export async function writeStreaming(
       type: 'NARRATION', speakerId: null, text: full.trim() || 'The moment passes.',
       visibility: 'GROUP', voiceEligible: false,
     } as NarrativeBlock],
-    stateDeltaPresentation: [],
+    // Derived, not asked for. These are what the player is *shown* changed —
+    // "Dai reconsiders you" — and this path returned an empty list, so on the
+    // fast path, which is every ordinary turn, the world moved and nobody was
+    // told. Insulting somebody to their face produced a relationship delta the
+    // engine recorded and the screen never mentioned.
+    //
+    // Free: `buildDeltas` reads mutations the engine has already made, so there
+    // is nothing to wait for and nothing a model could get wrong.
+    stateDeltaPresentation: buildDeltas(context),
     endStatePrompt: '',
   } as NarrativeTurn;
 }

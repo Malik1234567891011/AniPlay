@@ -22,6 +22,7 @@ import {
   topObjective,
   dayPart,
 } from '@aniplay/engine';
+import { retrieveLore } from './authored-lore.js';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
 
 /**
@@ -198,12 +199,18 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
 
   const query = `${actionText} ${resolution.observableFacts.join(' ')}`;
 
-  const retrievedFacts = retrieveMemories(
-    memories,
-    state,
-    { text: query, entityIds, limit: config.memoryBudget },
-    lexicalSimilarity,
-  );
+  const retrievedFacts = [
+    ...retrieveMemories(
+      memories,
+      state,
+      { text: query, entityIds, limit: config.memoryBudget },
+      lexicalSimilarity,
+    ),
+    // What the *author* wrote about the rest of the world, when this turn is
+    // actually about it. On its own budget so it can never crowd out what
+    // happened two turns ago. See `authored-lore.ts`.
+    ...retrieveLore(story, state, { text: query, entityIds }),
+  ];
 
   const presentCharacters: PresentCharacterContext[] = present
     .map((runtime) => {
