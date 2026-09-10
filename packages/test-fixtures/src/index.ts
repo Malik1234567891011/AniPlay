@@ -13,6 +13,7 @@ import { HUSH_HOUSE } from './hush-house.js';
 import { WINDOW_SEVEN } from './window-seven.js';
 import { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
 import { ITACHI as ITACHI_RAW } from './itachi.js';
+import { PRIMAL_CROWN as PRIMAL_CROWN_RAW } from './primal-crown.js';
 
 export { withDerivedAssetKeys } from './derive-assets.js';
 
@@ -27,6 +28,7 @@ export const SEVEN_DAYS = withDerivedAssetKeys(SEVEN_DAYS_RAW);
 export const BLACKWAKE = withDerivedAssetKeys(BLACKWAKE_RAW);
 export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
 export const ITACHI = withDerivedAssetKeys(ITACHI_RAW);
+export const PRIMAL_CROWN = withDerivedAssetKeys(PRIMAL_CROWN_RAW);
 
 /**
  * Three of the newest worlds ship without generated art, deliberately.
@@ -65,7 +67,9 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * it on the morning the player arrives with none, and Itachi is a fortnight in
  * which a thirteen-year-old is the only channel between two organisations that
  * have each decided he is theirs, and the famous thing at the end of it is one
- * of twelve destinations rather than the shape of the world.
+ * of twelve destinations rather than the shape of the world, and Primal Crown is
+ * three days at a market where five peoples have to redraw a forty-year
+ * arrangement before the herds arrive, and the animals in it are animals.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -82,4 +86,5 @@ export const LAUNCH_CATALOG = [
   WINDOW_SEVEN,
   GOOD_MORNING_HUSBAND,
   ITACHI,
+  PRIMAL_CROWN,
 ] as const;
