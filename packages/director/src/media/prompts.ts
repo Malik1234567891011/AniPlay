@@ -374,12 +374,19 @@ export function coverPrompt(story: StoryVersion): ImagePromptSpec {
         'picture height. Shot from the front, near eye level, looking at or just past the viewer. ' +
         'The setting is a backdrop behind them, small and simple, never the subject.',
       'The characters must pop off the background: strong silhouette separation, rim light or a clean outline.',
-      coverComposition(story),
-      pickBy(COVER_STAGINGS, story.storyId),
-      pickBy(COVER_COLOUR_KEYS, `${story.storyId}:colour`),
+      // A hand-written brief replaces everything the composer would have said
+      // about subject, staging and cast — but not the house rules above and
+      // below it.
+      story.coverDirection
+        ? story.coverDirection
+        : compose([
+            coverComposition(story),
+            pickBy(COVER_STAGINGS, story.storyId),
+            pickBy(COVER_COLOUR_KEYS, `${story.storyId}:colour`),
+            coverCast(story),
+            hero ? `Setting behind them: ${hero.artDirection}` : null,
+          ]),
       CAST_APPEAL,
-      coverCast(story),
-      hero ? `Setting behind them: ${hero.artDirection}` : null,
       `It must read at a glance as: ${story.fantasyLabel}`,
       `Mood: ${story.rules.toneGuide}`,
       // Small covers are the common case — a 150pt card in a rail — so faces

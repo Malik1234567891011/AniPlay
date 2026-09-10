@@ -9275,19 +9275,19 @@
     "assetKey": "story_ninth_archive/cover",
     "file": "story_ninth_archive/cover.png",
     "kind": "COVER",
-    "alt": "Cover art for The Ninth Archive: Your sigil was erased. It still burns.",
+    "alt": "Cover art for The Ninth Archive: The school says you were never admitted.",
     "width": 1024,
     "height": 1536,
-    "styleVersion": "anima-v1",
+    "styleVersion": "plotbreak-cover-v3-anime",
     "provenance": {
       "provider": "openai",
       "model": "gpt-image-2",
-      "requestId": "57a660c4-7da4-4967-b003-c6cfca790943",
-      "promptHash": "4cb5bcba809a9afb26f82a3678cb0120",
-      "seed": "sv_ninth_archive_1:cover:anima-v1",
-      "costUsd": 0.00632,
-      "latencyMs": 21933,
-      "createdAt": "2026-09-09T05:51:26.041Z"
+      "requestId": "1fc1d8fa-e691-43b1-b552-533932238e7f",
+      "promptHash": "753d77426d57fb7629b95d8a69aff5f8",
+      "seed": "sv_ninth_archive_1:cover:plotbreak-cover-v3-anime",
+      "costUsd": 0.05488,
+      "latencyMs": 35961,
+      "createdAt": "2026-09-10T21:44:02.205Z"
     }
   },
   "story_ninth_archive/kael": {

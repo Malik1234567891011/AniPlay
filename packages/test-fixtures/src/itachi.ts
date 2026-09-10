@@ -2413,6 +2413,62 @@ const raw = {
    * already exists. Nothing here narrows what you may *do*: the clan, the
    * village, your brother and the fortnight are all still open.
    */
+  /**
+   * Hand-directed, from Malik's brief. Replaces the composed cover.
+   *
+   * Meshed with the house rules rather than replacing them: cel shading, ink
+   * outlines and the cast filling the frame still apply, and the brief's
+   * "subtle film grain" is deliberately dropped — grain was one of the things
+   * making our covers read as film posters instead of anime.
+   *
+   * The title is not asked for here. Image models cannot spell, and the brief
+   * wants specific elegant lettering; that is composited afterwards where it
+   * can be drawn correctly and translated.
+   */
+  coverDirection: [
+    'SUBJECT: Itachi Uchiha alone at the centre, a key visual for a tragic anime film about his life.',
+    'Itachi stands in the immediate foreground from the waist up, centred, larger than everyone else and',
+    'holding roughly half the visual weight. Body turned slightly away, face turned directly to the viewer.',
+    'He is eighteen to twenty-one, slim and tall, narrow face, very pale, long straight black hair framing',
+    'both sides and tied loosely behind. Pronounced tear-trough lines run down beneath his eyes. His eyes',
+    'are deep-red Mangekyo Sharingan that glow softly rather than like neon. Expression: calm and',
+    'emotionally exhausted, not angry — lowered eyelids, unreadable, a man who already knows how this ends.',
+    'He wears the black Akatsuki cloak with large red clouds, tall open collar hiding part of his jaw, dark',
+    'mesh beneath. His Leaf forehead protector is scratched horizontally through the symbol. One hand hangs',
+    'loose, the other emerges slightly from the cloak. Controlled presence, never a combat pose.',
+    '',
+    'BEHIND HIM, arranged like memories orbiting him rather than a group photograph:',
+    'Shisui over his upper-left shoulder, faded into the atmosphere — young Uchiha, warm serious features,',
+    'short messy dark hair, Konoha flak jacket, a small reassuring smile, the only genuine warmth here.',
+    'Sasuke behind his right shoulder, the younger teenage Sasuke — pale, sharp black eyes, spiky black hair',
+    'with long bangs, dark-blue high-collared shirt with the Uchiha fan. Angry, confused and hurt, looking',
+    'toward Itachi rather than the viewer, wanting an answer from the brother in front of him.',
+    'Fugaku further back and high, stern and proud rather than villainous — strong features, short black',
+    'hair, cheek lines, rigid posture, traditional dark Uchiha clothing, the clan fan faint behind him.',
+    'Danzo far left and low, mostly in shadow — elderly, lined face, short grey hair, right eye and part of',
+    'his head bandaged, one arm hidden in his robes. Cold and calculating, connected to Itachi by nothing.',
+    'Masked Obito opposite Danzo, further back — black Akatsuki cloak, orange spiral mask, one dark eyehole',
+    'with a faint red Sharingan, half lost in smoke, relaxed and unreadable.',
+    'The arrangement should read as two worlds: family and friendship on one side, manipulation and',
+    'darkness on the other, with Itachi standing between them.',
+    '',
+    'BACKGROUND: the Uchiha district of the Hidden Leaf at night — traditional rooftops, wooden buildings,',
+    'utility poles, the compound in silhouette. Kept simple and dissolving into mist toward the edges.',
+    'A huge partly obscured blood-red moon sits high behind him, casting a red halo near his head without',
+    'sitting behind it like a disc. Thin cloud crosses it. A few black crows fly through, one or two close',
+    'to the foreground, others dissolving into feathers. Restrained — symbolic, not decorative. The Uchiha',
+    'fan crest appears somewhere in a wall or banner, noticeable but not dominant.',
+    '',
+    'LIGHT AND COLOUR: dual lighting. Muted crimson rim light from the moon down one side of his face, hair',
+    'and cloak; cold blue moonlight on the other. His face stays readable but partly shadowed around the',
+    'eyes. Palette of black, charcoal, desaturated navy, deep crimson and pale skin. Shisui and Sasuke get',
+    'slightly more natural light; Fugaku is subdued and distant; Danzo is nearly all shadow; Obito is almost',
+    'lost to darkness except the orange mask and one red eye. Faint fog and suspended moisture catching the',
+    'red light. This is the quiet immediately before or immediately after something terrible.',
+    '',
+    'TONE: tragic, intelligent, lonely, restrained, ominous. Nobody shouts and nobody strikes a battle pose;',
+    'all of the tension comes from expression, light and arrangement.',
+  ].join(' '),
   protagonist: {
     kind: 'NAMED',
     name: 'Itachi Uchiha',

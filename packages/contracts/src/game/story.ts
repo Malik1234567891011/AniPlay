@@ -1044,6 +1044,17 @@ export const StoryVersion = z
     archetypes: z.array(ArchetypeDef).default([]),
     setupFields: z.array(CharacterSetupField).default([]),
     protagonist: Protagonist,
+    /**
+     * A hand-written brief for this world's cover, replacing the generated one.
+     *
+     * Covers are normally composed — a genre composition, a staging picked per
+     * story, the cast read out of the schema. That is right for twenty worlds
+     * and wrong for the one somebody has actually art-directed. When this is
+     * set, it replaces the composed middle of the prompt; the style spine, the
+     * framing rule, the appeal direction and the negatives still apply, because
+     * those are the house rules rather than the subject.
+     */
+    coverDirection: z.string().default(''),
     /** 50–150 words. Spec §21.3 step 8 / §43.2. */
     opening: z.string(),
     openingSuggestions: z.array(z.string()).max(3).default([]),
