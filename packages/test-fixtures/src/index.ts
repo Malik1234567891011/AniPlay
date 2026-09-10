@@ -14,6 +14,7 @@ import { WINDOW_SEVEN } from './window-seven.js';
 import { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
 import { ITACHI as ITACHI_RAW } from './itachi.js';
 import { PRIMAL_CROWN as PRIMAL_CROWN_RAW } from './primal-crown.js';
+import { ZERO_THRONE as ZERO_THRONE_RAW } from './zero-throne.js';
 
 
 export { withDerivedAssetKeys } from './derive-assets.js';
@@ -30,6 +31,7 @@ export const BLACKWAKE = withDerivedAssetKeys(BLACKWAKE_RAW);
 export const LAST_FIVE = withDerivedAssetKeys(LAST_FIVE_RAW);
 export const ITACHI = withDerivedAssetKeys(ITACHI_RAW);
 export const PRIMAL_CROWN = withDerivedAssetKeys(PRIMAL_CROWN_RAW);
+export const ZERO_THRONE = withDerivedAssetKeys(ZERO_THRONE_RAW);
 
 /**
  * Three of the newest worlds ship without generated art, deliberately.
@@ -70,7 +72,10 @@ export { GOOD_MORNING_HUSBAND } from './good-morning-husband.js';
  * have each decided he is theirs, and the famous thing at the end of it is one
  * of twelve destinations rather than the shape of the world, and Primal Crown is
  * three days at a market where five peoples have to redraw a forty-year
- * arrangement before the herds arrive, and the animals in it are animals.
+ * arrangement before the herds arrive, and the animals in it are animals, and
+ * Zero Throne is a machine that opened for nobody for eighteen years walking the
+ * length of a memorial plaza on turn one and kneeling to somebody who has no
+ * idea why.
  */
 export const LAUNCH_CATALOG = [
   NINTH_ARCHIVE,
@@ -88,4 +93,5 @@ export const LAUNCH_CATALOG = [
   GOOD_MORNING_HUSBAND,
   ITACHI,
   PRIMAL_CROWN,
+  ZERO_THRONE,
 ] as const;
