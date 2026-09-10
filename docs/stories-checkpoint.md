@@ -27,7 +27,7 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 | The Blank Prophecy | ✅ `blank-prophecy.ts` | ✅ `blank-prophecy.spec.ts` | ✅ 70 assets | ✅ |
 | The Red Floor | ✅ `red-floor.ts` | ✅ `red-floor.spec.ts` | ✅ 78 assets | ✅ |
 | Second Skin | ✅ `second-skin.ts` | ✅ `second-skin.spec.ts` | ✅ 78 assets | ✅ |
-| Last Service | ✅ `last-service.ts` | ✅ `last-service.spec.ts` | ✅ 78 assets, **no cover yet** (see Next) | ✅ |
+| Last Service | ✅ `last-service.ts` | ✅ `last-service.spec.ts` | ✅ 79 assets incl. v3 cover | ✅ |
 
 All three gates green at the last commit. Catalog is now **22 worlds**. Every
 bible in the queue is built; nothing is untouched.
@@ -210,21 +210,13 @@ in this session. **Keep writing the good word — just add it to the map.**
 
 ## Next
 
-1. **Last Service cover.** Everything else of its art is generated, optimized
-   and pushed — key visual, fourteen stages, seven portraits, seven full
-   reaction decks. The
-   cover was deliberately skipped: the coordinator's v3 anime direction
-   (`COVER_STYLE_SPINE`, `plotbreak-cover-v3-anime`, cover `titleSafeArea`
-   null, cast filling three quarters of the frame) is **not on `origin/main`
-   yet** — main still reads `plotbreak-cover-v2` with the title-safe band on.
-   When v3 lands, `git checkout origin/main -- packages/director/src/media/prompts.ts`
-   and run
-   `npx tsx infra/scripts/generate-art.ts --only=story_last_service/cover`.
-   Do not re-enable wordmark plating.
-2. `optimize-art.ts`, gates, commit, push once the deck finishes.
-3. Offered but not taken: populating `protagonist` on the eight worlds this
-   branch built. The schema is on main and defaults to `BLANK`, which is
-   correct for all of them except Itachi, which already declares `NAMED`.
+1. **Nothing outstanding on this branch.** Every bible assigned to it is
+   built, gated, catalogued and illustrated, and `origin/main` is merged in
+   as of the v3 cover direction. Last Service's cover was generated under
+   `plotbreak-cover-v3-anime` with plating off.
+2. Offered but not taken: populating `protagonist` on the worlds this branch
+   built. The schema is on main and defaults to `BLANK`, which is correct
+   for all eight of them; Itachi already declares `NAMED` on main.
 
 **The image provider rate-limits hard at about sixty images in a stretch.**
 Fourteen frames failed as `RATE_LIMITED` at concurrency 4 and again
