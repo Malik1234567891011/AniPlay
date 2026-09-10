@@ -12,6 +12,7 @@ import { QUALITY_TIERS } from '@aniplay/contracts';
 import {
   abandonedObjectiveNote,
   charactersPresent,
+  composeStory,
   crewFlag,
   crewRoster,
   formatWorldTime,
@@ -163,7 +164,11 @@ export interface BuildContextOptions {
 }
 
 export function buildTurnContext(options: BuildContextOptions): TurnContext {
-  const { story, state, resolution, tier, memories, recentTurns, actionText } = options;
+  // Spec §11.9 — the director and writer see the composed world too, so a
+  // generated person appears in the cast, can be a speaker, and can be
+  // retrieved against, exactly like an authored one.
+  const story = composeStory(options.story, options.state);
+  const { state, resolution, tier, memories, recentTurns, actionText } = options;
   const config = QUALITY_TIERS[tier];
 
   const location = story.locations.find((l) => l.id === state.player.locationId);

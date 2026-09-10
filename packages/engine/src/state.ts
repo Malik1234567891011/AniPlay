@@ -143,6 +143,7 @@ export function createInitialState({ sessionId, story, identity }: CreateStateOp
     flags: {},
     encounter: null,
     contest: null,
+    generated: { characters: [], locations: [], origins: [] },
     arc: {
       episode: 1,
       turnsInEpisode: 0,

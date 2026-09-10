@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { FactVisibility } from '../ai/primitives.js';
-import { AttributeKey } from './story.js';
+import { AttributeKey, CharacterDef, LocationDef } from './story.js';
 
 /**
  * Authoritative runtime game state. This is the truth the writer decorates —
@@ -167,6 +167,48 @@ export const EncounterState = z
 export type EncounterState = z.infer<typeof EncounterState>;
 
 /**
+ * Spec §11.9 — the part of this world the player made.
+ *
+ * A published `StoryVersion` is immutable and shared by every session of it,
+ * which is right for authored content and fatal for generated content. When a
+ * player walked out of the academy the writer invented a café, a shopkeeper
+ * and a job, the prose continued perfectly — and none of it existed anywhere
+ * the engine could see. Next session it was gone, because it had never been
+ * anywhere.
+ *
+ * These are full definitions, in the same shapes an author uses, stored on the
+ * session. Composed over the authored world at the top of every entry point,
+ * so a generated person is a character in every sense that matters: you can
+ * travel to their shop, talk to them, have a relationship with them, fight
+ * them and kill them, and the forty places in the engine that look up
+ * `story.characters` never need to know they were not there at the start.
+ *
+ * Promotion is deliberate and driven by the player. Three students in a
+ * hallway stay prose. The one the player stops and talks to becomes real.
+ */
+export const GeneratedWorld = z
+  .object({
+    characters: z.array(CharacterDef).default([]),
+    locations: z.array(LocationDef).default([]),
+    /** How each came to exist, for the record and for retrieval. */
+    origins: z
+      .array(
+        z
+          .object({
+            entityId: z.string(),
+            kind: z.enum(['CHARACTER', 'LOCATION']),
+            promotedAtTurn: z.number().int(),
+            /** What the player did that made it real. */
+            reason: z.string(),
+          })
+          .strict(),
+      )
+      .default([]),
+  })
+  .strict();
+export type GeneratedWorld = z.infer<typeof GeneratedWorld>;
+
+/**
  * Spec §13.8 — a bounded contest with a clock and a score.
  *
  * A basketball game, a duel tournament, a race. Distinct from `EncounterState`
@@ -293,6 +335,8 @@ export const GameState = z
     encounter: EncounterState.nullable().default(null),
     /** Spec §13.8 — a match in progress, if there is one. */
     contest: ContestState.nullable().default(null),
+    /** Spec §11.9 — the part of this world the player made. */
+    generated: GeneratedWorld.default({ characters: [], locations: [], origins: [] }),
     arc: ArcState,
     /** Lineage of consumed seeds, so a branch can be replayed deterministically. */
     rngCursor: z.number().int().min(0).default(0),

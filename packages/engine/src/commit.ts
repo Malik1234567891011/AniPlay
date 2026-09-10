@@ -15,6 +15,7 @@ import type { FiredWorldEvent } from './world-events.js';
 import { echoDirectorNotes, loopShouldReset, resetLoop, type LoopResetResult } from './loop.js';
 import { departuresFromMutations, type CrewDeparture } from './crew.js';
 import { scoutingMutations } from './tendencies.js';
+import { composeStory } from './generated-world.js';
 import { contestResultFlags } from './contest.js';
 
 /**
@@ -54,7 +55,10 @@ export interface CommitOptions {
 }
 
 export function commitTurn(options: CommitOptions): CommitResult {
-  const { story, resolution, turnId } = options;
+  // Spec §11.9 — quests, schedules and gates all evaluate against the composed
+  // world, so a generated person can be a quest target like anybody else.
+  const story = composeStory(options.story, options.state);
+  const { resolution, turnId } = options;
   const now = options.now ?? ((): string => new Date().toISOString());
 
   let counter = 0;

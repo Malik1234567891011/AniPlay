@@ -22,6 +22,7 @@ import { classifyClaim, directorNoteFor, proposalFor } from './player-canon.js';
 import { detectOutOfScope } from './entity-resolution.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { expandElliptical } from './elliptical.js';
+import { recordMentions } from '@aniplay/engine';
 
 /**
  * Spec §17.1 — the turn pipeline, steps 4 through 12.
@@ -201,11 +202,25 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
   // Step 12 — commit. Memory proposals are materialised only for the facts the
   // surviving prose actually supports.
   clock.start('commit');
+  let mentionCounter = 0;
+  // Spec §11.9 — record the proper nouns this beat put in front of the player,
+  // so that "go back to the Moonlight Café" next turn can tell the difference
+  // between a place the story offered them and one they made up. Cheap, lossy,
+  // and the thing that makes promotion possible without asking the model to
+  // file paperwork.
+  const mentionMutations = recordMentions(
+    narrative.blocks.map((b) => b.text).join(' '),
+    story,
+    () => `mut_${turnId}_men${mentionCounter++}`,
+  );
+
+
   const commit = commitTurn({
     story,
     state,
     resolution,
     turnId,
+    extraMutations: mentionMutations,
     now: options.now,
   });
   // An established claim is written down before anything the model proposed,

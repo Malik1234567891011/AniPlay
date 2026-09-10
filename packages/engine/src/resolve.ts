@@ -23,6 +23,7 @@ import {
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
 import { fireWorldEvents } from './world-events.js';
 import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
+import { composeStory, matchMention, promoteCharacter, promoteLocation } from './generated-world.js';
 import { scoutingPressure, tendencyMutations } from './tendencies.js';
 import { clampRelationshipDelta, type EventSeverity, type RelationshipDimension } from './relationships.js';
 import {
@@ -148,6 +149,10 @@ const PARTIAL_CAPABLE = new Set([
 ]);
 
 export function resolveIntent(options: ResolveOptions): Resolution {
+  // Spec §11.9 — everything below sees one world: the authored one with this
+  // player's additions composed over it. Doing it once here is what lets the
+  // forty `story.characters.find(...)` sites stay exactly as they are.
+  options = { ...options, story: composeStory(options.story, options.state) };
   const { story, state, intent, turnId, seed } = options;
   const rng = new SeededRng(seed, state.rngCursor);
 
@@ -844,6 +849,36 @@ function resolveTravel(args: ResolveActionArgs): ActionOutcome {
   const target = action.targets.find((t) => t.entityType === 'location');
   const destination = story.locations.find((l) => l.id === target?.entityId);
   if (!destination) {
+    // Spec §11.9 — before refusing, check whether the player is heading for
+    // somewhere the story itself put in front of them.
+    //
+    // This is the moment a generated place becomes real. The writer conjured
+    // the Moonlight Café on the way out of the academy; the player said "go to
+    // the Moonlight Café"; and the engine used to answer that there was no
+    // such place — the story disowning something it had said one turn earlier.
+    const spoken = `${action.method} ${action.declaredOutcome ?? ''} ${target?.displayName ?? ''}`;
+    const mentioned = matchMention(spoken, state);
+    if (mentioned) {
+      const promotion = promoteLocation(state, mentioned, 'went there', TRAVEL_TO_NEW_MINUTES, nextMutationId);
+      return {
+        checks: [],
+        mutations: [
+          ...promotion.mutations,
+          {
+            mutationId: nextMutationId(),
+            type: 'LOCATION_CHANGE',
+            subjectId: 'player',
+            reasonCode: 'TRAVEL_TO_GENERATED',
+            payload: { locationId: promotion.location!.id, firstVisit: true, generated: promotion.location },
+          },
+        ],
+        observableFacts: [`You go to ${mentioned}.`],
+        privateFacts: [{ visibility: 'SELF', fact: promotion.note }],
+        timeCategory: 'SCENE',
+        normalized: { verb: 'travel', status: 'RESOLVED', locationId: promotion.location!.id },
+      };
+    }
+
     // Name the exits that do exist. "Nowhere by that name" tells the player
     // nothing and leaves the writer with nothing true to say, which is how a
     // beat ends up inventing a reason the way out is closed.
@@ -2087,3 +2122,7 @@ function undertakingId(raw: string): string {
     .join('_')
     .slice(0, 60) || 'unnamed';
 }
+
+
+/** How long it takes to get somewhere the story only just mentioned. */
+const TRAVEL_TO_NEW_MINUTES = 25;

@@ -119,7 +119,12 @@ export function validateMutations(
       }
       case 'LOCATION_CHANGE': {
         const locationId = str(p.locationId);
-        if (!locationId || !story.locations.some((l) => l.id === locationId)) {
+        // A move that carries its own definition is creating the place it goes
+        // to. Spec §11.9 — the destination cannot already be in the story,
+        // because the player is inventing it by walking into it, and rejecting
+        // it here was silently discarding every generated location.
+        const carriesDefinition = Boolean((p.generated as { id?: string } | undefined)?.id);
+        if (!locationId || (!carriesDefinition && !story.locations.some((l) => l.id === locationId))) {
           reject(mutation, `unknown location "${String(p.locationId)}"`);
           continue;
         }
@@ -324,6 +329,21 @@ function applyOne(state: GameState, story: StoryVersion, mutation: StateMutation
 
     case 'LOCATION_CHANGE': {
       const locationId = str(p.locationId)!;
+      // Spec §11.9 — a move into somewhere the story invented carries the
+      // definition with it, and that is where it becomes permanent. It is
+      // stored on the session, so it survives the reload the way everything
+      // else on the session does.
+      const generatedLocation = p.generated as { id?: string } | undefined;
+      if (generatedLocation?.id && !state.generated.locations.some((l) => l.id === generatedLocation.id)) {
+        state.generated.locations.push(generatedLocation as (typeof state.generated.locations)[number]);
+        state.generated.origins.push({
+          entityId: generatedLocation.id,
+          kind: 'LOCATION',
+          promotedAtTurn: state.turnIndex,
+          reason: mutation.reasonCode,
+        });
+      }
+
       if (mutation.subjectId === 'player') {
         state.player.locationId = locationId;
         if (!state.discoveredLocationIds.includes(locationId)) {
