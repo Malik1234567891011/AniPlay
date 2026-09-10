@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
-  FlatList,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -77,9 +76,25 @@ import type { RootNavigation, RootRoute } from '../navigation.jsx';
  */
 const GENERIC_CHECK_LABELS = new Set(['attempt', 'interact', 'investigate', 'custom']);
 
-function worthRevealing(check: { label: string; outcome: string } | null | undefined): boolean {
+/**
+ * Whether to show the player the engine's working.
+ *
+ * Only when the world asked for it. Every launch world sets
+ * `revealCheckMath: false`, and the card was rendering anyway — "PERSUADE MINA
+ * ARCLIGHT · MODERATE" over "Failure", above prose that had just shown Mina
+ * deflecting perfectly well on its own. That is a verb, a target, a difficulty
+ * band and a verdict, on the one screen that is supposed to be story, and
+ * "Failure" reads as a scolding for a turn that was not a mistake.
+ *
+ * The presence of `math` is the signal, because that is exactly what
+ * `revealCheckMath` controls: a world that wants its dice seen sends it, and a
+ * world that does not sends null and gets prose.
+ */
+function worthRevealing(
+  check: { label: string; outcome: string; math?: string | null } | null | undefined,
+): boolean {
   if (!check) return false;
-  if (check.outcome === 'CRITICAL_SUCCESS' || check.outcome === 'COMPLICATION') return true;
+  if (!check.math) return false;
   return !GENERIC_CHECK_LABELS.has(check.label.trim().toLowerCase());
 }
 
@@ -127,7 +142,6 @@ export function SessionScreen({
   const [showQuality, setShowQuality] = useState(false);
   const [showTurnMenu, setShowTurnMenu] = useState(false);
   const [rephrasing, setRephrasing] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
   const [revision, setRevision] = useState(0);
   const [playerPortraitUrl, setPlayerPortraitUrl] = useState<string | null>(null);
   const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
@@ -466,24 +480,21 @@ export function SessionScreen({
         style={{ flex: 1 }}
         contentContainerStyle={{ padding: GUTTER, gap: spacing.lg, paddingBottom: spacing.xxl }}
       >
-        {turns.length > 1 && !showHistory ? (
-          <Pressable accessibilityRole="button" onPress={() => setShowHistory(true)}>
-            <Txt variant="caption" color={colors.accent.primary} center>
-              ↑ Earlier beats
-            </Txt>
-          </Pressable>
-        ) : null}
-
-        {showHistory
-          ? turns.slice(0, -1).map((turn) => (
-              <View key={turn.turnId} style={{ opacity: 0.55, gap: spacing.sm }}>
-                {turn.actionText ? <PlayerAction text={turn.actionText} /> : null}
-                {turn.blocks.map((block, index) => (
-                  <Block key={index} block={block} scene={scene} />
-                ))}
-              </View>
-            ))
-          : null}
+        {/* The whole story, scrollable, with nothing folded away.
+            
+            Earlier beats used to sit behind an "↑ Earlier beats" button and
+            then render at 55% opacity, which made the last hour of play look
+            like an appendix and made the screen feel like a set of active
+            nodes rather than a story you can read back. It is one feed now,
+            and scrolling up is how you reread it. */}
+        {turns.slice(0, -1).map((turn) => (
+          <View key={turn.turnId} style={{ gap: spacing.sm }}>
+            {turn.actionText ? <PlayerAction text={turn.actionText} /> : null}
+            {turn.blocks.map((block, index) => (
+              <Block key={index} block={block} scene={scene} />
+            ))}
+          </View>
+        ))}
 
         {pending ? <PlayerAction text={pending.actionText} /> : null}
         {latest?.actionText && !pending ? <PlayerAction text={latest.actionText} /> : null}
@@ -496,7 +507,7 @@ export function SessionScreen({
             outcomeLabel={pending.check.outcomeLabel}
             math={pending.check.math}
           />
-        ) : latest?.checks[0] && !pending && worthRevealing({ label: latest.checks[0].label, outcome: latest.checks[0].outcome }) ? (
+        ) : latest?.checks[0] && !pending && worthRevealing({ label: latest.checks[0].label, outcome: latest.checks[0].outcome, math: latest.checks[0].math }) ? (
           <CheckReveal
             label={latest.checks[0].label}
             // The committed turn carries the band and, where the world reveals
@@ -577,6 +588,37 @@ export function SessionScreen({
 
         <StateDeltaRow deltas={visibleDeltas.map((d) => ({ label: d.label }))} />
 
+        {/* Three responses, at the end of the story rather than pinned above
+            the composer.
+            
+            Pinned, they cost two or three lines of prose on every screen and
+            they sit in the player's eyeline while they are still reading the
+            beat, which reads as "choose before you finish". In the feed they
+            are simply what comes next: you read to the bottom, and there they
+            are. Hidden entirely while a turn resolves, so a set the player has
+            already chosen from never sits there looking unfinished. */}
+        {suggestions.length > 0 && !pending ? (
+          <Stack gap={spacing.sm} style={{ paddingTop: spacing.sm }}>
+            {suggestions.map((item, index) => (
+              <ActionSuggestion
+                key={`${item.text}_${index}`}
+                text={item.text}
+                // Tapping sends. The old behaviour filled the composer and
+                // waited for a second tap on Send, which is one tap more than
+                // the lean-back way of playing can afford.
+                onPress={() => {
+                  setSuggestions([]);
+                  void send(item.text);
+                }}
+                onEdit={() => {
+                  setSuggestions([]);
+                  setDraft(item.text);
+                }}
+              />
+            ))}
+          </Stack>
+        ) : null}
+
         {error ? (
           <Card style={{ borderColor: colors.semantic.warning, gap: spacing.md }}>
             <Txt variant="bodyCompact">{error.message}</Txt>
@@ -598,34 +640,6 @@ export function SessionScreen({
             paddingBottom: Math.max(insets.bottom, spacing.md),
           }}
         >
-          {/* Three responses above the composer.
-              
-              Stacked rather than in a horizontal rail: these are sentences the
-              protagonist says, not chips, and a rail cut them off mid-thought.
-              Hidden entirely while a turn resolves, so a set the player has
-              already chosen from never sits there looking unfinished. */}
-          {suggestions.length > 0 && !pending ? (
-            <Stack gap={spacing.sm} style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.md }}>
-              {suggestions.map((item, index) => (
-                <ActionSuggestion
-                  key={`${item.text}_${index}`}
-                  text={item.text}
-                  // Tapping sends. The old behaviour filled the composer and
-                  // waited for a second tap on Send, which is one tap more than
-                  // the lean-back way of playing can afford.
-                  onPress={() => {
-                    setSuggestions([]);
-                    void send(item.text);
-                  }}
-                  onEdit={() => {
-                    setSuggestions([]);
-                    setDraft(item.text);
-                  }}
-                />
-              ))}
-            </Stack>
-          ) : null}
-
           <Row gap={spacing.sm} style={{ paddingHorizontal: GUTTER }} align="flex-end">
             <TextInput
               value={draft}

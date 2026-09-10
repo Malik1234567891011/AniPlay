@@ -1363,9 +1363,9 @@ const raw = {
     '"Probationer," she says. "You have been taught to move a different way for five years, and you are going to do it my way for the next hour. When you get it wrong I will say so out loud."\n\n' +
     'Further down the line Tam Ashgrove turns to watch, entirely without malice, which somehow makes it worse.',
   openingSuggestions: [
-    'Fall in and do it her way.',
-    'Ask Renna what happens if you get it wrong twice.',
-    'Show her the Oyan version instead.',
+    'I fall in and do it her way, exactly her way, and keep my mouth shut about the rest.',
+    'I hold the form a beat and look at Renna. “What happens if I get this wrong twice? I would rather know now.”',
+    'I move through the Oyan version instead — slower, lower, wrong for this room — and let her see all of it.',
   ],
   publishedAt: '2026-09-09T09:00:00.000Z',
 };

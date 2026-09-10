@@ -1997,9 +1997,9 @@ const raw = {
     '"Right," she says, when the tall boy finally drops the ball. "Shirts and skins, three-on-three, and I would like to see the new one actually do something."\n\n' +
     'Nobody here knows what you can do. Including, if you are honest, you.',
   openingSuggestions: [
-    'Take the ball and go straight at whoever is guarding me.',
-    'Give it up early and see who can actually catch.',
-    'Guard the best player out there and make it unpleasant.',
+    'I take the ball and go straight at whoever is guarding me. No pass, no set-up — just at him, right now.',
+    'I give it up early and go and stand somewhere useful, and find out which of these six can actually catch.',
+    'I pick up the best player out there and get into him. “All practice. Every possession. Let us see it.”',
   ],
   publishedAt: '2026-09-09T18:00:00.000Z',
 };

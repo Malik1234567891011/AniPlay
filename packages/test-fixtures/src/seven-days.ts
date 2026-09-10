@@ -1656,9 +1656,9 @@ const raw = {
     'Your bags are at your feet. Both of them. The blue one has a broken zip.\n\n' +
     'It is twelve minutes past eight on Monday morning.',
   openingSuggestions: [
-    'Let her show you the town.',
-    'Ask her what there is to do here on a Sunday.',
-    'Say you would rather find the room first.',
+    'I pick up the lighter bag and grin at her. “Go on then. Show me the town — and be honest about the bad parts.”',
+    'I look down the hill towards the marina, then back at her. “What is there to do here on a Sunday? Asking for planning purposes.”',
+    'I do not move from my bags. “I would rather see the room first, if that is all right. I have been on a train since six.”',
   ],
   publishedAt: '2026-09-09T09:00:00.000Z',
 };

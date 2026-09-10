@@ -1283,9 +1283,9 @@ const raw = {
     'Juno looks up and sees you. Neither of you does anything for about two seconds.\n\n' +
     '"Right," Nadia says, without looking up. "Cabin four. You are on at six."',
   openingSuggestions: [
-    'Take your bag to cabin four and say nothing yet.',
-    'Go over and introduce yourself to the person with Juno.',
-    'Ask Nadia how long they have been here.',
+    'I take my bag to cabin four and say nothing to anyone, not yet.',
+    'I walk over to whoever is standing with Juno and put my hand out first. “I do not think we have met. I am new.”',
+    'I sit down near Nadia like it is nothing. “How long have you all been here? I am trying to work out how far behind I am.”',
   ],
   publishedAt: '2026-09-09T09:00:00.000Z',
 };

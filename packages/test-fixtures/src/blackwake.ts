@@ -1982,9 +1982,9 @@ const raw = {
     'Nessa Vale is standing at the harbour table twenty feet away, copying somebody else’s chart for money, and she has looked up at you twice. She was at the funeral. Nobody invited her.\n\n' +
     'You cannot sail this ship alone, and nobody in this town has any reason to help you.',
   openingSuggestions: [
-    'Go and ask Nessa Vale how she knew Ferro.',
-    'Take the compass down to the Marrow and see how bad the keel is.',
-    'Find Tolla Corrow at the yard and get the real number.',
+    'I cross to the harbour table and stand until she looks up. “You were at the funeral. Nobody invited you. How did you know Ferro?”',
+    'I take the compass down to the Marrow and get under her properly, to see exactly how bad that keel is before anyone tells me.',
+    'I go and find Tolla Corrow at the yard. “No courtesy, no rounding. Give me the real number to put her back in the water.”',
   ],
   publishedAt: '2026-09-09T09:00:00.000Z',
 };

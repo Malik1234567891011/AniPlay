@@ -750,9 +750,9 @@ const raw = {
     '"Nine days of water. Eleven days of road." Ferrow hands your canteen back. "There are four wells. The third one is a maybe. Anyone who wants to go home should turn round here, because past the first well it is the same distance either way."\n\n' +
     'Behind you the pilgrim shoulders a pack that is far too heavy for them and grins at nobody in particular.',
   openingSuggestions: [
-    'Ask Ferrow what happens if the third well is dry.',
-    'Go through the pilgrim’s pack before we leave.',
-    'Pick up the case and start walking.',
+    'I shoulder the case and fall in beside Ferrow. “Say the third well is dry. What happens to us then — honestly?”',
+    'I crouch and go through the pilgrim’s pack properly, item by item, before anyone tells me not to.',
+    'I pick up the case and start walking, out ahead of them, without waiting to be told the order of march.',
   ],
   publishedAt: '2026-08-27T09:00:00.000Z',
 };

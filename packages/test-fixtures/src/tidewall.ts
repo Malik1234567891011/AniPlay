@@ -1322,9 +1322,9 @@ const raw = {
     'Bec Tarrow is at the edge of the sand with his hands in his pockets, not in formation, watching you. He told you what he saw four days ago and has not met your eye since.\n\n' +
     '"Front rank," Odalys says. "We start whether you are ready or not."',
   openingSuggestions: [
-    'Take your place in the front rank.',
-    'Ask Odalys why you are nineteenth.',
-    'Catch Bec before drill starts.',
+    'I take a place in the front rank without being asked, and set my feet like I intend to stay there.',
+    'I catch Odalys before the line settles. “Nineteenth. I want to know what I did to earn that, or what you think I did.”',
+    'I get to Bec before drill starts and keep my voice down. “What is the one thing nobody tells the new ones?”',
   ],
   publishedAt: '2026-09-09T09:00:00.000Z',
 };

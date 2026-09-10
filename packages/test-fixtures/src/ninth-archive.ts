@@ -1255,9 +1255,9 @@ const raw = {
     '"You." Kael Ostrand does not raise his voice. "Do not move."\n\n' +
     'Behind him, a small dark-haired archivist glances at the red light, then at you, and says nothing at all about what she just saw.',
   openingSuggestions: [
-    'Stand still and let Kael write it up.',
-    'Show him the acceptance letter.',
-    'Ask the archivist what the red light means.',
+    'I stay exactly where I am and let Kael write whatever he is going to write. “Go on. I want to see what it says.”',
+    'I pull the acceptance letter out and hold it where the light catches it. “Read the name on this. Then tell me I was never admitted.”',
+    'I nod at the red light over the door without taking my eyes off the archivist. “That has been on since I walked in. What does it mean?”',
   ],
   publishedAt: '2026-08-14T09:00:00.000Z',
 };

@@ -835,9 +835,9 @@ const raw = {
     'Talia sits without a word and folds her hands in her lap. You cannot tell from her face whether she is being generous or whether this is the opening move of something.\n\n' +
     'You know the line. You have known it since February.',
   openingSuggestions: [
-    'Play the scene exactly the way I have been rehearsing it alone.',
-    'Ask the director what he actually wants from this moment.',
-    'Catch Talia’s eye before I begin.',
+    'I take my mark and play it exactly the way I have been playing it alone at two in the morning. No adjustments, no apologies.',
+    'I stop before the first line and look straight at the director. “Tell me what you actually want from this moment. I will give you that instead.”',
+    'I find Talia’s eyes in the dark past the lights and hold them for a second longer than is comfortable. Then I begin.',
   ],
   publishedAt: '2026-08-20T09:00:00.000Z',
 };

@@ -2231,9 +2231,9 @@ const raw = {
     'Captain Venn is across the hall with the night reports, and she has already seen you come in.\n\n' +
     'The bell for muster goes in ten minutes.',
   openingSuggestions: [
-    'Get the coat on before anyone sees.',
-    'Go straight to Captain Venn and get it over with.',
-    'Find Ren before muster.',
+    'I get the coat on and the buttons done before anybody comes round the corner and sees what is underneath.',
+    'I go straight to Captain Venn and stand where she has to look at me. “I would rather you heard it from me than from somebody else.”',
+    'I find Ren before muster and keep it quiet. “Tell me what she is like before I have to find out the hard way.”',
   ],
   publishedAt: '2026-09-09T09:00:00.000Z',
 };
