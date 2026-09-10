@@ -19,21 +19,18 @@ on `hush-house.ts`; merge resolved cleanly and is already pushed).
 
 | World | Code | Spec | Art | In `LAUNCH_CATALOG` |
 |---|---|---|---|---|
-| Itachi | ✅ `itachi.ts` | ✅ `itachi.spec.ts` | ✅ 88 assets | ✅ (derived asset keys) |
+| Itachi | ✅ `itachi.ts` | ✅ `itachi.spec.ts` | ✅ 88 assets | ✅ |
+| Primal Crown | ✅ `primal-crown.ts` | ✅ `primal-crown.spec.ts` | ✅ 69 assets | ✅ |
+| Zero Throne | ✅ `zero-throne.ts` | ✅ `zero-throne.spec.ts` | ⏳ generating | ✅ |
 
-**In progress — uncommitted at the time of writing:**
+All three gates green at the last commit. Catalog is now 16 worlds.
 
-- **Primal Crown** — `packages/test-fixtures/src/primal-crown.ts` (~2,170 lines)
-  is written and registered in `index.ts`, and `packages/test-fixtures` is green
-  (374 tests). It was failing 1 director-suite assertion (Mako's `cardBlurb` had
-  no "you"/"your"); that edit is applied but not yet re-run. **No `primal-crown.spec.ts`
-  yet. No art yet.**
-
-**Untouched (7 worlds), in build order:**
-`01_ZERO_THRONE`, `02_THE_FOURTH_BEAST`, `03_SEVEN_NAMES`,
-`04_THE_BLANK_PROPHECY`, `06_THE_RED_FLOOR`, `07_SECOND_SKIN`,
-`08_LAST_SERVICE` — all in `/Users/malik/Downloads/morestoryideas/`.
-Copy each bible into `docs/story-bibles/` as you build it.
+**Untouched (6 worlds), in build order:**
+`02_THE_FOURTH_BEAST`, `03_SEVEN_NAMES`, `04_THE_BLANK_PROPHECY`,
+`06_THE_RED_FLOOR`, `07_SECOND_SKIN`, `08_LAST_SERVICE` — all in
+`/Users/malik/Downloads/morestoryideas/`. Copy each bible into
+`docs/story-bibles/` as you build it (Itachi → `09_ITACHI.md`, Zero Throne →
+`05_ZERO_THRONE.md`, that folder's index → `00_MORESTORYIDEAS_INDEX.md`).
 
 Three worlds from **previous** sessions (Hush House, Window Seven, Good Morning
 Husband) are shipped and gated but have **no art** and export raw with null
@@ -109,6 +106,22 @@ array order on purpose**).
 The licensing/rights flag a previous session left in `BUILD_STATUS.md` has been
 **deleted** per the product owner. Do not raise it again.
 
+### Zero Throne — shape
+
+Playable span is the **fortnight after the machine kneels**, on and around one
+neutral orbital station. The Nine-Day War, Lysandra and HELIOS are eighteen
+years of backstory carried in lore and in what six people will and will not say;
+the second war, if it happens, is an ending.
+
+7 characters (Rhea, Mina, Talon, Orin, Venn, **Morrow**, Eli), 13 locations,
+6 factions, 5 quests / 14 steps, 10 world events, 12 endings, 3 resources
+(Nerve `GOOD_HIGH`; Pressure / Wear `GOOD_LOW`, Pressure first).
+
+Morrow **is** a `CharacterDef` — unlike White Maw in Primal Crown — because it
+has a voice, preferences and boundaries. Its `appearance` is the red line across
+the cockpit display, and it is placed sixth in the cast array so it does not
+take a cover slot.
+
 ### Primal Crown — shape
 
 Playable world is the **three days at Sunscar Crossing**, not the continent.
@@ -147,27 +160,31 @@ every character and an animal cannot have them.
 
 ## Next
 
-1. Re-run `npx vitest run --root packages/director 2>&1 | grep -E "FAIL|Tests "`
-   to confirm the Mako `cardBlurb` fix landed (it was the last failing assertion).
-2. Write `packages/test-fixtures/src/primal-crown.spec.ts`. Copy the shape of
-   `itachi.spec.ts`. It must cover, at minimum:
-   - **Opening co-location**: `charactersPresent(start())` contains `kaia`
-     (`market_lanes`, minute 440), and no other character's
-     `locationForSchedule(...) ?? homeLocationId` resolves to `market_lanes`.
-   - **Pairwise voice separation**: all 15 cast pairs, content-word (len > 3)
-     Jaccard-style overlap `< 0.3`. This is what found the real defects in Itachi.
-   - Each declared `speechStyle` differentiator demonstrated in `voiceSamples`.
-   - Resource drivers, the single `GOOD_HIGH`, and both array orders above.
-   - Every `cancelledByFlags` entry on a world event is a flag something sets.
-   - `end_the_long_hunger` (the careful-play loss) requires no relationship and
-     no items.
-3. Run all three gates by exit code, then **commit and push Primal Crown**.
-4. Generate Primal Crown art (recipe above), `optimize-art.ts`, flip `index.ts`
-   to `withDerivedAssetKeys`, re-run gates, commit, push.
-5. Update this file, then start `01_ZERO_THRONE.md`. Read
-   `/Users/malik/Downloads/morestoryideas/00_INDEX.md` first if not already read
-   (already read: it lists seven and describes a `RANK_ZERO` with no file; `08`
-   and `09` are on disk and unlisted).
+1. Zero Throne art is generating in the background. When it finishes:
+   `npx tsx infra/scripts/optimize-art.ts`, re-run gates, commit, push.
+   (`index.ts` already has it on `withDerivedAssetKeys`, so nothing else to flip.)
+2. Build `02_THE_FOURTH_BEAST.md`, then the remaining five in order.
+
+**The per-world loop that works — follow it exactly:**
+
+1. Read the bible: outline with `grep -n "^# \|^## "`, then `sed -n` the core
+   sections. Do not read art-prompt sections.
+2. Decide the **playable span** first and write it into the file's doc comment.
+   Every bible so far has been larger than one `StoryVersion` can hold; the
+   compression is the authoring decision and it is the expensive part.
+3. Write the world in ~8 heredoc chunks to `/tmp/<world>/pN.ts`, then `cat` them
+   together into `packages/test-fixtures/src/<world>.ts`.
+4. **Register in `index.ts` immediately** and run
+   `npx vitest run --root packages/test-fixtures 2>&1 | grep -E "Tests |FAIL|→"`.
+   This is what catches parse errors and unreachable routes.
+5. Run `npx vitest run --root packages/director` — this is where the gate,
+   `cardBlurb` and narrative-clarity failures appear.
+6. Write `<world>.spec.ts`. Copy `zero-throne.spec.ts`; it is the most complete.
+   It **must** include the pairwise voice-overlap test — that test has found a
+   real defect in every world it has been run against.
+7. All three gates by exit code, commit, push.
+8. Generate art backgrounded, `optimize-art.ts`, gates, commit, push.
+9. Update this file.
 
 ---
 

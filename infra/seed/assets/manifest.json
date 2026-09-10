@@ -7465,5 +7465,24 @@
       "latencyMs": 30550,
       "createdAt": "2026-09-10T16:14:57.937Z"
     }
+  },
+  "story_zero_throne/stage_vesper_hangar": {
+    "assetKey": "story_zero_throne/stage_vesper_hangar",
+    "file": "story_zero_throne/stage_vesper_hangar.png",
+    "kind": "LOCATION_STAGE",
+    "alt": "The Memorial Hangar: Sealed for eighteen years and no longer sealed.",
+    "width": 1536,
+    "height": 1024,
+    "styleVersion": "anima-v1",
+    "provenance": {
+      "provider": "openai",
+      "model": "gpt-image-2",
+      "requestId": "e280c28d-99f0-49aa-ae8f-82f065363f30",
+      "promptHash": "cc19f756bdafaa2f25c250ea18b38499",
+      "seed": "sv_zero_throne_1:loc:vesper_hangar:anima-v1",
+      "costUsd": 0.02404,
+      "latencyMs": 24125,
+      "createdAt": "2026-09-10T16:23:03.968Z"
+    }
   }
 }
