@@ -201,3 +201,95 @@ client-writable path to that table, check this first.
 Also unverifiable right now: live PostgREST exposure. The project returns
 `PGRST002` for every table, including ones that already had RLS, so the gap was
 read from the migrations rather than demonstrated.
+
+---
+
+# Where we actually are, 2026-09-11 (evening)
+
+Scored against the spec's own ship gate, §46 of
+`PROJECT_ANIMA_PRODUCT_SPEC.md`. Not against a feeling.
+
+## French: yes, it works
+
+Verified end to end today, not assumed:
+
+- A French turn commits and the prose is native quality. From a live Itachi
+  run: *« Le silence recolle entre les phrases. »* / *« C'est pas la prise.
+  C'est le poste. »* That is French writing, not translated English.
+- Interface catalogue 727/727 keys, no violations.
+- 22 of 23 worlds carry complete French world text. **Nine Weeks is at 11%** and
+  is the only gap — it is Supabase data, so it can be finished without a build.
+- `DEVICE_LOCALE_AUTODETECT` is on, so a French phone opens in French, and the
+  language picker is a normal Profile row so English is one tap away.
+- A full 23-world French smoke is running as this is written.
+
+So French is **not** the thing standing between you and a push.
+
+## The thing standing between you and a push
+
+**Still the API.** It runs on a laptop on a home wifi. No Dockerfile, no CI, no
+host, no TLS. Until that is deployed nothing else on this list can even be
+tested by a real person, let alone reviewed by Apple.
+
+## The spec's own gate, scored
+
+| Section | Score | Note |
+|---|---|---|
+| Core gameplay | 5 / 6 | Only the <60s usability test is unrun |
+| Economy | 4 / 5 | Support/admin tooling does not exist |
+| **Safety** | **4 / 8** | See below — this is what gets you rejected |
+| **Reliability** | **1 / 5** | No crash reporting, no load test, no verified restore |
+| Design / a11y | 4 / 6 | Dynamic Type and VoiceOver untested on device |
+| Content | 3 / 4 | The publish clarity gate is decorative |
+
+### Safety, item by item
+
+- UGC filtering — **no**. Comments are posted unfiltered.
+- Report — **yes**. Fixed today; the in-session button used to open the
+  timeline instead of a report.
+- Block — **no**. The endpoint exists; nothing consumes it, so blocking
+  somebody changes nothing you see.
+- Moderation queue — **no**. `moderation_cases`, `moderation_actions` and
+  `admin_audit_log` have zero writers, and `apps/admin/` is empty. There is no
+  path from a report to a human.
+- Age / content gating — **yes**.
+- Public IP / likeness checks — **see below**.
+- Official romance age rules — not audited.
+- Account deletion — **yes**, implemented and tested.
+
+Apple Guideline 1.2 asks a UGC app to show filtering, reporting, blocking and a
+way to act on reports. Two of four exist.
+
+## The one nobody has raised
+
+The flagship world is **Itachi**, featured first, and its text contains
+`Uchiha` 76 times, `Hokage` 31, `Konoha` 14, `Sharingan` 12 — plus Sasuke,
+Mikoto, Fugaku, Danzo and Izumi. That is Naruto: Shueisha and Kishimoto's
+property, licensed to Viz in the US.
+
+The app is commercial and sells credits to play it. Apple Guideline 5.2 covers
+third-party IP directly, and the spec's own ship gate lists "public IP/likeness
+checks" as a line item for exactly this reason.
+
+This is a business decision rather than a bug, and it is not mine to make. But
+it should be a decision somebody takes deliberately before submitting, not one
+discovered in a rejection or a takedown. The options are roughly: get a
+licence, file the serial numbers off (the *shape* of that story — a prodigy
+asked to choose between family and village — is not anybody's property), or
+ship it and accept the risk knowingly.
+
+## So: App Store Connect and Superwall now?
+
+Not yet, and not because of French. In order:
+
+1. **Deploy the API.** Nothing is testable without it.
+2. **Decide on Itachi.** It is the front page.
+3. **Safety minimum for Guideline 1.2** — somewhere a report lands that a human
+   reads, and make block do something. Smallest honest version, not an admin
+   suite.
+4. **Crash reporting.** You shipped a crash-on-open bug today and nothing would
+   have told you.
+5. *Then* Superwall, App Store Connect, IAP products, submit.
+
+Steps 1 and 5 can run in parallel with Omar; 2 and 3 cannot be parallelised
+away.
