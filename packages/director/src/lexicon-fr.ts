@@ -94,6 +94,63 @@ function verbForms(...stems: string[]): string {
   return `${CLITIC}(?:${stems.join('|')})${endings}`;
 }
 
+/**
+ * French that looks like violence and is not. Step 11.
+ *
+ * Every one of these contains a verb the attack list matches, and none of them
+ * is an attack. `ça me tue` is *that is hilarious*. `je meurs` is *I am dying
+ * of laughter / embarrassment / boredom*. `c'est une tuerie` is a compliment,
+ * usually about food. A player typing any of them got a combat check, a
+ * relationship penalty and a world that treated a joke as an assault.
+ *
+ * These are checked **before** the verb lexicon and win outright, because the
+ * cost is asymmetric: reading a joke as an attack breaks the scene and moves
+ * state that cannot be moved back, while missing a real attack phrased this way
+ * costs one turn of `custom`.
+ *
+ * Deliberately narrow. Each is an idiom with a fixed shape, not a general rule
+ * about the verb — `je le tue` is still an attack, and must stay one.
+ */
+export const FIGURATIVE_VIOLENCE_FR: RegExp[] = [
+  // `ça me tue`, `ça me tuait`, `ça me fait mourir` — that is very funny.
+  fr(`(?:ça|ca|cela)\\s+(?:me|te|le|la|nous|vous|les)\\s+(?:tue|tuais|tuait|tuent)`),
+  // `c'est une tuerie`, `c'était une tuerie` — that was outstanding.
+  fr(`c${APOS}(?:est|était|etait)\\s+(?:une\\s+)?tuerie`),
+  // `je meurs de rire`, `je meurs de faim`, `je meurs d'ennui`.
+  fr(`${SUBJECT}(?:meurs|meure|mourir)\\s+(?:de|d${APOS})`),
+  // `je suis mort` / `je suis morte` — laughing, exhausted, or in trouble.
+  // Never a declaration that the player character has died.
+  fr(`${SUBJECT}suis\\s+mort(?:e|s|es)?`),
+  // `il m'a tué` — he destroyed me, as a compliment or a joke.
+  fr(`(?:il|elle|on|ils|elles)\\s+m${APOS}(?:a|ont)\\s+tué(?:e|s|es)?`),
+  // `tu me tues` — you are killing me, said fondly.
+  fr(`tu\\s+me\\s+tues?`),
+];
+
+/**
+ * Violence in a world that has violence, and swagger in a world that does not.
+ *
+ * `je l'explose`, `je le fume`, `on va se le faire`, `il s'est fait démonter` —
+ * in Red Moon Brigade these are exactly what they sound like. In Good Morning,
+ * Husband or Last Service they are how somebody talks about winning an argument
+ * or a service, and resolving them as combat in a world with no combat is worse
+ * than useless: the engine has no check to run and the fiction has no room for
+ * the outcome.
+ *
+ * So the same phrase reads differently per world, gated on `allowsCombat`,
+ * which is the flag the world's own author already set. Where combat is off
+ * these fall through to the rest of the lexicon and usually land on `custom`,
+ * which is the honest answer — the player said something the world cannot
+ * mechanise, and the writer handles it as prose.
+ */
+export const GENRE_DEPENDENT_VIOLENCE_FR: RegExp[] = [
+  fr(`${SUBJECT}${verbForms('explos', 'fum', 'démont', 'demont', 'défonc', 'defonc', 'éclat', 'eclat')}`),
+  // `on va se le faire`, `on va se la faire` — we are going to get him.
+  fr(`(?:on|nous)\\s+(?:va|allons|vais)\\s+se\\s+(?:le|la|les)\\s+faire`),
+  // `il s'est fait démonter` — he got taken apart.
+  fr(`s${APOS}est\\s+fait\\s+(?:démont|demont|défonc|defonc|explos|fum)`),
+];
+
 export const VERB_LEXICON_FR: Array<{ verb: Verb; patterns: RegExp[] }> = [
   {
     verb: 'travel',

@@ -10,7 +10,13 @@ import type {
 import { nameKeys } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
 import type { Locale } from '@aniplay/i18n';
-import { CLAUSE_SPLIT_FR, META_PATTERNS_FR, VERB_LEXICON_FR } from './lexicon-fr.js';
+import {
+  CLAUSE_SPLIT_FR,
+  FIGURATIVE_VIOLENCE_FR,
+  GENRE_DEPENDENT_VIOLENCE_FR,
+  META_PATTERNS_FR,
+  VERB_LEXICON_FR,
+} from './lexicon-fr.js';
 import {
   detectOutOfScope,
   detectWorldAuthoring,
@@ -372,7 +378,8 @@ export class RuleBasedIntentParser implements IntentParser {
     }
 
     const item = matchItem(trimmed, story, state);
-    const verb = matchVerb(trimmed, state.locale) ?? (item ? 'use_item' : 'custom');
+    const verb =
+      matchVerb(trimmed, state.locale, story.rules.allowsCombat) ?? (item ? 'use_item' : 'custom');
 
     if (verb === 'custom') {
       ambiguities.push(`Unclear intent: "${trimmed.slice(0, 60)}"`);
@@ -418,7 +425,23 @@ function lexiconFor(locale: Locale): Array<{ verb: Verb; patterns: RegExp[] }> {
   return locale === 'fr' ? [...VERB_LEXICON_FR, ...VERB_LEXICON] : VERB_LEXICON;
 }
 
-function matchVerb(clause: string, locale: Locale = 'en'): Verb | null {
+function matchVerb(clause: string, locale: Locale = 'en', allowsCombat = true): Verb | null {
+  if (locale === 'fr') {
+    // Checked before the lexicon, and it wins. `ça me tue` is *that is
+    // hilarious*, and reading it as an attack runs a combat check, moves a
+    // relationship and hands the writer an assault that never happened — none
+    // of which can be taken back. Missing a real attack phrased this way costs
+    // one turn of `custom`. The trade is not close.
+    if (FIGURATIVE_VIOLENCE_FR.some((pattern) => pattern.test(clause))) return null;
+
+    // Swagger that is violence only where the world has violence. The world's
+    // own author already decided that, so this reads their flag rather than
+    // guessing from the sentence.
+    if (allowsCombat && GENRE_DEPENDENT_VIOLENCE_FR.some((pattern) => pattern.test(clause))) {
+      return 'attack';
+    }
+  }
+
   for (const entry of lexiconFor(locale)) {
     for (const pattern of entry.patterns) {
       if (pattern.test(clause)) return entry.verb;
@@ -560,6 +583,41 @@ function resolveTargets(clause: string, context: ParseContext): IntentAction['ta
     if (present.length === 1) {
       const only = story.characters.find((c) => c.id === present[0]!.characterId);
       if (only) targets.push({ entityType: 'npc', entityId: only.id, displayName: only.name });
+    }
+  }
+
+  // The French half of the same fallback, and it reaches further.
+  //
+  // French puts the object *before* the verb as a clitic — `je lui parle`,
+  // `je le frappe`, `je l'embrasse` — so the sentence names nobody and every
+  // name-matching pass above finds nothing. These parsed with the right verb
+  // and no target at all, which is a turn where the player clearly addressed
+  // somebody and the engine recorded that they addressed the room.
+  //
+  // Better than the English fallback in one respect: `le` and `la` carry
+  // gender, so with two people present French can still say which, where
+  // English `them` cannot. Only used when exactly one present character
+  // matches — two women in the room makes `la` ambiguous again.
+  if (targets.length === 0 && state.locale === 'fr') {
+    const clitic = /(?<![\p{L}\p{M}])(?:(le|la|les|lui|leur)\s+\p{L}|l['’])/iu.exec(clause);
+    if (clitic) {
+      const present = charactersPresent(state)
+        .map((c) => story.characters.find((character) => character.id === c.characterId))
+        .filter((c): c is NonNullable<typeof c> => !!c);
+
+      const which = (clitic[1] ?? '').toLowerCase();
+      const wants =
+        which === 'le' ? /\b(?:he|him|il|lui)\b/i : which === 'la' ? /\b(?:she|her|elle)\b/i : null;
+      const byGender = wants ? present.filter((c) => wants.test(c.pronouns ?? '')) : [];
+
+      const chosen =
+        byGender.length === 1
+          ? byGender[0]!
+          : // `context.addressee` is who the scene was already talking to, which
+            // is what a bare clitic almost always means.
+            present.find((c) => c.id === context.addressee) ?? (present.length === 1 ? present[0]! : null);
+
+      if (chosen) targets.push({ entityType: 'npc', entityId: chosen.id, displayName: chosen.name });
     }
   }
 
