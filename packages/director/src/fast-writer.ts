@@ -6,6 +6,7 @@ import { buildMessages, policyFor, writerPayload } from './model-stages.js';
 import type { Locale } from '@aniplay/i18n';
 import { nameKeys } from '@aniplay/contracts';
 import { buildDeltas } from './writer.js';
+import { frenchTypography } from '@aniplay/i18n';
 
 /**
  * Spec §17.10 — prose that arrives while it is being written.
@@ -74,6 +75,10 @@ export function takeCompleteSentences(buffer: string): { emit: string; rest: str
 export function blocksFrom(text: string, context: TurnContext): NarrativeBlock[] {
   const blocks: NarrativeBlock[] = [];
   const byName = speakerIndex(context);
+  // Typography is a rule, not a request. The authored catalogue is normalised
+  // at build time; this is the same pass for text a model just wrote.
+  const type = (value: string): string =>
+    context.state?.locale === 'fr' ? frenchTypography(value) : value;
 
   for (const paragraph of paragraphs(text)) {
     const speech = SPEAKER_LINE.exec(paragraph);
@@ -86,7 +91,7 @@ export function blocksFrom(text: string, context: TurnContext): NarrativeBlock[]
         // Quotes are stripped here and drawn by the client, so the two writer
         // paths store the same thing and the presentation is one decision in
         // one place rather than a property of which path happened to run.
-        text: stripQuotes(speech[2]!.trim()),
+        text: type(stripQuotes(speech[2]!.trim())),
         visibility: 'GROUP',
         voiceEligible: true,
       } as NarrativeBlock);
@@ -94,7 +99,7 @@ export function blocksFrom(text: string, context: TurnContext): NarrativeBlock[]
       blocks.push({
         type: 'NARRATION',
         speakerId: null,
-        text: paragraph,
+        text: type(paragraph),
         visibility: 'GROUP',
         voiceEligible: false,
       } as NarrativeBlock);

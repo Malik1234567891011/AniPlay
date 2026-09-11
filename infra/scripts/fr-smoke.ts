@@ -135,8 +135,18 @@ async function smoke(storyId: string, turns: number, problems: Problem[], log: s
       log.push(`> ${text}\n`);
       if (ENGLISH.test(text)) note(t, 'ENGLISH_PROSE', text);
       if (MIDPOINT.test(text)) note(t, 'MIDPOINT_PROSE', text);
-      // A narrator that vouvoies the player. Characters may; the narrator may not.
-      if (block.type === 'NARRATION' && /\b(vous|votre|vos)\b/i.test(text)) {
+      // A narrator that vouvoies the player. Characters may; the narrator may
+      // not.
+      //
+      // Narrowed to `vous` in subject position with a second-person-plural
+      // verb, because the first version flagged thirteen perfectly good lines:
+      // "entre vous", "posée entre vous", "le silence s'installe entre vous
+      // deux", "le parquet grince sous vos semelles". That is `vous` as the
+      // *plural of tu* — the player and somebody else — which is correct
+      // French and the opposite of vouvoiement.
+      const vouvoiement =
+        /\bvous (?:êtes|avez|voyez|pouvez|devez|savez|allez|faites|vous sentez|regardez|entendez)\b/i;
+      if (block.type === 'NARRATION' && vouvoiement.test(text)) {
         note(t, 'NARRATOR_VOUS', text);
       }
     }

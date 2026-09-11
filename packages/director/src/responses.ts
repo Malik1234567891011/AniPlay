@@ -33,6 +33,7 @@ import { RESPONSE_POLICY_FR } from './policies-fr.js';
 import { nameKeys } from '@aniplay/contracts';
 import { speakerBrief } from './speaker-brief.js';
 import { stateBands } from './state-bands.js';
+import { frenchTypography } from '@aniplay/i18n';
 
 /**
  * How long a card may be, per locale.
@@ -408,6 +409,10 @@ export async function generateResponses(
       // The policy forbids it and the payload now carries the answer, so a card
       // that still hedges is a card that ignored both.
       .filter((r) => !hasMidpoint(r.text))
+      // Sixteen cards in a twenty-three world smoke test carried straight
+      // apostrophes — `D'accord`, `m'occuper`. The policy asks for curly ones
+      // and the model complies most of the time, which is not a standard.
+      .map((r) => (locale === 'fr' ? { ...r, text: frenchTypography(r.text) } : r))
       .slice(0, 3);
 
     return responses.length >= 2 ? responses : null;

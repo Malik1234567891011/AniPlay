@@ -48,3 +48,38 @@ export const EN_DASH = '–';
 export function foldNarrowSpaces(text: string): string {
   return text.replace(/ /g, NBSP);
 }
+
+/**
+ * French typography, applied to text a model just wrote.
+ *
+ * The authored catalogue goes through this at build time. Generated prose and
+ * generated cards do not — they arrive from the model mid-turn — and a
+ * twenty-three world smoke test found sixteen cards with straight apostrophes:
+ * `D'accord`, `m'occuper`, `d'aller`. The policy asks for curly ones and a model
+ * obeys that most of the time, which is not a typography standard.
+ *
+ * Deterministic, so it belongs in code rather than in a prompt. The three rules
+ * are the ones French readers notice:
+ *
+ *   - the apostrophe is ’ and never ', between letters;
+ *   - ? ! ; : take a narrow no-break space before them;
+ *   - guillemets take one on the inside.
+ *
+ * Careful about what it must *not* touch: `10:30` is a time, `https://` is a
+ * URL, and an apostrophe that is acting as a quotation mark is somebody's
+ * punctuation rather than an elision.
+ */
+export function frenchTypography(text: string): string {
+  return text
+    .replace(/(\p{L})'(\p{L})/gu, '$1\u2019$2')
+    // Not before a colon that belongs to a clock or a scheme: `10:30` is a
+    // time and `https://` is a URL. Both were getting a narrow space, and the
+    // URL one was caught by its own test rather than by a reader, which is the
+    // only reason it is not in the catalogue.
+    .replace(/([^\s\u00a0\u202f])(\s?)([?!;:])(\/\/)?/gu, (match, before: string, gap: string, mark: string, slashes: string | undefined) => {
+      if (mark === ':' && (slashes || /\d/.test(before))) return match;
+      return `${before}\u202f${mark}${slashes ?? ''}`;
+    })
+    .replace(/«\s*/g, '«\u202f')
+    .replace(/\s*»/g, '\u202f»');
+}

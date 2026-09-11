@@ -31,6 +31,7 @@ import { worldTextCoverage } from '@aniplay/contracts';
 import { createGatewayFromEnv } from '@aniplay/director';
 import { FR_TIER_A, FR_TIER_B, glossaryBrief } from '../../packages/director/src/fr-adaptation.js';
 import { manifestFor, type ManifestField } from './fr-manifest.js';
+import { frenchTypography } from '@aniplay/i18n';
 
 const ROOT = new URL('../..', import.meta.url).pathname.replace(/\/$/, '');
 const OUT_DIR = join(ROOT, 'packages/test-fixtures/src/fr');
@@ -129,36 +130,18 @@ async function adaptBatch(
 /**
  * French typography, applied as a rule rather than asked for as a favour.
  *
- * The brief says "apostrophe courbe, espace insécable avant ? ! ; :" and a
- * model obeys that most of the time. Most of the time is not a typography
- * standard, and the misses are invisible in review — a straight apostrophe in
- * one topic string out of four hundred.
+ * The brief asks for curly apostrophes and narrow no-break spaces, and a model
+ * complies most of the time — which is not a typography standard, and the
+ * misses are invisible in review.
  *
- * These are deterministic transformations with no judgement in them, so they
- * belong in code. What is left for the model is the writing.
+ * The implementation is `frenchTypography` in `@aniplay/i18n`, shared with the
+ * runtime path that normalises generated prose and cards. It had a private
+ * copy here first, and the two immediately disagreed: the shared one learned
+ * that `https://` must not take a space before its colon, and this one did not.
+ * One rule, one place.
  */
-function normaliseTypography(value: string): string {
-  return (
-    value
-      // Apostrophe: only between letters, so a straight quote used as a quote
-      // mark is left for the QA queue rather than silently becoming an
-      // apostrophe.
-      .replace(/(\p{L})'(\p{L})/gu, '$1\u2019$2')
-      // A narrow no-break space before the two-part punctuation marks, unless
-      // one is already there. `\u202f` is the correct one; the renderer folds
-      // it to `\u00a0` for fonts that lack it.
-      .replace(/([^\s\u00a0\u202f])\s?([?!;:])/gu, (match, before: string, mark: string) =>
-        // Not inside a URL or a time — `10:30` and `https://` must survive.
-        /\d/.test(before) && mark === ':' ? match : `${before}\u202f${mark}`,
-      )
-      // Guillemets take the same space on the inside.
-      .replace(/«\s*/g, '«\u202f')
-      .replace(/\s*»/g, '\u202f»')
-  );
-}
-
 function normalise(value: string | string[]): string | string[] {
-  return Array.isArray(value) ? value.map(normaliseTypography) : normaliseTypography(value);
+  return Array.isArray(value) ? value.map(frenchTypography) : frenchTypography(value);
 }
 
 /**
