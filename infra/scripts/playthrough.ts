@@ -1,0 +1,167 @@
+/**
+ * Plays one world the way a player actually plays it: by tapping the cards.
+ *
+ * `smoke.ts` plays every world *badly*, on purpose, with scripted adversarial
+ * probes. This is the opposite and answers a different question — if somebody
+ * just taps what they are offered, is the result a story worth reading?
+ *
+ *   npm run playthrough -- --story=story_itachi --turns=10
+ *
+ * Everything is logged: the prose, every card offered, which one was taken,
+ * the media plan behind each turn, and the state the turn moved. Written to a
+ * file, because the point is to read it afterwards.
+ */
+import { writeFileSync } from 'node:fs';
+
+const args = process.argv.slice(2);
+const arg = (name: string, fallback: string): string =>
+  args.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3) ?? fallback;
+
+const BASE = arg('base', 'http://localhost:4000');
+const STORY = arg('story', 'story_itachi');
+const TURNS = Number(arg('turns', '10'));
+const OUT = arg('out', `/tmp/playthrough-${STORY}.md`);
+const TIER = arg('tier', 'VIVID');
+
+async function playerToken(): Promise<string> {
+  const url = process.env.SUPABASE_URL;
+  const anonKey = process.env.SUPABASE_ANON_KEY;
+  if (!url || !anonKey) return `guest_${crypto.randomUUID()}`;
+  const response = await fetch(`${url.replace(/\/$/, '')}/auth/v1/signup`, {
+    method: 'POST',
+    headers: { apikey: anonKey, authorization: `Bearer ${anonKey}`, 'content-type': 'application/json' },
+    body: '{}',
+  });
+  const body = (await response.json()) as { access_token?: string; msg?: string };
+  if (!body.access_token) throw new Error(`no token: ${body.msg ?? response.status}`);
+  return body.access_token;
+}
+
+const out: string[] = [];
+const log = (line = ''): void => {
+  out.push(line);
+  console.log(line);
+};
+
+async function main(): Promise<void> {
+  const auth = { authorization: `Bearer ${await playerToken()}`, 'content-type': 'application/json' };
+  const call = async <T>(method: string, path: string, body?: unknown, extra: Record<string, string> = {}): Promise<T> => {
+    const r = await fetch(`${BASE}${path}`, {
+      method, headers: { ...auth, ...extra },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+    const text = await r.text();
+    if (!r.ok) throw new Error(`${method} ${path} → ${r.status} ${text.slice(0, 300)}`);
+    return JSON.parse(text) as T;
+  };
+
+  const detail = await call<any>('GET', `/v1/stories/${STORY}`);
+  log(`# Playthrough — ${detail.story.title}`);
+  log();
+  log(`Tap-only. ${TURNS} turns, quality tier ${TIER}. ${new Date().toISOString()}`);
+  log();
+  log(`**Premise.** ${detail.story.premise ?? detail.story.hook ?? ''}`);
+  log();
+  const named = detail.protagonist?.kind === 'NAMED';
+  log(`**Protagonist.** ${named ? `NAMED — ${detail.protagonist.name} (${detail.protagonist.pronouns})` : 'BLANK'}`);
+  log();
+
+  const session = await call<any>('POST', `/v1/stories/${STORY}/sessions`, {
+    identity: {
+      displayName: named ? detail.protagonist.name : 'Robin Vale',
+      pronouns: named ? detail.protagonist.pronouns : 'they/them',
+      archetypeId: detail.archetypes?.[0]?.id ?? null,
+      advanced: {},
+    },
+  });
+  const sessionId = session.session.sessionId;
+  let revision = session.revision ?? session.session?.revision ?? 0;
+  log(`Session \`${sessionId}\``);
+  log();
+
+  // The opening scene, before any turn.
+  const opening = session.scene ? session : await call<any>('GET', `/v1/sessions/${sessionId}`);
+  let cards: any[] =
+    opening.suggestions ?? [];
+  const openingBlocks =
+    opening.openingBlocks ?? opening.recentTurns?.flatMap((t: any) => t.blocks ?? []) ?? [];
+  if (openingBlocks.length) {
+    log('## Opening');
+    log();
+    for (const b of openingBlocks) log(`> ${b.text}`);
+    log();
+  }
+
+
+  for (let t = 1; t <= TURNS; t += 1) {
+    if (!cards.length) {
+      const fresh = await call<any>('GET', `/v1/sessions/${sessionId}`);
+      cards = fresh.suggestions ?? [];
+    }
+    log(`---`);
+    log();
+    log(`## Turn ${t}`);
+    log();
+    if (!cards.length) {
+      log(`**NO CARDS OFFERED.** A tap-only player is stuck here.`);
+      break;
+    }
+    log(`**Cards offered:**`);
+    cards.forEach((c: any, i: number) => {
+      log(`  ${i + 1}. _(${c.attitude ?? '—'})_ ${c.label ?? c.text}`);
+    });
+    // Rotate through the cards rather than always taking the first, so the run
+    // is not one attitude repeated ten times.
+    const pick = cards[(t - 1) % cards.length];
+    const chosen = pick.label ?? pick.text;
+    log();
+    log(`**TAPPED → ${chosen}**`);
+    log();
+
+    const accepted = await call<any>('POST', `/v1/sessions/${sessionId}/turns`, {
+      actionText: chosen,
+      qualityTier: TIER,
+      sessionRevision: revision,
+      selectedSuggestionId: pick.id ?? null,
+      voicePreferred: false,
+    }, { 'idempotency-key': crypto.randomUUID() });
+
+    let turn: any = null;
+    for (let a = 0; a < 90 && !turn; a += 1) {
+      await new Promise((r) => setTimeout(r, 1000));
+      try { turn = await call<any>('GET', `/v1/turns/${accepted.turnId}`); } catch { /* not committed */ }
+    }
+    if (!turn) { log(`**TURN TIMED OUT after 90s.**`); break; }
+
+    for (const b of turn.blocks ?? []) {
+      const who = b.speakerName ?? b.speaker ?? null;
+      if (b.kind === 'DIALOGUE' && who) log(`**${who}:** ${b.text}`);
+      else log(`> ${b.text}`);
+      log();
+    }
+
+    const media = turn.media ?? turn.mediaPlan ?? null;
+    if (media) log(`\`media:\` ${JSON.stringify(media)}`);
+    const imgs = (turn.blocks ?? []).filter((b: any) => b.imageUrl || b.assetUrl);
+    if (imgs.length) {
+      for (const i of imgs) log(`\`image:\` ${i.imageUrl ?? i.assetUrl}  (block kind ${i.kind})`);
+    } else {
+      log(`\`image:\` none this turn`);
+    }
+    log();
+
+    const after = await call<any>('GET', `/v1/sessions/${sessionId}`);
+    revision = after.revision ?? revision;
+    cards = after.suggestions ?? [];
+    log(`\`clock:\` ${after.scene?.worldTimeLabel ?? '?'}  \`place:\` ${after.scene?.locationName ?? '?'}  \`present:\` ${(after.scene?.cast ?? []).map((c: any) => c.name).join(', ') || '(nobody)'}`);
+    log();
+  }
+
+  log(`---`);
+  log();
+  log(`Session id for \`npm run playtest ${sessionId}\`.`);
+  writeFileSync(OUT, out.join('\n'), 'utf8');
+  console.log(`\n\nWritten to ${OUT}`);
+}
+
+void main().catch((e) => { console.error(e); process.exit(1); });
