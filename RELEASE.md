@@ -51,15 +51,14 @@ that work has not started.
 **Size: medium-large.** Worth deciding whether it is needed for v1 at all,
 given the credit screen and StoreKit path already exist.
 
-### 4. Privacy policy and Terms have to exist and be reachable.
+### 4. Privacy policy and Terms — DONE (2026-09-11)
 
-`EXPO_PUBLIC_LEGAL_BASE_URL` is unset, so `LEGAL_LINKS_CONFIGURED` is false and
-the links are hidden — deliberately, with a comment saying a dead link on the
-age gate is the first thing review taps. Correct behaviour, but Apple requires a
-privacy policy URL on the App Store listing regardless.
+`https://www.plotbreak.com/privacy` and `/terms` both return 200, and
+`EXPO_PUBLIC_LEGAL_BASE_URL=https://www.plotbreak.com` is set, so the links now
+appear on the age gate.
 
-Needs: two pages hosted somewhere, then set that one variable.
-**Size: small once the pages are written.**
+⚠️ `apps/mobile/.env` is gitignored, so **this variable has to be set in
+whatever builds the production app too**, or the links silently vanish again.
 
 ### 5. Apple-account work — see `AppleForOmar.md`
 
@@ -71,21 +70,17 @@ developer account.
 
 ## SHOULD FIX BEFORE LAUNCH
 
-### 6. Decide what French is at launch.
+### 6. French — DONE (2026-09-11)
 
-Right now French is real but unreachable: `DEVICE_LOCALE_AUTODETECT` is `false`,
-and the language picker is behind a seven-tap gate on the Profile heading. A
-French speaker cannot find it.
+Decision: launching on the French App Store in France and Belgium, so a French
+phone opens in French. `DEVICE_LOCALE_AUTODETECT` is now `true` and the language
+picker is a normal Profile row rather than a seven-tap secret — French by
+default must not mean French only. Verified on a simulator set to `fr-FR` with
+no stored choice.
 
-Two honest options:
-- **Ship English-only**, and leave the gate where it is. Nothing to do.
-- **Ship French**, which means promoting the picker to a normal row — and
-  finishing Nine Weeks first, which is at 11% (41 of 390 fields) while the other
-  22 worlds are at 100%.
-
-The interface strings are bundled in the app, so a French *UI* needs a build.
-French *world text* does not.
-**Size: small to decide, medium to finish Nine Weeks.**
+Remaining: **Nine Weeks is at 11%** of its world text (41 of 390) while the
+other 22 worlds are complete. That is Supabase data, not bundled strings, so it
+can be finished after the push.
 
 ### 7. Two gates are not gating anything.
 
@@ -99,13 +94,10 @@ French *world text* does not.
 **Size: small each.** The lint one may surface a pile of violations the first
 time it actually runs, which is the point.
 
-### 8. Anonymous users are uncapped.
+### 8. Anonymous users are uncapped — ACCEPTED
 
-Every install mints a Supabase anonymous user. Supabase's own console warns that
-without captcha this inflates MAU and can be abused into a bill. Native captcha
-is awkward, so the pragmatic answer is probably to ship and watch, but it should
-be a decision rather than a surprise.
-**Size: small to monitor, medium to add captcha.**
+Decision taken: ship uncapped. Sign-in is not required to play and the risk is
+a bill rather than a breach. Worth watching MAU after launch.
 
 ---
 
@@ -127,3 +119,85 @@ be a decision rather than a surprise.
 - Every cold start re-ran onboarding.
 - A guest could not be French at all — the app never sent `accept-language`.
 - Sign in with Apple was disabled in Supabase. Enabled today.
+
+---
+
+## Added by the audit, 2026-09-11
+
+Everything below came from a full read of the repo against the spec. The two
+with money or security attached I re-verified myself before acting; the rest are
+reported as found and marked.
+
+### BLOCKS — user-generated content has no moderation path (verified)
+
+The app ships a public comment section. Apple Guideline 1.2 asks you to
+demonstrate a method for filtering objectionable content, a mechanism to report
+it, and the ability to block abusive users.
+
+Reports are written to `moderation_cases`, `moderation_actions` and
+`admin_audit_log` — tables with **no writers and no readers**. `apps/admin/` is
+an empty directory. `listBlocks` has exactly one caller, its own route, so a
+block changes nothing about what a blocked person can post or what you see.
+There is no path from a person tapping "report" to any human seeing it.
+
+Also: the in-session report button navigates to the **timeline**, not the report
+sheet (`Session.tsx:858`). A safety control that silently does nothing.
+
+**Size: medium.** The smallest honest version is somewhere a report lands that a
+person actually reads, plus making block do something, plus fixing that button.
+
+### BLOCKS — fixed today
+
+- **Fork fee could double-charge, or charge for nothing.** A random UUID as the
+  ledger idempotency key made replays undetectable, and nothing after the debit
+  had a `catch`. Fixed and tested (`cfbb73f`).
+- **Row Level Security was on 14 of 52 tables.** The social and badge tables had
+  none at all, and so did session-scoped player state and the moderation tables.
+  The anon key ships in the app bundle. Fixed (`1341be8`): all 52 now covered.
+
+### SHOULD FIX
+
+- **No crash reporting at all.** No Sentry, Crashlytics or Bugsnag anywhere. The
+  app shipped a crash-on-open bug today and nothing would have told you. *Small.*
+- **Deleting a session is a hard cascade** (`repo/postgres.ts:624`). The spec
+  (§22.3) asks for a 7-day soft delete; there is no `deleted_at` on
+  `story_sessions`. Unrecoverable on a mistap. *Small.*
+- **`reserve()` reads the balance and appends in separate transactions**
+  (`wallet.ts:165` → `postgres.ts:876`) with no `SELECT … FOR UPDATE` and no
+  `CHECK (balance >= 0)`, so two concurrent turns can both pass the check. The
+  existing test is strictly sequential. Related: every balance read is a full
+  scan of that account's ledger, which grows by one row per turn forever.
+  *Medium, and the scan will matter before the race does.*
+- **The publish clarity gate is decorative.** Real checkers exist
+  (`narrative-clarity.ts`, `choice-clarity.ts`) but `checkStoryClarity` is only
+  called from tests, and `migrate.ts:150` writes `clarity_passed` as a literal
+  `true`. *Small.*
+- **`ai_contracts.json` has drifted from its companion spec without a version
+  bump** — `BeatPlan.text.maxLength` 180→320, `wordBudget.maximum` 220→500, both
+  still `"version": "1.0.0"`. `CLAUDE.md` calls that file authoritative, so the
+  version no longer identifies the contract. *Trivial.*
+- **The spec is not in the repo.** `PROJECT_ANIMA_PRODUCT_SPEC.md` lives in
+  `~/Downloads`, is named as the build target by `README.md:9`, and is in no
+  commit. Its companions (`schema.sql`, `openapi.yaml`, `design_tokens.json`,
+  `release_checklist.md`) do not exist on disk at all. Everything in this
+  codebase cites it by section number. *Trivial to fix, and it should be fixed:
+  the build target should not live in one person's Downloads folder.*
+- **37 code comments cite spec sections that do not exist** (§11.9 ×15, §17.10
+  ×7, §13.8 ×6, and others). They describe real working features, but nothing
+  can be audited against them. *Trivial.*
+- **Three worlds have no art** — Hush House, Window Seven, Good Morning Husband
+  export null asset keys. *Content, but visible on the shelf.*
+- **`docs/status.md` is stale** — says 21 worlds (there are 23) and that French
+  is unmerged (it is merged). *Trivial.*
+
+### Not verified
+
+The audit flagged that a forged `user_badges` row might mint credits through
+`/v1/badges/:id/claim`, because `syncBadges` may preserve a stored `unlockedAt`
+rather than recompute it. It did not finish reading `evaluateBadges`, and
+neither did I. **The RLS fix closes the door either way**, but if you ever add a
+client-writable path to that table, check this first.
+
+Also unverifiable right now: live PostgREST exposure. The project returns
+`PGRST002` for every table, including ones that already had RLS, so the gap was
+read from the migrations rather than demonstrated.
