@@ -3,7 +3,7 @@ import { Animated, Dimensions, FlatList, Linking, Pressable, ScrollView, View } 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Chip, Row, Stack, StoryArt, Txt, colors, radius, spacing, GUTTER } from '@aniplay/ui';
 import type { StorySummary } from '@aniplay/contracts';
-import { api } from '../api/client.jsx';
+import { api } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 
 /**
