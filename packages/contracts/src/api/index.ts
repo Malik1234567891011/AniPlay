@@ -90,7 +90,7 @@ export const DiscoverRail = z
   .object({
     id: z.string(),
     title: z.string(),
-    kind: z.enum(['HERO', 'CONTINUE', 'FOR_YOU', 'TRENDING', 'NEW', 'GENRE', 'FOLLOWING']),
+    kind: z.enum(['HERO', 'CONTINUE', 'FOR_YOU', 'TRENDING', 'TOP_RANKED', 'NEW', 'GENRE', 'FOLLOWING']),
     subtitle: z.string().nullable().default(null),
     stories: z.array(StorySummary),
   })

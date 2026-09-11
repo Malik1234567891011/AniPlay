@@ -1,3 +1,7 @@
+import { randomUUID } from 'node:crypto';
+import { BADGES, BADGES_BY_ID } from '@aniplay/contracts';
+import { syncBadges, type PlayerRecord } from './badges.js';
+import { rankTopRanked, rankTrending, trendingScore } from './ranking.js';
 import Fastify, { type FastifyInstance } from 'fastify';
 import {
   CanonCorrectionRequest,
@@ -267,9 +271,29 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const visible = stories.filter((story) => !hidden.includes(story.storyId));
     const signalsById = await ctx.repo.getSignalsFor(visible.map((story) => story.storyId));
 
+    // The social numbers, gathered in three queries for the whole shelf rather
+    // than per card.
+    const visibleIds = visible.map((story) => story.storyId);
+    const [likeCounts, commentCounts, myLikes, editorial] = await Promise.all([
+      ctx.repo.countLikes(visibleIds),
+      ctx.repo.countComments(visibleIds),
+      user ? ctx.repo.getLikes(user.userId) : Promise.resolve([] as string[]),
+      ctx.repo.getEditorial(),
+    ]);
+    const likedByMe = new Set(myLikes);
+    const staffPicks = new Set(editorial.filter((e) => e.staffPick).map((e) => e.storyId));
+
     const entries: RankedEntry[] = visible.map((story) => {
       const signals = signalsById.get(story.storyId) ?? EMPTY_SIGNALS;
-      return { summary: toStorySummary(story, signals, saved.includes(story.storyId)), signals };
+      const summary = toStorySummary(story, signals, saved.includes(story.storyId), {
+        likes: likeCounts.get(story.storyId) ?? signals.likes,
+        comments: commentCounts.get(story.storyId) ?? 0,
+        likedByMe: likedByMe.has(story.storyId),
+      });
+      if (staffPicks.has(story.storyId) && !summary.badges.includes('STAFF_PICK')) {
+        summary.badges.push('STAFF_PICK');
+      }
+      return { summary, signals };
     });
 
     const ranked = rankStories(entries);
@@ -289,8 +313,21 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       return { rails, continueCards: await continueCardsFor(ctx, user), categories, activeCategory: category };
     }
 
-    if (ranked[0]) {
-      rails.push({ id: 'hero', title: 'Featured', kind: 'HERO', subtitle: null, stories: [ranked[0]] });
+    // Six featured worlds, in the order an editor chose.
+    //
+    // `story_editorial.featured_rank` decides this, not the ranking — a shop
+    // window is curated for range (a tragedy, an arena, a romance, a horror) and
+    // "the six most liked" would put six of the same thing in it. Anything
+    // without a rank falls in behind by rank order, so the rotation is full even
+    // before anybody has curated it.
+    const featuredRank = new Map(
+      editorial.filter((e) => e.featuredRank !== null).map((e) => [e.storyId, e.featuredRank!]),
+    );
+    const featured = [...ranked]
+      .sort((a, b) => (featuredRank.get(a.storyId) ?? 999) - (featuredRank.get(b.storyId) ?? 999))
+      .slice(0, 6);
+    if (featured.length > 0) {
+      rails.push({ id: 'hero', title: 'Featured', kind: 'HERO', subtitle: null, stories: featured });
     }
 
     // Tastes the onboarding actually collected, spent on the one rail that
@@ -327,7 +364,34 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     // Trending is only a claim worth making when there is real play behind it.
     const played = ranked.filter((s) => s.runs > 0);
     if (played.length >= 3) {
-      rails.push({ id: 'trending', title: 'Trending now', kind: 'TRENDING', subtitle: null, stories: played });
+      const momentum = new Map(
+        played.map((story) => [
+          story.storyId,
+          trendingScore({
+            recentPlays: signalsById.get(story.storyId)?.runs ?? 0,
+            recentLikes: 0,
+          }),
+        ]),
+      );
+      rails.push({
+        id: 'trending',
+        title: 'Trending now',
+        kind: 'TRENDING',
+        subtitle: null,
+        stories: rankTrending(played, momentum),
+      });
+    }
+
+    // Top Ranked is the like count, and the rail carries its own order so the
+    // number on the card and the rank beside it can never disagree.
+    if (enough(4)) {
+      rails.push({
+        id: 'top_ranked',
+        title: 'Top ranked',
+        kind: 'TOP_RANKED',
+        subtitle: null,
+        stories: rankTopRanked(ranked, new Map(ranked.map((s) => [s.storyId, s.likes]))).slice(0, 10),
+      });
     }
 
     const newest = [...ranked].reverse().slice(0, Math.max(1, Math.ceil(ranked.length * 0.3)));
@@ -447,12 +511,229 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     return { saved: false };
   });
 
+  /**
+   * Like, and mean it.
+   *
+   * This used to bump `story_signals.likes` and return `{liked:true}` without
+   * writing anything down, so the number counted taps rather than people,
+   * tapping twice counted twice, and unliking was not expressible. The row is
+   * the like; the counter is derived.
+   */
   app.post<{ Params: { storyId: string } }>('/v1/stories/:storyId/like', async (request, reply) => {
     const user = await requireUser(ctx, request, reply);
     if (!user) return reply;
-    await ctx.repo.bumpSignal(request.params.storyId, 'likes', 1);
+    await ctx.repo.setLiked(user.userId, request.params.storyId, true);
+    const counts = await ctx.repo.countLikes([request.params.storyId]);
+    return { liked: true, likes: counts.get(request.params.storyId) ?? 0 };
+  });
+
+  app.delete<{ Params: { storyId: string } }>('/v1/stories/:storyId/like', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+    await ctx.repo.setLiked(user.userId, request.params.storyId, false);
+    const counts = await ctx.repo.countLikes([request.params.storyId]);
+    return { liked: false, likes: counts.get(request.params.storyId) ?? 0 };
+  });
+
+  // --- Comments ------------------------------------------------------------
+
+  /** Anyone may read. Only signed-in people may post. */
+  app.get<{ Params: { storyId: string }; Querystring: { sort?: string } }>(
+    '/v1/stories/:storyId/comments',
+    async (request) => {
+      const sort = request.query.sort === 'NEW' ? 'NEW' : 'TOP';
+      const user = await optionalUser(ctx, request);
+      const comments = await ctx.repo.listComments(request.params.storyId, sort, 100);
+      const liked = user ? new Set(await ctx.repo.likedCommentIds(user.userId, request.params.storyId)) : new Set<string>();
+      return {
+        sort,
+        comments: comments.map((c) => ({
+          commentId: c.commentId,
+          authorName: c.authorName,
+          body: c.body,
+          spoiler: c.spoiler,
+          likes: c.likes,
+          createdAt: c.createdAt,
+          likedByMe: liked.has(c.commentId),
+          // Only your own comment offers a delete control.
+          mine: !!user && c.userId === user.userId,
+        })),
+      };
+    },
+  );
+
+  /** How many a person may post in an hour before we ask them to slow down. */
+  const COMMENTS_PER_HOUR = 10;
+
+  app.post<{ Params: { storyId: string }; Body: { body?: string; spoiler?: boolean } }>(
+    '/v1/stories/:storyId/comments',
+    async (request, reply) => {
+      const user = await requireUser(ctx, request, reply);
+      if (!user) return reply;
+
+      const body = (request.body?.body ?? '').trim();
+      if (body.length === 0 || body.length > 1000) {
+        return sendError(reply, 400, 'INVALID_REQUEST', 'A comment is between 1 and 1000 characters.');
+      }
+
+      const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      if ((await ctx.repo.countRecentComments(user.userId, hourAgo)) >= COMMENTS_PER_HOUR) {
+        return sendError(reply, 429, 'RATE_LIMITED', 'That is a lot of comments in an hour. Try again shortly.');
+      }
+
+      const comment = {
+        commentId: `cmt_${randomUUID()}`,
+        storyId: request.params.storyId,
+        userId: user.userId,
+        authorName: user.displayName,
+        body,
+        kind: 'USER' as const,
+        spoiler: Boolean(request.body?.spoiler),
+        likes: 0,
+        createdAt: new Date().toISOString(),
+      };
+      await ctx.repo.addComment(comment);
+      return reply.code(201).send({ commentId: comment.commentId });
+    },
+  );
+
+  // --- Badges --------------------------------------------------------------
+
+  /**
+   * Gathers what the badges need to count, from what already exists.
+   *
+   * Derived rather than incremented: counters bumped from a dozen places in the
+   * turn pipeline drift the first time one is missed, and then somebody who
+   * played fifty turns is told they played forty-eight.
+   */
+  const playerRecord = async (userId: string): Promise<PlayerRecord> => {
+    const sessions = await ctx.repo.listSessions(userId);
+    const runs: { storyId: string; turns: number }[] = [];
+    const days = new Set<string>();
+    let endings = 0;
+    let freeformed = false;
+    let returned = false;
+
+    for (const session of sessions) {
+      const turns = await ctx.repo.listTurns(session.sessionId);
+      runs.push({ storyId: session.storyId, turns: turns.length });
+      days.add(session.lastPlayedAt.slice(0, 10));
+      days.add(session.createdAt.slice(0, 10));
+      if (session.createdAt.slice(0, 10) !== session.lastPlayedAt.slice(0, 10)) returned = true;
+      if (session.status === 'COMPLETED') endings += 1;
+      // A turn the player typed rather than tapped.
+      //
+      // Derived, because nothing records which it was: a turn is freeform when
+      // its action text is not one of the cards the *previous* turn offered.
+      // Imperfect at the edges — somebody could retype a card word for word —
+      // and right for every real case, which beats adding a column to a table
+      // that is append-only.
+      const ordered = [...turns].sort((a, b) => a.turnIndex - b.turnIndex);
+      for (const [index, turn] of ordered.entries()) {
+        const offered = (ordered[index - 1]?.suggestions ?? []).map((sug) => sug.text);
+        if (turn.actionText && !offered.includes(turn.actionText)) freeformed = true;
+      }
+    }
+
+    const genres = new Set<string>();
+    for (const storyId of new Set(runs.map((r) => r.storyId))) {
+      const story = await ctx.repo.getStoryByStoryId(storyId);
+      for (const tag of story?.tags ?? []) genres.add(tag.toLowerCase());
+    }
+
+    return {
+      runs,
+      genresPlayed: genres.size,
+      daysPlayed: days.size,
+      endingsReached: endings,
+      // Needs a catalogue-wide ending histogram we do not collect yet, so it
+      // stays honestly at zero rather than being faked from something adjacent.
+      rareEndings: 0,
+      hasFreeformed: freeformed,
+      hasReturned: returned,
+    };
+  };
+
+  app.get('/v1/badges', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+    const { progress, newlyUnlocked } = await syncBadges(ctx.repo, user.userId, await playerRecord(user.userId));
+    return {
+      badges: BADGES.map((badge) => {
+        const row = progress.find((p) => p.badgeId === badge.id);
+        const unlocked = !!row?.unlockedAt;
+        return {
+          ...badge,
+          // A secret badge shows as a locked mystery until it is earned.
+          title: badge.secret && !unlocked ? '???' : badge.title,
+          description: badge.secret && !unlocked ? 'Some endings are harder to find than others.' : badge.description,
+          progress: row?.progress ?? 0,
+          unlockedAt: row?.unlockedAt ?? null,
+          claimedAt: row?.claimedAt ?? null,
+        };
+      }),
+      newlyUnlocked: newlyUnlocked.map((b) => b.id),
+    };
+  });
+
+  app.post<{ Params: { badgeId: string } }>('/v1/badges/:badgeId/claim', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+    const badge = BADGES_BY_ID.get(request.params.badgeId);
+    if (!badge) return sendError(reply, 404, 'NOT_FOUND', 'No such badge.');
+
+    // Recompute first, so a badge earned seconds ago can be claimed without the
+    // player having to open the screen twice.
+    await syncBadges(ctx.repo, user.userId, await playerRecord(user.userId));
+
+    const claimed = await ctx.repo.claimBadge(user.userId, badge.id, new Date().toISOString());
+    if (!claimed) {
+      return sendError(reply, 409, 'ALREADY_CLAIMED', 'That reward has already been collected.');
+    }
+    // The ledger is the only place credits move, and the idempotency key is the
+    // badge itself — so even if this route is somehow called twice, the grant
+    // cannot land twice.
+    await ctx.wallet.grant(user.userId, 'PROMO_GRANT', badge.creditReward, `badge:${user.userId}:${badge.id}`);
+    const balance = await ctx.wallet.getBalance(user.userId);
+    return { claimed: true, credited: badge.creditReward, balance };
+  });
+
+  app.delete<{ Params: { commentId: string } }>('/v1/comments/:commentId', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+    const deleted = await ctx.repo.deleteComment(request.params.commentId, user.userId);
+    if (!deleted) return sendError(reply, 404, 'NOT_FOUND', 'That comment is not yours to delete.');
+    return { deleted: true };
+  });
+
+  app.post<{ Params: { commentId: string } }>('/v1/comments/:commentId/like', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+    await ctx.repo.setCommentLiked(user.userId, request.params.commentId, true);
     return { liked: true };
   });
+
+  app.delete<{ Params: { commentId: string } }>('/v1/comments/:commentId/like', async (request, reply) => {
+    const user = await requireUser(ctx, request, reply);
+    if (!user) return reply;
+    await ctx.repo.setCommentLiked(user.userId, request.params.commentId, false);
+    return { liked: false };
+  });
+
+  app.post<{ Params: { commentId: string }; Body: { reason?: string } }>(
+    '/v1/comments/:commentId/report',
+    async (request, reply) => {
+      const user = await requireUser(ctx, request, reply);
+      if (!user) return reply;
+      await ctx.repo.reportComment(
+        `crp_${randomUUID()}`,
+        request.params.commentId,
+        user.userId,
+        (request.body?.reason ?? 'UNSPECIFIED').slice(0, 200),
+      );
+      return { reported: true };
+    },
+  );
 
   app.post<{ Params: { storyId: string } }>('/v1/stories/:storyId/hide', async (request, reply) => {
     const user = await requireUser(ctx, request, reply);

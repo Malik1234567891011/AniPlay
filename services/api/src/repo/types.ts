@@ -101,6 +101,33 @@ export const EMPTY_SIGNALS: StorySignals = {
   impressions: 0,
 };
 
+export interface StoryComment {
+  readonly commentId: string;
+  readonly storyId: string;
+  /** Null for seeded launch content, which has no account behind it. */
+  readonly userId: string | null;
+  readonly authorName: string;
+  readonly body: string;
+  readonly kind: 'USER' | 'SEEDED';
+  readonly spoiler: boolean;
+  readonly likes: number;
+  readonly createdAt: string;
+}
+
+export interface StoryEditorial {
+  readonly storyId: string;
+  readonly featuredRank: number | null;
+  readonly staffPick: boolean;
+}
+
+export interface UserBadgeRow {
+  readonly userId: string;
+  readonly badgeId: string;
+  readonly progress: number;
+  readonly unlockedAt: string | null;
+  readonly claimedAt: string | null;
+}
+
 export interface Repository {
   // --- Catalog ---
   listStories(): Promise<StoryVersion[]>;
@@ -209,6 +236,44 @@ export interface Repository {
   setSaved(userId: string, storyId: string, saved: boolean): Promise<void>;
   getHidden(userId: string): Promise<string[]>;
   setHidden(userId: string, storyId: string, hidden: boolean): Promise<void>;
+
+  // --- Likes -----------------------------------------------------------
+  //
+  // A like is a row, not a counter bump. The old route incremented
+  // `story_signals.likes` and returned `{liked:true}`, so the number counted
+  // taps rather than people and unliking was not expressible.
+
+  /** True if the like was newly created. False means it was already there. */
+  setLiked(userId: string, storyId: string, liked: boolean): Promise<boolean>;
+  getLikes(userId: string): Promise<string[]>;
+  countLikes(storyIds: readonly string[]): Promise<Map<string, number>>;
+
+  // --- Comments --------------------------------------------------------
+
+  listComments(
+    storyId: string,
+    sort: 'TOP' | 'NEW',
+    limit: number,
+  ): Promise<StoryComment[]>;
+  countComments(storyIds: readonly string[]): Promise<Map<string, number>>;
+  addComment(comment: StoryComment): Promise<void>;
+  deleteComment(commentId: string, userId: string): Promise<boolean>;
+  setCommentLiked(userId: string, commentId: string, liked: boolean): Promise<boolean>;
+  likedCommentIds(userId: string, storyId: string): Promise<string[]>;
+  reportComment(reportId: string, commentId: string, reporterId: string, reason: string): Promise<void>;
+  /** How many this person has posted since `since`. Rate limiting. */
+  countRecentComments(userId: string, since: Date): Promise<number>;
+
+  // --- Editorial placement ---------------------------------------------
+
+  getEditorial(): Promise<StoryEditorial[]>;
+
+  // --- Badges ----------------------------------------------------------
+
+  getBadges(userId: string): Promise<UserBadgeRow[]>;
+  upsertBadge(row: UserBadgeRow): Promise<void>;
+  /** Claims exactly once. False means somebody already claimed it. */
+  claimBadge(userId: string, badgeId: string, at: string): Promise<boolean>;
 
   // --- Safety ---
   createReport(report: ReportRecord): Promise<void>;

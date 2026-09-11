@@ -87,6 +87,15 @@ export function toStorySummary(
   story: StoryVersion,
   signals: StorySignals,
   saved: boolean,
+  /**
+   * The social numbers, when the caller has gathered them.
+   *
+   * Optional so every existing call site keeps working and falls back to the
+   * signal rollup. `likes` here is the *combined* figure — the curated launch
+   * count plus the people who have actually tapped it — because those are one
+   * number to a reader and splitting them on screen would be strange.
+   */
+  social?: { likes?: number; comments?: number; likedByMe?: boolean },
 ): StorySummary {
   const badges: Array<'NEW' | 'TRENDING' | 'OFFICIAL'> = [];
   if (story.official) badges.push('OFFICIAL');
@@ -107,7 +116,9 @@ export function toStorySummary(
     contentDescriptors: story.contentDescriptors,
     intensity: story.intensity,
     runs: signals.runs,
-    likes: signals.likes,
+    likes: social?.likes ?? signals.likes,
+    comments: social?.comments ?? 0,
+    likedByMe: social?.likedByMe ?? false,
     saved,
     badges,
     updatedAt: story.publishedAt ?? new Date().toISOString(),

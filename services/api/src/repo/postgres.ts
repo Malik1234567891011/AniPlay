@@ -9,10 +9,13 @@ import {
 } from '@aniplay/contracts';
 import type {
   IdempotencyRecord,
-  Repository,
   ReportRecord,
+  Repository,
   SessionRecord,
+  StoryComment,
+  StoryEditorial,
   StorySignals,
+  UserBadgeRow,
   UserRecord,
 } from './types.js';
 import { EMPTY_SIGNALS } from './types.js';
@@ -50,6 +53,25 @@ export interface PostgresRepositoryOptions {
   /** Supabase requires TLS; a local cluster does not offer it. */
   readonly ssl?: boolean;
   readonly maxConnections?: number;
+}
+
+interface CommentRow {
+  comment_id: string; story_id: string; user_id: string | null; author_name: string;
+  body: string; kind: string; spoiler: boolean; likes: number; created_at: Date;
+}
+
+function toComment(r: CommentRow): StoryComment {
+  return {
+    commentId: r.comment_id,
+    storyId: r.story_id,
+    userId: r.user_id,
+    authorName: r.author_name,
+    body: r.body,
+    kind: r.kind === 'SEEDED' ? 'SEEDED' : 'USER',
+    spoiler: r.spoiler,
+    likes: r.likes,
+    createdAt: r.created_at.toISOString(),
+  };
 }
 
 export class PostgresRepository implements Repository {
@@ -182,6 +204,205 @@ export class PostgresRepository implements Repository {
                                             updated_at = now()`,
       [storyId, delta],
     );
+  }
+
+  // --- Likes ---------------------------------------------------------------
+
+  async setLiked(userId: string, storyId: string, liked: boolean): Promise<boolean> {
+    if (liked) {
+      // `ON CONFLICT DO NOTHING` is what makes this idempotent: the second tap
+      // affects nothing and reports that it affected nothing, so the caller
+      // knows not to move the counter.
+      const { rowCount } = await this.#pool.query(
+        `INSERT INTO story_likes (user_id, story_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+        [userId, storyId],
+      );
+      return (rowCount ?? 0) > 0;
+    }
+    const { rowCount } = await this.#pool.query(
+      `DELETE FROM story_likes WHERE user_id = $1 AND story_id = $2`,
+      [userId, storyId],
+    );
+    return (rowCount ?? 0) > 0;
+  }
+
+  async getLikes(userId: string): Promise<string[]> {
+    const { rows } = await this.#pool.query<{ story_id: string }>(
+      `SELECT story_id FROM story_likes WHERE user_id = $1`,
+      [userId],
+    );
+    return rows.map((r) => r.story_id);
+  }
+
+  async countLikes(storyIds: readonly string[]): Promise<Map<string, number>> {
+    const counts = new Map<string, number>();
+    if (storyIds.length === 0) return counts;
+    // The real rows plus the curated floor. `story_signals.likes` carries the
+    // seeded number a world launches with; `story_likes` carries the people.
+    // Added rather than max-ed, so a real like always moves the number the
+    // player is looking at.
+    const { rows } = await this.#pool.query<{ story_id: string; n: string }>(
+      `SELECT s.story_id,
+              (COALESCE(sig.likes, 0) + COUNT(l.user_id))::text AS n
+         FROM unnest($1::text[]) AS s(story_id)
+         LEFT JOIN story_signals sig ON sig.story_id = s.story_id
+         LEFT JOIN story_likes  l    ON l.story_id   = s.story_id
+        GROUP BY s.story_id, sig.likes`,
+      [[...storyIds]],
+    );
+    for (const row of rows) counts.set(row.story_id, Number(row.n));
+    return counts;
+  }
+
+  // --- Comments ------------------------------------------------------------
+
+  async listComments(storyId: string, sort: 'TOP' | 'NEW', limit: number): Promise<StoryComment[]> {
+    const { rows } = await this.#pool.query<CommentRow>(
+      `SELECT comment_id, story_id, user_id, author_name, body, kind, spoiler, likes, created_at
+         FROM story_comments
+        WHERE story_id = $1 AND deleted_at IS NULL
+        ORDER BY ${sort === 'TOP' ? 'likes DESC, created_at DESC' : 'created_at DESC'}
+        LIMIT $2`,
+      [storyId, limit],
+    );
+    return rows.map(toComment);
+  }
+
+  async countComments(storyIds: readonly string[]): Promise<Map<string, number>> {
+    const counts = new Map<string, number>();
+    if (storyIds.length === 0) return counts;
+    const { rows } = await this.#pool.query<{ story_id: string; n: string }>(
+      `SELECT story_id, COUNT(*)::text AS n FROM story_comments
+        WHERE story_id = ANY($1) AND deleted_at IS NULL GROUP BY story_id`,
+      [[...storyIds]],
+    );
+    for (const id of storyIds) counts.set(id, 0);
+    for (const row of rows) counts.set(row.story_id, Number(row.n));
+    return counts;
+  }
+
+  async addComment(c: StoryComment): Promise<void> {
+    await this.#pool.query(
+      `INSERT INTO story_comments
+         (comment_id, story_id, user_id, author_name, body, kind, spoiler, likes, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      [c.commentId, c.storyId, c.userId, c.authorName, c.body, c.kind, c.spoiler, c.likes, c.createdAt],
+    );
+  }
+
+  async deleteComment(commentId: string, userId: string): Promise<boolean> {
+    // Soft, and only your own. Scoped by `user_id` in the statement rather than
+    // checked first, so there is no window between the check and the delete.
+    const { rowCount } = await this.#pool.query(
+      `UPDATE story_comments SET deleted_at = now()
+        WHERE comment_id = $1 AND user_id = $2 AND deleted_at IS NULL`,
+      [commentId, userId],
+    );
+    return (rowCount ?? 0) > 0;
+  }
+
+  async setCommentLiked(userId: string, commentId: string, liked: boolean): Promise<boolean> {
+    const { rowCount } = liked
+      ? await this.#pool.query(
+          `INSERT INTO comment_likes (user_id, comment_id) VALUES ($1,$2) ON CONFLICT DO NOTHING`,
+          [userId, commentId],
+        )
+      : await this.#pool.query(`DELETE FROM comment_likes WHERE user_id = $1 AND comment_id = $2`, [
+          userId,
+          commentId,
+        ]);
+    const changed = (rowCount ?? 0) > 0;
+    if (changed) {
+      await this.#pool.query(
+        `UPDATE story_comments SET likes = GREATEST(0, likes + $2) WHERE comment_id = $1`,
+        [commentId, liked ? 1 : -1],
+      );
+    }
+    return changed;
+  }
+
+  async likedCommentIds(userId: string, storyId: string): Promise<string[]> {
+    const { rows } = await this.#pool.query<{ comment_id: string }>(
+      `SELECT cl.comment_id FROM comment_likes cl
+         JOIN story_comments c ON c.comment_id = cl.comment_id
+        WHERE cl.user_id = $1 AND c.story_id = $2`,
+      [userId, storyId],
+    );
+    return rows.map((r) => r.comment_id);
+  }
+
+  async reportComment(reportId: string, commentId: string, reporterId: string, reason: string): Promise<void> {
+    await this.#pool.query(
+      `INSERT INTO comment_reports (report_id, comment_id, reporter_id, reason)
+       VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING`,
+      [reportId, commentId, reporterId, reason],
+    );
+  }
+
+  async countRecentComments(userId: string, since: Date): Promise<number> {
+    const { rows } = await this.#pool.query<{ n: string }>(
+      `SELECT COUNT(*)::text AS n FROM story_comments WHERE user_id = $1 AND created_at >= $2`,
+      [userId, since.toISOString()],
+    );
+    return Number(rows[0]?.n ?? 0);
+  }
+
+  // --- Editorial placement -------------------------------------------------
+
+  async getEditorial(): Promise<StoryEditorial[]> {
+    const { rows } = await this.#pool.query<{
+      story_id: string;
+      featured_rank: number | null;
+      staff_pick: boolean;
+    }>(`SELECT story_id, featured_rank, staff_pick FROM story_editorial`);
+    return rows.map((r) => ({
+      storyId: r.story_id,
+      featuredRank: r.featured_rank,
+      staffPick: r.staff_pick,
+    }));
+  }
+
+  // --- Badges --------------------------------------------------------------
+
+  async getBadges(userId: string): Promise<UserBadgeRow[]> {
+    const { rows } = await this.#pool.query<{
+      badge_id: string; progress: number; unlocked_at: Date | null; claimed_at: Date | null;
+    }>(
+      `SELECT badge_id, progress, unlocked_at, claimed_at FROM user_badges WHERE user_id = $1`,
+      [userId],
+    );
+    return rows.map((r) => ({
+      userId,
+      badgeId: r.badge_id,
+      progress: r.progress,
+      unlockedAt: r.unlocked_at?.toISOString() ?? null,
+      claimedAt: r.claimed_at?.toISOString() ?? null,
+    }));
+  }
+
+  async upsertBadge(row: UserBadgeRow): Promise<void> {
+    await this.#pool.query(
+      `INSERT INTO user_badges (user_id, badge_id, progress, unlocked_at, claimed_at, updated_at)
+       VALUES ($1,$2,$3,$4,$5, now())
+       ON CONFLICT (user_id, badge_id) DO UPDATE
+         SET progress = GREATEST(user_badges.progress, EXCLUDED.progress),
+             -- Never re-stamp an unlock. The first time is the time it happened.
+             unlocked_at = COALESCE(user_badges.unlocked_at, EXCLUDED.unlocked_at),
+             updated_at = now()`,
+      [row.userId, row.badgeId, row.progress, row.unlockedAt, row.claimedAt],
+    );
+  }
+
+  async claimBadge(userId: string, badgeId: string, at: string): Promise<boolean> {
+    // The `claimed_at IS NULL` in the WHERE is the whole guarantee: two
+    // simultaneous claims race, one updates a row, the other updates nothing,
+    // and only the winner is paid.
+    const { rowCount } = await this.#pool.query(
+      `UPDATE user_badges SET claimed_at = $3, updated_at = now()
+        WHERE user_id = $1 AND badge_id = $2 AND unlocked_at IS NOT NULL AND claimed_at IS NULL`,
+      [userId, badgeId, at],
+    );
+    return (rowCount ?? 0) > 0;
   }
 
   // --- Users ---------------------------------------------------------------

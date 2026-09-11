@@ -9,10 +9,13 @@ import type {
 import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
 import type {
   IdempotencyRecord,
-  Repository,
   ReportRecord,
+  Repository,
   SessionRecord,
+  StoryComment,
+  StoryEditorial,
   StorySignals,
+  UserBadgeRow,
   UserRecord,
 } from './types.js';
 
@@ -101,6 +104,133 @@ export class MemoryRepository implements Repository {
     const signals = await this.getSignals(storyId);
     signals[key] = Math.max(0, signals[key] + delta);
     this.#signals.set(storyId, signals);
+  }
+
+  // --- Likes, comments, editorial, badges ---
+  //
+  // The in-memory repository exists so the whole product runs with no database
+  // at all — `npm run smoke`, the specs, and a laptop on a train. These are
+  // plain maps with the same semantics as the SQL: idempotent likes, soft
+  // deletes, claim-once badges.
+
+  #likes = new Map<string, Set<string>>();
+  #comments: StoryComment[] = [];
+  #deletedComments = new Set<string>();
+  #commentLikes = new Map<string, Set<string>>();
+  #commentReports = new Set<string>();
+  #editorial: StoryEditorial[] = [];
+  #badges = new Map<string, UserBadgeRow>();
+
+  async setLiked(userId: string, storyId: string, liked: boolean): Promise<boolean> {
+    const set = this.#likes.get(storyId) ?? new Set<string>();
+    this.#likes.set(storyId, set);
+    if (liked) {
+      if (set.has(userId)) return false;
+      set.add(userId);
+      return true;
+    }
+    return set.delete(userId);
+  }
+
+  async getLikes(userId: string): Promise<string[]> {
+    return [...this.#likes.entries()].filter(([, set]) => set.has(userId)).map(([id]) => id);
+  }
+
+  async countLikes(storyIds: readonly string[]): Promise<Map<string, number>> {
+    return new Map(
+      storyIds.map((id) => [
+        id,
+        (this.#signals.get(id)?.likes ?? 0) + (this.#likes.get(id)?.size ?? 0),
+      ]),
+    );
+  }
+
+  async listComments(storyId: string, sort: 'TOP' | 'NEW', limit: number): Promise<StoryComment[]> {
+    const live = this.#comments.filter(
+      (c) => c.storyId === storyId && !this.#deletedComments.has(c.commentId),
+    );
+    const sorted = [...live].sort((a, b) =>
+      sort === 'TOP' ? b.likes - a.likes : b.createdAt.localeCompare(a.createdAt),
+    );
+    return sorted.slice(0, limit);
+  }
+
+  async countComments(storyIds: readonly string[]): Promise<Map<string, number>> {
+    return new Map(
+      storyIds.map((id) => [
+        id,
+        this.#comments.filter((c) => c.storyId === id && !this.#deletedComments.has(c.commentId))
+          .length,
+      ]),
+    );
+  }
+
+  async addComment(comment: StoryComment): Promise<void> {
+    this.#comments.push(comment);
+  }
+
+  async deleteComment(commentId: string, userId: string): Promise<boolean> {
+    const found = this.#comments.find((c) => c.commentId === commentId && c.userId === userId);
+    if (!found || this.#deletedComments.has(commentId)) return false;
+    this.#deletedComments.add(commentId);
+    return true;
+  }
+
+  async setCommentLiked(userId: string, commentId: string, liked: boolean): Promise<boolean> {
+    const set = this.#commentLikes.get(commentId) ?? new Set<string>();
+    this.#commentLikes.set(commentId, set);
+    const changed = liked ? (set.has(userId) ? false : (set.add(userId), true)) : set.delete(userId);
+    if (changed) {
+      const index = this.#comments.findIndex((c) => c.commentId === commentId);
+      const current = this.#comments[index];
+      if (current) {
+        this.#comments[index] = { ...current, likes: Math.max(0, current.likes + (liked ? 1 : -1)) };
+      }
+    }
+    return changed;
+  }
+
+  async likedCommentIds(userId: string, storyId: string): Promise<string[]> {
+    return this.#comments
+      .filter((c) => c.storyId === storyId && this.#commentLikes.get(c.commentId)?.has(userId))
+      .map((c) => c.commentId);
+  }
+
+  async reportComment(reportId: string, commentId: string, reporterId: string): Promise<void> {
+    this.#commentReports.add(`${commentId}:${reporterId}`);
+  }
+
+  async countRecentComments(userId: string, since: Date): Promise<number> {
+    return this.#comments.filter((c) => c.userId === userId && c.createdAt >= since.toISOString())
+      .length;
+  }
+
+  async getEditorial(): Promise<StoryEditorial[]> {
+    return [...this.#editorial];
+  }
+
+  async getBadges(userId: string): Promise<UserBadgeRow[]> {
+    return [...this.#badges.values()].filter((b) => b.userId === userId);
+  }
+
+  async upsertBadge(row: UserBadgeRow): Promise<void> {
+    const key = `${row.userId}:${row.badgeId}`;
+    const existing = this.#badges.get(key);
+    this.#badges.set(key, {
+      ...row,
+      progress: Math.max(existing?.progress ?? 0, row.progress),
+      // The first unlock is the one that happened.
+      unlockedAt: existing?.unlockedAt ?? row.unlockedAt,
+      claimedAt: existing?.claimedAt ?? row.claimedAt,
+    });
+  }
+
+  async claimBadge(userId: string, badgeId: string, at: string): Promise<boolean> {
+    const key = `${userId}:${badgeId}`;
+    const existing = this.#badges.get(key);
+    if (!existing?.unlockedAt || existing.claimedAt) return false;
+    this.#badges.set(key, { ...existing, claimedAt: at });
+    return true;
   }
 
   // --- Users ---

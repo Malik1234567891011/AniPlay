@@ -1106,8 +1106,12 @@ export const StorySummary = z
     intensity: z.enum(['LIGHT', 'MODERATE', 'INTENSE']),
     runs: z.number().int(),
     likes: z.number().int(),
+    /** Comments on the world. Real rows plus curated launch content. */
+    comments: z.number().int().default(0),
+    /** Whether the person asking has liked it. Always false for guests. */
+    likedByMe: z.boolean().default(false),
     saved: z.boolean().default(false),
-    badges: z.array(z.enum(['NEW', 'TRENDING', 'OFFICIAL'])).default([]),
+    badges: z.array(z.enum(['NEW', 'TRENDING', 'OFFICIAL', 'STAFF_PICK'])).default([]),
     updatedAt: z.string(),
   })
   .strict();
