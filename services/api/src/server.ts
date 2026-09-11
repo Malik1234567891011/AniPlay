@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { BADGES, BADGES_BY_ID } from '@aniplay/contracts';
+import { localizeStory } from '@aniplay/contracts';
 import { syncBadges, type PlayerRecord } from './badges.js';
 import { rankTopRanked, rankTrending, trendingScore } from './ranking.js';
 import Fastify, { type FastifyInstance } from 'fastify';
@@ -282,7 +283,13 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const locale = interfaceLocale(user, request);
     const t = translatorFor(locale);
 
-    const allStories = await ctx.repo.listStories();
+    // The catalogue in the language the shelf is being read in. A hook and a
+    // fantasy label are the two lines that sell a world, and they were English
+    // on a French Discover — the first thing a French player sees, and the
+    // thing they judge the whole app by.
+    const allStories = (await ctx.repo.listStories()).map((story) =>
+      localizeStory(story, locale),
+    );
     const saved = user ? await ctx.repo.getSaves(user.userId) : [];
     const hidden = user ? await ctx.repo.getHidden(user.userId) : [];
 
@@ -529,10 +536,12 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   });
 
   app.get<{ Params: { storyId: string } }>('/v1/stories/:storyId', async (request, reply) => {
-    const story = await ctx.repo.getStoryByStoryId(request.params.storyId);
-    if (!story) return sendError(reply, 404, 'NOT_FOUND', 'That world does not exist.');
+    const rawStory = await ctx.repo.getStoryByStoryId(request.params.storyId);
+    if (!rawStory) return sendError(reply, 404, 'NOT_FOUND', 'That world does not exist.');
 
     const user = await optionalUser(ctx, request);
+    // Read in the language of whoever is looking, not of any run they have.
+    const story = localizeStory(rawStory, interfaceLocale(user, request));
     const saved = user ? await ctx.repo.getSaves(user.userId) : [];
     const signals = await ctx.repo.getSignals(story.storyId);
 
@@ -879,6 +888,14 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
         available: story.archetypes.map((a) => a.id),
       });
     }
+
+    // The world in the language this run will be played in.
+    //
+    // `composeStory` localizes every *turn*, but the opening beat and its cards
+    // are authored and written here, before a turn exists — so a French run
+    // would have opened on five paragraphs of English and three English cards,
+    // which is the first thing a French player would ever see.
+    story = localizeStory(story, parsed.data.locale ?? 'en');
 
     const sessionId = `sess_${crypto.randomUUID()}`;
 

@@ -5,6 +5,7 @@ import type {
   StateMutation,
   StoryVersion,
 } from '@aniplay/contracts';
+import { localizeStory } from '@aniplay/contracts';
 
 /**
  * Spec §11.9 — the world the player made, composed over the world an author
@@ -37,6 +38,19 @@ import type {
  * writer improvised.
  */
 export function composeStory(story: StoryVersion, state: GameState): StoryVersion {
+  // The run's language first, then whatever this run has invented on top.
+  //
+  // Here rather than at the API boundary because *every* engine and director
+  // path already calls this — resolve, commit, quests, schedules, the writer's
+  // context — so there is exactly one place a world can arrive in the wrong
+  // language, and it is this line. A second seam would be a second thing to
+  // remember.
+  //
+  // A world with no overlay comes back unchanged, which is the correct
+  // intermediate state while the catalogue is being written: English is not a
+  // failure mode, it is the fallback.
+  story = localizeStory(story, state.locale);
+
   const generated = state.generated;
   if (generated.characters.length === 0 && generated.locations.length === 0) return story;
 
