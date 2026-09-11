@@ -43,7 +43,9 @@ const ENGLISH_ONLY =
 /** Structures that are English wearing French words. */
 const CALQUES: Array<[RegExp, string]> = [
   [/\bréaliser que\b/i, '« réaliser » pour « se rendre compte » est un anglicisme'],
-  [/\bsupporter (?:son|sa|ses|le|la|les)\b/i, '« supporter » pour « soutenir » est un anglicisme'],
+  // Narrowed: `supporter la douleur` is correct French for *endure*, and the
+  // broad form flagged it. Only the football sense is the anglicism.
+  [/\bsupporter (?:une? )?(?:équipe|candidat|projet|idée|cause)\b/i, '« supporter » pour « soutenir »'],
   [/\béventuellement\b/i, '« éventuellement » ne veut pas dire « finalement »'],
   [/\bopportunité de\b/i, '« opportunité » pour « occasion »'],
   [/\bbasé sur\b/i, '« basé sur » pour « fondé sur » / « d’après »'],
@@ -100,6 +102,19 @@ function voiceOverlap(a: string, b: string): number {
   return shared / Math.min(left.size, right.size);
 }
 
+/** The text with the world's own proper nouns removed. */
+function withoutNames(text: string, story: StoryVersion): string {
+  const names = [
+    story.title,
+    ...story.locations.map((l) => l.name),
+    ...story.characters.map((c) => c.name),
+    ...story.items.map((i) => i.name),
+  ].filter((n) => n.length > 2);
+  let stripped = text;
+  for (const name of names) stripped = stripped.split(name).join(' ');
+  return stripped;
+}
+
 function check(story: StoryVersion, findings: Finding[], gaps: string[]): void {
   const fr = localizeStory(story, 'fr');
   if (fr === story) return; // no overlay; nothing to check
@@ -131,7 +146,11 @@ function check(story: StoryVersion, findings: Finding[], gaps: string[]): void {
       continue;
     }
 
-    if (ENGLISH_ONLY.test(text)) {
+    // A world's own proper nouns are English-looking on purpose and appear
+    // inside French prose constantly: "The Red Floor est le niveau de stockage
+    // sous le gymnase Mikado" is correct, and flagging it twice per world
+    // trains everybody to skim the queue.
+    if (ENGLISH_ONLY.test(withoutNames(text, story))) {
       findings.push({ world: story.title, path, code: 'ENGLISH', detail: text.slice(0, 90) });
     }
     if (MIDPOINT.test(text)) {

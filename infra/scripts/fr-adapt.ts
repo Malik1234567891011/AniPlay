@@ -161,6 +161,81 @@ function normalise(value: string | string[]): string | string[] {
   return Array.isArray(value) ? value.map(normaliseTypography) : normaliseTypography(value);
 }
 
+/**
+ * Ask again, for the ones that came back wrong.
+ *
+ * Short adjective labels — an archetype's `playstyle`, three words describing
+ * the player — are where the midpoint survives every instruction. The model is
+ * being asked to describe somebody whose gender it does not know, in two words,
+ * and `Patient·e` is the obvious escape. Telling it not to in the brief reduced
+ * this from five to two; it did not remove it, because the pressure is
+ * structural rather than a matter of attention.
+ *
+ * So the flagged fields go back with nothing else in the request but them and
+ * the rule. Two attempts, then it goes to the human queue — a third would be
+ * asking the same question louder.
+ */
+async function exceptionPass(
+  gateway: ReturnType<typeof createGatewayFromEnv>,
+  fr: Map<string, string | string[]>,
+  fields: ManifestField[],
+): Promise<number> {
+  if (!gateway) return 0;
+  const MIDPOINT = /\p{L}[·‧•]\p{L}|\p{L}\(e\)/u;
+
+  let repaired = 0;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const bad = fields.filter((f) => {
+      const value = fr.get(f.path);
+      const text = Array.isArray(value) ? value.join(' ') : (value ?? '');
+      return MIDPOINT.test(text);
+    });
+    if (bad.length === 0) break;
+
+    const result = await gateway.generateStructured(
+      'writer_fast',
+      Adapted,
+      [
+        {
+          role: 'system',
+          content: [
+            'Tu corriges du français qui contient un point médian. C’est la seule chose à corriger.',
+            '',
+            'Le point médian est interdit : ni « Patient·e », ni « Patient(e) », ni « Patient.e ».',
+            'Ces textes décrivent le joueur, et on ne sait pas qui il est — il n’y a donc personne',
+            'avec qui accorder.',
+            '',
+            'Emploie un nom ou une tournure sans accord :',
+            '  « Patient·e »                      → « Patience » ou « Sait attendre »',
+            '  « Cérébral·e »                     → « Tête » ou « Réfléchit avant »',
+            '  « Jamais reposé·e »                → « Jamais reposé » n’est PAS la réponse —',
+            '                                       écris « Toujours à court de sommeil »',
+            '  « Physiquement peu impressionnant·e » → « Ne paie pas de mine »',
+            '',
+            'Garde le sens et la longueur. C’est une étiquette courte, pas une phrase.',
+          ].join('\n'),
+        },
+        {
+          role: 'user',
+          content: JSON.stringify(
+            bad.map((f) => ({ path: f.path, fr: fr.get(f.path) })),
+            null,
+            1,
+          ),
+        },
+      ],
+      { maxTokens: 4000, temperature: 0.5, timeoutMs: 120_000 },
+    );
+
+    for (const field of result?.value?.fields ?? []) {
+      if (MIDPOINT.test(Array.isArray(field.fr) ? field.fr.join(' ') : field.fr)) continue;
+      fr.set(field.path, normalise(field.fr));
+      repaired += 1;
+    }
+  }
+  return repaired;
+}
+
 /** The overlay file, with the hashes that make staleness detectable. */
 function render(storyId: string, title: string, fields: ManifestField[], fr: Map<string, string | string[]>): string {
   const lines: string[] = [];
@@ -226,6 +301,9 @@ async function main(): Promise<void> {
     const fr = new Map<string, string | string[]>();
     if (tierOnly !== 'B') for (const [k, v] of await adaptBatch(gateway, 'A', a, brief)) fr.set(k, v);
     if (tierOnly !== 'A') for (const [k, v] of await adaptBatch(gateway, 'B', b, brief)) fr.set(k, v);
+
+    const repaired = await exceptionPass(gateway, fr, fields);
+    if (repaired > 0) console.log(`    repaired ${repaired} field(s) on a second ask`);
 
     const slug = world.storyId.replace(/^story_/, '').replace(/_/g, '-');
     const path = join(OUT_DIR, `${slug}.fr.ts`);
