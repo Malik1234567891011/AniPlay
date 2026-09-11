@@ -25,6 +25,7 @@ import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
 import type { BadgeView } from '../api/client.js';
+import { BADGES } from '@aniplay/contracts';
 
 /**
  * LB-01 / LB-02 Library, PR-01 / PR-02 / PR-03 Profile, SF-01 Report.
@@ -260,7 +261,10 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
   const [badges, setBadges] = useState<BadgeView[]>([]);
 
   const badgeCount = badges.filter((b) => b.unlockedAt).length;
-  const badgeTotal = badges.length;
+  // The set is fixed and known without asking the server, so a guest — who
+  // cannot call `/v1/badges` — sees "0 of 12" rather than "0 of 0 earned",
+  // which reads as a broken screen rather than as something to go and earn.
+  const badgeTotal = badges.length || BADGES.length;
   const unclaimed = badges.filter((b) => b.unlockedAt && !b.claimedAt).length;
   // The language switch is deliberately not on the screen yet. French exists
   // as infrastructure and not yet as copy, and a visible control that produced
