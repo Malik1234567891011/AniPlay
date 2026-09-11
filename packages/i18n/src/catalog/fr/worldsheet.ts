@@ -233,11 +233,17 @@ export const worldsheet = {
   /**
    * `Épingler` (`PRODUCT_VOICE.md` terminology lock), jamais `pinner` et
    * jamais `Garder` — le sens est « fixer au canon », pas « conserver ».
-   * Glyphe en fin de chaîne : voir la note 4 en tête de fichier.
+   *
+   * L’étoile est repassée en tête, comme en anglais. Elle avait été déplacée en
+   * fin de chaîne pour une raison qui n’était pas une raison de français :
+   * FRC002 comptait le glyphe comme un mot, donc `Épingler` passait pour un mot
+   * capitalisé en milieu de chaîne. Le contrôle est corrigé, et les deux
+   * langues alignent de nouveau leur glyphe — ce qui compte, parce que les deux
+   * étiquettes occupent le même bouton et que l’œil suit la colonne.
    */
-  'worldsheet.pin_action': 'Épingler ☆',
+  'worldsheet.pin_action': '☆ Épingler',
   /** Le même contrôle une fois épinglé. `★` est l'étoile pleine. */
-  'worldsheet.pinned_canon_star': 'Épinglé au canon ★',
+  'worldsheet.pinned_canon_star': '★ Épinglé au canon',
   /** Le badge, sur un moment qu'on ne peut pas désépingler d'ici. */
   'worldsheet.pinned_canon': 'Épinglé au canon',
   'worldsheet.pin_a11y': 'Épingler ce moment\u00A0: {text}',

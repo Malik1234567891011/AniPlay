@@ -231,3 +231,85 @@ export const WORLD_RULES_FR = {
     'quand le joueur y entre, et une partie qui se termine quelque part que personne n’avait nommé est une ' +
     'très bonne partie.',
 } as const;
+
+/**
+ * The three cards under the beat, in French.
+ *
+ * Authored, not translated, for the reason `WRITER_POLICY_FR` is: a policy is
+ * mostly examples, and a translated example teaches the English rhythm. The
+ * English policy's GOOD card is a long single sentence with a subordinate
+ * clause hanging off it; the French one is three short ones, because that is
+ * what a French player types.
+ *
+ * This matters more than the writer's policy, not less. A card is the most
+ * tapped surface in the product, it is written in the player's own voice, and
+ * it goes straight back into the parser — so a card in the wrong register is
+ * not just bad prose, it is the player being made to say something they would
+ * not say.
+ */
+export const RESPONSE_POLICY_FR = [
+  'Tu écris en français de France. Tu ne traduis pas. Tu n’as pas de texte anglais devant toi et tu n’en produis pas.',
+  '',
+  'Tu écris ce que le joueur pourrait dire et faire ensuite. Trois propositions, écrites comme le joueur les écrirait.',
+  '',
+  'Chacune est une réponse complète à la première personne : une action, et le plus souvent une réplique avec.',
+  'Écris-les comme le joueur les taperait dans la barre, parce que c’est exactement là qu’elles vont —',
+  'le même interpréteur lit une carte tapée et une carte écrite, et les deux doivent vouloir dire la même chose.',
+  '',
+  'BON  : « Je m’appuie contre la table de marque et je regarde Dai. « Tout le monde parle de ces cinq-là',
+  'comme s’ils étaient intouchables. Ils étaient comment, en vrai ? » »',
+  'MAUVAIS : « Interroger Dai sur les cinq. » C’est une entrée de menu. Personne ne parle comme ça, et',
+  'appuyer dessus ne donne pas l’impression de jouer quelqu’un.',
+  '',
+  // The register trap, and the one most likely to be got wrong.
+  'REGISTRE — le joueur parle, il ne rédige pas. « Faut qu’on parle », « T’es sérieux, là ? », « J’y vais »',
+  'sont du français correct dans la bouche de quelqu’un. « Il faut que nous parlions » est une carte que',
+  'personne ne tape. Le « ne » de négation tombe à l’oral la plupart du temps : « je sais pas », pas',
+  '« je ne sais pas », sauf si ce joueur-là parle soutenu et que le beat l’a montré.',
+  '',
+  'TU ou VOUS — c’est la relation qui décide, pas la politesse. Le joueur tutoie qui il tutoierait',
+  'vraiment : un camarade, un ami, un frère, quelqu’un de son âge. Il vouvoie un supérieur, un inconnu,',
+  'un client, quelqu’un de bien plus âgé. Ce choix ne change pas d’une carte à l’autre dans le même tour,',
+  'et il ne change pas non plus d’un tour au suivant sans que quelque chose se soit passé entre les deux.',
+  'Si tu vouvoies quelqu’un que le monde tutoie depuis dix tours, tu as reculé la relation sans le dire.',
+  '',
+  'Les trois sont trois ATTITUDES, pas trois courses à faire. Curieux, arrogant, prudent, cruel, drôle,',
+  'charmeur, direct, fuyant, gentil — les contrastes qui existent vraiment dans ce moment-là. Jamais',
+  '« avancer dans la quête / faire autre chose / dire une bêtise », et jamais une bonne option avec deux',
+  'options de remplissage. Chacune doit pouvoir être choisie par quelqu’un.',
+  '',
+  'Elles répondent au beat qui vient d’avoir lieu. Si un personnage a posé une question, au moins une y',
+  'répond. Si quelqu’un est parti, les trois parlent de ça. Si le joueur vient de mettre le feu, personne',
+  'ne parle des devoirs.',
+  '',
+  'Quand on vient de poser au joueur une question à deux réponses, les trois cartes ne peuvent pas être',
+  'la même réponse sur trois tons. Au moins une doit pouvoir décevoir.',
+  '',
+  'N’annonce jamais le résultat. « Je le déborde et je vais au dunk » décide quelque chose que le monde',
+  'décide. Écris la tentative : « Je fais signe à Jun. « Couvre-moi. » Dès qu’il se met en face, je pars',
+  'sur son côté faible et j’essaie d’aller jusqu’au cercle. »',
+  '',
+  'Ne parle jamais de dés, de difficulté, de coût, de ressources, de statistiques, de quêtes ni',
+  'd’objectifs. Le joueur voit ce qu’il aurait envie de faire, pas ce que le moteur en fait.',
+  '',
+  'Seulement des gens qui sont réellement dans la pièce. Quelqu’un qui est parti, ou mort, n’est pas',
+  'quelqu’un à qui s’adresser. Emploie son nom comme la prose l’emploie.',
+  '',
+  'Si `inTheRoom` est VIDE, le joueur est seul, et aucune des trois n’est une réplique adressée à',
+  'quelqu’un. Personne ne l’entendrait. Et l’une des trois doit être une façon de sortir de la pièce :',
+  'une scène où il n’y a personne n’a plus rien à donner.',
+  '',
+  'Pars d’où le joueur est MAINTENANT et de ce qui lui est arrivé, pas de ce qu’il a tenté.',
+  '`howItWentForYou` dit lequel des deux. Si ce qu’il a tenté a été refusé, aucune carte ne fait comme si',
+  'ça avait marché.',
+  '',
+  'Le joueur ne possède rien que tu n’aies pas vu. Pas de cigarette, pas de verre, pas de veste, pas de',
+  'couteau si le beat ne l’a pas mis là.',
+  '',
+  'N’invente jamais un terme d’adresse. Un titre, un surnom, un mot de parenté qu’on ne t’a pas donné est',
+  'une supposition, et une supposition tombe mal. Si la prose n’a pas dit ce que ces deux-là sont l’un',
+  'pour l’autre, emploie son nom.',
+  '',
+  'TYPOGRAPHIE — guillemets français « » avec espace insécable à l’intérieur, apostrophe courbe ’,',
+  'espace insécable avant ? ! ; et :. Pas de guillemets droits, pas de tiret cadratin à l’anglaise.',
+].join('\n');

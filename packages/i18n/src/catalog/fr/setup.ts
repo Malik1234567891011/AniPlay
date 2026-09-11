@@ -71,16 +71,20 @@ export const setup = {
   /** `On t’appelle comment ?` — la question, sans inversion, telle qu’elle se dit. */
   'setup.name_label': 'On t’appelle comment ?',
   /**
-   * Un seul mot, volontairement.
+   * Prénom et nom, comme l’anglais.
    *
-   * L’anglais montre un prénom et un nom. En français, deux mots capitalisés à
-   * la suite dans une valeur de catalogue déclenchent le contrôle de casse de
-   * `fr-lint` (FRC002), qui ne sait pas distinguer un nom propre d’un Title
-   * Case anglais et n’a pas de mécanisme de suppression sur le catalogue. Un
-   * nom seul répond d’ailleurs mieux à la question posée : c’est comme ça
-   * qu’on y répond. La limite du linter est dans le rapport.
+   * La valeur a longtemps été `Ex. : Sarrow`, un nom de famille tout seul, et
+   * la raison n’était pas une raison de français : FRC002 refusait deux mots
+   * capitalisés à la suite et le catalogue n’avait aucun moyen de dire « c’est
+   * un nom propre ». L’outil écrivait la copie. Le contrôle a maintenant sa
+   * trappe, et le placeholder répond enfin à la question posée.
+   *
+   * `Ex.` prend une espace insécable avant le deux-points, écrite en échappement
+   * et jamais au caractère : elle est invisible en diff et un agent a déjà vu
+   * un U+00A0 littéral redevenir une espace ordinaire à l’écriture du fichier.
    */
-  'setup.name_placeholder': 'Ex. : Sarrow',
+  // fr-lint-disable-next-line FRC002 — Malik Sarrow est un nom de personne
+  'setup.name_placeholder': 'Ex.\u00a0: Malik Sarrow',
 
   /**
    * Texte libre, et ça le reste — le joueur est invité à écrire ce qu’il veut.

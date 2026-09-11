@@ -387,8 +387,47 @@ const MUST_PASS: Array<[string, Where]> = [
   ['0 partie', 'any'],
 ];
 
+/**
+ * The catalogue rules, which had no samples at all until two of their bugs had
+ * already rewritten shipped French. Each pair is [value, should it trip].
+ */
+const CATALOGUE_SAMPLES: Array<[string, boolean]> = [
+  // Title Case is what the rule is for, and it still catches it.
+  ['Nouvelle Partie', true],
+  ['Voir Tous Les Mondes', true],
+  // A second sentence may start with a capital. So may a clause after a colon
+  // or a closing guillemet.
+  ['Tout est prêt. Choisis un titre.', false],
+  ['Tu es prêt ? Alors on y va.', false],
+  // A leading glyph is decoration, not a word — the bug that pushed two agents
+  // into moving the star to the end of the string.
+  ['☆ Épingler', false],
+  ['• Reprendre', false],
+  ['→ Continuer', false],
+  // A known brand, and only that word. The old whole-value test let one
+  // `Plotbreak` excuse every other capital in the string.
+  ['Nouveautés sur Plotbreak', false],
+  ['Plotbreak Nouvelle Partie', true],
+  // A placeholder is not a word of French.
+  ['Reprendre {title}', false],
+  // A name the list cannot know still trips, which is correct: the catalogue
+  // says so with a disable comment rather than the rule guessing.
+  ['Ex.\u00a0: Malik Sarrow', true],
+];
+
 function selfTest(): number {
   let failures = 0;
+
+  for (const [value, shouldTrip] of CATALOGUE_SAMPLES) {
+    const tripped = titleCaseOffenders(value).length > 0;
+    if (tripped !== shouldTrip) {
+      console.log(
+        `  ✗ FRC002 ${tripped ? 'fired on' : 'missed'}: ${value}` +
+          `  (expected ${shouldTrip ? 'a finding' : 'nothing'})`,
+      );
+      failures += 1;
+    }
+  }
 
   for (const [id, sample, where] of MUST_TRIP) {
     const hit = lint('<sample>', sample, where).some((f) => f.rule.id === id);
@@ -416,7 +455,8 @@ function selfTest(): number {
     console.log(
       `fr-lint self-test: ${RULES.length} rules, ` +
         `${MUST_TRIP.length} bad samples all caught, ` +
-        `${MUST_PASS.length} native lines all clean.`,
+        `${MUST_PASS.length} native lines all clean, ` +
+        `${CATALOGUE_SAMPLES.length} catalogue samples correct.`,
     );
   } else {
     console.log(`\nfr-lint self-test: ${failures} failure(s).`);
@@ -446,28 +486,104 @@ function selfTest(): number {
  * Coverage is printed rather than enforced, because a partial catalogue falls
  * back to English and that is a correct intermediate state.
  */
+/**
+ * Words capitalised mid-string — French UI is sentence case, not Title Case.
+ *
+ * Extracted so it can be tested, which is the whole story of this function.
+ * `lintCatalogue` had no self-test while `lint` had thirty-two samples, and two
+ * bugs lived in here long enough to *change the French*: a leading `☆` made the
+ * first real word look mid-string, and a whole-value proper-noun check was both
+ * too lax (one `Plotbreak` exempted the rest of the string) and too strict (no
+ * name it did not already know could ever pass). See the catalogue self-test.
+ */
+export function titleCaseOffenders(value: string): string[] {
+  const tokens = value.replace(/\{[^}]*\}/g, '\u0000').split(/\s+/).filter(Boolean);
+  const hasLetter = (token: string): boolean => /\p{L}/u.test(token);
+  // A bullet, star or arrow is decoration, not the first word.
+  while (tokens.length > 0 && !hasLetter(tokens[0] ?? '')) tokens.shift();
+
+  const bare = (token: string): string => token.replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '');
+  const isProperNoun = (token: string): boolean =>
+    PROPER_NOUNS.some((n) => n === bare(token) || n.split(/\s+/).includes(bare(token)));
+
+  const titled: string[] = [];
+  for (let i = 1; i < tokens.length; i += 1) {
+    // A sentence ends on the *previous* token — `l'extraordinaire.` — so the
+    // punctuation is glued to the word before, not sitting on its own.
+    const previous = tokens[i - 1] ?? '';
+    if (/[.!?…:»]$/.test(previous)) continue;
+    const word = tokens[i] ?? '';
+    if (isProperNoun(word)) continue;
+    if (/^[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ]{2,}/.test(word)) titled.push(word);
+  }
+  return titled;
+}
+
+interface CatalogueEntry {
+  readonly file: string;
+  readonly line: number;
+  readonly value: string;
+  /** Rules switched off for this key by a `fr-lint-disable-next-line` above it. */
+  readonly disabled: ReadonlySet<string>;
+}
+
 function lintCatalogue(json: boolean): boolean {
   const enDir = join(ROOT, 'packages/i18n/src/catalog/en');
   const frDir = join(ROOT, 'packages/i18n/src/catalog/fr');
 
-  const keysIn = (dir: string): Map<string, { file: string; line: number; value: string }> => {
-    const found = new Map<string, { file: string; line: number; value: string }>();
+  const keysIn = (dir: string): Map<string, CatalogueEntry> => {
+    const found = new Map<string, CatalogueEntry>();
     for (const name of readdirSync(dir)) {
       if (!name.endsWith('.ts') || name === 'index.ts') continue;
-      // Comments first: a localizer note is prose *about* the string and would
-      // otherwise be linted as if it were the string.
-      const raw = readFileSync(join(dir, name), 'utf8')
+      const source = readFileSync(join(dir, name), 'utf8');
+
+      // Read the escape hatches off the *unblanked* source, because they live
+      // in the comments the next step is about to erase.
+      //
+      // `lint()` has had `fr-lint-disable-next-line` since the first commit and
+      // the catalogue had nothing, which left no way to say "this really is a
+      // proper noun" — so the rule won every argument and the copy moved to
+      // suit it. `setup.name_placeholder` read `Ex. : Sarrow`, a surname with
+      // no first name, purely because FRC002 cannot tell a person's name from
+      // Title Case.
+      const disabled = new Map<number, Set<string>>();
+      source.split('\n').forEach((text, index) => {
+        const match = text.match(/fr-lint-disable-next-line\s+([A-Z0-9, ]+)/);
+        if (!match?.[1]) return;
+        // Line numbers are 1-based, and the directive covers the line after it
+        // — which is the line the key sits on.
+        disabled.set(index + 2, new Set(match[1].split(/[\s,]+/).filter(Boolean)));
+      });
+
+      // Comments next: a localizer note is prose *about* the string and would
+      // otherwise be linted as if it were the string. Blanked rather than
+      // deleted so every line number above still points at the same line.
+      const raw = source
         .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '))
         .replace(/\/\/[^\n]*/g, (m) => ' '.repeat(m.length));
+
       // Matched over the whole file rather than line by line, because a long
       // value legitimately wraps onto the line after its key.
-      const pattern = /'([a-z0-9_.]+)':\s*(['"])((?:\\.|(?!\2)[^\\])*)\2/g;
+      //
+      // The trailing group takes the `+ '…'` continuations with it. Without it
+      // the pattern stopped at the first literal, so a value written as a
+      // concatenation was only ever *partly* linted — a calque in the second
+      // half was invisible, and the halves are usually split mid-sentence,
+      // which is exactly where a capitalised word looks like a new one.
+      const pattern =
+        /'([a-z0-9_.]+)':\s*(['"])((?:\\.|(?!\2)[^\\])*)\2((?:\s*\+\s*(['"])(?:\\.|(?!\5)[^\\])*\5)*)/g;
       for (const match of raw.matchAll(pattern)) {
         const key = match[1];
-        const value = match[3];
-        if (!key || value === undefined) continue;
+        if (!key || match[3] === undefined) continue;
+        const continued = (match[4] ?? '').replace(/\s*\+\s*(['"])((?:\\.|(?!\1)[^\\])*)\1/g, '$2');
+        const value = match[3] + continued;
         const line = raw.slice(0, match.index ?? 0).split('\n').length;
-        found.set(key, { file: `${dir.endsWith('/fr') ? 'fr' : 'en'}/${name}`, line, value });
+        found.set(key, {
+          file: `${dir.endsWith('/fr') ? 'fr' : 'en'}/${name}`,
+          line,
+          value,
+          disabled: disabled.get(line) ?? new Set<string>(),
+        });
       }
     }
     return found;
@@ -485,7 +601,8 @@ function lintCatalogue(json: boolean): boolean {
     readonly why: string;
   }
   const findings: CatalogueFinding[] = [];
-  const add = (key: string, meta: { file: string; line: number; value: string }, rule: string, why: string): void => {
+  const add = (key: string, meta: CatalogueEntry, rule: string, why: string): void => {
+    if (meta.disabled.has(rule)) return;
     findings.push({ key, file: meta.file, line: meta.line, value: meta.value, rule, why });
   };
 
@@ -507,18 +624,34 @@ function lintCatalogue(json: boolean): boolean {
     // string can legitimately contain two sentences, and `Choisis` after a full
     // stop is correct. Placeholders and known proper nouns are skipped, since
     // `{name}` and `Plotbreak` are capitalised for reasons of their own.
-    const words = value.replace(/\{[^}]*\}/g, '\u0000').split(/\s+/).filter(Boolean);
-    const titled: string[] = [];
-    for (let i = 1; i < words.length; i += 1) {
-      // A sentence ends on the *previous* token — `l'extraordinaire.` — so the
-      // punctuation is glued to the word before, not sitting on its own.
-      const previous = words[i - 1] ?? '';
-      if (/[.!?…:»]$/.test(previous)) continue;
-      const word = words[i] ?? '';
-      if (/^[A-ZÀ-ÖØ-Þ][a-zà-öø-ÿ]{2,}/.test(word)) titled.push(word);
-    }
-    if (titled.length > 0 && !PROPER_NOUNS.some((n) => value.includes(n))) {
-      add(key, meta, 'FRC002', `sentence case: «${titled[0]}» is capitalised mid-string — French UI is not Title Case`);
+    //
+    // Two bugs lived here, and both of them *moved the French* rather than
+    // reporting on it, which is the worst thing a lint rule can do.
+    //
+    // The first: a leading token with no letters in it — `☆`, `→`, `•` — was
+    // counted as a word, so the genuinely first French word was read as
+    // mid-string and flagged. `☆ Épingler` is correct and failed, and two
+    // separate agents worked around it by moving the glyph to the end of the
+    // string. The fix is to drop leading tokens that contain no letter, so the
+    // first *word* is the first word.
+    //
+    // The second: `PROPER_NOUNS.some((n) => value.includes(n))` tested the
+    // whole value, so it was simultaneously too lax and too strict. Too lax
+    // because one mention of `Plotbreak` exempted every other capitalised word
+    // in the string; too strict because a name the list does not know — which
+    // is every name a player might be called — had no way through at all.
+    // Matching per word fixes the lax half; `fr-lint-disable-next-line FRC002`
+    // fixes the strict half, and is the honest answer: no rule can tell
+    // `Malik Sarrow` from `Nouvelle Partie` by looking at it.
+    const titled = titleCaseOffenders(value);
+    if (titled.length > 0) {
+      add(
+        key,
+        meta,
+        'FRC002',
+        `sentence case: «${titled[0]}» is capitalised mid-string — French UI is not Title Case. ` +
+          'If it is a proper noun, say so with `// fr-lint-disable-next-line FRC002` above the key.',
+      );
     }
 
     // An ICU plural that special-cases 1 is the English rule wearing ICU.
