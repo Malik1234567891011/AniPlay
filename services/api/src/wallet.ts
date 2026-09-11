@@ -305,17 +305,43 @@ export class WalletService {
     return { credited: offer.credits + offer.bonusCredits, duplicate: false, entry };
   }
 
-  /** Spec §20.10 — the fork fee is a single charge, not a reservation. */
-  async chargeFork(accountId: string, sessionId: string, amount: number): Promise<LedgerEntry> {
+  /**
+   * Spec §20.10 — the fork fee is a single charge, not a reservation.
+   *
+   * `idempotencyKey` is the caller's, and it matters: this used to build
+   * `fork:${sessionId}:${crypto.randomUUID()}`, a fresh UUID on every call,
+   * which makes the ledger's uniqueness index structurally incapable of
+   * catching a replay. A retried request — a flaky network, a double tap —
+   * charged 120 credits twice for one fork. Every other spend path in this file
+   * passes a key that means something.
+   */
+  async chargeFork(
+    accountId: string,
+    sessionId: string,
+    amount: number,
+    idempotencyKey: string,
+  ): Promise<LedgerEntry> {
     const balance = await this.getBalance(accountId);
     if (balance < amount) throw new InsufficientCreditsError(amount, balance);
+    return this.#append(accountId, 'FORK_FEE', -amount, 'TIMELINE_FORK', sessionId, idempotencyKey);
+  }
+
+  /**
+   * Give back a fork fee whose fork did not happen.
+   *
+   * The charge is single-phase by design, so there is no reservation to
+   * release — the compensating entry is the only way back. Without it, a throw
+   * anywhere between the debit and the last inherited turn left the player
+   * paying for a branch that does not exist.
+   */
+  async refundFork(accountId: string, sessionId: string, amount: number, idempotencyKey: string): Promise<LedgerEntry> {
     return this.#append(
       accountId,
-      'FORK_FEE',
-      -amount,
-      'TIMELINE_FORK',
+      'REFUND',
+      amount,
+      'TIMELINE_FORK_FAILED',
       sessionId,
-      `fork:${sessionId}:${crypto.randomUUID()}`,
+      `refund:${idempotencyKey}`,
     );
   }
 

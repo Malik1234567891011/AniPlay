@@ -1167,8 +1167,17 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       const { session, story, state, user } = loaded;
 
       const cost = story.rules.forkCostCredits || FORK_COST_CREDITS;
+      // The client's key when it sends one, and a deterministic fallback when
+      // it does not. Either way a retry of the same fork is recognised as the
+      // same fork, which a random UUID could never be.
+      const forkAt = request.body?.atTurnIndex ?? state.turnIndex;
+      const headerKey = request.headers['idempotency-key'];
+      const forkKey =
+        typeof headerKey === 'string' && headerKey.length > 0
+          ? `fork:${session.sessionId}:${headerKey}`
+          : `fork:${session.sessionId}:${forkAt}`;
       try {
-        await ctx.wallet.chargeFork(user.userId, session.sessionId, cost);
+        await ctx.wallet.chargeFork(user.userId, session.sessionId, cost, forkKey);
       } catch (error) {
         if (error instanceof InsufficientCreditsError) {
           return sendError(reply, 402, 'INSUFFICIENT_CREDITS', 'You need more credits to fork.', {
@@ -1181,6 +1190,12 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       }
 
       const newSessionId = `sess_${crypto.randomUUID()}`;
+
+      // Everything below spends the fee. A throw between here and the last
+      // inherited turn used to leave the player charged for a branch that was
+      // never written, because a single-phase charge has no reservation to
+      // release. The compensating entry is the only way back.
+      try {
 
       // Spec §11.7 / §20.10 — a fork copies authoritative state at the selected
       // event. Cloning the present would charge 120 credits for a branch that
@@ -1230,6 +1245,18 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
         session: toSessionSummary(record, story, forked, inherited.length),
         creditsCharged: cost,
       };
+      } catch (error) {
+        await ctx.wallet
+          .refundFork(user.userId, session.sessionId, cost, forkKey)
+          .catch(() => undefined);
+        console.error(`[fork] ${session.sessionId} failed after charging; refunded ${cost}:`, error);
+        return sendError(
+          reply,
+          500,
+          'FORK_FAILED',
+          'That fork could not be created. You have not been charged.',
+        );
+      }
     },
   );
 

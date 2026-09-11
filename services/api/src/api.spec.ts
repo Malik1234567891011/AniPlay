@@ -523,7 +523,7 @@ describe('forking (spec §11.7, §20.10)', () => {
     const { sessionId } = await startSession();
     // Spend the wallet down below the fork price.
     const balance = await ctx.wallet.getBalance(GUEST);
-    await ctx.wallet.chargeFork(GUEST, sessionId, balance);
+    await ctx.wallet.chargeFork(GUEST, sessionId, balance, `drain:${sessionId}`);
 
     const response = await app.inject({
       method: 'POST',
@@ -1411,5 +1411,47 @@ describe('rate limiting', () => {
     } finally {
       await limited.close();
     }
+  });
+});
+
+/**
+ * The fork fee is the one spend path with no reservation behind it, so both of
+ * its failure modes have to be handled by hand.
+ */
+describe('forking charges once, or not at all', () => {
+  it('does not charge twice for a retried fork', async () => {
+    const { sessionId } = await startSession();
+    const before = await ctx.wallet.getBalance(GUEST);
+
+    const fork = (): Promise<unknown> =>
+      app.inject({
+        method: 'POST',
+        url: `/v1/sessions/${sessionId}/forks`,
+        // The same key twice is the same fork, which is what a retry is.
+        headers: { ...auth, 'idempotency-key': 'fork-retry-1' },
+        payload: { atTurnIndex: 0 },
+      });
+
+    await fork();
+    const afterFirst = await ctx.wallet.getBalance(GUEST);
+    await fork();
+    const afterSecond = await ctx.wallet.getBalance(GUEST);
+
+    expect(afterFirst).toBeLessThan(before);
+    // The retry costs nothing. A random idempotency key made this impossible.
+    expect(afterSecond).toBe(afterFirst);
+  });
+
+  it('charges the same amount whether or not the client sends a key', async () => {
+    const { sessionId } = await startSession();
+    const before = await ctx.wallet.getBalance(GUEST);
+    await app.inject({
+      method: 'POST',
+      url: `/v1/sessions/${sessionId}/forks`,
+      headers: auth,
+      payload: { atTurnIndex: 0 },
+    });
+    const after = await ctx.wallet.getBalance(GUEST);
+    expect(before - after).toBeGreaterThan(0);
   });
 });
