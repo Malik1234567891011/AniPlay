@@ -12,6 +12,7 @@ import { DevTokenVerifier, devUserId } from './auth.js';
 import { createStoreVerifierFromEnv } from './store-verifier.js';
 import type { AppContext } from './context.js';
 import type { TurnStreamHub } from './stream.js';
+import { newUserRecord } from './context.js';
 
 /**
  * Step 2's gate: **an `fr` session round-trips through the API and the
@@ -214,5 +215,31 @@ describe('the locale is frozen, not tracked', () => {
       }
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+describe('the language choice survives the round trip', () => {
+  it('is selected back out of the database', async () => {
+    // It was written on save, mapped in `toUserRecord`, and missing from the
+    // SELECT in `getUser` — so choosing French in Profile worked for exactly
+    // one request and then silently reverted. Nothing failed; the setting whose
+    // entire purpose is to persist simply did not.
+    //
+    // Asserted against the in-memory repository, which mirrors the SQL: if the
+    // two ever disagree about this field, one of them is the bug.
+    const repo = new MemoryRepository();
+    const user = newUserRecord('11111111-1111-1111-1111-111111111111', true);
+    await repo.createUser(user);
+
+    await repo.updateUser(user.userId, { settings: { ...user.settings, locale: 'fr' } });
+    const read = await repo.getUser(user.userId);
+
+    expect(read?.settings.locale).toBe('fr');
+  });
+
+  it('stays null for somebody who has never chosen', () => {
+    // `null` means *never chose*, which is not *chose English* — it is what
+    // leaves the device hint reachable. See `user_settings.locale`.
+    expect(newUserRecord('22222222-2222-2222-2222-222222222222', true).settings.locale).toBeNull();
   });
 });

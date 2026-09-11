@@ -88,6 +88,14 @@ async function main(): Promise<void> {
     return JSON.parse(text) as T;
   };
 
+  // A French player has French set on their account. Device autodetect is off
+  // behind `DEVICE_LOCALE_AUTODETECT` — the documented gate that turns France
+  // on — so the setting is how the catalogue is asked in French, exactly as it
+  // would be for somebody who chose it in Profile.
+  if (LOCALE !== 'en') {
+    await call<any>('PATCH', '/v1/me', { settings: { locale: LOCALE } }).catch(() => undefined);
+  }
+
   const detail = await call<any>('GET', `/v1/stories/${STORY}`);
   log(`# Playthrough — ${detail.story.title}`);
   log();

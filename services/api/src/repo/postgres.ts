@@ -408,12 +408,22 @@ export class PostgresRepository implements Repository {
 
   // --- Users ---------------------------------------------------------------
 
+  /**
+   * One column short.
+   *
+   * `s.locale` was missing from this SELECT and from nowhere else: it is
+   * written on save, it is mapped in `toUserRecord`, and it was never read
+   * back. So choosing French in Profile worked for exactly one request and then
+   * silently reverted — the one setting whose entire purpose is to persist was
+   * the only one that did not.
+   */
   async getUser(userId: string): Promise<UserRecord | null> {
     const { rows } = await this.#pool.query<Record<string, unknown>>(
       `SELECT p.user_id, p.handle, p.display_name, p.avatar_url, p.is_guest, p.age_verified,
               p.migrated_from_guest_id, p.deletion_requested_at, p.created_at, u.email,
               s.show_advanced_relationship_stats, s.show_check_math, s.reduce_motion,
-              s.voice_autoplay, s.haptics_enabled, s.default_quality_tier, s.content_filters
+              s.voice_autoplay, s.haptics_enabled, s.default_quality_tier, s.content_filters,
+              s.locale
          FROM profiles p
          LEFT JOIN user_settings s ON s.user_id = p.user_id
          LEFT JOIN auth.users u ON u.id = p.user_id
