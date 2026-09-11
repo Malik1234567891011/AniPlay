@@ -857,7 +857,10 @@ export function SessionScreen({
           }}
           onReport={() => {
             setShowTurnMenu(false);
-            navigation.navigate('WorldSheet', { sessionId, tab: 'timeline' });
+            // This opened the WorldSheet timeline, which is not a report and
+            // not anything like one — the one safety control inside a session
+            // silently did nothing when tapped.
+            navigation.navigate('Report', { targetType: 'TURN', targetId: latest.turnId });
           }}
           onShare={() => {
             setShowTurnMenu(false);

@@ -257,7 +257,6 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
   const { wallet, isGuest, refreshWallet, signOut, locale, localeChoice, setLocale } = useStore();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [characters, setCharacters] = useState<PlayerCharacterCard[]>([]);
-  const [advancedOpen, setAdvancedOpen] = useState(false);
   const [badges, setBadges] = useState<BadgeView[]>([]);
 
   const badgeCount = badges.filter((b) => b.unlockedAt).length;
@@ -462,49 +461,24 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
         ) : null}
 
         {/*
-          Two switches that show the engine's working.
+          `Advanced gameplay` is gone.
 
-          They were top-level, between Language and Reduce Motion, which put
-          "show check maths" in front of every player who has never wanted to
-          see a dice roll. They are genuinely useful to a small number of people
-          and noise to everyone else, so they are one tap away rather than gone.
+          It held two switches: relationship numbers, and the arithmetic behind
+          a dice check. They are genuinely interesting to a small number of
+          players and noise to everyone else, and they sat in Profile — where a
+          new player meets them before they have ever seen a check, with no way
+          to know what either one means.
+
+          The check-math switch was also only half wired: `turn-service.ts`
+          honoured it on the committed turn but not on the live stream, and
+          `projections.ts` ignored it on scrollback, so turning it off still
+          showed the maths twice. A setting that does not do what it says is
+          worse than no setting.
+
+          The underlying story rules (`revealCheckMath`, `revealExactDc`) are
+          untouched — a world can still choose to show its dice, which is a
+          decision about that world rather than a preference to bury in a menu.
         */}
-        <Stack gap={spacing.md}>
-          <Txt variant="h3">{t('profile.gameplay')}</Txt>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityState={{ expanded: advancedOpen }}
-            onPress={() => setAdvancedOpen(!advancedOpen)}
-          >
-            <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-              <Stack gap={2}>
-                <Txt variant="body">{t('profile.advanced_gameplay')}</Txt>
-                <Txt variant="micro" color={colors.text.muted}>
-                  {t('profile.advanced_gameplay_hint')}
-                </Txt>
-              </Stack>
-              <Txt variant="h3" color={colors.text.muted}>
-                {advancedOpen ? '⌄' : '›'}
-              </Txt>
-            </Row>
-          </Pressable>
-          {advancedOpen ? (
-            <Stack gap={spacing.md} style={{ paddingLeft: spacing.md }}>
-              <Toggle
-                label={t('profile.advanced_relationship_stats')}
-                hint={t('profile.advanced_relationship_stats_hint')}
-                value={me?.settings.showAdvancedRelationshipStats ?? false}
-                onChange={(v) => setSetting('showAdvancedRelationshipStats', v)}
-              />
-              <Toggle
-                label={t('profile.check_math')}
-                hint={t('profile.check_math_hint')}
-                value={me?.settings.showCheckMath ?? false}
-                onChange={(v) => setSetting('showCheckMath', v)}
-              />
-            </Stack>
-          ) : null}
-        </Stack>
 
         {/* Badges, with what is waiting to be collected said plainly. */}
         <Pressable accessibilityRole="button" onPress={() => navigation.navigate('Badges')}>
