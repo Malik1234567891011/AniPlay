@@ -26,6 +26,7 @@ import {
 } from '@aniplay/engine';
 import { retrieveLore } from './authored-lore.js';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
+import { pressureOf } from '@aniplay/engine';
 
 /**
  * Spec §17.5 — the context budget.
@@ -135,6 +136,31 @@ export interface TurnContext {
   // Layer 7 — retrieved canon.
   readonly retrievedFacts: readonly ScoredFact[];
 
+  /**
+   * What the player is on the hook for, and how hard it is pressing.
+   *
+   * Only what is *live*: an obligation forty minutes out is not news, and a
+   * writer handed every open promise every turn will mention them every turn,
+   * which reads as the game nagging. `SOON`, `NOW` and `LATE` are the ones
+   * worth a sentence; `LATER` is carried so cards can know the pressure exists
+   * without the prose announcing it.
+   */
+  /**
+   * Who the player aimed this turn at, present or not.
+   *
+   * Carried so the validator can check that a question put to somebody who is
+   * not in the room is answered by their absence rather than by whoever
+   * happens to be standing nearby.
+   */
+  readonly addressedIds: readonly string[];
+
+  readonly obligations: readonly {
+    readonly what: string;
+    readonly withName: string | null;
+    readonly pressure: 'LATER' | 'SOON' | 'NOW' | 'LATE';
+    readonly minutesLeft: number | null;
+  }[];
+
   // Layer 8 — arc and promises.
   readonly arc: {
     readonly episode: number;
@@ -182,6 +208,8 @@ export interface BuildContextOptions {
   readonly recentTurns: readonly TurnRecord[];
   readonly actionText: string;
   readonly playerDialogue?: readonly IntentDialogue[];
+  /** NPC ids the player's action was aimed at, for the address validator. */
+  readonly addressedIds?: readonly string[];
 }
 
 export function buildTurnContext(options: BuildContextOptions): TurnContext {
@@ -217,6 +245,20 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
     // happened two turns ago. See `authored-lore.ts`.
     ...retrieveLore(story, state, { text: query, entityIds }),
   ];
+
+  const obligations = state.obligations
+    .filter((obligation) => obligation.status === 'OPEN')
+    .map((obligation) => ({
+      what: obligation.what,
+      withName: obligation.withCharacterId
+        ? (story.characters.find((c) => c.id === obligation.withCharacterId)?.name ?? null)
+        : null,
+      pressure: pressureOf(obligation, state.worldMinute),
+      minutesLeft:
+        obligation.dueWorldMinute !== null
+          ? obligation.dueWorldMinute - state.worldMinute
+          : obligation.budgetMinutes,
+    }));
 
   const presentCharacters: PresentCharacterContext[] = present
     .map((runtime) => {
@@ -365,6 +407,8 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
       rank: f.rankLabel,
       reputation: f.reputation,
     })),
+    obligations,
+    addressedIds: options.addressedIds ?? [],
     presentCharacters,
     // Spec §17.5 layer 6 — the last 2–4 turns, never the whole history.
     turnsSinceHeroImage: turnsSinceHeroImage(recentTurns),

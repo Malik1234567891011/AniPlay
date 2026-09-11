@@ -149,6 +149,7 @@ export function createInitialState({ sessionId, story, identity }: CreateStateOp
     characters,
     relationships,
     quests,
+    obligations: [],
     factions,
     discoveredLocationIds,
     flags: {},

@@ -264,6 +264,60 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
     );
   }
 
+  // --- The player spoke to somebody who is not here, and somebody else answered ---
+  //
+  // A tap-only Itachi run: the player chose "I need to hear what is really
+  // happening from those at the police post". The beat opened inside the police
+  // building with Fugaku, who answered instead. Both scenes were good. Only one
+  // of them was the one that was chosen.
+  //
+  // Narrow on purpose, and narrowed once already after a first version flagged
+  // legitimate beats across the thirty-turn adversarial run. The failure is not
+  // "addressed somebody absent" — that happens constantly and the right answer
+  // is usually to write their absence. The failure is **substitution**: the
+  // question goes to somebody who is not here, and a different person in the
+  // room answers it as though they had been asked. Writing the empty post, the
+  // refusal, or the interruption all pass.
+  const addressedAbsent = context.addressedIds
+    .filter((id) => !presentIds.has(id))
+    .map((id) => context.story.characters.find((c) => c.id === id))
+    .filter((c): c is NonNullable<typeof c> => !!c);
+
+  if (addressedAbsent.length > 0) {
+    const prose = turn.blocks.map((b) => b.text).join(' ');
+    const acknowledged = addressedAbsent.some((who) => {
+      const first = who.name.split(/\s+/)[0] ?? who.name;
+      return new RegExp(`\\b${first}\\b`, 'i').test(prose);
+    }) || /\bnot (?:here|there|in|around)\b|\bno sign\b|\bnobody\b|\bempty\b|\bgone\b|\bno one\b/i.test(prose);
+
+    const someoneElseAnswered = turn.blocks.some(
+      (block) => block.type === 'DIALOGUE' && !!block.speakerId && presentIds.has(block.speakerId),
+    );
+
+    if (!acknowledged && someoneElseAnswered) {
+      const who = addressedAbsent[0]!;
+      push(
+        // Reusing the existing code rather than adding one: `ai_contracts.json`
+        // is authoritative for the violation enum and the Zod twin may not
+        // diverge from it — and this is a location contradiction, somebody not
+        // in this location being treated as available to answer.
+        'LOCATION_CONTRADICTION',
+        // WARN rather than ERROR, deliberately. The detection is worth having —
+        // it is reported, it shows up in smoke and in playtests, and it is
+        // exactly the substitution the writer policy forbids. But it reads
+        // intent through a name match, and a beat can legitimately answer an
+        // absent person's question through somebody who speaks for them. An
+        // ERROR forces a repair round trip on every one of those, and a repair
+        // triggered by a heuristic is a worse trade than a warning somebody
+        // reads. Promote it if the warning rate proves it is precise.
+        'WARN',
+        `The player addressed ${who.name}, who is not here, and somebody else in the room answered ` +
+          'instead without the beat saying they were absent.',
+        0,
+      );
+    }
+  }
+
   // --- NAME_IDENTITY_DRIFT: the chatbot tell ---
   // A character saying the player's name three times in one line. Reported
   // under the existing code rather than a new one, because the AI contract's

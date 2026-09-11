@@ -351,6 +351,9 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
     // and use them. A companion the director is never told about is a portrait
     // in a sidebar.
     crew: context.crew,
+    // What the player is on the hook for. Only the live ones reach the prose
+    // — see the policy note on not nagging.
+    obligations: context.obligations,
     // Everything the world authored about each person in the room. See
     // `speaker-brief.ts` for what used to be dropped on the floor here.
     presentCharacters: context.presentCharacters.map((c) => ({
@@ -466,6 +469,13 @@ export const WRITER_POLICY = [
   `- ${NARRATIVE_CLARITY_RULES}`,
   '',
   STATE_BAND_RULES,
+  '',
+  'TIME THE PLAYER OWES SOMEBODY IS REAL. `obligations` is what they have committed to and how hard it',
+  'is pressing. `LATER` is not news and must not be mentioned — a game that reminds you every turn about',
+  'a meeting you have not forgotten is nagging you. `SOON` may show in the world rather than be stated:',
+  'the light going, somebody glancing at a clock, a shop closing. `NOW` and `LATE` are the story. If the',
+  'player is late for somebody, the person waiting has noticed, and the next time they are in the room',
+  'that is the first thing between them.',
   '',
   'STOP CLOSING EVERY BEAT WITH A THESIS. The habit is: describe a small domestic object, then explain',
   'what it means. "In this house, the small things are never about themselves." "The old building',

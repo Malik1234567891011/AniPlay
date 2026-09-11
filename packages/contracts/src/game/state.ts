@@ -71,6 +71,47 @@ export const PlayerCharacterState = z
 export type PlayerCharacterState = z.infer<typeof PlayerCharacterState>;
 
 /** Spec §14.1 — five independent dimensions. Respect ≠ affection. */
+/**
+ * Something the player is on the hook for.
+ *
+ * Two kinds, one shape, because they behave the same way: a thing was said,
+ * somebody is holding the player to it, and it can still be kept or broken.
+ *
+ * `APPOINTMENT` has a clock — be somewhere, by a time. `PROMISE` may not
+ * ("I am not going anywhere"), and an untimed promise is not weaker, it is
+ * *harder*, because it has no moment at which it is discharged. It stays open
+ * until something in the fiction keeps or breaks it.
+ *
+ * This exists because the Itachi opening establishes that Fugaku expects
+ * Itachi in eighty minutes, the player then gives forty of those minutes to
+ * Sasuke — and none of that was anywhere except in prose. The clock advanced
+ * six minutes a turn quite correctly while nothing in the world knew there was
+ * anything to be late for.
+ */
+export const Obligation = z
+  .object({
+    id: z.string(),
+    kind: z.enum(['APPOINTMENT', 'PROMISE']),
+    /** In the player's own words where possible — this is read by the writer. */
+    what: z.string().max(300),
+    /** Who is owed it. `null` for a deadline the world imposes. */
+    withCharacterId: z.string().nullable().default(null),
+    /** Absolute world minute it comes due. `null` for an open promise. */
+    dueWorldMinute: z.number().int().nullable().default(null),
+    /**
+     * How long the player said they would spend, when they said so.
+     *
+     * Separate from `dueWorldMinute` because "I will give you forty minutes"
+     * is a budget, not an appointment: it is spent by staying, and running it
+     * out is what makes the next obligation start pressing.
+     */
+    budgetMinutes: z.number().int().nullable().default(null),
+    createdTurn: z.number().int().default(0),
+    status: z.enum(['OPEN', 'KEPT', 'BROKEN']).default('OPEN'),
+  })
+  .strict();
+export type Obligation = z.infer<typeof Obligation>;
+
 export const RelationshipState = z
   .object({
     characterId: z.string(),
@@ -329,6 +370,8 @@ export const GameState = z
     characters: z.array(CharacterRuntimeState),
     relationships: z.array(RelationshipState),
     quests: z.array(QuestProgress),
+    /** Appointments and promises. Defaulted so old snapshots still parse. */
+    obligations: z.array(Obligation).default([]),
     factions: z.array(FactionState),
     discoveredLocationIds: z.array(z.string()),
     flags: z.record(z.union([z.string(), z.number(), z.boolean()])),

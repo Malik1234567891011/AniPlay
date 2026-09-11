@@ -11,6 +11,7 @@ import { QUALITY_TIERS, shortName } from '@aniplay/contracts';
 import { isSuccess, outcomeLabel, estimateRisk, attributeModifier } from '@aniplay/engine';
 import type { TurnContext, PresentCharacterContext } from './context.js';
 import { renderableFacts } from './writer.js';
+import { detectCommitment } from '@aniplay/engine';
 
 /**
  * Spec §16 — the director.
@@ -748,6 +749,36 @@ const HOSTILE_VERBS: Record<string, string> = {
 function proposeMemories(context: TurnContext): MemoryProposal[] {
   const proposals: MemoryProposal[] = [];
   const { resolution, state } = context;
+
+  // A promise, remembered by the person it was made to.
+  //
+  // "I am here, and I am not going anywhere" is not flavour in a story about a
+  // brother who will be abandoned. It is the line he will quote back. Stored
+  // NPC_PRIVATE at importance 1 so recency decay can never drop it: the whole
+  // value of a promise is that it outlives the scene it was made in, and a
+  // promise that ages out in six turns is worse than none, because the player
+  // believes it was heard.
+  //
+  // The same detector the engine uses to create the obligation, called again
+  // rather than reimplemented — one definition of what counts as a promise,
+  // two things that care.
+  const spokenThisTurn = context.playerDialogue.map((line) => line.text).join(' ');
+  for (const speaker of context.presentCharacters) {
+    const commitment = detectCommitment(spokenThisTurn, state, speaker.def);
+    if (!commitment) continue;
+    proposals.push({
+      subjectId: speaker.def.id,
+      predicate: 'was_promised_by_player',
+      // Their words. A promise paraphrased is a promise that cannot be quoted.
+      value: `${context.player.name} promised ${speaker.def.name}: "${commitment.what}" (${context.scene.worldTimeLabel})`,
+      visibility: 'NPC_PRIVATE',
+      importance: 1,
+      sourceEventIds: [`commitment:${state.turnIndex}`],
+    });
+    // One promise, to the person it was made to. Everybody in the room hearing
+    // it is a different fact and not this one.
+    break;
+  }
 
   for (const check of resolution.checks) {
     if (check.outcome === 'CRITICAL_SUCCESS' || check.outcome === 'COMPLICATION') {
