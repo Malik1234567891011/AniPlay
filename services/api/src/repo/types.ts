@@ -97,12 +97,34 @@ export interface StorySignals {
   impressions: number;
 }
 
+/** A world nobody has touched yet. One definition, shared by every repository. */
+export const EMPTY_SIGNALS: StorySignals = {
+  runs: 0,
+  likes: 0,
+  saves: 0,
+  hides: 0,
+  reports: 0,
+  impressions: 0,
+};
+
 export interface Repository {
   // --- Catalog ---
   listStories(): Promise<StoryVersion[]>;
   getStoryVersion(storyVersionId: string): Promise<StoryVersion | null>;
   getStoryByStoryId(storyId: string): Promise<StoryVersion | null>;
   getSignals(storyId: string): Promise<StorySignals>;
+  /**
+   * Signals for many worlds at once.
+   *
+   * Discover, search and the related-worlds strip each walked the catalogue
+   * calling `getSignals` one story at a time, inside `for … await`, so the
+   * round trips were sequential: twenty-three worlds meant twenty-three of
+   * them end to end. Against a database on the other side of the country that
+   * is most of a three-second response; against one in the same rack it is
+   * still twenty-three times more than the one query this needs, and it grows
+   * with the catalogue.
+   */
+  getSignalsFor(storyIds: readonly string[]): Promise<Map<string, StorySignals>>;
   bumpSignal(storyId: string, key: keyof StorySignals, delta: number): Promise<void>;
 
   // --- Users ---

@@ -143,8 +143,26 @@ const LITERAL = /(['"`])((?:\\.|(?!\1)[^\\\n]){3,400})\1/g;
 
 function extract(file: string): Hit[] {
   const hits: Hit[] = [];
-  const source = readFileSync(file, 'utf8');
+  const raw = readFileSync(file, 'utf8');
+
+  /**
+   * Comments are prose *about* the code, not strings in it.
+   *
+   * The gate kept flagging sentences inside explanatory comments — a comment
+   * quoting the UI copy it is explaining, a comment naming `slice(0, -1)` — and
+   * the workaround each time was to reword the comment until the scanner
+   * stopped noticing. That is the tool editing the source to suit itself, which
+   * is the same failure `fr-lint` had with its Title Case rule.
+   *
+   * Blanked rather than deleted, so every line number still points at the same
+   * line. The `i18n-exempt:` markers are read off the untouched source, since
+   * they live in the comments this is about to erase.
+   */
+  const source = raw
+    .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '))
+    .replace(/(^|[^:'"\`\\])\/\/[^\n]*/g, (m, lead: string) => lead + ' '.repeat(m.length - lead.length));
   const lines = source.split('\n');
+  const rawLines = raw.split('\n');
 
   lines.forEach((line, index) => {
     if (NOISE_LINE.test(line)) return;
@@ -152,8 +170,10 @@ function extract(file: string): Hit[] {
     const routes = routeNamesOn(line);
     // The reason may sit on the line itself or on the line above, because a
     // JSX prop is often too long to carry a trailing comment.
+    // Read off the untouched source: the markers live in the comments the
+    // blanking above has just erased.
     const exemptReason =
-      line.match(EXEMPT)?.[1] ?? (lines[index - 1] ?? '').match(EXEMPT)?.[1] ?? null;
+      (rawLines[index] ?? '').match(EXEMPT)?.[1] ?? (rawLines[index - 1] ?? '').match(EXEMPT)?.[1] ?? null;
 
     for (const match of line.matchAll(LITERAL)) {
       const value = match[2] ?? '';

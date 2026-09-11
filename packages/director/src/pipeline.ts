@@ -243,6 +243,13 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     recentTurns: options.recentTurns,
     actionText,
     playerDialogue: intent.dialogue,
+    // Who the player aimed at, present or not — the validator checks that a
+    // question put to an absent person is answered by their absence rather
+    // than by whoever happens to be standing nearby.
+    addressedIds: intent.actions
+      .flatMap((action) => action.targets)
+      .filter((target) => target.entityType === 'npc')
+      .map((target) => target.entityId),
   });
   clock.end('context');
 
@@ -387,6 +394,8 @@ export async function runTurn(options: RunTurnOptions): Promise<TurnPipelineResu
     resolution,
     turnId,
     extraMutations: mentionMutations,
+    // Their own words, for commitment detection. See `commitments.ts`.
+    intent,
     now: options.now,
   });
   // An established claim is written down before anything the model proposed,

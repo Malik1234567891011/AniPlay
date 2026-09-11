@@ -1,4 +1,5 @@
 import type {
+  ActionIntent,
   GameEvent,
   GameState,
   Resolution,
@@ -16,6 +17,7 @@ import { echoDirectorNotes, loopShouldReset, resetLoop, type LoopResetResult } f
 import { departuresFromMutations, type CrewDeparture } from './crew.js';
 import { scoutingMutations } from './tendencies.js';
 import { composeStory } from './generated-world.js';
+import { advanceObligations, detectCommitment, settleOnArrival } from './commitments.js';
 import { contestResultFlags } from './contest.js';
 
 /**
@@ -38,6 +40,13 @@ export interface CommitResult {
   readonly worldEvents: FiredWorldEvent[];
   /** Facts the world events produced, to be merged into the beat. */
   readonly worldEventFacts: { observable: string[]; private: string[] };
+  /**
+   * Appointments and promises that changed state this turn — came due, ran
+   * out, went late. Facts, not prose: the director decides what is worth a
+   * line, because nagging a player about a meeting they have not forgotten is
+   * its own failure.
+   */
+  readonly obligationFacts: string[];
   /** Set on the turn a looping world started again. */
   readonly loopReset: { occurred: boolean; loopNumber: number; directorNotes: string[] };
   /** Anybody who stopped being crew this turn. Spec §14.7. */
@@ -51,6 +60,14 @@ export interface CommitOptions {
   readonly turnId: string;
   /** Mutations proposed outside the resolution (director memory writes, etc). */
   readonly extraMutations?: readonly StateMutation[];
+  /**
+   * What the player actually said, for commitment detection.
+   *
+   * Their own words rather than the resolution's summary: a promise is quoted
+   * back at somebody later, and "you can have forty of them" does not survive
+   * being normalised into "spent time with brother".
+   */
+  readonly intent?: ActionIntent;
   readonly now?: () => string;
 }
 
@@ -68,11 +85,73 @@ export function commitTurn(options: CommitOptions): CommitResult {
   const { accepted, rejected } = validateMutations(proposed, options.state, story);
 
   const minutesElapsed = resolution.timeAdvancedMinutes;
+  /** What came due this turn, for the director to decide whether to surface. */
+  const obligationFacts: string[] = [];
   let state = applyMutations(options.state, story, accepted);
 
   // World time has moved: regenerate resources and let NPCs follow their schedules.
   regenerateResources(state, story, minutesElapsed);
   applySchedules(state, story);
+
+  // ...and appointments come due. Before quests, because being late for
+  // something is a fact a quest step may well be written against.
+  //
+  // The facts are collected rather than narrated: the director decides whether
+  // any of it is worth a line. An obligation that is merely pending is not,
+  // and reminding the player every turn about a meeting they have not
+  // forgotten is its own failure mode.
+  const advanced = advanceObligations(state, minutesElapsed);
+  state = { ...state, obligations: advanced.obligations };
+  obligationFacts.push(...advanced.facts);
+
+  // Anything the player just put themselves on the hook for.
+  //
+  // After the advance, so a promise made this turn is not immediately judged
+  // against a clock that has already moved past it.
+  if (options.intent) {
+    // `rawAction` usually already contains the quoted dialogue, so joining both
+    // stored every promise twice over. Only add a line the raw text does not
+    // already carry.
+    const raw = options.intent.rawAction ?? '';
+    const extra = options.intent.dialogue
+      .map((line) => line.text)
+      .filter((line) => line && !raw.includes(line));
+    const spoken = [raw, ...extra].filter(Boolean).join(' ');
+    const addressedId = options.intent.actions
+      .flatMap((action) => action.targets)
+      .find((target) => target.entityType === 'npc')?.entityId;
+    const addressee = story.characters.find((c) => c.id === addressedId) ?? null;
+    const detected = detectCommitment(spoken, state, addressee);
+    if (detected) {
+      state = {
+        ...state,
+        obligations: [
+          ...state.obligations,
+          {
+            id: `obl_${turnId}`,
+            kind: detected.kind,
+            what: detected.what,
+            withCharacterId: detected.withCharacterId,
+            dueWorldMinute: detected.dueWorldMinute,
+            budgetMinutes: detected.budgetMinutes,
+            createdTurn: state.turnIndex,
+            status: 'OPEN',
+          },
+        ],
+      };
+    }
+  }
+
+  // Arriving is how an appointment is kept, and the engine already knows who
+  // is in the room — the player should not have to announce it.
+  state = {
+    ...state,
+    obligations: settleOnArrival(
+      state,
+      story,
+      charactersPresent(state).map((runtime) => runtime.characterId),
+    ),
+  };
 
 
   // Then record what the engine actually observed this turn, before quests are
@@ -211,6 +290,7 @@ export function commitTurn(options: CommitOptions): CommitResult {
     // Fired during resolution, so the beat the player reads contains them.
     worldEvents: [],
     worldEventFacts: { observable: [], private: [] },
+    obligationFacts,
     loopReset: {
       occurred: loop !== null,
       loopNumber: loop?.loopNumber ?? 1,

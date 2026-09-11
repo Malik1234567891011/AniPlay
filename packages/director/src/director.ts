@@ -12,6 +12,7 @@ import { isSuccess, outcomeLabel, estimateRisk, attributeModifier } from '@anipl
 import { type HostileVerb, type StructuredFact } from './memory-facts.js';
 import type { TurnContext, PresentCharacterContext } from './context.js';
 import { renderableFacts } from './writer.js';
+import { detectCommitment } from '@aniplay/engine';
 
 /**
  * Spec §16 — the director.
@@ -755,6 +756,36 @@ function proposeMemories(context: TurnContext): MemoryProposal[] {
   const proposals: MemoryProposal[] = [];
   const { resolution, state } = context;
 
+  // A promise, remembered by the person it was made to.
+  //
+  // "I am here, and I am not going anywhere" is not flavour in a story about a
+  // brother who will be abandoned. It is the line he will quote back. Stored
+  // NPC_PRIVATE at importance 1 so recency decay can never drop it: the whole
+  // value of a promise is that it outlives the scene it was made in, and a
+  // promise that ages out in six turns is worse than none, because the player
+  // believes it was heard.
+  //
+  // The same detector the engine uses to create the obligation, called again
+  // rather than reimplemented — one definition of what counts as a promise,
+  // two things that care.
+  const spokenThisTurn = context.playerDialogue.map((line) => line.text).join(' ');
+  for (const speaker of context.presentCharacters) {
+    const commitment = detectCommitment(spokenThisTurn, state, speaker.def);
+    if (!commitment) continue;
+    proposals.push({
+      subjectId: speaker.def.id,
+      predicate: 'was_promised_by_player',
+      // Their words. A promise paraphrased is a promise that cannot be quoted.
+      value: `${context.player.name} promised ${speaker.def.name}: "${commitment.what}" (${context.scene.worldTimeLabel})`,
+      visibility: 'NPC_PRIVATE',
+      importance: 1,
+      sourceEventIds: [`commitment:${state.turnIndex}`],
+    });
+    // One promise, to the person it was made to. Everybody in the room hearing
+    // it is a different fact and not this one.
+    break;
+  }
+
   for (const check of resolution.checks) {
     if (check.outcome === 'CRITICAL_SUCCESS' || check.outcome === 'COMPLICATION') {
       proposals.push({
@@ -1145,6 +1176,7 @@ export function heroImageDecision(
     reason('CONTEST_RESULT') ||
     beatType === 'CLIFFHANGER' ||
     scene.firstVisit ||
+
     // Meeting somebody important for the first time.
     context.presentCharacters.some((c) => !context.state.flags[`met:${c.def.id}`] && c.def.cardBlurb !== '');
 
@@ -1176,6 +1208,13 @@ export function heroImageDecision(
     resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS') ||
     resolution.mutations.some((m) => m.type === 'ENCOUNTER_START') ||
     resolution.mutations.some((m) => m.type === 'QUEST_TRANSITION') ||
+    // Walking back into a room you know is worth a frame, but it waits its
+    // turn. It sat in `landmark` for one build, and `landmark` bypasses the
+    // spacing rule — so a player crossing the district four times got four
+    // establishing shots, ten planned frames in fourteen turns, and a queue of
+    // image jobs longer than the session. Seeing a place for the *first* time
+    // is still a landmark; coming back to it is merely notable.
+    scene.locationChanged ||
     socialTurn;
 
   const spacing = HERO_SPACING[tier] ?? 10;

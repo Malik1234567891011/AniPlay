@@ -93,6 +93,10 @@ export class MemoryRepository implements Repository {
     );
   }
 
+  async getSignalsFor(storyIds: readonly string[]): Promise<Map<string, StorySignals>> {
+    return new Map(await Promise.all(storyIds.map(async (id) => [id, await this.getSignals(id)] as const)));
+  }
+
   async bumpSignal(storyId: string, key: keyof StorySignals, delta: number): Promise<void> {
     const signals = await this.getSignals(storyId);
     signals[key] = Math.max(0, signals[key] + delta);

@@ -340,7 +340,25 @@ export function SessionScreen({
             if (event === 'media.completed' && typeof data.url === 'string') {
               // The turn is already committed and read; the frame just arrives.
               const url = data.url;
-              setPending((current) => (current ? { ...current, heroImageUrl: url } : current));
+              // Only if this is still the turn that asked for it.
+              //
+              // Art is generated after the beat is written and can land many
+              // seconds later — comfortably after the player has read the beat
+              // and sent the next one. This wrote the url onto whatever was
+              // pending *at the moment it arrived*, which by then was the next
+              // turn, so turn N's frame appeared under turn N+1's line. It sat
+              // there until the refetch replaced the transcript with the
+              // server's copy and quietly moved it back.
+              //
+              // Which is what "the image disappears and a different one shows
+              // up under the prompt above" is: both frames were correct, and
+              // one of them spent a few seconds on the wrong beat.
+              //
+              // The `setTurns` call below was always keyed by `turnId` and was
+              // always right. Only the live slot guessed.
+              setPending((current) =>
+                current && current.turnId === accepted.turnId ? { ...current, heroImageUrl: url } : current,
+              );
               setTurns((current) =>
                 current.map((t) => (t.turnId === accepted.turnId ? { ...t, heroImageUrl: url } : t)),
               );
@@ -496,7 +514,26 @@ export function SessionScreen({
             like an appendix and made the screen feel like a set of active
             nodes rather than a story you can read back. It is one feed now,
             and scrolling up is how you reread it. */}
-        {turns.slice(0, -1).map((turn) => (
+        {/*
+          Every committed turn except the one the live slot below is showing.
+
+          `slice(0, -1)` alone was wrong, and wrong only while a turn was in
+          flight. The last committed turn is normally drawn by the live slot,
+          which is why it is cut here — but the moment the player submits,
+          `pending` takes that slot over and the `!pending` guards below stop
+          drawing `latest`. So for the length of the request the previous beat
+          was in neither place: its prompt, its prose, its check and its hero
+          frame all left the screen, and came back when the next turn committed.
+
+          From the player's side that reads as the image moving: a frame sits
+          under the line you just wrote, you send the next one, the frame
+          disappears — and when it returns the feed has reflowed, so it looks
+          like a new image appeared under the *earlier* prompt.
+
+          While something is pending, nothing in `turns` is live any more, so
+          all of it belongs to the history.
+        */}
+        {(pending ? turns : turns.slice(0, -1)).map((turn) => (
           <View key={turn.turnId} style={{ gap: spacing.sm }}>
             {turn.actionText ? <PlayerAction text={turn.actionText} /> : null}
             {/*

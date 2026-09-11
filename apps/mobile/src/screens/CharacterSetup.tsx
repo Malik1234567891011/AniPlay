@@ -222,6 +222,27 @@ export function CharacterSetupScreen({
           <View style={{ width: 44 }} />
         </Row>
 
+        {/*
+          Nothing is drawn until the world has answered.
+
+          `named` is derived from `detail`, and `detail` arrives over the
+          network — so for the length of that fetch it is `false`, which is
+          indistinguishable from a world that really does want to ask. The
+          screen rendered "Who are you?" with a name field, a pronouns field
+          and an appearance field, and then swapped itself for the named
+          version the moment the response landed. From the player's side a
+          question appeared, sat there, and vanished on its own.
+
+          The honest thing is to not answer a question we have not been asked
+          yet. One quiet line, then the real screen.
+        */}
+        {!detail ? (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Txt variant="bodyCompact" color={colors.text.muted}>
+              Loading…
+            </Txt>
+          </View>
+        ) : (
         <ScrollView
           contentContainerStyle={{ padding: GUTTER, gap: spacing.xxl, paddingBottom: spacing.giant }}
           keyboardShouldPersistTaps="handled"
@@ -560,6 +581,7 @@ export function CharacterSetupScreen({
             </Txt>
           ) : null}
         </ScrollView>
+        )}
 
         <SafeAreaView
           edges={['bottom']}

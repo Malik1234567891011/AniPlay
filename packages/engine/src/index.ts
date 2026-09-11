@@ -18,3 +18,4 @@ export * from './generated-world.js';
 export * from './custom-build.js';
 export * from './endings.js';
 export * from './commit.js';
+export * from './commitments.js';
