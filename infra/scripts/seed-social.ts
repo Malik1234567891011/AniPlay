@@ -63,7 +63,34 @@ const NAMES = [
   'quietpart_loud', 'nocturne22', 'plumrain', 'wrongnumber', 'fig_and_smoke', 'yuzu_bit',
   'the_real_kaz', 'sundaydriver', 'oldgodsnew', 'paperlantern', 'HALCYON_', 'mint_condition',
   'somebodys_ex', 'gh0stwriter', 'tsukiyo_', 'bad_at_names', 'reineke', 'cassette_ghost',
+  'burntoast_', 'no_thoughts_', 'kettle.on', 'marrowmilk', 'definitely_steve', 'ex_husband_of',
+  'wet_sock_', 'pigeon.mp3', 'HOURGLASS__', 'nine_lives_left', 'soggy_receipt', 'my_othr_acct',
+  'terminal_velocity_', 'sweater.weather', 'unpaid_intern', 'moth_to_lamp', 'frogpond_', 'kkkarin',
+  'second_breakfast', 'dial_tone_', 'vhs_rot', 'not_that_deep', 'lukewarm_', 'certified_hater',
+  'chair_enjoyer', 'bus_window', 'minor_inconvenience', 'threeAM_thoughts', 'saltlick_', 'gone_fishing_brb',
 ];
+
+/**
+ * The like count, roughened.
+ *
+ * `CATALOGUE` carries round planning figures (10,400 / 8,900 / 7,600) because
+ * that is how you reason about a shelf. Shipped as-is they read as invented:
+ * every world in the app ending in two zeroes is not something that happens to
+ * real numbers, and a player who notices stops believing the rest of the page.
+ *
+ * Deterministic, so the figure is stable across re-seeds rather than drifting
+ * every time this runs. The offset is small enough to preserve the ordering the
+ * catalogue was arranged in.
+ */
+function roughen(storyId: string, likes: number): number {
+  let seed = 0;
+  for (const ch of storyId) seed = (seed * 131 + ch.charCodeAt(0)) >>> 0;
+  const spread = Math.max(12, Math.round(likes * 0.011));
+  const offset = (seed % (spread * 2 + 1)) - spread;
+  const rough = likes + offset;
+  // A trailing zero is fine; three of them is the tell.
+  return rough % 100 === 0 ? rough + ((seed % 9) + 1) : rough;
+}
 
 /** Roughly a comment per 90 likes, so the two numbers look like each other. */
 const commentsFor = (likes: number): number => Math.max(3, Math.round(likes / 90));
@@ -85,6 +112,30 @@ const PRAISE = [
   'came back a week later and it remembered a promise i made. insane',
   'read this at 2am. bad decision. great story',
   'the quiet scenes are better than the loud ones and that is rare',
+  'i typed something completely unhinged and it just went with it',
+  'nobody warned me about chapter whatever it was. rude',
+  'the dialogue does not sound like a robot wrote it which is the bar apparently',
+  'i said one mean thing in turn two and it came back for me an hour later',
+  'this is the first one of these ive finished',
+  'genuinely thought about this at work today',
+  'the small choices matter more than the big ones here and i love that',
+  'my friend and i got completely different stories from the same start',
+  'i tried to be nice to everyone and it made things worse. perfect',
+  'the art fits the writing for once',
+  'stayed up way too late. worth it',
+  'it let me be a coward and did not punish me for it. respect',
+  'the side character stole the whole thing',
+  'i have recommended this to four people today',
+  'you can tell someone actually cared about this one',
+  'the fact that it tracks who is in the room is wild',
+  'ok the bit near the end where it calls back to your first line. come on',
+  'i went in expecting slop and got actual writing',
+  'replay value is real here, not fake',
+  'i did not think a phone thing could make me sit and stare at a wall',
+  'the restraint in this is what makes it work',
+  'every time i think it will cop out it does not',
+  'first one where the choices felt like mine',
+  'this one lives in my head now',
 ];
 
 const CRITICAL = [
@@ -99,6 +150,19 @@ const CRITICAL = [
   'the first hour is slow. stick with it though',
   'not my genre but i can tell it is well made',
   'mid tbh. the other one is better',
+  'lost track of who everyone was around turn ten',
+  'the middle section repeats itself a bit',
+  'wish i could go back one turn instead of starting over',
+  'good writing, but i never felt actually in danger',
+  'it ignored something i set up earlier and that bugged me',
+  'too easy. i never failed anything',
+  'the premise is better than the payoff imo',
+  'kept nudging me toward one option and i noticed',
+  'fine but it is not the masterpiece the comments say',
+  'i wanted one more scene with her and did not get it',
+  'the tone shifts around halfway and it threw me off',
+  'solid but forgettable, sorry',
+  'felt like it ended right when it got interesting',
 ];
 
 const NONSENSE = [
@@ -116,6 +180,21 @@ const NONSENSE = [
   'who else broke it by typing nonsense',
   'peak',
   'brb replaying',
+  'reading this instead of studying',
+  'the algorithm sent me here at 3am',
+  'why do i always pick the worst option',
+  'im supposed to be asleep',
+  'chat is this real',
+  'commenting so i can find this later',
+  'no way that worked',
+  'i typed my ex name in and now i feel weird',
+  'somebody make a tier list of these',
+  'reading this on the toilet at my job',
+  'how do people write this fast',
+  'unemployed behaviour from me today',
+  'i have zero credits left and no regrets',
+  'do not talk to me until i finish this',
+  'found this from a comment on another one lol',
 ];
 
 /** A comment written `days` ago, jittered so they are not all on the hour. */
@@ -129,21 +208,59 @@ function pick<T>(list: readonly T[], index: number): T {
 }
 
 /**
- * The mix.
+ * The mix, without repeating itself.
  *
- * Roughly six in ten positive, two in ten critical, two in ten noise — which is
+ * Roughly six in ten positive, two in ten critical, two in ten noise, which is
  * what a real comment section looks like. A wall of praise reads as bought.
+ *
+ * This used to pick with `Math.floor(index / 3)`, which handed **three
+ * consecutive commenters the identical sentence** — three different usernames
+ * saying "the ending actually got me. i sat there for a minute", one after
+ * another, which reads as exactly the astroturf the seeded rows are trying not
+ * to be. The database had 910 comments built from 38 distinct bodies, one of
+ * them eight times inside a single story.
+ *
+ * Now each story draws from its own shuffled deck and never puts a card back.
+ * A story asks for more comments than the pools hold, it gets the whole deck
+ * and stops there.
  */
-function bodyFor(index: number): { body: string; spoiler: boolean } {
-  const slot = index % 10;
-  if (slot < 6) {
-    const body = pick(PRAISE, Math.floor(index / 3));
+function deckFor(storyId: string): { body: string; spoiler: boolean }[] {
+  // Deterministic per story, so re-seeding produces the same section and two
+  // worlds do not open with the same comment in the same order.
+  let seed = 0;
+  for (const ch of storyId) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+  const next = (): number => {
+    seed = (seed * 1_664_525 + 1_013_904_223) >>> 0;
+    return seed / 0x1_0000_0000;
+  };
+  const shuffled = (list: readonly string[]): string[] => {
+    const out = [...list];
+    for (let i = out.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(next() * (i + 1));
+      [out[i], out[j]] = [out[j]!, out[i]!];
+    }
+    return out;
+  };
+
+  const praise = shuffled(PRAISE);
+  const critical = shuffled(CRITICAL);
+  const nonsense = shuffled(NONSENSE);
+  const deck: { body: string; spoiler: boolean }[] = [];
+
+  for (let i = 0; deck.length < praise.length + critical.length + nonsense.length; i += 1) {
+    const slot = i % 10;
+    const from = slot < 6 ? praise : slot < 8 ? critical : nonsense;
+    const body = from.shift();
+    if (body === undefined) {
+      // That category is spent. Keep going until all three are.
+      if (praise.length + critical.length + nonsense.length === 0) break;
+      continue;
+    }
     // The ones that name the ending get the spoiler flag, which is also the
     // feature demonstrating itself.
-    return { body, spoiler: /ending/i.test(body) && index % 3 === 0 };
+    deck.push({ body, spoiler: /ending/i.test(body) && deck.length % 3 === 0 });
   }
-  if (slot < 8) return { body: pick(CRITICAL, Math.floor(index / 5)), spoiler: false };
-  return { body: pick(NONSENSE, Math.floor(index / 7)), spoiler: false };
+  return deck;
 }
 
 async function main(): Promise<void> {
@@ -157,7 +274,7 @@ async function main(): Promise<void> {
       await pool.query(
         `INSERT INTO story_signals (story_id, likes) VALUES ($1, $2)
          ON CONFLICT (story_id) DO UPDATE SET likes = EXCLUDED.likes, updated_at = now()`,
-        [story.id, story.likes],
+        [story.id, roughen(story.id, story.likes)],
       );
 
       await pool.query(
@@ -177,9 +294,12 @@ async function main(): Promise<void> {
       );
       if (Number(rows[0]?.n ?? 0) > 0) continue;
 
-      const want = commentsFor(story.likes);
+      // Capped by the deck: a world with ten thousand likes does not get to
+      // repeat itself just because the ratio says it should have a hundred.
+      const deck = deckFor(story.id);
+      const want = Math.min(commentsFor(roughen(story.id, story.likes)), deck.length);
       for (let i = 0; i < want; i += 1) {
-        const { body, spoiler } = bodyFor(i + position);
+        const { body, spoiler } = deck[i]!;
         await pool.query(
           `INSERT INTO story_comments
              (comment_id, story_id, user_id, author_name, body, kind, spoiler, likes, created_at)
