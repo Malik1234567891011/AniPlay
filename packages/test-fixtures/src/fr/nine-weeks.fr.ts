@@ -134,5 +134,34 @@ registerWorldText('fr', {
       'Iel sait pourquoi Juno a disparu. Iel ne te l’a jamais dit, et ça fait un an que ça lui reste en travers.',
     'characters.cass.speechStyle':
       'Ironique, sur la réserve. Change de sujet d’un cran quand ça devient précis.',
+
+    /*
+     * Places.
+     *
+     * `STORY_AUDIT.md` §2 says location names never travel, and that rule was
+     * written for invented proper nouns — Blackwake, the Tidewall, the Ninth
+     * Archive. These are not that. `The Back Steps`, `The Dock`, `The Road Into
+     * Town` are ordinary descriptions with a definite article, and leaving them
+     * in English puts `place: The Staff Cabins` in a French HUD, under a French
+     * clock, beside French prose. That is the single most visible untranslated
+     * thing in a French session.
+     *
+     * `Longhouse` stays, because that one genuinely is a name — it is what the
+     * hotel is called, and `la Grande Maison` would be a different building.
+     */
+    'locations.staff_cabins.name': 'Les cabanons',
+    'locations.staff_cabins.shortName': 'Cabanons',
+    'locations.kitchen.name': 'La cuisine',
+    'locations.kitchen.shortName': 'Cuisine',
+    'locations.longhouse_bar.name': 'Le bar du Longhouse',
+    'locations.longhouse_bar.shortName': 'Bar',
+    'locations.back_steps.name': 'Les marches de derrière',
+    'locations.back_steps.shortName': 'Marches',
+    'locations.the_dock.name': 'Le ponton',
+    'locations.the_dock.shortName': 'Ponton',
+    'locations.town_road.name': 'La route du village',
+    'locations.town_road.shortName': 'Route',
+    'locations.the_point.name': 'La pointe',
+    'locations.the_point.shortName': 'Pointe',
   },
 });

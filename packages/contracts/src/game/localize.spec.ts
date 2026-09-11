@@ -30,17 +30,33 @@ describe('the French overlay', () => {
     expect(localizeStory(en, 'en')).toBe(en);
   });
 
-  it('never touches a name', () => {
-    // `STORY_AUDIT.md` §2: names do not travel. A translated proper noun is
-    // how a world stops being the same world.
+  it('never touches a person’s name, or the world’s', () => {
+    // A translated proper noun is how a world stops being the same world. Juno
+    // Vale is Juno Vale in Paris.
     expect(fr.title).toBe(en.title);
     for (const [index, character] of fr.characters.entries()) {
       expect(character.name).toBe(en.characters[index]!.name);
       expect(character.id).toBe(en.characters[index]!.id);
     }
-    for (const [index, location] of fr.locations.entries()) {
-      expect(location.name).toBe(en.locations[index]!.name);
-    }
+  });
+
+  it('does translate a place whose name is a description', () => {
+    // `STORY_AUDIT.md` §2 says location names never travel, and that rule was
+    // written for invented proper nouns — Blackwake, the Tidewall. `The Back
+    // Steps` and `The Road Into Town` are not that: they are ordinary
+    // descriptions with a definite article, and leaving them puts
+    // `place: The Staff Cabins` in a French HUD under a French clock beside
+    // French prose. It is the most visible untranslated thing in a session.
+    const cabins = fr.locations.find((l) => l.id === 'staff_cabins');
+    expect(cabins?.name).toBe('Les cabanons');
+  });
+
+  it('keeps a proper noun that lives inside a place name', () => {
+    // The hotel is called the Longhouse. `Le bar du Longhouse` translates the
+    // description around it and leaves the name alone.
+    const bar = fr.locations.find((l) => l.id === 'longhouse_bar');
+    expect(bar?.name).toContain('Longhouse');
+    expect(bar?.name).not.toBe(en.locations.find((l) => l.id === 'longhouse_bar')!.name);
   });
 
   it('never touches anything structural', () => {
@@ -81,5 +97,25 @@ describe('the French overlay', () => {
   it('leaves a world with no overlay exactly as it was', () => {
     const itachi = { ...en, storyId: 'story_itachi' } as StoryVersion;
     expect(localizeStory(itachi, 'fr')).toBe(itachi);
+  });
+});
+
+describe('every path in the overlay resolves', () => {
+  it('changes something for each one, so a typo cannot go unnoticed', () => {
+    // `localizeStory` ignores unknown paths on purpose — a stale path is a copy
+    // problem, not a reason to take a world off the shelf. The cost is that a
+    // typo is completely silent, so it is caught here instead: every path must
+    // make the French differ from the English somewhere.
+    const enJson = JSON.stringify(en);
+    const frJson = JSON.stringify(fr);
+    expect(frJson).not.toBe(enJson);
+
+    // Location names specifically, because they are addressed by id and a
+    // wrong id is the easiest mistake to make.
+    for (const location of fr.locations) {
+      const english = en.locations.find((l) => l.id === location.id)!;
+      // Every Nine Weeks location is overlaid, so none should still read English.
+      expect(location.name, location.id).not.toBe(english.name);
+    }
   });
 });

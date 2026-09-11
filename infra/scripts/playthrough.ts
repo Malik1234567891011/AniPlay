@@ -76,7 +76,11 @@ async function main(): Promise<void> {
   const auth = { authorization: `Bearer ${await playerToken()}`, 'content-type': 'application/json' };
   const call = async <T>(method: string, path: string, body?: unknown, extra: Record<string, string> = {}): Promise<T> => {
     const r = await fetch(`${BASE}${path}`, {
-      method, headers: { ...auth, ...extra },
+      method,
+      // The catalogue answers in the *interface* locale, which a real client
+      // carries in this header. Without it the harness read a French run's
+      // premise in English and reported it as a bug.
+      headers: { ...auth, 'accept-language': LOCALE, ...extra },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
     const text = await r.text();
