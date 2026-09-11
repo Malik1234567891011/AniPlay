@@ -33,6 +33,10 @@ const STORAGE_KEYS = {
   quality: 'aniplay.qualityTier',
   drafts: 'aniplay.composerDrafts',
   locale: 'aniplay.locale',
+  // Set once the showcase is dismissed. Without it the taste picker and the
+  // showcase were held in component state, so they came back on every cold
+  // start and a returning player was re-onboarded forever.
+  onboarded: 'aniplay.onboarded',
 } as const;
 
 export interface AppState {
@@ -45,6 +49,8 @@ export interface AppState {
   authConfigured: boolean;
   ageVerified: boolean;
   onboardingComplete: boolean;
+  /** The taste picker and the showcase are behind them. Survives a restart. */
+  onboarded: boolean;
   tastes: string[];
   bootstrap: BootstrapResponse | null;
   wallet: WalletSummary | null;
@@ -73,6 +79,7 @@ type Action =
       type: 'HYDRATED';
       identity: { userId: string; email: string | null; isGuest: boolean } | null;
       ageVerified: boolean;
+      onboarded: boolean;
       tastes: string[];
       quality: QualityTier | null;
       localeChoice: Locale | null;
@@ -80,6 +87,7 @@ type Action =
   | { type: 'BOOTSTRAPPED'; bootstrap: BootstrapResponse }
   | { type: 'IDENTITY'; identity: { userId: string; email: string | null; isGuest: boolean } | null }
   | { type: 'SET_AGE_VERIFIED' }
+  | { type: 'SET_ONBOARDED' }
   | { type: 'SET_TASTES'; tastes: string[] }
   | { type: 'SET_WALLET'; wallet: WalletSummary }
   | { type: 'SET_BALANCE'; balance: number }
@@ -95,6 +103,7 @@ const initialState: AppState = {
   authConfigured: auth.configured,
   ageVerified: false,
   onboardingComplete: false,
+  onboarded: false,
   tastes: [],
   bootstrap: null,
   wallet: null,
@@ -115,6 +124,7 @@ function reducer(state: AppState, action: Action): AppState {
         isGuest: action.identity?.isGuest ?? true,
         ageVerified: action.ageVerified,
         onboardingComplete: action.ageVerified,
+        onboarded: action.onboarded,
         tastes: action.tastes,
         qualityTier: action.quality ?? state.qualityTier,
         localeChoice: action.localeChoice,
@@ -140,6 +150,8 @@ function reducer(state: AppState, action: Action): AppState {
       };
     case 'SET_AGE_VERIFIED':
       return { ...state, ageVerified: true, onboardingComplete: true };
+    case 'SET_ONBOARDED':
+      return { ...state, onboarded: true };
     case 'SET_TASTES':
       return { ...state, tastes: action.tastes };
     case 'SET_WALLET':
@@ -173,6 +185,7 @@ export interface AppStore extends AppState {
    * device. Runs already in progress keep the language they were created in.
    */
   setLocale(choice: Locale | null): Promise<void>;
+  completeOnboarding(): Promise<void>;
   refreshWallet(): Promise<void>;
   setBalance(balance: number): void;
   refreshBootstrap(): Promise<void>;
@@ -220,9 +233,10 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
       // knows it even on a Hermes build whose `Intl` reported nothing.
       applyDeviceTimeZone();
 
-      const [identity, ageVerified, tastes, quality, storedLocale] = await Promise.all([
+      const [identity, ageVerified, onboarded, tastes, quality, storedLocale] = await Promise.all([
         auth.restore(),
         AsyncStorage.getItem(STORAGE_KEYS.ageVerified),
+        AsyncStorage.getItem(STORAGE_KEYS.onboarded),
         AsyncStorage.getItem(STORAGE_KEYS.tastes),
         AsyncStorage.getItem(STORAGE_KEYS.quality),
         AsyncStorage.getItem(STORAGE_KEYS.locale),
@@ -232,6 +246,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
         type: 'HYDRATED',
         identity,
         ageVerified: ageVerified === 'true',
+        onboarded: onboarded === 'true',
         tastes: tastes ? (JSON.parse(tastes) as string[]) : [],
         quality: (quality as QualityTier | null) ?? null,
         localeChoice: isLocale(storedLocale) ? storedLocale : null,
@@ -312,6 +327,11 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
     }
   }, []);
 
+  const completeOnboarding = useCallback(async () => {
+    await AsyncStorage.setItem(STORAGE_KEYS.onboarded, 'true');
+    dispatch({ type: 'SET_ONBOARDED' });
+  }, []);
+
   const confirmAge = useCallback(async () => {
     await AsyncStorage.setItem(STORAGE_KEYS.ageVerified, 'true');
     dispatch({ type: 'SET_AGE_VERIFIED' });
@@ -386,13 +406,14 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
       setTastes,
       setQualityTier,
       setLocale,
+      completeOnboarding,
       refreshWallet,
       setBalance,
       refreshBootstrap,
       saveDraft,
       loadDraft,
     }),
-    [state, sendEmailCode, verifyEmailCode, signInWithApple, signOut, confirmAge, setTastes, setQualityTier, setLocale, refreshWallet, setBalance, refreshBootstrap, saveDraft, loadDraft],
+    [state, sendEmailCode, verifyEmailCode, signInWithApple, signOut, confirmAge, setTastes, setQualityTier, setLocale, completeOnboarding, refreshWallet, setBalance, refreshBootstrap, saveDraft, loadDraft],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

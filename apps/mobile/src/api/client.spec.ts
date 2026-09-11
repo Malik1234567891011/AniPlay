@@ -183,3 +183,47 @@ describe('a token the server has refused', () => {
     expect(asked.at(-1)).toEqual({ force: true });
   });
 });
+
+/**
+ * The language the app is in has to reach the server.
+ *
+ * A guest has no account, so the account setting the API prefers does not
+ * exist, and without this header `interfaceLocale` fell back to a device path
+ * that is gated off — which served a French player English hooks, English
+ * premises and English rail titles underneath French chrome. Discover is the
+ * first screen anybody sees.
+ */
+describe('the app states its language on every request', () => {
+  function headersOf(): Array<Record<string, string>> {
+    const seen: Array<Record<string, string>> = [];
+    globalThis.fetch = (async (_url: string, init: RequestInit) => {
+      seen.push((init.headers ?? {}) as Record<string, string>);
+      return new Response('{}', { status: 200, headers: { 'content-type': 'application/json' } });
+    }) as unknown as typeof fetch;
+    return seen;
+  }
+
+  it('sends English by default', async () => {
+    const seen = headersOf();
+    await new ApiClient('https://api.test').bootstrap();
+    expect(seen[0]?.['accept-language']).toBe('en');
+  });
+
+  it('sends the locale the player chose', async () => {
+    const seen = headersOf();
+    const api = new ApiClient('https://api.test');
+    api.setLocale('fr');
+    await api.bootstrap();
+    expect(seen[0]?.['accept-language']).toBe('fr');
+  });
+
+  it('keeps sending it after the language changes again', async () => {
+    const seen = headersOf();
+    const api = new ApiClient('https://api.test');
+    api.setLocale('fr');
+    await api.bootstrap();
+    api.setLocale('en');
+    await api.bootstrap();
+    expect(seen.map((h) => h['accept-language'])).toEqual(['fr', 'en']);
+  });
+});

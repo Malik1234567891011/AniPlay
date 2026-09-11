@@ -150,9 +150,25 @@ function Tabs(): React.JSX.Element {
 }
 
 export function Navigation(): React.JSX.Element {
-  const { ready, ageVerified, onboardingComplete } = useStore();
-  const [tasteDone, setTasteDone] = React.useState(false);
-  const [showcaseDone, setShowcaseDone] = React.useState(false);
+  const { ready, ageVerified, onboardingComplete, onboarded, completeOnboarding } = useStore();
+  // Seeded from what was stored rather than always false. These were component
+  // state, so every cold start walked a returning player back through the taste
+  // picker and the showcase — the age gate was the only step that remembered
+  // having been answered.
+  const [tasteDone, setTasteDone] = React.useState(onboarded);
+  const [showcaseDone, setShowcaseDone] = React.useState(onboarded);
+
+  // `ready` is false on the first render, so `onboarded` arrives after boot.
+  React.useEffect(() => {
+    if (!onboarded) return;
+    setTasteDone(true);
+    setShowcaseDone(true);
+  }, [onboarded]);
+
+  const finishOnboarding = React.useCallback(() => {
+    setShowcaseDone(true);
+    void completeOnboarding();
+  }, [completeOnboarding]);
   // A story chosen on the showcase, opened once the navigator exists. Onboarding
   // renders instead of the navigator, so it has nothing to navigate with.
   const [openStoryId, setOpenStoryId] = React.useState<string | null>(null);
@@ -169,10 +185,10 @@ export function Navigation(): React.JSX.Element {
   if (onboardingComplete && !showcaseDone) {
     return (
       <ShowcaseScreen
-        onSeeAll={() => setShowcaseDone(true)}
+        onSeeAll={finishOnboarding}
         onOpen={(storyId) => {
           setOpenStoryId(storyId);
-          setShowcaseDone(true);
+          finishOnboarding();
         }}
       />
     );
