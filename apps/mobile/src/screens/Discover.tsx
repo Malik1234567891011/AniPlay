@@ -32,6 +32,7 @@ import {
 import { api, ApiError } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import type { RootNavigation } from '../navigation.jsx';
+import { HeroCarousel } from '../components/HeroCarousel.js';
 
 /**
  * DS-01 Discover home.
@@ -94,7 +95,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
     return unsubscribe;
   }, [load, navigation]);
 
-  const hero = data?.rails.find((rail) => rail.kind === 'HERO')?.stories[0];
+  const hero = data?.rails.find((rail) => rail.kind === 'HERO')?.stories ?? [];
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: colors.bg.base }}>
@@ -187,54 +188,11 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           tall, the copy is one line, and the CTA is inside the card, so the
           category rail and the first row of covers are above the fold.
         */}
-        {hero && !data?.activeCategory ? (
-          <View style={{ paddingHorizontal: GUTTER }}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`Featured: ${hero.title}. ${hero.fantasyLabel}. Enter world.`}
-              onPress={() => navigation.navigate('StoryDetail', { storyId: hero.storyId })}
-            >
-              <StoryArt
-                seed={hero.storyId}
-                uri={hero.keyArt ?? hero.coverImage}
-                style={{ width: '100%', aspectRatio: 16 / 9, borderRadius: radius.large, justifyContent: 'flex-end' }}
-              >
-                <View
-                  style={{
-                    padding: spacing.md,
-                    gap: spacing.xs,
-                    backgroundColor: 'rgba(11,13,18,0.78)',
-                    borderBottomLeftRadius: radius.large,
-                    borderBottomRightRadius: radius.large,
-                  }}
-                >
-                  <Txt variant="micro" color={colors.accent.primary} style={{ letterSpacing: 1.5 }}>
-                    FEATURED
-                  </Txt>
-                  <Txt variant="h2" numberOfLines={1}>
-                    {hero.title}
-                  </Txt>
-                  <Row style={{ justifyContent: 'space-between', alignItems: 'center' }} gap={spacing.sm}>
-                    <Txt variant="caption" color={colors.text.secondary} numberOfLines={1} style={{ flex: 1 }}>
-                      {hero.fantasyLabel}
-                    </Txt>
-                    <View
-                      style={{
-                        paddingHorizontal: spacing.md,
-                        paddingVertical: spacing.xs,
-                        borderRadius: radius.control,
-                        backgroundColor: colors.accent.primary,
-                      }}
-                    >
-                      <Txt variant="caption" color="#0B0D12">
-                        Enter
-                      </Txt>
-                    </View>
-                  </Row>
-                </View>
-              </StoryArt>
-            </Pressable>
-          </View>
+        {hero.length > 0 && !data?.activeCategory ? (
+          <HeroCarousel
+            stories={hero}
+            onOpen={(storyId) => navigation.navigate('StoryDetail', { storyId })}
+          />
         ) : null}
 
         {/* Spec §7.2 item 3 — Continue, only when there is something to continue. */}

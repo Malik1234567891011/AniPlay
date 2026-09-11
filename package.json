@@ -24,7 +24,8 @@
     "brand": "tsx infra/scripts/generate-brand.ts",
     "migrate": "tsx infra/scripts/migrate.ts",
     "playtest": "node infra/scripts/playtest-read.mjs",
-    "playthrough": "tsx --env-file-if-exists=.env infra/scripts/playthrough.ts"
+    "playthrough": "tsx --env-file-if-exists=.env infra/scripts/playthrough.ts",
+    "seed:social": "tsx --env-file-if-exists=.env infra/scripts/seed-social.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
