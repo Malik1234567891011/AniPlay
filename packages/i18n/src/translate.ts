@@ -90,3 +90,18 @@ export type Translator = (key: TranslationKey, options?: TranslateOptions) => st
 export function translatorFor(locale: Locale): Translator {
   return (key, options) => translate(locale, key, options);
 }
+
+/**
+ * The word for a browse category, given the id the server files it under.
+ *
+ * The server owns which categories exist; this owns what they are called. An id
+ * with no key yet falls back to the label the server sent, so adding a category
+ * to `CATEGORIES` cannot make a chip render as `category.whatever` — it renders
+ * in English until somebody adds the row, which is a coverage gap and not a
+ * broken screen.
+ */
+export function categoryLabel(locale: Locale, id: string, fallback: string): string {
+  const key = `category.${id}`;
+  if (!(key in en)) return fallback;
+  return translate(locale, key as TranslationKey);
+}

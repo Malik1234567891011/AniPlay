@@ -1,3 +1,4 @@
+import { category } from './category.js';
 import { characters } from './characters.js';
 import { discover } from './discover.js';
 import { errors } from './errors.js';
@@ -55,6 +56,7 @@ export const en = {
   ...worldsheet,
   ...library,
   ...profile,
+  ...category,
   ...characters,
   ...wallet,
   ...share,

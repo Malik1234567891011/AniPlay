@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { translatorFor, type Translator } from '@aniplay/i18n';
+import { categoryLabel, translatorFor, type Translator } from '@aniplay/i18n';
 import { useStore } from '../state/store.jsx';
 
 /**
@@ -20,4 +20,16 @@ import { useStore } from '../state/store.jsx';
 export function useT(): Translator {
   const { locale } = useStore();
   return useMemo(() => translatorFor(locale), [locale]);
+}
+
+/**
+ * The word for a browse category, bound to the current locale.
+ *
+ * Separate from `useT` because the id comes from the server at runtime and is
+ * not a `TranslationKey` the compiler can check — the fallback to the server's
+ * own label is what makes that safe.
+ */
+export function useCategoryLabel(): (id: string, fallback: string) => string {
+  const { locale } = useStore();
+  return useMemo(() => (id: string, fallback: string) => categoryLabel(locale, id, fallback), [locale]);
 }

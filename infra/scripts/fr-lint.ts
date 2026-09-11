@@ -715,22 +715,21 @@ function main(): void {
   const fenced = argv.includes('--fenced');
   const files = argv.filter((a) => !a.startsWith('--'));
 
-  if (argv.includes('--catalog')) {
-    process.exitCode = lintCatalogue(json) ? 0 : 1;
+  if (argv.includes('--self-test')) {
+    process.exitCode = selfTest() > 0 ? 1 : 0;
     return;
   }
 
-  if (argv.includes('--self-test') || files.length === 0) {
-    const failures = selfTest();
-    if (files.length === 0 && !argv.includes('--self-test')) {
-      console.log(
-        '\nNo files given. Try:\n' +
-          '  npm run fr:lint -- --catalog      the fr message catalogue\n' +
-          '  npm run fr:lint -- --fenced <f>   French inside a markdown doc\n' +
-          '  npm run fr:lint -- --self-test    the rules, against known-bad samples',
-      );
+  // A bare `npm run fr:lint` used to print usage and exit 0. That is the worst
+  // possible behaviour for something people reach for as a gate: it reads as
+  // green while checking nothing — and it did. "fr:lint is clean" went into
+  // this repo's own notes on the strength of a run that linted no files.
+  // The bare form now does what it is almost always meant to do.
+  if (argv.includes('--catalog') || files.length === 0) {
+    if (files.length === 0 && !argv.includes('--catalog')) {
+      console.log('No files given — checking the fr catalogue.');
     }
-    process.exitCode = failures > 0 ? 1 : 0;
+    process.exitCode = lintCatalogue(json) ? 0 : 1;
     return;
   }
 

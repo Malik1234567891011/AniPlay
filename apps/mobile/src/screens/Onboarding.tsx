@@ -5,7 +5,7 @@ import { Button, Chip, Row, Stack, StoryArt, Txt, colors, radius, spacing, GUTTE
 import type { StorySummary } from '@aniplay/contracts';
 import { api } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
-import { useT } from '../i18n/useT.js';
+import { useCategoryLabel, useT } from '../i18n/useT.js';
 
 /**
  * Screens OB-01 to OB-03.
@@ -129,12 +129,16 @@ export function AgeGateScreen(): React.JSX.Element {
 export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Element {
   const t = useT();
   const { setTastes, bootstrap } = useStore();
+  const categoryWord = useCategoryLabel();
   const [picked, setPicked] = useState<string[]>([]);
 
   // From the catalog, not from a hand-written list. The old one offered
   // Isekai, Sci-fi and Cozy, and no world is tagged with any of them — three
   // picks could return nothing at all.
-  const genres = (bootstrap?.genres ?? []).map((genre) => genre.label);
+  // The label is the *value* here — `picked` holds labels and `setTastes` sends
+  // them — so the English word has to survive even when a French word is on the
+  // chip. Display and identity are separated rather than translated together.
+  const genres = bootstrap?.genres ?? [];
 
   const toggle = (genre: string): void => {
     setPicked((current) =>
@@ -164,10 +168,10 @@ export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Eleme
         <Row gap={spacing.md} style={{ flexWrap: 'wrap' }}>
           {genres.map((genre) => (
             <Chip
-              key={genre}
-              label={genre}
-              selected={picked.includes(genre)}
-              onPress={() => toggle(genre)}
+              key={genre.id}
+              label={categoryWord(genre.id, genre.label)}
+              selected={picked.includes(genre.label)}
+              onPress={() => toggle(genre.label)}
               style={{ paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}
             />
           ))}

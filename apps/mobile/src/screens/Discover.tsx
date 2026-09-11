@@ -31,7 +31,7 @@ import {
 } from '@aniplay/ui';
 import { api, ApiError } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
-import { useT } from '../i18n/useT.js';
+import { useCategoryLabel, useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
 import { HeroCarousel } from '../components/HeroCarousel.jsx';
 
@@ -65,6 +65,7 @@ function useCardWidths(): { gridCardWidth: number; railCardWidth: number } {
 export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
   const t = useT();
   const { wallet, refreshWallet, offline, tastes } = useStore();
+  const categoryWord = useCategoryLabel();
   const [data, setData] = useState<DiscoverResponse | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -158,7 +159,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
               const id = item.id === '__all' ? null : item.id;
               return (
                 <Chip
-                  label={item.label}
+                  label={item.id === '__all' ? item.label : categoryWord(item.id, item.label)}
                   tone={category === id ? 'accent' : 'neutral'}
                   selected={category === id}
                   onPress={() => setCategory(id)}
