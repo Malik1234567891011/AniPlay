@@ -120,6 +120,18 @@ export function registerMediaRoutes(app: FastifyInstance, ctx: AppContext): void
         );
       }
 
+      // A canon protagonist is not drawn. Refused here as well as hidden in the
+      // client, so an older build cannot spend a player's credits producing an
+      // approximation of a character they can already picture exactly.
+      if (story.protagonist?.kind === 'NAMED') {
+        return sendError(
+          reply,
+          409,
+          'PORTRAIT_NOT_AVAILABLE',
+          'This world already knows what its lead looks like. You have not been charged.',
+        );
+      }
+
       // Spec §9.3 — after the first turn, not before.
       if (state.turnIndex < 1) {
         return sendError(
@@ -264,6 +276,12 @@ export function registerMediaRoutes(app: FastifyInstance, ctx: AppContext): void
         status: session.status,
         lastPlayedAt: session.lastPlayedAt,
         portraitCost: PORTRAIT_COST_CREDITS,
+        // A world whose protagonist is canon does not get a drawn portrait.
+        // Everybody already knows what Itachi looks like, and a generated
+        // approximation of a character the player can picture exactly is worse
+        // than no picture: it is the one image in the app they can compare
+        // against the real thing, and it will lose.
+        protagonistIsCanon: story.protagonist?.kind === 'NAMED',
       });
     }
 

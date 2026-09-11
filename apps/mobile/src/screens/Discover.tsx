@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Animated,
   FlatList,
   Pressable,
   RefreshControl,
@@ -53,12 +54,26 @@ import { HeroCarousel } from '../components/HeroCarousel.jsx';
  * Three columns was tried and rejected: 108pt covers turn every character into
  * a smudge, which defeats the entire point of a character-forward cover.
  */
-function useCardWidths(): { gridCardWidth: number; railCardWidth: number } {
+function useCardWidths(): {
+  gridCardWidth: number;
+  railCardWidth: number;
+  continueCardWidth: number;
+} {
   const { width } = useWindowDimensions();
   const usable = width - GUTTER * 2;
   return {
     gridCardWidth: Math.floor((usable - spacing.md) / 2),
     railCardWidth: Math.floor((usable - spacing.md * 1.4) / 2.4),
+    /**
+     * Continue is deliberately the smallest shelf on the page.
+     *
+     * It is the only rail selling something the player has already chosen, so
+     * it does not need to sell. At the full rail width it competed with the
+     * shelves whose job is discovery, which is backwards: a row of worlds you
+     * are already in should be a quick way back, not the loudest thing under
+     * the hero.
+     */
+    continueCardWidth: Math.floor((usable - spacing.md * 2.4) / 3.6),
   };
 }
 
@@ -67,12 +82,21 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
   const { wallet, refreshWallet, offline, tastes } = useStore();
   const categoryWord = useCategoryLabel();
   const insets = useSafeAreaInsets();
+  /**
+   * How opaque the floating header's background is.
+   *
+   * Transparent over the hero art, solid once the page has scrolled up under
+   * it. Without this the header was legible over the blurred cover and then sat
+   * directly on top of the category pills the moment anybody scrolled, which is
+   * text over text.
+   */
+  const headerFade = useRef(new Animated.Value(0)).current;
   const [data, setData] = useState<DiscoverResponse | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<StorySummary | null>(null);
   const [category, setCategory] = useState<string | null>(null);
-  const { gridCardWidth, railCardWidth } = useCardWidths();
+  const { gridCardWidth, railCardWidth, continueCardWidth } = useCardWidths();
 
   const load = useCallback(async () => {
     try {
@@ -113,6 +137,12 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
       ) : null}
 
       <ScrollView
+        scrollEventThrottle={16}
+        onScroll={(event) => {
+          // A short ramp: the header is solid by the time anything reaches it.
+          const y = event.nativeEvent.contentOffset.y;
+          headerFade.setValue(Math.max(0, Math.min(1, y / 120)));
+        }}
         contentContainerStyle={{
           paddingTop: insets.top + HEADER_HEIGHT,
           paddingBottom: spacing.giant,
@@ -205,8 +235,8 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           a horizontal row not vertical. like the same as our trending and
           stuff, except it says continue."
 
-          So it is the same `StoryCoverCard` at the same `railCardWidth` as every
-          other rail. What made the original horizontal version bad — a cramped
+          So it is the same `StoryCoverCard` as every other rail, at a smaller
+          width — see `continueCardWidth`. What made the original horizontal version bad — a cramped
           260pt card with the objective cut off mid-word — is gone because the
           card no longer tries to carry the objective at all. The cover does the
           work, the title is under it, and how far in you are is a caption.
@@ -238,7 +268,8 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
                     tags: [],
                     runs: 0,
                   }}
-                  width={railCardWidth}
+                  width={continueCardWidth}
+                  showLikes={false}
                   onPress={() => navigation.navigate('Session', { sessionId: item.sessionId })}
                 />
               )}
@@ -293,7 +324,6 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
                         // shelf that is about ranking. Everywhere else the
                         // cover does the selling.
                         rank={rail.kind === 'TOP_RANKED' ? index + 1 : undefined}
-                        showLikes={rail.kind === 'TOP_RANKED'}
                         onPress={() => navigation.navigate('StoryDetail', { storyId: item.storyId })}
                         onLongPress={() => setPreview(item)}
                       />
@@ -359,6 +389,18 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           justifyContent: 'space-between',
         }}
       >
+        <Animated.View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: -insets.top,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: colors.bg.base,
+            opacity: headerFade,
+          }}
+        />
         <Txt variant="h2" style={{ letterSpacing: 3 }}>
           PLOTBREAK
         </Txt>

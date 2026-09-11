@@ -42,7 +42,7 @@ export function StoryCoverCard({
   onLongPress,
   width,
   rank,
-  showLikes = false,
+  showLikes = true,
 }: {
   story: StoryCardData;
   variant?: 'rail' | 'hero' | 'row';
@@ -60,32 +60,39 @@ export function StoryCoverCard({
   /**
    * Whether to put the like count under the title.
    *
-   * Off by default and deliberately not on every shelf. A wall of hearts turns
-   * a catalogue into a leaderboard, and the covers are doing the selling.
+   * On everywhere now. The argument for keeping it to Top Ranked was that a
+   * wall of hearts turns a catalogue into a leaderboard — but the number a
+   * browsing player actually wants is "did anybody like this", and it was
+   * showing on exactly one shelf while a run count nobody asked for showed on
+   * all of them.
    */
   showLikes?: boolean;
 }): React.JSX.Element {
   const t = useUiT();
+  // `formatCredits` defaults to English grouping, so a like count on a French
+  // shelf read "2,092 j'aime" — and in French the comma is the decimal
+  // separator, which makes that two.
+  const locale = useUiLocale();
   const isHero = variant === 'hero';
   const isRow = variant === 'row';
 
   // The genre says something the cover cannot always carry, and it is the
-  // thing a browsing player is actually sorting on. A run count joins it only
-  // when somebody has genuinely played the world, and a community creator's
-  // name matters in a way "Plotbreak Studios" on all nine cards does not.
+  // thing a browsing player is actually sorting on. A community creator's name
+  // matters in a way "Plotbreak Studios" on all nine cards does not.
+  //
+  // The run count used to sit here. It was the least interesting number on the
+  // card — how many people started this, which is not a recommendation — and it
+  // was on every shelf while the like count was on one.
   const likeLine =
     showLikes && (story.likes ?? 0) > 0
       ? t('ui.story_likes', {
-          formatted: formatCredits(story.likes ?? 0, true),
+          formatted: formatCredits(story.likes ?? 0, true, locale),
           count: story.likes ?? 0,
         })
       : null;
 
   const metaLine = [
     story.tags[0] ?? null,
-    story.runs > 0
-      ? t('ui.story_runs', { formatted: formatCredits(story.runs, true), count: story.runs })
-      : null,
     story.official ? null : story.creatorName,
   ]
     .filter((part): part is string => !!part)
@@ -762,10 +769,11 @@ export function CreditBalance({
   onPress?: () => void;
 }): React.JSX.Element {
   const t = useUiT();
+  const locale = useUiLocale();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={t('ui.credit_balance_a11y', { balance: formatCredits(balance) })}
+      accessibilityLabel={t('ui.credit_balance_a11y', { balance: formatCredits(balance, false, locale) })}
       onPress={() => {
         haptic('light');
         onPress?.();
@@ -784,7 +792,7 @@ export function CreditBalance({
       <Txt variant="caption" color={colors.accent.primary}>
         ◈
       </Txt>
-      <Txt variant="caption">{formatCredits(balance, compact)}</Txt>
+      <Txt variant="caption">{formatCredits(balance, compact, locale)}</Txt>
     </Pressable>
   );
 }

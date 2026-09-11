@@ -118,4 +118,6 @@ export const characters = {
    * dirait, pas ce qu’un système journalise.
    */
   'characters.portrait_failed': 'Ce portrait n’est pas allé au bout. Tu n’as rien payé.',
+  /** Voir `en/characters.ts` : on ne dessine pas un personnage déjà connu. */
+  'characters.canon_no_portrait': 'Ce monde sait déjà à quoi {name} ressemble. Les portraits, c’est pour les personnages que tu inventes.',
 } as const;

@@ -515,27 +515,18 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
           </Card>
         </Pressable>
 
-        <Stack gap={spacing.md}>
-          <Txt variant="h3">{t('profile.audio_visual')}</Txt>
-          <Toggle
-            label={t('profile.reduce_motion')}
-            hint={t('profile.reduce_motion_hint')}
-            value={me?.settings.reduceMotion ?? false}
-            onChange={(v) => setSetting('reduceMotion', v)}
-          />
-          <Toggle
-            label={t('profile.voice_autoplay')}
-            value={me?.settings.voiceAutoplay ?? false}
-            onChange={(v) => setSetting('voiceAutoplay', v)}
-          />
-          <Toggle
-            label={t('profile.haptics')}
-            value={me?.settings.hapticsEnabled ?? true}
-            onChange={(v) => setSetting('hapticsEnabled', v)}
-          />
-        </Stack>
+        {/*
+          `Audio & visual` was three switches that did nothing.
+          Nothing in the app ever read `settings.reduceMotion` or
+          `settings.hapticsEnabled`: the real reduce-motion behaviour comes from
+          the *system* setting, which `HeroCarousel` reads through
+          `AccessibilityInfo`, and `haptic()` fires unconditionally. Voice
+          autoplay sits behind a `voicePlayback` flag that is off.
 
-        <Divider />
+          So the section asked a player to make three decisions, none of which
+          had an effect, in a settings list where every other row does. The
+          fields stay in the data model; only the controls are gone.
+        */}
 
         <Stack gap={spacing.md}>
           <Txt variant="h3">{t('profile.privacy_safety')}</Txt>

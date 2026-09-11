@@ -248,6 +248,17 @@ export function CharacterCard({
         </Txt>
       ) : null}
 
+      {/*
+        A canon protagonist is not drawn.
+        Nobody needs a generated Itachi; every player already has one, and this
+        would be the single image in the app they can hold against the original.
+        The server refuses it too, so an older build cannot spend the credits.
+      */}
+      {character.protagonistIsCanon ? (
+        <Txt variant="caption" color={colors.text.muted} style={{ padding: GUTTER, paddingTop: 0 }}>
+          {t('characters.canon_no_portrait', { name: character.displayName })}
+        </Txt>
+      ) : (
       <Stack gap={spacing.sm} style={{ padding: GUTTER, paddingTop: 0 }}>
         {editing ? (
           <>
@@ -270,6 +281,7 @@ export function CharacterCard({
           />
         )}
       </Stack>
+      )}
     </Card>
   );
 }

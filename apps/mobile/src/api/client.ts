@@ -49,6 +49,8 @@ export interface PlayerCharacterCard {
   archetypeName: string | null;
   portraitUrl: string | null;
   appearanceNote: string;
+  /** A world with a canon lead. Portraits are not offered — see Characters.tsx. */
+  protagonistIsCanon?: boolean;
   worldKnowsAboutYou: string;
   turnCount: number;
   level: number;

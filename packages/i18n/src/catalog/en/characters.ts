@@ -60,4 +60,12 @@ export const characters = {
   'characters.redraw_portrait': 'Redraw portrait',
 
   'characters.portrait_failed': "That portrait didn't come through. You weren't charged.",
+  /**
+   * Why a canon protagonist has no portrait button.
+   *
+   * A generated approximation of a character the player can already picture
+   * exactly is the one image in the app they can compare against the real
+   * thing, and it loses. Better to say so than to sell them a bad drawing.
+   */
+  'characters.canon_no_portrait': 'This world already knows what {name} looks like. Portraits are for characters you invent.',
 } as const;
