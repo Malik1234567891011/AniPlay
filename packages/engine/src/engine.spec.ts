@@ -1343,3 +1343,61 @@ describe('branching (a story that is actually yours)', () => {
     expect(state.flags.wards_flagged_you).toBe(true);
   });
 });
+
+/**
+ * The words on a check chip.
+ *
+ * `resolveIntent` built these by concatenation — `Strike ${name}`, `Take
+ * ${item}`, a `SOCIAL_LABEL` table, a `labelForVerb` table — so a French
+ * session rolled "Strike Sasuke" and carried a status called "Shaken". They
+ * reach the player twice, on the Session check chip and in the WorldSheet
+ * status list, and neither screen could do anything about it.
+ *
+ * Asserted in both languages, because the English half is what silently
+ * regresses when somebody adds the French.
+ */
+describe('check labels are in the language the session is played in', () => {
+  const fr = (): GameState => ({ ...baseState(), locale: 'fr' });
+
+  const persuadeKael = intent([
+    {
+      verb: 'persuade',
+      actor: player,
+      targets: [{ entityType: 'npc', entityId: 'kael' }],
+      method: 'explain the ward is wrong',
+      declaredOutcome: 'he lets me through',
+      timeIntent: 'NOW',
+    },
+  ]);
+
+  it('names a social check after the person it is aimed at', () => {
+    const en = resolveIntent({ story: STORY, state: baseState(), intent: persuadeKael, turnId: 't', seed: 's' });
+    const label = en.checks[0]?.label;
+    expect(label).toMatch(/^Persuade /);
+
+    const french = resolveIntent({ story: STORY, state: fr(), intent: persuadeKael, turnId: 't', seed: 's' });
+    expect(french.checks[0]?.label).toMatch(/^Persuader /);
+    // The person's name is not a word to translate.
+    expect(french.checks[0]?.label).toBe(label?.replace('Persuade ', 'Persuader '));
+  });
+
+  it('translates a verb check with no target', () => {
+    const look = intent([
+      { verb: 'inspect', actor: player, targets: [], method: 'look around', declaredOutcome: '', timeIntent: 'NOW' },
+    ]);
+    const en = resolveIntent({ story: STORY, state: baseState(), intent: look, turnId: 't', seed: 's' });
+    const french = resolveIntent({ story: STORY, state: fr(), intent: look, turnId: 't', seed: 's' });
+    if (en.checks[0]) {
+      expect(en.checks[0].label).toBe('Investigate');
+      expect(french.checks[0]?.label).toBe('Enquête');
+    }
+  });
+
+  it('rolls the same dice in both languages', () => {
+    const en = resolveIntent({ story: STORY, state: baseState(), intent: persuadeKael, turnId: 't', seed: 'same' });
+    const french = resolveIntent({ story: STORY, state: fr(), intent: persuadeKael, turnId: 't', seed: 'same' });
+    expect(french.checks[0]?.rolls).toEqual(en.checks[0]?.rolls);
+    expect(french.checks[0]?.outcome).toBe(en.checks[0]?.outcome);
+    expect(french.checks[0]?.total).toBe(en.checks[0]?.total);
+  });
+});

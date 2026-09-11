@@ -1,4 +1,5 @@
 import type { TranslationKey } from '../en/index.js';
+import { check } from './check.js';
 import { category } from './category.js';
 import { characters } from './characters.js';
 import { discover } from './discover.js';
@@ -54,6 +55,7 @@ export const fr: Partial<Record<TranslationKey, string>> = {
   ...worldsheet,
   ...library,
   ...profile,
+  ...check,
   ...category,
   ...characters,
   ...wallet,

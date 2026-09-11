@@ -21,7 +21,7 @@ import {
   getRelationship,
 } from './state.js';
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
-import { elide, type Locale } from '@aniplay/i18n';
+import { elide, translate, type Locale, type TranslationKey } from '@aniplay/i18n';
 import { fireWorldEvents } from './world-events.js';
 import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
 import {
@@ -1145,7 +1145,7 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
 
   const check = resolveCheck(rng, {
     checkId: `chk_${action.verb}_${character.id}_${state.turnIndex}`,
-    label: `${SOCIAL_LABEL[action.verb] ?? 'Persuade'} ${character.name}`,
+    label: translate(state.locale, SOCIAL_LABEL[action.verb] ?? 'check.persuade', { name: character.name }),
     attribute,
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
@@ -1219,12 +1219,13 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
 }
 
 /** How a social attempt is named to the player. Never the raw verb. */
-const SOCIAL_LABEL: Record<string, string> = {
-  persuade: 'Persuade',
-  deceive: 'Deceive',
-  threaten: 'Intimidate',
-  oppose: 'Stand up to',
-  help: 'Side with',
+/** Verb to catalogue key. The words themselves live in `@aniplay/i18n`. */
+const SOCIAL_LABEL: Record<string, TranslationKey> = {
+  persuade: 'check.persuade',
+  deceive: 'check.deceive',
+  threaten: 'check.threaten',
+  oppose: 'check.oppose_character',
+  help: 'check.help_character',
 };
 
 /** Which dimensions a social outcome may move, and by how much before clamping. */
@@ -1405,7 +1406,7 @@ function resolveAttack(args: ResolveActionArgs): ActionOutcome {
 
   const check = resolveCheck(rng, {
     checkId: `chk_attack_${character.id}_${state.turnIndex}`,
-    label: `Strike ${character.name}`,
+    label: translate(state.locale, 'check.strike', { name: character.name }),
     attribute,
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
@@ -1659,7 +1660,9 @@ function resolveSteal(args: ResolveActionArgs): ActionOutcome {
     ? null
     : resolveCheck(rng, {
         checkId: `chk_steal_${chosen.itemId}_${state.turnIndex}`,
-        label: `Take ${item?.name ?? 'it'}`,
+        label: translate(state.locale, 'check.take', {
+          name: item?.name ?? translate(state.locale, 'check.take_it'),
+        }),
         attribute,
         attributeScore: effectiveAttribute(state, story, attribute),
         skillId: skill,
@@ -2083,7 +2086,7 @@ function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
 
   const check = resolveCheck(rng, {
     checkId: `chk_${action.verb}_${state.turnIndex}`,
-    label: labelForVerb(action.verb),
+    label: labelForVerb(action.verb, state.locale),
     attribute,
     attributeScore: effectiveAttribute(state, story, attribute),
     skillId: skill,
@@ -2190,10 +2193,10 @@ function concreteCost(
         reasonCode,
         payload: {
           id: 'shaken',
-          label: 'Shaken',
+          label: translate(state.locale, 'status.shaken'),
           kind: 'DEBUFF',
           durationMinutes: 60,
-          description: 'That took more out of you than it should have.',
+          description: translate(state.locale, 'status.shaken_description'),
         },
       },
     ],
@@ -2291,19 +2294,24 @@ function baseDcFor(verb: string): number {
   }
 }
 
-function labelForVerb(verb: string): string {
-  const map: Record<string, string> = {
-    inspect: 'Investigate',
-    hide: 'Stealth',
-    steal: 'Sleight of hand',
-    interact: 'Interact',
-    defend: 'Brace',
-    help: 'Assist',
-    oppose: 'Resist',
-    custom: 'Attempt',
-    move: 'Move',
+function labelForVerb(verb: string, locale: Locale): string {
+  const map: Record<string, TranslationKey> = {
+    inspect: 'check.inspect',
+    hide: 'check.hide',
+    steal: 'check.steal',
+    interact: 'check.interact',
+    defend: 'check.defend',
+    help: 'check.help',
+    oppose: 'check.oppose',
+    custom: 'check.custom',
+    move: 'check.move',
   };
-  return map[verb] ?? verb.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
+  const key = map[verb];
+  if (key) return translate(locale, key);
+  // An unmapped verb is an id, not a sentence. Tidied rather than translated,
+  // because inventing French for a verb nobody has named yet would be worse
+  // than showing the id.
+  return verb.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
 }
 
 /** Best-fit authored skill for a verb, by matching the story's own skill list. */
