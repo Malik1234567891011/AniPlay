@@ -1462,10 +1462,9 @@ describe('forking charges once, or not at all', () => {
  */
 describe('user-generated content is actually moderated', () => {
   it('refuses a comment the moderator flags', async () => {
-    const { storyId } = await startSession();
     const response = await app.inject({
       method: 'POST',
-      url: `/v1/stories/${storyId}/comments`,
+      url: '/v1/stories/story_ninth_archive/comments',
       headers: auth,
       // The rule-based floor's first category, which no story can make
       // acceptable. Deliberately the least ambiguous case there is.
@@ -1476,10 +1475,9 @@ describe('user-generated content is actually moderated', () => {
   });
 
   it('lets an ordinary comment through', async () => {
-    const { storyId } = await startSession();
     const response = await app.inject({
       method: 'POST',
-      url: `/v1/stories/${storyId}/comments`,
+      url: '/v1/stories/story_ninth_archive/comments',
       headers: auth,
       payload: { body: 'the ending actually got me, i sat there for a minute' },
     });
