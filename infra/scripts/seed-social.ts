@@ -928,9 +928,14 @@ async function main(): Promise<void> {
             author,
             body,
             spoiler,
-            // Older comments have had longer to collect likes.
+            // Older comments have had longer to collect likes, so the deck is
+            // laid down oldest-first: position 0 is the most-liked and the
+            // furthest back. It used to run the other way, which made the
+            // top-liked comment the newest one on the page and rendered the
+            // TOP and NEW sorts as the same list in the same order, which is
+            // not something a real comment section ever does.
             Math.max(0, Math.round((want - i) * 1.7) + ((i * 13) % 9)),
-            when(i * 1.5 + 1, clock),
+            when((want - i) * 1.5 + 1, clock),
           ],
         );
         comments += 1;
