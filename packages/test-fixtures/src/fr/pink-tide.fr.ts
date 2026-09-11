@@ -43,25 +43,25 @@ registerWorldText('fr', {
     // B · a8c1fa8269c3
     "skills.read_people.attribute": "esprit",
     // B · 2d2fac45d30e
-    "skills.read_people.description": "Qui ment, qui a peur, qui est réveillé depuis trois heures du matin, et lequel de ces cas concerne ce qui vous importe.",
+    "skills.read_people.description": "Qui ment, qui a peur, qui est réveillé depuis trois heures du matin, et lequel de ces cas concerne ce qui t’importe.",
     // B · 04e2fe221ac3
     "skills.water.name": "Eau",
     // B · 97081b4b4792
     "skills.water.attribute": "force",
     // B · 71061cf19062
-    "skills.water.description": "Nager, plonger, planches, bateaux, surf et la question honnête de savoir si vous devriez être dans cette eau précise à cette heure précise.",
+    "skills.water.description": "Nager, plonger, planches, bateaux, surf et la question honnête de savoir si tu devrais être dans cette eau précise à cette heure précise.",
     // B · b0d0dc2aa738
     "skills.notice.name": "Remarquer",
     // B · a8c1fa8269c3
     "skills.notice.attribute": "esprit",
     // B · 125325fc75c6
-    "skills.notice.description": "Le sac qui ne devrait pas être là, la montre qui manque dans la vidéo, la serviette qui a bougé pendant que vous déjeuniez.",
+    "skills.notice.description": "Le sac qui ne devrait pas être là, la montre qui manque dans la vidéo, la serviette qui a bougé pendant que tu déjeunais.",
     // B · 837d9279e002
     "skills.nerve.name": "Nerf",
     // B · 4c84c2c842d0
     "skills.nerve.attribute": "détermination",
     // B · 36b28aa7ad7c
-    "skills.nerve.description": "Passer une porte réservée au personnel, et rester calme quand quelqu’un en blazer vous demande poliment ce que vous faites.",
+    "skills.nerve.description": "Passer une porte réservée au personnel, et rester calme quand quelqu’un en blazer te demande poliment ce que tu fais.",
     // B · 014bace396f9
     "skills.money.name": "Argent",
     // B · cfb7a15645c3
@@ -79,7 +79,7 @@ registerWorldText('fr', {
     // B · 34e8ec1ac388
     "resources.ease.polarity": "BON_HAUTE",
     // B · e74820888198
-    "resources.ease.zeroStateConsequence": "Vous êtes sur la plus belle île que vous ayez jamais payée pour visiter et vous ne l’avez pas regardée depuis deux jours. Vous êtes brûlé par le soleil, quatre heures en moins de sommeil, nerveux avec des gens qui ne font que leur travail, et plus du tout amusant — ce qui est la seule chose qui fait qu’un inconnu vous raconte quelque chose dans un bar.",
+    "resources.ease.zeroStateConsequence": "Tu es sur la plus belle île que tu aies jamais payée pour visiter et tu ne l’as pas regardée depuis deux jours. Le soleil t’a brûlé, quatre heures en moins de sommeil, nerveux avec des gens qui ne font que leur travail, et plus du tout amusant — ce qui est la seule chose qui fait qu’un inconnu vous raconte quelque chose dans un bar.",
     // B · 0a2eeb2190bb
     "resources.ease.color": "#37B3C9",
     // B · fc6018b79ee3
@@ -99,9 +99,9 @@ registerWorldText('fr', {
     // B · 4734de9b2439
     "items.room_key.tags": ["équipement"],
     // B · c076c52d74d6
-    "items.room_key.description": "Une carte blanche dans une pochette en papier avec votre numéro de chambre écrit au stylo bleu. Elle ouvre votre porte, la grille de la piscine, le beach club et la salle de sport, et rien d’autre sur cette île.",
+    "items.room_key.description": "Une carte blanche dans une pochette en papier avec ton numéro de chambre écrit au stylo bleu. Elle ouvre ta porte, la grille de la piscine, le beach club et la salle de sport, et rien d’autre sur cette île.",
     // B · 7ec535b3c8c0
-    "items.room_key.loreText": "C’est aussi un enregistrement. Chaque porte qu’elle touche est une ligne dans un système que quelqu’un en gestion peut lire, ce à quoi vous n’avez pas encore pensé mais quelqu’un d’autre oui.",
+    "items.room_key.loreText": "C’est aussi un enregistrement. Chaque porte qu’elle touche est une ligne dans un système que quelqu’un en gestion peut lire, ce à quoi tu n’as pas encore pensé mais quelqu’un d’autre oui.",
     // B · c0c1baf2fa65
     "items.room_key.icon": "clé",
     // A · 9922289f947a
@@ -109,7 +109,7 @@ registerWorldText('fr', {
     // B · 4734de9b2439
     "items.phone.tags": ["équipement"],
     // B · 12caeee9e79f
-    "items.phone.description": "Plein signal partout sauf un endroit sur cette île. Appareil photo, notes, le chat de groupe que vous ignorez, et onze photos d’une piscine.",
+    "items.phone.description": "Plein signal partout sauf un endroit sur cette île. Appareil photo, notes, le chat de groupe que tu ignores, et onze photos d’une piscine.",
     // B · d09ed802ec4c
     "items.phone.loreText": "Rien dans ce monde ne t’oblige à perdre ton téléphone. Le mystère ici survit même avec un téléphone qui marche, c’est ça le truc.",
     // B · d5511d58ae89
@@ -313,9 +313,9 @@ registerWorldText('fr', {
     // B · 805959e9a115
     "locations.the_lobby.stageImage": "story_pink_tide/stage_the_lobby",
     // A · 7e313718e6f8
-    "locations.your_room.name": "Votre Chambre",
+    "locations.your_room.name": "Ta chambre",
     // A · 7e313718e6f8
-    "locations.your_room.shortName": "Votre Chambre",
+    "locations.your_room.shortName": "Ta chambre",
     // B · 4b6e5ad52cfb
     "locations.your_room.description": "Mieux que ce que tu attendais. Un lit où tu pourrais perdre quelqu’un, un balcon au-dessus des palmiers, un mini-bar que tu as déjà ouvert, et une salle de bain avec une fenêtre sur la mer. C’est la seule porte sur cette île qui t’appartient, c’est pour ça que ça compte autant quand quelque chose a été déplacé dedans.",
     // B · e7e938e5c44c
@@ -389,7 +389,7 @@ registerWorldText('fr', {
     // A · 0f4838698ae6
     "locations.ferry_dock.shortName": "Le Quai",
     // B · a9ebcbf245d9
-    "locations.ferry_dock.description": "Une place couverte, un banc, un chariot à bagages et un panneau avec quatre traversées par jour. Quarante minutes d’ici à Kagetsu et tout ce qui vous y attend. Chaque arrivée et départ sur cette île est un moment que quelqu’un regarde.",
+    "locations.ferry_dock.description": "Une place couverte, un banc, un chariot à bagages et un panneau avec quatre traversées par jour. Quarante minutes d’ici à Kagetsu et tout ce qui t’y attend. Chaque arrivée et départ sur cette île est un moment que quelqu’un regarde.",
     // B · 023fe1f2fea3
     "locations.ferry_dock.stageImage": "story_pink_tide/stage_ferry_dock",
     // A · 4746d70657b7
@@ -451,7 +451,7 @@ registerWorldText('fr', {
     // A · 94d4097a9709
     "characters.sora.socialStyle": "Chaleureuse, directe et tactile. Elle te vole tes lunettes de soleil, conteste le score au volley, touche ton bras pour appuyer son propos. Pose bien plus de questions qu’elle n’en répond, et quand la conversation approche de la vérité, elle change de sujet par une activité.",
     // B · 7819fe37f582
-    "characters.sora.boundaries": ["Elle ne discutera pas des affaires privées d’un autre client avec vous, même si elle vous aime bien, parce que c’est la seule limite que le personnel ne franchit pas","Elle recule complètement et définitivement dès que quelqu’un dit qu’il n’est pas intéressé, et reste chaleureuse à ce sujet"],
+    "characters.sora.boundaries": ["Elle ne discutera pas des affaires privées d’un autre client avec toi, même si elle t’aime bien, parce que c’est la seule limite que le personnel ne franchit pas","Elle recule complètement et définitivement dès que quelqu’un dit qu’il n’est pas intéressé, et reste chaleureuse à ce sujet"],
     // B · 6287e7b9ecf0
     "characters.sora.goals": ["Passer la saison avec assez d’économies pour le premier versement sur un terrain de plage près de Kagetsu","Découvrir ce qui est vraiment arrivé à l’homme qui n’est pas venu à son excursion en paddle"],
     // B · 3689e87e3de1
@@ -1067,7 +1067,7 @@ registerWorldText('fr', {
     // B · 6e278483f375
     "quests.q_the_first_afternoon.involvedLocationIds": ["piscine_infinie","club_de_plage","votre_chambre"],
     // B · 58a78dcd7dc5
-    "quests.q_the_first_afternoon.knownRewardCopy": "Ce que cette semaine va être, décidé par vous dans sa première heure.",
+    "quests.q_the_first_afternoon.knownRewardCopy": "Ce que cette semaine va être, décidé par toi dans sa première heure.",
     // B · be47c9c5c875
     "quests.q_the_bag.title": "Le Sac Dans Le Hangar",
     // B · a627baed11bc
@@ -1107,11 +1107,11 @@ registerWorldText('fr', {
     // B · f9f3dffa231e
     "quests.q_the_lie.title": "Où Elle Était Cette Nuit-là",
     // B · a297fbfe8ecc
-    "quests.q_the_lie.summary": "Une carte-clé a ouvert la porte est à onze heures quarante mardi, et le nom dessus est celui de la personne qui vous a fait entrer.",
+    "quests.q_the_lie.summary": "Une carte-clé a ouvert la porte est à onze heures quarante mardi, et le nom dessus est celui de la personne qui t’a fait entrer.",
     // B · 7fcc0be2ad9c
     "quests.q_the_lie.kind": "PRINCIPALE",
     // B · 2c2c980500d1
-    "quests.q_the_lie.steps.the_keycard.playerCopy": "Sa carte a ouvert la porte est la nuit où il est tombé, et elle vous a dit qu’elle était sur le toit.",
+    "quests.q_the_lie.steps.the_keycard.playerCopy": "Sa carte a ouvert la porte est la nuit où il est tombé, et elle t’a dit qu’elle était sur le toit.",
     // B · 4cbd74ae4fcc
     "quests.q_the_lie.steps.the_keycard.directorNotes": "C’est le moment ordinaire le plus cruel du monde. Elle a menti sur sa présence dans un endroit interdit avec un ex, et elle est bien plus gênée que coupable. La confronter durement coûte une vraie relation ; lui demander gentiment, elle vous dit tout, y compris le bruit qu’elle a entendu mais pas enquêté.",
     // B · 2c570d29ec1f
@@ -1121,7 +1121,7 @@ registerWorldText('fr', {
     // B · 05bfdbb5c7f5
     "quests.q_the_lie.steps.the_woman_at_the_far_end_of_the_beach.playerCopy": "Le numéro de téléphone sur la page déchirée a un préfixe Kagetsu et appartient à quelqu’un sur cette île.",
     // B · 823ce972e352
-    "quests.q_the_lie.steps.the_woman_at_the_far_end_of_the_beach.directorNotes": "Nami ne se cache pas de vous, elle se cache du service juridique. Elle parle en unités et dates et ne décrira pas un résultat non publié comme une conclusion. Ce qu’elle veut, c’est un nettoyage et une évaluation honnête, pas la destruction du complexe, et cette différence compte pour toutes les fins dans ce monde.",
+    "quests.q_the_lie.steps.the_woman_at_the_far_end_of_the_beach.directorNotes": "Nami ne se cache pas de toi, elle se cache du service juridique. Elle parle en unités et dates et ne décrira pas un résultat non publié comme une conclusion. Ce qu’elle veut, c’est un nettoyage et une évaluation honnête, pas la destruction du complexe, et cette différence compte pour toutes les fins dans ce monde.",
     // B · 825569631433
     "quests.q_the_lie.steps.the_woman_at_the_far_end_of_the_beach.enterWhen.flagsSet": ["sait :elle_etait_la"],
     // B · 835ba8f47b80
@@ -1133,7 +1133,7 @@ registerWorldText('fr', {
     // B · 53b38e69af4c
     "quests.q_the_lie.involvedLocationIds": ["anse_est","centre_de_plongee","arriere_du_personnel","rive_de_pink_tide"],
     // B · 1c77a1c8ba76
-    "quests.q_the_lie.knownRewardCopy": "La vérité sur la seule personne ici que vous ne cherchiez pas.",
+    "quests.q_the_lie.knownRewardCopy": "La vérité sur la seule personne ici que tu ne cherchais pas.",
     // B · a225b87806f2
     "quests.q_the_cove.title": "Anse Est",
     // B · ea3df2fdbfff
@@ -1551,37 +1551,37 @@ registerWorldText('fr', {
     // B · 3a6240a26696
     "setupFields.pronouns.placeholder": "ex. iel/iel",
     // B · ba8e62685a69
-    "setupFields.archetype.label": "Qu’avez-vous apporté avec vous ?",
+    "setupFields.archetype.label": "Qu’est-ce que tu as apporté avec toi ?",
     // B · 694e20d7b2d8
     "setupFields.archetype.kind": "ARCHETYPE",
     // B · 7f1bfb9bf52c
-    "setupFields.archetype.helpText": "Qui vous êtes loin de cette île, ce qui décide de ce à quoi vous êtes déraisonnablement bon ici et de ce que tout le monde suppose de vous à la piscine. C’est fixé pour la semaine. Ça ne décide pas si vous enquêtez, pour qui vous craquez, ou comment tout ça finit.",
+    "setupFields.archetype.helpText": "Qui tu es loin de cette île, ce qui décide de ce à quoi tu es déraisonnablement bon ici et de ce que tout le monde suppose de toi à la piscine. C’est fixé pour la semaine. Ça ne décide pas si vous enquêtez, pour qui vous craquez, ou comment tout ça finit.",
     // B · 7465378aaf11
-    "setupFields.worldKnowsAboutYou.label": "Comment vous êtes-vous retrouvé avec sept nuits à Aster Cove ?",
+    "setupFields.worldKnowsAboutYou.label": "Comment as-tu atterri ici pour sept nuits ?",
     // B · 401854456756
     "setupFields.worldKnowsAboutYou.kind": "TEXTE",
     // B · bad027760c54
-    "setupFields.worldKnowsAboutYou.helpText": "Entièrement à vous. Un prix, un avantage au travail, une annulation transférée, un anniversaire, une lune de miel que vous vivez seul. Une ligne, et l’île y croira.",
+    "setupFields.worldKnowsAboutYou.helpText": "Entièrement à toi. Un prix, un avantage au travail, une annulation transférée, un anniversaire, une lune de miel que tu vis sans personne. Une ligne, et l’île y croira.",
     // B · bb696c507c03
     "setupFields.worldKnowsAboutYou.placeholder": "ex. Un collègue l’a gagné à une tombola, n’a pas pu y aller, et j’ai dit oui avant d’y réfléchir.",
     // B · a108919bef5c
-    "setupFields.what_you_are_escaping.label": "Qu’avez-vous laissé chez vous ?",
+    "setupFields.what_you_are_escaping.label": "Qu’est-ce que tu as laissé chez toi ?",
     // B · b6a31c665c0b
     "setupFields.what_you_are_escaping.kind": "CHOIX",
     // B · 6f86319cd037
-    "setupFields.what_you_are_escaping.helpText": "Tout le monde ici fuit quelque chose. Un point de départ, pas un engagement — vous pouvez découvrir à mi-semaine que c’était autre chose.",
+    "setupFields.what_you_are_escaping.helpText": "Tout le monde ici fuit quelque chose. Un point de départ, pas un engagement — tu peux découvrir à mi-semaine que c’était autre chose.",
     // B · 996b2f51320d
     "setupFields.what_you_are_escaping.options.a_job.label": "Un travail qui a duré trois ans et n’a rien rapporté",
     // B · 9cd7ee21276a
-    "setupFields.what_you_are_escaping.options.a_person.label": "Quelqu’un contre qui vous n’avez pas fini d’être en colère",
+    "setupFields.what_you_are_escaping.options.a_person.label": "Quelqu’un contre qui tu n’as pas fini d’être en colère",
     // B · dffa54ef7814
-    "setupFields.what_you_are_escaping.options.nothing_at_all.label": "Rien. Vous êtes vraiment là juste pour la piscine",
+    "setupFields.what_you_are_escaping.options.nothing_at_all.label": "Rien. Tu es vraiment là juste pour la piscine",
     // B · d388781d23b2
-    "setupFields.what_you_are_escaping.options.a_decision.label": "Une décision qui vous attend lundi et que vous n’avez pas prise",
+    "setupFields.what_you_are_escaping.options.a_decision.label": "Une décision qui t’attend lundi et que tu n’as pas prise",
     // B · c76d07fc3940
-    "setupFields.what_you_are_escaping.options.yourself.label": "La version de vous que tout le monde chez vous connaît déjà",
+    "setupFields.what_you_are_escaping.options.yourself.label": "La version de toi que tout le monde chez toi connaît déjà",
     // B · 062993f6236f
-    "setupFields.appearance.label": "Que voit la piscine quand vous sortez sur la terrasse ?",
+    "setupFields.appearance.label": "Que voit la piscine quand tu sors sur la terrasse ?",
     // B · 401854456756
     "setupFields.appearance.kind": "TEXTE",
     // B · cfd4eb2e719f

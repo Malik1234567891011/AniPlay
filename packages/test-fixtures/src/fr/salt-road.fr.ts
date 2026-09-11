@@ -275,7 +275,7 @@ registerWorldText('fr', {
     // A · 0d6bed302c6f
     "characters.ferrow.speechStyle": "Phrases courtes. Des chiffres dès que c’est utile. Pas de réconfort, ni à attendre, ni à donner.",
     // A · 1904e52bc330
-    "characters.ferrow.topics": ["l’eau","le troisième puits","la route","qui vous a engagé"],
+    "characters.ferrow.topics": ["l’eau","le troisième puits","la route","qui t’emploie"],
     // A · c78c1b1a21fa
     "characters.ferrow.voiceSamples": ["Neuf jours d’eau. Onze jours de route. Le reste, c’est vous.","Je vais pas vous dire que ça ira. Je vous dirai quand boire.","Le troisième puits, c’est un point d’interrogation sur toutes les cartes qui comptent. La mienne aussi."],
     // B · d189c3c6bece
@@ -301,7 +301,7 @@ registerWorldText('fr', {
     // A · ed4e73bc0bd4
     "characters.oren.role": "Rejoint au deuxième puits",
     // A · 6598b8c1bf49
-    "characters.oren.cardBlurb": "Il a rejoint l’équipe au deuxième puits. Bonne compagnie, utile, et jamais endormi quand vous ouvrez les yeux.",
+    "characters.oren.cardBlurb": "Il a rejoint l’équipe au deuxième puits. Bonne compagnie, utile, et jamais endormi quand tu ouvres les yeux.",
     // B · fcca6b746d0b
     "characters.oren.pronouns": "il",
     // A · 6f9277898426
@@ -343,7 +343,7 @@ registerWorldText('fr', {
     // B · cd6d92a12634
     "characters.oren.expressions": ["amical","neutre","vigilant","pris sur le fait","résolu"],
     // B · c20e8049952e
-    "characters.oren.gates.oren_admits.label": "Oren vous dira qui l’a envoyé",
+    "characters.oren.gates.oren_admits.label": "Oren te dira qui l’a envoyé",
     // B · 55a54e80451a
     "characters.oren.gates.oren_admits.kind": "CONFIANCE",
     // B · a9da4a724077
@@ -397,7 +397,7 @@ registerWorldText('fr', {
     // B · d65769005fe2
     "characters.sabe.expressions": ["vif","neutre","fatigué","silencieux","déterminé"],
     // B · c4c665d816b1
-    "characters.sabe.gates.sabe_tells_you.label": "Sabe vous dira ce qu’iel porte",
+    "characters.sabe.gates.sabe_tells_you.label": "Sabe te dira ce qu’iel porte",
     // B · 55a54e80451a
     "characters.sabe.gates.sabe_tells_you.kind": "CONFIANCE",
     // B · b763e8d496c1
@@ -405,7 +405,7 @@ registerWorldText('fr', {
     // B · abad582b24d2
     "quests.q_delivery.title": "La Livraison",
     // B · 164e68566893
-    "quests.q_delivery.summary": "Portez la mallette scellée que vous avez été payé à livrer jusqu’à la côte. Onze jours de marche, neuf jours d’eau.",
+    "quests.q_delivery.summary": "Porte jusqu’à la côte la mallette scellée qu’on t’a confiée. Onze jours de marche, neuf jours d’eau.",
     // B · 7fcc0be2ad9c
     "quests.q_delivery.kind": "PRINCIPALE",
     // B · eb0a6bd19de6

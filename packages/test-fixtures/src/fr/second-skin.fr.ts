@@ -659,7 +659,7 @@ registerWorldText('fr', {
     // A · 043359266822
     "characters.sai.role": "Vingt-neuf ans, médecin de Concord, et auteur d’un protocole que sa propre institution a refusé de publier",
     // A · 5ddc26a5cc41
-    "characters.sai.cardBlurb": "Il travaille pour ceux qui gèrent le service, et il a dix-neuf pages qui vous permettraient de garder les deux formes sans autorisation. Il vous donne toujours les chiffres d’échec avant les mots rassurants, c’est comme ça que vous saurez qu’il est celui qui vous dit la vérité.",
+    "characters.sai.cardBlurb": "Il travaille pour ceux qui gèrent le service, et il a dix-neuf pages qui te permettraient de garder les deux formes sans autorisation. Il te donne toujours les chiffres d’échec avant les mots rassurants, c’est comme ça que vous saurez qu’il est celui qui vous dit la vérité.",
     // B · fcca6b746d0b
     "characters.sai.pronouns": "il/lui",
     // A · 731359a6a5d5
@@ -671,13 +671,13 @@ registerWorldText('fr', {
     // B · 70f1fd7d9ae2
     "characters.sai.fears": ["Publier et se tromper sur quelqu’un, à grande échelle, dans un journal","Être l’homme qui a passé trente ans à être correct à l’intérieur de quelque chose sans rien changer"],
     // A · 878b41ec6b36
-    "characters.sai.socialStyle": "Prudent, poli et un peu épuisé. Répond complètement aux questions médicales, et aux questions morales en vous prescrivant plus de médicaments. Surveille les mains de quelqu’un plutôt que son visage, ce qui est typique des Serpents et aussi des médecins.",
+    "characters.sai.socialStyle": "Prudent, poli et un peu épuisé. Répond complètement aux questions médicales, et aux questions morales en te prescrivant plus de médicaments. Surveille les mains de quelqu’un plutôt que son visage, ce qui est typique des Serpents et aussi des médecins.",
     // B · 12921e33f8aa
     "characters.sai.boundaries": ["Il ne fera pas passer le protocole à quelqu’un qui n’a pas été informé deux fois, en entier, des chiffres d’échec","Il ne discutera jamais d’un patient, quelles que soient les circonstances, même si ça aiderait clairement"],
     // B · 1c130fe355eb
     "characters.sai.goals": ["Faire passer le protocole devant quelqu’un qui peut le légaliser, sans qu’il soit enterré avec lui","Garder les onze en vie, ce qui signifie actuellement les cacher"],
     // B · 5047ac6b7df2
-    "characters.sai.secrets.sai_the_eleven.fact": "Il a appliqué le protocole de façon officieuse onze fois. Neuf de ces personnes sont vivantes et ont adopté deux formes, sous d’autres noms. Deux ne le sont pas, et il peut vous donner les deux dates.",
+    "characters.sai.secrets.sai_the_eleven.fact": "Il a appliqué le protocole de façon officieuse onze fois. Neuf de ces personnes sont vivantes et ont adopté deux formes, sous d’autres noms. Deux ne le sont pas, et il peut te donner les deux dates.",
     // B · 47558a04be8d
     "characters.sai.secrets.sai_the_eleven.visibility": "NPC_PRIVATE",
     // B · 448a5c82cee6
@@ -691,7 +691,7 @@ registerWorldText('fr', {
     // A · 0d7f8e6844e6
     "characters.sai.speechStyle": "Clinique, prudent et autocorrectif, avec le mauvais chiffre donné en premier par principe. Répond aux questions morales par des questions médicales parce qu’il n’a pas l’autre type de réponse. Parle sans cesse à demi-mot de lui-même, mais jamais du médicament, et ce contraste fait tout son personnage.",
     // A · a3d040584048
-    "characters.sai.topics": ["le protocole","les chiffres d’échec","le service","pourquoi il reste","les Pierres du Cœur","ce qui vous arrive"],
+    "characters.sai.topics": ["le protocole","les chiffres d’échec","le service","pourquoi il reste","les Pierres du Cœur","ce qui t’arrive"],
     // A · dccadb1c5080
     "characters.sai.voiceSamples": ["Deux d’entre eux sont morts. Je veux que ce soit dit d’abord, avant tout, parce que tous ceux qui vous racontent ça commencent par le neuf et moi, je ne ferai pas ça.","La suppression marche. C’est là toute la difficulté. Ça marche environ soixante-dix pour cent du temps, et les échecs sont catastrophiques, tandis que les réussites sont discrètes, si bien que les chiffres paraissent excellents et les gens atroces.","Je suis resté parce qu’il y a trente-et-une personnes là-bas qui ont besoin de quelqu’un dans la pièce qui croit en elles. Ça fait deux ans que je dis cette phrase, et j’ai perdu la capacité d’entendre si c’est vrai.","Ne me racontez pas ce qu’ils vous ont dit. Je parle sérieusement. Si vous me le racontez, je dois l’écrire, et je préférerais éviter."],
     // B · 9ccfc1c4df49
@@ -709,13 +709,13 @@ registerWorldText('fr', {
     // B · 1484710330f0
     "characters.sai.knowledgeScope": ["sai","le_protocole","médecine_écho","le_concord","le_septième_poste","les_pierres_de_cœur"],
     // B · 619227eaad5e
-    "characters.sai.gates.sai_gives_you_the_figures.label": "Il vous donne les deux chiffres, dans son ordre",
+    "characters.sai.gates.sai_gives_you_the_figures.label": "Il te donne les deux chiffres, dans son ordre",
     // B · 55a54e80451a
     "characters.sai.gates.sai_gives_you_the_figures.kind": "CONFIANCE",
     // B · 427a1c4a20f7
     "characters.sai.gates.sai_gives_you_the_figures.requires.flagsSet": ["parlé :sai"],
     // B · 98443d488067
-    "characters.sai.gates.sai_hands_over_the_pages.label": "Il vous donne dix-neuf pages qui pourraient lui coûter cher",
+    "characters.sai.gates.sai_hands_over_the_pages.label": "Il te donne dix-neuf pages qui pourraient lui coûter cher",
     // B · 9e8ae18bf8bf
     "characters.sai.gates.sai_hands_over_the_pages.kind": "ALLIANCE",
     // B · 0d9e071921d7
@@ -725,11 +725,11 @@ registerWorldText('fr', {
     // A · bff14669cab2
     "characters.edran.role": "Cinquante-six ans, Grand Gardien de la Concorde, et la personne la plus convaincante de cette histoire",
     // A · 7d977fab057c
-    "characters.edran.cardBlurb": "Il dirige l’institution et ne se défend pas du tout. Il croit que l’identité a besoin de limites, qu’un soi qu’on peut jeter dès qu’il dérange n’est pas un vrai soi, et il va vous exposer ça calmement, de manière convaincante. Certains soirs vous aurez du mal à répondre.",
+    "characters.edran.cardBlurb": "Il dirige l’institution et ne se défend pas du tout. Il croit que l’identité a besoin de limites, qu’un soi qu’on peut jeter dès qu’il dérange n’est pas un vrai soi, et il va t’exposer ça calmement, de manière convaincante. Certains soirs vous aurez du mal à répondre.",
     // B · fcca6b746d0b
     "characters.edran.pronouns": "il/lui",
     // A · c46ed41f6f27
-    "characters.edran.publicTraits": ["Jamais une seule fois sur la défensive face à la Concorde","Demande ce que vous avez choisi avant de dire quoi que ce soit d’autre","Admet immédiatement et complètement l’argument le plus fort contre lui"],
+    "characters.edran.publicTraits": ["Jamais une seule fois sur la défensive face à la Concorde","Demande ce que tu as choisi avant de dire quoi que ce soit d’autre","Admet immédiatement et complètement l’argument le plus fort contre lui"],
     // B · f34aaa55c627
     "characters.edran.hiddenDrives": ["Il a besoin que le Sceau concerne l’identité plutôt que l’infrastructure, parce qu’il a lu les mêmes chiffres que Sai","Il a commencé à organiser sa succession autour de quelqu’un qui ignore à quoi sert le poste"],
     // B · f88a6567cda6
@@ -737,7 +737,7 @@ registerWorldText('fr', {
     // B · c146068fe66b
     "characters.edran.fears": ["Être le Gardien qui a découvert que c’était porteur et qui a continué quand même, ce qu’il est déjà","Une génération qui ne se stabilise jamais, et ce qu’il croit que ça leur ferait, ce qui n’est pas rien"],
     // A · 00c3f4aec29e
-    "characters.edran.socialStyle": "Très présent, entièrement calme. Rend votre objection plus forte que vous ne l’avez faite et répond à cette version-là. Ne s’énerve jamais, ne se hérisse pas, et n’a pas montré de colère visible depuis onze ans.",
+    "characters.edran.socialStyle": "Très présent, entièrement calme. Rend ton objection plus forte que tu ne l’as faite et répond à cette version-là. Ne s’énerve jamais, ne se hérisse pas, et n’a pas montré de colère visible depuis onze ans.",
     // B · d968e6eb6599
     "characters.edran.boundaries": ["Il n’autorisera pas une prise sans constat médical, et a refusé les Gardes à ce sujet deux fois","Il ne permettra pas qu’un Choix soit forcé par une famille, ce qu’il fait appliquer personnellement et impopulairement"],
     // B · be268c2a0318

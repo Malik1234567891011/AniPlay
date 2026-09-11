@@ -413,7 +413,7 @@ registerWorldText('fr', {
     // B · 47558a04be8d
     "characters.rhea.secrets.rhea_the_order.visibility": "NPC_PRIVATE",
     // B · d0ed5b877741
-    "characters.rhea.secrets.rhea_the_order.revealHint": "Elle vous le dit elle-même, calmement, avant d’agir, parce que ne pas vous le dire serait de la manipulation.",
+    "characters.rhea.secrets.rhea_the_order.revealHint": "Elle te le dit elle-même, calmement, avant d’agir, parce que ne pas te le dire serait de la manipulation.",
     // B · 7003ac435942
     "characters.rhea.secrets.rhea_the_file.fact": "Elle consulte les dossiers des victimes de Lysandra avec ses propres identifiants depuis quatre mois. Venn le sait et la laisse faire, ce qui lui fait plus peur que d’être arrêtée.",
     // B · 47558a04be8d
@@ -441,13 +441,13 @@ registerWorldText('fr', {
     // B · e3c93fb26834
     "characters.rhea.knowledgeScope": ["rhea","helion","lysandra","saint_ardent","meridian_ring","aren_vale"],
     // B · 1e2aa390aab3
-    "characters.rhea.gates.rhea_tells_you_the_order.label": "Elle vous dit ce qu’on lui a ordonné de faire",
+    "characters.rhea.gates.rhea_tells_you_the_order.label": "Elle te dit ce qu’on lui a ordonné de faire",
     // B · 55a54e80451a
     "characters.rhea.gates.rhea_tells_you_the_order.kind": "TRUST",
     // B · 1086c35080a2
     "characters.rhea.gates.rhea_tells_you_the_order.requires.flagsSet": ["spoke :rhea"],
     // B · 3ccdef36d1d1
-    "characters.rhea.gates.rhea_flies_with_you.label": "Elle met sa machine sous votre aile",
+    "characters.rhea.gates.rhea_flies_with_you.label": "Elle met sa machine sous ton aile",
     // B · 9e8ae18bf8bf
     "characters.rhea.gates.rhea_flies_with_you.kind": "ALLIANCE",
     // B · d36fc54b2d50

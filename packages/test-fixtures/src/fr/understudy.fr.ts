@@ -55,7 +55,7 @@ registerWorldText('fr', {
     // B · a8c1fa8269c3
     "skills.insight.attribute": "esprit",
     // B · 10d09b37e7ed
-    "skills.insight.description": "Lire la pièce avant qu’elle ne vous lise.",
+    "skills.insight.description": "Lire la pièce avant qu’elle ne te lise.",
     // B · cf929c9acc8a
     "skills.composure.name": "Calme",
     // B · 4c84c2c842d0
@@ -79,7 +79,7 @@ registerWorldText('fr', {
     // B · 34e8ec1ac388
     "resources.stamina.polarity": "BON_HAUT",
     // B · 222c25a77bf4
-    "resources.stamina.zeroStateConsequence": "Vous êtes visiblement épuisé. Tout ce qui est social devient plus dur.",
+    "resources.stamina.zeroStateConsequence": "Ton épuisement se voit. Tout ce qui est social devient plus dur.",
     // B · 22fa7a5c5a5a
     "resources.stamina.color": "#43D6A4",
     // B · 46adc881193f
@@ -87,7 +87,7 @@ registerWorldText('fr', {
     // B · 34e8ec1ac388
     "resources.standing.polarity": "BON_HAUT",
     // B · 99446bbc108a
-    "resources.standing.zeroStateConsequence": "La pièce ne se tourne plus vers vous. Vous êtes du mobilier.",
+    "resources.standing.zeroStateConsequence": "La pièce ne se tourne plus vers toi. Tu fais partie du mobilier.",
     // B · bffd32432679
     "resources.standing.color": "#7C6CFF",
     // B · cbd92c957856
@@ -95,7 +95,7 @@ registerWorldText('fr', {
     // B · a34adbda2422
     "resources.debt.polarity": "BON_BAS",
     // B · 289b680f6f6d
-    "resources.debt.zeroStateConsequence": "Vous ne devez rien à personne. Rare, et ça vaut le coup de le protéger.",
+    "resources.debt.zeroStateConsequence": "Tu ne dois rien à personne. Rare, et ça vaut le coup de le protéger.",
     // B · ad1dcb42b294
     "resources.debt.color": "#F6BE55",
     // A · e6b657153d93
@@ -103,9 +103,9 @@ registerWorldText('fr', {
     // B · 21bbab704ce0
     "items.annotated_sides.tags": ["quête"],
     // B · 496888eb45e7
-    "items.annotated_sides.description": "Votre exemplaire du script. Quatre mois de notes en marge que personne ne vous a demandées.",
+    "items.annotated_sides.description": "Ton exemplaire du script. Quatre mois de notes en marge que personne ne t’a demandées.",
     // B · 60c4a13912bf
-    "items.annotated_sides.loreText": "L’acte deux est écrit en trois couleurs d’encre. Vous avez des avis sur l’acte deux.",
+    "items.annotated_sides.loreText": "L’acte deux est écrit en trois couleurs d’encre. Tu as des avis sur l’acte deux.",
     // B · 5bbd8bbb9bc3
     "items.annotated_sides.icon": "script",
     // A · 3ab95955b992

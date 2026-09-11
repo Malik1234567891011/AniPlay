@@ -17,13 +17,13 @@ registerWorldText('fr', {
     // A · 3d976b785823
     "fantasyLabel": "Sept nuits. Une fenêtre. Elle a fait signe.",
     // A · 64d9c2926dc3
-    "hook": "Sept nuits dans un appartement de surveillance avec une agente que vous n’avez jamais côtoyée, à observer une traîtresse qui vient de regarder droit dans votre caméra cachée.",
+    "hook": "Sept nuits dans un appartement de surveillance avec une agente que tu n’as jamais côtoyée, à observer une traîtresse qui vient de regarder droit dans ta caméra cachée.",
     // A · e7fd4559a107
-    "premise": "Pendant sept nuits, vous êtes assis dans un appartement sombre au sixième étage d’un immeuble banal et vous observez le penthouse qui occupe tout le dernier étage de l’immeuble d’en face.\n\nLa mission suit quatre règles, qui tiennent en une ligne. Notez chaque visiteur. Rédigez votre rapport à six heures du matin. Ne quittez pas l’appartement. Ne contactez pas la femme qui habite là-bas.\n\nElle s’appelle Dr Selene Voss. C’est une chercheuse en cybernétique et conseillère politique, et le dossier que votre service détient sur elle dit qu’elle vend des données de défense au ministère depuis onze mois.\n\nVotre partenaire, Mara Ellison, a déjà fait quatre missions comme celle-ci et elle organise la nourriture du planque selon la date de péremption.\n\nIl y a une mallette noire dans la penderie. Elle est à elle. Vous ne devez pas l’ouvrir.\n\nÀ 01:16, la première nuit, Voss sort sur son balcon en chemise blanche, regarde à travers quatre voies de route vide directement dans un objectif qu’elle ne peut pas savoir, et fait signe.\n\nQuatre-vingt-dix secondes plus tard, votre combiné reçoit quatre mots d’une personne qui se fait appeler Glass.\n\nVOUS NE REGARDEZ PAS LE BON APPARTEMENT.\n\nAlors soit la cible sait exactement où vous êtes, soit quelqu’un dans votre propre service voulait que vous soyez dans cette pièce précise. Il vous reste six nuits pour comprendre laquelle, et ce service n’existe officiellement pas, donc personne ne viendra si vous vous êtes trompé.",
+    "premise": "Pendant sept nuits, tu occupes un appartement sombre au sixième étage d’un immeuble banal et tu observes le penthouse qui occupe tout le dernier étage de l’immeuble d’en face.\n\nLa mission suit quatre règles, qui tiennent en une ligne. Note chaque visiteur. Rédige ton rapport à six heures du matin. Ne quitte pas l’appartement. Ne contacte pas la femme qui habite là-bas.\n\nElle s’appelle Dr Selene Voss. C’est une chercheuse en cybernétique et conseillère politique, et le dossier que ton service détient sur elle dit qu’elle vend des données de défense au ministère depuis onze mois.\n\nTa partenaire, Mara Ellison, a déjà fait quatre missions comme celle-ci et elle organise la nourriture du planque selon la date de péremption.\n\nIl y a une mallette noire dans la penderie. Elle est à elle. Tu ne dois pas l’ouvrir.\n\nÀ 01:16, la première nuit, Voss sort sur son balcon en chemise blanche, regarde à travers quatre voies de route vide directement dans un objectif qu’elle ne peut pas savoir, et fait signe.\n\nQuatre-vingt-dix secondes plus tard, ton combiné reçoit quatre mots d’une personne qui se fait appeler Glass.\n\nTU TE TROMPES D’APPARTEMENT.\n\nAlors soit la cible sait exactement où tu es, soit quelqu’un dans ton propre service voulait que tu sois dans cette pièce précise. Il te reste six nuits pour comprendre laquelle, et ce service n’existe officiellement pas, donc personne ne viendra en cas d’erreur.",
     // A · cae70647843a
-    "mechanicsChips": ["Sept nuits au compteur","Une partenaire avec ses propres ordres","La cible sait que vous êtes là","Interrompez la mission quand vous voulez","Tout ce que vous faites est enregistré"],
+    "mechanicsChips": ["Sept nuits au compteur","Une partenaire avec ses propres ordres","La cible sait que tu es là","Interromps la mission quand tu veux","Tout ce que tu fais est enregistré"],
     // A · ab4e167d7f82
-    "creatorNote": "Deux personnes, une pièce, sept nuits, et une femme en face qui a décidé d’être vue. Vous pouvez mener l’opération exactement comme prévu et découvrir à quoi elle servait vraiment, ou décrocher le téléphone la première nuit et l’appeler. Les deux choix font partie du jeu.",
+    "creatorNote": "Deux personnes, une pièce, sept nuits, et une femme en face qui a décidé d’être vue. Tu peux mener l’opération exactement comme prévu et découvrir à quoi elle servait vraiment, ou décrocher le téléphone la première nuit et l’appeler. Les deux choix font partie du jeu.",
     // B · 99069638dac1
     "rules.defeatMode": "ÉCHEC AVANCÉ",
     // B · 9788c35a3ab5
@@ -107,7 +107,7 @@ registerWorldText('fr', {
     // B · 239b78d9d62b
     "items.the_black_case.tags": ["quête","scellé"],
     // B · 552f296cf3ad
-    "items.the_black_case.description": "Dans la penderie du 7C sous deux couvertures pliées. Aluminium, sceau intact, et le seul objet de l’appartement que vous n’avez aucune raison de toucher.",
+    "items.the_black_case.description": "Dans la penderie du 7C sous deux couvertures pliées. Aluminium, sceau intact, et le seul objet de l’appartement que tu n’as aucune raison de toucher.",
     // B · b9596692b450
     "items.the_black_case.loreText": "Équipement de secours et une enveloppe scellée avec contre-signature. L’enveloppe est à Mara et l’équipement sert à ce que l’enveloppe autorise.",
     // B · 909ac0144b71
@@ -453,19 +453,19 @@ registerWorldText('fr', {
     // B · 68aec4031fe2
     "characters.selene.knowledgeScope": ["palisade","le_ministère","direction","glass","veyra","l_opération"],
     // B · 8a314b16a320
-    "characters.selene.gates.selene_talks.label": "Elle vous explique ce qu’est vraiment PALISADE",
+    "characters.selene.gates.selene_talks.label": "Elle t’explique ce qu’est vraiment PALISADE",
     // B · 55a54e80451a
     "characters.selene.gates.selene_talks.kind": "CONFIANCE",
     // B · c42191ce1e8a
     "characters.selene.gates.selene_talks.requires.flagsSet": ["contact_établi"],
     // B · 8e287e77b214
-    "characters.selene.gates.selene_trusts_you.label": "Elle vous laisse accéder aux archives",
+    "characters.selene.gates.selene_trusts_you.label": "Elle te laisse accéder aux archives",
     // B · 9e8ae18bf8bf
     "characters.selene.gates.selene_trusts_you.kind": "ALLIANCE",
     // B · f36ae25ede65
     "characters.selene.gates.selene_trusts_you.requires.hasItems": ["voss_mémorandums"],
     // B · 8892751daa9f
-    "characters.selene.gates.selene_romance.label": "Elle cesse de vous voir comme un simple atout",
+    "characters.selene.gates.selene_romance.label": "Elle cesse de te voir comme un simple atout",
     // B · 0b75bc536447
     "characters.selene.gates.selene_romance.kind": "ROMANCE",
     // B · 8d234559d531
@@ -525,7 +525,7 @@ registerWorldText('fr', {
     // B · 4c96109ac6f0
     "characters.halden.knowledgeScope": ["direction","palisade","l_opération","glass","veyra"],
     // B · 477b2afe97da
-    "characters.halden.gates.halden_says_it.label": "Il vous explique à quoi sert vraiment l’opération",
+    "characters.halden.gates.halden_says_it.label": "Il t’explique à quoi sert vraiment l’opération",
     // B · 55a54e80451a
     "characters.halden.gates.halden_says_it.kind": "CONFIANCE",
     // B · e619653cde31
@@ -581,11 +581,11 @@ registerWorldText('fr', {
     // B · be8a6ab2efe3
     "characters.juno.knowledgeScope": ["orpheum","veyra","the_avenue","the_operation"],
     // B · bee0221377b2
-    "characters.juno.gates.juno_sells_you_the_logs.label": "Il vous imprime le journal d’accès",
+    "characters.juno.gates.juno_sells_you_the_logs.label": "Il t’imprime le journal d’accès",
     // B · 9e8ae18bf8bf
     "characters.juno.gates.juno_sells_you_the_logs.kind": "ALLIANCE",
     // B · c661d1d59675
-    "characters.juno.gates.juno_tells_you_who_else.label": "Il vous dit qui d’autre a demandé",
+    "characters.juno.gates.juno_tells_you_who_else.label": "Il te dit qui d’autre a demandé",
     // B · 55a54e80451a
     "characters.juno.gates.juno_tells_you_who_else.kind": "CONFIANCE",
     // B · 8d234559d531
@@ -613,7 +613,7 @@ registerWorldText('fr', {
     // B · 0b5b2b3b5e42
     "characters.ash.goals": ["Identifier qui, dans la Direction Neuf, aide Voss","Faire enregistrer le déploiement intérieur pour qu’une personne extérieure au service le lise"],
     // B · 0ab86dd404ed
-    "characters.ash.secrets.ash_is_glass.fact": "Il est l’une des trois identités Glass. C’est lui qui a envoyé VOUS VOUS TROMPEZ D’APPARTEMENT, et il parlait de l’appartement derrière le joueur, pas de celui en face.",
+    "characters.ash.secrets.ash_is_glass.fact": "Il est l’une des trois identités Glass. C’est lui qui a envoyé TU TE TROMPES D’APPARTEMENT, et il parlait de l’appartement derrière le joueur, pas de celui en face.",
     // B · 47558a04be8d
     "characters.ash.secrets.ash_is_glass.visibility": "NPC_PRIVATE",
     // B · 1e71c07a4163
@@ -735,7 +735,7 @@ registerWorldText('fr', {
     // B · 40aa17749d30
     "quests.q_selene.title": "Pourquoi elle a fait signe",
     // B · fd7c10c87821
-    "quests.q_selene.summary": "Elle a regardé dans un objectif dont elle ne pouvait pas savoir l’existence, et elle vous a toujours eu d’avance depuis.",
+    "quests.q_selene.summary": "Elle a regardé dans un objectif dont elle ne pouvait pas savoir l’existence, et elle a toujours eu une longueur d’avance sur toi depuis.",
     // B · 552c0b7f83c2
     "quests.q_selene.kind": "SECONDAIRE",
     // B · ead1cdd0123f
@@ -777,7 +777,7 @@ registerWorldText('fr', {
     // B · 71018bf7e807
     "quests.q_glass.steps.the_contradiction.rewards.flags": ["knows :glass_contradicts"],
     // B · 9a66786d3b88
-    "quests.q_glass.steps.which_one_wrote_the_first_message.playerCopy": "Découvre lequel d’entre eux a envoyé VOUS VOUS TROMPEZ D’APPARTEMENT.",
+    "quests.q_glass.steps.which_one_wrote_the_first_message.playerCopy": "Découvre lequel d’entre eux a envoyé TU TE TROMPES D’APPARTEMENT.",
     // B · 66a4c908cf48
     "quests.q_glass.steps.which_one_wrote_the_first_message.directorNotes": "C’est Tobin Ash, et il parlait de l’appart où le joueur est, pas de celui d’en face. Il le confirmera à quelqu’un qui l’a compris et le lui dit en face, mais ne le dira pas à qui que ce soit d’autre, parce que le dire volontairement ruinerait sa carrière au lieu de celle des autres.",
     // B · 71018bf7e807
@@ -793,7 +793,7 @@ registerWorldText('fr', {
     // B · 65e57e50763a
     "worldEvents.we_the_wave.publicCopy": "À 01:16, la porte du balcon du penthouse s’ouvre. La Dr Selene Voss sort en chemise blanche, un verre à la main, va vers la rambarde, regarde à travers quatre voies directement dans l’objectif, et lève l’autre main.",
     // B · 6f0522c9eb6b
-    "worldEvents.we_the_wave.directorNotes": "Quatre-vingt-dix secondes plus tard, le portable du joueur reçoit quatre mots d’une identité appelée Glass : VOUS VOUS TROMPEZ D’APPARTEMENT. Mara voudra que ce soit enregistré et discuté à une heure raisonnable. Ça arrive la première nuit, que quelqu’un soit au verre ou pas.",
+    "worldEvents.we_the_wave.directorNotes": "Quatre-vingt-dix secondes plus tard, le portable du joueur reçoit quatre mots d’une identité appelée Glass : TU TE TROMPES D’APPARTEMENT. Mara voudra que ce soit enregistré et discuté à une heure raisonnable. Ça arrive la première nuit, que quelqu’un soit au verre ou pas.",
     // B · 14f066088d14
     "worldEvents.we_the_wave.setsFlags": ["saw_the_wave","knows :glass"],
     // B · 394dc9c422b4
@@ -831,7 +831,7 @@ registerWorldText('fr', {
     // B · ead1cdd0123f
     "worldEvents.we_archive_moves.requiresFlags": ["a_vu_le_signe"],
     // B · 949bcfcfbd81
-    "worldEvents.we_seventh_night.publicCopy": "Septième nuit, et l’opération se termine à 6 h quoi qu’il arrive. Mara commence à démonter le trépied à cinq heures, ce qu’elle n’a pas fait depuis six jours, et vous ne dites rien pendant un moment.",
+    "worldEvents.we_seventh_night.publicCopy": "Septième nuit, et l’opération se termine à 6 h quoi qu’il arrive. Mara commence à démonter le trépied à cinq heures, ce qu’elle n’a pas fait depuis six jours, et tu ne dis rien pendant un moment.",
     // B · 775bd01b2e4b
     "worldEvents.we_seventh_night.directorNotes": "L’heure arrive. L’extraction est à six heures. Ce que ça signifie dépend entièrement de la Crainte de la Direction — une voiture et un débrief, ou une équipe et une pièce. Ne le résous pas pour le joueur ; rends la différence visible dans la rue.",
     // B · 0fe6d22f45a6
@@ -1033,13 +1033,13 @@ registerWorldText('fr', {
     // B · 3a6240a26696
     "setupFields.pronouns.placeholder": "ex. iel/iels",
     // B · 705b68343417
-    "setupFields.archetype.label": "Comment la Direction Neuf vous a-t-elle recruté ?",
+    "setupFields.archetype.label": "Comment la Direction Neuf est-elle venue te chercher ?",
     // B · 694e20d7b2d8
     "setupFields.archetype.kind": "ARCHÉTYPE",
     // B · ace57b6339ab
-    "setupFields.archetype.helpText": "D’où vous venez, ce que ça détermine dans vos compétences. C’est fixé pour toute la partie. Ça ne dit pas de quel côté vous êtes, ce que vous mettez dans vos rapports, ni si vous bossez encore pour eux jeudi — rien de tout ça ne se décide ici, et tout peut changer pendant les sept nuits.",
+    "setupFields.archetype.helpText": "D’où tu viens, ce que ça détermine dans tes compétences. C’est fixé pour toute la partie. Ça ne dit pas de quel côté tu es, ce que tu mets dans tes rapports, ni si tu bosses encore pour eux jeudi — rien de tout ça ne se décide ici, et tout peut changer pendant les sept nuits.",
     // B · 43aed0136396
-    "setupFields.worldKnowsAboutYou.label": "Que pense déjà le service de vous ?",
+    "setupFields.worldKnowsAboutYou.label": "Que pense déjà le service de toi ?",
     // B · 401854456756
     "setupFields.worldKnowsAboutYou.kind": "TEXTE",
     // B · 44746a38fe14
@@ -1047,21 +1047,21 @@ registerWorldText('fr', {
     // B · 5692ce7dcf20
     "setupFields.worldKnowsAboutYou.placeholder": "ex. Il y a une opération à Ferrand il y a deux ans dont tout le monde évite de parler devant moi.",
     // B · d8a95e94c1e6
-    "setupFields.why_you.label": "Pourquoi vous ont-ils mis dans cet appartement ?",
+    "setupFields.why_you.label": "Pourquoi t’ont-ils mis dans cet appartement ?",
     // B · b6a31c665c0b
     "setupFields.why_you.kind": "CHOIX",
     // B · 595c1c7aecf9
-    "setupFields.why_you.helpText": "Ça montre ce que vous perdez si l’opération foire, la seule pression qu’on peut avoir dans cette histoire.",
+    "setupFields.why_you.helpText": "Ça montre ce que tu perds si l’opération foire, la seule pression qu’on peut avoir dans cette histoire.",
     // B · a7b245de932a
-    "setupFields.why_you.options.safe_pair.label": "Vous êtes la paire de mains la plus sûre qu’ils avaient de dispo",
+    "setupFields.why_you.options.safe_pair.label": "Tu es la paire de mains la plus sûre qu’ils avaient de dispo",
     // B · d8585c3ff12b
-    "setupFields.why_you.options.expendable.label": "Vous êtes celui qu’ils peuvent renier le plus vite",
+    "setupFields.why_you.options.expendable.label": "Tu es la personne qu’ils peuvent renier le plus vite",
     // B · 8094758516d0
-    "setupFields.why_you.options.volunteered.label": "Vous l’avez demandé, et personne ne vous a demandé pourquoi",
+    "setupFields.why_you.options.volunteered.label": "Tu l’as demandé, et personne ne t’a demandé pourquoi",
     // B · fd0e04ec662f
     "setupFields.why_you.options.punishment.label": "C’est une punition, et tout le monde le sait",
     // B · 920940999956
-    "setupFields.why_you.options.watching_you.label": "C’est vous qu’ils surveillent vraiment",
+    "setupFields.why_you.options.watching_you.label": "C’est toi qu’ils surveillent vraiment",
     // B · f6093d6587c4
     "setupFields.appearance.label": "Qu’est-ce que les gens remarquent en premier ?",
     // B · 401854456756

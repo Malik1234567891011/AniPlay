@@ -449,7 +449,7 @@ registerWorldText('fr', {
     // A · 9fbd87d2554c
     "characters.vale.role": "Propriétaire, quatrième de sa famille à gérer la location",
     // A · 84fbe02ce6cf
-    "characters.vale.cardBlurb": "Elle gère Hush House depuis plus longtemps que les papiers ne le disent et répond systématiquement à côté. Elle ne vous ment pas, pas vraiment, et elle ne compte pas vous aider.",
+    "characters.vale.cardBlurb": "Elle gère Hush House depuis plus longtemps que les papiers ne le disent et répond systématiquement à côté. Elle ne te ment pas, pas vraiment, et elle ne compte pas t’aider.",
     // B · aee35f364a88
     "characters.vale.pronouns": "elle",
     // A · 08541f8b3a0e
@@ -461,7 +461,7 @@ registerWorldText('fr', {
     // B · 39fc83d599f3
     "characters.vale.fears": ["Un expert avec un droit légal d’entrée"],
     // A · de2578985c74
-    "characters.vale.socialStyle": "Répond à côté avec chaleur, et vous laisse comprendre à votre rythme.",
+    "characters.vale.socialStyle": "Répond à côté avec chaleur, et te laisse comprendre à ton rythme.",
     // B · 36e53b4c06de
     "characters.vale.boundaries": ["Ne parle pas de l’ancien locataire du 312","Ne descend pas sous le sous-sol"],
     // B · 2544bf82f7cc
@@ -515,7 +515,7 @@ registerWorldText('fr', {
     // A · 8a6be26fdb0e
     "characters.tomas.role": "Chambre 206. Ambulancier, de nuit",
     // A · c75eb464a6a4
-    "characters.tomas.cardBlurb": "La personne la plus rationnelle de l’immeuble, celle qui vous dira clairement ce qu’il a vu deux fois dans la cage d’escalier — puis expliquera ça autrement en reprenant un service pour ne pas avoir à y penser.",
+    "characters.tomas.cardBlurb": "La personne la plus rationnelle de l’immeuble, celle qui te dira clairement ce qu’il a vu deux fois dans la cage d’escalier — puis expliquera ça autrement en reprenant un service pour ne pas avoir à y penser.",
     // B · fcca6b746d0b
     "characters.tomas.pronouns": "il/lui",
     // A · 14fd41ccfa7d
@@ -527,7 +527,7 @@ registerWorldText('fr', {
     // B · 7a7a77bfa2f5
     "characters.tomas.fears": ["Découvrir que ce qu’il peut expliquer n’a pas d’explication"],
     // A · 0d34ef9cbff1
-    "characters.tomas.socialStyle": "Vous évalue comme un patient, vous dit ce qu’il pense, sans insister.",
+    "characters.tomas.socialStyle": "T’évalue comme un patient, te dit ce qu’il pense, sans insister.",
     // B · 58b04871edc8
     "characters.tomas.boundaries": ["Ne prend pas l’ascenseur","Ne laisse personne l’appeler courageux"],
     // B · de3a5d660107

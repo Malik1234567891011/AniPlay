@@ -15,15 +15,15 @@ registerWorldText('fr', {
   storyId: "story_blackwake",
   text: {
     // A · b92b0425d675
-    "fantasyLabel": "Un navire brisé. Personne ne sait qui vous êtes.",
+    "fantasyLabel": "Un navire brisé. Personne ne sait qui tu es.",
     // A · 0cc8c2d2d330
-    "hook": "Votre tuteur a passé quarante ans à chercher une mer qui n’est sur aucune carte. Quelqu’un l’a tué pour ça et vous a laissé la boussole.",
+    "hook": "Ton tuteur a passé quarante ans à chercher une mer qui n’est sur aucune carte. Quelqu’un l’a tué pour ça et t’a laissé la boussole.",
     // A · 94ac7c2d4d25
-    "premise": "Le Blackwake, c’est neuf cents milles de mer ouverte et environ quatre cents îles, chacune appartenant à quelqu’un : la Neuvième Flotte, une maison marchande, un roi, ou quiconque l’a tenue assez longtemps pour le dire.\n\nFerro Vane vous a élevé. Il a passé sa vie à chercher une région d’océan appelée la Mer Sans Couronne que presque tout le monde est sûr de ne pas exister, et il a été chassé de chaque port sur la côte pour ça.\n\nIl y a onze jours, quelqu’un est entré dans l’atelier et lui a tranché la gorge, sans prendre son argent.\n\nIl vous a laissé trois choses : un cotre vieux de quarante ans avec une quille fendue et sans équipage, le tiers est d’une carte dont le reste est déchiré, et une boussole en laiton qui pointe là où aucune boussole ne pointe.\n\nVous êtes dans le port de Saltmarket avec un navire que vous ne pouvez pas naviguer seul, et la seule personne qui a proposé de vous aider est une navigatrice recherchée qui refuse de dire pourquoi elle peut lire l’écriture de votre tuteur.\n\nPersonne ne connaît encore votre nom.",
+    "premise": "Le Blackwake, c’est neuf cents milles de mer ouverte et environ quatre cents îles, chacune appartenant à quelqu’un : la Neuvième Flotte, une maison marchande, un roi, ou quiconque l’a tenue assez longtemps pour le dire.\n\nTu as grandi chez Ferro Vane. Il a passé sa vie à chercher une région d’océan appelée la Mer Sans Couronne que presque tout le monde est sûr de ne pas exister, et il a été chassé de chaque port sur la côte pour ça.\n\nIl y a onze jours, quelqu’un est entré dans l’atelier et lui a tranché la gorge, sans prendre son argent.\n\nIl t’a laissé trois choses : un cotre vieux de quarante ans avec une quille fendue et sans équipage, le tiers est d’une carte dont le reste est déchiré, et une boussole en laiton qui pointe là où aucune boussole ne pointe.\n\nTu es dans le port de Saltmarket avec un navire que tu ne peux pas manœuvrer sans équipage, et la seule personne qui a proposé de t’aider est une navigatrice recherchée qui refuse de dire pourquoi elle sait lire l’écriture de ton tuteur.\n\nPersonne ne connaît encore ton nom.",
     // A · f30dd0405086
-    "mechanicsChips": ["Recruter un vrai équipage","Améliorer votre navire","Primes et notoriété","Arcs d’îles","Reliques"],
+    "mechanicsChips": ["Recruter un vrai équipage","Améliorer ton navire","Primes et notoriété","Arcs d’îles","Reliques"],
     // A · f0e0d827d152
-    "creatorNote": "Votre équipage, c’est des gens, pas du matériel. Ils vous disputent, ils se disputent entre eux, et n’importe qui peut partir. Une relique casse exactement une règle du monde — et vous pouvez devenir la chose la plus dangereuse de cet océan sans jamais en tenir une.",
+    "creatorNote": "Ton équipage, c’est des gens, pas du matériel. Ils te tiennent tête, ils se disputent entre eux, et n’importe qui peut partir. Une relique casse exactement une règle du monde — et tu peux devenir la chose la plus dangereuse de cet océan sans jamais en tenir une.",
     // B · 99069638dac1
     "rules.defeatMode": "ÉCHEC AVANCÉ",
     // B · 9788c35a3ab5
@@ -697,7 +697,7 @@ registerWorldText('fr', {
     // A · 82389471bd31
     "characters.tolla.role": "Charpentier de marine, propriétaire du chantier",
     // A · 82322220aa96
-    "characters.tolla.cardBlurb": "La charpentière qui peut rendre le Marrow navigable et qui, gratis, vous expliquera en détail tout ce qui ne va pas avec lui.",
+    "characters.tolla.cardBlurb": "La charpentière qui peut rendre le Marrow navigable et qui, gratis, t’expliquera en détail tout ce qui ne va pas avec lui.",
     // B · aee35f364a88
     "characters.tolla.pronouns": "elle",
     // A · 2cc1df733976
@@ -725,7 +725,7 @@ registerWorldText('fr', {
     // A · a9b198439ebf
     "characters.tolla.topics": ["la quille","l’expertise de la coque","Ferro Vane","les voiles d’avant","le coût d’une remise en état"],
     // A · a87ee9082b08
-    "characters.tolla.voiceSamples": ["Fendue, pas cassée. C’est une vraie différence, et ça va vous coûter onze jours.","Il m’a payé ça il y a neuf ans. J’ai toujours l’argent. Ne m’en parle pas.","Tu peux avoir ça vite ou tu peux avoir ça qui flotte."],
+    "characters.tolla.voiceSamples": ["Fendue, pas cassée. C’est une vraie différence, et ça va te coûter onze jours.","Il m’a payé ça il y a neuf ans. J’ai toujours l’argent. Ne m’en parle pas.","Tu peux avoir ça vite ou tu peux avoir ça qui flotte."],
     // B · 14d719462037
     "characters.tolla.appearance": "Dans la soixantaine, avant-bras comme des câbles, de la sciure coincée en permanence dans un sourcil.",
     // B · 3db4ffea4fea
@@ -745,7 +745,7 @@ registerWorldText('fr', {
     // A · a9fdd9eb2138
     "characters.harrow_bell.role": "Courtier au Drift",
     // A · 28625fcd00e7
-    "characters.harrow_bell.cardBlurb": "Le courtier qui vous vendra les deux tiers ouest de votre propre carte, et qui veut savoir qui d’autre la réclame.",
+    "characters.harrow_bell.cardBlurb": "Le courtier qui te vendra les deux tiers ouest de ta propre carte, et qui veut savoir qui d’autre la réclame.",
     // B · 9bdf0106d724
     "characters.harrow_bell.pronouns": "iel",
     // A · 139da4a45b75

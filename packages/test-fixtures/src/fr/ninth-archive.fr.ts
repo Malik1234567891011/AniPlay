@@ -15,11 +15,11 @@ registerWorldText('fr', {
   storyId: "story_ninth_archive",
   text: {
     // A · 8b39256ed232
-    "fantasyLabel": "L’académie affirme que vous n’avez jamais été admis.",
+    "fantasyLabel": "L’académie affirme que ton admission n’a jamais eu lieu.",
     // A · 02b737a017d4
-    "hook": "Votre dossier scolaire a disparu. Vous êtes toujours devant la porte, la lettre d’admission en main.",
+    "hook": "Ton dossier scolaire a disparu. Tu es toujours devant la porte, la lettre d’admission en main.",
     // A · f5e7d792fa6e
-    "premise": "L’académie Verath garde un dossier magique pour chacun de ses élèves. Ce dossier vit dans les archives, et le sort sur la porte d’entrée le vérifie chaque matin pour décider qui peut passer. Le premier jour, la porte a cherché votre dossier et n’a rien trouvé. Pour Verath, vous n’avez jamais été admis.\n\nC’est impossible. Vous avez une lettre d’admission, une chambre, un emploi du temps. Soit l’académie a commis une erreur inédite, soit quelqu’un vous a expressément effacé du dossier.\n\nLa porte vire au rouge : c’est le signal qui interdit l’entrée. Un préfet nommé Kael a reçu l’ordre de vous enquêter. Une assistante des archives, Mira, vous couvre en douce et semble en savoir plus qu’elle ne dit. Le surveillant qui valide les modifications de dossier se montre très gentil avec vous, et c’est ce qui vous inquiète le plus.\n\nVous avez un trimestre pour découvrir qui vous a effacé et pourquoi, avant que la porte cesse de voir ça comme une erreur et vous considère comme un intrus. Ici, on n’expulse jamais les élèves. On les transfère, et ces transferts n’arrivent nulle part.",
+    "premise": "L’académie Verath garde un dossier magique pour chacun de ses élèves. Ce dossier vit dans les archives, et le sort sur la porte d’entrée le vérifie chaque matin pour décider qui peut passer. Le premier jour, la porte a cherché ton dossier et n’a rien trouvé. Pour Verath, ton admission n’a jamais eu lieu.\n\nC’est impossible. Tu as une lettre d’admission, une chambre, un emploi du temps. Soit l’académie a commis une erreur inédite, soit quelqu’un a fait disparaître ton dossier exprès.\n\nLa porte vire au rouge : c’est le signal qui interdit l’entrée. Un préfet nommé Kael a reçu l’ordre d’enquêter sur toi. Une assistante des archives, Mira, te couvre en douce et semble en savoir plus qu’elle ne dit. Le surveillant qui valide les modifications de dossier se montre très gentil avec toi, et c’est ce qui t’inquiète le plus.\n\nTu as un trimestre pour découvrir qui a fait ça, et pourquoi, avant que la porte cesse de voir ça comme une erreur et te classe parmi les intrus. Ici, on n’expulse jamais les élèves. On les transfère, et ces transferts n’arrivent nulle part.",
     // A · 4af64c2c7a9b
     "mechanicsChips": ["Enquête","Protection","Relations","Discrétion","Factions"],
     // A · b99c7954dd86

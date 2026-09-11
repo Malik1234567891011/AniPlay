@@ -375,7 +375,7 @@ registerWorldText('fr', {
     // B · 47558a04be8d
     "characters.hana.secrets.hana_fellowship.visibility": "NPC_PRIVATE",
     // B · c7042ad86ac5
-    "characters.hana.secrets.hana_fellowship.revealHint": "Elle vous le dit elle-même sur le balcon, tard, si vous lui avez posé une vraie question sur sa semaine plutôt que sur le mariage.",
+    "characters.hana.secrets.hana_fellowship.revealHint": "Elle te le dit elle-même sur le balcon, tard, si tu lui as posé une vraie question sur sa semaine plutôt que sur le mariage.",
     // B · a27bed373f19
     "characters.hana.secrets.hana_the_photograph.fact": "Il y a une photo du voyage sur la côte où le joueur est mal placé — une veste différente, la mauvaise main dans la poche. Elle l’a remarqué il y a un an et ne l’a jamais dit à personne.",
     // B · 47558a04be8d
@@ -403,7 +403,7 @@ registerWorldText('fr', {
     // B · c2c50b14d6fe
     "characters.hana.knowledgeScope": ["hana","appartement_8b","le_mariage","aster_city","emi","bourse","chambre_libre","voyages_partagés"],
     // B · 0817dbbed1b6
-    "characters.hana.gates.hana_tells_you_about_it.label": "Elle vous parle elle-même de la bourse",
+    "characters.hana.gates.hana_tells_you_about_it.label": "Elle te parle elle-même de la bourse",
     // B · 55a54e80451a
     "characters.hana.gates.hana_tells_you_about_it.kind": "CONFIANCE",
     // B · 61ab59ca7778
@@ -437,11 +437,11 @@ registerWorldText('fr', {
     // A · 86845ed7dff7
     "characters.emi.socialStyle": "Elle débarque sans prévenir, se fait un thé, et pose la question que t’évites depuis moins de deux minutes.",
     // B · 8d98d48915d9
-    "characters.emi.boundaries": ["Ne vous dira pas les affaires de Hana, peu importe comment vous demandez — mais elle vous dira qu’il y en a","Ne sera pas utilisée comme moyen d’atteindre Hana sans passer par Hana"],
+    "characters.emi.boundaries": ["Ne te dira pas les affaires de Hana, peu importe comment tu demandes — mais elle te dira qu’il y en a","Ne sera pas utilisée comme moyen d’atteindre Hana sans passer par Hana"],
     // B · a8a915dc011f
-    "characters.emi.goals": ["Faire dire à Hana la bourse à voix haute","Comprendre ce qui ne va pas vraiment chez vous cette semaine"],
+    "characters.emi.goals": ["Faire dire à Hana la bourse à voix haute","Comprendre ce qui ne va pas vraiment chez toi cette semaine"],
     // B · 38b00b5ff99f
-    "characters.emi.secrets.emi_knows.fact": "Elle sait pour la bourse depuis février, a aidé pour le portfolio, et dit à Hana de vous le dire depuis quatre mois.",
+    "characters.emi.secrets.emi_knows.fact": "Elle sait pour la bourse depuis février, a aidé pour le portfolio, et dit à Hana de te le dire depuis quatre mois.",
     // B · 47558a04be8d
     "characters.emi.secrets.emi_knows.visibility": "NPC_PRIVATE",
     // B · ec26ba54a365
@@ -553,7 +553,7 @@ registerWorldText('fr', {
     // B · 594019662d56
     "characters.lucia.boundaries": ["Ne mentira pas à Hana pour toi, et te le dira franchement plutôt qu’après","Ne voudra pas choisir un camp et arrêtera simplement de répondre au téléphone si tu la forces"],
     // B · 84d25eb8d8c2
-    "characters.lucia.goals": ["Comprendre ce qui t’est arrivé entre vendredi et samedi","Ramener vous trois à la table du vendredi"],
+    "characters.lucia.goals": ["Comprendre ce qui t’est arrivé entre vendredi et samedi","Vous ramener tous les trois à la table du vendredi"],
     // B · f8958852352d
     "characters.lucia.secrets.lucia_the_wrong_memory.fact": "Elle se souvient d’une nuit sur la route côtière que le joueur ne connaît pas, avec un détail — une veste, une deuxième voiture — qui ne correspond pas à la photo dans l’appartement.",
     // B · 47558a04be8d
@@ -849,7 +849,7 @@ registerWorldText('fr', {
     // B · 1cbd99ba2b97
     "promises.p_who_you_were.label": "Ce que l’homme qui vivait ici était vraiment",
     // B · 7dcf9f47f009
-    "promises.p_who_you_were.seedHint": "Des annotations sur une notice de meuble en kit, écrites dans une écriture que vous ne reconnaissez pas.",
+    "promises.p_who_you_were.seedHint": "Des annotations sur une notice de meuble en kit, écrites dans une écriture que tu ne reconnais pas.",
     // B · 9f3436a279b9
     "promises.p_who_you_were.payoffHint": "Lucia Vale a onze ans de lui, et une histoire qui ne colle pas avec les photos.",
     // B · f8b4a6708d82

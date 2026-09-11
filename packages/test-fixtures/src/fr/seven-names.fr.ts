@@ -167,7 +167,7 @@ registerWorldText('fr', {
     // B · 8658537ddce5
     "items.evening_suit.description": "Bien taillé, porté une fois, acquis par un moyen que personne impliqué n’écrira. Dans la bonne pièce, ça vaut plus qu’un revolver et ça marche sur plus de monde.",
     // B · 14dff23c74be
-    "items.evening_suit.loreText": "L’étiquette du tailleur a été décousue. Quiconque cherche une étiquette et trouve la couture où elle était apprend quelque chose sur vous.",
+    "items.evening_suit.loreText": "L’étiquette du tailleur a été décousue. Quiconque cherche une étiquette et trouve la couture où elle était apprend quelque chose sur toi.",
     // B · 2c3f9da60ba7
     "items.evening_suit.icon": "manteau",
     // A · c83a2a78316f
@@ -235,7 +235,7 @@ registerWorldText('fr', {
     // B · 09b907576d49
     "abilities.work_the_table.tags": ["social"],
     // B · 436293aa5ff4
-    "abilities.work_the_table.description": "Vingt minutes à être un compagnon exceptionnel, ciblées sur une personne précise, pour une phrase précise que vous avez besoin qu’elle dise devant témoins.",
+    "abilities.work_the_table.description": "Vingt minutes à être un compagnon exceptionnel, ciblées sur une personne précise, pour une phrase précise que tu as besoin qu’elle dise devant témoins.",
     // B · 39d896e20aec
     "abilities.work_the_table.targetRule": "UN",
     // B · cfb7a15645c3
@@ -453,7 +453,7 @@ registerWorldText('fr', {
     // B · 47558a04be8d
     "characters.celeste.secrets.celeste_nocturne.visibility": "NPC_PRIVATE",
     // B · 509aea6ab55d
-    "characters.celeste.secrets.celeste_nocturne.revealHint": "Elle vous laisse la surprendre en flagrant délit plutôt que de vous le dire, et n’est absolument pas gênée par cette prise.",
+    "characters.celeste.secrets.celeste_nocturne.revealHint": "Elle te laisse la surprendre en flagrant délit plutôt que de te le dire, et n’est absolument pas gênée par cette prise.",
     // B · 9972e82383e8
     "characters.celeste.secrets.celeste_the_debt.fact": "Son père verse onze mille francs par trimestre à quelqu’un depuis avant le gala. Elle a trouvé les écritures, pas le bénéficiaire, et ne l’a pas confronté.",
     // B · 47558a04be8d
@@ -567,9 +567,9 @@ registerWorldText('fr', {
     // B · 5bd2fdb853d7
     "characters.renaud.name": "Gabriel Renaud",
     // A · 627dd88f2820
-    "characters.renaud.role": "Inspecteur, trente-deux ans, débutant sur l’affaire Valère, et le seul en France à ne jamais avoir signé votre noyade",
+    "characters.renaud.role": "Inspecteur, trente-deux ans, débutant sur l’affaire Valère, et le seul en France à ne jamais avoir signé ta noyade",
     // A · 965c434c1798
-    "characters.renaud.cardBlurb": "Il a aidé à vous condamner et il croyait chaque mot à l’époque. Depuis, il a relu le dossier onze fois et trouvé quatre choses qui ne collent pas. Il va vous suivre à travers le pays pour vous interroger à leur sujet.",
+    "characters.renaud.cardBlurb": "Il a aidé à te condamner et il croyait chaque mot à l’époque. Depuis, il a relu le dossier onze fois et trouvé quatre choses qui ne collent pas. Il va te suivre à travers le pays pour t’interroger à leur sujet.",
     // B · fcca6b746d0b
     "characters.renaud.pronouns": "il/lui",
     // A · 3fe2d8c6cb85

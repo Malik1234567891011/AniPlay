@@ -163,9 +163,9 @@ registerWorldText('fr', {
     // B · 32830ea136a7
     "items.bakery_bag.tags": ["nourriture"],
     // B · c1896c36a4d1
-    "items.bakery_bag.description": "Encore chaud au fond. Acheté à six heures du matin chez une femme qui a arrêté de demander ce qu’il y a dans votre sac et a commencé à en mettre un en plus pour ça.",
+    "items.bakery_bag.description": "Encore chaud au fond. Acheté à six heures du matin chez une femme qui a arrêté de demander ce qu’il y a dans ton sac et a commencé à en mettre un en plus pour ça.",
     // B · a37adc11f9a3
-    "items.bakery_bag.loreText": "Votre partenaire a trouvé seul le chemin vers cette boulangerie et y ira, que vous y alliez ou pas.",
+    "items.bakery_bag.loreText": "Ton partenaire a trouvé seul le chemin vers cette boulangerie et y ira, que tu y ailles ou pas.",
     // B · 2088f328aea7
     "items.bakery_bag.icon": "sac",
     // A · 98215802487a
@@ -173,7 +173,7 @@ registerWorldText('fr', {
     // B · f3a60c587a13
     "items.field_kit.tags": ["outil"],
     // B · ec7418a1c9a7
-    "items.field_kit.description": "Une mallette rigide contenant des choses qui stabilisent le tissu de phase, dont la plupart ont été fabriquées par lui-même, aucune testée sur quelque chose de la taille de ce qu’il y a dans votre sac.",
+    "items.field_kit.description": "Une mallette rigide contenant des choses qui stabilisent le tissu de phase, dont la plupart ont été fabriquées par lui-même, aucune testée sur quelque chose de la taille de ce qu’il y a dans ton sac.",
     // B · fd4fcce208f6
     "items.field_kit.loreText": "Il y a onze ampoules et une note manuscrite qui dit, en entier : « 3 max. Puis stop. Puis apporte-le-moi. »",
     // B · 909ac0144b71
@@ -193,7 +193,7 @@ registerWorldText('fr', {
     // B · 2e74bfc33328
     "abilities.take_the_roofs.tags": ["mouvement"],
     // B · 61372308293f
-    "abilities.take_the_roofs.description": "Entrée de métro, rue étroite, gouttière, toit, cour, pont. Paris est plus rapide au-dessus du trafic si vous êtes prêt à vous y engager.",
+    "abilities.take_the_roofs.description": "Entrée de métro, rue étroite, gouttière, toit, cour, pont. Paris est plus rapide au-dessus du trafic si tu acceptes de t’y engager.",
     // B · c44e6dd70059
     "abilities.take_the_roofs.targetRule": "AUCUN",
     // B · 7ce3b6387340
@@ -1229,7 +1229,7 @@ registerWorldText('fr', {
     // B · 8ff09a741cb7
     "endings.end_just_us.requires.flagsUnset": ["a_traversé","l’ont_maintenu_ouvert"],
     // B · 908939708956
-    "endings.end_just_us.condition": "Ils sont partis en emmenant l’animal. C’est une réponse légitime à ce qu’un inconnu vous donne une arme vivante dans un sous-sol, et il ne faut pas la rédempter ou l’écrire comme de la lâcheté. La ville continue. Les meurtres peuvent s’arrêter ou pas. Ils ne sont pas là pour ça.",
+    "endings.end_just_us.condition": "Ils sont partis en emmenant l’animal. C’est une réponse légitime à ce qu’un inconnu te donne une arme vivante dans un sous-sol, et il ne faut pas la rédempter ou l’écrire comme de la lâcheté. La ville continue. Les meurtres peuvent s’arrêter ou pas. Ils ne sont pas là pour ça.",
     // A · 8eb43f3dcc77
     "endings.end_just_us.epilogue": "Quelque part avec moins de caméras et plus de terrain. Il cesse de se débattre en un mois, ce que personne n’avait prévu et que Morel aurait voulu savoir. Il y a un message non répondu sur un téléphone, d’un professeur parisien, en juin, et il reste sans réponse.",
     // A · 8297286e656f

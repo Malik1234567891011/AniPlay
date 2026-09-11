@@ -165,6 +165,56 @@ function check(story: StoryVersion, findings: Finding[], gaps: string[]): void {
         findings.push({ world: story.title, path, code: 'CALQUE', detail: `${why} — ${text.slice(0, 70)}` });
       }
     }
+    // A narrator that vouvoies the player.
+    //
+    // Characters may — a stranger who vouvoies is characterisation. The
+    // narrator may not, and three worlds had drifted: Window Seven's entire
+    // premise, Blackwake's hook and premise, and The Ninth Archive's, while the
+    // other nineteen tutoyaient. Nothing flagged it, because each file was
+    // internally consistent and only the catalogue as a whole was not.
+    //
+    // `vous` is also the plural of `tu`, and that is correct and common here —
+    // the player and their partner, the player and Juno. A sentence carrying a
+    // pair marker is the plural and is left alone.
+    // `openingSuggestions` and friends are lines the *player* says. A player
+    // who vouvoies a stranger is being polite, which is what a French speaker
+    // would do.
+    if (!/voiceSamples|dialogue|speechStyle|\.lines|[Ss]uggestions/.test(path)) {
+      const pair =
+        /\bvous (?:ne )?(?:vous|deux)\b|\b(?:entre|aucun de|chacun de|l’un de|aucune de) vous\b|\b(?:tous|toutes) les deux\b|\bvous êtes (?:deux|trois)\b|\bensemble\b|\bl’un (?:pour|à|de) l’autre\b|\bl’un l’autre\b/i;
+      const vouvoiement =
+        /\bvous (?:êtes|avez|voyez|pouvez|devez|savez|allez|faites|venez|entrez|sentez|regardez|entendez|tenez|marchez|perdez|mettez|dites)\b|\b(?:votre|vos)\b/i;
+      // `vous` that the heuristic cannot see is plural, because the pair is
+      // established somewhere else in the world rather than in the sentence.
+      // Listed rather than silenced, so that adding one is a decision somebody
+      // makes on purpose and the queue stays empty otherwise.
+      const KNOWN_PLURAL: Record<string, readonly string[]> = {
+        'Window Seven': ['locations[6].description'], // the player and Mara, in one flat
+        'Good Morning, Husband': [
+          'locations[6].description', // a bench the couple has a joke about
+          'characters[0].topics[5]', // their anniversary
+          'characters[2].topics[3]',
+          'worldEvents[6].publicCopy', // both of them circled the date
+          'promises[0].payoffHint', // what the two of them became
+        ],
+        'Zero Throne': ['endings[2].condition'], // the player and Rhea, after the fortnight
+      };
+      // Scoped to this check only. A `continue` here would also skip the
+      // typography and placeholder checks for these paths, which have nothing
+      // to do with how the narrator addresses anybody.
+      const knownPlural = (KNOWN_PLURAL[story.title] ?? []).includes(path);
+
+      for (const sentence of knownPlural ? [] : text.split(/(?<=[.!?])\s+/)) {
+        if (vouvoiement.test(sentence) && !pair.test(sentence)) {
+          findings.push({
+            world: story.title, path, code: 'NARRATOR_VOUS',
+            detail: sentence.trim().slice(0, 90),
+          });
+          break;
+        }
+      }
+    }
+
     // Straight quotes and apostrophes.
     if (/["']/.test(text) && !/\{/.test(text)) {
       findings.push({ world: story.title, path, code: 'TYPOGRAPHY', detail: text.slice(0, 90) });
@@ -264,11 +314,12 @@ function main(): void {
 
   for (const [code, list] of [...byCode].sort((a, b) => b[1].length - a[1].length)) {
     console.log(`\n${code} — ${list.length}`);
-    for (const finding of list.slice(0, 12)) {
+    const shown = process.argv.includes('--all') ? list.length : 12;
+    for (const finding of list.slice(0, shown)) {
       console.log(`  ${finding.world} · ${finding.path}`);
       console.log(`    ${finding.detail}`);
     }
-    if (list.length > 12) console.log(`  … and ${list.length - 12} more`);
+    if (list.length > shown) console.log(`  … and ${list.length - shown} more (--all)`);
   }
 
   console.log(`\n${findings.length} to look at. This is a queue, not a verdict.`);

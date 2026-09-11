@@ -95,7 +95,7 @@ registerWorldText('fr', {
     // B · a34adbda2422
     "resources.wariness.polarity": "BON_BAS",
     // B · 6e47f2de686a
-    "resources.wariness.zeroStateConsequence": "Il vient quand on l’appelle à travers une voie bondée. Il reste immobile quand quelqu’un qu’il ne connaît pas pose la main dessus parce que vous êtes là, dort dos à vous, et entre dans l’eau, le feu et le bruit rien qu’à la force de votre voix.",
+    "resources.wariness.zeroStateConsequence": "Il vient quand on l’appelle à travers une voie bondée. Il reste immobile quand quelqu’un qu’il ne connaît pas pose la main dessus parce que tu es là, dort dos à toi, et entre dans l’eau, le feu et le bruit rien qu’à la force de ta voix.",
     // B · 74fa1a051fd1
     "resources.wariness.color": "#6B8E5A",
     // A · 6af7d166a7b8
@@ -103,9 +103,9 @@ registerWorldText('fr', {
     // B · e72573287188
     "items.trade_tally.tags": ["document"],
     // B · 16e571f24ed2
-    "items.trade_tally.description": "Un bout de corde tressée avec des nœuds et des fils colorés qui enregistrent chaque dette qu’on vous doit et chaque dette que vous devez. Au passage, c’est le seul document que cinq peuples acceptent tous de lire.",
+    "items.trade_tally.description": "Un bout de corde tressée avec des nœuds et des fils colorés qui enregistrent chaque dette qu’on te doit et chaque dette que tu dois. Au passage, c’est le seul document que cinq peuples acceptent tous de lire.",
     // B · b0fbcd96a261
-    "items.trade_tally.loreText": "Trois des nœuds sont ceux de quelqu’un d’autre et vous les portez depuis le printemps. Personne ne les a réclamés, ce qui est un message en soi.",
+    "items.trade_tally.loreText": "Trois des nœuds sont ceux de quelqu’un d’autre et tu les portes depuis le printemps. Personne ne les a réclamés, ce qui est un message en soi.",
     // B · 195edf70942c
     "items.trade_tally.icon": "corde",
     // A · c13b4769fee3
@@ -347,7 +347,7 @@ registerWorldText('fr', {
     // A · de9566487b17
     "locations.mireborn_landing.shortName": "Point d’arrivée",
     // B · e4e2ce1ab0b2
-    "locations.mireborn_landing.description": "Passerelles flottantes, nattes de roseaux et une douzaine de barques plates poussées depuis le delta, avec des hadrosaures debout jusqu’à la poitrine à côté qui mâchent. C’est le seul terrain de ce passage où quelqu’un soignera votre animal gratuitement et demandera ce que vous lui donnez à manger.",
+    "locations.mireborn_landing.description": "Passerelles flottantes, nattes de roseaux et une douzaine de barques plates poussées depuis le delta, avec des hadrosaures debout jusqu’à la poitrine à côté qui mâchent. C’est le seul terrain de ce passage où quelqu’un soignera ton animal gratuitement et demandera ce que vous lui donnez à manger.",
     // B · 2e3499117036
     "locations.mireborn_landing.stageImage": "story_primal_crown/stage_mireborn_landing",
     // A · b0e71bed5737
@@ -471,7 +471,7 @@ registerWorldText('fr', {
     // B · aee35f364a88
     "characters.suri.pronouns": "elle",
     // A · ee0526cf7b43
-    "characters.suri.publicTraits": ["Ne répond qu’en quatre mots ou moins tant qu’elle ne vous apprécie pas","Donne à manger sans en parler","Ne mentionne jamais la distance qu’ils ont parcourue"],
+    "characters.suri.publicTraits": ["Ne répond qu’en quatre mots ou moins tant qu’elle ne t’apprécie pas","Donne à manger sans en parler","Ne mentionne jamais la distance qu’ils ont parcourue"],
     // B · 9f1980cbe4dd
     "characters.suri.hiddenDrives": ["Elle veut que les quatre autres peuples remarquent, sans qu’on le leur dise, que Frostfang a pris le pire terrain onze années de suite","Elle préfère être sous-estimée plutôt que devoir s’expliquer, et sait que ce choix a coûté du terrain à son peuple"],
     // B · 63a498f98ac6
@@ -533,7 +533,7 @@ registerWorldText('fr', {
     // A · e50c259f3857
     "characters.ilya.role": "Éclaireur Skyfire et marchand d’infos, il a déjà vendu ce qu’il sait du nord à deux peuples différents et est prêt à le faire pour un troisième",
     // A · 269ff54e1453
-    "characters.ilya.cardBlurb": "Il a survolé la crête noire il y a trois semaines et vu des incendies là où il n’y aurait pas dû y en avoir. Il a déjà vendu ça deux fois, il vous le vendra volontiers, et il ne trouve aucune honte à ces trois ventes.",
+    "characters.ilya.cardBlurb": "Il a survolé la crête noire il y a trois semaines et vu des incendies là où il n’y aurait pas dû y en avoir. Il a déjà vendu ça deux fois, il te le vendra volontiers, et il ne trouve aucune honte à ces trois ventes.",
     // B · fcca6b746d0b
     "characters.ilya.pronouns": "il",
     // A · 2347de1d985c
@@ -545,7 +545,7 @@ registerWorldText('fr', {
     // B · 3b3dbf5d5274
     "characters.ilya.fears": ["Vendre l’information qui fait tuer beaucoup de monde, et le découvrir après","Que Skyfire n’ait aucun terrain à défendre et que tout le monde l’ait remarqué"],
     // A · f37004b850f0
-    "characters.ilya.socialStyle": "Il arrive en parlant déjà. Il donne son prix avant même que vous ayez posé une question, puis il négocie à la baisse pendant que vous hésitez encore. Incapable de faire semblant de ne pas être intéressé.",
+    "characters.ilya.socialStyle": "Il arrive en parlant déjà. Il donne son prix avant même que tu aies posé une question, puis il négocie à la baisse pendant que tu hésites encore. Incapable de faire semblant de ne pas être intéressé.",
     // B · ecb63ca5eb23
     "characters.ilya.boundaries": ["Ne vendra pas la position d’une famille ou d’une ligne de piquets, ce qu’on lui demande le plus souvent","Ne portera pas un message qu’il n’a pas lu, et le dit avant de le prendre"],
     // B · 3e9cbb1f6179
@@ -1115,11 +1115,11 @@ registerWorldText('fr', {
     // B · 445cd8deebc2
     "promises.p_your_own_animal.kind": "RELATION",
     // B · 80cb097ada65
-    "promises.p_your_own_animal.label": "Si quelque chose à ce passage finit par être à vous",
+    "promises.p_your_own_animal.label": "Si quelque chose à ce passage finit par être à toi",
     // B · b5c2ffc72298
     "promises.p_your_own_animal.seedHint": "Un demi-kilomètre d’animaux attachés, et un au bout que trois personnes ont déjà abandonné.",
     // B · fb9756e8ee67
-    "promises.p_your_own_animal.payoffHint": "Il traverse une allée bondée parce que vous le lui avez demandé, ou il place trois autres animaux entre vous deux.",
+    "promises.p_your_own_animal.payoffHint": "Il traverse une allée bondée parce que tu le lui as demandé, ou il place trois autres animaux entre vous deux.",
     // B · a1877cdd6c86
     "endings.end_the_herds_reach_south.name": "Les Troupeaux Arrivent au Sud",
     // B · c9d08ae5d876
