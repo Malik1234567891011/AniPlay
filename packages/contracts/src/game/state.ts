@@ -144,6 +144,49 @@ export const PlayerCharacterState = z
 export type PlayerCharacterState = z.infer<typeof PlayerCharacterState>;
 
 /** Spec §14.1 — five independent dimensions. Respect ≠ affection. */
+/**
+ * `tu` or `vous`. fr-FR only; absent in locales that do not have T/V.
+ *
+ * English cannot express this and nothing in an English run reads it.
+ */
+export const AddressMode = z.enum(['TU', 'VOUS']);
+export type AddressMode = z.infer<typeof AddressMode>;
+
+/**
+ * How two people address each other, as an **ordered pair**.
+ *
+ * Not one value per character: Mara may `vouvoyer` the player while the player
+ * `tutoie` her, and that asymmetry is characterisation — a drillmaster who
+ * suddenly *vouvoie* a recruit is being sarcastic or about to say something
+ * serious. A single symmetric field cannot hold that.
+ *
+ * `pendingShift` is set when a change has been *earned* but not yet played.
+ * The next beat in which this character speaks to the player performs the
+ * switch, once, and clears it. A transition is a scene, not a silent flag: the
+ * `TU → VOUS` move — a friend who starts vouvoying you — is the coldest thing
+ * French can do to somebody, and it is worth a beat because the English version
+ * physically cannot contain it.
+ *
+ * `.optional()` rather than `.default()` deliberately. A `.default()` field is
+ * *required* in the inferred type, which would break every spec and fixture
+ * that builds a `RelationshipState` literal — twenty-nine files the last time
+ * this was tried. Read it through `addressState()`, never directly.
+ */
+export const AddressPair = z
+  .object({
+    /** How they address the player. */
+    toPlayer: AddressMode,
+    /** How the player is written addressing them, in generated cards. */
+    fromPlayer: AddressMode,
+    pendingShift: z
+      .object({ to: AddressMode, because: z.string().max(200) })
+      .strict()
+      .nullable()
+      .default(null),
+  })
+  .strict();
+export type AddressPair = z.infer<typeof AddressPair>;
+
 export const RelationshipState = z
   .object({
     characterId: z.string(),
@@ -155,6 +198,8 @@ export const RelationshipState = z
     /** Turn index of the last change, for recency dampening (§14.2). */
     lastChangedTurn: z.number().int().default(0),
     unlockedGates: z.array(z.string()).default([]),
+    /** fr-FR only, and only once something has moved it. See `AddressPair`. */
+    address: AddressPair.optional(),
   })
   .strict();
 export type RelationshipState = z.infer<typeof RelationshipState>;

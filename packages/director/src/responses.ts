@@ -200,7 +200,7 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
       // who keeps making jokes should sometimes be offered a joke.
       aboutYou: context.player.setupAnswers,
     },
-    inTheRoom: context.presentCharacters.map(speakerBrief),
+    inTheRoom: context.presentCharacters.map((c) => speakerBrief(c, context.state.locale)),
     // How the world is behaving right now. A response written against a house
     // that has started staging scenes around you is a different response from
     // one written against a house that has barely noticed you.

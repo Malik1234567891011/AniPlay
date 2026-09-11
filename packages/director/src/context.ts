@@ -1,4 +1,5 @@
 import type {
+  AddressPair,
   CharacterDef,
   GameState,
   IntentDialogue,
@@ -31,6 +32,7 @@ import {
 import type { DayPart, RelationshipTone } from '@aniplay/engine';
 import { retrieveLore } from './authored-lore.js';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
+import { addressState } from './address-fr.js';
 
 /**
  * Spec §17.5 — the context budget.
@@ -74,6 +76,15 @@ export interface PresentCharacterContext {
   /** Already in the session's locale. Shown to the player and read by the model. */
   readonly relationshipLabel: string;
   readonly relationship: { trust: number; affection: number; respect: number; fear: number; rivalry: number };
+  /**
+   * `tu` or `vous`, both ways, in French runs. Step 9.
+   *
+   * Carried here rather than derived at each model stage so the two cannot
+   * disagree — the whole reason `speaker-brief.ts` exists. Present in English
+   * runs too, where nothing reads it, because a field that exists only
+   * sometimes is a field every caller has to guard.
+   */
+  readonly address: AddressPair;
   /** Only what this NPC could know — filtered before it ever reaches a prompt. */
   readonly knownMemories: ScoredFact[];
   readonly revealableSecrets: Array<{ id: string; fact: string }>;
@@ -286,6 +297,7 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
           ? relationshipLabel(rel, state.locale)
           : relationshipLabel(NEUTRAL_RELATIONSHIP, state.locale),
         relationship: dimensions,
+        address: addressState(def, rel),
         // Per-NPC retrieval, filtered to their own knowledge scope.
         knownMemories: retrieveMemories(
           memories,

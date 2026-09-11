@@ -19,6 +19,7 @@ const context = (overrides: Partial<PresentCharacterContext> = {}): PresentChara
   relationshipTone: 'WARM' as const,
   relationshipLabel: 'Warming',
   relationship: { trust: 30, affection: 5, respect: 0, fear: 0, rivalry: 0 },
+  address: { toPlayer: 'TU', fromPlayer: 'TU', pendingShift: null },
   knownMemories: [],
   revealableSecrets: [],
   openGates: [],

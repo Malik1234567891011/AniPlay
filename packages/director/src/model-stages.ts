@@ -406,7 +406,7 @@ function directorPayload(context: TurnContext): Record<string, unknown> {
     // Everything the world authored about each person in the room. See
     // `speaker-brief.ts` for what used to be dropped on the floor here.
     presentCharacters: context.presentCharacters.map((c) => ({
-      ...speakerBrief(c),
+      ...speakerBrief(c, context.state.locale),
       openGates: c.openGates,
     })),
     cast: context.story.characters.map((c) => ({ id: c.id, name: c.name, pronouns: c.pronouns })),
@@ -680,7 +680,9 @@ export function writerPayload(
             // writer had a voice and a relationship score and nothing a person
             // wants, fears, values or would refuse — so the cast was voiced
             // correctly and motivated not at all. See `speaker-brief.ts`.
-            speakers: context.presentCharacters.map(speakerBrief),
+            // Not `map(speakerBrief)`: `map` passes the index as the second
+            // argument, which would arrive as the locale.
+            speakers: context.presentCharacters.map((c) => speakerBrief(c, context.state.locale)),
             // Everyone the beat could mention, not only who is on stage. A
             // character who is absent still gets talked about, and the writer
             // was calling them "him" because it had never been told otherwise.
