@@ -352,4 +352,6 @@ export const wallet = {
   'wallet.badge_popular': 'Populaire',
   'wallet.badge_best_value': 'Le plus avantageux',
   'wallet.badge_first_purchase': 'Premier achat',
+  /** Le seul bouton qui dépense, sous le pack choisi. */
+  'wallet.buy_now': 'Acheter',
 } as const;

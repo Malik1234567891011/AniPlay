@@ -77,6 +77,15 @@ export function WalletScreen({
   const [ledger, setLedger] = useState<LedgerEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+  /**
+   * Which pack the player has picked, bought with one deliberate button.
+   *
+   * Every card used to be its own buy button, so the gesture that selects a
+   * pack and the gesture that spends money were the same gesture. The
+   * reference this is matched to selects first and charges second, which is
+   * both what a store normally does and a harder thing to do by accident.
+   */
+  const [selected, setSelected] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [storePrices, setStorePrices] = useState<Record<string, string>>({});
   const [storeUnavailable, setStoreUnavailable] = useState<string | null>(null);
@@ -306,15 +315,23 @@ export function WalletScreen({
                   t('wallet.about_price', { price: `$${offer.referencePriceUsd.toFixed(2)}` }),
               })}
               disabled={busy !== null}
-              onPress={() => void purchase(offer)}
+              onPress={() => setSelected(offer.productId)}
             >
               <Card
                 style={{
-                  borderColor: offer.firstPurchaseOnly ? colors.accent.primary : colors.border.subtle,
+                  borderColor:
+                    selected === offer.productId
+                      ? colors.accent.primary
+                      : offer.firstPurchaseOnly
+                        ? colors.accent.primary
+                        : colors.border.subtle,
+                  borderWidth: selected === offer.productId ? 2 : 1,
                   opacity: busy && busy !== offer.productId ? 0.5 : 1,
                 }}
               >
                 <Row style={{ justifyContent: 'space-between' }}>
+                  <Row gap={spacing.md} style={{ flex: 1 }}>
+                    <RadioDot selected={selected === offer.productId} />
                   <Stack gap={2}>
                     <Row gap={spacing.sm}>
                       <Txt variant="bodyStrong">{formatCredits(offer.credits, false, locale)}</Txt>
@@ -331,6 +348,7 @@ export function WalletScreen({
                       </Txt>
                     ) : null}
                   </Stack>
+                  </Row>
                   {/* The store's own localised price once it has answered. */}
                   <Txt variant="bodyStrong" color={colors.accent.primary}>
                     {storePrices[offer.productId] ?? `$${offer.referencePriceUsd.toFixed(2)}`}
@@ -339,6 +357,18 @@ export function WalletScreen({
               </Card>
             </Pressable>
           ))}
+
+          {/* One button, for the pack that is selected. */}
+          <Button
+            label={t('wallet.buy_now')}
+            loading={busy !== null && busy !== 'daily'}
+            loadingLabel={t('wallet.claiming')}
+            onPress={() => {
+              const offer = offers.find((o) => o.productId === selected);
+              if (offer) void purchase(offer);
+            }}
+            disabled={selected === null || busy !== null}
+          />
           {storeUnavailable ? (
             <Txt variant="micro" color={colors.semantic.warning}>
               {storeUnavailable}
@@ -461,4 +491,33 @@ function relativeTime(iso: string, t: Translator): string {
   if (hours < 1) return t('wallet.time_in_minutes', { count: Math.max(1, Math.floor(diff / 60_000)) });
   if (hours < 24) return t('wallet.time_in_hours', { count: hours });
   return t('wallet.time_in_days', { count: Math.floor(hours / 24) });
+}
+
+/**
+ * The selection dot on a credit pack.
+ *
+ * Drawn rather than imported: two circles, and it matches the ring in
+ * Discover's search icon rather than introducing an icon set for one glyph.
+ */
+function RadioDot({ selected }: { selected: boolean }): React.JSX.Element {
+  return (
+    <View
+      style={{
+        width: 22,
+        height: 22,
+        borderRadius: 11,
+        borderWidth: 2,
+        borderColor: selected ? colors.accent.primary : colors.border.subtle,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 2,
+      }}
+    >
+      {selected ? (
+        <View
+          style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.accent.primary }}
+        />
+      ) : null}
+    </View>
+  );
 }

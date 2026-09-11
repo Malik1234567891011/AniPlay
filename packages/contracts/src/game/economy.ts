@@ -166,11 +166,24 @@ export const GRANT_DAILY = 7 * DEFAULT_TURN_COST;
 export const FORK_COST_CREDITS = 120;
 export const ANIMATION_COST_CREDITS = 600;
 
+/**
+ * The credit ladder, matched to the reference app the owner is benchmarking.
+ *
+ * ⚠️ `referencePriceUsd` is a **display fallback only** — what a player is
+ * actually charged comes from StoreKit, which is the source of truth and shows
+ * their local currency. Each `productId` below therefore needs a matching
+ * consumable in App Store Connect, priced on one of Apple's price points. Some
+ * of these figures (2.89, 71.00) are copied from an app that does not appear to
+ * bill through Apple, so the nearest available point may differ by a few cents;
+ * when it does, the store's number wins on screen and this one is only ever
+ * seen before products load.
+ */
 export const STORE_OFFERS: readonly z.infer<typeof StoreOffer>[] = [
-  { productId: 'crd_2000', credits: 2000, bonusCredits: 0, referencePriceUsd: 2.99, badge: null, firstPurchaseOnly: false, expiresAt: null },
-  { productId: 'crd_10000', credits: 10000, bonusCredits: 300, referencePriceUsd: 14.99, badge: 'Popular', firstPurchaseOnly: false, expiresAt: null },
-  { productId: 'crd_20000', credits: 20000, bonusCredits: 1000, referencePriceUsd: 28.99, badge: null, firstPurchaseOnly: false, expiresAt: null },
-  { productId: 'crd_50000', credits: 50000, bonusCredits: 3500, referencePriceUsd: 71.99, badge: 'Best value', firstPurchaseOnly: false, expiresAt: null },
+  { productId: 'crd_2000', credits: 2000, bonusCredits: 0, referencePriceUsd: 2.89, badge: null, firstPurchaseOnly: false, expiresAt: null },
+  { productId: 'crd_10000', credits: 10000, bonusCredits: 300, referencePriceUsd: 14.49, badge: 'Popular', firstPurchaseOnly: false, expiresAt: null },
+  { productId: 'crd_20000', credits: 20000, bonusCredits: 1000, referencePriceUsd: 28.49, badge: null, firstPurchaseOnly: false, expiresAt: null },
+  { productId: 'crd_50000', credits: 50000, bonusCredits: 3500, referencePriceUsd: 71.0, badge: 'Best value', firstPurchaseOnly: false, expiresAt: null },
+  { productId: 'crd_100000', credits: 100000, bonusCredits: 10000, referencePriceUsd: 142.99, badge: null, firstPurchaseOnly: false, expiresAt: null },
 ];
 
 export const FIRST_PURCHASE_OFFER: z.infer<typeof StoreOffer> = {

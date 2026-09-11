@@ -315,4 +315,6 @@ export const wallet = {
   'wallet.badge_popular': 'Popular',
   'wallet.badge_best_value': 'Best value',
   'wallet.badge_first_purchase': 'First purchase',
+  /** The one button that spends money, under the pack the player picked. */
+  'wallet.buy_now': 'Buy now',
 } as const;
