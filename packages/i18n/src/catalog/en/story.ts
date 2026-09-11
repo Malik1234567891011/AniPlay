@@ -112,4 +112,24 @@ export const story = {
   'story.comment_sort_new': 'New',
   'story.comment_sign_in': 'Sign in to join the conversation.',
   'story.comment_rate_limited': 'That is a lot of comments in an hour. Try again shortly.',
+  /**
+   * How long ago a comment was posted.
+   *
+   * These exist because `Comments.tsx` used `Intl.RelativeTimeFormat`, which
+   * **segfaults Hermes on iOS** — opening any story from Discover killed the
+   * app, with a SIGSEGV inside React Native's mounting transaction and no JS
+   * error to point at it. It also formatted in the device's language rather
+   * than the app's, so a French player got English timestamps.
+   *
+   * Same shape as `wallet.time_in_*`, which has always worked, for the same
+   * reason: the catalogue does it, ICU pluralises it, and no Intl constructor
+   * is involved.
+   */
+  'story.posted_now': 'just now',
+  'story.posted_minutes': '{count, plural, one {{count}m ago} other {{count}m ago}}',
+  'story.posted_hours': '{count, plural, one {{count}h ago} other {{count}h ago}}',
+  'story.posted_days': '{count, plural, one {{count}d ago} other {{count}d ago}}',
+  'story.posted_weeks': '{count, plural, one {{count}w ago} other {{count}w ago}}',
+  'story.posted_months': '{count, plural, one {{count}mo ago} other {{count}mo ago}}',
+  'story.posted_years': '{count, plural, one {{count}y ago} other {{count}y ago}}',
 } as const;

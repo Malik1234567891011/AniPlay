@@ -1,3 +1,4 @@
+import { type Translator, type TranslationKey } from '@aniplay/i18n';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, TextInput, View } from 'react-native';
 import { Button, Card, Chip, Row, Stack, Txt, colors, radius, spacing } from '@aniplay/ui';
@@ -155,7 +156,7 @@ export function Comments({
                 <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                   <Txt variant="bodyStrong">{comment.authorName}</Txt>
                   <Txt variant="micro" color={colors.text.muted}>
-                    {relativeTime(comment.createdAt)}
+                    {postedAgo(comment.createdAt, t)}
                   </Txt>
                 </Row>
 
@@ -249,24 +250,31 @@ export function Comments({
 /**
  * How long ago, in the coarsest unit that is still true.
  *
- * Deliberately built from `Intl.RelativeTimeFormat` rather than from hand-built
- * strings: "il y a 3 jours" has a word order and a preposition English does
- * not, and a catalogue of `{n} days ago` keys would have to be rewritten per
- * locale anyway. The platform already knows.
+ * This was built on `Intl.RelativeTimeFormat`, with a comment arguing that the
+ * platform already knows how French word order works. The platform does. What
+ * it does not do is survive: that constructor **segfaults Hermes on iOS**, so
+ * opening any story from Discover killed the app — a SIGSEGV deep inside React
+ * Native's mounting transaction, with no JS error anywhere to name the line.
+ * It was also formatting in the *device's* language rather than the app's,
+ * which is a second bug the first one was hiding.
+ *
+ * Now keys and ICU plurals, exactly like `wallet.time_in_*`, which has always
+ * worked. The word order and the preposition live in the French catalogue,
+ * where a French speaker can see them.
  */
-function relativeTime(iso: string): string {
-  const seconds = Math.round((Date.now() - new Date(iso).getTime()) / 1000);
-  const units: Array<[Intl.RelativeTimeFormatUnit, number]> = [
-    ['year', 31_536_000],
-    ['month', 2_592_000],
-    ['week', 604_800],
-    ['day', 86_400],
-    ['hour', 3_600],
-    ['minute', 60],
+function postedAgo(iso: string, t: Translator): string {
+  const seconds = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
+  const units: Array<[TranslationKey, number]> = [
+    ['story.posted_years', 31_536_000],
+    ['story.posted_months', 2_592_000],
+    ['story.posted_weeks', 604_800],
+    ['story.posted_days', 86_400],
+    ['story.posted_hours', 3_600],
+    ['story.posted_minutes', 60],
   ];
-  const format = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto', style: 'narrow' });
-  for (const [unit, size] of units) {
-    if (seconds >= size) return format.format(-Math.floor(seconds / size), unit);
+  for (const [key, size] of units) {
+    if (seconds >= size) return t(key, { count: Math.floor(seconds / size) });
   }
-  return format.format(0, 'minute');
+  return t('story.posted_now');
 }
+

@@ -194,4 +194,19 @@ export const story = {
   'story.comment_sign_in': 'Connecte-toi pour participer.',
   'story.comment_rate_limited':
     'Ça fait beaucoup de commentaires en une heure. Réessaie dans un moment.',
+  /**
+   * L’ancienneté d’un commentaire. Voir `en/story.ts` : ces clés remplacent un
+   * `Intl.RelativeTimeFormat` qui faisait planter l’application.
+   *
+   * `one` couvre le zéro en français, d’où la même forme dans les deux
+   * branches. `sem.` et `mois` s’abrègent ainsi ; `an` prend un `s` au pluriel,
+   * ce que la branche `other` porte.
+   */
+  'story.posted_now': 'à l’instant',
+  'story.posted_minutes': '{count, plural, one {il y a {count} min} other {il y a {count} min}}',
+  'story.posted_hours': '{count, plural, one {il y a {count} h} other {il y a {count} h}}',
+  'story.posted_days': '{count, plural, one {il y a {count} j} other {il y a {count} j}}',
+  'story.posted_weeks': '{count, plural, one {il y a {count} sem.} other {il y a {count} sem.}}',
+  'story.posted_months': '{count, plural, one {il y a {count} mois} other {il y a {count} mois}}',
+  'story.posted_years': '{count, plural, one {il y a {count} an} other {il y a {count} ans}}',
 } as const;
