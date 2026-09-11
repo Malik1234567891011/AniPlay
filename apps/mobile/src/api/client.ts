@@ -87,6 +87,42 @@ export interface TurnStreamHandlers {
   onError?: (error: Error) => void;
 }
 
+export interface CommentView {
+  commentId: string;
+  authorName: string;
+  body: string;
+  spoiler: boolean;
+  likes: number;
+  createdAt: string;
+  likedByMe: boolean;
+  /** Only your own comment offers a delete control. */
+  mine: boolean;
+}
+
+export interface CommentsResponse {
+  sort: 'TOP' | 'NEW';
+  comments: CommentView[];
+}
+
+export interface BadgeView {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  tier: 'BRONZE' | 'SILVER' | 'GOLD';
+  target: number;
+  creditReward: number;
+  secret: boolean;
+  progress: number;
+  unlockedAt: string | null;
+  claimedAt: string | null;
+}
+
+export interface BadgesResponse {
+  badges: BadgeView[];
+  newlyUnlocked: string[];
+}
+
 export class ApiClient {
   #baseUrl: string;
   #token: string | null = null;
@@ -258,6 +294,38 @@ export class ApiClient {
 
   saveStory(storyId: string, saved: boolean): Promise<{ saved: boolean }> {
     return this.#request(saved ? 'POST' : 'DELETE', `/v1/stories/${storyId}/save`);
+  }
+
+  likeStory(storyId: string, liked: boolean): Promise<{ liked: boolean; likes: number }> {
+    return this.#request(liked ? 'POST' : 'DELETE', `/v1/stories/${storyId}/like`);
+  }
+
+  comments(storyId: string, sort: 'TOP' | 'NEW'): Promise<CommentsResponse> {
+    return this.#request('GET', `/v1/stories/${storyId}/comments?sort=${sort}`);
+  }
+
+  postComment(storyId: string, body: string, spoiler: boolean): Promise<{ commentId: string }> {
+    return this.#request('POST', `/v1/stories/${storyId}/comments`, { body, spoiler });
+  }
+
+  deleteComment(commentId: string): Promise<{ deleted: boolean }> {
+    return this.#request('DELETE', `/v1/comments/${commentId}`);
+  }
+
+  likeComment(commentId: string, liked: boolean): Promise<{ liked: boolean }> {
+    return this.#request(liked ? 'POST' : 'DELETE', `/v1/comments/${commentId}/like`);
+  }
+
+  reportComment(commentId: string, reason: string): Promise<{ reported: boolean }> {
+    return this.#request('POST', `/v1/comments/${commentId}/report`, { reason });
+  }
+
+  badges(): Promise<BadgesResponse> {
+    return this.#request('GET', '/v1/badges');
+  }
+
+  claimBadge(badgeId: string): Promise<{ claimed: boolean; credited: number; balance: number }> {
+    return this.#request('POST', `/v1/badges/${badgeId}/claim`);
   }
 
   hideStory(storyId: string): Promise<{ hidden: boolean }> {

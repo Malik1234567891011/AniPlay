@@ -553,13 +553,40 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       toStorySummary(other, relatedSignals.get(other.storyId) ?? EMPTY_SIGNALS, saved.includes(other.storyId)),
     );
 
-    const activeSession = user
-      ? (await ctx.repo.listSessions(user.userId)).find(
-          (s) => s.storyId === story.storyId && s.status === 'ACTIVE',
-        )
-      : undefined;
+    // Every run of this world, newest first. Replayability is the product, so
+    // a world played once is not a world finished with — the screen offers
+    // Continue *and* New session, and this is the list underneath them.
+    const mine = user
+      ? (await ctx.repo.listSessions(user.userId))
+          .filter((s) => s.storyId === story.storyId)
+          .sort((a, b) => b.lastPlayedAt.localeCompare(a.lastPlayedAt))
+      : [];
+    const activeSession = mine.find((s) => s.status === 'ACTIVE');
+
+    const sessions = [];
+    for (const session of mine.slice(0, 10)) {
+      const turns = await ctx.repo.listTurns(session.sessionId);
+      // The state as of the last committed turn, for "where they left off".
+      const snapshot = await ctx.repo
+        .getStateSnapshot(session.sessionId, Math.max(0, turns.length - 1))
+        .catch(() => null);
+      const locationId = snapshot?.player.locationId;
+      sessions.push({
+        sessionId: session.sessionId,
+        turnCount: turns.length,
+        status: session.status,
+        lastPlayedAt: session.lastPlayedAt,
+        locationName: story.locations.find((l) => l.id === locationId)?.name ?? null,
+      });
+    }
 
     await ctx.repo.bumpSignal(story.storyId, 'impressions', 1);
+
+    const [detailLikes, detailComments, myLikeIds] = await Promise.all([
+      ctx.repo.countLikes([story.storyId]),
+      ctx.repo.countComments([story.storyId]),
+      user ? ctx.repo.getLikes(user.userId) : Promise.resolve([] as string[]),
+    ]);
 
     return toStoryDetail(
       story,
@@ -567,6 +594,12 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       saved.includes(story.storyId),
       related.slice(0, 6),
       activeSession?.sessionId ?? null,
+      sessions,
+      {
+        likes: detailLikes.get(story.storyId) ?? signals.likes,
+        comments: detailComments.get(story.storyId) ?? 0,
+        likedByMe: myLikeIds.includes(story.storyId),
+      },
     );
   });
 

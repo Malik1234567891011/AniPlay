@@ -85,4 +85,31 @@ export const story = {
   /** Death that cannot be undone or reloaded. `Mort définitive`. */
   'story.descriptor_permanent_death': 'Permanent death',
   'story.descriptor_moral_ambiguity': 'Moral ambiguity',
+  /* -- Replay, sessions, and the social layer -- */
+
+  /** Secondary CTA beside Continue. A fresh run; the old one is untouched. */
+  'story.new_session': 'New session',
+  'story.sessions_heading': 'Your runs',
+  'story.session_line': '{count, plural, one {# turn} other {# turns}} · {date}',
+  'story.session_line_where': '{count, plural, one {# turn} other {# turns}} · {where} · {date}',
+  'story.session_resume': 'Resume',
+  'story.session_status_completed': 'Finished',
+  'story.session_latest': 'Latest',
+
+  'story.like': 'Like',
+  'story.unlike': 'Liked',
+  'story.likes_count': '{formatted}',
+  'story.comments_heading': 'Comments',
+  'story.comments_count': '{formatted}',
+  'story.comments_empty': 'Nothing here yet. Say the first thing.',
+  'story.comment_placeholder': 'What did you think?',
+  'story.comment_post': 'Post',
+  'story.comment_spoiler_toggle': 'Mark as spoiler',
+  'story.comment_spoiler_hidden': 'Spoiler — tap to read',
+  'story.comment_delete': 'Delete',
+  'story.comment_report': 'Report',
+  'story.comment_sort_top': 'Top',
+  'story.comment_sort_new': 'New',
+  'story.comment_sign_in': 'Sign in to join the conversation.',
+  'story.comment_rate_limited': 'That is a lot of comments in an hour. Try again shortly.',
 } as const;

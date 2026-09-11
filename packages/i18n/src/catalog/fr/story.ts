@@ -157,4 +157,41 @@ export const story = {
   /** Une mort qu’on ne recharge pas. */
   'story.descriptor_permanent_death': 'Mort définitive',
   'story.descriptor_moral_ambiguity': 'Ambiguïté morale',
+  /* -- Rejouer, parties, et la couche sociale -- */
+
+  /**
+   * `Nouvelle partie` — le mot français pour une session de jeu.
+   *
+   * Pas `Nouvelle session` : `session` en français, c'est une session
+   * d'examens ou une session parlementaire. Une partie, c'est ce qu'on joue.
+   */
+  'story.new_session': 'Nouvelle partie',
+  'story.sessions_heading': 'Tes parties',
+  'story.session_line': '{count, plural, one {# tour} other {# tours}} · {date}',
+  'story.session_line_where': '{count, plural, one {# tour} other {# tours}} · {where} · {date}',
+  'story.session_resume': 'Reprendre',
+  'story.session_status_completed': 'Terminée',
+  'story.session_latest': 'La plus récente',
+
+  /**
+   * `J'aime` est invariable et ne s'accorde jamais. Le bouton actif dit
+   * `Aimé`, participe, parce qu'il décrit un état et non l'action.
+   */
+  'story.like': 'J’aime',
+  'story.unlike': 'Aimé',
+  'story.likes_count': '{formatted}',
+  'story.comments_heading': 'Commentaires',
+  'story.comments_count': '{formatted}',
+  'story.comments_empty': 'Rien pour l’instant. Lance-toi.',
+  'story.comment_placeholder': 'Tu en as pensé quoi\u202f?',
+  'story.comment_post': 'Publier',
+  'story.comment_spoiler_toggle': 'Marquer comme spoiler',
+  'story.comment_spoiler_hidden': 'Spoiler — appuie pour lire',
+  'story.comment_delete': 'Supprimer',
+  'story.comment_report': 'Signaler',
+  'story.comment_sort_top': 'Top',
+  'story.comment_sort_new': 'Récents',
+  'story.comment_sign_in': 'Connecte-toi pour participer.',
+  'story.comment_rate_limited':
+    'Ça fait beaucoup de commentaires en une heure. Réessaie dans un moment.',
 } as const;

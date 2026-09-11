@@ -153,9 +153,12 @@ export function toStoryDetail(
   saved: boolean,
   related: StorySummary[],
   activeSessionId: string | null,
+  sessions: StoryDetailResponse['sessions'] = [],
+  social?: { likes?: number; comments?: number; likedByMe?: boolean },
 ): StoryDetailResponse {
   return {
-    story: toStorySummary(story, signals, saved),
+    story: toStorySummary(story, signals, saved, social),
+    sessions,
     premise: story.premise,
     creatorNote: story.creatorNote,
     opening: story.opening,

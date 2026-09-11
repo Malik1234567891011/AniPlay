@@ -9,6 +9,7 @@ import {
   CharacterPortrait,
   Chip,
   Divider,
+  GUTTER,
   IconButton,
   Row,
   Skeleton,
@@ -17,7 +18,7 @@ import {
   StoryCoverCard,
   Txt,
   colors,
-  GUTTER,
+  formatCredits,
   radius,
   spacing,
   toParagraphs,
@@ -25,6 +26,7 @@ import {
 import { api } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
+import { useStore } from '../state/store.jsx';
 
 /**
  * ST-01 Story detail.
@@ -72,10 +74,13 @@ export function StoryDetailScreen({
   route: RootRoute<'StoryDetail'>;
 }): React.JSX.Element {
   const t = useT();
+  const { locale } = useStore();
   const { storyId } = route.params;
   const insets = useSafeAreaInsets();
   const [detail, setDetail] = useState<StoryDetailResponse | null>(null);
   const [saved, setSaved] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(0);
   const [castMember, setCastMember] = useState<StoryDetailResponse['cast'][number] | null>(null);
 
   // The key art is deliberately edge-to-edge under the status bar. Once the page
@@ -92,6 +97,8 @@ export function StoryDetailScreen({
     void api.storyDetail(storyId).then((response) => {
       setDetail(response);
       setSaved(response.story.saved);
+      setLiked(response.story.likedByMe);
+      setLikes(response.story.likes);
     });
   }, [storyId]);
 
@@ -167,18 +174,127 @@ export function StoryDetailScreen({
             </Txt>
           </Stack>
 
-          {/* Spec §8.3 — exactly one primary CTA above the fold. */}
-          <Button
-            label={continuing ? t('story.continue') : t('story.start')}
-            hapticKind="medium"
-            onPress={() => {
-              if (detail.activeSessionId) {
-                navigation.navigate('Session', { sessionId: detail.activeSessionId });
-              } else {
-                navigation.navigate('CharacterSetup', { storyId: story.storyId });
-              }
-            }}
-          />
+          {/*
+            Spec §8.3 — one primary CTA above the fold, and exactly one.
+
+            When there is a run to return to, Continue is that CTA and New
+            session sits beside it as a secondary. Replayability is the point of
+            this product: a world played once is not a world finished with, and
+            funnelling every return visit into the same save was quietly saying
+            otherwise. Starting a new one leaves the old one entirely alone —
+            they are separate rows, and the list below shows both.
+          */}
+          <Stack gap={spacing.sm}>
+            <Button
+              label={continuing ? t('story.continue') : t('story.start')}
+              hapticKind="medium"
+              onPress={() => {
+                if (detail.activeSessionId) {
+                  navigation.navigate('Session', { sessionId: detail.activeSessionId });
+                } else {
+                  navigation.navigate('CharacterSetup', { storyId: story.storyId });
+                }
+              }}
+            />
+            {continuing ? (
+              <Button
+                label={t('story.new_session')}
+                variant="secondary"
+                onPress={() => navigation.navigate('CharacterSetup', { storyId: story.storyId })}
+              />
+            ) : null}
+          </Stack>
+
+          {/* Like and comment count, together, because they answer the same
+              question: is this worth my evening. */}
+          <Row gap={spacing.md} style={{ alignItems: 'center' }}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={{ selected: liked }}
+              accessibilityLabel={liked ? t('story.unlike') : t('story.like')}
+              onPress={() => {
+                const next = !liked;
+                // Optimistic, and reverted if the server disagrees. A like is
+                // the cheapest possible interaction and must feel instant.
+                setLiked(next);
+                setLikes((n) => n + (next ? 1 : -1));
+                void api.likeStory(story.storyId, next).then(
+                  (result) => setLikes(result.likes),
+                  () => {
+                    setLiked(!next);
+                    setLikes((n) => n + (next ? -1 : 1));
+                  },
+                );
+              }}
+            >
+              <Row gap={spacing.xs} style={{ alignItems: 'center' }}>
+                <Txt variant="h3" color={liked ? colors.accent.primary : colors.text.secondary}>
+                  {liked ? '♥' : '♡'}
+                </Txt>
+                <Txt variant="bodyCompact" color={colors.text.secondary}>
+                  {formatCredits(likes, true, locale)}
+                </Txt>
+              </Row>
+            </Pressable>
+            <Row gap={spacing.xs} style={{ alignItems: 'center' }}>
+              <Txt variant="h3" color={colors.text.secondary}>
+                ⌾
+              </Txt>
+              <Txt variant="bodyCompact" color={colors.text.secondary}>
+                {formatCredits(story.comments, true, locale)}
+              </Txt>
+            </Row>
+          </Row>
+
+          {/*
+            Every run of this world, newest first.
+
+            Below the CTAs rather than beside them: somebody who wants to get
+            back in taps Continue and never reads this, and somebody who wants a
+            specific earlier run is looking for it deliberately.
+          */}
+          {detail.sessions.length > 0 ? (
+            <Stack gap={spacing.md}>
+              <Txt variant="h3">{t('story.sessions_heading')}</Txt>
+              {detail.sessions.map((session, index) => (
+                <Card key={session.sessionId}>
+                  <Row style={{ justifyContent: 'space-between', alignItems: 'center' }} gap={spacing.md}>
+                    <Stack gap={2} style={{ flex: 1 }}>
+                      <Row gap={spacing.sm} style={{ alignItems: 'center', flexWrap: 'wrap' }}>
+                        <Txt variant="bodyStrong">
+                          {session.locationName
+                            ? t('story.session_line_where', {
+                                count: session.turnCount,
+                                where: session.locationName,
+                                date: new Date(session.lastPlayedAt).toLocaleDateString(),
+                              })
+                            : t('story.session_line', {
+                                count: session.turnCount,
+                                date: new Date(session.lastPlayedAt).toLocaleDateString(),
+                              })}
+                        </Txt>
+                      </Row>
+                      <Row gap={spacing.sm}>
+                        {index === 0 ? <Chip label={t('story.session_latest')} tone="accent" /> : null}
+                        {session.status === 'COMPLETED' ? (
+                          <Chip label={t('story.session_status_completed')} />
+                        ) : null}
+                      </Row>
+                    </Stack>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={t('story.session_resume')}
+                      onPress={() => navigation.navigate('Session', { sessionId: session.sessionId })}
+                    >
+                      <Txt variant="bodyStrong" color={colors.accent.primary}>
+                        {t('story.session_resume')}
+                      </Txt>
+                    </Pressable>
+                  </Row>
+                </Card>
+              ))}
+            </Stack>
+          ) : null}
 
           {/* Spec §8.2 item 6 — compact honest stats, no fake ratings. */}
           <Card>

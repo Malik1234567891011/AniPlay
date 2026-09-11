@@ -226,6 +226,27 @@ export const StoryDetailResponse = z
       .strict(),
     related: z.array(StorySummary),
     activeSessionId: z.string().nullable(),
+    /**
+     * Every run the player has of this world, newest first.
+     *
+     * Replayability is the product, so a world that has been played once is not
+     * a world that is finished with. The detail screen offers Continue *and*
+     * New session, and this is what the list underneath them is built from.
+     */
+    sessions: z
+      .array(
+        z
+          .object({
+            sessionId: z.string(),
+            turnCount: z.number().int().min(0),
+            status: z.enum(['ACTIVE', 'COMPLETED', 'ARCHIVED']),
+            lastPlayedAt: z.string(),
+            /** Where they are, so a run is identifiable without opening it. */
+            locationName: z.string().nullable().default(null),
+          })
+          .strict(),
+      )
+      .default([]),
     setupFields: StoryVersion.shape.setupFields,
     archetypes: z.array(SetupArchetype),
     /** Whether the setup screen should ask who the player is, or already knows. */
