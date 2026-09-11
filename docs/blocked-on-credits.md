@@ -36,6 +36,21 @@ the reservation is released, and the turn never exists.
 
 The player is correctly not charged. That part works.
 
+## What still works without credits
+
+Quite a lot, as it turns out, and this was worth finding:
+
+- **Sessions can be created.** The opening beat and the first response cards are
+  authored content, not generated, so `POST /v1/stories/<id>/sessions` returns
+  201 with French prose and French cards. The Session screen is reachable and
+  can be read.
+- The whole catalogue: Discover, story detail, search, the wallet.
+- Everything deterministic: the engine, `fr:qa`, `fr:lint`, `fr:stale`.
+
+**Only submitting a turn fails.** That is still the thing that matters most —
+no playtest can get past turn one — but the French visual pass did not have to
+wait for it, and neither does reading an opening beat in context.
+
 ## Fix
 
 Add credits to the OpenAI account. Nothing in this repo can work around it;
