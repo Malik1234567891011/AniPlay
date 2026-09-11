@@ -32,7 +32,8 @@
     "fr:manifest": "tsx infra/scripts/fr-manifest.ts",
     "fr:adapt": "tsx --env-file-if-exists=.env infra/scripts/fr-adapt.ts",
     "fr:qa": "tsx infra/scripts/fr-qa.ts",
-    "fr:stale": "tsx infra/scripts/fr-stale.ts"
+    "fr:stale": "tsx infra/scripts/fr-stale.ts",
+    "fr:smoke": "tsx --env-file-if-exists=.env infra/scripts/fr-smoke.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
