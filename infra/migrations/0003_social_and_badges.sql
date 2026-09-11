@@ -78,16 +78,14 @@ CREATE TABLE IF NOT EXISTS comment_reports (
 -- Editorial placement
 -- --------------------------------------------------------------------------
 --
--- Kept in its own table, deliberately apart from `story_signals`. Ranking may
--- read it; **displayed counts may never include it**. A story can be boosted to
--- the top of Top Ranked and still honestly show the likes it actually has, and
--- keeping the two in separate tables is what makes that hard to get wrong.
+-- Which stories are in the hero rotation, and which carry a STAFF PICK label.
+--
+-- Placement only. Top Ranked is the like count and nothing here touches it —
+-- the player can see both the likes and the rank, and a formula that quietly
+-- disagreed with the number on screen would just make the shelf look broken.
 
 CREATE TABLE IF NOT EXISTS story_editorial (
   story_id        text PRIMARY KEY REFERENCES stories (story_id) ON DELETE CASCADE,
-  -- Ranking prior, in the same units as the Bayesian score. Fades as real
-  -- engagement accumulates; see `ranking.ts`.
-  editorial_boost real NOT NULL DEFAULT 0,
   -- Position in the hero rotation, 1..6. NULL means not featured.
   featured_rank   integer,
   staff_pick      boolean NOT NULL DEFAULT false,
@@ -122,3 +120,7 @@ CREATE TABLE IF NOT EXISTS user_badges (
 
 CREATE INDEX IF NOT EXISTS user_badges_unclaimed_idx
   ON user_badges (user_id) WHERE unlocked_at IS NOT NULL AND claimed_at IS NULL;
+
+-- Dropped rather than left unused: Top Ranked is the like count, and a column
+-- no code reads is a column somebody will eventually wire back up by accident.
+ALTER TABLE story_editorial DROP COLUMN IF EXISTS editorial_boost;
