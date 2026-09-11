@@ -147,4 +147,7 @@ export const story = {
   'story.intensity_light': 'Light',
   'story.intensity_moderate': 'Moderate',
   'story.intensity_intense': 'Intense',
+  /** The comment shelf on a story page, and its way in. */
+  'story.comments_see_all': 'See all {count}',
+  'story.comment_likes': '{count, plural, one {# like} other {# likes}}',
 } as const;

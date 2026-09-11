@@ -16,7 +16,8 @@ import { StoryDetailScreen } from './screens/StoryDetail.jsx';
 import { CharacterSetupScreen } from './screens/CharacterSetup.jsx';
 import { SessionScreen } from './screens/Session.jsx';
 import { WorldSheetScreen } from './screens/WorldSheet.jsx';
-import { PersonalizationScreen, SettingsScreen } from './screens/Settings.jsx';
+import { MyInformationScreen, PersonalizationScreen, SettingsScreen } from './screens/Settings.jsx';
+import { CommentsScreen } from './screens/CommentsScreen.jsx';
 import { WalletScreen } from './screens/Wallet.jsx';
 import { LibraryScreen, ProfileScreen } from './screens/LibraryProfile.jsx';
 import { CreateScreen, ReportHistoryScreen, ReportScreen, SignInScreen } from './screens/Misc.jsx';
@@ -61,6 +62,8 @@ export type RootParamList = {
   Badges: undefined;
   Settings: undefined;
   Personalization: undefined;
+  MyInformation: undefined;
+  Comments: { storyId: string };
   ReportHistory: undefined;
 };
 
@@ -276,6 +279,14 @@ export function Navigation(): React.JSX.Element {
           <Stack.Screen
             name="Personalization" // i18n-exempt: route name
             component={PersonalizationScreen as never}
+          />
+          <Stack.Screen
+            name="MyInformation" // i18n-exempt: route name
+            component={MyInformationScreen as never}
+          />
+          <Stack.Screen
+            name="Comments" // i18n-exempt: route name
+            component={CommentsScreen as never}
           />
         </Stack.Group>
       </Stack.Navigator>

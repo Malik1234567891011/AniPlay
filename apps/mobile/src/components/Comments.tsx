@@ -1,6 +1,6 @@
 import { type Translator, type TranslationKey } from '@aniplay/i18n';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, TextInput, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { Button, Card, Chip, Row, Stack, Txt, colors, radius, spacing } from '@aniplay/ui';
 import { api, type CommentView } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
@@ -31,10 +31,22 @@ export function Comments({
   storyId,
   signedIn,
   onSignIn,
+  variant = 'full',
+  onSeeAll,
 }: {
   storyId: string;
   signedIn: boolean;
   onSignIn: () => void;
+  /**
+   * `preview` is a few cards sideways under a story; `full` is the screen.
+   *
+   * A story page carried the entire comment section inline, vertically, so a
+   * world with forty-seven comments buried everything under it and the page
+   * had no bottom. A shelf of two or three, and a way in, is the shape that
+   * belongs on a page about the story.
+   */
+  variant?: 'preview' | 'full';
+  onSeeAll?: () => void;
 }): React.JSX.Element {
   const t = useT();
   const [sort, setSort] = useState<'TOP' | 'NEW'>('TOP');
@@ -77,8 +89,85 @@ export function Comments({
     }
   };
 
+  if (variant === 'preview') {
+    return (
+      <Stack gap={spacing.md}>
+        <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <Txt variant="h3">{t('story.comments_heading')}</Txt>
+          {comments.length > 0 ? (
+            <Txt
+              variant="caption"
+              color={colors.accent.primary}
+              accessibilityRole="button"
+              onPress={onSeeAll}
+            >
+              {t('story.comments_see_all', { count: comments.length })}
+            </Txt>
+          ) : null}
+        </Row>
+
+        {comments.length === 0 ? (
+          <Txt variant="bodyCompact" color={colors.text.muted}>
+            {t('story.comments_empty')}
+          </Txt>
+        ) : (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={comments.slice(0, 6)}
+            keyExtractor={(comment) => comment.commentId}
+            contentContainerStyle={{ gap: spacing.md }}
+            renderItem={({ item }) => {
+              const hidden = item.spoiler && !revealed.has(item.commentId);
+              return (
+                <Pressable onPress={onSeeAll} style={{ width: 250 }}>
+                  <Card style={{ height: 128 }}>
+                    <Stack gap={spacing.xs}>
+                      <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Txt variant="bodyStrong" numberOfLines={1} style={{ flex: 1 }}>
+                          {item.authorName}
+                        </Txt>
+                        <Txt variant="micro" color={colors.text.muted}>
+                          {postedAgo(item.createdAt, t)}
+                        </Txt>
+                      </Row>
+                      <Txt
+                        variant="bodyCompact"
+                        color={hidden ? colors.text.muted : colors.text.primary}
+                        numberOfLines={3}
+                      >
+                        {/* A spoiler stays hidden here. Tapping opens the full
+                            screen, which is where revealing one belongs. */}
+                        {hidden ? t('story.comment_spoiler_hidden') : item.body}
+                      </Txt>
+                      <Txt variant="micro" color={colors.text.muted}>
+                        {t('story.comment_likes', { count: item.likes })}
+                      </Txt>
+                    </Stack>
+                  </Card>
+                </Pressable>
+              );
+            }}
+          />
+        )}
+
+        {signedIn ? null : (
+          <Pressable accessibilityRole="button" onPress={onSignIn}>
+            <Txt variant="caption" color={colors.accent.primary}>
+              {t('story.comment_sign_in')}
+            </Txt>
+          </Pressable>
+        )}
+      </Stack>
+    );
+  }
+
   return (
-    <Stack gap={spacing.md}>
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        contentContainerStyle={{ gap: spacing.md, paddingBottom: spacing.xl }}
+        keyboardShouldPersistTaps="handled"
+      >
       <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <Txt variant="h3">{t('story.comments_heading')}</Txt>
         {comments.length > 3 ? (
@@ -96,52 +185,6 @@ export function Comments({
           </Row>
         ) : null}
       </Row>
-
-      {signedIn ? (
-        <Stack gap={spacing.sm}>
-          <TextInput
-            value={draft}
-            onChangeText={setDraft}
-            placeholder={t('story.comment_placeholder')}
-            placeholderTextColor={colors.text.muted}
-            multiline
-            maxLength={1000}
-            style={{
-              minHeight: 64,
-              padding: spacing.md,
-              borderRadius: radius.card,
-              backgroundColor: colors.bg.elevated,
-              color: colors.text.primary,
-              fontSize: 15,
-            }}
-          />
-          <Row style={{ justifyContent: 'space-between', alignItems: 'center' }} gap={spacing.md}>
-            <Chip
-              label={t('story.comment_spoiler_toggle')}
-              selected={spoiler}
-              onPress={() => setSpoiler(!spoiler)}
-            />
-            <View style={{ flex: 1 }} />
-            <Button
-              label={t('story.comment_post')}
-              variant="secondary"
-              disabled={draft.trim().length === 0 || posting}
-              onPress={() => void post()}
-            />
-          </Row>
-          {error ? (
-            <Txt variant="caption" color={colors.semantic.danger}>
-              {error}
-            </Txt>
-          ) : null}
-        </Stack>
-      ) : (
-        <Pressable accessibilityRole="button" onPress={onSignIn}>
-          <Txt variant="bodyCompact" color={colors.accent.primary}>
-            {t('story.comment_sign_in')}
-          </Txt>
-        </Pressable>
-      )}
 
       {comments.length === 0 ? (
         <Txt variant="bodyCompact" color={colors.text.muted}>
@@ -243,7 +286,71 @@ export function Comments({
           );
         })
       )}
-    </Stack>
+      </ScrollView>
+
+      {/*
+        The composer, pinned.
+
+        It used to sit above the list, so on a story with forty-seven comments
+        the box you type into was wherever you had last scrolled away from.
+        A comment bar belongs at the bottom, the way every other one does.
+      */}
+      <View
+        style={{
+          borderTopWidth: 1,
+          borderTopColor: colors.border.subtle,
+          backgroundColor: colors.bg.base,
+          paddingTop: spacing.md,
+        }}
+      >
+        {signedIn ? (
+        <Stack gap={spacing.sm}>
+          <TextInput
+            value={draft}
+            onChangeText={setDraft}
+            placeholder={t('story.comment_placeholder')}
+            placeholderTextColor={colors.text.muted}
+            multiline
+            maxLength={1000}
+            style={{
+              minHeight: 64,
+              padding: spacing.md,
+              borderRadius: radius.card,
+              backgroundColor: colors.bg.elevated,
+              color: colors.text.primary,
+              fontSize: 15,
+            }}
+          />
+          <Row style={{ justifyContent: 'space-between', alignItems: 'center' }} gap={spacing.md}>
+            <Chip
+              label={t('story.comment_spoiler_toggle')}
+              selected={spoiler}
+              onPress={() => setSpoiler(!spoiler)}
+            />
+            <View style={{ flex: 1 }} />
+            <Button
+              label={t('story.comment_post')}
+              variant="secondary"
+              disabled={draft.trim().length === 0 || posting}
+              onPress={() => void post()}
+            />
+          </Row>
+          {error ? (
+            <Txt variant="caption" color={colors.semantic.danger}>
+              {error}
+            </Txt>
+          ) : null}
+        </Stack>
+      ) : (
+        <Pressable accessibilityRole="button" onPress={onSignIn}>
+          <Txt variant="bodyCompact" color={colors.accent.primary}>
+            {t('story.comment_sign_in')}
+          </Txt>
+        </Pressable>
+      )}
+
+      </View>
+    </View>
   );
 }
 

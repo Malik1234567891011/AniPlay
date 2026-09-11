@@ -308,9 +308,12 @@ export function StoryDetailScreen({
             </Row>
           </Card>
 
+          {/* A shelf, not the whole section — see `Comments`. */}
           <Comments
             storyId={story.storyId}
             signedIn={signedIn}
+            variant="preview"
+            onSeeAll={() => navigation.navigate('Comments', { storyId: story.storyId })}
             onSignIn={() => navigation.navigate('Profile' as never)}
           />
 

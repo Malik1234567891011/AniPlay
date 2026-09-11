@@ -220,4 +220,7 @@ export const story = {
   'story.intensity_light': 'Léger',
   'story.intensity_moderate': 'Modéré',
   'story.intensity_intense': 'Intense',
+  /** L’étagère de commentaires et son entrée. « j’aime » est invariable. */
+  'story.comments_see_all': 'Voir les {count}',
+  'story.comment_likes': '{count, plural, one {# j’aime} other {# j’aime}}',
 } as const;

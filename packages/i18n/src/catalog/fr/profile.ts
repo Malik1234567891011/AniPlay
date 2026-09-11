@@ -110,4 +110,11 @@ export const profile = {
   'settings.save_preferences': 'Enregistrer',
   'settings.a11y': 'Réglages',
   'profile.service': 'Services',
+  'settings.account': 'Compte',
+  'settings.account_guest': 'Tu joues sans compte',
+  'settings.account_unknown': 'Connecté',
+  'settings.account_guest_hint': 'Connecte-toi pour garder tes mondes si tu changes de téléphone.',
+  'settings.age_range': 'Tranche d’âge',
+  'settings.age_unknown': 'Non renseignée',
+  'settings.age_hint': 'Tu nous l’as dit une fois, pour choisir les mondes à te montrer.',
 } as const;

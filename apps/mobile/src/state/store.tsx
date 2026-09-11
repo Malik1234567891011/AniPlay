@@ -37,6 +37,14 @@ const STORAGE_KEYS = {
   // showcase were held in component state, so they came back on every cold
   // start and a returning player was re-onboarded forever.
   onboarded: 'aniplay.onboarded',
+  /**
+   * Which age band the player picked at the gate.
+   *
+   * The gate asked, used the answer once to decide whether they were too young,
+   * and threw it away — so the one piece of information the app collects about
+   * a person was not kept, and Settings had nothing to show them.
+   */
+  ageBand: 'aniplay.ageBand',
 } as const;
 
 export interface AppState {
@@ -48,6 +56,8 @@ export interface AppState {
   /** False in a build with no Supabase project, where sign-in cannot work. */
   authConfigured: boolean;
   ageVerified: boolean;
+  /** `under13` | `13_17` | `18_24` | `25plus`, or null before the gate. */
+  ageBand: string | null;
   onboardingComplete: boolean;
   /** The taste picker and the showcase are behind them. Survives a restart. */
   onboarded: boolean;
@@ -79,6 +89,7 @@ type Action =
       type: 'HYDRATED';
       identity: { userId: string; email: string | null; isGuest: boolean } | null;
       ageVerified: boolean;
+      ageBand: string | null;
       onboarded: boolean;
       tastes: string[];
       quality: QualityTier | null;
@@ -86,7 +97,7 @@ type Action =
     }
   | { type: 'BOOTSTRAPPED'; bootstrap: BootstrapResponse }
   | { type: 'IDENTITY'; identity: { userId: string; email: string | null; isGuest: boolean } | null }
-  | { type: 'SET_AGE_VERIFIED' }
+  | { type: 'SET_AGE_VERIFIED'; band: string }
   | { type: 'SET_ONBOARDED' }
   | { type: 'SET_TASTES'; tastes: string[] }
   | { type: 'SET_WALLET'; wallet: WalletSummary }
@@ -102,6 +113,7 @@ const initialState: AppState = {
   isGuest: true,
   authConfigured: auth.configured,
   ageVerified: false,
+  ageBand: null,
   onboardingComplete: false,
   onboarded: false,
   tastes: [],
@@ -123,6 +135,7 @@ function reducer(state: AppState, action: Action): AppState {
         email: action.identity?.email ?? null,
         isGuest: action.identity?.isGuest ?? true,
         ageVerified: action.ageVerified,
+        ageBand: action.ageBand,
         onboardingComplete: action.ageVerified,
         onboarded: action.onboarded,
         tastes: action.tastes,
@@ -149,7 +162,7 @@ function reducer(state: AppState, action: Action): AppState {
         isGuest: action.identity?.isGuest ?? true,
       };
     case 'SET_AGE_VERIFIED':
-      return { ...state, ageVerified: true, onboardingComplete: true };
+      return { ...state, ageVerified: true, ageBand: action.band, onboardingComplete: true };
     case 'SET_ONBOARDED':
       return { ...state, onboarded: true };
     case 'SET_TASTES':
@@ -177,7 +190,7 @@ export interface AppStore extends AppState {
   verifyEmailCode(email: string, code: string): Promise<void>;
   signInWithApple(): Promise<void>;
   signOut(): Promise<void>;
-  confirmAge(): Promise<void>;
+  confirmAge(band: string): Promise<void>;
   setTastes(tastes: string[]): Promise<void>;
   setQualityTier(tier: QualityTier): Promise<void>;
   /**
@@ -233,9 +246,10 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
       // knows it even on a Hermes build whose `Intl` reported nothing.
       applyDeviceTimeZone();
 
-      const [identity, ageVerified, onboarded, tastes, quality, storedLocale] = await Promise.all([
+      const [identity, ageVerified, ageBand, onboarded, tastes, quality, storedLocale] = await Promise.all([
         auth.restore(),
         AsyncStorage.getItem(STORAGE_KEYS.ageVerified),
+        AsyncStorage.getItem(STORAGE_KEYS.ageBand),
         AsyncStorage.getItem(STORAGE_KEYS.onboarded),
         AsyncStorage.getItem(STORAGE_KEYS.tastes),
         AsyncStorage.getItem(STORAGE_KEYS.quality),
@@ -246,6 +260,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
         type: 'HYDRATED',
         identity,
         ageVerified: ageVerified === 'true',
+        ageBand,
         onboarded: onboarded === 'true',
         tastes: tastes ? (JSON.parse(tastes) as string[]) : [],
         quality: (quality as QualityTier | null) ?? null,
@@ -347,9 +362,10 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
     dispatch({ type: 'SET_ONBOARDED' });
   }, []);
 
-  const confirmAge = useCallback(async () => {
+  const confirmAge = useCallback(async (band: string) => {
     await AsyncStorage.setItem(STORAGE_KEYS.ageVerified, 'true');
-    dispatch({ type: 'SET_AGE_VERIFIED' });
+    await AsyncStorage.setItem(STORAGE_KEYS.ageBand, band);
+    dispatch({ type: 'SET_AGE_VERIFIED', band });
     // Persist server-side too, so the gate survives a reinstall (§6.2).
     void api.updateMe({ ageVerified: true }).catch(() => {});
   }, []);

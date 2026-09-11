@@ -105,7 +105,7 @@ export function AgeGateScreen(): React.JSX.Element {
           <Button
             label={t('onboarding.continue')}
             disabled={!band || tooYoung}
-            onPress={() => void confirmAge()}
+            onPress={() => band && void confirmAge(band)}
           />
           {/* Only shown once they point somewhere. A dead link on the age gate
               is the first thing App Store review taps. */}

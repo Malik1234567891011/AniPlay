@@ -61,4 +61,11 @@ export const profile = {
   'settings.save_preferences': 'Save',
   'settings.a11y': 'Settings',
   'profile.service': 'Service',
+  'settings.account': 'Account',
+  'settings.account_guest': 'Playing as a guest',
+  'settings.account_unknown': 'Signed in',
+  'settings.account_guest_hint': 'Sign in to keep your worlds if you change phones.',
+  'settings.age_range': 'Age range',
+  'settings.age_unknown': 'Not set',
+  'settings.age_hint': 'You told us this once, to decide which worlds to show.',
 } as const;

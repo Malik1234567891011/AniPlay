@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Divider, Row, Stack, Txt, colors, spacing, GUTTER } from '@aniplay/ui';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
+import type { TranslationKey } from '@aniplay/i18n';
 import type { RootNavigation } from '../navigation.jsx';
 import { LinkRow } from './LibraryProfile.jsx';
 import { TasteScreen } from './Onboarding.jsx';
@@ -30,7 +31,7 @@ export function SettingsScreen({ navigation }: { navigation: RootNavigation }): 
         <Txt variant="h1">{t('settings.title')}</Txt>
 
         <Stack gap={spacing.md}>
-          <LinkRow label={t('settings.my_information')} onPress={() => navigation.navigate('Profile' as never)} />
+          <LinkRow label={t('settings.my_information')} onPress={() => navigation.navigate('MyInformation')} />
           <LinkRow label={t('profile.report_history')} onPress={() => navigation.navigate('ReportHistory')} />
           <LinkRow label={t('profile.wallet')} onPress={() => navigation.navigate('Wallet')} />
         </Stack>
@@ -99,5 +100,64 @@ export function PersonalizationScreen({ navigation }: { navigation: RootNavigati
       ctaLabel={t('settings.save_preferences')}
       onDone={() => navigation.goBack()}
     />
+  );
+}
+
+/**
+ * The two things the app actually knows about a person.
+ *
+ * This row used to navigate to Profile, which from inside Profile's own stack
+ * does nothing at all — a settings row that visibly did nothing when tapped.
+ *
+ * It is deliberately short. The app collects an account and an age band, and
+ * that is the whole list; a screen that padded it out with invented fields
+ * would be claiming to hold more than it does.
+ */
+export function MyInformationScreen(): React.JSX.Element {
+  const t = useT();
+  const { email, isGuest, ageBand } = useStore();
+
+  const AGE_LABELS: Record<string, TranslationKey> = {
+    under13: 'onboarding.age_band_under_13',
+    '13_17': 'onboarding.age_band_13_17',
+    '18_24': 'onboarding.age_band_18_24',
+    '25plus': 'onboarding.age_band_25_plus',
+  };
+  const ageKey = ageBand ? AGE_LABELS[ageBand] : undefined;
+
+  return (
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: colors.bg.base }}>
+      <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl, paddingBottom: spacing.giant }}>
+        <Txt variant="h1">{t('settings.my_information')}</Txt>
+
+        <Stack gap={spacing.xs}>
+          <Txt variant="micro" color={colors.text.muted}>
+            {t('settings.account')}
+          </Txt>
+          <Txt variant="body">
+            {/* An Apple relay address is still the address, and showing it is
+                how somebody recognises which account they are in. */}
+            {email ?? (isGuest ? t('settings.account_guest') : t('settings.account_unknown'))}
+          </Txt>
+          {isGuest ? (
+            <Txt variant="caption" color={colors.text.muted}>
+              {t('settings.account_guest_hint')}
+            </Txt>
+          ) : null}
+        </Stack>
+
+        <Stack gap={spacing.xs}>
+          <Txt variant="micro" color={colors.text.muted}>
+            {t('settings.age_range')}
+          </Txt>
+          <Txt variant="body">{ageKey ? t(ageKey) : t('settings.age_unknown')}</Txt>
+          <Txt variant="caption" color={colors.text.muted}>
+            {t('settings.age_hint')}
+          </Txt>
+        </Stack>
+
+        <View style={{ height: spacing.lg }} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
