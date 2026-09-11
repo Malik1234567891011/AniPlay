@@ -300,8 +300,30 @@ export const FAST_WRITER_POLICY_FOR_TEST = fastWriterPolicy('en');
 
 
 /** `"…"` → `…`. The speech marks are the renderer's business. */
+/**
+ * The line itself, without whatever the model wrapped it in.
+ *
+ * Quotes are stripped here and drawn by the client, so both writer paths store
+ * the same thing and the presentation is one decision in one place rather than
+ * a property of which path happened to run.
+ *
+ * **Guillemets were missing from this list**, and only French uses them. So an
+ * English line arrived bare and a French one arrived still wearing « », which
+ * the client then either doubled or left looking like the only line in the app
+ * with punctuation around it. The stored text was different in the two locales
+ * for no reason anybody chose.
+ *
+ * The inner padding goes too: French puts a non-breaking space inside the
+ * guillemets, so `« Tu viens ? »` has one after the opener and one before the
+ * closer, and leaving them turns into a line that begins with a space.
+ */
 function stripQuotes(text: string): string {
   const trimmed = text.trim();
-  const paired = /^(["'“”‘’])([\s\S]*)(["'“”‘’])$/.exec(trimmed);
-  return paired ? paired[2]!.trim() : trimmed;
+  const paired = /^(["'“”‘’«»])([\s\S]*)(["'“”‘’«»])$/.exec(trimmed);
+  if (!paired) return trimmed;
+  // `\u00a0` and `\u202f` are the two spaces French uses inside guillemets.
+  return paired[2]!.replace(/^[\s\u00a0\u202f]+|[\s\u00a0\u202f]+$/g, '');
 }
+
+/** Exported for the spec; production calls the private one above. */
+export const stripQuotesForTest = stripQuotes;

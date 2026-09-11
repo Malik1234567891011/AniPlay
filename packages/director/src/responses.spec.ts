@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { hasMidpoint, outcomeOf, talksToNobody } from './responses.js';
+import { stripQuotesForTest } from './fast-writer.js';
 import type { TurnContext } from './context.js';
 
 /**
@@ -106,5 +107,34 @@ describe('a card the player cannot read aloud', () => {
 
   it('leaves English alone, which has no such hedge', () => {
     expect(hasMidpoint('I am ready. Let us go.')).toBe(false);
+  });
+});
+
+describe('a spoken line, stored', () => {
+  it('arrives bare whatever the model wrapped it in', () => {
+    // English, as before.
+    expect(stripQuotesForTest('“You said two. Not three.”')).toBe('You said two. Not three.');
+    expect(stripQuotesForTest('"Right."')).toBe('Right.');
+    // French. Guillemets were missing from the strip list, so only French
+    // lines kept their punctuation — the stored text differed between locales
+    // for no reason anybody chose.
+    expect(stripQuotesForTest('« Tu viens ? »')).toBe('Tu viens ?');
+    // The non-breaking space French puts inside them goes too, or the line
+    // begins with a space.
+    expect(stripQuotesForTest('« Il y a encore de la soupe. »')).toBe(
+      'Il y a encore de la soupe.',
+    );
+    expect(stripQuotesForTest('« Bon. »')).toBe('Bon.');
+  });
+
+  it('leaves a line that was never wrapped alone', () => {
+    expect(stripQuotesForTest('Tu reprends le même lit.')).toBe('Tu reprends le même lit.');
+  });
+
+  it('leaves quotes that are inside the line', () => {
+    // Somebody quoting somebody else is theirs, not ours.
+    expect(stripQuotesForTest('Elle a dit « demain » et elle est partie.')).toBe(
+      'Elle a dit « demain » et elle est partie.',
+    );
   });
 });
