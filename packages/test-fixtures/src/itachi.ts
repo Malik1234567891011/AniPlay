@@ -2487,6 +2487,8 @@ const raw = {
     'all of the tension comes from expression, light and arrangement.',
   ].join(' '),
   protagonist: {
+    // Canon art, because this one is not drawn on request.
+    portrait: 'story_itachi/protagonist',
     kind: 'NAMED',
     name: 'Itachi Uchiha',
     pronouns: 'he/him',

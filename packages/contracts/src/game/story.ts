@@ -1011,9 +1011,25 @@ export const Protagonist = z
      * only the world knows how to phrase it.
      */
     setupHeading: z.string().default(''),
+    /**
+     * A canon portrait, for a protagonist everybody can already picture.
+     *
+     * Worlds with a `NAMED` lead do not offer to draw one — a generated Itachi
+     * is the single image in the app a player can hold against the original,
+     * and it loses. But the slot should not simply be empty either, so the
+     * world supplies the picture itself.
+     */
+    portrait: z.string().nullable().default(null),
   })
   .strict()
-  .default({ kind: 'BLANK', name: '', pronouns: '', description: '', setupHeading: '' });
+  .default({
+    kind: 'BLANK',
+    name: '',
+    pronouns: '',
+    description: '',
+    setupHeading: '',
+    portrait: null,
+  });
 export type Protagonist = z.infer<typeof Protagonist>;
 
 export const StoryVersion = z

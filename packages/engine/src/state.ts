@@ -94,7 +94,13 @@ export function createInitialState({
   ];
 
   const player: PlayerCharacterState = {
-    identity,
+    // A world with a canon lead supplies the portrait, because the app will not
+    // offer to draw one — nobody needs a generated Itachi. A player-supplied
+    // portrait still wins, so this fills the slot rather than claiming it.
+    identity: {
+      ...identity,
+      portraitAssetId: identity.portraitAssetId ?? story.protagonist?.portrait ?? null,
+    },
     attributes,
     skills,
     resources,
