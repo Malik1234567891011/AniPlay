@@ -378,3 +378,11 @@ export async function generateResponses(
     throw error;
   }
 }
+
+/**
+ * Both card policies, for the cross-locale parity test.
+ *
+ * Exported rather than reached through the module's internals, so the test
+ * reads what production reads.
+ */
+export const RESPONSE_POLICY_FOR_TEST = { en: POLICY, fr: RESPONSE_POLICY_FR };
