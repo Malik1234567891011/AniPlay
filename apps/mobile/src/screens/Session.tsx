@@ -337,7 +337,25 @@ export function SessionScreen({
             if (event === 'media.completed' && typeof data.url === 'string') {
               // The turn is already committed and read; the frame just arrives.
               const url = data.url;
-              setPending((current) => (current ? { ...current, heroImageUrl: url } : current));
+              // Only if this is still the turn that asked for it.
+              //
+              // Art is generated after the beat is written and can land many
+              // seconds later — comfortably after the player has read the beat
+              // and sent the next one. This wrote the url onto whatever was
+              // pending *at the moment it arrived*, which by then was the next
+              // turn, so turn N's frame appeared under turn N+1's line. It sat
+              // there until the refetch replaced the transcript with the
+              // server's copy and quietly moved it back.
+              //
+              // Which is what "the image disappears and a different one shows
+              // up under the prompt above" is: both frames were correct, and
+              // one of them spent a few seconds on the wrong beat.
+              //
+              // The `setTurns` call below was always keyed by `turnId` and was
+              // always right. Only the live slot guessed.
+              setPending((current) =>
+                current && current.turnId === accepted.turnId ? { ...current, heroImageUrl: url } : current,
+              );
               setTurns((current) =>
                 current.map((t) => (t.turnId === accepted.turnId ? { ...t, heroImageUrl: url } : t)),
               );
