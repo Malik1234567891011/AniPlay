@@ -23,6 +23,7 @@ const STORY = arg('story', 'story_itachi');
 const TURNS = Number(arg('turns', '10'));
 const OUT = arg('out', `/tmp/playthrough-${STORY}.md`);
 const TIER = arg('tier', 'VIVID');
+const LOCALE = arg('locale', 'en');
 
 async function playerToken(): Promise<string> {
   const url = process.env.SUPABASE_URL;
@@ -86,7 +87,7 @@ async function main(): Promise<void> {
   const detail = await call<any>('GET', `/v1/stories/${STORY}`);
   log(`# Playthrough — ${detail.story.title}`);
   log();
-  log(`Tap-only. ${TURNS} turns, quality tier ${TIER}. ${new Date().toISOString()}`);
+  log(`Tap-only. ${TURNS} turns, quality tier ${TIER}, locale ${LOCALE}. ${new Date().toISOString()}`);
   log();
   log(`**Premise.** ${detail.story.premise ?? detail.story.hook ?? ''}`);
   log();
@@ -100,7 +101,11 @@ async function main(): Promise<void> {
       pronouns: named ? detail.protagonist.pronouns : 'they/them',
       archetypeId: detail.archetypes?.[0]?.id ?? null,
       advanced: {},
+      // French narration must agree with somebody. Declared here because the
+      // harness is not a person and cannot be asked.
+      ...(LOCALE === 'fr' ? { grammar: { gender: 'MASCULINE', thirdPerson: 'il' } } : {}),
     },
+    locale: LOCALE,
   });
   const sessionId = session.session.sessionId;
   let revision = session.revision ?? session.session?.revision ?? 0;

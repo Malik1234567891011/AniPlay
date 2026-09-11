@@ -190,6 +190,19 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
   return {
     theBeatThatJustHappened: narrative.blocks.map((b) => b.text),
     whatThePlayerDid: context.playerAction,
+    /**
+     * How the player's own sentences agree, in French.
+     *
+     * A card is written in the player's voice, so in French it has to agree
+     * with them — and without being told, the model hedges. A ten-turn French
+     * run produced `t'es sûr·e`, `adossé·e`, `parti·e` and `revenu·e`: the
+     * midpoint, which `PLAYER_GRAMMAR.md` rule 4 bans outright and the *writer*
+     * policy already forbids. The cards were the one surface that neither knew
+     * the answer nor was told not to guess.
+     *
+     * The writer has had this since step 6. The cards never did.
+     */
+    playerGrammar: context.player.grammar,
     where: context.scene.locationName,
     when: context.scene.worldTimeLabel,
     /**
@@ -284,6 +297,23 @@ export function talksToNobody(
   ).test(text);
 }
 
+/**
+ * The inclusive midpoint — `prêt·e`, `arrivé·e` — in any of its spellings.
+ *
+ * `PLAYER_GRAMMAR.md` rule 4: administrative register, banned from school
+ * documents by ministerial circular, and unreadable aloud on a product that
+ * marks blocks `voiceEligible`. The writer policy has forbidden it since step
+ * 8 and the writer's prose is clean; the cards were the surface that was
+ * neither told the player's gender nor told not to guess, and a ten-turn
+ * French run produced four of them.
+ *
+ * The parenthesised and full-stop forms are the same hedge wearing different
+ * punctuation, so they go too.
+ */
+export function hasMidpoint(text: string): boolean {
+  return /\p{L}[·‧•]\p{L}|\p{L}\(e\)|\p{L}\.e\b/u.test(text);
+}
+
 function escapeName(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -370,6 +400,14 @@ export async function generateResponses(
       }))
       .filter((r) => r.text.length > 0)
       .filter((r) => !talksToNobody(r.text, inRoom.size, absentNames))
+      // A card the player cannot read aloud.
+      //
+      // Dropped rather than repaired, for the same reason `talksToNobody`
+      // drops: two workable cards beat three where one cannot function, and if
+      // too few survive the caller falls back to the rule-built suggestions.
+      // The policy forbids it and the payload now carries the answer, so a card
+      // that still hedges is a card that ignored both.
+      .filter((r) => !hasMidpoint(r.text))
       .slice(0, 3);
 
     return responses.length >= 2 ? responses : null;
