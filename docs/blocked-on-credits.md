@@ -61,3 +61,32 @@ a writer with no provider has nothing to write with.
    A harness that cannot distinguish "slow" from "dead" sends you looking for a
    performance problem that does not exist. That is most of why this took as
    long as it did.
+
+## French coverage as measured, 2026-09-11
+
+Overlaid Tier A+B paths against what the manifest says is translatable:
+
+| worlds | coverage |
+|---|---|
+| 22 of 23 | **100%** |
+| Nine Weeks | **11%** — 41 of 390 |
+
+Nine Weeks is in the deep-playtest matrix and is the one real content gap.
+Finishing it needs `npm run fr:adapt -- --world=story_nine_weeks`, which is a
+model call, so it is blocked on the same credits as everything else.
+
+Interface catalogue is complete and `fr:lint` is clean.
+
+## Why the app still cannot be put into French by a player
+
+The language picker in `LibraryProfile.tsx` is behind a seven-tap gate on the
+Profile heading, with a deliberate promotion condition in the comment: it
+becomes a normal row "once `npm run fr:lint` is clean over a full catalogue".
+
+`fr:lint` is clean. 22 of 23 worlds are complete. The remaining blocker on
+promoting it is Nine Weeks — a French player who picked it would get an English
+world, which is exactly the half-translated app the gate exists to prevent.
+
+**So the order is: credits → finish Nine Weeks → promote the picker → ship.**
+`DEVICE_LOCALE_AUTODETECT` is still `false`, which is a separate decision: with
+it off, a French phone gets English onboarding and has to find the setting.
