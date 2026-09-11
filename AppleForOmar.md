@@ -62,6 +62,12 @@ Notes:
 Connect → Business), with banking and tax forms complete. Until it is, StoreKit
 returns no products at all and the whole credit screen looks broken.
 
+⚠️ **There is already a banking problem on the account.** App Store Connect is
+showing: *"Your payment was returned by your bank… Your bank account number is
+formatted incorrectly"* — Wells Fargo, reference 403651046. That blocks payouts
+and may block the Paid Applications agreement being in good standing. Worth
+clearing before any paid app ships, independent of this one.
+
 ---
 
 ## 3. Things deliberately NOT built, which are Apple policy decisions
@@ -98,8 +104,23 @@ casually.
 
 ---
 
-## 5. Open questions for Omar
+## 5. What is already in place
 
-- Which Apple org owns the app long term? The build is currently signed with
-  team `Q7ZLXMG4SB` from Malik's machine.
-- Is there an existing App Store Connect record, or does one need creating?
+- The org is **CielPM, Inc.**, and it already ships *Glutt: Recipes & AI Chef*,
+  so the account, agreements and TestFlight flow are not new ground.
+- **`com.plotbreak.app` already exists as a registered bundle ID** and appears
+  in the New App → Bundle ID list. The App Store Connect *app record* has not
+  been created yet — that is the "New App" step.
+- Builds are currently signed with team `Q7ZLXMG4SB` from Malik's machine and
+  install fine on his device.
+
+## 6. Open questions for Omar
+
+- Primary language for the listing. The app ships English and French, and the
+  plan is to launch in the French App Store (France, Belgium) as well — so the
+  listing needs French metadata, screenshots and a French description too.
+- Age rating: the content descriptors in code are FANTASY_VIOLENCE, ROMANCE,
+  SUGGESTIVE_THEMES, HORROR, PSYCHOLOGICAL_THEMES, ALCOHOL_REFERENCES, LANGUAGE,
+  PERMANENT_DEATH, MORAL_AMBIGUITY. Also note App Store Connect is now asking
+  new **social media questions** on age ratings — the app has a public comment
+  section, so those apply.
