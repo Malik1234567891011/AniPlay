@@ -1,0 +1,25 @@
+# Everything the API does not need, and the 3 GB it definitely does not.
+node_modules
+**/node_modules
+.git
+.env
+*.log
+
+# The mobile client. The API never imports it.
+apps/
+
+# Runtime-generated turn art. 1803 files, 2.1 GB, all of it from playtesting on
+# somebody's laptop. Production writes its own to a volume.
+infra/seed/assets/hero/
+
+# Sources. `/media/*` serves .webp first; the .png files are 3.0 GB of originals
+# and the .raw.webp are pre-crop masters.
+infra/seed/assets/**/*.png
+infra/seed/assets/**/*.raw.webp
+
+# Dev-only
+.expo/
+ios/
+android/
+**/dist
+**/*.tsbuildinfo
