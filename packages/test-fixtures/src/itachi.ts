@@ -46,6 +46,23 @@ const raw = {
   version: 1,
   title: 'Itachi',
   fantasyLabel: 'Both sides already think you are theirs.',
+  /**
+   * The clock the premise already put you on.
+   *
+   * "In eighty minutes your father expects you under the seventh mat with
+   * everything the tower told you this week" is in the opening prose, and it is
+   * the engine of the whole first hour — so it needs to be a fact the world
+   * holds, not only a sentence the player read once. Without it a tap-only run
+   * wandered the district until eight o'clock came and went and nobody
+   * mentioned it.
+   */
+  openingObligations: [
+    {
+      what: 'Be under the seventh mat with everything the tower told you this week — your father is waiting.',
+      withCharacterId: 'fugaku',
+      dueInMinutes: 80,
+    },
+  ],
   hook: 'You are thirteen, you are the best shinobi your clan has produced in a generation, and in two weeks your father intends to take the village by force using everything you have told him.',
   premise:
     'You are thirteen. You are the best shinobi your clan has produced in a generation, and both sides of the argument tearing your village apart have already decided you belong to them.\n\n' +

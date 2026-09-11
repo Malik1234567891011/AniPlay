@@ -1005,6 +1005,31 @@ export const StoryVersion = z
     storyId: z.string(),
     version: z.number().int().min(1),
     title: z.string(),
+    /**
+     * Clocks the player is already on when the story opens.
+     *
+     * Some premises start you late. Itachi's says his father expects him in
+     * eighty minutes with everything the tower told him this week — which is
+     * the whole engine of the scene, and it existed only in the opening prose,
+     * so nothing in the world knew there was anything to be late for.
+     *
+     * A player's own promises are detected from what they say (see
+     * `commitments.ts`). This is the other half: a deadline the world imposes
+     * before the player has said anything at all. Empty for most worlds, and
+     * that is correct — most stories do not start you on a clock.
+     */
+    openingObligations: z
+      .array(
+        z
+          .object({
+            what: z.string().max(300),
+            withCharacterId: z.string().nullable().default(null),
+            /** Minutes from the story's start, not an absolute world minute. */
+            dueInMinutes: z.number().int().min(1),
+          })
+          .strict(),
+      )
+      .default([]),
     /** Max 42 chars. Spec §7.3 card fantasy label. */
     fantasyLabel: z.string().max(42),
     hook: z.string(),

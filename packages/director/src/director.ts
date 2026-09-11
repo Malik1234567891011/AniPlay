@@ -1144,15 +1144,7 @@ export function heroImageDecision(
     reason('CONTEST_RESULT') ||
     beatType === 'CLIFFHANGER' ||
     scene.firstVisit ||
-    // Arriving somewhere is a cut, and a cut is what an establishing frame is
-    // for. `firstVisit` alone meant a world could only ever establish each of
-    // its locations once — so a story that leaves home, does something, and
-    // comes back is shot entirely in close-up after its first hour.
-    //
-    // This does not open the floodgates: `HERO_HARD_FLOOR` still refuses two
-    // frames in a row, so a player crossing three rooms gets one frame, not
-    // three.
-    scene.locationChanged ||
+
     // Meeting somebody important for the first time.
     context.presentCharacters.some((c) => !context.state.flags[`met:${c.def.id}`] && c.def.cardBlurb !== '');
 
@@ -1184,6 +1176,13 @@ export function heroImageDecision(
     resolution.checks.some((c) => c.outcome === 'CRITICAL_SUCCESS') ||
     resolution.mutations.some((m) => m.type === 'ENCOUNTER_START') ||
     resolution.mutations.some((m) => m.type === 'QUEST_TRANSITION') ||
+    // Walking back into a room you know is worth a frame, but it waits its
+    // turn. It sat in `landmark` for one build, and `landmark` bypasses the
+    // spacing rule — so a player crossing the district four times got four
+    // establishing shots, ten planned frames in fourteen turns, and a queue of
+    // image jobs longer than the session. Seeing a place for the *first* time
+    // is still a landmark; coming back to it is merely notable.
+    scene.locationChanged ||
     socialTurn;
 
   const spacing = HERO_SPACING[tier] ?? 10;
