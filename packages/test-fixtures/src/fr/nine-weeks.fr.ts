@@ -46,7 +46,7 @@ registerWorldText('fr', {
       '',
       'La saison dure neuf semaines. Vous partagez une cuisine, une salle de bains et un planning avec tous ces gens, et à la troisième semaine tout le monde sait tout sur tout le monde.',
       '',
-      'Tu as donc neuf semaines pour comprendre ce que tu veux vraiment, et si tu es prêt à ce que ça coûte quelque chose à quelqu’un d’autre. Certaines de ces personnes seront encore dans ta vie en octobre. Lesquelles, ce n’est pas décidé.',
+      'Tu as donc neuf semaines pour comprendre ce que tu veux vraiment, et si tu acceptes que ça coûte quelque chose à quelqu’un d’autre. Certaines de ces personnes seront encore dans ta vie en octobre. Lesquelles, ce n’est pas décidé.',
     ].join('\n'),
 
     creatorNote:

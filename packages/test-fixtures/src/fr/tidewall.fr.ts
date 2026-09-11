@@ -467,7 +467,7 @@ registerWorldText('fr', {
     // B · c6b5ccff1936
     "characters.bec.fears": ["Être déclaré inapte","Retourner à l’est","Avoir raison"],
     // A · d2f14d90a019
-    "characters.bec.socialStyle": "Parle vite et en biais. Il répondra à une question directe si tu es le seul dans la pièce.",
+    "characters.bec.socialStyle": "Parle vite et en biais. Il répondra à une question directe s’il n’y a personne d’autre dans la pièce.",
     // B · 4fbb9cbd8be8
     "characters.bec.boundaries": ["Ne le répétera pas devant un officier","Ne dépassera pas le mur"],
     // B · 6163ef4232f4

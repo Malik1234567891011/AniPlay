@@ -915,7 +915,7 @@ registerWorldText('fr', {
     // B · d39aaf2fa56e
     "quests.q_step_on.involvedLocationIds": ["salle_de_sport_mikado","le_red_floor","le_bureau"],
     // B · 304c61ca280a
-    "quests.q_step_on.knownRewardCopy": "Une idée de ce à quoi sert cette salle, et de ce que tu es venu découvrir en descendant les escaliers.",
+    "quests.q_step_on.knownRewardCopy": "Une idée de ce à quoi sert cette salle, et de ce que tu viens découvrir en descendant les escaliers.",
     // B · f2786b8b1f08
     "quests.q_what_you_are.title": "Découvre Ce Que Tu Es",
     // B · 4e5f172bdfff
@@ -1393,7 +1393,7 @@ registerWorldText('fr', {
     // B · b7dc9a9ec787
     "setupFields.worldKnowsAboutYou.placeholder": "ex. J’ai fait onze combats amateurs, j’ai arrêté il y a quatre ans et je n’ai jamais dit pourquoi.",
     // B · 4ab11d770835
-    "setupFields.what_you_came_for.label": "Qu’est-ce que tu es venu découvrir ?",
+    "setupFields.what_you_came_for.label": "Qu’est-ce que tu viens découvrir ?",
     // B · b6a31c665c0b
     "setupFields.what_you_came_for.kind": "CHOIX",
     // B · daa57128b5bc

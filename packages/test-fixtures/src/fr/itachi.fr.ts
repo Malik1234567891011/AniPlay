@@ -955,7 +955,7 @@ registerWorldText('fr', {
     // B · abac715462b1
     "characters.kakashi.gates.kakashi_shows_you.requires.flagsSet": ["dit_quelque_chose_a_quelquun"],
     // B · 816521ae7b48
-    "characters.kakashi.scouting.revealCopy": "Il ne lève pas les yeux. « Tu lances en premier quand tu es inquiet et tu parles en premier quand tu ne l’es pas. Tu as lancé en premier quatre fois cette semaine. »",
+    "characters.kakashi.scouting.revealCopy": "Il ne lève pas les yeux. « Tu lances en premier quand quelque chose t’inquiète et tu parles en premier quand tu ne l’es pas. Tu as lancé en premier quatre fois cette semaine. »",
     // B · 88e6607b38cb
     "characters.kakashi.combatant.tags": ["anbu","sharingan"],
     // B · f961cf657950

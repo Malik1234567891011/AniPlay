@@ -17,7 +17,7 @@ registerWorldText('fr', {
     // A · 7430a3c5f4f0
     "fantasyLabel": "Paradis. Une semaine. Un homme disparu.",
     // A · 3aa503884587
-    "hook": "Tu es venu à Aster Cove pour sept nuits de soleil. Quarante minutes après ton arrivée, l’hôte aux cheveux roses qui t’a éclaboussé à la piscine te dit qu’un client est porté disparu depuis trois jours, alors que la direction assure qu’il est parti ce matin.",
+    "hook": "Tu débarques à Aster Cove pour sept nuits de soleil. Quarante minutes après ton arrivée, l’hôte aux cheveux roses qui t’a éclaboussé à la piscine te dit qu’un client est porté disparu depuis trois jours, alors que la direction assure qu’il est parti ce matin.",
     // A · 8faddb11c916
     "premise": "Aster Cove est une île-hôtel réservée aux adultes, à quarante minutes en ferry rapide de la côte sud du Japon. À 14 h 17, la pierre blanche autour de la piscine à débordement est assez chaude pour brûler.\n\nTu es là depuis quarante minutes. Tu n’as pas déballé tes affaires. L’eau a la couleur promise dans la brochure, la musique vient du club de plage, et quelqu’un dans le petit bain vient de t’éclabousser exprès.\n\nElle s’appelle Sora, ses cheveux sont rose bubblegum, et elle juge ta façon de te poser en vacances inacceptable.\n\nVingt minutes plus tard, après un verre que tu n’as pas commandé et une baignade imprévue, son sourire s’efface pendant une seconde, au moment où un assistant-manager traverse la terrasse derrière toi.\n\nPuis elle te demande si tu veux entendre un truc bizarre.\n\nUn client nommé Adrian Vale a quitté l’hôtel ce matin à huit heures dix. Le souci, c’est qu’elle a vu son sac bleu de matériel fermé à clé dans le local des sports nautiques à neuf heures trente, ce qui veut dire que les dossiers de l’hôtel racontent n’importe quoi sur son emplacement. Elle ne l’a dit à personne, et elle t’observe pour voir ce que tu vas en faire.\n\nPersonne ne l’a signalé disparu, la marée remplit les grottes de l’est deux fois par jour, et dimanche matin tu prendras un ferry quoi qu’il arrive. Si tu décides que ce n’est pas ta semaine pour ça, c’est une vraie réponse, et l’île continuera d’être le meilleur endroit où tu aies jamais séjourné.",
     // A · 20fc2d2acc52
@@ -1523,7 +1523,7 @@ registerWorldText('fr', {
     // B · def2c18246ba
     "archetypes.arch_water.role": "Natation et bateaux",
     // A · f6587d159a9f
-    "archetypes.arch_water.summary": "Tu connais les grands espaces d’eau depuis que tu es enfant. Tu as tes diplômes, tu lis les houles sans y penser, et tu es le seul client ici capable d’atteindre l’autre côté de cette pointe sans aide.",
+    "archetypes.arch_water.summary": "Tu connais les grands espaces d’eau depuis que tu es enfant. Tu as tes diplômes, tu lis les houles sans y penser, et tu es la seule personne ici capable d’atteindre l’autre côté de cette pointe sans aide.",
     // A · c7fd3b736709
     "archetypes.arch_water.playstyle": ["Nageur aguerri","Physique","Direct"],
     // A · fb16dd4f8a9f

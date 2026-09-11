@@ -799,7 +799,7 @@ registerWorldText('fr', {
     // B · 92e27ab3b965
     "characters.vesh.gates.vesh_stops_lying_by_omission.requires.hasItems": ["pot_odeur"],
     // B · 9ea032601f71
-    "characters.vesh.scouting.revealCopy": "Elle regarde tes mains plutôt que ton visage quand tu parles. « Tu te tais avant de décider quelque chose. À chaque fois. Tu l’as fait trois fois depuis que tu es assis. »",
+    "characters.vesh.scouting.revealCopy": "Elle regarde tes mains plutôt que ton visage quand tu parles. « Tu te tais avant de décider quelque chose. À chaque fois. Tu l’as fait trois fois depuis que tu es là. »",
     // B · ea901526dd59
     "characters.vesh.combatant.tags": ["cendrée","dresseuse"],
     // B · a3f3310d3256
@@ -1251,7 +1251,7 @@ registerWorldText('fr', {
     // A · b3aa45797eeb
     "archetypes.arch_rider.blurb": "Personne aux piquets ne t’a demandé ton nom. Trois d’entre eux ont demandé ce que tu montais, et un a demandé ce que tu avais payé, ce qui, à ce passage, revient au même.",
     // A · 2918cfa44b4c
-    "archetypes.arch_trader.name": "Tu es venu pour commercer",
+    "archetypes.arch_trader.name": "Ici pour commercer",
     // B · b3c53934ed30
     "archetypes.arch_trader.role": "Négociation et présence",
     // A · 542fc1d8785e
@@ -1261,7 +1261,7 @@ registerWorldText('fr', {
     // A · 3f4e0f4d0c45
     "archetypes.arch_trader.blurb": "Tu as déjà vécu quatre éditions de ce marché. Tu sais à quel prix se vend le sel les bonnes années, et cette année, et tu connais la délégation qui paye toujours trop le dernier matin.",
     // A · 7e60ef63d32b
-    "archetypes.arch_hunter.name": "Tu es venu chasser",
+    "archetypes.arch_hunter.name": "Ici pour chasser",
     // B · 27e75be6bb43
     "archetypes.arch_hunter.role": "Pistage et lance",
     // A · 55757e82be45
@@ -1271,7 +1271,7 @@ registerWorldText('fr', {
     // A · fac8d956c927
     "archetypes.arch_hunter.blurb": "Tu es arrivé au sud derrière les troupeaux, pas devant, et en chemin tu as vu quatre choses dont personne à ce passage ne connaît encore l’histoire.",
     // A · 618531f8b064
-    "archetypes.arch_healer.name": "Tu es venu travailler",
+    "archetypes.arch_healer.name": "Ici pour travailler",
     // B · bc84a1e6a863
     "archetypes.arch_healer.role": "Médecine et sens des bêtes",
     // A · bd320dd3580c
@@ -1293,7 +1293,7 @@ registerWorldText('fr', {
     // B · 5965ecf877b1
     "setupFields.pronouns.placeholder": "ex. elle / elle",
     // B · 8b7883802b7e
-    "setupFields.archetype.label": "Qu’est-ce que tu es venu faire à ce marché ?",
+    "setupFields.archetype.label": "Qu’est-ce que tu viens faire à ce marché ?",
     // B · 694e20d7b2d8
     "setupFields.archetype.kind": "ARCHÉTYPE",
     // B · c00c08f8a0da

@@ -238,6 +238,35 @@ function check(story: StoryVersion, findings: Finding[], gaps: string[]): void {
       }
     }
 
+    // Authored French that agrees with a player whose gender nobody knows.
+    //
+    // CharacterSetup promises this explicitly — « Le français doit s’accorder
+    // avec toi » — and then The Ninth Archive's opening beat told every player
+    // `arrête celui-là`, identical for FEMININE and MASCULINE, because the
+    // opening is authored text and authored text cannot agree with anything.
+    //
+    // The fix is never a midpoint. It is a phrasing with no agreement in it:
+    // `tu viens` rather than `tu es venu`, `la seule personne` rather than `le
+    // seul`, `depuis que tu es là` rather than `depuis que tu es assis`.
+    if (!/voiceSamples|speechStyle|dialogue|\.lines/.test(path)) {
+      const AGREES_WITH_PLAYER: Array<[RegExp, string]> = [
+        [/\bcelui-là\b/i, 'celui-là'],
+        [/\btu (?:es|étais|serais|seras) (?:un |le |)?(?:prêt|seul|assis|debout|certain|sûr|content|fatigué|inquiet|surpris|perdu|arrivé|venu|resté)\b/i, 'tu es + masculin'],
+        [/\bte voilà (?:prêt|seul|assis|arrivé|revenu)\b/i, 'te voilà + masculin'],
+        [/\btu t’es (?:retrouvé|trompé|assis|levé|arrêté|perdu)\b/i, 'tu t’es + masculin'],
+        [/\btu (?:as|avais) été (?:choisi|invité|envoyé|payé|prévenu|admis)\b/i, 'passif + masculin'],
+      ];
+      for (const [pattern, why] of AGREES_WITH_PLAYER) {
+        if (pattern.test(text)) {
+          findings.push({
+            world: story.title, path, code: 'PLAYER_AGREEMENT',
+            detail: `${why} — ${text.slice(0, 70)}`,
+          });
+          break;
+        }
+      }
+    }
+
     // Straight quotes and apostrophes.
     if (/["']/.test(text) && !/\{/.test(text)) {
       findings.push({ world: story.title, path, code: 'TYPOGRAPHY', detail: text.slice(0, 90) });

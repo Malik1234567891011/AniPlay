@@ -825,7 +825,7 @@ registerWorldText('fr', {
     // B · a133aed4899c
     "quests.q_the_last_train.title": "Le Dernier Train",
     // B · fb2939b99c0f
-    "quests.q_the_last_train.summary": "Quelque chose est sur le toit d’un train arrivé six minutes en avance, et parmi les quarante personnes sur le quai, tu es le seul à le regarder.",
+    "quests.q_the_last_train.summary": "Quelque chose est sur le toit d’un train arrivé six minutes en avance, et parmi les quarante personnes sur le quai, tu es la seule personne à le regarder.",
     // B · 7fcc0be2ad9c
     "quests.q_the_last_train.kind": "PRINCIPALE",
     // B · bb3828ee2142

@@ -1063,7 +1063,7 @@ registerWorldText('fr', {
     // B · 694e20d7b2d8
     "setupFields.archetype.kind": "ARCHETYPE",
     // B · f8b70ab0b489
-    "setupFields.archetype.helpText": "D’où tu venais avant Bellweather Street, ça détermine ce dans quoi tu es bon. C’est fixé pour toute l’histoire. Ça ne fixe pas ce que tu crois sur l’immeuble, ce que tu es prêt à faire, ni si tu restes — tout ça t’appartient, tu peux changer d’avis n’importe quelle nuit.",
+    "setupFields.archetype.helpText": "D’où tu venais avant Bellweather Street, ça détermine ce dans quoi tu es bon. C’est fixé pour toute l’histoire. Ça ne fixe pas ce que tu crois sur l’immeuble, jusqu’où tu irais, ni si tu restes — tout ça t’appartient, tu peux changer d’avis n’importe quelle nuit.",
     // B · a29dab43da13
     "setupFields.worldKnowsAboutYou.label": "Quelqu’un à Morrowgate te connaît-il ?",
     // B · 401854456756
@@ -1085,7 +1085,7 @@ registerWorldText('fr', {
     // B · b279ae2e86d3
     "setupFields.why_morrowgate.options.the_job.label": "Le boulot t’a déplacé ici avec trois semaines de préavis",
     // B · 4a1228e05acf
-    "setupFields.why_morrowgate.options.the_study.label": "Tu es venu à Morrowgate pour étudier et les dortoirs étaient pleins",
+    "setupFields.why_morrowgate.options.the_study.label": "Tu viens à Morrowgate pour étudier et les dortoirs étaient pleins",
     // B · 2ed5dc35a513
     "setupFields.why_morrowgate.options.looking.label": "Tu connaissais déjà le nom Hush House avant de voir l’annonce",
     // B · f6093d6587c4

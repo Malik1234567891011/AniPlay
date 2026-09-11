@@ -1347,7 +1347,7 @@ registerWorldText('fr', {
     // B · d95f1e6e85fb
     "archetypes.arch_nobody.role": "Récupération et lecture de la pièce",
     // A · cbb1479f6d5d
-    "archetypes.arch_nobody.summary": "Tu es venu à l’anniversaire pour tes propres raisons, sans grade, sans place précise ni attentes, ce qui est vraiment le seul truc inhabituel sur cette station.",
+    "archetypes.arch_nobody.summary": "Tu viens à l’anniversaire pour tes propres raisons, sans grade, sans place précise ni attentes, ce qui est vraiment le seul truc inhabituel sur cette station.",
     // A · 36e5dd680854
     "archetypes.arch_nobody.playstyle": ["Sans attache","Adaptable","Off record"],
     // A · 11aba0e3e42f
@@ -1389,7 +1389,7 @@ registerWorldText('fr', {
     // B · 48347dbb3607
     "setupFields.why_you_are_here.options.work.label": "Tu travaillais. Contrat, service, reportage, livraison",
     // B · 52dcc6cf6abb
-    "setupFields.why_you_are_here.options.the_machine.label": "Tu es venu spécialement pour voir la machine",
+    "setupFields.why_you_are_here.options.the_machine.label": "Tu viens spécialement pour voir la machine",
     // B · 1f4b79b72e0b
     "setupFields.why_you_are_here.options.passing.label": "Tu changeais de vaisseau et la place était sur le chemin",
     // B · a781bc9fb17d
