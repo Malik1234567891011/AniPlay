@@ -3,6 +3,7 @@ import { LAST_FIVE } from '@aniplay/test-fixtures';
 import type { GameState, StoryVersion } from '@aniplay/contracts';
 import { createInitialState, charactersPresent } from './state.js';
 import { advanceObligations, detectCommitment, minutesIn, pressureOf, settleOnArrival } from './commitments.js';
+import { beyondName } from './resolve.js';
 
 /**
  * Time somebody is owed.
@@ -141,5 +142,24 @@ describe('the clock reaching an obligation', () => {
       ['somebody-else'],
     );
     expect(settled[0]!.status).toBe('OPEN');
+  });
+});
+
+describe('walking off the edge of the map', () => {
+  it('names the new place in the run’s language, with the contraction', () => {
+    // A French player walked off the map and arrived somewhere called
+    // "Beyond Les", which is neither language. `de` + `les cabanons` is
+    // `des cabanons`, and French contracts rather than concatenating.
+    expect(beyondName('Les cabanons', 'fr')).toBe('Au-delà des cabanons');
+    expect(beyondName('Le ponton', 'fr')).toBe('Au-delà du ponton');
+    expect(beyondName('La pointe', 'fr')).toBe('Au-delà de la pointe');
+    // Vowel-initial elides rather than contracting.
+    expect(beyondName('Auberge', 'fr')).toBe('Au-delà d’Auberge');
+  });
+
+  it('leaves English exactly as it was', () => {
+    // The English branch is byte-identical on purpose; French takes the other.
+    expect(beyondName('The Dock', 'en')).toBe('Beyond The Dock');
+    expect(beyondName(null, 'en')).toBe('Beyond here');
   });
 });

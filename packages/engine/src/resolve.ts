@@ -21,6 +21,7 @@ import {
   getRelationship,
 } from './state.js';
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
+import { elide, type Locale } from '@aniplay/i18n';
 import { fireWorldEvents } from './world-events.js';
 import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
 import {
@@ -2453,6 +2454,32 @@ const LEAVING =
  * back" carries no destination at all and fell through to a generic check.
  * Both produced lovely prose about departing and a player who had not moved.
  */
+/**
+ * What to call the place just past the edge of the map.
+ *
+ * Derived from where the player came from rather than invented, so it is an
+ * address instead of fiction — immediately real, returnable, and persistent.
+ * The writer fills in what it is actually like.
+ *
+ * French contracts rather than concatenating. `elide` carries the contraction
+ * table (`de` + `le` is `du`, `de` + `les` is `des`) and the aspirated-h list,
+ * which is the half nobody ships.
+ */
+export function beyondName(here: string | null, locale: Locale): string {
+  if (!here) return locale === 'fr' ? 'Plus loin' : 'Beyond here';
+  if (locale !== 'fr') return `Beyond ${here}`;
+
+  // French place names in this catalogue carry their own article — `Les
+  // cabanons`, `La pointe` — and an article that starts a name is capitalised.
+  // Dropped into the middle of a phrase it must not be: `Au-delà de La pointe`
+  // reads as a typo. Lowercased before `elide` sees it, so the contraction
+  // table matches too.
+  const lowered = /^(le|la|les|l’|l')\s*/i.test(here)
+    ? here.charAt(0).toLowerCase() + here.slice(1)
+    : here;
+  return `Au-delà ${elide('de', lowered)}`;
+}
+
 function resolveDeparture(args: ResolveActionArgs): ActionOutcome {
   const { story, state, action, nextMutationId } = args;
   const here = story.locations.find((l) => l.id === state.player.locationId);
@@ -2460,7 +2487,11 @@ function resolveDeparture(args: ResolveActionArgs): ActionOutcome {
       // derived from where they came from rather than invented — an address,
       // not fiction — so the place is immediately real, returnable, and
       // persistent, and the writer fills in what it is actually like.
-      const name = `Beyond ${here?.name ?? 'here'}`;
+      // In the run's language, and with the contraction French requires:
+      // `de` + `les cabanons` is `des cabanons`, never `de les cabanons`. A
+      // French player walked off the map and arrived somewhere called
+      // "Beyond Les", which is neither language.
+      const name = beyondName(here?.name ?? null, state.locale);
       const promotion = promoteLocation(state, name, 'left', TRAVEL_TO_NEW_MINUTES, nextMutationId);
 
       return {
