@@ -19,7 +19,7 @@ import {
   radius,
   spacing,
 } from '@aniplay/ui';
-import type { Translator } from '@aniplay/i18n';
+import { intlTag, type Translator } from '@aniplay/i18n';
 import { api } from '../api/client.js';
 import { Purchases } from '../store/purchases.js';
 import { useStore } from '../state/store.jsx';
@@ -53,7 +53,23 @@ export function WalletScreen({
   route: RootRoute<'Wallet'>;
 }): React.JSX.Element {
   const shortfall = route.params?.shortfall ?? null;
-  const { refreshWallet, setBalance } = useStore();
+  const { refreshWallet, setBalance, locale } = useStore();
+
+  /**
+   * `STORE_OFFERS` carries the badge as an English literal, because
+   * `@aniplay/contracts` has no translator — so `Popular` and `Best value` sat
+   * on a French store page between French prices and a French disclaimer. The
+   * offer keeps the word; the catalogue decides how to say it. A badge nobody
+   * has keyed yet falls back to what the offer sent.
+   */
+  const badgeWord = (badge: string): string => {
+    const key = {
+      Popular: 'wallet.badge_popular',
+      'Best value': 'wallet.badge_best_value',
+      'First purchase': 'wallet.badge_first_purchase',
+    }[badge];
+    return key ? t(key as never) : badge;
+  };
   const t = useT();
 
   const [wallet, setWallet] = useState<WalletSummary | null>(null);
@@ -245,7 +261,7 @@ export function WalletScreen({
             </Txt>
             {/* Spec §26.10 — the wallet always shows the full number. */}
             <Row gap={spacing.sm} align="baseline">
-              <Txt variant="display">{wallet.balance.toLocaleString()}</Txt>
+              <Txt variant="display">{formatCredits(wallet.balance, false, locale)}</Txt>
               <Txt variant="body" color={colors.text.muted}>
                 {t('wallet.credits_unit')}
               </Txt>
@@ -279,8 +295,8 @@ export function WalletScreen({
               key={offer.productId}
               accessibilityRole="button"
               accessibilityLabel={t('wallet.offer_a11y', {
-                credits: formatCredits(offer.credits),
-                bonus: offer.bonusCredits ? String(offer.bonusCredits) : 'none',
+                credits: formatCredits(offer.credits, false, locale),
+                bonus: offer.bonusCredits ? formatCredits(offer.bonusCredits, false, locale) : 'none',
                 price:
                   storePrices[offer.productId] ??
                   // The dollar amount is deliberately untouched — a hardcoded
@@ -301,14 +317,14 @@ export function WalletScreen({
                 <Row style={{ justifyContent: 'space-between' }}>
                   <Stack gap={2}>
                     <Row gap={spacing.sm}>
-                      <Txt variant="bodyStrong">{formatCredits(offer.credits)}</Txt>
+                      <Txt variant="bodyStrong">{formatCredits(offer.credits, false, locale)}</Txt>
                       {offer.bonusCredits > 0 ? (
                         <Txt variant="caption" color={colors.semantic.success}>
-                          {t('wallet.bonus_badge', { bonus: offer.bonusCredits })}
+                          {t('wallet.bonus_badge', { bonus: formatCredits(offer.bonusCredits, false, locale) })}
                         </Txt>
                       ) : null}
                     </Row>
-                    {offer.badge ? <Chip label={offer.badge} tone="accent" /> : null}
+                    {offer.badge ? <Chip label={badgeWord(offer.badge)} tone="accent" /> : null}
                     {offer.expiresAt ? (
                       <Txt variant="micro" color={colors.semantic.warning}>
                         {t('wallet.ends', { when: relativeTime(offer.expiresAt, t) })}
@@ -372,7 +388,7 @@ export function WalletScreen({
                   <Stack gap={0}>
                     <Txt variant="bodyCompact">{ledgerLabel(entry.type, t)}</Txt>
                     <Txt variant="micro" color={colors.text.muted}>
-                      {new Date(entry.createdAt).toLocaleString()}
+                      {new Date(entry.createdAt).toLocaleString(intlTag(locale))}
                     </Txt>
                   </Stack>
                   <Txt

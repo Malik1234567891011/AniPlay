@@ -344,4 +344,12 @@ export const wallet = {
     'Les achats ne sont pas disponibles sur cet appareil ou avec ce compte.',
   /** L’échec fourre-tout, atteint seulement quand la boutique n’a rien dit. */
   'store.purchase_failed': 'Cet achat n’est pas allé au bout. Tu n’as rien payé.',
+  /**
+   * Les trois badges de la boutique. « Le plus avantageux » plutôt que « Meilleure
+   * valeur », qui est un calque de *best value* et ne veut rien dire en
+   * français.
+   */
+  'wallet.badge_popular': 'Populaire',
+  'wallet.badge_best_value': 'Le plus avantageux',
+  'wallet.badge_first_purchase': 'Premier achat',
 } as const;
