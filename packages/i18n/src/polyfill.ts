@@ -49,6 +49,12 @@ import '@formatjs/intl-datetimeformat/add-all-tz.js';
 import '@formatjs/intl-datetimeformat/locale-data/en.js';
 import '@formatjs/intl-datetimeformat/locale-data/fr.js';
 
+// NOT installed, and deliberately: RelativeTimeFormat, Segmenter, DisplayNames,
+// Collator. Whatever Hermes ships is what you get, and for RelativeTimeFormat
+// what you get is a segfault — `Comments.tsx` used it and killed the app every
+// time a player opened a story. `polyfill.spec.ts` now fails the build if any
+// of them is constructed outside a guarded probe like the one in `search.ts`.
+// Add the formatjs package here before reaching for one of them.
 import '@formatjs/intl-listformat/polyfill-force.js';
 import '@formatjs/intl-listformat/locale-data/en.js';
 import '@formatjs/intl-listformat/locale-data/fr.js';
