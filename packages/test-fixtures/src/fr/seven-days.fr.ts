@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_seven_days",
   text: {
-    // A · 6460ef79cc0b
-    "title": "Sept jours jusqu’à minuit",
     // A · 9b65bc3c8f97
     "fantasyLabel": "La ville s’arrête dimanche. Toi seul t’en souviens.",
     // A · ccccdcad81be

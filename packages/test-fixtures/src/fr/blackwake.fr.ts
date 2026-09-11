@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_blackwake",
   text: {
-    // A · 76c7dbc3eafa
-    "title": "Blackwake",
     // A · b92b0425d675
     "fantasyLabel": "Un navire brisé. Personne ne sait qui vous êtes.",
     // A · 0cc8c2d2d330

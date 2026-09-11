@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_pink_tide",
   text: {
-    // A · cbe9e5f92ce3
-    "title": "Pink Tide",
     // A · 7430a3c5f4f0
     "fantasyLabel": "Paradis. Une semaine. Un homme disparu.",
     // A · 3aa503884587

@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_salt_road",
   text: {
-    // A · 248d2c267794
-    "title": "La Route du Sel",
     // A · a12d6cc89164
     "fantasyLabel": "Onze jours de marche. Neuf jours d’eau.",
     // A · 348c66727b04

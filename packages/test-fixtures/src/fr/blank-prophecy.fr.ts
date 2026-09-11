@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_blank_prophecy",
   text: {
-    // A · d1acdeac0a1c
-    "title": "La Prophétie Vide",
     // A · 1ad36acdc1d9
     "fantasyLabel": "Ils lisent ton avenir. Il était vide.",
     // A · fd448f2e6254

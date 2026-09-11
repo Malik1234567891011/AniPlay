@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_last_service",
   text: {
-    // A · a17d041b6679
-    "title": "Last Service",
     // A · 73b04eaab2cf
     "fantasyLabel": "Trente couverts. Trente jours. Une cuisine.",
     // A · fd3b6263b2bf

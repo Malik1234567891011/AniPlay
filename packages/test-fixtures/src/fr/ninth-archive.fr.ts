@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_ninth_archive",
   text: {
-    // A · d5fb18b2a4c9
-    "title": "Les Archives Neuvièmes",
     // A · 8b39256ed232
     "fantasyLabel": "L’académie affirme que vous n’avez jamais été admis.",
     // A · 02b737a017d4

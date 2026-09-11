@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_fourth_beast",
   text: {
-    // A · 2cc3eda0f9c9
-    "title": "La Quatrième Bête",
     // A · 19b3d761b4e3
     "fantasyLabel": "Trois bêtes. Deux personnes. Toi, tu choisis en premier.",
     // A · 8d9eca8e7ef5

@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_last_five",
   text: {
-    // A · 8a39bd60a0c8
-    "title": "Last Five",
     // A · 9ae612c79d10
     "fantasyLabel": "Reconstruis l’équipe. Battez les cinq qui sont partis.",
     // A · ffd207d4756f

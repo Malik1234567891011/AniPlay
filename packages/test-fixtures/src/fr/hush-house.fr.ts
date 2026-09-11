@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_hush_house",
   text: {
-    // A · 5704f9c71488
-    "title": "Hush House",
     // A · e82b4d74f541
     "fantasyLabel": "N’ouvre pas la porte à 2 h 13 du matin",
     // A · e6c3d6723a61

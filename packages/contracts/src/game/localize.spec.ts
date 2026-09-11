@@ -123,3 +123,16 @@ describe('every path in the overlay resolves', () => {
     }
   });
 });
+
+describe('the title', () => {
+  it('never travels, because the cover art carries it', () => {
+    // Every cover has the English title painted into the image — `ZERO THRONE`
+    // is part of the picture. A French label under English key art is not a
+    // localization, it is two names for one thing on the same screen.
+    //
+    // The batch translated 22 of them before this was noticed, and
+    // inconsistently: `La Prophétie Vide` moved, `Blackwake` did not. Revisit
+    // the day covers are generated per locale.
+    expect(fr.title).toBe(en.title);
+  });
+});

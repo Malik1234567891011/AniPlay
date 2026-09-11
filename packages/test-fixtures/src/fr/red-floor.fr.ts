@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_red_floor",
   text: {
-    // A · a31114dc1a08
-    "title": "Le Red Floor",
     // A · dc13f12fb0fc
     "fantasyLabel": "Pas de caméras. Pas d’enregistrements. Monte ou pas.",
     // A · 5372f42b66eb

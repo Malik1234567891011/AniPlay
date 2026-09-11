@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_window_seven",
   text: {
-    // A · 443e2967ab84
-    "title": "Window Seven",
     // A · 3d976b785823
     "fantasyLabel": "Sept nuits. Une fenêtre. Elle a fait signe.",
     // A · 64d9c2926dc3

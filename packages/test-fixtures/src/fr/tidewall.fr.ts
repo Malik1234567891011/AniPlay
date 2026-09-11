@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_tidewall",
   text: {
-    // A · d09b12fabefc
-    "title": "La Muraille de Marée",
     // A · e062e3e87688
     "fantasyLabel": "Ta sœur est morte en défendant la muraille.",
     // A · c04970d8e1c0

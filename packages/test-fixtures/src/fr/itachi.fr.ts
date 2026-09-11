@@ -14,8 +14,6 @@ import { registerWorldText } from '@aniplay/contracts';
 registerWorldText('fr', {
   storyId: "story_itachi",
   text: {
-    // A · e2024cce2d02
-    "title": "Itachi",
     // A · b8b673f932c1
     "fantasyLabel": "Les deux camps pensent déjà que tu leur appartiens.",
     // A · f249df50a902
