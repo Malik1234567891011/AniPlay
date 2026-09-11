@@ -833,7 +833,7 @@ registerWorldText('fr', {
     // B · d982523e87d8
     "characters.koji.secrets.koji_the_record.visibility": "FACTION",
     // B · 166878b322f1
-    "characters.koji.secrets.koji_the_record.revealHint": "Demandez-lui. Il vous dira en une seconde et vous demandera les vôtres.",
+    "characters.koji.secrets.koji_the_record.revealHint": "Demande-lui. Il te dira en une seconde et te demandera les tiens.",
     // B · 462a486d81a0
     "characters.koji.secrets.koji_the_coaching.fact": "Il entraîne officieusement deux ados depuis huit mois et n’a pas dit à Maki, parce que le dire ferait de ça une activité à part du combat.",
     // B · 47558a04be8d

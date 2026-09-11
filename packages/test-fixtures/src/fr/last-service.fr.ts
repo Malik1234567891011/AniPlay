@@ -895,13 +895,13 @@ registerWorldText('fr', {
     // B · c73392f42a2c
     "quests.q_the_number.discoverWhen.flagsSet": ["la_première_nuit_est_passée"],
     // B · 897f80ed8525
-    "quests.q_the_number.steps.find_out_what_it_is.playerCopy": "Personne ne vous a donné le chiffre. Découvrez ce que c’est.",
+    "quests.q_the_number.steps.find_out_what_it_is.playerCopy": "Personne ne vous a donné le chiffre. Découvre ce que c’est.",
     // B · 889933ac97f0
     "quests.q_the_number.steps.find_out_what_it_is.directorNotes": "Elle n’en parlera pas dans la cuisine et détournera tout ce qui s’en approche. Le livre, c’est dix-neuf ans de couverts au crayon. Les quatre derniers mois sont écrits de la même main que tout le reste, ce qui est dur à regarder.",
     // B · b324f4fa0397
     "quests.q_the_number.steps.find_out_what_it_is.rewards.flags": ["le_chiffre_est_sorti"],
     // B · c9af6ab09637
-    "quests.q_the_number.steps.what_the_two_years_cost.playerCopy": "Comprenez ce que tenir ça seule lui a vraiment fait.",
+    "quests.q_the_number.steps.what_the_two_years_cost.playerCopy": "Comprends ce que tenir ça seule lui a vraiment fait.",
     // B · 538db3db091e
     "quests.q_the_number.steps.what_the_two_years_cost.directorNotes": "Dix-neuf ans, pas un jour complet depuis mars, un appartement à six minutes choisi parce qu’il est à six minutes. Emi et Daichi ont tous deux couvert pour elle en silence. Cette étape n’est pas une crise et devrait être la scène la plus calme du monde.",
     // B · b324f4fa0397

@@ -15,7 +15,7 @@ registerWorldText('fr', {
   storyId: "story_last_five",
   text: {
     // A · 9ae612c79d10
-    "fantasyLabel": "Reconstruis l’équipe. Battez les cinq qui sont partis.",
+    "fantasyLabel": "Reconstruis l’équipe. Bats les cinq qui sont partis.",
     // A · ffd207d4756f
     "hook": "Les cinq titulaires de Kosei sont partis au printemps dernier. Le collège ferme le programme en mars, sauf si ce qu’il en reste atteint les Nationals.",
     // A · 9a596677c14a

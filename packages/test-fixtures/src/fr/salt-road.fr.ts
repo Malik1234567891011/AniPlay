@@ -409,13 +409,13 @@ registerWorldText('fr', {
     // B · 7fcc0be2ad9c
     "quests.q_delivery.kind": "PRINCIPALE",
     // B · eb0a6bd19de6
-    "quests.q_delivery.steps.step_first_well.playerCopy": "Atteignez le premier puits.",
+    "quests.q_delivery.steps.step_first_well.playerCopy": "Atteins le premier puits.",
     // B · da654899c177
-    "quests.q_delivery.steps.step_first_well.directorNotes": "Douze heures de marche. Établissez l’arithmétique avant tout drame.",
+    "quests.q_delivery.steps.step_first_well.directorNotes": "Douze heures de marche. Poser l’arithmétique avant tout drame.",
     // B · fc406b872d8a
     "quests.q_delivery.steps.step_first_well.succeedWhen.atLocation": "first_well",
     // B · b9ca07b2f65b
-    "quests.q_delivery.steps.step_second_well.playerCopy": "Atteignez le deuxième puits avec de l’eau en réserve.",
+    "quests.q_delivery.steps.step_second_well.playerCopy": "Atteins le deuxième puits avec de l’eau en réserve.",
     // B · 54cc2f0c058c
     "quests.q_delivery.steps.step_second_well.directorNotes": "La dernière eau certaine. Quoi que le groupe décide ici, il en vivra après.",
     // B · fc406b872d8a
@@ -423,7 +423,7 @@ registerWorldText('fr', {
     // B · f2e5e9c8a9cd
     "quests.q_delivery.steps.step_second_well.succeedWhen.atLocation": "second_well",
     // B · ca7deb7deef5
-    "quests.q_delivery.steps.step_third_well.playerCopy": "Découvrez si le troisième puits tient.",
+    "quests.q_delivery.steps.step_third_well.playerCopy": "Découvre si le troisième puits tient.",
     // B · cc69a2875771
     "quests.q_delivery.steps.step_third_well.directorNotes": "La promesse se réalise ici, et la façon dont le groupe arrive est toute l’histoire. Quelqu’un qui lit le sol le savait avant d’arriver. Quelqu’un qui portait l’eau a rendu la question académique. Quelqu’un qui s’est tenu devant les épaves a acheté les heures. Et quelqu’un en qui Ferrow a confiance s’est simplement fait dire ce qu’elle savait déjà. Ferrow ne voudra pas partir, et partira.",
     // B · f2e5e9c8a9cd

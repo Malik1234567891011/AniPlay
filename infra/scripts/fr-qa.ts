@@ -204,6 +204,29 @@ function check(story: StoryVersion, findings: Finding[], gaps: string[]): void {
       // to do with how the narrator addresses anybody.
       const knownPlural = (KNOWN_PLURAL[story.title] ?? []).includes(path);
 
+      // The imperative carries no pronoun, so `Battez les cinq qui sont partis`
+      // is invisible to the check above — and it sat on Last Five's shelf card
+      // directly after `Reconstruis l'équipe`, one tutoiement and one
+      // vouvoiement in the same line. Found by looking at the screen, which is
+      // the argument for looking at the screen.
+      //
+      // A sentence that opens with a -ez verb is addressed to `vous`. The
+      // exceptions are words that merely end that way.
+      const VOUS_IMPERATIVE = /(?:^|[.!?»]\s+)([A-ZÀ-ÝÉÈÊ][a-zà-ÿéèêç]+ez)\b/g;
+      const NOT_A_VERB = /^(Assez|Chez|Nez|Rez|Vous)$/;
+      if (!knownPlural) {
+        for (const m of text.matchAll(VOUS_IMPERATIVE)) {
+          if (NOT_A_VERB.test(m[1]!)) continue;
+          // `Décidez ensemble` is the couple, and correct.
+          if (/\bensemble\b|\b(?:tous|toutes) les deux\b/.test(text)) continue;
+          findings.push({
+            world: story.title, path, code: 'VOUS_IMPERATIVE',
+            detail: `${m[1]} — ${text.slice(0, 70)}`,
+          });
+          break;
+        }
+      }
+
       for (const sentence of knownPlural ? [] : text.split(/(?<=[.!?])\s+/)) {
         if (vouvoiement.test(sentence) && !pair.test(sentence)) {
           findings.push({

@@ -1077,7 +1077,7 @@ registerWorldText('fr', {
     // B · d466d93d526b
     "quests.q_the_bag.steps.what_is_in_the_shed.playerCopy": "Le sac bleu est exactement là où elle a dit qu’il était.",
     // B · 78ab6df74ae7
-    "quests.q_the_bag.steps.what_is_in_the_shed.directorNotes": "Lumière du soleil, crème solaire, un cadenas que quelqu’un a ouvert pour une raison. Quoi que le joueur fasse, le sac ne reste pas ici après la deuxième nuit. Photographiez-le, et la photo survit ; laissez-le, et il n’y a plus rien à montrer ensuite.",
+    "quests.q_the_bag.steps.what_is_in_the_shed.directorNotes": "Lumière du soleil, crème solaire, un cadenas que quelqu’un a ouvert pour une raison. Quoi que le joueur fasse, le sac ne reste pas ici après la deuxième nuit. S’il le photographie, la photo survit ; s’il le laisse, il n’y a plus rien à montrer ensuite.",
     // B · 5d9994bbf695
     "quests.q_the_bag.steps.what_is_in_the_shed.enterWhen.flagsSet": ["dedans"],
     // B · 2c570d29ec1f
@@ -1403,7 +1403,7 @@ registerWorldText('fr', {
     // B · 19d512bb8617
     "endings.end_the_missing_man.requires.flagsSet": ["adrian_is_out","the_man_is_answered"],
     // B · e033edafc8f5
-    "endings.end_the_missing_man.condition": "Il est sorti de là vivant et le registre indique maintenant ce qui s’est vraiment passé sur le chemin. Racontez le sauvetage comme une logistique plutôt que comme un acte héroïque — une fenêtre de marée, un départ, un chirurgien en vacances, et un homme trop déshydraté pour être aussi clair qu’il le voudrait.",
+    "endings.end_the_missing_man.condition": "Il est sorti de là vivant et le registre indique maintenant ce qui s’est vraiment passé sur le chemin. Raconter le sauvetage comme une logistique plutôt que comme un acte héroïque — une fenêtre de marée, un départ, un chirurgien en vacances, et un homme trop déshydraté pour être aussi clair qu’il le voudrait.",
     // A · 035e1a8a6498
     "endings.end_the_missing_man.epilogue": "Deux opérations au poignet et une cicatrice qui descend le mollet ; un souvenir qu’il montrera toute sa vie. Il se montre furieux envers lui-même lors des interviews et charmant en même temps, c’est exactement ce qu’il était avant. Il envoie un seul message qui n’a rien à voir avec l’histoire, une excuse adressée à quelqu’un qui a passé trois jours à se demander si elle aurait dû parler.",
     // B · 68b6f9972317
@@ -1445,7 +1445,7 @@ registerWorldText('fr', {
     // B · 0d771534ed26
     "endings.end_paradise_closed.requires.flagsUnset": ["resort_survives"],
     // B · 665bd038b603
-    "endings.end_paradise_closed.condition": "Tout est sorti, et le complexe n’a pas survécu à l’année. C’est une vraie conséquence de faire ce qu’il faut bruyamment et ça ne doit pas être écrit comme une punition ou un triomphe. Suivez le personnel plutôt que l’entreprise : quatre cent onze personnes et où chacun finit.",
+    "endings.end_paradise_closed.condition": "Tout est sorti, et le complexe n’a pas survécu à l’année. C’est une vraie conséquence de faire ce qu’il faut bruyamment et ça ne doit pas être écrit comme une punition ou un triomphe. Suivre le personnel plutôt que l’entreprise : quatre cent onze personnes et où chacun finit.",
     // A · b7e22bc5acd7
     "endings.end_paradise_closed.epilogue": "La piscine retient l’eau pendant encore onze mois avant qu’on arrête de la nettoyer. Luka s’achète un bateau, sans grand succès, et s’en sort quand même. Un an plus tard, June gère un bar à Kagetsu et gagne mieux sa vie. Reika ne retravaille pas dans l’hôtellerie, par choix, et répond au téléphone aux anciens employés pendant des années.",
     // B · b25d14e30eaa
@@ -1485,7 +1485,7 @@ registerWorldText('fr', {
     // B · d83899d26398
     "endings.end_sunrise_ferry.requires.flagsSet": ["left_early","left_the_map"],
     // B · ca95a29a62a8
-    "endings.end_sunrise_ferry.condition": "Ils sont partis tôt, volontairement, et ce n’est ni un échec ni une tragédie. Une semaine dans un complexe dont on s’est éloigné, c’est une mauvaise semaine, et prendre le premier bateau est quelque chose de tout à fait raisonnable pour un adulte. Racontez ce départ comme une décision, pas une fuite.",
+    "endings.end_sunrise_ferry.condition": "Ils sont partis tôt, volontairement, et ce n’est ni un échec ni une tragédie. Une semaine dans un complexe dont on s’est éloigné, c’est une mauvaise semaine, et prendre le premier bateau est quelque chose de tout à fait raisonnable pour un adulte. Raconter ce départ comme une décision, pas une fuite.",
     // A · 9c40bd62264d
     "endings.end_sunrise_ferry.epilogue": "Le ferry de six heures quarante est presque vide et le café est mauvais. Trois jours chez soi, qui s’avèrent être les vraies vacances. Environ un mois plus tard, un message arrive au sujet de quelque chose survenue sur l’île après leur départ, ils le lisent deux fois, puis reprennent le travail.",
     // B · 4630a2df5203

@@ -877,7 +877,7 @@ registerWorldText('fr', {
     // B · e765033a420b
     "endings.end_sunday_morning.requires.flagsUnset": ["separated","went_back"],
     // B · 67a399238310
-    "endings.end_sunday_morning.condition": "La fin tranquille. Le joueur est resté, le mariage est intact et sans histoire, et rien n’a été résolu — le trou de mémoire est juste un truc qui est arrivé et qui n’est plus le fait le plus intéressant de la semaine. Jouez petit et domestique : un dimanche, un petit déjeuner tardif, un plan pour l’après-midi que personne ne note. Personne ne fait de discours sur le choix de cette vie.",
+    "endings.end_sunday_morning.condition": "La fin tranquille. Le joueur est resté, le mariage est intact et sans histoire, et rien n’a été résolu — le trou de mémoire est juste un truc qui est arrivé et qui n’est plus le fait le plus intéressant de la semaine. Jouer petit et domestique : un dimanche, un petit déjeuner tardif, un plan pour l’après-midi que personne ne note. Personne ne fait de discours sur le choix de cette vie.",
     // A · d7b5962d908e
     "endings.end_sunday_morning.epilogue": "La bibliothèque est soit terminée, soit pas, et quoi qu’il en soit, plus personne n’en parle. Il y a une liste de courses sur le frigo, écrite à deux mains, et la plupart des articles sont barrés. Certains matins, pendant environ quatre secondes, l’appartement semble étranger à nouveau, puis ça passe.",
     // B · 6737f6247df8
