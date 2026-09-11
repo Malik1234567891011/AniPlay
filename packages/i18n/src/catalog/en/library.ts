@@ -152,4 +152,6 @@ export const library = {
   'library.delete_account_confirm': 'Delete everything',
   'library.account_deleted_title': 'Account deleted',
   'library.account_deleted_body': 'Your data will be fully purged within 30 days.',
+  /** Replaces the created count, which was always zero. */
+  'library.stat_badges': 'Badges',
 } as const;

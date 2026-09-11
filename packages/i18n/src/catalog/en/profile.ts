@@ -33,4 +33,19 @@ export const profile = {
   /** "Follow whatever the phone is set to" — not the name of a device. */
   'profile.language_device': 'Device',
   'profile.language_current': 'New stories will be in {name}.',
+  /** The two switches that show the engine's working, behind a disclosure. */
+  'profile.advanced_gameplay': 'Advanced gameplay',
+  'profile.advanced_gameplay_hint': 'Relationship numbers and check maths',
+  'profile.badges': 'Badges',
+  'profile.badges_summary': '{earned} of {total} earned',
+  'profile.badges_unclaimed': '{count, plural, one {# reward to collect} other {# rewards to collect}}',
+  /* -- The badges screen -- */
+
+  'badges.ready': 'Ready to collect',
+  'badges.in_progress': 'In progress',
+  'badges.earned': 'Earned',
+  'badges.claim': 'Collect {credits}',
+  'badges.claim_a11y': 'Collect {credits} credits for {title}.',
+  'badges.progress': '{done} of {target}',
+  'badges.guest': 'Sign in to keep the badges you earn.',
 } as const;

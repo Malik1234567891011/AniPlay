@@ -22,6 +22,7 @@ import { CreateScreen, ReportHistoryScreen, ReportScreen, SignInScreen } from '.
 import { ShareScreen } from './screens/Share.jsx';
 import { CharactersScreen } from './screens/Characters.jsx';
 import { useT } from './i18n/useT.js';
+import { BadgesScreen } from './screens/Badges.jsx';
 
 /**
  * Spec §5 — information architecture.
@@ -56,6 +57,7 @@ export type RootParamList = {
   };
   Report: { targetType: string; targetId: string };
   Characters: undefined;
+  Badges: undefined;
   ReportHistory: undefined;
 };
 
@@ -243,6 +245,10 @@ export function Navigation(): React.JSX.Element {
           <Stack.Screen
             name="Characters" // i18n-exempt: route name
             component={CharactersScreen as never}
+          />
+          <Stack.Screen
+            name="Badges" // i18n-exempt: route name
+            component={BadgesScreen as never}
           />
         </Stack.Group>
       </Stack.Navigator>

@@ -171,4 +171,5 @@ export const library = {
   'library.account_deleted_title': 'Compte supprimé',
   /** `sous 30 jours` est la forme française de « within 30 days ». */
   'library.account_deleted_body': 'Tes données seront entièrement effacées sous 30 jours.',
+  'library.stat_badges': 'Badges',
 } as const;

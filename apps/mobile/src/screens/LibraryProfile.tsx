@@ -24,6 +24,7 @@ import { ApiError, api, type PlayerCharacterCard } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
+import type { BadgeView } from '../api/client.js';
 
 /**
  * LB-01 / LB-02 Library, PR-01 / PR-02 / PR-03 Profile, SF-01 Report.
@@ -255,6 +256,12 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
   const { wallet, isGuest, refreshWallet, signOut, locale, localeChoice, setLocale } = useStore();
   const [me, setMe] = useState<MeResponse | null>(null);
   const [characters, setCharacters] = useState<PlayerCharacterCard[]>([]);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [badges, setBadges] = useState<BadgeView[]>([]);
+
+  const badgeCount = badges.filter((b) => b.unlockedAt).length;
+  const badgeTotal = badges.length;
+  const unclaimed = badges.filter((b) => b.unlockedAt && !b.claimedAt).length;
   // The language switch is deliberately not on the screen yet. French exists
   // as infrastructure and not yet as copy, and a visible control that produced
   // a half-translated app would be a worse bug than not having one. Seven taps
@@ -277,6 +284,11 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
       setCharacters([]);
     }
   }, [refreshWallet]);
+
+  useEffect(() => {
+    if (isGuest) return;
+    void api.badges().then((response) => setBadges(response.badges)).catch(() => undefined);
+  }, [isGuest]);
 
   useEffect(() => {
     void load();
@@ -345,9 +357,13 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
 
         {me ? (
           <Row style={{ justifyContent: 'space-around' }}>
+            {/* What a *player* has done. `worldsCreated` was here and was
+                always 0, because creator publishing is not a thing we ship —
+                a permanent `0 CREATED` on the profile is the product telling
+                the player about a feature they cannot have. */}
             <Stat label={t('library.stat_worlds')} value={me.stats.storiesPlayed} />
             <Stat label={t('library.stat_turns')} value={me.stats.turnsPlayed} />
-            <Stat label={t('library.stat_created')} value={me.stats.worldsCreated} />
+            <Stat label={t('library.stat_badges')} value={badgeCount} />
           </Row>
         ) : null}
 
@@ -431,21 +447,69 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
           </Stack>
         ) : null}
 
+        {/*
+          Two switches that show the engine's working.
+
+          They were top-level, between Language and Reduce Motion, which put
+          "show check maths" in front of every player who has never wanted to
+          see a dice roll. They are genuinely useful to a small number of people
+          and noise to everyone else, so they are one tap away rather than gone.
+        */}
         <Stack gap={spacing.md}>
           <Txt variant="h3">{t('profile.gameplay')}</Txt>
-          <Toggle
-            label={t('profile.advanced_relationship_stats')}
-            hint={t('profile.advanced_relationship_stats_hint')}
-            value={me?.settings.showAdvancedRelationshipStats ?? false}
-            onChange={(v) => setSetting('showAdvancedRelationshipStats', v)}
-          />
-          <Toggle
-            label={t('profile.check_math')}
-            hint={t('profile.check_math_hint')}
-            value={me?.settings.showCheckMath ?? false}
-            onChange={(v) => setSetting('showCheckMath', v)}
-          />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={{ expanded: advancedOpen }}
+            onPress={() => setAdvancedOpen(!advancedOpen)}
+          >
+            <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+              <Stack gap={2}>
+                <Txt variant="body">{t('profile.advanced_gameplay')}</Txt>
+                <Txt variant="micro" color={colors.text.muted}>
+                  {t('profile.advanced_gameplay_hint')}
+                </Txt>
+              </Stack>
+              <Txt variant="h3" color={colors.text.muted}>
+                {advancedOpen ? '⌄' : '›'}
+              </Txt>
+            </Row>
+          </Pressable>
+          {advancedOpen ? (
+            <Stack gap={spacing.md} style={{ paddingLeft: spacing.md }}>
+              <Toggle
+                label={t('profile.advanced_relationship_stats')}
+                hint={t('profile.advanced_relationship_stats_hint')}
+                value={me?.settings.showAdvancedRelationshipStats ?? false}
+                onChange={(v) => setSetting('showAdvancedRelationshipStats', v)}
+              />
+              <Toggle
+                label={t('profile.check_math')}
+                hint={t('profile.check_math_hint')}
+                value={me?.settings.showCheckMath ?? false}
+                onChange={(v) => setSetting('showCheckMath', v)}
+              />
+            </Stack>
+          ) : null}
         </Stack>
+
+        {/* Badges, with what is waiting to be collected said plainly. */}
+        <Pressable accessibilityRole="button" onPress={() => navigation.navigate('Badges')}>
+          <Card>
+            <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+              <Stack gap={2}>
+                <Txt variant="body">{t('profile.badges')}</Txt>
+                <Txt variant="micro" color={colors.text.muted}>
+                  {unclaimed > 0
+                    ? t('profile.badges_unclaimed', { count: unclaimed })
+                    : t('profile.badges_summary', { earned: badgeCount, total: badgeTotal })}
+                </Txt>
+              </Stack>
+              <Txt variant="h3" color={colors.text.muted}>
+                ›
+              </Txt>
+            </Row>
+          </Card>
+        </Pressable>
 
         <Stack gap={spacing.md}>
           <Txt variant="h3">{t('profile.audio_visual')}</Txt>

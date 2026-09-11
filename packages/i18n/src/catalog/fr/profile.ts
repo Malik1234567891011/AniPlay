@@ -77,4 +77,29 @@ export const profile = {
   /** « Suis ce que règle le téléphone » — pas le nom d'un appareil. */
   'profile.language_device': 'Appareil',
   'profile.language_current': 'Les nouvelles histoires seront en {name}.',
+  /**
+   * Les deux réglages qui montrent la mécanique, repliés.
+   *
+   * `Jeu avancé` et non `Gameplay avancé` : `gameplay` est de l'anglais qui
+   * passe à l'oral et détonne dans un menu de réglages.
+   */
+  'profile.advanced_gameplay': 'Jeu avancé',
+  'profile.advanced_gameplay_hint': 'Chiffres de relation et détail des jets',
+  'profile.badges': 'Badges',
+  'profile.badges_summary': '{earned} sur {total}',
+  'profile.badges_unclaimed':
+    '{count, plural, one {# récompense à récupérer} other {# récompenses à récupérer}}',
+  /* -- L'écran des badges -- */
+
+  /**
+   * `Récupérer` et non `Réclamer` : on réclame ce qu'on estime dû, on récupère
+   * ce qui nous attend. Le second est ce que fait le bouton.
+   */
+  'badges.ready': 'À récupérer',
+  'badges.in_progress': 'En cours',
+  'badges.earned': 'Obtenus',
+  'badges.claim': 'Récupérer {credits}',
+  'badges.claim_a11y': 'Récupérer {credits} crédits pour {title}.',
+  'badges.progress': '{done} sur {target}',
+  'badges.guest': 'Connecte-toi pour garder les badges que tu obtiens.',
 } as const;
