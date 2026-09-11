@@ -273,7 +273,12 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
   // developer menu; step 7 of the localization sequence promotes it to a
   // normal row once `npm run fr:lint` is clean over a full catalogue.
   const [languageTaps, setLanguageTaps] = useState(0);
-  const languageVisible = languageTaps >= 7 || localeChoice !== null;
+  // Promoted to a normal row on 2026-09-11, per the condition in the comment
+  // above: `fr:lint` is clean over a complete catalogue. It also has to be a
+  // normal row now that `DEVICE_LOCALE_AUTODETECT` is on — a French phone opens
+  // in French, and the only way back to English cannot be a secret seven taps.
+  const languageVisible = true;
+  void languageTaps;
 
   const load = useCallback(async () => {
     try {

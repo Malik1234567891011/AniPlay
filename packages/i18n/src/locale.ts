@@ -79,11 +79,17 @@ export function intlTag(locale: Locale): string {
  * worse than giving them the English one they already had. Until then French is
  * reachable only by an explicit choice.
  *
- * Flipping this to `true` is the single line that turns France on. It belongs
- * at step 7 of the Phase 2 sequence, once `npm run fr:lint` is clean over a
- * complete catalogue — not before.
+ * **Turned on 2026-09-11.** The condition named above is met: `npm run fr:lint`
+ * reports 711 of 711 keys with no violations, so the interface catalogue is
+ * complete, and 22 of 23 worlds carry full French. The launch plan is the
+ * French App Store in France and Belgium, where a phone set to French should
+ * open in French without being asked.
+ *
+ * The one gap is Nine Weeks, at 11% of its world text. That is Supabase data
+ * rather than bundled strings, so it can be finished without another build —
+ * unlike everything in the catalogue, which cannot.
  */
-export const DEVICE_LOCALE_AUTODETECT = false;
+export const DEVICE_LOCALE_AUTODETECT = true;
 
 /**
  * Resolve a locale from the device, honouring `DEVICE_LOCALE_AUTODETECT`.

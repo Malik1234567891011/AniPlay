@@ -133,14 +133,27 @@ describe('English is untouched', () => {
     expect((await ctx.repo.getState(created.session.sessionId))?.locale).toBe('en');
   });
 
-  it('does not follow a French device while the autodetect flag is off', async () => {
-    // The whole point of `DEVICE_LOCALE_AUTODETECT`: the plumbing works, and
-    // it stays off until there is French copy behind it. A French phone must
-    // not be handed a half-built app on the strength of its OS settings.
+  it('follows a French device, now that the autodetect flag is on', async () => {
+    // This asserted the opposite until 2026-09-11, and was right to: the flag
+    // existed so a French phone could not be handed a half-built app on the
+    // strength of its OS settings. The catalogue is complete now, and the
+    // launch is the French App Store, so a phone set to French opens in French.
     const response = await app.inject({
       method: 'POST',
       url: '/v1/stories/story_ninth_archive/sessions',
       headers: { ...auth, 'accept-language': 'fr-FR,fr;q=0.9' },
+      payload: { identity: IDENTITY, usedQuickSetup: true },
+    });
+    expect(response.json().session.locale).toBe('fr');
+  });
+
+  it('still gives English to a device that asks for English', async () => {
+    // The other half of the promise, and the reason the language picker is a
+    // normal row now: French by default must not mean French only.
+    const response = await app.inject({
+      method: 'POST',
+      url: '/v1/stories/story_ninth_archive/sessions',
+      headers: { ...auth, 'accept-language': 'en-GB,en;q=0.9' },
       payload: { identity: IDENTITY, usedQuickSetup: true },
     });
     expect(response.json().session.locale).toBe('en');
