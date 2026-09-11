@@ -63,7 +63,8 @@ export function foldNarrowSpaces(text: string): string {
  *
  *   - the apostrophe is ’ and never ', between letters;
  *   - ? ! ; : take a narrow no-break space before them;
- *   - guillemets take one on the inside.
+ *   - a pair of straight double quotes becomes guillemets;
+ *   - guillemets take a narrow no-break space on the inside.
  *
  * Careful about what it must *not* touch: `10:30` is a time, `https://` is a
  * URL, and an apostrophe that is acting as a quotation mark is somebody's
@@ -80,6 +81,15 @@ export function frenchTypography(text: string): string {
       if (mark === ':' && (slashes || /\d/.test(before))) return match;
       return `${before}\u202f${mark}${slashes ?? ''}`;
     })
+    // A **pair** of straight double quotes is dialogue, and French dialogue
+    // takes guillemets. The smoke test found three cards in one world reading
+    // `"Je préfère un peu de compagnie"` — which is correct French inside
+    // English punctuation, and the one typographic error a French reader
+    // notices instantly.
+    //
+    // Pairs only. An odd quote is somebody's inch mark or a truncation, and
+    // turning it into a lone « is worse than leaving it alone.
+    .replace(/"([^"\n]*)"/g, '«\u202f$1\u202f»')
     .replace(/«\s*/g, '«\u202f')
     .replace(/\s*»/g, '\u202f»');
 }

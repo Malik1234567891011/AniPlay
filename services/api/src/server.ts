@@ -675,8 +675,20 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     async (request) => {
       const sort = request.query.sort === 'NEW' ? 'NEW' : 'TOP';
       const user = await optionalUser(ctx, request);
-      const comments = await ctx.repo.listComments(request.params.storyId, sort, 100);
+      const all = await ctx.repo.listComments(request.params.storyId, sort, 100);
       const liked = user ? new Set(await ctx.repo.likedCommentIds(user.userId, request.params.storyId)) : new Set<string>();
+
+      /**
+       * Blocking somebody now hides them.
+       *
+       * `listBlocks` existed, and its only caller was the route that returns
+       * the list — so blocking a person changed nothing you could see, which
+       * is the opposite of what the word means and what Guideline 1.2 asks a
+       * UGC app to provide.
+       */
+      const blocked = user ? new Set(await ctx.repo.listBlocks(user.userId)) : new Set<string>();
+      const comments = blocked.size === 0 ? all : all.filter((c) => !c.userId || !blocked.has(c.userId));
+
       return {
         sort,
         comments: comments.map((c) => ({
@@ -711,6 +723,29 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
       if ((await ctx.repo.countRecentComments(user.userId, hourAgo)) >= COMMENTS_PER_HOUR) {
         return sendError(reply, 429, 'RATE_LIMITED', 'That is a lot of comments in an hour. Try again shortly.');
+      }
+
+      /**
+       * The same moderator every turn already passes through.
+       *
+       * Comments were the one player-authored text in the app that reached
+       * other people unfiltered — the turn pipeline has been checking input
+       * since it was written, and this route simply never called it. Guideline
+       * 1.2 asks a UGC app for a method of filtering objectionable content;
+       * this is that method, and it was already here.
+       */
+      const verdict = await ctx.moderator.check(body);
+      if (verdict.flagged) {
+        request.log.warn(
+          { userId: user.userId, categories: verdict.categories },
+          'comment blocked by moderation',
+        );
+        return sendError(
+          reply,
+          422,
+          'CONTENT_BLOCKED',
+          verdict.playerFacingMessage ?? 'That comment cannot be posted.',
+        );
       }
 
       const comment = {

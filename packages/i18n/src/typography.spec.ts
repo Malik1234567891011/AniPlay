@@ -30,3 +30,28 @@ describe('French typography on text a model just wrote', () => {
     expect(frenchTypography("'Salut'")).toBe("'Salut'");
   });
 });
+
+describe('straight quotes become guillemets', () => {
+  it('converts a pair, with the inside spaces French uses', () => {
+    expect(frenchTypography('Je dis "bonjour" et je pars.')).toBe(
+      'Je dis «\u202fbonjour\u202f» et je pars.',
+    );
+  });
+
+  it('handles the case the smoke test found', () => {
+    // A response card from Window Seven, straight out of the model.
+    const card = 'Je pose le mug. "Je préfère un peu de compagnie."';
+    const out = frenchTypography(card);
+    expect(out).toContain('«\u202fJe préfère un peu de compagnie.\u202f»');
+    expect(out).not.toContain('"');
+  });
+
+  it('leaves an unpaired quote alone rather than mangling it', () => {
+    // An inch mark, or a truncated card. A lone « is worse than a lone ".
+    expect(frenchTypography('Il mesure 6" de haut')).toBe('Il mesure 6" de haut');
+  });
+
+  it('does not disturb text that already uses guillemets', () => {
+    expect(frenchTypography('Il dit « non » et sort.')).toBe('Il dit «\u202fnon\u202f» et sort.');
+  });
+});

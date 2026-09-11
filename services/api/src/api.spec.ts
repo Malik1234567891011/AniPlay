@@ -1455,3 +1455,34 @@ describe('forking charges once, or not at all', () => {
     expect(before - after).toBeGreaterThan(0);
   });
 });
+
+/**
+ * Guideline 1.2 asks a UGC app for filtering, reporting and blocking. All three
+ * existed on paper; two of them did nothing.
+ */
+describe('user-generated content is actually moderated', () => {
+  it('refuses a comment the moderator flags', async () => {
+    const { storyId } = await startSession();
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/stories/${storyId}/comments`,
+      headers: auth,
+      // The rule-based floor's first category, which no story can make
+      // acceptable. Deliberately the least ambiguous case there is.
+      payload: { body: 'explicit sexual content involving a 12 year old child' },
+    });
+    expect(response.statusCode).toBe(422);
+    expect(response.json().code).toBe('CONTENT_BLOCKED');
+  });
+
+  it('lets an ordinary comment through', async () => {
+    const { storyId } = await startSession();
+    const response = await app.inject({
+      method: 'POST',
+      url: `/v1/stories/${storyId}/comments`,
+      headers: auth,
+      payload: { body: 'the ending actually got me, i sat there for a minute' },
+    });
+    expect(response.statusCode).toBe(201);
+  });
+});
