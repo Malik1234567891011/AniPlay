@@ -209,4 +209,15 @@ export const story = {
   'story.posted_weeks': '{count, plural, one {il y a {count} sem.} other {il y a {count} sem.}}',
   'story.posted_months': '{count, plural, one {il y a {count} mois} other {il y a {count} mois}}',
   'story.posted_years': '{count, plural, one {il y a {count} an} other {il y a {count} ans}}',
+  /**
+   * Les deux statistiques dérivées d’une fiche. Voir `en/story.ts`.
+   *
+   * `Ouvert` plutôt que `Sans fin` : la partie a des fins, c’est la forme qui
+   * n’est pas découpée en épisodes.
+   */
+  'story.shape_open_ended': 'Ouvert',
+  'story.shape_episodic': 'Épisodique',
+  'story.intensity_light': 'Léger',
+  'story.intensity_moderate': 'Modéré',
+  'story.intensity_intense': 'Intense',
 } as const;

@@ -132,4 +132,19 @@ export const story = {
   'story.posted_weeks': '{count, plural, one {{count}w ago} other {{count}w ago}}',
   'story.posted_months': '{count, plural, one {{count}mo ago} other {{count}mo ago}}',
   'story.posted_years': '{count, plural, one {{count}y ago} other {{count}y ago}}',
+  /**
+   * The two derived stats on a story card.
+   *
+   * `medianDepthLabel` is computed in `projections.ts` from the quest count and
+   * arrives as the English word; `intensity` arrives as an enum and was being
+   * title-cased into one. Both sat in English under French labels — FORMAT said
+   * `Open-ended`, INTENSITÉ said `Moderate`.
+   *
+   * The server keeps deciding which it is. This decides what it is called.
+   */
+  'story.shape_open_ended': 'Open-ended',
+  'story.shape_episodic': 'Episodic',
+  'story.intensity_light': 'Light',
+  'story.intensity_moderate': 'Moderate',
+  'story.intensity_intense': 'Intense',
 } as const;

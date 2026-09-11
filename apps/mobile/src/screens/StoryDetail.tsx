@@ -302,9 +302,9 @@ export function StoryDetailScreen({
           {/* Spec §8.2 item 6 — compact honest stats, no fake ratings. */}
           <Card>
             <Row style={{ justifyContent: 'space-between' }}>
-              <Stat label={t('story.stat_players')} value={detail.stats.runs.toLocaleString()} />
-              <Stat label={t('story.stat_shape')} value={detail.stats.medianDepthLabel} />
-              <Stat label={t('story.stat_intensity')} value={titleCase(detail.stats.intensity)} />
+              <Stat label={t('story.stat_players')} value={formatCredits(detail.stats.runs, false, locale)} />
+              <Stat label={t('story.stat_shape')} value={shapeWord(detail.stats.medianDepthLabel, t)} />
+              <Stat label={t('story.stat_intensity')} value={intensityWord(detail.stats.intensity, t)} />
             </Row>
           </Card>
 
@@ -531,6 +531,26 @@ function Stat({ label, value }: { label: string; value: string }): React.JSX.Ele
   );
 }
 
-function titleCase(value: string): string {
-  return value.charAt(0) + value.slice(1).toLowerCase();
+/**
+ * The shape and intensity words.
+ *
+ * `projections.ts` computes the shape from the quest count and sends the
+ * English word; intensity arrives as an enum that used to be title-cased into
+ * one. Under French labels that read `FORMAT · Open-ended` and
+ * `INTENSITÉ · Moderate`. The server still decides which it is; these decide
+ * what it is called, and an unrecognised value falls back to what was sent.
+ */
+function shapeWord(label: string, t: Translator): string {
+  if (label === 'Open-ended') return t('story.shape_open_ended');
+  if (label === 'Episodic') return t('story.shape_episodic');
+  return label;
+}
+
+function intensityWord(value: string, t: Translator): string {
+  const key = {
+    LIGHT: 'story.intensity_light',
+    MODERATE: 'story.intensity_moderate',
+    INTENSE: 'story.intensity_intense',
+  }[value.toUpperCase()];
+  return key ? t(key as never) : value.charAt(0) + value.slice(1).toLowerCase();
 }
