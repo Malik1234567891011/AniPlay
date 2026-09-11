@@ -245,12 +245,20 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   });
 
   /**
-   * Which language to render interface chrome in for this request.
+   * The language to answer a catalogue request in.
    *
-   * An explicit saved choice wins; otherwise the device, which
-   * `resolveDeviceLocale` gates behind `DEVICE_LOCALE_AUTODETECT` and which
-   * therefore answers `en` until the French catalogue is real. Never a run's
-   * locale — a run is frozen and this is not.
+   * The account setting wins, because it is the player's own decision and it
+   * follows them between devices. Failing that, the `accept-language` the app
+   * sent — which it now always does, and which is its *resolved* locale rather
+   * than a raw device tag.
+   *
+   * That header used to go through `resolveDeviceLocale`, which returns the
+   * default whenever `DEVICE_LOCALE_AUTODETECT` is off. The effect was that a
+   * guest could not be French: no account meant no setting, the header was
+   * discarded, and a French player browsing before they sign in got English
+   * hooks and an English premise under French chrome. The flag is about what
+   * the *client* should assume when nobody has chosen. Once a client states a
+   * language, discarding it is not caution, it is a bug.
    */
   const interfaceLocale = (
     user: { settings: { locale: Locale | null } } | null,
@@ -258,11 +266,9 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   ): Locale =>
     resolveLocale(
       user?.settings.locale,
-      resolveDeviceLocale(
-        Array.isArray(request.headers['accept-language'])
-          ? request.headers['accept-language'][0]
-          : request.headers['accept-language'],
-      ),
+      Array.isArray(request.headers['accept-language'])
+        ? request.headers['accept-language'][0]
+        : request.headers['accept-language'],
     );
 
   // --- Discover (§33.2) ---

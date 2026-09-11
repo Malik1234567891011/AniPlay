@@ -202,7 +202,8 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
   useEffect(() => {
     api.setTranslator(t);
     auth.setTranslator(t);
-  }, [t]);
+    api.setLocale(state.locale);
+  }, [t, state.locale]);
 
   // Boot: restore identity, then bootstrap. A guest token is minted locally so
   // the player can browse and start one session before any account exists (§6.3).

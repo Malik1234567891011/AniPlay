@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { translatorFor, type Translator } from '@aniplay/i18n';
+import { translatorFor, type Locale, type Translator } from '@aniplay/i18n';
 import type {
   BootstrapResponse,
   CreateSessionRequest,
@@ -145,6 +145,8 @@ export class ApiClient {
    */
   #t: Translator = translatorFor('en');
 
+  #locale: Locale = 'en';
+
   constructor(baseUrl = defaultBaseUrl()) {
     this.#baseUrl = baseUrl.replace(/\/$/, '');
   }
@@ -165,6 +167,23 @@ export class ApiClient {
   /** Installed by the store, and again whenever the player changes language. */
   setTranslator(t: Translator): void {
     this.#t = t;
+  }
+
+  /**
+   * The language this app is in, sent on every request.
+   *
+   * Without it the server has no way to know: a guest has no account to read a
+   * setting from, so `interfaceLocale` fell through to the device path, which
+   * is gated off — and a French guest was served English hooks, English rail
+   * titles and an English premise while the chrome around them was French.
+   *
+   * This is the app's *resolved* locale, which is an explicit answer rather
+   * than a guess about the device. `DEVICE_LOCALE_AUTODETECT` still decides
+   * what that answer is when the player has not chosen; it does not belong in
+   * the question of whether the server believes the client.
+   */
+  setLocale(locale: Locale): void {
+    this.#locale = locale;
   }
 
   get token(): string | null {
@@ -189,6 +208,8 @@ export class ApiClient {
   ): Promise<T> {
     const headers: Record<string, string> = {
       accept: 'application/json',
+      // i18n-exempt: an HTTP header value, not copy
+      'accept-language': this.#locale,
       'x-app-version': '1.0.0',
       ...extraHeaders,
     };
