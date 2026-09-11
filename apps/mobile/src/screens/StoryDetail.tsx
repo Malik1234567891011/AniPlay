@@ -27,6 +27,7 @@ import { api } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 import { useStore } from '../state/store.jsx';
+import { Comments } from '../components/Comments.jsx';
 
 /**
  * ST-01 Story detail.
@@ -74,7 +75,9 @@ export function StoryDetailScreen({
   route: RootRoute<'StoryDetail'>;
 }): React.JSX.Element {
   const t = useT();
-  const { locale } = useStore();
+  const { locale, isGuest } = useStore();
+  // A guest may read every comment and post none. See `Comments`.
+  const signedIn = !isGuest;
   const { storyId } = route.params;
   const insets = useSafeAreaInsets();
   const [detail, setDetail] = useState<StoryDetailResponse | null>(null);
@@ -238,7 +241,7 @@ export function StoryDetailScreen({
             </Pressable>
             <Row gap={spacing.xs} style={{ alignItems: 'center' }}>
               <Txt variant="h3" color={colors.text.secondary}>
-                ⌾
+                {'\u{1F4AC}'}
               </Txt>
               <Txt variant="bodyCompact" color={colors.text.secondary}>
                 {formatCredits(story.comments, true, locale)}
@@ -304,6 +307,12 @@ export function StoryDetailScreen({
               <Stat label={t('story.stat_intensity')} value={titleCase(detail.stats.intensity)} />
             </Row>
           </Card>
+
+          <Comments
+            storyId={story.storyId}
+            signedIn={signedIn}
+            onSignIn={() => navigation.navigate('Profile' as never)}
+          />
 
           {/* Spec §8.2 item 7 — what you can actually do here. */}
           <Stack gap={spacing.md}>
