@@ -124,7 +124,11 @@ async function smoke(storyId: string, turns: number, problems: Problem[], log: s
     }
 
     let turn: any = null;
-    for (let a = 0; a < 60 && !turn; a += 1) {
+    // Two minutes. Sixty seconds was enough when most worlds still ran on
+    // English content; a full French world is a larger prompt at every stage,
+    // and twenty-three timeouts in a row was the harness being impatient
+    // rather than the product being broken.
+    for (let a = 0; a < 120 && !turn; a += 1) {
       await new Promise((r) => setTimeout(r, 1000));
       try { turn = await call<any>('GET', `/v1/turns/${accepted.turnId}`); } catch { /* not committed */ }
     }

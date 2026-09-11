@@ -374,6 +374,13 @@ async function processTurn(
       result.state.revision,
     );
   } catch (error) {
+    // A failed turn used to leave no trace on the server. The player got
+    // `turn.failed` on the stream, but `GET /v1/turns/<id>` kept answering 404
+    // forever, so from outside the process a dead turn and a slow one were
+    // indistinguishable — which is exactly how a provider outage reads as "the
+    // engine is hanging". This line is the only record of what actually broke.
+    console.error(`[turn] ${turnId} failed:`, error);
+
     // Spec §17.2 / §20.8 — nothing committed, so nothing is charged. The player
     // is never billed for a provider timeout or an internal fault.
     await ctx.wallet.release(reservation, 'TURN_FAILED');
