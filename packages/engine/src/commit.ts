@@ -109,9 +109,14 @@ export function commitTurn(options: CommitOptions): CommitResult {
   // After the advance, so a promise made this turn is not immediately judged
   // against a clock that has already moved past it.
   if (options.intent) {
-    const spoken = [options.intent.rawAction, ...options.intent.dialogue.map((line) => line.text)]
-      .filter(Boolean)
-      .join(' ');
+    // `rawAction` usually already contains the quoted dialogue, so joining both
+    // stored every promise twice over. Only add a line the raw text does not
+    // already carry.
+    const raw = options.intent.rawAction ?? '';
+    const extra = options.intent.dialogue
+      .map((line) => line.text)
+      .filter((line) => line && !raw.includes(line));
+    const spoken = [raw, ...extra].filter(Boolean).join(' ');
     const addressedId = options.intent.actions
       .flatMap((action) => action.targets)
       .find((target) => target.entityType === 'npc')?.entityId;
