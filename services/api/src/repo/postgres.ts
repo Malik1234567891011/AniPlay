@@ -15,6 +15,7 @@ import type {
   StorySignals,
   UserRecord,
 } from './types.js';
+import { EMPTY_SIGNALS } from './types.js';
 
 /**
  * The production persistence adapter (spec §34, §35).
@@ -43,15 +44,6 @@ import type {
 
 /** How far back a player can fork. Matches MemoryRepository. */
 const MAX_SNAPSHOTS = 60;
-
-const EMPTY_SIGNALS: StorySignals = {
-  runs: 0,
-  likes: 0,
-  saves: 0,
-  hides: 0,
-  reports: 0,
-  impressions: 0,
-};
 
 export interface PostgresRepositoryOptions {
   readonly connectionString: string;
@@ -161,6 +153,23 @@ export class PostgresRepository implements Repository {
       [storyId],
     );
     return rows[0] ?? { ...EMPTY_SIGNALS };
+  }
+
+  async getSignalsFor(storyIds: readonly string[]): Promise<Map<string, StorySignals>> {
+    const found = new Map<string, StorySignals>();
+    if (storyIds.length === 0) return found;
+    const { rows } = await this.#pool.query<StorySignals & { story_id: string }>(
+      `SELECT story_id, runs, likes, saves, hides, reports, impressions
+         FROM story_signals WHERE story_id = ANY($1)`,
+      [[...storyIds]],
+    );
+    for (const row of rows) {
+      const { story_id, ...signals } = row;
+      found.set(story_id, signals);
+    }
+    // A world nobody has touched yet has no row, and must still answer.
+    for (const id of storyIds) if (!found.has(id)) found.set(id, { ...EMPTY_SIGNALS });
+    return found;
   }
 
   async bumpSignal(storyId: string, key: keyof StorySignals, delta: number): Promise<void> {

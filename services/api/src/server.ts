@@ -59,6 +59,7 @@ import { deriveCustomBuildWithModel } from '@aniplay/director';
 import { availableCategories, categoriesFor, searchCatalog } from './catalog-taxonomy.js';
 import { registerMediaRoutes } from './media-routes.js';
 import type { SessionRecord, StorySignals } from './repo/types.js';
+import { EMPTY_SIGNALS } from './repo/types.js';
 
 /**
  * Spec §33 — the `/v1` surface.
@@ -260,12 +261,16 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       ? allStories.filter((story) => categoriesFor(story).includes(category))
       : allStories;
 
-    const entries: RankedEntry[] = [];
-    for (const story of stories) {
-      if (hidden.includes(story.storyId)) continue;
-      const signals = await ctx.repo.getSignals(story.storyId);
-      entries.push({ summary: toStorySummary(story, signals, saved.includes(story.storyId)), signals });
-    }
+    // One query for every world's signals rather than one per world. This was
+    // `for … await getSignals(...)`, so the round trips ran end to end and the
+    // response grew a full database round trip for every world added.
+    const visible = stories.filter((story) => !hidden.includes(story.storyId));
+    const signalsById = await ctx.repo.getSignalsFor(visible.map((story) => story.storyId));
+
+    const entries: RankedEntry[] = visible.map((story) => {
+      const signals = signalsById.get(story.storyId) ?? EMPTY_SIGNALS;
+      return { summary: toStorySummary(story, signals, saved.includes(story.storyId)), signals };
+    });
 
     const ranked = rankStories(entries);
     const rails: DiscoverRail[] = [];
@@ -363,12 +368,13 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     const hits = searchCatalog(stories, query);
     const order = new Map(hits.map((hit, index) => [hit.storyId, index]));
 
-    const results: RankedEntry[] = [];
-    for (const story of stories) {
-      if (!order.has(story.storyId)) continue;
-      const signals = await ctx.repo.getSignals(story.storyId);
-      results.push({ summary: toStorySummary(story, signals, saved.includes(story.storyId)), signals });
-    }
+    const matched = stories.filter((story) => order.has(story.storyId));
+    const searchSignals = await ctx.repo.getSignalsFor(matched.map((story) => story.storyId));
+
+    const results: RankedEntry[] = matched.map((story) => {
+      const signals = searchSignals.get(story.storyId) ?? EMPTY_SIGNALS;
+      return { summary: toStorySummary(story, signals, saved.includes(story.storyId)), signals };
+    });
 
     // An empty query is a browse, so it ranks by the catalog's own signals. A
     // real query ranks by how well it matched, which the signals must not
@@ -396,13 +402,17 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     // just reported and hid was still being offered two taps later.
     const hidden = user ? await ctx.repo.getHidden(user.userId) : [];
 
-    const related: StorySummary[] = [];
-    for (const other of await ctx.repo.listStories()) {
-      if (other.storyId === story.storyId) continue;
-      if (hidden.includes(other.storyId)) continue;
-      const otherSignals = await ctx.repo.getSignals(other.storyId);
-      related.push(toStorySummary(other, otherSignals, saved.includes(other.storyId)));
-    }
+    // Opening one world walked the whole catalogue a query at a time to build
+    // the related strip underneath it, which is why tapping a card felt slow
+    // in a way that had nothing to do with the card.
+    const others = (await ctx.repo.listStories()).filter(
+      (other) => other.storyId !== story.storyId && !hidden.includes(other.storyId),
+    );
+    const relatedSignals = await ctx.repo.getSignalsFor(others.map((other) => other.storyId));
+
+    const related: StorySummary[] = others.map((other) =>
+      toStorySummary(other, relatedSignals.get(other.storyId) ?? EMPTY_SIGNALS, saved.includes(other.storyId)),
+    );
 
     const activeSession = user
       ? (await ctx.repo.listSessions(user.userId)).find(

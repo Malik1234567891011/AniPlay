@@ -62,7 +62,15 @@ export function resolveAssetUrl(key: string | null, version?: number): string | 
   const base = process.env.MEDIA_CDN_BASE_URL;
   if (!base) return null;
   const url = `${base.replace(/\/$/, '')}/${key}`;
-  return version === undefined ? url : `${url}?v=${version}`;
+  if (version === undefined) return url;
+  // `version` is the *story* version, which moves when the fiction changes.
+  // Art can be regenerated without the fiction moving at all — a new cover
+  // direction over an unchanged world — and then the URL is byte-identical and
+  // every device that has already fetched it keeps the old picture forever.
+  // `MEDIA_EPOCH` is the knob for exactly that: bump it when art is
+  // regenerated in place, and every cached copy is missed at once.
+  const epoch = process.env.MEDIA_EPOCH;
+  return epoch ? `${url}?v=${version}&e=${epoch}` : `${url}?v=${version}`;
 }
 
 /** Plain-language attribute copy for the World Sheet (spec §11.2). */
