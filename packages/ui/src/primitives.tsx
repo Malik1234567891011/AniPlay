@@ -73,6 +73,7 @@ export function Txt({
         type[variant],
         { color },
         center && { textAlign: 'center' },
+        // i18n-exempt: a font family name, not copy
         serif && { fontFamily: Platform.select({ ios: 'Georgia', default: 'serif' }) },
         style,
       ]}

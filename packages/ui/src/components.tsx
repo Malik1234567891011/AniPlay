@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { colors, durations, formatCredits, outcomeColor, radius, riskColor, spacing } from './tokens.js';
 import { Card, Chip, Row, Stack, Txt, haptic } from './primitives.jsx';
+import { useUiT } from './i18n.jsx';
 
 /**
  * Spec §26 — the component library. Each of these carries a rule from the spec
@@ -45,6 +46,7 @@ export function StoryCoverCard({
   onLongPress?: () => void;
   width?: number;
 }): React.JSX.Element {
+  const t = useUiT();
   const isHero = variant === 'hero';
   const isRow = variant === 'row';
 
@@ -54,7 +56,9 @@ export function StoryCoverCard({
   // name matters in a way "Plotbreak Studios" on all nine cards does not.
   const metaLine = [
     story.tags[0] ?? null,
-    story.runs > 0 ? `${formatCredits(story.runs, true)} ${story.runs === 1 ? 'run' : 'runs'}` : null,
+    story.runs > 0
+      ? t('ui.story_runs', { formatted: formatCredits(story.runs, true), count: story.runs })
+      : null,
     story.official ? null : story.creatorName,
   ]
     .filter((part): part is string => !!part)
@@ -70,8 +74,8 @@ export function StoryCoverCard({
   const a11yLabel = [
     story.title,
     story.fantasyLabel,
-    story.creatorName ? `by ${story.creatorName}` : null,
-    story.creatorName ? (story.official ? 'Official world' : 'Community world') : null,
+    story.creatorName ? t('ui.by_creator', { name: story.creatorName }) : null,
+    story.creatorName ? t(story.official ? 'ui.official_world' : 'ui.community_world') : null,
   ]
     .filter((part): part is string => !!part)
     .join('. ');
@@ -112,20 +116,20 @@ export function StoryCoverCard({
 
       <View style={[{ gap: 2, paddingTop: spacing.sm }, isRow && { flex: 1, paddingTop: 0 }]}>
         {/*
-          What goes under a cover has to earn the space it takes from the art.
-
-          "Official" used to sit here as a large accent pill on every single
-          card, which at launch — when every world is official — is a label that
-          distinguishes nothing while being the most visually prominent thing
-          on the card. Verification still lives in the data and on world detail,
-          where it means something; a badge is only worth a pill when it tells
-          you which of two things you are looking at. Same reasoning for run
-          counts: "0 runs" on every card is not social proof, it is an
-          admission, so a count only appears once it is real.
-        */}
+         * What goes under a cover has to earn the space it takes from the art.
+         *
+         * "Official" used to sit here as a large accent pill on every single
+         * card, which at launch — when every world is official — is a label
+         * that distinguishes nothing while being the most visually prominent
+         * thing on the card. Verification still lives in the data and on world
+         * detail, where it means something; a badge is only worth a pill when
+         * it tells you which of two things you are looking at. Same reasoning
+         * for run counts: "0 runs" on every card is not social proof, it is an
+         * admission, so a count only appears once it is real.
+         */}
         {story.badges.includes('TRENDING') ? (
           <Row gap={spacing.xs}>
-            <Chip label="Trending" tone="warning" />
+            <Chip label={t('ui.trending')} tone="warning" />
           </Row>
         ) : null}
         <Txt variant={isHero ? 'h2' : 'bodyStrong'} numberOfLines={2}>
@@ -196,6 +200,7 @@ export function StoryArt({
       style={[
         {
           overflow: 'hidden',
+          // i18n-exempt: an HSL colour value
           backgroundColor: `hsl(${hue}, 34%, 16%)`,
           borderWidth: StyleSheet.hairlineWidth,
           borderColor: colors.border.subtle,
@@ -212,6 +217,7 @@ export function StoryArt({
           width: '90%',
           height: '90%',
           borderRadius: 999,
+          // i18n-exempt: an HSL colour value
           backgroundColor: `hsl(${alt}, 40%, 26%)`,
           opacity: 0.55,
         }}
@@ -224,6 +230,7 @@ export function StoryArt({
           width: '80%',
           height: '80%',
           borderRadius: 999,
+          // i18n-exempt: an HSL colour value
           backgroundColor: `hsl(${hue}, 44%, 12%)`,
           opacity: 0.8,
         }}
@@ -260,6 +267,7 @@ export function CharacterPortrait({
   dimmed?: boolean;
   expression?: string;
 }): React.JSX.Element {
+  const t = useUiT();
   const initials = name
     .split(/\s+/)
     .slice(0, 2)
@@ -269,7 +277,11 @@ export function CharacterPortrait({
   return (
     <View
       accessible
-      accessibilityLabel={`${name}${expression && expression !== 'neutral' ? `, ${expression}` : ''}`}
+      accessibilityLabel={
+        expression && expression !== 'neutral'
+          ? t('ui.portrait_with_expression_a11y', { name, expression })
+          : t('ui.portrait_a11y', { name })
+      }
       style={{
         width: size,
         height: size * 1.25,
@@ -310,15 +322,16 @@ export function DialogueBlock({
   voiceEligible?: boolean;
   onPlayVoice?: () => void;
 }): React.JSX.Element {
+  const t = useUiT();
   return (
-    <View accessible accessibilityLabel={`${speaker} says: ${text}`} style={{ gap: spacing.xs }}>
+    <View accessible accessibilityLabel={t('ui.speaker_says_a11y', { speaker, text })} style={{ gap: spacing.xs }}>
       <Row gap={spacing.sm}>
         <CharacterPortrait name={speaker} uri={portraitUri} size={22} />
         <Txt variant="caption" color={colors.accent.secondary}>
           {speaker}
         </Txt>
         {voiceEligible && onPlayVoice ? (
-          <Pressable accessibilityRole="button" accessibilityLabel={`Play ${speaker}'s line`} onPress={onPlayVoice}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('ui.play_line_a11y', { speaker })} onPress={onPlayVoice}>
             <Txt variant="micro" color={colors.text.muted}>
               ▶ Play
             </Txt>
@@ -335,9 +348,15 @@ export function DialogueBlock({
 
 /** Spec §26.4 — serif, comfortable measure, `Read more` past 90 visible words. */
 export function NarrationBlock({ text }: { text: string }): React.JSX.Element {
+  const t = useUiT();
   const [expanded, setExpanded] = useState(false);
   const words = text.split(/\s+/);
   const long = words.length > 90;
+  // ⚠️ French carries the same content in ~1.11x the words, so this fold hides
+  // about 10% more of a French beat and cuts somewhere else relative to the
+  // meaning. It should be measured in rendered lines, not words. Tracked in
+  // UI_AUDIT §2.5; translating anything here does not fix it.
+  // i18n-exempt: a word-count truncation, not copy
   const shown = long && !expanded ? `${words.slice(0, 90).join(' ')}…` : text;
 
   return (
@@ -348,7 +367,7 @@ export function NarrationBlock({ text }: { text: string }): React.JSX.Element {
       {long ? (
         <Pressable accessibilityRole="button" onPress={() => setExpanded((v) => !v)}>
           <Txt variant="caption" color={colors.accent.primary}>
-            {expanded ? 'Read less' : 'Read more'}
+            {t(expanded ? 'ui.read_less' : 'ui.read_more')}
           </Txt>
         </Pressable>
       ) : null}
@@ -409,6 +428,7 @@ export function StateDeltaRow({
 }: {
   deltas: Array<{ label: string; kind?: DeltaKind; positive?: boolean }>;
 }): React.JSX.Element | null {
+  const t = useUiT();
   if (deltas.length === 0) return null;
   const shown = deltas.slice(0, 3);
   const overflow = deltas.length - shown.length;
@@ -418,7 +438,7 @@ export function StateDeltaRow({
       {shown.map((delta, index) => (
         <StateDeltaChip key={index} {...delta} />
       ))}
-      {overflow > 0 ? <Chip label={`${overflow} more changes`} /> : null}
+      {overflow > 0 ? <Chip label={t('ui.more_changes', { count: overflow })} /> : null}
     </Row>
   );
 }
@@ -449,12 +469,13 @@ export function ActionSuggestion({
   onPress: () => void;
   onEdit?: () => void;
 }): React.JSX.Element {
+  const t = useUiT();
   return (
     <Row gap={spacing.sm} align="stretch">
       {onEdit ? (
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Edit this response before sending"
+          accessibilityLabel={t('ui.edit_response_a11y')}
           onPress={() => {
             haptic('light');
             onEdit();
@@ -477,7 +498,7 @@ export function ActionSuggestion({
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={text}
-        accessibilityHint="Sends this as your action."
+        accessibilityHint={t('ui.send_response_hint')}
         onPress={() => {
           haptic('light');
           onPress();
@@ -523,12 +544,13 @@ export function QualityPill({
   affordable: boolean;
   onPress: () => void;
 }): React.JSX.Element {
+  const t = useUiT();
   return (
     <Pressable
       accessibilityRole="button"
       // Spec §26.7 — the pill stays selectable when the balance is short; Send
       // is what opens the wallet with the exact shortfall.
-      accessibilityLabel={`Quality: ${label}, ${cost} credits${affordable ? '' : '. Not enough credits'}`}
+      accessibilityLabel={t(affordable ? 'ui.quality_a11y' : 'ui.quality_a11y_short', { label, cost })}
       onPress={() => {
         haptic('light');
         onPress();
@@ -577,6 +599,7 @@ export function CheckReveal({
   math?: string | null;
   onSkip?: () => void;
 }): React.JSX.Element {
+  const t = useUiT();
   const progress = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -595,7 +618,11 @@ export function CheckReveal({
   return (
     <Pressable
       accessible
-      accessibilityLabel={[`${label} check`, difficulty, `Result: ${outcomeLabel}.`]
+      accessibilityLabel={[
+        t('ui.check_a11y', { label }),
+        difficulty,
+        t('ui.check_result_a11y', { outcome: outcomeLabel }),
+      ]
         .filter((part) => part.trim().length > 0)
         .join(', ')}
       onPress={onSkip}
@@ -629,10 +656,11 @@ export function ObjectiveStrip({
   objective: string;
   onPress?: () => void;
 }): React.JSX.Element {
+  const t = useUiT();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Current objective: ${objective}`}
+      accessibilityLabel={t('ui.current_objective_a11y', { objective })}
       onPress={onPress}
       style={({ pressed }) => ({
         flexDirection: 'row',
@@ -669,10 +697,11 @@ export function CreditBalance({
   compact?: boolean;
   onPress?: () => void;
 }): React.JSX.Element {
+  const t = useUiT();
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${balance.toLocaleString()} credits. Opens wallet.`}
+      accessibilityLabel={t('ui.credit_balance_a11y', { balance: formatCredits(balance) })}
       onPress={() => {
         haptic('light');
         onPress?.();
@@ -711,6 +740,7 @@ export function ResourceBar({
   color: string | null;
   polarity: 'GOOD_HIGH' | 'GOOD_LOW';
 }): React.JSX.Element {
+  const t = useUiT();
   const ratio = max === 0 ? 0 : Math.max(0, Math.min(1, current / max));
   // A "bad when high" resource like Suspicion turns warning as it fills, so the
   // bar reads correctly without the player learning which meters are inverted.
@@ -718,7 +748,11 @@ export function ResourceBar({
     color ?? (polarity === 'GOOD_LOW' && ratio > 0.6 ? colors.semantic.warning : colors.accent.primary);
 
   return (
-    <View accessible accessibilityLabel={`${name}: ${Math.round(current)} of ${max}`} style={{ gap: 4, minWidth: 88 }}>
+    <View
+      accessible
+      accessibilityLabel={t('ui.meter_a11y', { name, current: Math.round(current), max })}
+      style={{ gap: 4, minWidth: 88 }}
+    >
       <Row gap={spacing.xs}>
         <Txt variant="micro" color={colors.text.muted}>
           {name}
@@ -728,6 +762,7 @@ export function ResourceBar({
         </Txt>
       </Row>
       <View style={{ height: 4, borderRadius: 2, backgroundColor: colors.bg.raised, overflow: 'hidden' }}>
+        // i18n-exempt: a CSS width percentage
         <View style={{ width: `${ratio * 100}%`, height: '100%', backgroundColor: fill }} />
       </View>
     </View>

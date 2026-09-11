@@ -10,6 +10,7 @@
  * because that pulls a websocket client, a storage client and a URL polyfill
  * into a bundle that needs none of them. What we use is six requests.
  */
+import { translatorFor, type Translator } from '@aniplay/i18n';
 
 export interface AuthSession {
   readonly accessToken: string;
@@ -50,6 +51,12 @@ export class SupabaseAuth {
   readonly #config: SupabaseAuthConfig;
   readonly #fetch: typeof fetch;
   readonly #now: () => number;
+  /**
+   * The interface translator. Not React, so no `useT()`, and deliberately not
+   * an ambient language either: the store pushes the player's one in, and
+   * `AuthStore.setTranslator` is what does it (`auth/index.ts`).
+   */
+  #t: Translator = translatorFor('en');
 
   constructor(config: SupabaseAuthConfig) {
     this.#config = config;
@@ -57,20 +64,26 @@ export class SupabaseAuth {
     this.#now = config.now ?? Date.now;
   }
 
+  setTranslator(t: Translator): void {
+    this.#t = t;
+  }
+
   async #post<T>(path: string, body: unknown, accessToken?: string): Promise<T> {
     let response: Response;
     try {
+      // i18n-exempt: the GoTrue endpoint URL, not copy
       response = await this.#fetch(`${this.#config.url.replace(/\/$/, '')}/auth/v1${path}`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
           apikey: this.#config.anonKey,
+          // i18n-exempt: an HTTP Authorization header value, not copy
           authorization: `Bearer ${accessToken ?? this.#config.anonKey}`,
         },
         body: JSON.stringify(body),
       });
     } catch {
-      throw new AuthError('You appear to be offline. Try again in a moment.', 'OFFLINE');
+      throw new AuthError(this.#t('error.offline_try_again'), 'OFFLINE');
     }
 
     if (response.status === 204) return undefined as T;
@@ -84,7 +97,7 @@ export class SupabaseAuth {
 
     if (!response.ok) {
       const code = String(payload.error_code ?? response.status);
-      throw new AuthError(playerFacingMessage(code, payload), code);
+      throw new AuthError(playerFacingMessage(this.#t, code, payload), code);
     }
     return payload as T;
   }
@@ -154,7 +167,7 @@ export class SupabaseAuth {
 
   #toSession(payload: GoTrueSession): AuthSession {
     if (!payload.access_token || !payload.refresh_token || !payload.user?.id) {
-      throw new AuthError('That did not work. Try again.', 'MALFORMED_SESSION');
+      throw new AuthError(this.#t('error.sign_in_failed'), 'MALFORMED_SESSION');
     }
     return {
       accessToken: payload.access_token,
@@ -171,25 +184,31 @@ export class SupabaseAuth {
  * Provider error codes are not player-facing copy. "otp_expired" is a fact
  * about a protocol; "That code has expired" is a sentence someone can act on.
  */
-function playerFacingMessage(code: string, payload: { msg?: string; message?: string }): string {
+function playerFacingMessage(
+  t: Translator,
+  code: string,
+  payload: { msg?: string; message?: string },
+): string {
   switch (code) {
     case 'otp_expired':
-      return 'That code has expired. Ask for a new one.';
+      return t('error.code_expired');
     case 'invalid_credentials':
     case 'otp_disabled':
-      return 'That code did not match. Check it and try again.';
+      return t('error.code_incorrect');
     case 'over_email_send_rate_limit':
     case 'over_request_rate_limit':
-      return 'Too many attempts. Wait a minute and try again.';
+      return t('error.too_many_attempts');
     case 'email_address_invalid':
-      return 'That email address does not look right.';
+      return t('error.email_invalid');
     case 'anonymous_provider_disabled':
-      return 'Guest play is not available right now. Sign in to continue.';
+      return t('error.guest_play_unavailable');
     case 'signup_disabled':
-      return 'New accounts are paused right now.';
+      return t('error.signups_paused');
     case '429':
-      return 'Too many attempts. Wait a minute and try again.';
+      return t('error.too_many_attempts');
     default:
-      return payload.msg ?? payload.message ?? 'That did not work. Try again.';
+      // GoTrue's own text, which is English whatever the player set. Ours is
+      // better than a raw provider string, so it wins where there is no code.
+      return payload.msg ?? payload.message ?? t('error.sign_in_failed');
   }
 }

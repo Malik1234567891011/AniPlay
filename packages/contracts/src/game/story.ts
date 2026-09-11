@@ -533,6 +533,23 @@ export const CharacterDef = z
      */
     cardBlurb: z.string().default(''),
     pronouns: z.string().default('they/them'),
+    /**
+     * How this person addresses the player in French, and is addressed back.
+     *
+     * fr-FR only, and **authored where the world knows better than a rule can**.
+     * Nine Weeks is a summer job among people the same age, so `tu` from day
+     * one; Window Seven is a professional pairing, so `vous`, and earning the
+     * switch is the arc. A handler and a source stay on `vous` for years, and a
+     * handler moving to `tu` is a manipulation move, not a warming.
+     *
+     * Omitted means *derive it* — see `derivedAddress()` — which is right for
+     * the worlds written before French existed and for any cast member whose
+     * register is unremarkable.
+     */
+    addressMode: z
+      .object({ toPlayer: z.enum(['TU', 'VOUS']), fromPlayer: z.enum(['TU', 'VOUS']) })
+      .strict()
+      .optional(),
     publicTraits: z.array(z.string()).default([]),
     hiddenDrives: z.array(z.string()).default([]),
     values: z.array(z.string()).default([]),

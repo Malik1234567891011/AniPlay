@@ -9,6 +9,14 @@ import type {
 } from '@aniplay/contracts';
 import { nameKeys } from '@aniplay/contracts';
 import { charactersPresent } from '@aniplay/engine';
+import type { Locale } from '@aniplay/i18n';
+import {
+  CLAUSE_SPLIT_FR,
+  FIGURATIVE_VIOLENCE_FR,
+  GENRE_DEPENDENT_VIOLENCE_FR,
+  META_PATTERNS_FR,
+  VERB_LEXICON_FR,
+} from './lexicon-fr.js';
 import {
   detectOutOfScope,
   detectWorldAuthoring,
@@ -207,7 +215,11 @@ export class RuleBasedIntentParser implements IntentParser {
     const { story, state, intentId } = context;
     const raw = text.trim().slice(0, 4000);
 
-    const unsafeOrMetaRequests = META_PATTERNS.filter((m) => m.pattern.test(raw)).map((m) => m.label);
+    // Both lists, always. A French player can type an English injection and a
+    // French one, and the English patterns cost nothing on French input.
+    const metaPatterns =
+      state.locale === 'fr' ? [...META_PATTERNS, ...META_PATTERNS_FR] : META_PATTERNS;
+    const unsafeOrMetaRequests = metaPatterns.filter((m) => m.pattern.test(raw)).map((m) => m.label);
 
     // A goal stated as though it were a single action. Marked here so the
     // engine refuses to settle a campaign with one die roll.
@@ -253,7 +265,7 @@ export class RuleBasedIntentParser implements IntentParser {
     }
 
     const { dialogue, remainder } = extractDialogue(raw, state, story);
-    const clauses = splitClauses(remainder || raw);
+    const clauses = splitClauses(remainder || raw, state.locale);
 
     const ambiguities: string[] = [];
     const actions: IntentAction[] = [];
@@ -366,7 +378,8 @@ export class RuleBasedIntentParser implements IntentParser {
     }
 
     const item = matchItem(trimmed, story, state);
-    const verb = matchVerb(trimmed) ?? (item ? 'use_item' : 'custom');
+    const verb =
+      matchVerb(trimmed, state.locale, story.rules.allowsCombat) ?? (item ? 'use_item' : 'custom');
 
     if (verb === 'custom') {
       ambiguities.push(`Unclear intent: "${trimmed.slice(0, 60)}"`);
@@ -392,8 +405,44 @@ export class RuleBasedIntentParser implements IntentParser {
 
 // --- Matching helpers ------------------------------------------------------
 
-function matchVerb(clause: string): Verb | null {
-  for (const entry of VERB_LEXICON) {
+/**
+ * The lexicon for a locale.
+ *
+ * **Selected, never translated.** The English lexicon carries fixes earned from
+ * live bugs about English words that are both violence and furniture — `deck`,
+ * `beat`, `kick`, `hold`. French has a different set of traps entirely, so
+ * `VERB_LEXICON_FR` is authored against them rather than ported. See the head
+ * of `lexicon-fr.ts`.
+ */
+function lexiconFor(locale: Locale): Array<{ verb: Verb; patterns: RegExp[] }> {
+  // French first, then English as a fallback — a French player who types an
+  // English verb, or a loanword the French list does not carry, still gets an
+  // action rather than `custom`. Order matters: French wins every tie, so an
+  // English pattern can only ever add a match the French list did not make.
+  //
+  // Never the other way round. English sessions see only the English lexicon,
+  // so nothing about English behaviour moves.
+  return locale === 'fr' ? [...VERB_LEXICON_FR, ...VERB_LEXICON] : VERB_LEXICON;
+}
+
+function matchVerb(clause: string, locale: Locale = 'en', allowsCombat = true): Verb | null {
+  if (locale === 'fr') {
+    // Checked before the lexicon, and it wins. `ça me tue` is *that is
+    // hilarious*, and reading it as an attack runs a combat check, moves a
+    // relationship and hands the writer an assault that never happened — none
+    // of which can be taken back. Missing a real attack phrased this way costs
+    // one turn of `custom`. The trade is not close.
+    if (FIGURATIVE_VIOLENCE_FR.some((pattern) => pattern.test(clause))) return null;
+
+    // Swagger that is violence only where the world has violence. The world's
+    // own author already decided that, so this reads their flag rather than
+    // guessing from the sentence.
+    if (allowsCombat && GENRE_DEPENDENT_VIOLENCE_FR.some((pattern) => pattern.test(clause))) {
+      return 'attack';
+    }
+  }
+
+  for (const entry of lexiconFor(locale)) {
     for (const pattern of entry.patterns) {
       if (pattern.test(clause)) return entry.verb;
     }
@@ -537,6 +586,41 @@ function resolveTargets(clause: string, context: ParseContext): IntentAction['ta
     }
   }
 
+  // The French half of the same fallback, and it reaches further.
+  //
+  // French puts the object *before* the verb as a clitic — `je lui parle`,
+  // `je le frappe`, `je l'embrasse` — so the sentence names nobody and every
+  // name-matching pass above finds nothing. These parsed with the right verb
+  // and no target at all, which is a turn where the player clearly addressed
+  // somebody and the engine recorded that they addressed the room.
+  //
+  // Better than the English fallback in one respect: `le` and `la` carry
+  // gender, so with two people present French can still say which, where
+  // English `them` cannot. Only used when exactly one present character
+  // matches — two women in the room makes `la` ambiguous again.
+  if (targets.length === 0 && state.locale === 'fr') {
+    const clitic = /(?<![\p{L}\p{M}])(?:(le|la|les|lui|leur)\s+\p{L}|l['’])/iu.exec(clause);
+    if (clitic) {
+      const present = charactersPresent(state)
+        .map((c) => story.characters.find((character) => character.id === c.characterId))
+        .filter((c): c is NonNullable<typeof c> => !!c);
+
+      const which = (clitic[1] ?? '').toLowerCase();
+      const wants =
+        which === 'le' ? /\b(?:he|him|il|lui)\b/i : which === 'la' ? /\b(?:she|her|elle)\b/i : null;
+      const byGender = wants ? present.filter((c) => wants.test(c.pronouns ?? '')) : [];
+
+      const chosen =
+        byGender.length === 1
+          ? byGender[0]!
+          : // `context.addressee` is who the scene was already talking to, which
+            // is what a bare clitic almost always means.
+            present.find((c) => c.id === context.addressee) ?? (present.length === 1 ? present[0]! : null);
+
+      if (chosen) targets.push({ entityType: 'npc', entityId: chosen.id, displayName: chosen.name });
+    }
+  }
+
   // Locations — reachable exits first, then anywhere discovered.
   const here = story.locations.find((l) => l.id === state.player.locationId);
   const candidates = [
@@ -641,9 +725,9 @@ function detectTimeIntent(clause: string): IntentAction['timeIntent'] {
   return 'NOW';
 }
 
-function splitClauses(text: string): string[] {
+function splitClauses(text: string, locale: Locale = 'en'): string[] {
   return text
-    .split(CLAUSE_SPLIT)
+    .split(locale === 'fr' ? CLAUSE_SPLIT_FR : CLAUSE_SPLIT)
     .map((c) => c.trim())
     .filter((c) => c.length > 1);
 }

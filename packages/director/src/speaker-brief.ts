@@ -19,7 +19,9 @@
  *
  * One projection, used by both stages, so they cannot drift apart again.
  */
+import type { Locale } from '@aniplay/i18n';
 import type { PresentCharacterContext } from './context.js';
+import { addressInstruction } from './address-fr.js';
 
 export interface SpeakerBrief {
   readonly id: string;
@@ -45,6 +47,16 @@ export interface SpeakerBrief {
   readonly knows: readonly string[];
   readonly feelsAboutYou: Record<string, number | string>;
   /**
+   * The `tu`/`vous` instruction for this speaker, in French, or `null` in
+   * English where the distinction does not exist.
+   *
+   * A sentence rather than a pair of enum values, because that is the form the
+   * writer actually obeys — a bare `toPlayer: "VOUS"` inside a JSON blob is
+   * ignored roughly half the time, and the failure is silent and invisible in
+   * review.
+   */
+  readonly addressing: string | null;
+  /**
    * Secrets whose gate the player has opened, as text.
    *
    * Previously only ids travelled, in both directions, so a gate could open and
@@ -68,7 +80,7 @@ export interface SpeakerBrief {
 /** Memories about being wronged by the player, wherever they came from. */
 const GRIEVANCES = new Set(['was_attacked_by_player', 'was_treated_badly_by_player', 'witnessed_violence']);
 
-export function speakerBrief(c: PresentCharacterContext): SpeakerBrief {
+export function speakerBrief(c: PresentCharacterContext, locale: Locale = 'en'): SpeakerBrief {
   return {
     id: c.def.id,
     name: c.def.name,
@@ -87,6 +99,7 @@ export function speakerBrief(c: PresentCharacterContext): SpeakerBrief {
     looksLike: [c.def.appearance, c.def.visualHook].filter(Boolean).join(' '),
     knows: c.knownMemories.map((m) => m.fact.text),
     feelsAboutYou: { ...c.relationship, label: c.relationshipLabel },
+    addressing: locale === 'fr' ? addressInstruction(c.def.name, c.address) : null,
     canTell: c.revealableSecrets.map((s) => s.fact),
     mustNotReveal: c.def.secrets
       .filter((s) => !c.revealableSecrets.some((r) => r.id === s.id))

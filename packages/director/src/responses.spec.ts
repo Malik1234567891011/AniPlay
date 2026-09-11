@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { outcomeOf, talksToNobody } from './responses.js';
+import { hasMidpoint, outcomeOf, talksToNobody } from './responses.js';
 import type { TurnContext } from './context.js';
 
 /**
@@ -81,5 +81,30 @@ describe('not handing dialogue to a player standing alone', () => {
 
   it('leaves dialogue alone when there is somebody to hear it', () => {
     expect(talksToNobody('I turn to Juno. "You in?"', 2, ABSENT)).toBe(false);
+  });
+});
+
+describe('a card the player cannot read aloud', () => {
+  it('drops the midpoint in every spelling', () => {
+    for (const bad of ['Tu es sûr·e ?', 'Je suis prêt(e).', 'Je suis arrivé.e hier', 'Tu es parti‧e']) {
+      expect(hasMidpoint(bad), bad).toBe(true);
+    }
+  });
+
+  it('leaves ordinary French alone', () => {
+    for (const good of [
+      'Je suis prête, on y va.',
+      'Je préfère attendre ici.',
+      'C’est à toi de voir.',
+      "J'y vais.",
+      // A midpoint is a letter either side. A bullet in a list is not.
+      'Trois choses · deux personnes',
+    ]) {
+      expect(hasMidpoint(good), good).toBe(false);
+    }
+  });
+
+  it('leaves English alone, which has no such hedge', () => {
+    expect(hasMidpoint('I am ready. Let us go.')).toBe(false);
   });
 });

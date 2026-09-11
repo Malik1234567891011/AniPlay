@@ -1,5 +1,6 @@
 import type { CheckOutcome, CheckResult } from '@aniplay/contracts';
 import type { AttributeKey } from '@aniplay/contracts';
+import { translate, type Locale } from '@aniplay/i18n';
 import type { SeededRng } from './rng.js';
 
 /** Spec §12.3 — `floor((attribute - 10) / 2)`. */
@@ -19,14 +20,43 @@ export const DC_BANDS = {
 } as const;
 export type DcBand = keyof typeof DC_BANDS;
 
-export function dcBandLabel(dc: number): string {
-  if (dc <= 8) return 'Routine';
-  if (dc <= 10) return 'Easy';
-  if (dc <= 12) return 'Moderate';
-  if (dc <= 15) return 'Hard';
-  if (dc <= 18) return 'Very hard';
-  if (dc <= 22) return 'Exceptional';
-  return 'Nearly impossible';
+/**
+ * Which difficulty band a DC falls in, as an **id**.
+ *
+ * Split from the wording so the band can be compared, logged and branched on
+ * without anybody comparing against a word a translation would change.
+ */
+export type DcBandName =
+  | 'ROUTINE'
+  | 'EASY'
+  | 'MODERATE'
+  | 'HARD'
+  | 'VERY_HARD'
+  | 'EXCEPTIONAL'
+  | 'NEARLY_IMPOSSIBLE';
+
+export function dcBandName(dc: number): DcBandName {
+  if (dc <= 8) return 'ROUTINE';
+  if (dc <= 10) return 'EASY';
+  if (dc <= 12) return 'MODERATE';
+  if (dc <= 15) return 'HARD';
+  if (dc <= 18) return 'VERY_HARD';
+  if (dc <= 22) return 'EXCEPTIONAL';
+  return 'NEARLY_IMPOSSIBLE';
+}
+
+const DC_BAND_KEY = {
+  ROUTINE: 'world.dc.routine',
+  EASY: 'world.dc.easy',
+  MODERATE: 'world.dc.moderate',
+  HARD: 'world.dc.hard',
+  VERY_HARD: 'world.dc.very_hard',
+  EXCEPTIONAL: 'world.dc.exceptional',
+  NEARLY_IMPOSSIBLE: 'world.dc.nearly_impossible',
+} as const;
+
+export function dcBandLabel(dc: number, locale: Locale = 'en'): string {
+  return translate(locale, DC_BAND_KEY[dcBandName(dc)]);
 }
 
 /** Spec §12.4 — proficiency scale. */
@@ -39,8 +69,17 @@ export const PROFICIENCY_LABELS = [
   'Legendary',
 ] as const;
 
-export function proficiencyLabel(value: number): string {
-  return PROFICIENCY_LABELS[Math.max(0, Math.min(5, value))]!;
+const PROFICIENCY_KEYS = [
+  'world.proficiency.untrained',
+  'world.proficiency.familiar',
+  'world.proficiency.trained',
+  'world.proficiency.expert',
+  'world.proficiency.master',
+  'world.proficiency.legendary',
+] as const;
+
+export function proficiencyLabel(value: number, locale: Locale = 'en'): string {
+  return translate(locale, PROFICIENCY_KEYS[Math.max(0, Math.min(5, value))]!);
 }
 
 export interface CheckSpec {
@@ -169,22 +208,18 @@ export function estimateRisk(
   return 'EXTREME';
 }
 
+const OUTCOME_KEY = {
+  CRITICAL_SUCCESS: 'world.outcome.critical_success',
+  CLEAN_SUCCESS: 'world.outcome.clean_success',
+  SUCCESS: 'world.outcome.success',
+  SUCCESS_WITH_COST: 'world.outcome.success_with_cost',
+  FAILURE: 'world.outcome.failure',
+  COMPLICATION: 'world.outcome.complication',
+} as const;
+
 /** Plain-language description for the check reveal module (spec §26.8). */
-export function outcomeLabel(outcome: CheckOutcome): string {
-  switch (outcome) {
-    case 'CRITICAL_SUCCESS':
-      return 'Critical success';
-    case 'CLEAN_SUCCESS':
-      return 'Clean success';
-    case 'SUCCESS':
-      return 'Success';
-    case 'SUCCESS_WITH_COST':
-      return 'Success with cost';
-    case 'FAILURE':
-      return 'Failure';
-    case 'COMPLICATION':
-      return 'Complication';
-  }
+export function outcomeLabel(outcome: CheckOutcome, locale: Locale = 'en'): string {
+  return translate(locale, OUTCOME_KEY[outcome]);
 }
 
 /** `d20 13 + Arcana 4 + Ritual 2 = 19 vs DC 18` — only when the story allows it (§10.6). */

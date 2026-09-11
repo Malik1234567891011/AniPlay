@@ -1,4 +1,5 @@
 export * from './ai/index.js';
+export * from './game/locale.js';
 export * from './game/story.js';
 export * from './game/assets.js';
 export * from './game/names.js';

@@ -23,22 +23,43 @@
  * first-text path entirely. The player is already reading when it starts.
  */
 import type { NarrativeTurn, SuggestedAction } from '@aniplay/contracts';
+import type { Locale } from '@aniplay/i18n';
 import { z } from 'zod';
 import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
-import { buildMessages, SAFETY_POLICY, worldRules } from './model-stages.js';
+import { buildMessages, policyFor, worldRules } from './model-stages.js';
+import { RESPONSE_POLICY_FR } from './policies-fr.js';
 import { nameKeys } from '@aniplay/contracts';
 import { speakerBrief } from './speaker-brief.js';
 import { stateBands } from './state-bands.js';
 
-const ResponseSet = z
+/**
+ * How long a card may be, per locale.
+ *
+ * This was a flat `max(320)`, and that number is an English number. Measured
+ * inflation on real French cards is 1.13x, so a 300-character English card
+ * comes back from a French run at roughly 339 — over the cap, `safeParse`
+ * fails, `generateResponses` returns `null`, and the player gets **no cards at
+ * all**. Nothing logs, nothing errors; the cards just quietly become the
+ * rule-built menu items the prose responses exist to replace. A silent quality
+ * cliff on the most-tapped surface in the product, reachable only in French.
+ *
+ * 380 rather than 320*1.13 = 362, because the cap is a guard against a model
+ * running away, not a layout constraint — the card wraps — and the cost of
+ * being 20 characters too generous is nothing next to the cost of being one
+ * character too strict.
+ */
+const TEXT_CAP: Record<Locale, number> = { en: 320, fr: 380 };
+
+const responseSetFor = (locale: Locale) =>
+  z
   .object({
     responses: z
       .array(
         z
           .object({
-            text: z.string().max(320),
+            text: z.string().max(TEXT_CAP[locale] ?? TEXT_CAP.en),
             /** The attitude this one takes, for the diversity check below. */
             attitude: z.string().max(40),
             /**
@@ -169,6 +190,19 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
   return {
     theBeatThatJustHappened: narrative.blocks.map((b) => b.text),
     whatThePlayerDid: context.playerAction,
+    /**
+     * How the player's own sentences agree, in French.
+     *
+     * A card is written in the player's voice, so in French it has to agree
+     * with them — and without being told, the model hedges. A ten-turn French
+     * run produced `t'es sûr·e`, `adossé·e`, `parti·e` and `revenu·e`: the
+     * midpoint, which `PLAYER_GRAMMAR.md` rule 4 bans outright and the *writer*
+     * policy already forbids. The cards were the one surface that neither knew
+     * the answer nor was told not to guess.
+     *
+     * The writer has had this since step 6. The cards never did.
+     */
+    playerGrammar: context.player.grammar,
     where: context.scene.locationName,
     when: context.scene.worldTimeLabel,
     /**
@@ -201,7 +235,7 @@ function payload(context: TurnContext, narrative: NarrativeTurn): Record<string,
       // who keeps making jokes should sometimes be offered a joke.
       aboutYou: context.player.setupAnswers,
     },
-    inTheRoom: context.presentCharacters.map(speakerBrief),
+    inTheRoom: context.presentCharacters.map((c) => speakerBrief(c, context.state.locale)),
     // How the world is behaving right now. A response written against a house
     // that has started staging scenes around you is a different response from
     // one written against a house that has barely noticed you.
@@ -263,6 +297,23 @@ export function talksToNobody(
   ).test(text);
 }
 
+/**
+ * The inclusive midpoint — `prêt·e`, `arrivé·e` — in any of its spellings.
+ *
+ * `PLAYER_GRAMMAR.md` rule 4: administrative register, banned from school
+ * documents by ministerial circular, and unreadable aloud on a product that
+ * marks blocks `voiceEligible`. The writer policy has forbidden it since step
+ * 8 and the writer's prose is clean; the cards were the surface that was
+ * neither told the player's gender nor told not to guess, and a ten-turn
+ * French run produced four of them.
+ *
+ * The parenthesised and full-stop forms are the same hedge wearing different
+ * punctuation, so they go too.
+ */
+export function hasMidpoint(text: string): boolean {
+  return /\p{L}[·‧•]\p{L}|\p{L}\(e\)|\p{L}\.e\b/u.test(text);
+}
+
 function escapeName(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -305,18 +356,26 @@ export async function generateResponses(
   narrative: NarrativeTurn,
 ): Promise<SuggestedAction[] | null> {
   try {
+    // The run's locale, not the interface's. A French run's cards are read by
+    // the French player and handed straight back to the French parser.
+    const locale = context.state.locale;
     const result = await gateway.generateStructured(
       'writer_fast',
-      ResponseSet,
+      responseSetFor(locale),
       buildMessages({
-        rolePolicy: POLICY,
-        safety: SAFETY_POLICY,
+        rolePolicy: locale === 'fr' ? RESPONSE_POLICY_FR : POLICY,
+        safety: policyFor(locale).safety,
         worldRules: worldRules(context),
         state: payload(context, narrative),
         task:
-          'Write three responses the player could send next. Each is first person, 1–3 sentences, ' +
-          'an action and usually a line of dialogue. Give each a one-word attitude, and the id of the ' +
-          'person it is addressed to from inTheRoom — null if it is addressed to nobody in particular.',
+          locale === 'fr'
+            ? 'Écris trois réponses que le joueur pourrait envoyer ensuite. Chacune à la première ' +
+              'personne, 1 à 3 phrases, une action et le plus souvent une réplique. Donne à chacune ' +
+              'une attitude en un mot, et l’id de la personne à qui elle s’adresse parmi inTheRoom — ' +
+              'null si elle ne s’adresse à personne en particulier. Écris en français, jamais en anglais.'
+            : 'Write three responses the player could send next. Each is first person, 1–3 sentences, ' +
+              'an action and usually a line of dialogue. Give each a one-word attitude, and the id of the ' +
+              'person it is addressed to from inTheRoom — null if it is addressed to nobody in particular.',
       }),
       { maxTokens: 700, temperature: 0.9, timeoutMs: 12_000 },
     );
@@ -341,6 +400,14 @@ export async function generateResponses(
       }))
       .filter((r) => r.text.length > 0)
       .filter((r) => !talksToNobody(r.text, inRoom.size, absentNames))
+      // A card the player cannot read aloud.
+      //
+      // Dropped rather than repaired, for the same reason `talksToNobody`
+      // drops: two workable cards beat three where one cannot function, and if
+      // too few survive the caller falls back to the rule-built suggestions.
+      // The policy forbids it and the payload now carries the answer, so a card
+      // that still hedges is a card that ignored both.
+      .filter((r) => !hasMidpoint(r.text))
       .slice(0, 3);
 
     return responses.length >= 2 ? responses : null;
@@ -349,3 +416,11 @@ export async function generateResponses(
     throw error;
   }
 }
+
+/**
+ * Both card policies, for the cross-locale parity test.
+ *
+ * Exported rather than reached through the module's internals, so the test
+ * reads what production reads.
+ */
+export const RESPONSE_POLICY_FOR_TEST = { en: POLICY, fr: RESPONSE_POLICY_FR };

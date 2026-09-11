@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, FlatList, Modal, Pressable, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { StoryDetailResponse } from '@aniplay/contracts';
+import type { TranslationKey, Translator } from '@aniplay/i18n';
 import {
   Button,
   Card,
@@ -22,6 +23,7 @@ import {
   toParagraphs,
 } from '@aniplay/ui';
 import { api } from '../api/client.js';
+import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 /**
@@ -32,17 +34,35 @@ import type { RootNavigation, RootRoute } from '../navigation.jsx';
  * and content descriptors visible before entry.
  */
 
-const DESCRIPTOR_COPY: Record<string, string> = {
-  FANTASY_VIOLENCE: 'Fantasy violence',
-  ROMANCE: 'Romance',
-  SUGGESTIVE_THEMES: 'Suggestive themes',
-  HORROR: 'Horror',
-  PSYCHOLOGICAL_THEMES: 'Psychological themes',
-  ALCOHOL_REFERENCES: 'Alcohol references',
-  LANGUAGE: 'Strong language',
-  PERMANENT_DEATH: 'Permanent death',
-  MORAL_AMBIGUITY: 'Moral ambiguity',
+/**
+ * Content descriptors — a France ratings surface, shown before entry (§8.3).
+ *
+ * The **keys are ids**: they are the enum values `contentDescriptors` carries on
+ * the wire, and they stay English in every locale. Only the labels they point at
+ * are localised, and those labels are ratings copy reviewed against PEGI FR's
+ * own wording — not a translator's free choice. The agreed fr-FR column is in
+ * `docs/localization/fr-FR/UI_AUDIT.md` §4.
+ *
+ * An unknown descriptor falls back to its own id rather than disappearing: a
+ * warning the client does not recognise still has to be visible.
+ */
+const DESCRIPTOR_KEYS: Record<string, TranslationKey | undefined> = {
+  FANTASY_VIOLENCE: 'story.descriptor_fantasy_violence',
+  ROMANCE: 'story.descriptor_romance',
+  SUGGESTIVE_THEMES: 'story.descriptor_suggestive_themes',
+  HORROR: 'story.descriptor_horror',
+  PSYCHOLOGICAL_THEMES: 'story.descriptor_psychological_themes',
+  ALCOHOL_REFERENCES: 'story.descriptor_alcohol_references',
+  LANGUAGE: 'story.descriptor_strong_language',
+  PERMANENT_DEATH: 'story.descriptor_permanent_death',
+  MORAL_AMBIGUITY: 'story.descriptor_moral_ambiguity',
 };
+
+/** Not a component, so it takes the translator rather than calling the hook. */
+function descriptorLabel(descriptor: string, t: Translator): string {
+  const key = DESCRIPTOR_KEYS[descriptor];
+  return key === undefined ? descriptor : t(key);
+}
 
 export function StoryDetailScreen({
   navigation,
@@ -51,6 +71,7 @@ export function StoryDetailScreen({
   navigation: RootNavigation;
   route: RootRoute<'StoryDetail'>;
 }): React.JSX.Element {
+  const t = useT();
   const { storyId } = route.params;
   const insets = useSafeAreaInsets();
   const [detail, setDetail] = useState<StoryDetailResponse | null>(null);
@@ -103,12 +124,12 @@ export function StoryDetailScreen({
 
         <SafeAreaView edges={['top']} style={{ position: 'absolute', left: GUTTER, right: GUTTER }}>
           <Row style={{ justifyContent: 'space-between' }}>
-            <IconButton label="Back" onPress={() => navigation.goBack()}>
+            <IconButton label={t('story.back')} onPress={() => navigation.goBack()}>
               <Txt variant="h2">‹</Txt>
             </IconButton>
             <Row gap={spacing.sm}>
               <IconButton
-                label={saved ? 'Remove from saved' : 'Save story'}
+                label={saved ? t('story.remove_from_saved') : t('story.save_story')}
                 onPress={() => {
                   setSaved(!saved);
                   void api.saveStory(story.storyId, !saved).catch(() => setSaved(saved));
@@ -119,7 +140,7 @@ export function StoryDetailScreen({
                 </Txt>
               </IconButton>
               <IconButton
-                label="Report this story"
+                label={t('story.report_story')}
                 onPress={() => navigation.navigate('Report', { targetType: 'STORY', targetId: story.storyId })}
               >
                 <Txt variant="h3">⋯</Txt>
@@ -131,11 +152,15 @@ export function StoryDetailScreen({
         <Stack gap={spacing.xxl} style={{ padding: GUTTER, marginTop: -spacing.xxl }}>
           <Stack gap={spacing.sm}>
             <Row gap={spacing.xs}>
-              {story.official ? <Chip label="Official" tone="accent" /> : <Chip label="Community" />}
+              {story.official ? (
+                <Chip label={t('story.badge_official')} tone="accent" />
+              ) : (
+                <Chip label={t('story.badge_community')} />
+              )}
             </Row>
             <Txt variant="display">{story.title}</Txt>
             <Txt variant="bodyCompact" color={colors.text.secondary}>
-              by {story.creatorName}
+              {t('story.by_creator', { name: story.creatorName })}
             </Txt>
             <Txt variant="body" color={colors.text.primary} style={{ marginTop: spacing.sm }}>
               {story.hook}
@@ -144,7 +169,7 @@ export function StoryDetailScreen({
 
           {/* Spec §8.3 — exactly one primary CTA above the fold. */}
           <Button
-            label={continuing ? 'Continue' : 'Start story'}
+            label={continuing ? t('story.continue') : t('story.start')}
             hapticKind="medium"
             onPress={() => {
               if (detail.activeSessionId) {
@@ -158,15 +183,15 @@ export function StoryDetailScreen({
           {/* Spec §8.2 item 6 — compact honest stats, no fake ratings. */}
           <Card>
             <Row style={{ justifyContent: 'space-between' }}>
-              <Stat label="Players" value={detail.stats.runs.toLocaleString()} />
-              <Stat label="Shape" value={detail.stats.medianDepthLabel} />
-              <Stat label="Intensity" value={titleCase(detail.stats.intensity)} />
+              <Stat label={t('story.stat_players')} value={detail.stats.runs.toLocaleString()} />
+              <Stat label={t('story.stat_shape')} value={detail.stats.medianDepthLabel} />
+              <Stat label={t('story.stat_intensity')} value={titleCase(detail.stats.intensity)} />
             </Row>
           </Card>
 
           {/* Spec §8.2 item 7 — what you can actually do here. */}
           <Stack gap={spacing.md}>
-            <Txt variant="h3">What you can do here</Txt>
+            <Txt variant="h3">{t('story.mechanics_heading')}</Txt>
             <Row gap={spacing.sm} style={{ flexWrap: 'wrap' }}>
               {story.mechanicsChips.map((chip) => (
                 <Chip key={chip} label={chip} tone="accent" />
@@ -175,7 +200,7 @@ export function StoryDetailScreen({
           </Stack>
 
           <Stack gap={spacing.md}>
-            <Txt variant="h3">The premise</Txt>
+            <Txt variant="h3">{t('story.premise_heading')}</Txt>
             {/* A premise is 200+ words and it is the one thing a player reads
                 before committing. Rendered as one block it is a wall nobody
                 finishes, so the authored paragraph breaks get real spacing. */}
@@ -190,7 +215,7 @@ export function StoryDetailScreen({
 
           {detail.cast.length > 0 ? (
             <Stack gap={spacing.md}>
-              <Txt variant="h3">Who you'll meet</Txt>
+              <Txt variant="h3">{t('story.cast_heading')}</Txt>
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -204,7 +229,7 @@ export function StoryDetailScreen({
                   // want this world at all.
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel={`${item.name}, ${item.role}. Tap for details.`}
+                    accessibilityLabel={t('story.cast_a11y', { name: item.name, role: item.role })}
                     onPress={() => setCastMember(item)}
                     style={({ pressed }) => [{ width: 148, gap: spacing.xs, opacity: pressed ? 0.8 : 1 }]}
                   >
@@ -217,7 +242,7 @@ export function StoryDetailScreen({
                       {item.cardBlurb || item.role}
                     </Txt>
                     <Txt variant="micro" color={colors.text.muted} numberOfLines={1}>
-                      {item.cardBlurb ? item.role : 'Tap for more'}
+                      {item.cardBlurb ? item.role : t('story.cast_tap_for_more')}
                     </Txt>
                   </Pressable>
                 )}
@@ -227,12 +252,12 @@ export function StoryDetailScreen({
 
           {/* Spec §8.3 — descriptors are visible before entry, never after. */}
           <Stack gap={spacing.md}>
-            <Txt variant="h3">Content</Txt>
+            <Txt variant="h3">{t('story.content_heading')}</Txt>
             <Row gap={spacing.sm} style={{ flexWrap: 'wrap' }}>
               {story.contentDescriptors.map((descriptor) => (
                 <Chip
                   key={descriptor}
-                  label={DESCRIPTOR_COPY[descriptor] ?? descriptor}
+                  label={descriptorLabel(descriptor, t)}
                   tone={descriptor === 'PERMANENT_DEATH' ? 'warning' : 'neutral'}
                 />
               ))}
@@ -242,7 +267,7 @@ export function StoryDetailScreen({
           {detail.creatorNote ? (
             <Card style={{ gap: spacing.sm }}>
               <Txt variant="caption" color={colors.text.muted}>
-                FROM THE CREATOR
+                {t('story.creator_note_heading')}
               </Txt>
               <Txt variant="bodyCompact" color={colors.text.secondary}>
                 {detail.creatorNote}
@@ -253,7 +278,7 @@ export function StoryDetailScreen({
           {detail.related.length > 0 ? (
             <Stack gap={spacing.md}>
               <Divider />
-              <Txt variant="h3">Related worlds</Txt>
+              <Txt variant="h3">{t('story.related_heading')}</Txt>
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -306,11 +331,13 @@ function CastSheet({
   member: StoryDetailResponse['cast'][number];
   onClose: () => void;
 }): React.JSX.Element {
+  const t = useT();
+
   return (
     <Modal transparent animationType="fade" onRequestClose={onClose}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Close"
+        accessibilityLabel={t('story.close')}
         onPress={onClose}
         style={{ flex: 1, backgroundColor: 'rgba(6,7,10,0.86)', justifyContent: 'flex-end' }}
       >
@@ -361,7 +388,7 @@ function CastSheet({
             </Txt>
           ) : null}
 
-          <Button label="Close" variant="secondary" onPress={onClose} />
+          <Button label={t('story.close')} variant="secondary" onPress={onClose} />
         </Pressable>
       </Pressable>
     </Modal>

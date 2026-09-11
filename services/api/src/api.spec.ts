@@ -288,7 +288,7 @@ describe('wallet (spec §20.7, §20.8)', () => {
     await timed.repo.createUser({
       userId: user, displayName: 'P', handle: 'p', email: 'p@example.com', isGuest: false,
       avatarUrl: null, ageVerified: true, createdAt: now.toISOString(),
-      settings: { showAdvancedRelationshipStats: false, showCheckMath: false, reduceMotion: false, voiceAutoplay: false, hapticsEnabled: true, defaultQualityTier: 'VIVID', contentFilters: [] },
+      settings: { showAdvancedRelationshipStats: false, showCheckMath: false, reduceMotion: false, voiceAutoplay: false, hapticsEnabled: true, defaultQualityTier: 'VIVID', contentFilters: [], locale: null },
       migratedFromGuestId: null, deletionRequestedAt: null,
     });
     const headers = { authorization: `Bearer ${user}` };

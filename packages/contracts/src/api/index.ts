@@ -11,6 +11,7 @@ import {
   StateMutation,
   SuggestedAction,
 } from '../ai/index.js';
+import { LocaleSchema } from '../game/locale.js';
 import { ArchetypeDef, ContentDescriptor, StorySummary, StoryVersion } from '../game/story.js';
 import { LedgerEntry, QualityTier, StoreOffer, WalletSummary } from '../game/economy.js';
 import {
@@ -89,9 +90,22 @@ export type BootstrapResponse = z.infer<typeof BootstrapResponse>;
 export const DiscoverRail = z
   .object({
     id: z.string(),
+    /**
+     * Rendered text, in the locale the request resolved to.
+     *
+     * Kept alongside `titleKey` rather than replaced by it: a client that does
+     * not know a key still has something to draw, and an older build keeps
+     * working. The client should prefer `titleKey` when it has the key, so the
+     * shelf follows the language switch without waiting for a refetch.
+     */
     title: z.string(),
+    /** Catalogue key for `title`. See `rails.ts`. */
+    titleKey: z.string().nullable().default(null),
     kind: z.enum(['HERO', 'CONTINUE', 'FOR_YOU', 'TRENDING', 'TOP_RANKED', 'NEW', 'GENRE', 'FOLLOWING']),
     subtitle: z.string().nullable().default(null),
+    /** Catalogue key for `subtitle`, with its ICU arguments. */
+    subtitleKey: z.string().nullable().default(null),
+    subtitleParams: z.record(z.string()).nullable().default(null),
     stories: z.array(StorySummary),
   })
   .strict();
@@ -227,6 +241,13 @@ export const CreateSessionRequest = z
     identity: PlayerIdentity,
     /** Present when the player took the fast path and skipped advanced setup. */
     usedQuickSetup: z.boolean().default(true),
+    /**
+     * The device's language, as a hint. Optional and **not** authoritative:
+     * the server resolves the run's locale from the player's explicit setting
+     * first, then this, then `Accept-Language`, then `en`. Whatever it decides
+     * is frozen into `GameState.locale` and comes back on `SessionSummary`.
+     */
+    locale: LocaleSchema.optional(),
   })
   .strict();
 export type CreateSessionRequest = z.infer<typeof CreateSessionRequest>;
@@ -246,6 +267,12 @@ export const SessionSummary = z
     displayName: z.string(),
     forkedFromSessionId: z.string().nullable(),
     forkedAtTurnIndex: z.number().int().nullable(),
+    /**
+     * The language this run is played in, decided when it was created. The
+     * library shows it so a player with runs in both languages can tell them
+     * apart, and the session screen needs it to render server-sent keys.
+     */
+    locale: LocaleSchema,
   })
   .strict();
 export type SessionSummary = z.infer<typeof SessionSummary>;
@@ -844,6 +871,14 @@ export const MeResponse = z
         hapticsEnabled: z.boolean(),
         defaultQualityTier: QualityTier,
         contentFilters: z.array(ContentDescriptor),
+        /**
+         * The player's **explicit** choice of language for new runs, or `null`
+         * when they have never chosen one. Null is not "English" — it is "ask
+         * the device", which is why it is nullable rather than defaulted.
+         * Existing runs keep the locale they were created with; see
+         * `GameState.locale`.
+         */
+        locale: LocaleSchema.nullable(),
       })
       .strict(),
     stats: z

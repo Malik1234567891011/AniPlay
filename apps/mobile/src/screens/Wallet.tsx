@@ -19,9 +19,11 @@ import {
   radius,
   spacing,
 } from '@aniplay/ui';
+import type { Translator } from '@aniplay/i18n';
 import { api } from '../api/client.js';
 import { Purchases } from '../store/purchases.js';
 import { useStore } from '../state/store.jsx';
+import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 /**
@@ -47,10 +49,12 @@ export function WalletScreen({
   route,
 }: {
   navigation: RootNavigation;
+  // i18n-exempt: 'Wallet' is the route name in a type parameter, not shown to anybody
   route: RootRoute<'Wallet'>;
 }): React.JSX.Element {
   const shortfall = route.params?.shortfall ?? null;
   const { refreshWallet, setBalance } = useStore();
+  const t = useT();
 
   const [wallet, setWallet] = useState<WalletSummary | null>(null);
   const [offers, setOffers] = useState<StoreOffer[]>([]);
@@ -80,6 +84,15 @@ export function WalletScreen({
     setBalance(response.wallet.balance);
   }, [setBalance]);
 
+  // The billing connection outlives this screen, so it cannot be handed a
+  // language once at construction: it is created at module load, before the app
+  // knows one. It is told here instead, and told again whenever the player
+  // changes it, so a store error raised months into a session is in the
+  // language the screen is currently in.
+  useEffect(() => {
+    purchases.translator = t;
+  }, [t]);
+
   useEffect(() => {
     void load();
   }, [load]);
@@ -105,16 +118,17 @@ export function WalletScreen({
       haptic('success');
       setNotice(
         outcome.kind === 'ALREADY_CREDITED'
-          ? 'That purchase was already on your balance.'
-          : `${formatCredits(outcome.credits)} credits added.`,
+          ? t('wallet.already_credited')
+          : t('wallet.credits_added', {
+              count: outcome.credits,
+              credits: formatCredits(outcome.credits),
+            }),
       );
     } else if (outcome.kind === 'CANCELLED') {
       // Someone who changed their mind has not hit a problem. Say nothing.
       setNotice(null);
     } else if (outcome.kind === 'PENDING') {
-      setNotice(
-        'That purchase is waiting for approval. Your credits will appear here as soon as it goes through.',
-      );
+      setNotice(t('wallet.purchase_pending'));
     } else {
       haptic('error');
       // Spec §3.8 — never tell a player they were not charged unless we know
@@ -123,7 +137,7 @@ export function WalletScreen({
         outcome.kind === 'UNAVAILABLE'
           ? outcome.message
           : outcome.charged
-            ? `${outcome.message} If you were charged, tap Restore purchases in a few minutes and your credits will appear.`
+            ? t('wallet.purchase_failed_charged', { message: outcome.message })
             : outcome.message,
       );
     }
@@ -149,15 +163,20 @@ export function WalletScreen({
       await refreshWallet();
       if (result.restored > 0) {
         haptic('success');
-        setNotice(`${formatCredits(result.creditsRestored)} credits restored.`);
+        setNotice(
+          t('wallet.credits_restored', {
+            count: result.creditsRestored,
+            credits: formatCredits(result.creditsRestored),
+          }),
+        );
       } else if (result.verified > 0) {
-        setNotice('Everything the store has on file is already on your balance.');
+        setNotice(t('wallet.restore_all_present'));
       } else {
-        setNotice('No purchases to restore on this account.');
+        setNotice(t('wallet.restore_none'));
       }
     } catch {
       haptic('error');
-      setNotice('We could not reach the store. Nothing changed — try again shortly.');
+      setNotice(t('wallet.restore_unreachable'));
     } finally {
       setBusy(null);
     }
@@ -171,10 +190,10 @@ export function WalletScreen({
       await refreshWallet();
       if (result.granted) {
         haptic('success');
-        setNotice(`${result.amount} credits claimed.`);
+        setNotice(t('wallet.credits_claimed', { count: result.amount }));
       }
     } catch {
-      setNotice('Sign in to claim your daily credits.');
+      setNotice(t('wallet.daily_sign_in'));
     } finally {
       setBusy(null);
     }
@@ -183,8 +202,8 @@ export function WalletScreen({
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <Row style={{ paddingHorizontal: GUTTER, justifyContent: 'space-between' }}>
-        <Txt variant="h2">Wallet</Txt>
-        <IconButton label="Close" onPress={() => navigation.goBack()}>
+        <Txt variant="h2">{t('wallet.title')}</Txt>
+        <IconButton label={t('wallet.close')} onPress={() => navigation.goBack()}>
           <Txt variant="h3">✕</Txt>
         </IconButton>
       </Row>
@@ -203,14 +222,16 @@ export function WalletScreen({
       ) : null}
 
       <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xl, paddingBottom: spacing.giant }}>
-        {/* WL-03 — the exact shortfall, never a vague "not enough". */}
+        {
+          /* WL-03 — the exact shortfall, never a vague "not enough". */
+        }
         {shortfall ? (
           <Card style={{ borderColor: colors.semantic.warning, gap: spacing.xs }}>
             <Txt variant="bodyStrong" color={colors.semantic.warning}>
-              {shortfall} more credits needed
+              {t('wallet.shortfall', { count: shortfall })}
             </Txt>
             <Txt variant="caption" color={colors.text.secondary}>
-              Add credits below, or switch to a lower turn quality and send the same action.
+              {t('wallet.shortfall_hint')}
             </Txt>
           </Card>
         ) : null}
@@ -220,18 +241,18 @@ export function WalletScreen({
         ) : (
           <Stack gap={spacing.xs} style={{ alignItems: 'center', paddingVertical: spacing.lg }}>
             <Txt variant="micro" color={colors.text.muted}>
-              BALANCE
+              {t('wallet.balance_label')}
             </Txt>
             {/* Spec §26.10 — the wallet always shows the full number. */}
             <Row gap={spacing.sm} align="baseline">
               <Txt variant="display">{wallet.balance.toLocaleString()}</Txt>
               <Txt variant="body" color={colors.text.muted}>
-                credits
+                {t('wallet.credits_unit')}
               </Txt>
             </Row>
             {wallet.reserved > 0 ? (
               <Txt variant="caption" color={colors.text.muted}>
-                {wallet.reserved} held by a turn in flight
+                {t('wallet.reserved_held', { count: wallet.reserved })}
               </Txt>
             ) : null}
           </Stack>
@@ -239,27 +260,35 @@ export function WalletScreen({
 
         {wallet?.dailyClaimAvailable ? (
           <Button
-            label="Claim 300 daily credits"
+            label={t('wallet.claim_daily')}
             variant="secondary"
             loading={busy === 'daily'}
-            loadingLabel="Claiming…"
+            loadingLabel={t('wallet.claiming')}
             onPress={() => void claimDaily()}
           />
         ) : wallet?.nextDailyClaimAt ? (
           <Txt variant="caption" color={colors.text.muted} center>
-            Next daily credits {relativeTime(wallet.nextDailyClaimAt)}
+            {t('wallet.next_daily', { when: relativeTime(wallet.nextDailyClaimAt, t) })}
           </Txt>
         ) : null}
 
         <Stack gap={spacing.md}>
-          <Txt variant="h3">Credit packs</Txt>
+          <Txt variant="h3">{t('wallet.packs_title')}</Txt>
           {offers.map((offer) => (
             <Pressable
               key={offer.productId}
               accessibilityRole="button"
-              accessibilityLabel={`${formatCredits(offer.credits)} credits${
-                offer.bonusCredits ? ` plus ${offer.bonusCredits} bonus` : ''
-              }, ${storePrices[offer.productId] ?? `about $${offer.referencePriceUsd.toFixed(2)}`}`}
+              accessibilityLabel={t('wallet.offer_a11y', {
+                credits: formatCredits(offer.credits),
+                bonus: offer.bonusCredits ? String(offer.bonusCredits) : 'none',
+                price:
+                  storePrices[offer.productId] ??
+                  // The dollar amount is deliberately untouched — a hardcoded
+                  // USD fallback is a known France bug (UI_AUDIT §2.2), tracked
+                  // separately, and translating the word around it would only
+                  // hide it. Only `about` is keyed.
+                  t('wallet.about_price', { price: `$${offer.referencePriceUsd.toFixed(2)}` }),
+              })}
               disabled={busy !== null}
               onPress={() => void purchase(offer)}
             >
@@ -275,14 +304,14 @@ export function WalletScreen({
                       <Txt variant="bodyStrong">{formatCredits(offer.credits)}</Txt>
                       {offer.bonusCredits > 0 ? (
                         <Txt variant="caption" color={colors.semantic.success}>
-                          +{offer.bonusCredits} bonus
+                          {t('wallet.bonus_badge', { bonus: offer.bonusCredits })}
                         </Txt>
                       ) : null}
                     </Row>
                     {offer.badge ? <Chip label={offer.badge} tone="accent" /> : null}
                     {offer.expiresAt ? (
                       <Txt variant="micro" color={colors.semantic.warning}>
-                        Ends {relativeTime(offer.expiresAt)}
+                        {t('wallet.ends', { when: relativeTime(offer.expiresAt, t) })}
                       </Txt>
                     ) : null}
                   </Stack>
@@ -300,21 +329,20 @@ export function WalletScreen({
             </Txt>
           ) : Object.keys(storePrices).length === 0 ? (
             <Txt variant="micro" color={colors.text.muted}>
-              Prices shown are US reference prices. Your store will show your local price and confirm before
-              any payment.
+              {t('wallet.reference_prices_note')}
             </Txt>
           ) : (
             <Txt variant="micro" color={colors.text.muted}>
-              Your store confirms the price before any payment. Credits are consumable and do not expire.
+              {t('wallet.price_confirmed_note')}
             </Txt>
           )}
           {/* Spec §20.6 — required, and the only way back from a charge whose
               reconciliation did not land. */}
           <Button
-            label="Restore purchases"
+            label={t('wallet.restore')}
             variant="tertiary"
             loading={busy === 'restore'}
-            loadingLabel="Checking with the store…"
+            loadingLabel={t('wallet.restore_loading')}
             disabled={busy !== null && busy !== 'restore'}
             onPress={() => void restore()}
           />
@@ -331,7 +359,7 @@ export function WalletScreen({
             }}
           >
             <Row style={{ justifyContent: 'space-between' }}>
-              <Txt variant="h3">Purchase history</Txt>
+              <Txt variant="h3">{t('wallet.history')}</Txt>
               <Txt variant="body" color={colors.text.muted}>
                 {showHistory ? '−' : '+'}
               </Txt>
@@ -342,7 +370,7 @@ export function WalletScreen({
             ? ledger.map((entry) => (
                 <Row key={entry.id} style={{ justifyContent: 'space-between' }}>
                   <Stack gap={0}>
-                    <Txt variant="bodyCompact">{ledgerLabel(entry.type)}</Txt>
+                    <Txt variant="bodyCompact">{ledgerLabel(entry.type, t)}</Txt>
                     <Txt variant="micro" color={colors.text.muted}>
                       {new Date(entry.createdAt).toLocaleString()}
                     </Txt>
@@ -362,18 +390,15 @@ export function WalletScreen({
         <Divider />
 
         <Stack gap={spacing.sm}>
-          <Txt variant="h3">How credits work</Txt>
+          <Txt variant="h3">{t('wallet.how_it_works')}</Txt>
           <Txt variant="bodyCompact" color={colors.text.secondary}>
-            Each turn you send costs credits, and higher quality tiers cost more. What you buy is richer
-            direction, deeper memory, and better visuals.
+            {t('wallet.how_it_works_richer')}
           </Txt>
           <Txt variant="bodyCompact" color={colors.text.secondary}>
-            What you never buy is a better outcome. The dice, your stats, and every rule are identical at
-            every tier.
+            {t('wallet.how_it_works_fair')}
           </Txt>
           <Txt variant="bodyCompact" color={colors.text.secondary}>
-            If a turn fails for any reason on our side, the credits go straight back. You are only ever
-            charged for a turn that actually happened.
+            {t('wallet.how_it_works_refund')}
           </Txt>
         </Stack>
       </ScrollView>
@@ -381,27 +406,43 @@ export function WalletScreen({
   );
 }
 
-function ledgerLabel(type: string): string {
+/**
+ * The ledger's entry types, as a player reads them.
+ *
+ * Takes the translator rather than calling `useT()`: this is a plain function,
+ * not a component, and a hook here would be a hook in a `map` callback. The
+ * record's keys are the server's enum values — identifiers, not copy — so they
+ * stay English, and an unknown type still falls back to showing the raw one.
+ */
+function ledgerLabel(type: string, t: Translator): string {
   const labels: Record<string, string> = {
-    PURCHASE: 'Credit pack',
-    BONUS: 'Pack bonus',
-    DAILY_GRANT: 'Daily credits',
-    NEW_USER_GRANT: 'Welcome credits',
-    TURN_RESERVE: 'Turn',
-    TURN_FINALIZE: 'Turn settled',
-    TURN_RELEASE: 'Turn refunded',
-    FORK_FEE: 'Timeline fork',
-    REFUND: 'Refund',
-    ADMIN_ADJUST: 'Adjustment',
+    PURCHASE: t('wallet.credit_pack'),
+    BONUS: t('wallet.pack_bonus'),
+    DAILY_GRANT: t('wallet.daily_credits'),
+    NEW_USER_GRANT: t('wallet.welcome_credits'),
+    TURN_RESERVE: t('wallet.turn'),
+    TURN_FINALIZE: t('wallet.turn_settled'),
+    TURN_RELEASE: t('wallet.turn_refunded'),
+    FORK_FEE: t('wallet.timeline_fork'),
+    REFUND: t('wallet.refund'),
+    ADMIN_ADJUST: t('wallet.adjustment'),
   };
   return labels[type] ?? type;
 }
 
-function relativeTime(iso: string): string {
+/**
+ * A countdown, in the coarsest unit that still says something.
+ *
+ * Also takes the translator for the same reason as `ledgerLabel`. The numbers
+ * are passed as ICU `count` so French can pluralise them — its `one` category
+ * covers zero, which English's does not — and the unit letters are inside the
+ * catalogue strings because French abbreviates days `j`, not `d`.
+ */
+function relativeTime(iso: string, t: Translator): string {
   const diff = new Date(iso).getTime() - Date.now();
-  if (diff <= 0) return 'now';
+  if (diff <= 0) return t('wallet.time_now');
   const hours = Math.floor(diff / 3_600_000);
-  if (hours < 1) return `in ${Math.max(1, Math.floor(diff / 60_000))} min`;
-  if (hours < 24) return `in ${hours}h`;
-  return `in ${Math.floor(hours / 24)}d`;
+  if (hours < 1) return t('wallet.time_in_minutes', { count: Math.max(1, Math.floor(diff / 60_000)) });
+  if (hours < 24) return t('wallet.time_in_hours', { count: hours });
+  return t('wallet.time_in_days', { count: Math.floor(hours / 24) });
 }

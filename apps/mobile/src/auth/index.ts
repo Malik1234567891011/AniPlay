@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
+import { translatorFor, type Translator } from '@aniplay/i18n';
 import { AuthError, SupabaseAuth, type AuthSession } from './supabase.js';
 
 export { AuthError, SupabaseAuth };
@@ -50,9 +51,23 @@ export class AuthStore {
   /** The development identity when no Supabase project is configured. */
   #devToken: string | null = null;
   #inFlight: Promise<string | null> | null = null;
+  /**
+   * The interface translator. Not React, so no `useT()`; the store pushes the
+   * player's language in at boot and again when they change it.
+   */
+  #t: Translator = translatorFor('en');
 
   constructor(client: SupabaseAuth | null = createClient()) {
     this.#client = client;
+  }
+
+  /**
+   * One call reaches the Supabase client too, so the store has a single seam
+   * for the whole auth stack rather than two that can drift apart.
+   */
+  setTranslator(t: Translator): void {
+    this.#t = t;
+    this.#client?.setTranslator(t);
   }
 
   get configured(): boolean {
@@ -177,18 +192,18 @@ export class AuthStore {
   }
 
   async sendEmailCode(email: string): Promise<void> {
-    if (!this.#client) throw new AuthError('Sign-in is not configured in this build.', 'NOT_CONFIGURED');
+    if (!this.#client) throw new AuthError(this.#t('error.sign_in_not_configured'), 'NOT_CONFIGURED');
     await this.#client.sendEmailCode(email.trim());
   }
 
   async verifyEmailCode(email: string, code: string): Promise<AuthIdentity> {
-    if (!this.#client) throw new AuthError('Sign-in is not configured in this build.', 'NOT_CONFIGURED');
+    if (!this.#client) throw new AuthError(this.#t('error.sign_in_not_configured'), 'NOT_CONFIGURED');
     await this.#adopt(await this.#client.verifyEmailCode(email.trim(), code.trim()));
     return this.identity!;
   }
 
   async signInWithIdToken(provider: 'apple' | 'google', idToken: string, nonce?: string): Promise<AuthIdentity> {
-    if (!this.#client) throw new AuthError('Sign-in is not configured in this build.', 'NOT_CONFIGURED');
+    if (!this.#client) throw new AuthError(this.#t('error.sign_in_not_configured'), 'NOT_CONFIGURED');
     await this.#adopt(await this.#client.signInWithIdToken(provider, idToken, nonce));
     return this.identity!;
   }

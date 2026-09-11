@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lightAt, dayPart } from './clock.js';
+import { dayPart, dayPartLabel, lightAt } from './clock.js';
 
 /**
  * Dusk at 4:44 in the afternoon.
@@ -35,8 +35,24 @@ describe('what the light is doing', () => {
   });
 
   it('still agrees with dayPart about which part of the day it is', () => {
-    expect(dayPart(at(16, 44))).toBe('Afternoon');
-    expect(dayPart(at(17, 32))).toBe('Evening');
+    // `dayPart` is the id and `dayPartLabel` the word — the split that stopped
+    // `director.ts` comparing a display string with `===`. Both are asserted,
+    // because agreeing with the id is what matters and agreeing with the
+    // English word is what a reader of this test expects to see.
+    expect(dayPart(at(16, 44))).toBe('AFTERNOON');
+    expect(dayPartLabel(at(16, 44))).toBe('Afternoon');
+    expect(dayPart(at(17, 32))).toBe('EVENING');
+    expect(dayPartLabel(at(17, 32))).toBe('Evening');
+  });
+
+  it('says what the light is doing in French too', () => {
+    // Not a translation check — a check that the French path is wired at all.
+    // An English sentence reaching a French writer is the failure mode.
+    expect(lightAt(at(17, 32), 'fr')).toMatch(/soleil/i);
+    expect(lightAt(at(2), 'fr')).toMatch(/nuit noire/i);
+    for (let h = 0; h < 24; h++) {
+      expect(lightAt(at(h), 'fr'), `hour ${h}`).not.toMatch(/[a-z]+ing\b|sunset|daylight/i);
+    }
   });
 
   it('covers the whole day without a gap', () => {

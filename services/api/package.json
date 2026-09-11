@@ -16,6 +16,7 @@
     "@aniplay/contracts": "*",
     "@aniplay/director": "*",
     "@aniplay/engine": "*",
+    "@aniplay/i18n": "*",
     "@aniplay/test-fixtures": "*",
     "@aniplay/worker": "*",
     "@types/pg": "^8.23.1",

@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import type { PurchaseSyncRequest } from '@aniplay/contracts';
+import { translatorFor, type TranslationKey, type Translator } from '@aniplay/i18n';
 
 /**
  * The native purchase flow (spec §20.6, §33.5).
@@ -85,8 +86,27 @@ export class Purchases {
   readonly #server: PurchaseServer;
   #native: NativeModule | null = null;
   #connected = false;
-  #unavailable: string | null = null;
+  /**
+   * The key, not the sentence.
+   *
+   * A reason is set when the connection fails and read whenever the store
+   * screen renders, which are two different moments — and the player can change
+   * language in between. Keeping the key and translating on the way out means
+   * the reason is always in the language the screen is in now.
+   */
+  #unavailable: TranslationKey | null = null;
   #subscriptions: Array<{ remove: () => void }> = [];
+
+  /**
+   * The language store copy is rendered in.
+   *
+   * This module is not React, so it cannot reach `useT()`. It defaults to
+   * English because a `Purchases` is constructed at module load — before any
+   * screen has mounted and before the app knows the player's language — and the
+   * screen sets it, and sets it again whenever the language changes, because
+   * this connection deliberately outlives any one mount of that screen.
+   */
+  #t: Translator = translatorFor('en');
 
   /** Resolved by whichever listener fires for the purchase we are waiting on. */
   #awaiting: { productId: string; settle: (outcome: PurchaseOutcome) => void } | null = null;
@@ -95,12 +115,16 @@ export class Purchases {
     this.#server = server;
   }
 
+  set translator(t: Translator) {
+    this.#t = t;
+  }
+
   get available(): boolean {
     return this.#connected;
   }
 
   get unavailableReason(): string | null {
-    return this.#unavailable;
+    return this.#unavailable === null ? null : this.#t(this.#unavailable);
   }
 
   /**
@@ -118,10 +142,7 @@ export class Purchases {
       this.#native = (await import('expo-iap')) as unknown as NativeModule;
       await this.#native.initConnection();
     } catch (error) {
-      this.#unavailable =
-        Platform.OS === 'web'
-          ? 'Credits can only be bought in the app.'
-          : 'The store is not available in this build. Purchases need a native build of the app.';
+      this.#unavailable = Platform.OS === 'web' ? 'store.web_only' : 'store.needs_native_build';
       this.#native = null;
       return false;
     }
@@ -131,7 +152,7 @@ export class Purchases {
         void this.#handle(purchase);
       }),
       this.#native.purchaseErrorListener((error) => {
-        this.#settle(toFailure(error));
+        this.#settle(toFailure(error, this.#t));
       }),
     );
 
@@ -178,10 +199,10 @@ export class Purchases {
    */
   async buy(productId: string): Promise<PurchaseOutcome> {
     if (!this.#connected && !(await this.connect())) {
-      return { kind: 'UNAVAILABLE', message: this.#unavailable ?? 'The store is not available.' };
+      return { kind: 'UNAVAILABLE', message: this.unavailableReason ?? this.#t('store.unavailable') };
     }
     if (this.#awaiting) {
-      return { kind: 'FAILED', message: 'Another purchase is already in progress.', charged: false };
+      return { kind: 'FAILED', message: this.#t('store.purchase_in_progress'), charged: false };
     }
 
     const settled = new Promise<PurchaseOutcome>((resolve) => {
@@ -196,7 +217,7 @@ export class Purchases {
     } catch (error) {
       // Some failures arrive here and some through the error listener. Whichever
       // is first settles it; the other finds nothing to settle.
-      this.#settle(toFailure(error as { code?: string; message?: string }));
+      this.#settle(toFailure(error as { code?: string; message?: string }, this.#t));
     }
 
     return settled;
@@ -246,8 +267,7 @@ export class Purchases {
       result = await this.#server.sync(toSyncRequest(purchase));
     } catch (error) {
       const message =
-        (error as { message?: string })?.message ??
-        'We could not confirm that purchase just now. Your purchase is safe.';
+        (error as { message?: string })?.message ?? this.#t('store.sync_unconfirmed');
       // Deliberately not finished: the store keeps it, and the next launch or
       // the next Restore tries again.
       if (!silent) this.#settle({ kind: 'FAILED', message, charged: true }, purchase.productId);
@@ -296,8 +316,14 @@ function toSyncRequest(purchase: NativePurchase): PurchaseSyncRequest {
 /**
  * Store error codes are not player copy, and the difference that matters most
  * is whether the player was charged.
+ *
+ * Takes the translator rather than reaching for one, so the copy comes out in
+ * whatever language the `Purchases` that called it is speaking. The `charged`
+ * flag is the part that must never drift in translation: `store.network_error`
+ * promises no charge because we know, and `store.already_processing` refuses to
+ * because we do not.
  */
-function toFailure(error: { code?: string; message?: string }): PurchaseOutcome {
+function toFailure(error: { code?: string; message?: string }, t: Translator): PurchaseOutcome {
   switch (error.code) {
     case 'user-cancelled':
     case 'E_USER_CANCELLED':
@@ -306,31 +332,31 @@ function toFailure(error: { code?: string; message?: string }): PurchaseOutcome 
     case 'pending':
       return { kind: 'PENDING' };
     case 'item-unavailable':
-      return { kind: 'FAILED', message: 'That pack is not available right now.', charged: false };
+      return { kind: 'FAILED', message: t('store.item_unavailable'), charged: false };
     case 'network-error':
       return {
         kind: 'FAILED',
-        message: 'The store could not be reached. You have not been charged.',
+        message: t('store.network_error'),
         charged: false,
       };
     case 'already-owned':
     case 'duplicate-purchase':
       return {
         kind: 'FAILED',
-        message: 'That purchase is still being processed. Tap Restore purchases in a moment.',
+        message: t('store.already_processing'),
         charged: true,
       };
     case 'iap-not-available':
     case 'billing-unavailable':
       return {
         kind: 'UNAVAILABLE',
-        message: 'Purchases are not available on this device or account.',
+        message: t('store.purchases_unavailable'),
         charged: false,
       } as PurchaseOutcome;
     default:
       return {
         kind: 'FAILED',
-        message: error.message ?? 'That purchase did not go through. You have not been charged.',
+        message: error.message ?? t('store.purchase_failed'),
         charged: false,
       };
   }

@@ -1,14 +1,17 @@
 import type {
+  AddressPair,
   CharacterDef,
   GameState,
   IntentDialogue,
   MemoryFact,
+  PlayerGrammar,
   QualityTier,
+  RelationshipState,
   Resolution,
   StoryVersion,
   TurnRecord,
 } from '@aniplay/contracts';
-import { QUALITY_TIERS } from '@aniplay/contracts';
+import { QUALITY_TIERS, playerGrammar } from '@aniplay/contracts';
 import {
   abandonedObjectiveNote,
   approachingEndings,
@@ -19,13 +22,17 @@ import {
   crewRoster,
   formatWorldTime,
   relationshipLabel,
+  relationshipTone,
   topObjective,
   dayPart,
+  dayPartLabel,
   formatClock,
   lightAt,
 } from '@aniplay/engine';
+import type { DayPart, RelationshipTone } from '@aniplay/engine';
 import { retrieveLore } from './authored-lore.js';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
+import { addressState } from './address-fr.js';
 import { pressureOf } from '@aniplay/engine';
 
 /**
@@ -37,10 +44,48 @@ import { pressureOf } from '@aniplay/engine';
  * inventory or quest state.
  */
 
+/**
+ * The relationship a character with no `RelationshipState` reads as.
+ *
+ * Was the literal `'Wary'`, which is the English wording of a state rather than
+ * the state itself. Going through `relationshipLabel` means the fallback is
+ * translated like every other rung of the ladder.
+ */
+const NEUTRAL_RELATIONSHIP: RelationshipState = {
+  characterId: '',
+  trust: 0,
+  affection: 0,
+  respect: 0,
+  fear: 0,
+  rivalry: 0,
+  lastChangedTurn: -1,
+  unlockedGates: [],
+};
+
 export interface PresentCharacterContext {
   readonly def: CharacterDef;
+  /**
+   * How the character reads, **as an id**.
+   *
+   * Added because the label was being compared against literal English —
+   * `relationshipLabel === 'Rival'` in `director.ts` — which is a latent bug in
+   * English (a copy edit breaks it silently) and a certain one in French. Any
+   * code that wants to *branch* on the relationship uses this; only code that
+   * wants to *show* it uses the label.
+   */
+  readonly relationshipTone: RelationshipTone;
+  /** Already in the session's locale. Shown to the player and read by the model. */
   readonly relationshipLabel: string;
   readonly relationship: { trust: number; affection: number; respect: number; fear: number; rivalry: number };
+  /**
+   * `tu` or `vous`, both ways, in French runs. Step 9.
+   *
+   * Carried here rather than derived at each model stage so the two cannot
+   * disagree — the whole reason `speaker-brief.ts` exists. Present in English
+   * runs too, where nothing reads it, because a field that exists only
+   * sometimes is a field every caller has to guard.
+   */
+  readonly address: AddressPair;
   /** Only what this NPC could know — filtered before it ever reaches a prompt. */
   readonly knownMemories: ScoredFact[];
   readonly revealableSecrets: Array<{ id: string; fact: string }>;
@@ -62,9 +107,13 @@ export interface TurnContext {
     readonly locationName: string;
     readonly locationDescription: string;
     readonly artDirection: string;
+    /** `Day 3 · 4:15 PM` / `Jour 3 · 16:15`, in the session's locale. */
     readonly worldTimeLabel: string;
+    /** The word — `Afternoon`, `Après-midi`. For prose. */
     readonly dayPart: string;
-    /** `4:44 PM` — the clock the header is showing the player. */
+    /** The id — `AFTERNOON`. For branching. */
+    readonly dayPartId: DayPart;
+    /** `4:44 PM`, `16:44` — the clock the header is showing the player. */
     readonly clock: string;
     /** What the light is doing, so the prose cannot contradict the clock. */
     readonly light: string;
@@ -74,7 +123,17 @@ export interface TurnContext {
   // Layer 3 — the player.
   readonly player: {
     readonly name: string;
+    /** Free text the player wrote. Self-expression, not a grammar signal. */
     readonly pronouns: string;
+    /**
+     * How the narration must agree with this player, declared on setup.
+     *
+     * The grammar signal, as opposed to `pronouns` above. English does not
+     * collect it and reads `UNSPECIFIED`; French cannot write a sentence
+     * without it. `WRITER_POLICY_FR` turns it into a rule; `agree()` in
+     * `@aniplay/i18n` is the deterministic half.
+     */
+    readonly grammar: PlayerGrammar;
     readonly about: string;
     /** The archetype's name, so the prose knows what kind of person this is. */
     readonly archetype: string | null;
@@ -275,10 +334,12 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
 
       return {
         def,
+        relationshipTone: rel ? relationshipTone(rel) : 'WARY',
         relationshipLabel: rel
-          ? relationshipLabel(rel)
-          : 'Wary',
+          ? relationshipLabel(rel, state.locale)
+          : relationshipLabel(NEUTRAL_RELATIONSHIP, state.locale),
         relationship: dimensions,
+        address: addressState(def, rel),
         // Per-NPC retrieval, filtered to their own knowledge scope.
         knownMemories: retrieveMemories(
           memories,
@@ -345,15 +406,20 @@ export function buildTurnContext(options: BuildContextOptions): TurnContext {
       locationName: location?.name ?? state.player.locationId,
       locationDescription: location?.description ?? '',
       artDirection: location?.artDirection ?? '',
-      worldTimeLabel: formatWorldTime(state.worldMinute),
-      dayPart: dayPart(state.worldMinute),
-      clock: formatClock(state.worldMinute),
-      light: lightAt(state.worldMinute),
+      // In the session's locale, not the interface's: these strings are read
+      // by the writer as well as shown on the HUD, and the run's language is
+      // the one the prose is in.
+      worldTimeLabel: formatWorldTime(state.worldMinute, state.locale),
+      dayPart: dayPartLabel(state.worldMinute, state.locale),
+      dayPartId: dayPart(state.worldMinute),
+      clock: formatClock(state.worldMinute, state.locale),
+      light: lightAt(state.worldMinute, state.locale),
       presentCharacterIds: presentIds,
     },
     player: {
       name: state.player.identity.displayName,
       pronouns: state.player.identity.pronouns,
+      grammar: playerGrammar(state.player.identity),
       about: state.player.identity.worldKnowsAboutYou,
       // Setup asks four questions and the screen promises the world will use
       // the answers. Only two of them were reaching the prose.

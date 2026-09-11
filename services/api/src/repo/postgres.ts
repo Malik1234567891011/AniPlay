@@ -1,4 +1,5 @@
 import { Pool, type PoolClient } from 'pg';
+import { isLocale } from '@aniplay/i18n';
 import {
   GameEvent,
   GameState,
@@ -452,8 +453,8 @@ export class PostgresRepository implements Repository {
       await client.query(
         `INSERT INTO user_settings (user_id, show_advanced_relationship_stats, show_check_math,
                                     reduce_motion, voice_autoplay, haptics_enabled,
-                                    default_quality_tier, content_filters)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+                                    default_quality_tier, content_filters, locale)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
          ON CONFLICT (user_id) DO NOTHING`,
         [
           user.userId,
@@ -464,6 +465,7 @@ export class PostgresRepository implements Repository {
           user.settings.hapticsEnabled,
           user.settings.defaultQualityTier,
           user.settings.contentFilters,
+          user.settings.locale,
         ],
       );
     });
@@ -501,8 +503,8 @@ export class PostgresRepository implements Repository {
       await client.query(
         `INSERT INTO user_settings (user_id, show_advanced_relationship_stats, show_check_math,
                                     reduce_motion, voice_autoplay, haptics_enabled,
-                                    default_quality_tier, content_filters, updated_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8, now())
+                                    default_quality_tier, content_filters, locale, updated_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, now())
          ON CONFLICT (user_id) DO UPDATE SET
            show_advanced_relationship_stats = EXCLUDED.show_advanced_relationship_stats,
            show_check_math = EXCLUDED.show_check_math,
@@ -511,6 +513,7 @@ export class PostgresRepository implements Repository {
            haptics_enabled = EXCLUDED.haptics_enabled,
            default_quality_tier = EXCLUDED.default_quality_tier,
            content_filters = EXCLUDED.content_filters,
+           locale = EXCLUDED.locale,
            updated_at = now()`,
         [
           userId,
@@ -521,6 +524,7 @@ export class PostgresRepository implements Repository {
           next.settings.hapticsEnabled,
           next.settings.defaultQualityTier,
           next.settings.contentFilters,
+          next.settings.locale,
         ],
       );
     });
@@ -1130,6 +1134,9 @@ function toUserRecord(row: Record<string, unknown>): UserRecord {
       hapticsEnabled: row.haptics_enabled === undefined ? true : Boolean(row.haptics_enabled),
       defaultQualityTier: (row.default_quality_tier as UserRecord['settings']['defaultQualityTier']) ?? 'VIVID',
       contentFilters: (row.content_filters as string[] | null) ?? [],
+      // A row written before the column existed reads as null — no choice
+      // made — which is exactly what it means.
+      locale: isLocale(row.locale) ? row.locale : null,
     },
     migratedFromGuestId: (row.migrated_from_guest_id as string | null) ?? null,
     deletionRequestedAt: row.deletion_requested_at ? iso(row.deletion_requested_at) : null,

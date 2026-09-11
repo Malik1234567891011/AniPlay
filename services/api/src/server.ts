@@ -21,6 +21,7 @@ import {
   type StorySummary,
 } from '@aniplay/contracts';
 import { createInitialState, forkState, sha256Hex } from '@aniplay/engine';
+import { formatList, resolveDeviceLocale, resolveLocale, translatorFor, type Locale } from '@aniplay/i18n';
 import {
   applyCorrection,
   buildRecap,
@@ -242,6 +243,27 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     };
   });
 
+  /**
+   * Which language to render interface chrome in for this request.
+   *
+   * An explicit saved choice wins; otherwise the device, which
+   * `resolveDeviceLocale` gates behind `DEVICE_LOCALE_AUTODETECT` and which
+   * therefore answers `en` until the French catalogue is real. Never a run's
+   * locale — a run is frozen and this is not.
+   */
+  const interfaceLocale = (
+    user: { settings: { locale: Locale | null } } | null,
+    request: { headers: Record<string, string | string[] | undefined> },
+  ): Locale =>
+    resolveLocale(
+      user?.settings.locale,
+      resolveDeviceLocale(
+        Array.isArray(request.headers['accept-language'])
+          ? request.headers['accept-language'][0]
+          : request.headers['accept-language'],
+      ),
+    );
+
   // --- Discover (§33.2) ---
 
   app.get<{ Querystring: { tastes?: string; category?: string } }>('/v1/discover', async (request) => {
@@ -251,6 +273,14 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       .map((tag) => tag.trim().toLowerCase())
       .filter(Boolean);
     const category = request.query.category?.trim() || null;
+
+    // The **interface** locale, not any run's. A rail title is chrome and
+    // belongs to whoever is looking at the shelf; a run's locale is frozen and
+    // belongs to that run. The rails also carry `titleKey`, so a client that
+    // knows the catalogue can re-render on a language switch without waiting
+    // for this endpoint to be asked again.
+    const locale = interfaceLocale(user, request);
+    const t = translatorFor(locale);
 
     const allStories = await ctx.repo.listStories();
     const saved = user ? await ctx.repo.getSaves(user.userId) : [];
@@ -308,7 +338,19 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     if (category) {
       const label = categories.find((c) => c.id === category)?.label ?? category;
       if (ranked.length > 0) {
-        rails.push({ id: 'category', title: label, kind: 'GENRE', subtitle: null, stories: ranked });
+        // No key: the title is a category label from the catalog, which is
+        // authored data rather than interface copy. It is translated with the
+        // world it belongs to, not with the app.
+        rails.push({
+          id: 'category',
+          title: label,
+          titleKey: null,
+          kind: 'GENRE',
+          subtitle: null,
+          subtitleKey: null,
+          subtitleParams: null,
+          stories: ranked,
+        });
       }
       return { rails, continueCards: await continueCardsFor(ctx, user), categories, activeCategory: category };
     }
@@ -327,7 +369,16 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       .sort((a, b) => (featuredRank.get(a.storyId) ?? 999) - (featuredRank.get(b.storyId) ?? 999))
       .slice(0, 6);
     if (featured.length > 0) {
-      rails.push({ id: 'hero', title: 'Featured', kind: 'HERO', subtitle: null, stories: featured });
+      rails.push({
+        id: 'hero',
+        title: t('rail.featured'),
+        titleKey: 'rail.featured',
+        kind: 'HERO',
+        subtitle: null,
+        subtitleKey: null,
+        subtitleParams: null,
+        stories: featured,
+      });
     }
 
     // Tastes the onboarding actually collected, spent on the one rail that
@@ -352,11 +403,17 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
     if (forYou.length > 1) {
       const because = [...new Set(forYou.flatMap(matched))].slice(0, 3);
+      // `Intl.ListFormat`, not `join(', ')`: French is `un, deux et trois`
+      // with no Oxford comma, and the joiner is part of the sentence.
+      const tags = formatList(because, locale);
       rails.push({
         id: 'for_you',
-        title: 'For you',
+        title: t('rail.for_you'),
+        titleKey: 'rail.for_you',
         kind: 'FOR_YOU',
-        subtitle: `Because you picked ${because.join(', ')}`,
+        subtitle: t('rail.for_you_because', { tags }),
+        subtitleKey: 'rail.for_you_because',
+        subtitleParams: { tags },
         stories: forYou,
       });
     }
@@ -375,9 +432,12 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       );
       rails.push({
         id: 'trending',
-        title: 'Trending now',
+        title: t('rail.trending'),
+        titleKey: 'rail.trending',
         kind: 'TRENDING',
         subtitle: null,
+        subtitleKey: null,
+        subtitleParams: null,
         stories: rankTrending(played, momentum),
       });
     }
@@ -387,16 +447,28 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     if (enough(4)) {
       rails.push({
         id: 'top_ranked',
-        title: 'Top ranked',
+        title: t('rail.top_ranked'),
+        titleKey: 'rail.top_ranked',
         kind: 'TOP_RANKED',
         subtitle: null,
+        subtitleKey: null,
+        subtitleParams: null,
         stories: rankTopRanked(ranked, new Map(ranked.map((s) => [s.storyId, s.likes]))).slice(0, 10),
       });
     }
 
     const newest = [...ranked].reverse().slice(0, Math.max(1, Math.ceil(ranked.length * 0.3)));
     if (enough(6) && newest.length >= 2) {
-      rails.push({ id: 'new', title: 'New on Plotbreak', kind: 'NEW', subtitle: null, stories: newest });
+      rails.push({
+        id: 'new',
+        title: t('rail.new'),
+        titleKey: 'rail.new',
+        kind: 'NEW',
+        subtitle: null,
+        subtitleKey: null,
+        subtitleParams: null,
+        stories: newest,
+      });
     }
 
     // Everything, always, as the floor of the page — a grid rather than
@@ -404,9 +476,12 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     // sampled. This is the rail that makes the page feel like a catalog.
     rails.push({
       id: 'all',
-      title: 'All worlds',
+      title: t('rail.all'),
+      titleKey: 'rail.all',
       kind: 'GENRE',
       subtitle: null,
+      subtitleKey: null,
+      subtitleParams: null,
       stories: ranked,
     });
 
@@ -793,7 +868,27 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       }
     }
 
-    const state = createInitialState({ sessionId, story, identity });
+    // The resolution chain, applied once and then frozen into the state
+    // (`LOCALIZATION_ARCHITECTURE.md` §1). Explicit request first, then the
+    // player's saved setting, then what the browser or device asked for in
+    // `Accept-Language`, then English.
+    //
+    // Deliberately **not** resolved per request. A run whose language could
+    // move would end up with a transcript that switches halfway down, and that
+    // is unrecoverable: the memory facts, the authored canon corrections and
+    // the prose are all already in the other language by then.
+    const locale = resolveLocale(
+      // What the client asked for — already the player's explicit choice where
+      // they have made one.
+      parsed.data.locale,
+      // The saved choice, which is null until they make one.
+      user.settings.locale,
+      // The device, but only once French is real enough to hand someone
+      // unasked. `resolveDeviceLocale` returns `en` while that flag is off.
+      resolveDeviceLocale(request.headers['accept-language']),
+    );
+
+    const state = createInitialState({ sessionId, story, identity, locale });
 
     const record: SessionRecord = {
       sessionId,
@@ -905,7 +1000,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
       scene: toSceneState(story, state),
       // Spec §10.2 C — recent beats only; history is paged separately.
       // Projected, so the exact DC and the raw mutations stay server-side.
-      recentTurns: turns.slice(-8).map((turn) => toPlayerTurn(story, turn)),
+      recentTurns: turns.slice(-8).map((turn) => toPlayerTurn(story, turn, state.locale)),
       suggestions: last?.suggestions ?? [],
       recap,
       revision: state.revision,
@@ -936,7 +1031,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
   app.get<{ Params: { sessionId: string } }>('/v1/sessions/:sessionId/timeline', async (request, reply) => {
     const loaded = await loadSession(request.params.sessionId, request, reply);
     if (!loaded) return reply;
-    const { session, story } = loaded;
+    const { session, story, state } = loaded;
 
     return {
       entries: toTimeline(
@@ -944,6 +1039,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
         await ctx.repo.listEvents(session.sessionId),
         await ctx.repo.listMemories(session.sessionId),
         await ctx.repo.listTurns(session.sessionId),
+        state.locale,
       ),
     };
   });
@@ -1243,7 +1339,10 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
     const story = await ctx.repo.getStoryVersion(session.storyVersionId);
     if (!story) return sendError(reply, 500, 'SESSION_CORRUPT', 'That turn could not be loaded.');
-    return toPlayerTurn(story, turn);
+    // The run's locale, so a scrolled-back turn reads in the language it was
+    // played in rather than in whatever the app is set to now.
+    const turnState = await ctx.repo.getState(session.sessionId);
+    return toPlayerTurn(story, turn, turnState?.locale ?? 'en');
   });
 
   /**
@@ -1331,7 +1430,7 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
 
       const updated = await ctx.repo.getTurn(turn.turnId);
       return {
-        turn: toPlayerTurn(story, updated ?? turn),
+        turn: toPlayerTurn(story, updated ?? turn, before.locale),
         creditsCharged: cost,
         balance: await ctx.wallet.getBalance(user.userId),
       };

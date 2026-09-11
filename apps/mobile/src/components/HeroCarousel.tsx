@@ -129,6 +129,8 @@ export function HeroCarousel({
 
   if (stories.length === 0) return null;
   const current = stories[Math.min(index, stories.length - 1)];
+  // i18n-exempt: two numerals and a slash. French reads 1/6 as 1/6.
+  const position = `${index + 1}/${stories.length}`;
 
   return (
     <View style={{ height, marginBottom: spacing.lg }}>
@@ -154,7 +156,7 @@ export function HeroCarousel({
         renderItem={({ item }) => (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('discover.hero_a11y', { title: item.title, hook: item.fantasyLabel })}
+            accessibilityLabel={t('discover.hero_a11y', { title: item.title, fantasy: item.fantasyLabel })}
             onPress={() => onOpen(item.storyId)}
             style={({ pressed }) => ({
               width,
@@ -202,7 +204,7 @@ export function HeroCarousel({
           }}
         >
           <Txt variant="micro" color={colors.text.secondary}>
-            {`${index + 1}/${stories.length}`}
+            {position}
           </Txt>
         </View>
       ) : null}

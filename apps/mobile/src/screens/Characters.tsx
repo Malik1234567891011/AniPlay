@@ -20,6 +20,7 @@ import {
 } from '@aniplay/ui';
 import { api, ApiError, type PlayerCharacterCard } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
+import { useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
 
 /**
@@ -30,6 +31,7 @@ import type { RootNavigation } from '../navigation.jsx';
  * recorded for them, rather than as a save slot with a timestamp.
  */
 export function CharactersScreen({ navigation }: { navigation: RootNavigation }): React.JSX.Element {
+  const t = useT();
   const [characters, setCharacters] = useState<PlayerCharacterCard[] | null>(null);
 
   const load = useCallback(async () => {
@@ -49,8 +51,8 @@ export function CharactersScreen({ navigation }: { navigation: RootNavigation })
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <Row style={{ paddingHorizontal: GUTTER, justifyContent: 'space-between' }}>
-        <Txt variant="h2">Your characters</Txt>
-        <IconButton label="Close" onPress={() => navigation.goBack()}>
+        <Txt variant="h2">{t('characters.title')}</Txt>
+        <IconButton label={t('characters.close')} onPress={() => navigation.goBack()}>
           <Txt variant="h3">✕</Txt>
         </IconButton>
       </Row>
@@ -62,10 +64,13 @@ export function CharactersScreen({ navigation }: { navigation: RootNavigation })
         </Stack>
       ) : characters.length === 0 ? (
         <EmptyState
-          title="Nobody yet"
-          body="Start a world and whoever you decide to be will show up here, with everything that happened to them."
-          actionLabel="Browse worlds"
-          onAction={() => navigation.navigate('Tabs', { screen: 'Discover' })}
+          title={t('characters.empty_title')}
+          body={t('characters.empty_body')}
+          actionLabel={t('characters.empty_action')}
+          onAction={() =>
+            // i18n-exempt: navigation route names, never shown to anybody
+            navigation.navigate('Tabs', { screen: 'Discover' })
+          }
         />
       ) : (
         <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.lg, paddingBottom: spacing.giant }}>
@@ -95,6 +100,7 @@ export function CharacterCard({
   onChanged: () => void;
   onNeedCredits: (shortfall: number) => void;
 }): React.JSX.Element {
+  const t = useT();
   const { setBalance } = useStore();
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -121,9 +127,7 @@ export function CharacterCard({
         onNeedCredits(caught.shortfall ?? character.portraitCost);
       } else {
         setError(
-          caught instanceof ApiError
-            ? caught.message
-            : "That portrait didn't come through. You weren't charged.",
+          caught instanceof ApiError ? caught.message : t('characters.portrait_failed'),
         );
       }
     } finally {
@@ -140,8 +144,8 @@ export function CharacterCard({
           accessibilityRole="imagebutton"
           accessibilityLabel={
             hasPortrait
-              ? `${character.displayName}'s portrait. Tap to open the run.`
-              : `No portrait for ${character.displayName} yet.`
+              ? t('characters.portrait_a11y', { name: character.displayName })
+              : t('characters.no_portrait_a11y', { name: character.displayName })
           }
           onPress={onOpen}
         >
@@ -159,7 +163,7 @@ export function CharacterCard({
               style={{ width: 136, height: 204, borderRadius: radius.card, alignItems: 'center', justifyContent: 'center' }}
             >
               <Txt variant="micro" color={colors.text.muted} center style={{ padding: spacing.sm }}>
-                No portrait yet
+                {t('characters.no_portrait_yet')}
               </Txt>
             </StoryArt>
           )}
@@ -171,11 +175,14 @@ export function CharacterCard({
             {[character.archetypeName, character.pronouns].filter(Boolean).join(' · ')}
           </Txt>
           <Txt variant="micro" color={colors.text.muted}>
-            {character.storyTitle} · {character.turnCount} turns
+            {t('characters.story_and_turns', {
+              title: character.storyTitle,
+              count: character.turnCount,
+            })}
           </Txt>
           {character.locationName ? (
             <Txt variant="micro" color={colors.text.muted}>
-              Currently at {character.locationName}
+              {t('characters.currently_at', { location: character.locationName })}
             </Txt>
           ) : null}
         </Stack>
@@ -199,7 +206,7 @@ export function CharacterCard({
       {character.notableMemories.length > 0 ? (
         <Stack gap={spacing.xs} style={{ paddingHorizontal: GUTTER }}>
           <Txt variant="micro" color={colors.text.muted}>
-            WHAT HAPPENED
+            {t('characters.what_happened')}
           </Txt>
           {character.notableMemories.map((memory, index) => (
             <Txt key={index} variant="caption" color={colors.text.secondary}>
@@ -212,16 +219,16 @@ export function CharacterCard({
       {editing ? (
         <Stack gap={spacing.sm} style={{ paddingHorizontal: GUTTER }}>
           <Txt variant="caption" color={colors.text.secondary}>
-            Describe yourself however you like
+            {t('characters.appearance_label')}
           </Txt>
           <TextInput
             value={note}
             onChangeText={setNote}
             multiline
             maxLength={240}
-            placeholder="e.g. Tall, buzzed hair, an archive coat I never take off, ink to the knuckle."
+            placeholder={t('characters.appearance_placeholder')}
             placeholderTextColor={colors.text.muted}
-            accessibilityLabel="Describe your appearance"
+            accessibilityLabel={t('characters.appearance_a11y')}
             style={{
               minHeight: 84,
               padding: spacing.lg,
@@ -245,16 +252,19 @@ export function CharacterCard({
         {editing ? (
           <>
             <Button
-              label={`${hasPortrait ? 'Redraw' : 'Draw'} for ${character.portraitCost} credits`}
+              label={t(
+                hasPortrait ? 'characters.redraw_for_credits' : 'characters.draw_for_credits',
+                { count: character.portraitCost },
+              )}
               loading={busy}
-              loadingLabel="Drawing…"
+              loadingLabel={t('characters.drawing')}
               onPress={() => void generate()}
             />
-            <Button label="Cancel" variant="tertiary" onPress={() => setEditing(false)} />
+            <Button label={t('characters.cancel')} variant="tertiary" onPress={() => setEditing(false)} />
           </>
         ) : (
           <Button
-            label={hasPortrait ? 'Redraw portrait' : 'Draw this character'}
+            label={t(hasPortrait ? 'characters.redraw_portrait' : 'characters.draw_this_character')}
             variant="secondary"
             onPress={() => setEditing(true)}
           />

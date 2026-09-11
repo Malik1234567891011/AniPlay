@@ -15,7 +15,11 @@ import {
   radius,
   spacing,
 } from '@aniplay/ui';
+import type { GrammaticalGender } from '@aniplay/contracts';
+import { thirdPersonPronoun, type TranslationKey, type Translator } from '@aniplay/i18n';
 import { api, ApiError } from '../api/client.js';
+import { useT } from '../i18n/useT.js';
+import { useStore } from '../state/store.jsx';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 /**
@@ -32,6 +36,47 @@ import type { RootNavigation, RootRoute } from '../navigation.jsx';
 
 const CUSTOM = '__custom__';
 
+/**
+ * The four answers to the grammar question, in the order French would ask
+ * them, each with the sentence the player will read and what it means for the
+ * third person.
+ *
+ * A table rather than four hand-written blocks so that the label, the example
+ * and the note for one option cannot drift apart — which is exactly how a
+ * picker ends up offering a neutral option and then quietly writing `il`.
+ */
+const GRAMMAR_OPTIONS: readonly {
+  gender: GrammaticalGender;
+  labelKey: TranslationKey;
+  exampleKey: TranslationKey;
+  noteKey: TranslationKey;
+}[] = [
+  {
+    gender: 'MASCULINE',
+    labelKey: 'setup.grammar.masculine',
+    exampleKey: 'setup.grammar.example_masculine',
+    noteKey: 'setup.grammar.note_masculine',
+  },
+  {
+    gender: 'FEMININE',
+    labelKey: 'setup.grammar.feminine',
+    exampleKey: 'setup.grammar.example_feminine',
+    noteKey: 'setup.grammar.note_feminine',
+  },
+  {
+    gender: 'NEUTRAL',
+    labelKey: 'setup.grammar.neutral',
+    exampleKey: 'setup.grammar.example_neutral',
+    noteKey: 'setup.grammar.note_neutral',
+  },
+  {
+    gender: 'UNSPECIFIED',
+    labelKey: 'setup.grammar.unspecified',
+    exampleKey: 'setup.grammar.example_unspecified',
+    noteKey: 'setup.grammar.note_unspecified',
+  },
+];
+
 export function CharacterSetupScreen({
   navigation,
   route,
@@ -40,6 +85,8 @@ export function CharacterSetupScreen({
   route: RootRoute<'CharacterSetup'>;
 }): React.JSX.Element {
   const { storyId } = route.params;
+  const t = useT();
+  const { locale } = useStore();
   const [detail, setDetail] = useState<StoryDetailResponse | null>(null);
   const [advanced, setAdvanced] = useState(false);
   const [starting, setStarting] = useState(false);
@@ -53,6 +100,15 @@ export function CharacterSetupScreen({
   const [customArchetype, setCustomArchetype] = useState('');
   const [choices, setChoices] = useState<Record<string, string>>({});
   const [customChoices, setCustomChoices] = useState<Record<string, string>>({});
+  /**
+   * How the narration should agree with this player.
+   *
+   * Collected **only in French**, because only French needs it — see
+   * `PLAYER_GRAMMAR.md`. An English session never renders the question and
+   * sends `UNSPECIFIED`, which is exactly what every identity created before
+   * this field existed reads as.
+   */
+  const [grammarGender, setGrammarGender] = useState<GrammaticalGender>('UNSPECIFIED');
 
   useEffect(() => {
     void api.storyDetail(storyId).then(setDetail);
@@ -75,6 +131,25 @@ export function CharacterSetupScreen({
    * premise. Both are right; they are different stories.
    */
   const named = detail?.protagonist?.kind === 'NAMED';
+  /**
+   * Agreement for a protagonist the world already named.
+   *
+   * The rule one line above — *declared, never inferred* — is about a real
+   * player's own words, and it stands. This is not that. `protagonist.pronouns`
+   * is canon the world's author wrote about a fictional person, in a fixed
+   * vocabulary they chose; reading it is no more an inference than reading
+   * `protagonist.name`. Anything unrecognised falls through to `UNSPECIFIED`,
+   * which is the avoidance form and is never wrong, only plainer.
+   */
+  const canonGrammar = ((): GrammaticalGender => {
+    const p = (detail?.protagonist?.pronouns ?? '').toLowerCase();
+    if (/\bhe\b|\bhim\b|\bil\b|\blui\b/.test(p)) return 'MASCULINE';
+    if (/\bshe\b|\bher\b|\belle\b/.test(p)) return 'FEMININE';
+    if (/\bthey\b|\bthem\b|\biel\b/.test(p)) return 'NEUTRAL';
+    return 'UNSPECIFIED';
+  })();
+  const asksGrammar = locale === 'fr' && !named;
+  const effectiveGrammar = named ? canonGrammar : grammarGender;
   const canonName = detail?.protagonist?.name?.trim() ?? '';
   const effectiveName = named ? canonName : displayName.trim();
   const canStart = effectiveName.length > 0 && !starting;
@@ -110,12 +185,24 @@ export function CharacterSetupScreen({
           worldKnowsAboutYou: about.trim().slice(0, 300),
           advanced: advancedValues,
           portraitAssetId: null,
+          // Declared, never inferred. Not from the name, not from the
+          // portrait, not by parsing the free-text pronouns above — every one
+          // of those is wrong for some real player.
+          grammar: {
+            gender: effectiveGrammar,
+            thirdPerson: thirdPersonPronoun(effectiveGrammar, ''),
+          },
         },
         usedQuickSetup: !advanced,
+        // The language this run will be played in, decided here and frozen by
+        // the server into `GameState.locale`. Sent explicitly rather than
+        // inferred from a header, because the interface language the player is
+        // looking at while they fill this in is the one they expect to get.
+        locale,
       });
       navigation.replace('Session', { sessionId: session.session.sessionId });
     } catch (caught) {
-      setError(caught instanceof ApiError ? caught.message : 'Could not start the story.');
+      setError(caught instanceof ApiError ? caught.message : t('setup.could_not_start'));
       setStarting(false);
     }
   };
@@ -126,7 +213,7 @@ export function CharacterSetupScreen({
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <Row style={{ paddingHorizontal: GUTTER, justifyContent: 'space-between' }}>
-          <IconButton label="Back" onPress={() => navigation.goBack()}>
+          <IconButton label={t('setup.back')} onPress={() => navigation.goBack()}>
             <Txt variant="h2">‹</Txt>
           </IconButton>
           <Txt variant="caption" color={colors.text.muted}>
@@ -162,36 +249,111 @@ export function CharacterSetupScreen({
         >
           <Stack gap={spacing.sm}>
             <Txt variant="display">
-              {named ? (detail?.protagonist?.setupHeading || `You are ${canonName}.`) : 'Who are you?'}
+              {/*
+                A world's own `setupHeading` is world content, written in the
+                language that world was authored in, and wins when it is set —
+                the same rule the title and the hook follow. The fallback is
+                keyed, so a world that did not write one still reads French.
+              */}
+              {named
+                ? detail?.protagonist?.setupHeading || t('setup.heading_named', { name: canonName })
+                : t('setup.heading')}
             </Txt>
             <Txt variant="bodyCompact" color={colors.text.secondary}>
-              {named
-                ? 'This one you already are. What is left to decide is what you became — and after that, ' +
-                  'everything is open.'
-                : 'Only your name is required. Everything else is yours to invent, and the world will use ' +
-                  'whatever you give it.'}
+              {t(named ? 'setup.subheading_named' : 'setup.subheading')}
             </Txt>
           </Stack>
 
           {named ? null : (
             <Stack gap={spacing.lg}>
               <Field
-                label="What do they call you?"
+                label={t('setup.name_label')}
                 value={displayName}
                 onChange={setDisplayName}
-                placeholder={placeholderFor(detail, 'displayName', 'e.g. Malik Sarrow')}
+                placeholder={placeholderFor(detail, 'displayName', t('setup.name_placeholder'))}
                 maxLength={40}
                 required
               />
               <Field
-                label="Pronouns"
+                label={t('setup.pronouns_label')}
                 value={pronouns}
                 onChange={setPronouns}
-                placeholder={placeholderFor(detail, 'pronouns', 'e.g. he/him — or write anything')}
+                placeholder={placeholderFor(detail, 'pronouns', t('setup.pronouns_placeholder'))}
                 maxLength={24}
               />
             </Stack>
           )}
+          {/*
+           * The question only French asks, in the French build only.
+           *
+           * It does not replace the free-text pronouns field above and is not
+           * a translation of it: that field is doing self-expression work a
+           * four-value enum must not take over. This one asks the single
+           * thing French narration cannot do without.
+           *
+           * A world with a NAMED protagonist does not ask it either. There the
+           * pronouns are canon the world authored, not a self-description, so
+           * `canonGrammar` reads them and the question has already been
+           * answered — asking "how should we address you?" one line under
+           * "you are Itachi" is the same fourth-wall break as asking his name.
+           *
+           * Each row shows the sentence the player will actually read, which
+           * is the only way to make an abstract grammatical question
+           * concrete. The neutral and no-preference rows show the avoidance
+           * form — present tense, no participle, nothing to agree — rather
+           * than a midpoint. PLAYER_GRAMMAR rule 4: the midpoint is an
+           * administrative register, it was banned from school documents by
+           * ministerial circular, and it breaks read-aloud on blocks the
+           * product marks voiceEligible.
+           */}
+          {asksGrammar ? (
+            <Stack gap={spacing.sm}>
+              <Stack gap={spacing.xs}>
+                <Txt variant="h3">{t('setup.grammar.heading')}</Txt>
+                <Txt variant="caption" color={colors.text.secondary}>
+                  {t('setup.grammar.hint')}
+                </Txt>
+              </Stack>
+              {GRAMMAR_OPTIONS.map((option) => {
+                const selected = grammarGender === option.gender;
+                return (
+                  <Pressable
+                    key={option.gender}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected }}
+                    accessibilityLabel={t('setup.grammar.option_a11y', {
+                      label: t(option.labelKey),
+                      example: t(option.exampleKey),
+                      note: t(option.noteKey),
+                    })}
+                    onPress={() => setGrammarGender(option.gender)}
+                  >
+                    <Card
+                      style={{
+                        borderColor: selected ? colors.accent.primary : colors.border.subtle,
+                        gap: spacing.xs,
+                      }}
+                    >
+                      <Row style={{ gap: spacing.sm, alignItems: 'baseline', flexWrap: 'wrap' }}>
+                        <Txt
+                          variant="bodyStrong"
+                          color={selected ? colors.accent.primary : colors.text.primary}
+                        >
+                          {t(option.labelKey)}
+                        </Txt>
+                        <Txt variant="bodyCompact" color={colors.text.primary}>
+                          {t('setup.grammar.quoted_example', { example: t(option.exampleKey) })}
+                        </Txt>
+                      </Row>
+                      <Txt variant="caption" color={colors.text.muted}>
+                        {t(option.noteKey)}
+                      </Txt>
+                    </Card>
+                  </Pressable>
+                );
+              })}
+            </Stack>
+          ) : null}
 
           {(detail?.archetypes.length ?? 0) > 0 ? (
             <Stack gap={spacing.md}>
@@ -201,7 +363,7 @@ export function CharacterSetupScreen({
                 inside it. A question on its own is not an explanation.
               */}
               <Stack gap={spacing.xs}>
-                <Txt variant="h3">{archetypeField?.label ?? 'What kind of character are you?'}</Txt>
+                <Txt variant="h3">{archetypeField?.label ?? t('setup.archetype_heading')}</Txt>
                 {archetypeField?.helpText ? (
                   <Txt variant="bodyCompact" color={colors.text.secondary}>
                     {archetypeField.helpText}
@@ -216,7 +378,11 @@ export function CharacterSetupScreen({
                       key={option.id}
                       accessibilityRole="radio"
                       accessibilityState={{ selected }}
-                      accessibilityLabel={`${option.name}. ${option.role}. ${option.summary}`}
+                      accessibilityLabel={t('setup.archetype_a11y', {
+                        name: option.name,
+                        role: option.role,
+                        summary: option.summary,
+                      })}
                       onPress={() => setArchetypeId(selected ? null : option.id)}
                     >
                       <Card
@@ -244,7 +410,7 @@ export function CharacterSetupScreen({
                         </Row>
 
                         {/* What it actually does, only once you are looking at it. */}
-                        {selected ? <GrantList grants={option.grants} /> : null}
+                        {selected ? <GrantList grants={option.grants} t={t} /> : null}
 
                         {/* Layer 2: the world's voice. Never carrying the meaning. */}
                         <Txt variant="caption" color={colors.text.secondary}>
@@ -258,7 +424,7 @@ export function CharacterSetupScreen({
                 <Pressable
                   accessibilityRole="radio"
                   accessibilityState={{ selected: usingCustomArchetype }}
-                  accessibilityLabel="Write your own background"
+                  accessibilityLabel={t('setup.write_own_background')}
                   onPress={() => setArchetypeId(usingCustomArchetype ? null : CUSTOM)}
                 >
                   <Card
@@ -269,11 +435,10 @@ export function CharacterSetupScreen({
                     }}
                   >
                     <Txt variant="bodyStrong" color={usingCustomArchetype ? colors.accent.primary : colors.text.primary}>
-                      Something else
+                      {t('setup.something_else')}
                     </Txt>
                     <Txt variant="bodyCompact" color={colors.text.primary}>
-                      Describe your own background instead. The world takes it as canon — but it grants no
-                      stats, skills or techniques, so you start with none of the packages above.
+                      {t('setup.custom_background_body')}
                     </Txt>
                   </Card>
                 </Pressable>
@@ -281,10 +446,10 @@ export function CharacterSetupScreen({
 
               {usingCustomArchetype ? (
                 <Field
-                  label="So what did you do?"
+                  label={t('setup.custom_background_label')}
                   value={customArchetype}
                   onChange={setCustomArchetype}
-                  placeholder="e.g. I ran messages for the lower-city courts until someone noticed I could read the seals."
+                  placeholder={t('setup.custom_background_placeholder')}
                   maxLength={240}
                   multiline
                 />
@@ -293,13 +458,13 @@ export function CharacterSetupScreen({
           ) : null}
 
           <Field
-            label="What should the world know about you?"
+            label={t('setup.about_label')}
             value={about}
             onChange={setAbout}
             placeholder={placeholderFor(
               detail,
               'worldKnowsAboutYou',
-              'e.g. I transferred in a term late and nobody will say who signed for me.',
+              t('setup.about_placeholder'),
             )}
             maxLength={300}
             multiline
@@ -313,14 +478,14 @@ export function CharacterSetupScreen({
           */}
           {named ? null : (
             <Field
-              label="What do you look like?"
-              hint="Used if you generate a portrait later. Skip it and we'll go on what the world sees."
+              label={t('setup.appearance_label')}
+              hint={t('setup.appearance_hint')}
               value={appearance}
               onChange={setAppearance}
               placeholder={placeholderFor(
                 detail,
                 'appearance',
-                'e.g. Short, dark hair cut badly by myself, a coat two sizes too big.',
+                t('setup.appearance_placeholder'),
               )}
               maxLength={240}
               multiline
@@ -355,7 +520,7 @@ export function CharacterSetupScreen({
                       ))}
                       {/* Every preset list ends in an escape hatch. */}
                       <Chip
-                        label="Something else"
+                        label={t('setup.something_else')}
                         selected={choices[field.id] === CUSTOM}
                         onPress={() =>
                           setChoices((current) => ({
@@ -371,10 +536,10 @@ export function CharacterSetupScreen({
                         onChangeText={(text) =>
                           setCustomChoices((current) => ({ ...current, [field.id]: text }))
                         }
-                        placeholder="Write your own answer"
+                        placeholder={t('setup.write_own_answer')}
                         placeholderTextColor={colors.text.muted}
                         maxLength={field.maxLength}
-                        accessibilityLabel={`${field.label}, your own answer`}
+                        accessibilityLabel={t('setup.own_answer_a11y', { label: field.label })}
                         style={inputStyle(false)}
                       />
                     ) : null}
@@ -429,7 +594,7 @@ export function CharacterSetupScreen({
           }}
         >
           <Button
-            label="Enter"
+            label={t('setup.enter')}
             loading={starting}
             loadingLabel="Entering…"
             disabled={!canStart}
@@ -438,7 +603,7 @@ export function CharacterSetupScreen({
           />
           {advancedFields.length > 0 ? (
             <Button
-              label={advanced ? 'Use quick setup' : 'Customize more'}
+              label={advanced ? t('setup.use_quick_setup') : t('setup.customize_more')}
               variant="tertiary"
               onPress={() => setAdvanced((v) => !v)}
             />
@@ -457,13 +622,19 @@ export function CharacterSetupScreen({
  * mean for me". The strings arrive already resolved from the server so the
  * screen has no opinion about how a proficiency is spelled.
  */
-function GrantList({ grants }: { grants: SetupArchetype['grants'] }): React.JSX.Element | null {
+function GrantList({
+  grants,
+  t,
+}: {
+  grants: SetupArchetype['grants'];
+  t: Translator;
+}): React.JSX.Element | null {
   const lines: Array<[string, string[]]> = [
-    ['Starts with', grants.abilities],
-    ['Better at', grants.skills],
-    ['Attributes', grants.attributes],
-    ['Carries', grants.items],
-    ['Counted by', grants.standing],
+    [t('setup.grants.starts_with'), grants.abilities],
+    [t('setup.grants.better_at'), grants.skills],
+    [t('setup.grants.attributes'), grants.attributes],
+    [t('setup.grants.carries'), grants.items],
+    [t('setup.grants.counted_by'), grants.standing],
   ];
   const shown = lines.filter(([, values]) => values.length > 0);
   if (shown.length === 0) return null;

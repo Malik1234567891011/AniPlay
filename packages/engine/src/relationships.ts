@@ -5,6 +5,7 @@ import type {
   RelationshipState,
   StoryVersion,
 } from '@aniplay/contracts';
+import { translate, type Locale } from '@aniplay/i18n';
 
 /**
  * Spec §14 — relationship simulation.
@@ -171,16 +172,49 @@ export function clampRelationshipDelta(
 }
 
 /**
- * Spec §11.5 — qualitative label shown by default. Underlying numbers stay
- * hidden unless the player enables advanced stats.
+ * Spec §11.5 — where a character sits on the ladder, as an **id**.
+ *
+ * Split from the wording, because `relationshipLabel` was being compared
+ * against literal English in the director (`=== 'Rival'`) — which is a latent
+ * bug in English too, and would have silently stopped working the moment the
+ * label was translated.
  */
-export function relationshipLabel(rel: RelationshipState): string {
-  if (rel.fear >= 55 && rel.fear > rel.affection) return 'Afraid';
-  if (rel.rivalry >= 50 && rel.rivalry > rel.affection) return 'Rival';
-  if (rel.trust <= -30 || rel.affection <= -30) return 'Hostile';
-  if (rel.affection >= 70 && rel.trust >= 50) return 'Devoted';
-  if (rel.affection >= 45 && rel.trust >= 30) return 'Close';
-  if (rel.trust >= 40) return 'Trusted';
+export type RelationshipTone =
+  | 'AFRAID'
+  | 'RIVAL'
+  | 'HOSTILE'
+  | 'DEVOTED'
+  | 'CLOSE'
+  | 'TRUSTED'
+  | 'COMPLICATED'
+  | 'RESPECTED'
+  | 'COMPETITIVE'
+  | 'WARM'
+  | 'FAMILIAR'
+  | 'WARY';
+
+const RELATIONSHIP_KEY = {
+  AFRAID: 'world.relationship.afraid',
+  RIVAL: 'world.relationship.rival',
+  HOSTILE: 'world.relationship.hostile',
+  DEVOTED: 'world.relationship.devoted',
+  CLOSE: 'world.relationship.close',
+  TRUSTED: 'world.relationship.trusted',
+  COMPLICATED: 'world.relationship.complicated',
+  RESPECTED: 'world.relationship.respected',
+  COMPETITIVE: 'world.relationship.competitive',
+  WARM: 'world.relationship.warm',
+  FAMILIAR: 'world.relationship.familiar',
+  WARY: 'world.relationship.wary',
+} as const;
+
+export function relationshipTone(rel: RelationshipState): RelationshipTone {
+  if (rel.fear >= 55 && rel.fear > rel.affection) return 'AFRAID';
+  if (rel.rivalry >= 50 && rel.rivalry > rel.affection) return 'RIVAL';
+  if (rel.trust <= -30 || rel.affection <= -30) return 'HOSTILE';
+  if (rel.affection >= 70 && rel.trust >= 50) return 'DEVOTED';
+  if (rel.affection >= 45 && rel.trust >= 30) return 'CLOSE';
+  if (rel.trust >= 40) return 'TRUSTED';
 
   // The interesting shapes below the top of the ladder, which a single
   // catch-all used to flatten. Four people the player feels four different ways
@@ -188,12 +222,24 @@ export function relationshipLabel(rel: RelationshipState): string {
   //
   // Liked without being trusted is the specific state a lot of this product is
   // about, so it gets its own word.
-  if (rel.affection >= 35 && rel.trust < 30) return 'Complicated';
-  if (rel.respect >= 40 && rel.affection < 35) return 'Respected';
-  if (rel.rivalry >= 25 && rel.rivalry > rel.trust) return 'Competitive';
-  if (rel.affection >= 20) return 'Warm';
-  if (rel.trust >= 10 || rel.affection >= 10) return 'Familiar';
-  return 'Wary';
+  if (rel.affection >= 35 && rel.trust < 30) return 'COMPLICATED';
+  if (rel.respect >= 40 && rel.affection < 35) return 'RESPECTED';
+  if (rel.rivalry >= 25 && rel.rivalry > rel.trust) return 'COMPETITIVE';
+  if (rel.affection >= 20) return 'WARM';
+  if (rel.trust >= 10 || rel.affection >= 10) return 'FAMILIAR';
+  return 'WARY';
+}
+
+/**
+ * The qualitative label shown by default. Underlying numbers stay hidden
+ * unless the player enables advanced stats.
+ *
+ * Shown in the UI **and** injected into the writer prompt, which is why it is
+ * rendered in the session's locale here rather than sent to the client as a
+ * key: an English `Trusted` inside a French context window is drift.
+ */
+export function relationshipLabel(rel: RelationshipState, locale: Locale = 'en'): string {
+  return translate(locale, RELATIONSHIP_KEY[relationshipTone(rel)]);
 }
 
 /** All labels the UI may render, so legends and filters stay in sync. */
