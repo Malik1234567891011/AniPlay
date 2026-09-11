@@ -26,6 +26,7 @@ import {
   stripSurplusVocatives,
 } from './name-spam.js';
 import { narratesPlayerInThirdPerson, toSecondPerson } from './second-person.js';
+import { hasMidpoint } from './responses.js';
 
 /**
  * Spec §17.1 step 10 — the consistency validator.
@@ -314,6 +315,30 @@ export function validateNarrative({ context, turn }: ValidateOptions): Consisten
         `The player addressed ${who.name}, who is not here, and somebody else in the room answered ` +
           'instead without the beat saying they were absent.',
         0,
+      );
+    }
+  }
+
+  // --- A midpoint in the prose. French only; English has no such hedge. ---
+  //
+  // `PLAYER_GRAMMAR.md` rule 4: administrative register, banned from school
+  // documents by ministerial circular, and unreadable aloud on a product that
+  // marks blocks `voiceEligible`.
+  //
+  // The policy has forbidden it since step 8 and the cards have a filter. The
+  // prose did not, and a fourteen-turn French run produced `quand iel est
+  // fatigué·e ou agacé·e` — about an NPC rather than the player, which is the
+  // case the policy had not covered. Structural, because a rule that only
+  // exists in a prompt is a rule that holds most of the time.
+  if (context.state.locale === 'fr') {
+    for (const [index, block] of turn.blocks.entries()) {
+      if (!hasMidpoint(block.text)) continue;
+      push(
+        'FORMAT',
+        'ERROR',
+        'The prose contains an inclusive midpoint, which French narration in this product never uses. ' +
+          'Turn the sentence so there is nothing to agree.',
+        index,
       );
     }
   }
