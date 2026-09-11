@@ -157,7 +157,11 @@ function check(story: StoryVersion, findings: Finding[], gaps: string[]): void {
       findings.push({ world: story.title, path, code: 'MIDPOINT', detail: text.slice(0, 90) });
     }
     for (const [pattern, why] of CALQUES) {
-      if (pattern.test(text)) {
+      // A tone guide that says « Jamais "basé sur une analyse probabiliste" »
+      // is teaching the model not to write the calque. Flagging it asks a
+      // writer to remove the example that prevents the mistake.
+      const quotedCounterExample = /\b(jamais|ne dis jamais|évite|pas de)\b[^.]{0,40}«/i.test(text);
+      if (pattern.test(text) && !quotedCounterExample) {
         findings.push({ world: story.title, path, code: 'CALQUE', detail: `${why} — ${text.slice(0, 70)}` });
       }
     }
@@ -194,6 +198,9 @@ function check(story: StoryVersion, findings: Finding[], gaps: string[]): void {
   // Glossary: a decided term must not have been re-invented.
   for (const entry of FR_GLOSSARY) {
     if (entry.decision === 'KEEP') continue;
+    // A ladder rung is a decision about a UI label, not about the word. `un
+    // rival` in a sentence is ordinary French.
+    if (entry.scope === 'label') continue;
     for (const [path, text] of pairs) {
       // Overlaid fields only, for the same reason as above.
       if (english.get(path) === text) continue;

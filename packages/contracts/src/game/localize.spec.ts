@@ -91,12 +91,16 @@ describe('the French overlay', () => {
 
   it('reports its coverage, so what is missing is visible rather than silent', () => {
     expect(worldTextCoverage('fr', 'story_nine_weeks')).toBeGreaterThan(20);
-    expect(worldTextCoverage('fr', 'story_itachi')).toBe(0);
+    // A world that does not exist has no French, which is the only stable way
+    // to assert this now that the catalogue is adapted. These two assertions
+    // used Itachi as the example of "no overlay" and started failing the hour
+    // Itachi got 750 fields — the test was stale, not the code.
+    expect(worldTextCoverage('fr', 'story_does_not_exist')).toBe(0);
   });
 
   it('leaves a world with no overlay exactly as it was', () => {
-    const itachi = { ...en, storyId: 'story_itachi' } as StoryVersion;
-    expect(localizeStory(itachi, 'fr')).toBe(itachi);
+    const unknown = { ...en, storyId: 'story_does_not_exist' } as StoryVersion;
+    expect(localizeStory(unknown, 'fr')).toBe(unknown);
   });
 });
 

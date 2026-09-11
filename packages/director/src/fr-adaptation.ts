@@ -42,7 +42,8 @@ export const FR_HOUSE_STYLE = [
   'ANGLICISMES — garde ceux que les Français emploient vraiment (un mail, un job, le week-end,',
   'cool, un crush, spoiler) et refuse ceux qu’ils n’emploient pas (« réaliser » pour se rendre',
   'compte, « supporter » pour soutenir, « éventuellement » pour finalement, « opportunité »',
-  'pour occasion).',
+  'pour occasion). Et « basé sur » : dis « fondé sur », « d’après », ou tourne la phrase —',
+  '« Basé sur l’illusion » devient « Tout en illusion ».',
   '',
   'PAS DE FAUX ANCIEN FRANÇAIS. Un monde médiéval parle un français moderne et sobre, pas',
   '« moult » et « point n’ai-je ». Sauf si le monde demande explicitement le contraire.',
@@ -144,6 +145,16 @@ export const FR_GLOSSARY: ReadonlyArray<{
   readonly fr: string;
   readonly decision: 'KEEP' | 'TRANSLATE' | 'ADAPT';
   readonly note?: string;
+  /**
+   * `label` means the decision is about the UI string and not about the word.
+   *
+   * The relationship ladder is the case. `Rival` as a ladder rung is
+   * `Rivalité`, because a French adjective would have to agree with a character
+   * whose gender the schema does not carry. But `un rival` in a sentence is
+   * ordinary French, and checking prose against the ladder flagged two
+   * perfectly good lines in worlds that had nothing wrong with them.
+   */
+  readonly scope?: 'label';
 }> = [
   // --- System vocabulary -------------------------------------------------
   { en: 'turn', fr: 'tour', decision: 'TRANSLATE', note: 'jamais « virage », jamais « tour de rôle »' },
@@ -169,14 +180,14 @@ export const FR_GLOSSARY: ReadonlyArray<{
   //
   // A French adjective agrees with the person, and `CharacterDef` carries no
   // gender — so `Dévoué` would be a coin flip on every NPC. Nouns do not agree.
-  { en: 'Devotion', fr: 'Dévouement', decision: 'ADAPT', note: 'nom, pas adjectif — voir engine/locale.spec' },
-  { en: 'Fear', fr: 'Crainte', decision: 'ADAPT' },
-  { en: 'Trust', fr: 'Confiance', decision: 'ADAPT' },
-  { en: 'Complicated', fr: 'C’est compliqué', decision: 'ADAPT' },
-  { en: 'Wary', fr: 'Sur ses gardes', decision: 'ADAPT' },
-  { en: 'Rival', fr: 'Rivalité', decision: 'ADAPT' },
-  { en: 'Warm', fr: 'Sympathie', decision: 'ADAPT' },
-  { en: 'Familiar', fr: 'Familiarité', decision: 'ADAPT' },
+  { scope: 'label', en: 'Devotion', fr: 'Dévouement', decision: 'ADAPT', note: 'nom, pas adjectif — voir engine/locale.spec' },
+  { scope: 'label', en: 'Fear', fr: 'Crainte', decision: 'ADAPT' },
+  { scope: 'label', en: 'Trust', fr: 'Confiance', decision: 'ADAPT' },
+  { scope: 'label', en: 'Complicated', fr: 'C’est compliqué', decision: 'ADAPT' },
+  { scope: 'label', en: 'Wary', fr: 'Sur ses gardes', decision: 'ADAPT' },
+  { scope: 'label', en: 'Rival', fr: 'Rivalité', decision: 'ADAPT' },
+  { scope: 'label', en: 'Warm', fr: 'Sympathie', decision: 'ADAPT' },
+  { scope: 'label', en: 'Familiar', fr: 'Familiarité', decision: 'ADAPT' },
 
   // --- Genre vocabulary --------------------------------------------------
   { en: 'shinobi / ninja', fr: 'shinobi', decision: 'KEEP', note: 'le vocabulaire anime passe tel quel en français' },
