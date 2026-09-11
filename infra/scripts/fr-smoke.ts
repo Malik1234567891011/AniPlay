@@ -47,6 +47,48 @@ async function playerToken(): Promise<string> {
   return body.access_token;
 }
 
+/**
+ * Follow a turn's SSE stream to its end.
+ *
+ * Returns `null` when the turn completed, or the reason it did not. The reason
+ * is the point: a harness that only knows "nothing showed up" cannot tell a
+ * slow world from a dead provider, and will happily spend an afternoon
+ * profiling a billing problem.
+ */
+async function watchTurn(accepted: any, authorization: string): Promise<string | null> {
+  const url = `${accepted.streamUrl}?token=${encodeURIComponent(accepted.streamToken)}`;
+  const response = await fetch(url, { headers: { authorization, accept: 'text/event-stream' } });
+  if (!response.ok || !response.body) return `stream ${response.status}`;
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  const deadline = Date.now() + 180_000;
+
+  try {
+    while (Date.now() < deadline) {
+      const { done, value } = await reader.read();
+      if (done) return 'the stream closed before the turn finished';
+      buffer += decoder.decode(value, { stream: true });
+      const frames = buffer.split('\n\n');
+      buffer = frames.pop() ?? '';
+      for (const frame of frames) {
+        const line = frame.split('\n').find((l) => l.startsWith('data:'));
+        if (!line) continue;
+        let parsed: any;
+        try { parsed = JSON.parse(line.slice(5).trim()); } catch { continue; }
+        if (parsed.event === 'turn.completed') return null;
+        if (parsed.event === 'turn.failed') {
+          return `${parsed.data?.code ?? 'FAILED'}: ${parsed.data?.message ?? ''}`.trim();
+        }
+      }
+    }
+    return 'no terminal event after 180s';
+  } finally {
+    await reader.cancel().catch(() => undefined);
+  }
+}
+
 async function smoke(storyId: string, turns: number, problems: Problem[], log: string[]): Promise<void> {
   const auth = {
     authorization: `Bearer ${await playerToken()}`,
@@ -123,16 +165,22 @@ async function smoke(storyId: string, turns: number, problems: Problem[], log: s
       break;
     }
 
+    // Watch the stream, do not poll the turn.
+    //
+    // `GET /v1/turns/<id>` answers 404 both for a turn that is still being
+    // written and for one that failed and will never exist. Polling it cannot
+    // tell those apart, so every failure arrived here as "no committed turn
+    // after 60s" — which reads as slowness. An entire investigation went into
+    // why French turns were slow before the stream said, instantly and in
+    // plain words, that the provider was out of credits.
+    const failure = await watchTurn(accepted, auth.authorization);
+    if (failure) { note(t, 'TURN_FAILED', failure); break; }
+
     let turn: any = null;
-    // Two minutes. Sixty seconds was enough when most worlds still ran on
-    // English content; a full French world is a larger prompt at every stage,
-    // and twenty-three timeouts in a row was the harness being impatient
-    // rather than the product being broken.
-    for (let a = 0; a < 120 && !turn; a += 1) {
-      await new Promise((r) => setTimeout(r, 1000));
-      try { turn = await call<any>('GET', `/v1/turns/${accepted.turnId}`); } catch { /* not committed */ }
+    for (let a = 0; a < 20 && !turn; a += 1) {
+      try { turn = await call<any>('GET', `/v1/turns/${accepted.turnId}`); } catch { await new Promise((r) => setTimeout(r, 500)); }
     }
-    if (!turn) { note(t, 'TURN_TIMEOUT', 'no committed turn after 60s'); break; }
+    if (!turn) { note(t, 'TURN_TIMEOUT', 'stream completed but the turn never appeared'); break; }
 
     for (const block of turn.blocks ?? []) {
       const text = String(block.text ?? '');

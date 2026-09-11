@@ -47,8 +47,17 @@ a writer with no provider has nothing to write with.
    the SSE stream and logged nothing. A server-side turn failure left no trace
    at all, which is how a billing problem spent hours reading as an engine hang.
    Fixed: `services/api/src/turn-service.ts` now logs the error.
-2. **A failed turn 404s forever.** Any client that loses the stream — backgrounded
-   app, dropped wifi — can never learn the turn failed, and spins indefinitely.
-   See below.
+2. **The reconciliation window was shorter than a turn.** I first assumed a
+   client that lost the stream would spin forever. It does not: `client.ts`
+   falls back to polling `/v1/turns/<id>`, and `Session.tsx` shows a retryable
+   error. Both correct. But the poll budget was 40 attempts at a flat 250ms —
+   **ten seconds**, less than a normal turn takes. So a stream dropped early
+   (app backgrounded, wifi handing over to cellular) told the player "that turn
+   didn't complete, you weren't charged" and handed their draft back, while the
+   turn committed a few seconds later and became invisible to them.
+   Fixed: 12 fast attempts then 1s apart, ~91s total.
 3. **`fr:smoke` polls the wrong endpoint.** It reports "no committed turn after
    60s" for what the server knew instantly was a hard, non-retryable failure.
+   A harness that cannot distinguish "slow" from "dead" sends you looking for a
+   performance problem that does not exist. That is most of why this took as
+   long as it did.

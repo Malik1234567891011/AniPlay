@@ -463,9 +463,21 @@ export class ApiClient {
     }
   }
 
-  /** Fallback: the turn is authoritative once committed, so polling is safe. */
+  /**
+   * Fallback: the turn is authoritative once committed, so polling is safe.
+   *
+   * The budget has to cover how long a turn actually takes, not how long a
+   * reconnect takes. At forty attempts and a flat 250ms this gave up after ten
+   * seconds — shorter than a normal turn — so a stream dropped early (the app
+   * backgrounded, wifi handed over to cellular) reported "that turn didn't
+   * complete" for a turn that committed a few seconds later. The player then
+   * had their draft handed back and a committed turn they could not see.
+   *
+   * Fast at first, because a stream that drops near the end is the common case
+   * and the turn is already there; then a second at a time out to ~90s.
+   */
   async #pollTurn(turnId: string, handlers: TurnStreamHandlers, signal?: AbortSignal): Promise<void> {
-    for (let attempt = 0; attempt < 40; attempt++) {
+    for (let attempt = 0; attempt < 100; attempt++) {
       if (signal?.aborted) return;
       try {
         const turn = await this.turn(turnId);
@@ -492,7 +504,7 @@ export class ApiClient {
         return;
       } catch (error) {
         if (error instanceof ApiError && error.status === 404) {
-          await new Promise((resolve) => setTimeout(resolve, 250));
+          await new Promise((resolve) => setTimeout(resolve, attempt < 12 ? 250 : 1000));
           continue;
         }
         throw error;
