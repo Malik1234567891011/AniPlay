@@ -33,7 +33,7 @@ import { api, ApiError } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
-import { HeroCarousel } from '../components/HeroCarousel.js';
+import { HeroCarousel } from '../components/HeroCarousel.jsx';
 
 /**
  * DS-01 Discover home.
@@ -289,10 +289,15 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
                     data={rail.stories}
                     keyExtractor={(item) => `${rail.id}_${item.storyId}`}
                     contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.md }}
-                    renderItem={({ item }) => (
+                    renderItem={({ item, index }) => (
                       <StoryCoverCard
                         story={{ ...item, badges: item.badges as string[] }}
                         width={railCardWidth}
+                        // The rank, and the count it is a rank of, only on the
+                        // shelf that is about ranking. Everywhere else the
+                        // cover does the selling.
+                        rank={rail.kind === 'TOP_RANKED' ? index + 1 : undefined}
+                        showLikes={rail.kind === 'TOP_RANKED'}
                         onPress={() => navigation.navigate('StoryDetail', { storyId: item.storyId })}
                         onLongPress={() => setPreview(item)}
                       />

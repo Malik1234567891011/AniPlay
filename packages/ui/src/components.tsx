@@ -31,6 +31,8 @@ export interface StoryCardData {
   runs: number;
   badges: string[];
   saved?: boolean;
+  /** Real likes, combined. Shown only where the caller asks for it. */
+  likes?: number;
 }
 
 export function StoryCoverCard({
@@ -39,12 +41,29 @@ export function StoryCoverCard({
   onPress,
   onLongPress,
   width,
+  rank,
+  showLikes = false,
 }: {
   story: StoryCardData;
   variant?: 'rail' | 'hero' | 'row';
   onPress?: () => void;
   onLongPress?: () => void;
   width?: number;
+  /**
+   * Position in a ranked shelf, drawn on the art.
+   *
+   * Only Top Ranked passes it. A rank on every card would be a number without a
+   * question — it is meaningful precisely because the shelf it sits on says
+   * what it is a rank *of*.
+   */
+  rank?: number;
+  /**
+   * Whether to put the like count under the title.
+   *
+   * Off by default and deliberately not on every shelf. A wall of hearts turns
+   * a catalogue into a leaderboard, and the covers are doing the selling.
+   */
+  showLikes?: boolean;
 }): React.JSX.Element {
   const t = useUiT();
   const isHero = variant === 'hero';
@@ -54,6 +73,14 @@ export function StoryCoverCard({
   // thing a browsing player is actually sorting on. A run count joins it only
   // when somebody has genuinely played the world, and a community creator's
   // name matters in a way "Plotbreak Studios" on all nine cards does not.
+  const likeLine =
+    showLikes && (story.likes ?? 0) > 0
+      ? t('ui.story_likes', {
+          formatted: formatCredits(story.likes ?? 0, true),
+          count: story.likes ?? 0,
+        })
+      : null;
+
   const metaLine = [
     story.tags[0] ?? null,
     story.runs > 0
@@ -81,6 +108,7 @@ export function StoryCoverCard({
     .join('. ');
 
   const cover = (
+    <View>
     <StoryArt
       seed={story.storyId}
       // Falls back to the deterministic placeholder when a world has no
@@ -93,6 +121,27 @@ export function StoryCoverCard({
         borderRadius: radius.card,
       }}
     />
+    {/* The rank, bottom-left on the art, the way a chart numbers itself. */}
+    {rank !== undefined ? (
+      <View
+        style={{
+          position: 'absolute',
+          left: spacing.sm,
+          bottom: spacing.sm,
+          minWidth: 26,
+          paddingHorizontal: 6,
+          paddingVertical: 1,
+          borderRadius: radius.control,
+          backgroundColor: 'rgba(11,13,18,0.82)',
+          alignItems: 'center',
+        }}
+      >
+        <Txt variant="bodyStrong" color={colors.text.primary}>
+          {String(rank)}
+        </Txt>
+      </View>
+    ) : null}
+    </View>
   );
 
   return (
@@ -139,9 +188,13 @@ export function StoryCoverCard({
         <Txt variant="caption" color={colors.text.secondary} numberOfLines={2}>
           {story.fantasyLabel}
         </Txt>
-        {metaLine ? (
+        {likeLine ?? metaLine ? (
           <Txt variant="micro" color={colors.text.muted} numberOfLines={1}>
-            {metaLine}
+            {/* One line, not two. The genre and the likes are both "what is
+                this and is it any good", and stacking them doubles the text
+                under every cover for very little. Where likes are asked for,
+                they are the more useful half. */}
+            {likeLine ?? metaLine}
           </Txt>
         ) : null}
       </View>

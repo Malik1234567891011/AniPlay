@@ -138,4 +138,12 @@ export const ui = {
   'ui.credit_balance_a11y': '{balance} crédits. Ouvrir le portefeuille.',
   /** Une jauge, lue à voix haute : `Énergie : 7 sur 10`. `sur`, comme on lit un rapport en français. */
   'ui.meter_a11y': '{name} : {current} sur {max}',
+  /**
+   * Sous une jaquette, dans un rayon classé.
+   *
+   * `j’aime` est invariable — « 3 j’aime », jamais « 3 j’aimes ». C’est une
+   * phrase figée employée comme nom, et l’accorder est la faute la plus
+   * répandue sur ce mot.
+   */
+  'ui.story_likes': '{count, plural, one {# j’aime} other {{formatted} j’aime}}',
 } as const;

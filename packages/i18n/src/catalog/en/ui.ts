@@ -66,4 +66,6 @@ export const ui = {
   'ui.credit_balance_a11y': '{balance} credits. Opens wallet.',
   /** A resource meter, read aloud: `Energy: 7 of 10`. */
   'ui.meter_a11y': '{name}: {current} of {max}',
+  /** Under a cover on a ranked shelf. `{formatted}` is already abbreviated. */
+  'ui.story_likes': '{count, plural, one {# like} other {{formatted} likes}}',
 } as const;
