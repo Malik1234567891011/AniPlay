@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { colors, durations, formatCredits, outcomeColor, radius, riskColor, spacing } from './tokens.js';
 import { Card, Chip, Row, Stack, Txt, haptic } from './primitives.jsx';
-import { useUiT } from './i18n.jsx';
+import { useUiLocale, useUiT } from './i18n.jsx';
 
 /**
  * Spec §26 — the component library. Each of these carries a rule from the spec
@@ -376,6 +376,7 @@ export function DialogueBlock({
   onPlayVoice?: () => void;
 }): React.JSX.Element {
   const t = useUiT();
+  const locale = useUiLocale();
   return (
     <View accessible accessibilityLabel={t('ui.speaker_says_a11y', { speaker, text })} style={{ gap: spacing.xs }}>
       <Row gap={spacing.sm}>
@@ -391,10 +392,20 @@ export function DialogueBlock({
           </Pressable>
         ) : null}
       </Row>
-      {/* Speech marks are drawn, not stored. Both writer paths hand over the
-          line itself, so what a character said is the same string whichever
-          one produced it. */}
-      <Txt variant="body">{`\u201C${text}\u201D`}</Txt>
+      {/*
+        Speech marks are drawn, not stored. Both writer paths hand over the line
+        itself, so what a character said is the same string whichever produced
+        it — and the punctuation around it can then follow the reader's
+        language instead of the writer's.
+
+        English gets curly double quotes. **French gets none at all.** Not
+        guillemets: the block already names the speaker and draws their
+        portrait, and French typography does not put « » around a line that has
+        been attributed — that is what a dash does, and a dash under a portrait
+        is a third way of saying the same thing. `UI_AUDIT` 2.4 reached the same
+        answer, and it makes this a deletion rather than a translation.
+      */}
+      <Txt variant="body">{locale === 'fr' ? text : `\u201C${text}\u201D`}</Txt>
     </View>
   );
 }
