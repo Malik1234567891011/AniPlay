@@ -102,4 +102,12 @@ export const profile = {
   'badges.claim_a11y': 'Récupérer {credits} crédits pour {title}.',
   'badges.progress': '{done} sur {target}',
   'badges.guest': 'Connecte-toi pour garder les badges que tu obtiens.',
+  /** Voir `en/profile.ts` : la roue dentée et son écran. */
+  'settings.title': 'Réglages',
+  'settings.my_information': 'Mes informations',
+  'settings.app_version': 'Version de l’app',
+  'settings.personalization': 'Ce que tu aimes',
+  'settings.save_preferences': 'Enregistrer',
+  'settings.a11y': 'Réglages',
+  'profile.service': 'Services',
 } as const;

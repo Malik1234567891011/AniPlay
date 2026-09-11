@@ -140,7 +140,29 @@ export class PostgresRepository implements Repository {
 
   // --- Catalog -------------------------------------------------------------
 
+  /**
+   * The catalogue, cached in memory.
+   *
+   * A world definition is a large JSON document, and the whole catalogue is
+   * about 1.1 MB. `/v1/discover`, `/v1/bootstrap` and every story page called
+   * this on every request, so each of those screens spent roughly 1.3 seconds
+   * pulling the same megabyte across the continent from Supabase and parsing
+   * twenty-three Zod schemas — before rendering anything. That is the lag the
+   * app has had since it moved off local fixtures.
+   *
+   * Published versions are immutable, so the only thing that changes this is a
+   * migration adding a new one. A short TTL picks that up without a restart and
+   * without anybody having to remember to invalidate anything.
+   */
+  #catalogue: { at: number; stories: StoryVersion[] } | null = null;
+
+  static readonly CATALOGUE_TTL_MS = 60_000;
+
   async listStories(): Promise<StoryVersion[]> {
+    const fresh =
+      this.#catalogue && Date.now() - this.#catalogue.at < PostgresRepository.CATALOGUE_TTL_MS;
+    if (fresh && this.#catalogue) return this.#catalogue.stories;
+
     // One row per world: the newest version of each. Without DISTINCT ON this
     // returned every version ever published, so the moment a world had a
     // second version it appeared twice in Discover — the same cover, the same
@@ -149,7 +171,9 @@ export class PostgresRepository implements Repository {
       `SELECT DISTINCT ON (story_id) definition FROM story_versions
        ORDER BY story_id, version DESC`,
     );
-    return rows.map((row) => StoryVersion.parse(row.definition));
+    const stories = rows.map((row) => StoryVersion.parse(row.definition));
+    this.#catalogue = { at: Date.now(), stories };
+    return stories;
   }
 
   async getStoryVersion(storyVersionId: string): Promise<StoryVersion | null> {
@@ -161,6 +185,13 @@ export class PostgresRepository implements Repository {
   }
 
   async getStoryByStoryId(storyId: string): Promise<StoryVersion | null> {
+    // Served from the catalogue cache when it is warm: this is one of the
+    // twenty-three rows that call already fetched, and a story page asking for
+    // it separately was a second trip for data already in memory.
+    const cached = this.#catalogue?.stories.find((story) => story.storyId === storyId);
+    if (cached && Date.now() - (this.#catalogue?.at ?? 0) < PostgresRepository.CATALOGUE_TTL_MS) {
+      return cached;
+    }
     // Published versions are immutable, so "the story" is its highest version.
     const { rows } = await this.#pool.query<{ definition: unknown }>(
       `SELECT definition FROM story_versions WHERE story_id = $1 ORDER BY version DESC LIMIT 1`,

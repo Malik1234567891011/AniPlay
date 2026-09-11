@@ -322,7 +322,12 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
           >
             <Txt variant="h1">{t('profile.title')}</Txt>
           </Pressable>
-          <CreditBalance balance={wallet?.balance ?? 0} onPress={() => navigation.navigate('Wallet')} />
+          <Row gap={spacing.sm} align="center">
+            <CreditBalance balance={wallet?.balance ?? 0} onPress={() => navigation.navigate('Wallet')} />
+            <IconButton label={t('settings.a11y')} onPress={() => navigation.navigate('Settings')}>
+              <GearIcon />
+            </IconButton>
+          </Row>
         </Row>
 
         <Card style={{ gap: spacing.sm }}>
@@ -534,6 +539,16 @@ export function ProfileScreen({ navigation }: { navigation: RootNavigation }): R
         */}
 
         <Stack gap={spacing.md}>
+          <Txt variant="h3">{t('profile.service')}</Txt>
+          <LinkRow
+            label={t('settings.personalization')}
+            onPress={() => navigation.navigate('Personalization')}
+          />
+        </Stack>
+
+        <Divider />
+
+        <Stack gap={spacing.md}>
           <Txt variant="h3">{t('profile.privacy_safety')}</Txt>
           <LinkRow label={t('profile.report_history')} onPress={() => navigation.navigate('ReportHistory')} />
           <LinkRow label={t('profile.creator_teaser')} onPress={() => navigation.navigate('Create')} />
@@ -621,7 +636,7 @@ function Toggle({
   );
 }
 
-function LinkRow({ label, onPress }: { label: string; onPress: () => void }): React.JSX.Element {
+export function LinkRow({ label, onPress }: { label: string; onPress: () => void }): React.JSX.Element {
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress}>
       <Row style={{ justifyContent: 'space-between', paddingVertical: spacing.sm }}>
@@ -631,5 +646,43 @@ function LinkRow({ label, onPress }: { label: string; onPress: () => void }): Re
         </Txt>
       </Row>
     </Pressable>
+  );
+}
+
+/**
+ * A gear, drawn.
+ *
+ * Same reasoning as the magnifier in Discover: a ring, a hub, and eight teeth
+ * rather than an icon dependency for one glyph. Eight is enough to read as a
+ * cog at 22 points and few enough to stay crisp.
+ */
+function GearIcon(): React.JSX.Element {
+  const teeth = [0, 45, 90, 135];
+  return (
+    <View style={{ width: 24, height: 24, alignItems: 'center', justifyContent: 'center' }}>
+      {teeth.map((angle) => (
+        <View
+          key={angle}
+          style={{
+            position: 'absolute',
+            width: 22,
+            height: 5,
+            borderRadius: 1.5,
+            backgroundColor: colors.text.secondary,
+            transform: [{ rotate: `${angle}deg` }],
+          }}
+        />
+      ))}
+      <View
+        style={{
+          width: 15,
+          height: 15,
+          borderRadius: 7.5,
+          borderWidth: 2.5,
+          borderColor: colors.text.secondary,
+          backgroundColor: colors.bg.base,
+        }}
+      />
+    </View>
   );
 }

@@ -48,4 +48,17 @@ export const profile = {
   'badges.claim_a11y': 'Collect {credits} credits for {title}.',
   'badges.progress': '{done} of {target}',
   'badges.guest': 'Sign in to keep the badges you earn.',
+  /**
+   * The gear in Profile's corner, and the screen behind it.
+   *
+   * Profile was doing two jobs in one scroll: who you are and what you have
+   * played, mixed with account plumbing nobody opens twice.
+   */
+  'settings.title': 'Settings',
+  'settings.my_information': 'My information',
+  'settings.app_version': 'App version',
+  'settings.personalization': 'What you like',
+  'settings.save_preferences': 'Save',
+  'settings.a11y': 'Settings',
+  'profile.service': 'Service',
 } as const;

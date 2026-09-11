@@ -126,11 +126,22 @@ export function AgeGateScreen(): React.JSX.Element {
 }
 
 /** OB-03 — optional, skippable, one screen. Must not delay play (§6.2). */
-export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Element {
+export function TasteScreen({
+  onDone,
+  initial,
+  heading,
+  ctaLabel,
+}: {
+  onDone: () => void;
+  /** Preselected genres. Onboarding starts empty; Personalization does not. */
+  initial?: readonly string[];
+  heading?: string;
+  ctaLabel?: string;
+}): React.JSX.Element {
   const t = useT();
   const { setTastes, bootstrap } = useStore();
   const categoryWord = useCategoryLabel();
-  const [picked, setPicked] = useState<string[]>([]);
+  const [picked, setPicked] = useState<string[]>([...(initial ?? [])]);
 
   // From the catalog, not from a hand-written list. The old one offered
   // Isekai, Sci-fi and Cozy, and no world is tagged with any of them — three
@@ -159,7 +170,7 @@ export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Eleme
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.bg.base }}>
       <ScrollView contentContainerStyle={{ padding: GUTTER, gap: spacing.xxl, flexGrow: 1 }}>
         <Stack gap={spacing.sm} style={{ paddingTop: spacing.xxxl }}>
-          <Txt variant="display">{t('onboarding.taste_title')}</Txt>
+          <Txt variant="display">{heading ?? t('onboarding.taste_title')}</Txt>
           <Txt variant="body" color={colors.text.secondary}>
             {t('onboarding.taste_body')}
           </Txt>
@@ -180,8 +191,12 @@ export function TasteScreen({ onDone }: { onDone: () => void }): React.JSX.Eleme
         <View style={{ flex: 1 }} />
 
         <Stack gap={spacing.md}>
-          <Button label={t('onboarding.continue')} onPress={() => finish(picked)} />
-          <Button label={t('onboarding.skip')} variant="tertiary" onPress={() => finish([])} />
+          <Button label={ctaLabel ?? t('onboarding.continue')} onPress={() => finish(picked)} />
+          {/* Skipping is an onboarding idea. Reached from Personalization, the
+              way out is the back arrow, not a button that wipes the answers. */}
+          {ctaLabel ? null : (
+            <Button label={t('onboarding.skip')} variant="tertiary" onPress={() => finish([])} />
+          )}
         </Stack>
       </ScrollView>
     </SafeAreaView>
