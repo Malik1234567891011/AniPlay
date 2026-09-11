@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ContinueCard, DiscoverResponse, StorySummary } from '@aniplay/contracts';
 import {
   Button,
@@ -66,6 +66,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
   const t = useT();
   const { wallet, refreshWallet, offline, tastes } = useStore();
   const categoryWord = useCategoryLabel();
+  const insets = useSafeAreaInsets();
   const [data, setData] = useState<DiscoverResponse | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,21 +102,7 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
   const hero = data?.rails.find((rail) => rail.kind === 'HERO')?.stories ?? [];
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: colors.bg.base }}>
-      {/* Spec §7.2 item 1 — safe-area header. */}
-      <Row style={{ paddingHorizontal: GUTTER, paddingBottom: spacing.md, justifyContent: 'space-between' }}>
-        <Txt variant="h2" style={{ letterSpacing: 3 }}>
-          PLOTBREAK
-        </Txt>
-        <Row gap={spacing.sm}>
-          <IconButton label={t('discover.search_worlds')} onPress={() => navigation.navigate('Search')}>
-            <Txt variant="h3" color={colors.text.secondary}>
-              ⌕
-            </Txt>
-          </IconButton>
-          <CreditBalance balance={wallet?.balance ?? 0} onPress={() => navigation.navigate('Wallet')} />
-        </Row>
-      </Row>
+    <View style={{ flex: 1, backgroundColor: colors.bg.base }}>
 
       {offline ? (
         <View style={{ marginHorizontal: GUTTER, marginBottom: spacing.sm, padding: spacing.md, borderRadius: radius.control, backgroundColor: colors.bg.raised }}>
@@ -126,7 +113,11 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
       ) : null}
 
       <ScrollView
-        contentContainerStyle={{ paddingBottom: spacing.giant, gap: spacing.xxl }}
+        contentContainerStyle={{
+          paddingTop: insets.top + HEADER_HEIGHT,
+          paddingBottom: spacing.giant,
+          gap: spacing.xxl,
+        }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -138,37 +129,6 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           />
         }
       >
-        {/*
-          The browse rail. Near the top because it is the answer to the
-          question a new player actually has — "is there the kind of anime I
-          like in here?" — and horizontal because the vocabulary should be
-          scannable in one gesture without pushing the covers off screen.
-
-          Categories come from the server, which only ever offers one that has
-          worlds in it, so tapping any of these can never open onto nothing.
-        */}
-        {data && data.categories.length > 0 ? (
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={[{ id: '__all', label: t('discover.category_all'), count: 0 }, ...data.categories]}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.sm }}
-            style={{ flexGrow: 0 }}
-            renderItem={({ item }) => {
-              const id = item.id === '__all' ? null : item.id;
-              return (
-                <Chip
-                  label={item.id === '__all' ? item.label : categoryWord(item.id, item.label)}
-                  tone={category === id ? 'accent' : 'neutral'}
-                  selected={category === id}
-                  onPress={() => setCategory(id)}
-                />
-              );
-            }}
-          />
-        ) : null}
-
         {!data && !error ? <DiscoverSkeleton /> : null}
 
         {error && !data ? (
@@ -195,6 +155,41 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           <HeroCarousel
             stories={hero}
             onOpen={(storyId) => navigation.navigate('StoryDetail', { storyId })}
+            backdropExtendTop={insets.top + HEADER_HEIGHT}
+          />
+        ) : null}
+
+        {/*
+          The browse rail, directly under the hero.
+
+          It used to sit above the hero, which put a row of category pills
+          between the player and the first thing the app wanted to show them.
+          The reference this is chasing does the opposite: art first, then the
+          ways to cut it. Still horizontal, because the vocabulary should be
+          scannable in one gesture without pushing the covers off screen.
+
+          Categories come from the server, which only ever offers one that has
+          worlds in it, so tapping any of these can never open onto nothing.
+        */}
+        {data && data.categories.length > 0 ? (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={[{ id: '__all', label: t('discover.category_all'), count: 0 }, ...data.categories]}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingHorizontal: GUTTER, gap: spacing.sm }}
+            style={{ flexGrow: 0 }}
+            renderItem={({ item }) => {
+              const id = item.id === '__all' ? null : item.id;
+              return (
+                <Chip
+                  label={item.id === '__all' ? item.label : categoryWord(item.id, item.label)}
+                  tone={category === id ? 'accent' : 'neutral'}
+                  selected={category === id}
+                  onPress={() => setCategory(id)}
+                />
+              );
+            }}
           />
         ) : null}
 
@@ -340,7 +335,84 @@ export function DiscoverScreen({ navigation }: { navigation: RootNavigation }): 
           }}
         />
       ) : null}
-    </SafeAreaView>
+
+      {/*
+        Spec §7.2 item 1 — the header, floated rather than stacked.
+        Last in the tree so it paints over the hero's blurred art, and
+        transparent so that art is what is behind it. Stacked above the
+        ScrollView it sat on flat black, and the page looked like a header with
+        a picture under it rather than a picture with a header on it.
+      */}
+      <View
+        // `box-none` so the header's own empty space does not swallow scrolls
+        // meant for the art behind it.
+        pointerEvents="box-none"
+        style={{
+          position: 'absolute',
+          top: insets.top,
+          left: 0,
+          right: 0,
+          height: HEADER_HEIGHT,
+          paddingHorizontal: GUTTER,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Txt variant="h2" style={{ letterSpacing: 3 }}>
+          PLOTBREAK
+        </Txt>
+        <Row gap={spacing.sm}>
+          <IconButton label={t('discover.search_worlds')} onPress={() => navigation.navigate('Search')}>
+            <SearchIcon />
+          </IconButton>
+          <CreditBalance balance={wallet?.balance ?? 0} onPress={() => navigation.navigate('Wallet')} />
+        </Row>
+      </View>
+    </View>
+  );
+}
+
+/** The height the floating header reserves, so the page can start under it. */
+const HEADER_HEIGHT = 48;
+
+/**
+ * A magnifier, drawn.
+ *
+ * The header used to carry `⌕` at body size, which on a dark background at a
+ * phone's pixel density reads as a smudge rather than a control. This is a
+ * ring and a handle: two views, no icon dependency, and it scales with the
+ * numbers below rather than with a font's idea of a glyph.
+ */
+function SearchIcon(): React.JSX.Element {
+  const ring = 17;
+  const stroke = 2;
+  return (
+    <View style={{ width: 26, height: 26, alignItems: 'center', justifyContent: 'center' }}>
+      <View
+        style={{
+          width: ring,
+          height: ring,
+          borderRadius: ring / 2,
+          borderWidth: stroke,
+          borderColor: colors.text.primary,
+          marginTop: -2,
+          marginLeft: -2,
+        }}
+      />
+      <View
+        style={{
+          position: 'absolute',
+          width: stroke,
+          height: 8,
+          borderRadius: stroke,
+          backgroundColor: colors.text.primary,
+          transform: [{ rotate: '-45deg' }],
+          right: 3,
+          bottom: 3,
+        }}
+      />
+    </View>
   );
 }
 

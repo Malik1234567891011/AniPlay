@@ -53,9 +53,19 @@ const FILL = { position: 'absolute' as const, top: 0, left: 0, right: 0, bottom:
 export function HeroCarousel({
   stories,
   onOpen,
+  backdropExtendTop = 0,
 }: {
   stories: readonly StorySummary[];
   onOpen: (storyId: string) => void;
+  /**
+   * How far the blurred art reaches **above** this component, in points.
+   *
+   * The backdrop used to stop at the carousel's own top edge, so the header sat
+   * on flat black and the art looked pasted into the page rather than being the
+   * page. Discover passes the header's height plus the safe-area inset, and
+   * floats the header on top of the result.
+   */
+  backdropExtendTop?: number;
 }): React.JSX.Element | null {
   const t = useT();
   const listRef = useRef<FlatList<StorySummary>>(null);
@@ -67,8 +77,11 @@ export function HeroCarousel({
   const width = Dimensions.get('window').width;
   // Tall enough to be the screen, short enough that the category pills and the
   // first row of covers stay reachable without a deliberate scroll.
-  const cardWidth = Math.min(width * 0.58, 260);
-  const height = Math.min(cardWidth * 1.5 + 120, Dimensions.get('window').height * 0.52);
+  // The card carries the screen, so it is sized against the screen rather than
+  // against a fixed ceiling. 0.58 of the width read as a thumbnail floating in
+  // a lot of dark space next to the reference it is chasing.
+  const cardWidth = Math.min(width * 0.64, 300);
+  const height = Math.min(cardWidth * 1.5 + 132, Dimensions.get('window').height * 0.58);
 
   useEffect(() => {
     let live = true;
@@ -133,12 +146,33 @@ export function HeroCarousel({
   const position = `${index + 1}/${stories.length}`;
 
   return (
-    <View style={{ height, marginBottom: spacing.lg }}>
+    // `overflow: visible` so the backdrop may reach up behind the header.
+    <View style={{ height, marginBottom: spacing.lg, overflow: 'visible' }}>
       {current?.coverImage ? (
-        <Animated.View style={[FILL, { opacity: fade }]}>
-          <Image source={{ uri: current.coverImage }} style={FILL} blurRadius={40} resizeMode="cover" />
-          {/* Dimmed hard: the point is atmosphere, not a second image. */}
-          <View style={[FILL, { backgroundColor: 'rgba(11,13,18,0.72)' }]} />
+        <Animated.View
+          pointerEvents="none"
+          style={[FILL, { top: -backdropExtendTop, opacity: fade }]}
+        >
+          <Image
+            source={{ uri: current.coverImage }}
+            style={FILL}
+            blurRadius={40}
+            resizeMode="cover"
+          />
+          {/*
+            Dimmed, but not to black. At 0.72 the art was a rumour; the
+            reference this is chasing keeps enough of the cover's colour that
+            the top of the page is tinted by whatever world is showing.
+          */}
+          <View style={[FILL, { backgroundColor: 'rgba(11,13,18,0.58)' }]} />
+          {/*
+            And faded out at the bottom, so the art ends by becoming the page
+            instead of stopping at a line. Three bands rather than a gradient
+            dependency: at this blur nobody can see the steps.
+          */}
+          <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 96, backgroundColor: 'rgba(11,13,18,0.35)' }} />
+          <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 56, backgroundColor: 'rgba(11,13,18,0.55)' }} />
+          <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 24, backgroundColor: colors.bg.base }} />
         </Animated.View>
       ) : null}
 
@@ -173,7 +207,7 @@ export function HeroCarousel({
             <View
               style={{ paddingHorizontal: GUTTER, paddingTop: spacing.md, alignItems: 'center', gap: 2 }}
             >
-              <Txt variant="h2" numberOfLines={2} style={{ textAlign: 'center' }}>
+              <Txt variant="display" numberOfLines={2} style={{ textAlign: 'center' }}>
                 {item.title}
               </Txt>
               <Txt
