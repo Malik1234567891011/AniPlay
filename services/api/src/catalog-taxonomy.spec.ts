@@ -117,3 +117,30 @@ describe('search finds what a player means, not what they typed', () => {
     expect(top.title).toBe('Blackwake');
   });
 });
+
+/**
+ * Accents, on both sides.
+ *
+ * `tokenize` split on `[^a-z0-9']+`, which makes every accented letter a word
+ * separator: `académie` became `['acad', 'mie']`. Nothing folded accents
+ * either, so `academie` typed without one — which is what a phone keyboard
+ * encourages — could not match `académie` at all. Invisible on an English
+ * catalogue and wrong on every screen of a French one.
+ */
+describe('a French catalogue, searched in French', () => {
+  it('tokenizes an accented word as one word', () => {
+    expect(tokenize('académie')).toEqual(['academie']);
+    expect(tokenize('élève')).toEqual(['eleve']);
+    expect(tokenize('Forêt Noire')).toEqual(['foret', 'noire']);
+  });
+
+  it('matches whether or not the player typed the accent', () => {
+    expect(tokenize('academie')).toEqual(tokenize('académie'));
+    expect(tokenize('ECOLE')).toEqual(tokenize('école'));
+  });
+
+  it('still tokenizes English exactly as before', () => {
+    expect(tokenize('magic school')).toEqual(['magic', 'school']);
+    expect(tokenize('the art of war')).toEqual(['art', 'war']);
+  });
+});

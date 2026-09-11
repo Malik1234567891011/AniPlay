@@ -510,7 +510,16 @@ export function buildServer(options: BuildServerOptions = {}): FastifyInstance &
     // Deliberately not filtered by the hide list: hiding is about what gets
     // recommended, and a player typing a story's name is asking for that
     // story, not being offered it.
-    let stories = await ctx.repo.listStories();
+    // The catalogue in the language being searched, and searched in it too.
+    //
+    // Discover localized and this did not, so a French player got French hooks
+    // on the shelf and English ones the moment they opened search — the same
+    // twenty-three worlds, described twice, in two languages. Localizing before
+    // `searchCatalog` rather than after also means a French premise is matched
+    // in French; titles and author tags stay English because they are Tier C,
+    // so searching either language still finds a world.
+    const locale = interfaceLocale(user, request);
+    let stories = (await ctx.repo.listStories()).map((story) => localizeStory(story, locale));
     if (category) stories = stories.filter((story) => categoriesFor(story).includes(category));
 
     // Spec §7.5 — title, creator, tags, premise, character names, mechanics.

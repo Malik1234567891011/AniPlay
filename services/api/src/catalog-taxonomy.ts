@@ -1,4 +1,5 @@
 import type { StoryVersion } from '@aniplay/contracts';
+import { normalizeForSearch } from '@aniplay/i18n';
 
 /**
  * The words a player browses in, and how they map onto what worlds are tagged.
@@ -174,9 +175,20 @@ const WEIGHTS = {
 
 const STOPWORDS = new Set(['a', 'an', 'the', 'of', 'and', 'or', 'in', 'on', 'to', 'with', 'for']);
 
+/**
+ * Query into comparable tokens.
+ *
+ * `normalizeForSearch` first, because this split on `[^a-z0-9']+` and every
+ * accented letter is outside `a-z` — so it was a *separator*. On an English
+ * catalogue that never showed; on a French one `académie` became
+ * `['acad', 'mie']` and `élève` became noise. And nothing folded accents on
+ * either side, so a French speaker typing `academie` without the accent — which
+ * is what people do on a phone keyboard — matched nothing at all.
+ *
+ * `fieldsOf` folds the same way, so the two sides meet.
+ */
 export function tokenize(query: string): string[] {
-  return query
-    .toLowerCase()
+  return normalizeForSearch(query)
     .split(/[^a-z0-9']+/)
     .filter((token) => token.length > 1 && !STOPWORDS.has(token));
 }
@@ -187,18 +199,19 @@ interface Field {
 }
 
 function fieldsOf(story: StoryVersion): Field[] {
+  // Folded, not merely lowercased — see `tokenize`.
   const fields: Field[] = [
-    { text: story.title.toLowerCase(), weight: WEIGHTS.title },
-    { text: story.hook.toLowerCase(), weight: WEIGHTS.hook },
-    { text: story.premise.toLowerCase(), weight: WEIGHTS.premise },
-    { text: story.creatorName.toLowerCase(), weight: WEIGHTS.creator },
+    { text: normalizeForSearch(story.title), weight: WEIGHTS.title },
+    { text: normalizeForSearch(story.hook), weight: WEIGHTS.hook },
+    { text: normalizeForSearch(story.premise), weight: WEIGHTS.premise },
+    { text: normalizeForSearch(story.creatorName), weight: WEIGHTS.creator },
   ];
-  for (const tag of story.tags) fields.push({ text: tag.toLowerCase(), weight: WEIGHTS.tag });
-  for (const chip of story.mechanicsChips) fields.push({ text: chip.toLowerCase(), weight: WEIGHTS.mechanic });
+  for (const tag of story.tags) fields.push({ text: normalizeForSearch(tag), weight: WEIGHTS.tag });
+  for (const chip of story.mechanicsChips) fields.push({ text: normalizeForSearch(chip), weight: WEIGHTS.mechanic });
   for (const character of story.characters) {
     // The name and what they are to the player, so "coach" or "navigator"
     // finds the world that has one.
-    fields.push({ text: `${character.name} ${character.role}`.toLowerCase(), weight: WEIGHTS.character });
+    fields.push({ text: normalizeForSearch(`${character.name} ${character.role}`), weight: WEIGHTS.character });
   }
   // The words the browse rail uses, plus their synonyms, so a query that would
   // pick a category picks the worlds in it. This is what makes "basketball"
