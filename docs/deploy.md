@@ -47,6 +47,25 @@ change to the write path only. It is not needed for launch at this size.
 
 ---
 
+## Which plan
+
+**Hobby, $5/month.** The Free tier's 0.5 GB RAM is not enough headroom for the
+Node process, and its 0.5 GB volume is the media disk — it would fill.
+
+Hobby's ceilings are far above one Fastify service: Postgres is Supabase, so
+Railway runs exactly one thing. Expect to use most but not all of the $5 of
+included credit.
+
+Two things force Pro ($20) later, neither of them today:
+
+- Hobby is a **single-developer workspace.** A second login — Omar with his own
+  account rather than sharing one — needs Pro.
+- **The media volume only grows.** `media-routes` never deletes generated art,
+  so 5 GB is a ceiling of roughly 25,000 images, not a steady state. Whichever
+  arrives first.
+
+---
+
 ## Environment
 
 Set these in Railway → Variables. Railway injects `PORT` itself; do not set it.
