@@ -4,4 +4,5 @@ export * from './game/assets.js';
 export * from './game/names.js';
 export * from './game/state.js';
 export * from './game/economy.js';
+export * from './game/badges.js';
 export * from './api/index.js';
