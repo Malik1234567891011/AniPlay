@@ -140,20 +140,28 @@ async function main(): Promise<void> {
       log();
     }
 
-    const media = turn.media ?? turn.mediaPlan ?? null;
-    if (media) log(`\`media:\` ${JSON.stringify(media)}`);
-    const imgs = (turn.blocks ?? []).filter((b: any) => b.imageUrl || b.assetUrl);
-    if (imgs.length) {
-      for (const i of imgs) log(`\`image:\` ${i.imageUrl ?? i.assetUrl}  (block kind ${i.kind})`);
-    } else {
-      log(`\`image:\` none this turn`);
+    // `heroImageUrl` is on the **turn**, not on its blocks. Reading it off the
+    // blocks reported "no image" for a run that had six, which is how an
+    // instrument turns a healthy system into a bug report.
+    log(turn.heroImageUrl ? `\`image:\` ${turn.heroImageUrl}` : '`image:` none this turn');
+    if (turn.checks?.length) {
+      log(`\`checks:\` ${turn.checks.map((c: any) => `${c.label}=${c.outcome}`).join(', ')}`);
+    }
+    if (turn.stateDeltas?.length) {
+      log(`\`moved:\` ${turn.stateDeltas.map((d: any) => d.label).join(' | ')}`);
     }
     log();
 
     const after = await call<any>('GET', `/v1/sessions/${sessionId}`);
     revision = after.revision ?? revision;
     cards = after.suggestions ?? [];
-    log(`\`clock:\` ${after.scene?.worldTimeLabel ?? '?'}  \`place:\` ${after.scene?.locationName ?? '?'}  \`present:\` ${(after.scene?.cast ?? []).map((c: any) => c.name).join(', ') || '(nobody)'}`);
+    // `scene.cast` is the whole cast on purpose — every character keeps a
+    // portrait so a line spoken three rooms ago still has a face on it.
+    // `scene.presentCharacters` is who is actually in the room. Logging the
+    // first and calling it "present" reported the entire Uchiha clan standing
+    // in the kitchen.
+    const here = (after.scene?.presentCharacters ?? []).map((c: any) => c.name ?? c.id);
+    log(`\`clock:\` ${after.scene?.worldTimeLabel ?? '?'}  \`place:\` ${after.scene?.locationName ?? '?'}  \`present:\` ${here.join(', ') || '(nobody)'}`);
     log();
   }
 

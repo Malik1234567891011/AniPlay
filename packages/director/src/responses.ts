@@ -134,6 +134,23 @@ const POLICY = [
   'stays exactly where they were. "I pick up my bag and follow her down to the Esplanade" is movement.',
   'If a scene has been in one room for a while and nothing is holding the player there, one of the',
   'three should leave it.',
+  '',
+  'THREE DIFFERENT INTENTIONS, NOT THREE TONES. The test is not "do these sound different", it is "does',
+  'picking a different one make a different hour happen". Three ways to keep playing with the same',
+  'person in the same room is one choice wearing three hats, however well each is written.',
+  '',
+  'A scene almost always has more than one pressure on it. Somebody is here; somebody else is expected;',
+  'something is owed; a clock is running. A player sitting with their little brother eighty minutes',
+  'before a meeting they dread has at least three real options — stay with him, go and deal with the',
+  'thing, or ask the other person in the house what is actually going on. Look at `worldState`, the',
+  'objective, the clock and who else exists, and let the set span the pressures that are genuinely live.',
+  'Not one per category as a formula; just not three paraphrases.',
+  '',
+  'Every card must be something a person would actually do. Do not assemble one out of the nouns lying',
+  'around the scene — a rice ball, a towel and tomorrow are not an action just because all three were',
+  'mentioned. Ask whether a real person, in this room, at this hour, with this on their mind, would do',
+  'the thing. If it needs a prop that is not there, or a reason that is not in the scene, it is not a',
+  'card.',
 ].join('\n');
 
 /**

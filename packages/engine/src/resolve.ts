@@ -1987,6 +1987,56 @@ const IMPOSSIBLE: Array<{ pattern: RegExp; inWorld: string; directive: string }>
   },
 ];
 
+/**
+ * Is anything actually standing in the way of this?
+ *
+ * A `custom` verb does not mean "hard". It means **the parser did not
+ * understand the sentence** — and rolling a die on an intent we could not
+ * identify is the engine deciding the player failed at something it cannot
+ * name. The writer is then told the attempt failed and dutifully writes a
+ * refusal, which is how "I take the shuriken he is holding out to me and
+ * correct his grip" came back as Sasuke keeping his fist closed.
+ *
+ * Spec §12 wants checks where an outcome is genuinely in doubt. So the
+ * question is not what the verb was, it is whether anything opposes it:
+ *
+ * - a live encounter or contest — somebody is actively against you;
+ * - a hostile or frightened person in the room the action involves;
+ * - the player declaring an outcome they do not control ("and he agrees");
+ * - a named target who is not here to be acted on.
+ *
+ * With none of those, an unparsed action in a quiet room is a person doing an
+ * ordinary thing, and it simply happens. The prose is then free to be about
+ * how it lands rather than about whether it worked.
+ */
+function nothingOpposes(args: ResolveActionArgs): boolean {
+  const { story, state, action } = args;
+
+  // Somebody is actively against the player right now.
+  if (state.encounter || state.contest) return false;
+
+  // They declared how it turns out. That is the one thing a player never gets
+  // to decide for free, and it is exactly what a check is for.
+  if (action.declaredOutcome) return false;
+
+  // They named somebody the world does not have, or who is not here.
+  if (args.namedUnknownPerson) return false;
+  const present = new Set(charactersPresent(state).map((runtime) => runtime.characterId));
+  const npcTargets = action.targets.filter((target) => target.entityType === 'npc');
+  if (npcTargets.some((target) => !present.has(target.entityId))) return false;
+
+  // Somebody in the room has reason to resist. Hostility is the obstacle; a
+  // person who merely dislikes you still hands you the shuriken.
+  for (const target of npcTargets) {
+    const rel = state.relationships.find((r) => r.characterId === target.entityId);
+    if (!rel) continue;
+    if (rel.fear >= 40 || rel.rivalry >= 50 || rel.trust <= -40) return false;
+    if (state.flags[`attacked:${target.entityId}`] || state.flags[`hostile:${target.entityId}`]) return false;
+  }
+
+  return true;
+}
+
 function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
   const { story, state, action, rng } = args;
 
@@ -2002,6 +2052,28 @@ function resolveGenericCheck(args: ResolveActionArgs): ActionOutcome {
     });
     if (covered) break;
     return refusal(action, 'IMPOSSIBLE', impossible.inWorld, impossible.directive);
+  }
+
+  // Nothing is in the way, so there is nothing to roll. The action is what
+  // happened; `undertaking` is how the writer is told to realise it rather
+  // than adjudicate it.
+  if (action.verb === 'custom' && nothingOpposes(args)) {
+    return {
+      checks: [],
+      mutations: [],
+      observableFacts: [],
+      privateFacts: [
+        {
+          visibility: 'SELF',
+          fact:
+            'The player did this, and nothing opposed it. Write it as having happened, in the first ' +
+            'beat, before anything else. Somebody may feel any way they like about it afterwards — ' +
+            'but it happened, and the beat may not open by quietly undoing it.',
+        },
+      ],
+      timeCategory: VERB_TIME[action.verb] ?? 'BRIEF',
+      normalized: { verb: action.verb, uncontested: true },
+    };
   }
 
   const attribute = VERB_ATTRIBUTE[action.verb] ?? 'mind';
