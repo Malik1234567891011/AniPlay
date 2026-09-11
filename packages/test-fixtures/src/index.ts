@@ -1,5 +1,5 @@
 // Registering a world's French text is a side effect of importing it.
-import './fr/nine-weeks.fr.js';
+import './fr/index.js';
 
 import { withDerivedAssetKeys } from './derive-assets.js';
 import { NINTH_ARCHIVE as NINTH_ARCHIVE_RAW } from './ninth-archive.js';
