@@ -252,11 +252,26 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }): R
         localeChoice: isLocale(storedLocale) ? storedLocale : null,
       });
 
-      try {
-        dispatch({ type: 'BOOTSTRAPPED', bootstrap: await api.bootstrap() });
-      } catch (error) {
-        if (error instanceof ApiError && error.code === 'OFFLINE') {
-          dispatch({ type: 'SET_OFFLINE', offline: true });
+      /**
+       * Bootstrap, with one retry.
+       *
+       * This was a single attempt, and everything downstream of it - the
+       * feature flags, the quality tiers, and the genre chips the taste screen
+       * is built from - stayed empty for the whole launch if it missed. On a
+       * fresh install that is a real race: the very first request a device
+       * makes can land before wifi has settled, and the taste screen then shows
+       * its heading over nothing at all, permanently, with no way to recover
+       * short of killing the app.
+       */
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+          dispatch({ type: 'BOOTSTRAPPED', bootstrap: await api.bootstrap() });
+          break;
+        } catch (error) {
+          if (error instanceof ApiError && error.code === 'OFFLINE') {
+            dispatch({ type: 'SET_OFFLINE', offline: true });
+          }
+          if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 1_200));
         }
       }
     })();

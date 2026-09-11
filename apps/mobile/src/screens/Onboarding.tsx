@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, FlatList, Linking, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Chip, Row, Stack, StoryArt, Txt, colors, radius, spacing, GUTTER } from '@aniplay/ui';
+import { Button, Chip, Row, Skeleton, Stack, StoryArt, Txt, colors, radius, spacing, GUTTER } from '@aniplay/ui';
 import type { StorySummary } from '@aniplay/contracts';
 import { api } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
@@ -139,7 +139,7 @@ export function TasteScreen({
   ctaLabel?: string;
 }): React.JSX.Element {
   const t = useT();
-  const { setTastes, bootstrap } = useStore();
+  const { setTastes, bootstrap, refreshBootstrap } = useStore();
   const categoryWord = useCategoryLabel();
   const [picked, setPicked] = useState<string[]>([...(initial ?? [])]);
 
@@ -150,6 +150,20 @@ export function TasteScreen({
   // them — so the English word has to survive even when a French word is on the
   // chip. Display and identity are separated rather than translated together.
   const genres = bootstrap?.genres ?? [];
+
+  /**
+   * Fetch them again if boot did not get them.
+   *
+   * The showcase screen after this one has always loaded its own data, which is
+   * why it recovers and this did not: the chips come from `bootstrap`, fetched
+   * once at launch, so a single missed request left this screen showing its
+   * heading over an empty space with no way back. Asking again costs 1.3 KB.
+   */
+  useEffect(() => {
+    if (genres.length === 0) void refreshBootstrap();
+    // Once, on mount. A retry loop on an empty catalogue would hammer the API.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = (genre: string): void => {
     setPicked((current) =>
@@ -176,16 +190,28 @@ export function TasteScreen({
           </Txt>
         </Stack>
 
+        {/*
+          Chip-shaped placeholders while the catalogue is still coming.
+
+          An empty space under a heading that says "pick anything you'd
+          actually play" reads as broken, and it was: this screen showed
+          exactly that whenever the single boot request missed. Skeletons say
+          "loading", and the retry above means they resolve.
+        */}
         <Row gap={spacing.md} style={{ flexWrap: 'wrap' }}>
-          {genres.map((genre) => (
-            <Chip
-              key={genre.id}
-              label={categoryWord(genre.id, genre.label)}
-              selected={picked.includes(genre.label)}
-              onPress={() => toggle(genre.label)}
-              style={{ paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}
-            />
-          ))}
+          {genres.length === 0
+            ? [96, 120, 104, 88, 112, 92].map((width, index) => (
+                <Skeleton key={index} width={width} height={44} radius={radius.pill} />
+              ))
+            : genres.map((genre) => (
+                <Chip
+                  key={genre.id}
+                  label={categoryWord(genre.id, genre.label)}
+                  selected={picked.includes(genre.label)}
+                  onPress={() => toggle(genre.label)}
+                  style={{ paddingVertical: spacing.md, paddingHorizontal: spacing.lg }}
+                />
+              ))}
         </Row>
 
         <View style={{ flex: 1 }} />
