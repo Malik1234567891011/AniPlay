@@ -35,7 +35,18 @@ import { InsufficientCreditsError } from './wallet.js';
  * is not.
  */
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-const ASSET_ROOT = process.env.ASSET_ROOT ?? resolve(REPO_ROOT, 'infra/seed/assets');
+/** World art as authored and shipped: the seed directory the image is built with. */
+const SEED_ROOT = resolve(REPO_ROOT, 'infra/seed/assets');
+/** Where generated art is written. In production a mounted volume, so it survives a redeploy. */
+const ASSET_ROOT = process.env.ASSET_ROOT ?? SEED_ROOT;
+/**
+ * Roots searched when serving, in order. Generated art lives in `ASSET_ROOT`;
+ * world art ships inside the image under `SEED_ROOT`. When the two differ —
+ * production points `ASSET_ROOT` at an empty volume — nothing copies the seed
+ * art across, so a single-root lookup 404'd every cover. Falling through to
+ * the seed directory serves both from wherever each actually is.
+ */
+const READ_ROOTS: readonly string[] = ASSET_ROOT === SEED_ROOT ? [ASSET_ROOT] : [ASSET_ROOT, SEED_ROOT];
 
 /** Spec §20.11 sets animation at 600; a still portrait is priced well below it. */
 export const PORTRAIT_COST_CREDITS = 150;
@@ -57,28 +68,32 @@ export function registerMediaRoutes(app: FastifyInstance, ctx: AppContext): void
   app.get<{ Params: { '*': string } }>('/media/*', async (request, reply) => {
     const requested = request.params['*'] ?? '';
 
-    // Path traversal guard: the resolved path must stay inside the asset root.
-    // Compared with the separator attached, because a bare prefix test also
-    // accepts a sibling directory whose name merely starts with the root's.
-    const candidate = resolve(ASSET_ROOT, normalize(requested).replace(/^(\.\.[/\\])+/, ''));
-    if (candidate !== ASSET_ROOT && !candidate.startsWith(`${ASSET_ROOT}${sep}`)) {
-      return sendError(reply, 400, 'INVALID_PATH', 'Bad asset path.');
-    }
+    const relative = normalize(requested).replace(/^(\.\.[/\\])+/, '');
 
-    const base = candidate.replace(/\.(webp|png)$/, '');
-    for (const extension of ['.webp', '.png'] as const) {
-      const path = `${base}${extension}`;
-      try {
-        const info = await stat(path);
-        if (!info.isFile()) continue;
-        void reply
-          .header('content-type', CONTENT_TYPES[extension]!)
-          .header('content-length', String(info.size))
-          // Spec §36.2 — generated assets are immutable once written.
-          .header('cache-control', 'public, max-age=31536000, immutable');
-        return reply.send(createReadStream(path));
-      } catch {
-        // Try the next extension.
+    for (const root of READ_ROOTS) {
+      // Path traversal guard: the resolved path must stay inside the root.
+      // Compared with the separator attached, because a bare prefix test also
+      // accepts a sibling directory whose name merely starts with the root's.
+      const candidate = resolve(root, relative);
+      if (candidate !== root && !candidate.startsWith(`${root}${sep}`)) {
+        return sendError(reply, 400, 'INVALID_PATH', 'Bad asset path.');
+      }
+
+      const base = candidate.replace(/\.(webp|png)$/, '');
+      for (const extension of ['.webp', '.png'] as const) {
+        const path = `${base}${extension}`;
+        try {
+          const info = await stat(path);
+          if (!info.isFile()) continue;
+          void reply
+            .header('content-type', CONTENT_TYPES[extension]!)
+            .header('content-length', String(info.size))
+            // Spec §36.2 — generated assets are immutable once written.
+            .header('cache-control', 'public, max-age=31536000, immutable');
+          return reply.send(createReadStream(path));
+        } catch {
+          // Try the next extension, then the next root.
+        }
       }
     }
 

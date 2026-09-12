@@ -111,7 +111,8 @@ curl -I https://<domain>/media/story_itachi/cover.webp   # 200, image/webp
 ```
 
 That third one is the one people forget. If it 404s, the assets did not make it
-into the image or `ASSET_ROOT` is pointing at an empty volume.
+into the image. World art is served from the image's `infra/seed/assets` even
+when `ASSET_ROOT` points at a volume; only generated art lives on the volume.
 
 ---
 
