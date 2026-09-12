@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { BLACKWAKE, LAST_FIVE } from '@aniplay/test-fixtures';
-import { createInitialState } from '@aniplay/engine';
+import { BLACKWAKE, LAST_FIVE } from '@plotbreak/test-fixtures';
+import { createInitialState } from '@plotbreak/engine';
 import { RuleBasedIntentParser } from './parser.js';
 
 /**

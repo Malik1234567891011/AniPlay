@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
-import type { ArchetypeDef, CharacterSetupField, StoryVersion } from '@aniplay/contracts';
-import { abilityEffect, archetypeGrants } from '@aniplay/contracts';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
+import type { ArchetypeDef, CharacterSetupField, StoryVersion } from '@plotbreak/contracts';
+import { abilityEffect, archetypeGrants } from '@plotbreak/contracts';
 import { checkChoiceClarity, checkStoryChoiceClarity } from './choice-clarity.js';
 
 /**

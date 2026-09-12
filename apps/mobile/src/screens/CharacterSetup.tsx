@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { SetupArchetype, StoryDetailResponse } from '@aniplay/contracts';
+import type { SetupArchetype, StoryDetailResponse } from '@plotbreak/contracts';
 import {
   Button,
   Card,
@@ -14,9 +14,9 @@ import {
   GUTTER,
   radius,
   spacing,
-} from '@aniplay/ui';
-import type { GrammaticalGender } from '@aniplay/contracts';
-import { thirdPersonPronoun, type TranslationKey, type Translator } from '@aniplay/i18n';
+} from '@plotbreak/ui';
+import type { GrammaticalGender } from '@plotbreak/contracts';
+import { thirdPersonPronoun, type TranslationKey, type Translator } from '@plotbreak/i18n';
 import { api, ApiError } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
 import { useStore } from '../state/store.jsx';

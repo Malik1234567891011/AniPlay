@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { BLACKWAKE, LAST_FIVE, NINTH_ARCHIVE } from '@aniplay/test-fixtures';
-import type { GameState, StoryVersion } from '@aniplay/contracts';
+import { BLACKWAKE, LAST_FIVE, NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
+import type { GameState, StoryVersion } from '@plotbreak/contracts';
 import { createInitialState } from './state.js';
 import { resolveIntent } from './resolve.js';
 

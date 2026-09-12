@@ -1,6 +1,6 @@
-import { normalizeForSearch, searchCatalog } from '@aniplay/i18n';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
-import { localizeStory, type StoryVersion } from '@aniplay/contracts';
+import { normalizeForSearch, searchCatalog } from '@plotbreak/i18n';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
+import { localizeStory, type StoryVersion } from '@plotbreak/contracts';
 console.log('normalizeForSearch("École")   =', JSON.stringify(normalizeForSearch('École')));
 console.log('normalizeForSearch("académie")=', JSON.stringify(normalizeForSearch('académie')));
 const fr = (LAUNCH_CATALOG as unknown as StoryVersion[]).map((w) => localizeStory(w, 'fr'));

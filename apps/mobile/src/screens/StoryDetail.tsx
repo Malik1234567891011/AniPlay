@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, FlatList, Modal, Pressable, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { StoryDetailResponse } from '@aniplay/contracts';
-import type { TranslationKey, Translator } from '@aniplay/i18n';
+import type { StoryDetailResponse } from '@plotbreak/contracts';
+import type { TranslationKey, Translator } from '@plotbreak/i18n';
 import {
   Button,
   Card,
@@ -22,7 +22,7 @@ import {
   radius,
   spacing,
   toParagraphs,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { api } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';

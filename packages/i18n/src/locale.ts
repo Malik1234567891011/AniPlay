@@ -107,7 +107,7 @@ export function resolveDeviceLocale(
 /**
  * How narration agrees with the player.
  *
- * Lives here rather than in `@aniplay/contracts` for the same reason `LOCALES`
+ * Lives here rather than in `@plotbreak/contracts` for the same reason `LOCALES`
  * does: this package is a leaf, contracts depends on it, and one list means the
  * schema and the agreement helpers cannot disagree about what exists.
  *

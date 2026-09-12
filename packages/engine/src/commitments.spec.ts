@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE } from '@aniplay/test-fixtures';
-import type { GameState, StoryVersion } from '@aniplay/contracts';
+import { LAST_FIVE } from '@plotbreak/test-fixtures';
+import type { GameState, StoryVersion } from '@plotbreak/contracts';
 import { createInitialState, charactersPresent } from './state.js';
 import { advanceObligations, detectCommitment, minutesIn, pressureOf, settleOnArrival } from './commitments.js';
 import { beyondName } from './resolve.js';

@@ -1,4 +1,4 @@
-import { StoryVersion } from '@aniplay/contracts';
+import { StoryVersion } from '@plotbreak/contracts';
 
 /**
  * "Itachi" — one fortnight out of a life that took seventeen years.

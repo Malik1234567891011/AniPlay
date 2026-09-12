@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { StoryVersion } from './story.js';
-import { NINE_WEEKS } from '@aniplay/test-fixtures';
+import { NINE_WEEKS } from '@plotbreak/test-fixtures';
 import { localizeStory, worldTextCoverage } from './localize.js';
 
 /**

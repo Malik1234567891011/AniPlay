@@ -1,4 +1,4 @@
-import type { GameState, MemoryProposal, StoryVersion } from '@aniplay/contracts';
+import type { GameState, MemoryProposal, StoryVersion } from '@plotbreak/contracts';
 
 /**
  * Spec §3.3 — who gets to decide a thing is true.

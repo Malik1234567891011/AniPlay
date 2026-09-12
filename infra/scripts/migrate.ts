@@ -13,7 +13,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from 'pg';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const MIGRATIONS = join(ROOT, 'infra/migrations');

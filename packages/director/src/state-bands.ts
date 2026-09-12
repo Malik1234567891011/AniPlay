@@ -13,7 +13,7 @@
  * One projection, used by the director, both writers and the response stage, so
  * the fast path cannot quietly receive less than the slow one.
  */
-import { resourceBand } from '@aniplay/contracts';
+import { resourceBand } from '@plotbreak/contracts';
 import type { TurnContext } from './context.js';
 
 export interface StateBand {

@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE } from '@aniplay/test-fixtures';
-import { createInitialState, resolveIntent } from '@aniplay/engine';
+import { LAST_FIVE } from '@plotbreak/test-fixtures';
+import { createInitialState, resolveIntent } from '@plotbreak/engine';
 import { RuleBasedDirector } from './director.js';
 import { RuleBasedIntentParser } from './parser.js';
 import { buildTurnContext } from './context.js';
 import { materializeProposals } from './memory.js';
 import { speakerBrief } from './speaker-brief.js';
-import { commitTurn } from '@aniplay/engine';
+import { commitTurn } from '@plotbreak/engine';
 
 /**
  * The other half of remembering: it has to come back.

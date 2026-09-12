@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { LedgerEntry, StoreOffer, WalletSummary } from '@aniplay/contracts';
+import type { LedgerEntry, StoreOffer, WalletSummary } from '@plotbreak/contracts';
 import {
   Button,
   Card,
@@ -18,8 +18,8 @@ import {
   haptic,
   radius,
   spacing,
-} from '@aniplay/ui';
-import { intlTag, type Translator } from '@aniplay/i18n';
+} from '@plotbreak/ui';
+import { intlTag, type Translator } from '@plotbreak/i18n';
 import { api } from '../api/client.js';
 import { Purchases } from '../store/purchases.js';
 import { useStore } from '../state/store.jsx';
@@ -57,7 +57,7 @@ export function WalletScreen({
 
   /**
    * `STORE_OFFERS` carries the badge as an English literal, because
-   * `@aniplay/contracts` has no translator — so `Popular` and `Best value` sat
+   * `@plotbreak/contracts` has no translator — so `Popular` and `Best value` sat
    * on a French store page between French prices and a French disclaimer. The
    * offer keeps the word; the catalogue decides how to say it. A badge nobody
    * has keyed yet falls back to what the offer sent.

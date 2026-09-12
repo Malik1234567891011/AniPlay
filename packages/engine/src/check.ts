@@ -1,6 +1,6 @@
-import type { CheckOutcome, CheckResult } from '@aniplay/contracts';
-import type { AttributeKey } from '@aniplay/contracts';
-import { translate, type Locale } from '@aniplay/i18n';
+import type { CheckOutcome, CheckResult } from '@plotbreak/contracts';
+import type { AttributeKey } from '@plotbreak/contracts';
+import { translate, type Locale } from '@plotbreak/i18n';
 import type { SeededRng } from './rng.js';
 
 /** Spec §12.3 — `floor((attribute - 10) / 2)`. */

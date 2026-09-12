@@ -87,7 +87,7 @@ export const ui = {
    *
    * `de {speaker}` renders `de Élodie` for every vowel-initial name, and ICU
    * cannot look at an argument's first letter to decide. `elide()` exists in
-   * `@aniplay/i18n` for the cases that cannot be restructured, but
+   * `@plotbreak/i18n` for the cases that cannot be restructured, but
    * `PLAYER_GRAMMAR.md` rule 6 prefers a sentence shape that never needs it —
    * a message assembled from fragments cannot be reordered by a translator.
    */

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { TimelineEntry, WorldSheetResponse } from '@aniplay/contracts';
-import type { TranslationKey } from '@aniplay/i18n';
+import type { TimelineEntry, WorldSheetResponse } from '@plotbreak/contracts';
+import type { TranslationKey } from '@plotbreak/i18n';
 import {
   Button,
   Card,
@@ -20,7 +20,7 @@ import {
   GUTTER,
   radius,
   spacing,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { api } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
@@ -104,7 +104,7 @@ export function WorldSheetScreen({
               entries={timeline}
               sessionId={sessionId}
               // i18n-exempt: the app's own name, which is not translated
-              storyTitle={sheet?.overview.chapterLabel ?? 'AniPlay'}
+              storyTitle={sheet?.overview.chapterLabel ?? 'Plotbreak'}
               navigation={navigation}
               onRefresh={setTimeline}
             />

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE } from '@aniplay/test-fixtures';
+import { LAST_FIVE } from '@plotbreak/test-fixtures';
 import { approachingEndings, eligibleEndings } from './endings.js';
 import { createInitialState } from './state.js';
 

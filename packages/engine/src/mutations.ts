@@ -5,8 +5,8 @@ import type {
   StateMutation,
   StatusEffect,
   StoryVersion,
-} from '@aniplay/contracts';
-import { ATTRIBUTE_KEYS } from '@aniplay/contracts';
+} from '@plotbreak/contracts';
+import { ATTRIBUTE_KEYS } from '@plotbreak/contracts';
 import { rankLabelFor } from './state.js';
 import { RELATIONSHIP_DIMENSIONS, dimensionBounds, type RelationshipDimension } from './relationships.js';
 

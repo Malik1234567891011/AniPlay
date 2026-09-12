@@ -8,7 +8,7 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator, type NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Txt, colors, spacing } from '@aniplay/ui';
+import { Txt, colors, spacing } from '@plotbreak/ui';
 import { useStore } from './state/store.jsx';
 import { AgeGateScreen, ShowcaseScreen, SplashScreen, TasteScreen } from './screens/Onboarding.jsx';
 import { DiscoverScreen, SearchScreen } from './screens/Discover.jsx';

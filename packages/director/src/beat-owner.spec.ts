@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { ActionIntent } from '@aniplay/contracts';
+import type { ActionIntent } from '@plotbreak/contracts';
 import { reactingCharacter } from './pipeline.js';
 import type { TurnContext } from './context.js';
 

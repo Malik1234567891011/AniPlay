@@ -1,4 +1,4 @@
-import type { StoryVersion } from '@aniplay/contracts';
+import type { StoryVersion } from '@plotbreak/contracts';
 
 /**
  * Narrative clarity checker.

@@ -6,7 +6,7 @@
  * token, so a light theme is a swap rather than a rewrite (§25.2).
  */
 
-import { formatCompact, formatNumber, type Locale } from '@aniplay/i18n';
+import { formatCompact, formatNumber, type Locale } from '@plotbreak/i18n';
 
 export const colors = {
   bg: {
@@ -87,7 +87,7 @@ export const type = {
  */
 // ⚠️ Worth knowing: a CoreText glyph probe found **Georgia has no U+202F**, the
 // narrow no-break space CLDR uses to group French thousands. That is not a
-// theoretical problem — it is why `@aniplay/i18n` folds U+202F to U+00A0 on
+// theoretical problem — it is why `@plotbreak/i18n` folds U+202F to U+00A0 on
 // every string it renders. Without the fold, every grouped number in French
 // narration would draw its separator from a fallback face at a width nobody
 // chose. See `docs/localization/fr-FR/research/typography.md`.

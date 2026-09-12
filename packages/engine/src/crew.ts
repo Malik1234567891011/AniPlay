@@ -4,7 +4,7 @@ import type {
   GameState,
   StateMutation,
   StoryVersion,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 
 /**
  * Spec §14.7 — companions who can leave.

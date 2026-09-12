@@ -1,5 +1,5 @@
 {
-  "name": "aniplay",
+  "name": "plotbreak",
   "private": true,
   "version": "0.1.0",
   "description": "Project ANIMA \u2014 anime roleplay RPG. The model interprets intent. The game engine determines truth. The AI director makes truth entertaining.",
@@ -16,8 +16,8 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "api": "npm run dev -w @aniplay/api",
-    "mobile": "npm run start -w @aniplay/mobile",
+    "api": "npm run dev -w @plotbreak/api",
+    "mobile": "npm run start -w @plotbreak/mobile",
     "clean": "rm -rf packages/*/dist services/*/dist node_modules/.cache",
     "smoke": "tsx --env-file-if-exists=.env infra/scripts/smoke.ts",
     "i18n:extract": "tsx infra/scripts/i18n-extract.ts",

@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
-import { GameState } from '@aniplay/contracts';
-import { createInitialState, forkState } from '@aniplay/engine';
-import { createDefaultPipeline, RuleBasedModerator } from '@aniplay/director';
-import { JobQueue } from '@aniplay/worker';
+import { GameState } from '@plotbreak/contracts';
+import { createInitialState, forkState } from '@plotbreak/engine';
+import { createDefaultPipeline, RuleBasedModerator } from '@plotbreak/director';
+import { JobQueue } from '@plotbreak/worker';
 import { buildServer } from './server.js';
 import { loadConfig } from './context.js';
 import { MemoryRepository } from './repo/memory.js';

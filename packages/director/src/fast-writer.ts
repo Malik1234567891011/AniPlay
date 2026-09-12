@@ -1,12 +1,12 @@
-import type { NarrativeBlock, NarrativeTurn } from '@aniplay/contracts';
-import type { BeatPlan } from '@aniplay/contracts';
+import type { NarrativeBlock, NarrativeTurn } from '@plotbreak/contracts';
+import type { BeatPlan } from '@plotbreak/contracts';
 import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { buildMessages, policyFor, writerPayload } from './model-stages.js';
-import type { Locale } from '@aniplay/i18n';
-import { nameKeys } from '@aniplay/contracts';
+import type { Locale } from '@plotbreak/i18n';
+import { nameKeys } from '@plotbreak/contracts';
 import { buildDeltas } from './writer.js';
-import { frenchTypography } from '@aniplay/i18n';
+import { frenchTypography } from '@plotbreak/i18n';
 
 /**
  * Spec §17.10 — prose that arrives while it is being written.

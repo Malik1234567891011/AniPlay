@@ -1,4 +1,4 @@
-import { nameKeys } from '@aniplay/contracts';
+import { nameKeys } from '@plotbreak/contracts';
 
 /**
  * The writer writing somebody out of the room they are standing in.

@@ -12,7 +12,7 @@
  * The director may notice; the writer may steer toward one when the player is
  * already going that way; the player decides.
  */
-import type { EndingDef, GameState, StoryVersion } from '@aniplay/contracts';
+import type { EndingDef, GameState, StoryVersion } from '@plotbreak/contracts';
 import { evaluatePredicate } from './quests.js';
 
 export interface EligibleEnding {

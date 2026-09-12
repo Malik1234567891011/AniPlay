@@ -4,8 +4,8 @@ import type {
   LocationDef,
   StateMutation,
   StoryVersion,
-} from '@aniplay/contracts';
-import { localizeStory } from '@aniplay/contracts';
+} from '@plotbreak/contracts';
+import { localizeStory } from '@plotbreak/contracts';
 
 /**
  * Spec §11.9 — the world the player made, composed over the world an author

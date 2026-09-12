@@ -1,4 +1,4 @@
-import type { GameState, StoryVersion } from '@aniplay/contracts';
+import type { GameState, StoryVersion } from '@plotbreak/contracts';
 import { createInitialState } from './state.js';
 
 /**

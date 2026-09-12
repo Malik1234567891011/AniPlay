@@ -1,4 +1,4 @@
-import { StoryVersion } from '@aniplay/contracts';
+import { StoryVersion } from '@plotbreak/contracts';
 
 /**
  * "Blackwake" — a broken ship, a torn map, and nobody knowing your name.

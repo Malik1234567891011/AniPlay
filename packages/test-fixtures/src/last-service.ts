@@ -1,4 +1,4 @@
-import { StoryVersion } from '@aniplay/contracts';
+import { StoryVersion } from '@plotbreak/contracts';
 
 /**
  * "Last Service" — thirty seats, thirty days, and a hood that is making a noise.

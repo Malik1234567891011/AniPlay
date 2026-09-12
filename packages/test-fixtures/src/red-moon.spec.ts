@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, resolveIntent, unmetRequirement } from '@aniplay/engine';
-import { RuleBasedIntentParser } from '@aniplay/director';
+import { createInitialState, resolveIntent, unmetRequirement } from '@plotbreak/engine';
+import { RuleBasedIntentParser } from '@plotbreak/director';
 import { RED_MOON } from './index.js';
 
 /**

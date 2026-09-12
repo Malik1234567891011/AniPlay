@@ -1,4 +1,4 @@
-import { StoryVersion } from '@aniplay/contracts';
+import { StoryVersion } from '@plotbreak/contracts';
 
 /**
  * "The Fourth Beast" — Paris, and three small creatures in open habitats.

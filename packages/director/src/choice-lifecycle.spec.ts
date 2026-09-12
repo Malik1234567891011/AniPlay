@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE } from '@aniplay/test-fixtures';
-import { createInitialState, resolveIntent } from '@aniplay/engine';
+import { LAST_FIVE } from '@plotbreak/test-fixtures';
+import { createInitialState, resolveIntent } from '@plotbreak/engine';
 import { RuleBasedDirector } from './director.js';
 import { RuleBasedIntentParser } from './parser.js';
 import { buildTurnContext } from './context.js';

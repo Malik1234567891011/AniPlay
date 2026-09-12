@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { BeatPlan, Resolution, StateMutation } from '@aniplay/contracts';
-import { createInitialState, resolveIntent } from '@aniplay/engine';
-import { NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import type { BeatPlan, Resolution, StateMutation } from '@plotbreak/contracts';
+import { createInitialState, resolveIntent } from '@plotbreak/engine';
+import { NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
 import { buildTurnContext } from './context.js';
 import { RuleBasedDirector } from './director.js';
 import { reconcilePlan } from './model-stages.js';

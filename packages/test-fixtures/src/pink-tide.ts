@@ -1,4 +1,4 @@
-import { StoryVersion } from '@aniplay/contracts';
+import { StoryVersion } from '@plotbreak/contracts';
 
 /**
  * "Pink Tide" — Aster Cove, seven nights, and a guest who checked out without

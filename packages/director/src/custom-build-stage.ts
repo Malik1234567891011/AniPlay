@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { ArchetypeDef, StoryVersion } from '@aniplay/contracts';
-import { buildBudget, deriveCustomBuild } from '@aniplay/engine';
+import type { ArchetypeDef, StoryVersion } from '@plotbreak/contracts';
+import { buildBudget, deriveCustomBuild } from '@plotbreak/engine';
 import type { ModelGateway } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { buildMessages, SAFETY_POLICY } from './model-stages.js';

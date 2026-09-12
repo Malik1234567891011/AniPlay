@@ -3,7 +3,7 @@
 // ~4,000, and it carries the media plan and beat plan the UI cannot show.
 import pg from 'pg';
 import fs from 'node:fs';
-const url = fs.readFileSync('/Users/malik/AniPlay/.env','utf8').match(/DATABASE_URL=(.*)/)[1].trim();
+const url = fs.readFileSync('/Users/malik/Plotbreak/.env','utf8').match(/DATABASE_URL=(.*)/)[1].trim();
 const c = new pg.Client({ connectionString: url });
 await c.connect();
 

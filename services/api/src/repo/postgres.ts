@@ -1,5 +1,5 @@
 import { Pool, type PoolClient } from 'pg';
-import { isLocale } from '@aniplay/i18n';
+import { isLocale } from '@plotbreak/i18n';
 import {
   GameEvent,
   GameState,
@@ -7,7 +7,7 @@ import {
   MemoryFact,
   StoryVersion,
   TurnRecord,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 import type {
   IdempotencyRecord,
   ReportRecord,

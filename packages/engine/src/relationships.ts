@@ -4,8 +4,8 @@ import type {
   RelationshipGate,
   RelationshipState,
   StoryVersion,
-} from '@aniplay/contracts';
-import { translate, type Locale } from '@aniplay/i18n';
+} from '@plotbreak/contracts';
+import { translate, type Locale } from '@plotbreak/i18n';
 
 /**
  * Spec §14 — relationship simulation.

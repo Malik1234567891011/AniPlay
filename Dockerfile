@@ -20,8 +20,8 @@ COPY packages ./packages
 COPY services ./services
 # `apps/` holds the mobile client. The API never imports it, and installing its
 # React Native tree would multiply the image for nothing.
-RUN npm ci --omit=dev --workspace @aniplay/api --include-workspace-root \
- || npm install --omit=dev --workspace @aniplay/api --include-workspace-root
+RUN npm ci --omit=dev --workspace @plotbreak/api --include-workspace-root \
+ || npm install --omit=dev --workspace @plotbreak/api --include-workspace-root
 
 FROM node:22-slim AS runtime
 WORKDIR /app

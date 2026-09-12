@@ -1,4 +1,4 @@
-import type { NarrativeBlock, StoryVersion } from '@aniplay/contracts';
+import type { NarrativeBlock, StoryVersion } from '@plotbreak/contracts';
 
 /**
  * Spec §16.9 — nobody in the story knows there is a story.

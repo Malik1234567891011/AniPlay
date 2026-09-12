@@ -22,18 +22,18 @@
  * Latency: this runs after the prose has finished streaming, so it is off the
  * first-text path entirely. The player is already reading when it starts.
  */
-import type { NarrativeTurn, SuggestedAction } from '@aniplay/contracts';
-import type { Locale } from '@aniplay/i18n';
+import type { NarrativeTurn, SuggestedAction } from '@plotbreak/contracts';
+import type { Locale } from '@plotbreak/i18n';
 import { z } from 'zod';
 import type { TurnContext } from './context.js';
 import type { ModelGateway } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { buildMessages, policyFor, worldRules } from './model-stages.js';
 import { RESPONSE_POLICY_FR } from './policies-fr.js';
-import { nameKeys } from '@aniplay/contracts';
+import { nameKeys } from '@plotbreak/contracts';
 import { speakerBrief } from './speaker-brief.js';
 import { stateBands } from './state-bands.js';
-import { frenchTypography } from '@aniplay/i18n';
+import { frenchTypography } from '@plotbreak/i18n';
 
 /**
  * How long a card may be, per locale.

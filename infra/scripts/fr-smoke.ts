@@ -214,8 +214,8 @@ async function main(): Promise<void> {
   const only = argv.find((a) => a.startsWith('--world='))?.slice('--world='.length);
   const turns = Number(argv.find((a) => a.startsWith('--turns='))?.slice('--turns='.length) ?? 6);
 
-  const { LAUNCH_CATALOG } = await import('@aniplay/test-fixtures');
-  const { worldTextCoverage } = await import('@aniplay/contracts');
+  const { LAUNCH_CATALOG } = await import('@plotbreak/test-fixtures');
+  const { worldTextCoverage } = await import('@plotbreak/contracts');
 
   const worlds = (LAUNCH_CATALOG as unknown as Array<{ storyId: string; title: string }>)
     .filter((w) => (only ? w.storyId === only : worldTextCoverage('fr', w.storyId) > 0));

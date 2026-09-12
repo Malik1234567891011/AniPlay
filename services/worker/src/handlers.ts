@@ -1,12 +1,12 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { CharacterDef, StoryVersion } from '@aniplay/contracts';
+import type { CharacterDef, StoryVersion } from '@plotbreak/contracts';
 import {
   MediaGatewayError,
   heroFramePrompt,
   type MediaGateway,
-} from '@aniplay/director';
+} from '@plotbreak/director';
 import type { JobContext, JobQueue } from './queue.js';
 
 /**

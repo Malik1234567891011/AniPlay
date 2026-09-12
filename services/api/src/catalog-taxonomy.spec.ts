@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
 import { CATEGORIES, availableCategories, categoriesFor, searchCatalog, tokenize } from './catalog-taxonomy.js';
 
 /**

@@ -16,8 +16,8 @@
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
-import { localizeStory, type StoryVersion } from '@aniplay/contracts';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
+import { localizeStory, type StoryVersion } from '@plotbreak/contracts';
 import { FR_GLOSSARY } from '../../packages/director/src/fr-adaptation.js';
 
 const ROOT = new URL('../..', import.meta.url).pathname.replace(/\/$/, '');

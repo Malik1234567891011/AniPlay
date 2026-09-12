@@ -1,5 +1,5 @@
-import type { ArchetypeDef, AttributeKey, StoryVersion } from '@aniplay/contracts';
-import { ATTRIBUTE_KEYS } from '@aniplay/contracts';
+import type { ArchetypeDef, AttributeKey, StoryVersion } from '@plotbreak/contracts';
+import { ATTRIBUTE_KEYS } from '@plotbreak/contracts';
 
 /**
  * Spec §9.4 — a background you wrote yourself is worth the same as one we wrote.

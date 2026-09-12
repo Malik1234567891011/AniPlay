@@ -1,4 +1,4 @@
-import { registerWorldText } from '@aniplay/contracts';
+import { registerWorldText } from '@plotbreak/contracts';
 
 /**
  * The Red Floor, in French.

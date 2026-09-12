@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { SEVEN_DAYS } from '@aniplay/test-fixtures';
-import { createInitialState } from '@aniplay/engine';
+import { SEVEN_DAYS } from '@plotbreak/test-fixtures';
+import { createInitialState } from '@plotbreak/engine';
 import { RuleBasedIntentParser } from './parser.js';
 
 /**

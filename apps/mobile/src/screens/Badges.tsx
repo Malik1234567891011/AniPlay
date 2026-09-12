@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Card, Row, Stack, Txt, colors, radius, spacing, GUTTER } from '@aniplay/ui';
+import { Card, Row, Stack, Txt, colors, radius, spacing, GUTTER } from '@plotbreak/ui';
 import { api, type BadgeView } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
 import { useStore } from '../state/store.jsx';

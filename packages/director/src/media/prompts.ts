@@ -9,7 +9,7 @@ import {
   type CharacterDef,
   type LocationDef,
   type StoryVersion,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 
 /**
  * Spec §19.4 — image prompt composition.

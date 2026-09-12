@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { ActionIntent, GameState } from '@aniplay/contracts';
-import { NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import type { ActionIntent, GameState } from '@plotbreak/contracts';
+import { NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
 import { commitTurn } from './commit.js';
 import { resolveIntent } from './resolve.js';
 import { createInitialState } from './state.js';

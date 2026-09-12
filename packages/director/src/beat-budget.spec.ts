@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { Resolution, StateMutation } from '@aniplay/contracts';
-import { createInitialState } from '@aniplay/engine';
-import { NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import type { Resolution, StateMutation } from '@plotbreak/contracts';
+import { createInitialState } from '@plotbreak/engine';
+import { NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
 import { beatBudget } from './director.js';
 import { buildTurnContext } from './context.js';
 

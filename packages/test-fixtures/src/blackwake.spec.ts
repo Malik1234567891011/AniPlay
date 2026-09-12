@@ -16,8 +16,8 @@ import {
   recruitCheck,
   recruitMutations,
   updateCrew,
-} from '@aniplay/engine';
-import type { GameState } from '@aniplay/contracts';
+} from '@plotbreak/engine';
+import type { GameState } from '@plotbreak/contracts';
 import { BLACKWAKE } from './index.js';
 
 /**

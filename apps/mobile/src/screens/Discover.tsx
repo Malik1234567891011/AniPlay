@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { ContinueCard, DiscoverResponse, StorySummary } from '@aniplay/contracts';
+import type { ContinueCard, DiscoverResponse, StorySummary } from '@plotbreak/contracts';
 import {
   Button,
   Card,
@@ -29,7 +29,7 @@ import {
   GUTTER,
   radius,
   spacing,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { api, ApiError } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useCategoryLabel, useT } from '../i18n/useT.js';

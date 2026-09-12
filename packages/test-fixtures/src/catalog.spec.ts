@@ -145,7 +145,7 @@ describe('worlds that have art declare it', () => {
 describe('authored expressions resolve to a real face', () => {
   for (const story of LAUNCH_CATALOG) {
     it(`${story.title} uses expressions the generator draws`, async () => {
-      const { knownExpression } = await import('@aniplay/contracts');
+      const { knownExpression } = await import('@plotbreak/contracts');
       const unknown = story.characters
         .flatMap((c) => c.expressions.map((e) => ({ character: c.name, expression: e })))
         .filter(({ expression }) => !knownExpression(expression));

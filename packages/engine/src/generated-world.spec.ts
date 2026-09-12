@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { GameState } from '@aniplay/contracts';
-import { NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import { GameState } from '@plotbreak/contracts';
+import { NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
 import {
   composeStory,
   generatedId,

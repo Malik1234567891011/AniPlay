@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { translatorFor, type Locale, type Translator } from '@aniplay/i18n';
+import { translatorFor, type Locale, type Translator } from '@plotbreak/i18n';
 import type {
   BootstrapResponse,
   CreateSessionRequest,
@@ -19,12 +19,12 @@ import type {
   TurnStreamEventName,
   WalletResponse,
   WorldSheetResponse,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 
 /**
  * The typed `/v1` client.
  *
- * Every response shape comes from `@aniplay/contracts`, so a server change that
+ * Every response shape comes from `@plotbreak/contracts`, so a server change that
  * breaks the client is a compile error rather than a runtime surprise.
  */
 

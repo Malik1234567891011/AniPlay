@@ -4,8 +4,8 @@
 // compact notation; Hermes on Android bridges to whatever ICU the OS release
 // shipped, so the French thousands separator is U+00A0 on one phone and U+202F
 // on the next. This import replaces `Intl` with one JavaScript implementation
-// and one CLDR version on every platform. See `@aniplay/i18n/polyfill`.
-import '@aniplay/i18n/polyfill';
+// and one CLDR version on every platform. See `@plotbreak/i18n/polyfill`.
+import '@plotbreak/i18n/polyfill';
 
 import { registerRootComponent } from 'expo';
 import App from './src/App';

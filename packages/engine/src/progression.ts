@@ -1,4 +1,4 @@
-import type { GameState, StateMutation, StoryVersion } from '@aniplay/contracts';
+import type { GameState, StateMutation, StoryVersion } from '@plotbreak/contracts';
 
 /**
  * Spec §12.11 — two progression modes, both enforced by the engine.

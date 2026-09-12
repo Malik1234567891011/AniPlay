@@ -6,10 +6,10 @@ import type {
   StoryVersion,
   Verb,
   Visibility,
-} from '@aniplay/contracts';
-import { nameKeys } from '@aniplay/contracts';
-import { charactersPresent } from '@aniplay/engine';
-import type { Locale } from '@aniplay/i18n';
+} from '@plotbreak/contracts';
+import { nameKeys } from '@plotbreak/contracts';
+import { charactersPresent } from '@plotbreak/engine';
+import type { Locale } from '@plotbreak/i18n';
 import {
   CLAUSE_SPLIT_FR,
   FIGURATIVE_VIOLENCE_FR,

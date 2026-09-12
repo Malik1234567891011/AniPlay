@@ -1,4 +1,4 @@
-# AniPlay — Project ANIMA
+# Plotbreak — Project ANIMA
 
 An anime-flavoured roleplay RPG where you type anything and a **deterministic game
 engine** decides what actually happens.

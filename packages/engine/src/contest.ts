@@ -1,4 +1,4 @@
-import type { ContestState, GameState, StoryVersion } from '@aniplay/contracts';
+import type { ContestState, GameState, StoryVersion } from '@plotbreak/contracts';
 import type { SeededRng } from './rng.js';
 import { effectiveModifier } from './state.js';
 import { tendencyProfile } from './tendencies.js';

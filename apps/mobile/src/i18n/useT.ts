@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { categoryLabel, translatorFor, type Translator } from '@aniplay/i18n';
+import { categoryLabel, translatorFor, type Translator } from '@plotbreak/i18n';
 import { useStore } from '../state/store.jsx';
 
 /**

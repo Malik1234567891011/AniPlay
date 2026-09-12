@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { BLACKWAKE } from '@aniplay/test-fixtures';
-import type { GameState, StoryVersion } from '@aniplay/contracts';
-import { charactersPresent, createInitialState } from '@aniplay/engine';
+import { BLACKWAKE } from '@plotbreak/test-fixtures';
+import type { GameState, StoryVersion } from '@plotbreak/contracts';
+import { charactersPresent, createInitialState } from '@plotbreak/engine';
 import { buildTurnContext } from './context.js';
 import { validateNarrative } from './validator.js';
 

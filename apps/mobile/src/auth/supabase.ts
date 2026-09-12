@@ -10,7 +10,7 @@
  * because that pulls a websocket client, a storage client and a URL polyfill
  * into a bundle that needs none of them. What we use is six requests.
  */
-import { translatorFor, type Translator } from '@aniplay/i18n';
+import { translatorFor, type Translator } from '@plotbreak/i18n';
 
 export interface AuthSession {
   readonly accessToken: string;

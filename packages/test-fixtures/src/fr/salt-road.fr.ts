@@ -1,4 +1,4 @@
-import { registerWorldText } from '@aniplay/contracts';
+import { registerWorldText } from '@plotbreak/contracts';
 
 /**
  * The Salt Road, in French.

@@ -3,9 +3,9 @@ import type {
   NarrativeBlock,
   NarrativeTurn,
   StateDeltaPresentation,
-} from '@aniplay/contracts';
-import { shortName } from '@aniplay/contracts';
-import { SeededRng, isSuccess, outcomeLabel } from '@aniplay/engine';
+} from '@plotbreak/contracts';
+import { shortName } from '@plotbreak/contracts';
+import { SeededRng, isSuccess, outcomeLabel } from '@plotbreak/engine';
 import type { PresentCharacterContext, TurnContext } from './context.js';
 
 /**

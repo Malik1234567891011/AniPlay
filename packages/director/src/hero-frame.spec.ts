@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { CheckOutcome, MutationType, Resolution } from '@aniplay/contracts';
+import type { CheckOutcome, MutationType, Resolution } from '@plotbreak/contracts';
 import { buildBeats, heroImageDecision } from './director.js';
 import type { TurnContext } from './context.js';
 

@@ -1,7 +1,7 @@
-import type { GameState, QualityTier, StoryVersion, TurnRecord } from '@aniplay/contracts';
-import { QUALITY_TIERS } from '@aniplay/contracts';
-import { dayPart, deriveTurnSeed, outcomeLabel, formatCheckMath, dcBandLabel } from '@aniplay/engine';
-import { runTurn } from '@aniplay/director';
+import type { GameState, QualityTier, StoryVersion, TurnRecord } from '@plotbreak/contracts';
+import { QUALITY_TIERS } from '@plotbreak/contracts';
+import { dayPart, deriveTurnSeed, outcomeLabel, formatCheckMath, dcBandLabel } from '@plotbreak/engine';
+import { runTurn } from '@plotbreak/director';
 import type { AppContext } from './context.js';
 import { resolveAssetUrl, toSceneState } from './projections.js';
 import type { SessionRecord, UserRecord } from './repo/types.js';

@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
-import { GRANT_DAILY, GRANT_NEW_USER, QUALITY_TIERS } from '@aniplay/contracts';
-import { createDefaultPipeline, RuleBasedModerator } from '@aniplay/director';
-import { JobQueue } from '@aniplay/worker';
+import { GRANT_DAILY, GRANT_NEW_USER, QUALITY_TIERS } from '@plotbreak/contracts';
+import { createDefaultPipeline, RuleBasedModerator } from '@plotbreak/director';
+import { JobQueue } from '@plotbreak/worker';
 import { buildServer } from './server.js';
 import { assertProductionReady, createAppContext, loadConfig } from './context.js';
 import { categoriesFor } from './catalog-taxonomy.js';
 import { MemoryRepository } from './repo/memory.js';
 import { WalletService } from './wallet.js';
-import type { TurnRecord } from '@aniplay/contracts';
+import type { TurnRecord } from '@plotbreak/contracts';
 import type { AppContext } from './context.js';
 import { createHmac } from 'node:crypto';
 import { DevTokenVerifier, SupabaseJwtVerifier, devUserId } from './auth.js';

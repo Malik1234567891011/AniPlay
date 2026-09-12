@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { Client } from 'pg';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
-import { createInitialState } from '@aniplay/engine';
-import type { GameState, LedgerEntry, TurnRecord } from '@aniplay/contracts';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
+import { createInitialState } from '@plotbreak/engine';
+import type { GameState, LedgerEntry, TurnRecord } from '@plotbreak/contracts';
 import { PostgresRepository } from './postgres.js';
 import type { SessionRecord, UserRecord } from './types.js';
 

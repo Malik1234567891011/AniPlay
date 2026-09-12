@@ -189,7 +189,7 @@ function extract(file: string): Hit[] {
 
 /** The authored-content number, which decides the translation schedule. */
 async function worlds(): Promise<void> {
-  const mod = (await import('@aniplay/test-fixtures')) as { LAUNCH_CATALOG: readonly unknown[] };
+  const mod = (await import('@plotbreak/test-fixtures')) as { LAUNCH_CATALOG: readonly unknown[] };
   const NOT_TEXT = /^(id|.*Id|.*Ids|assetKey|.*Key|schemaVersion)$/;
 
   let grandTotal = 0;

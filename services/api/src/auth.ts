@@ -74,7 +74,7 @@ export function devUserId(token: string): string {
 
 /** Stable per token, so the same development token is the same account. */
 export function deterministicUuid(seed: string): string {
-  const hash = createHash('sha256').update(`aniplay:dev:${seed}`).digest('hex');
+  const hash = createHash('sha256').update(`plotbreak:dev:${seed}`).digest('hex');
   return [
     hash.slice(0, 8),
     hash.slice(8, 12),

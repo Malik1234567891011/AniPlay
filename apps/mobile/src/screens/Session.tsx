@@ -20,9 +20,9 @@ import type {
   SessionDetailResponse,
   SessionSceneState,
   SuggestedAction,
-} from '@aniplay/contracts';
-import { QUALITY_TIERS } from '@aniplay/contracts';
-import type { TranslationKey, Translator } from '@aniplay/i18n';
+} from '@plotbreak/contracts';
+import { QUALITY_TIERS } from '@plotbreak/contracts';
+import type { TranslationKey, Translator } from '@plotbreak/i18n';
 import {
   ActionSuggestion,
   Button,
@@ -48,7 +48,7 @@ import {
   HIT_SLOP,
   radius,
   spacing,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { api, ApiError } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
@@ -1317,7 +1317,7 @@ function Sheet({
 
 /**
  * The four tier names and promises, keyed here rather than in
- * `@aniplay/contracts`.
+ * `@plotbreak/contracts`.
  *
  * `QUALITY_TIERS` is a wire contract shared with the server, and its `label`
  * and `promise` are English literals in a package that has no translator. The

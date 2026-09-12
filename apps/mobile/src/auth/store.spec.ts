@@ -109,7 +109,7 @@ describe('an app that failed to sign in at launch can still recover', () => {
   });
 
   it('prefers refreshing the token it has over minting a new guest', async () => {
-    keychain.set('aniplay.refreshToken', 'stored-refresh');
+    keychain.set('plotbreak.refreshToken', 'stored-refresh');
     const fake = fakeClient({
       refresh: async () => session({ accessToken: 'refreshed', userId: 'user-9', isAnonymous: false }),
     });
@@ -122,7 +122,7 @@ describe('an app that failed to sign in at launch can still recover', () => {
   });
 
   it('falls back to a guest when the stored refresh token has been revoked', async () => {
-    keychain.set('aniplay.refreshToken', 'revoked');
+    keychain.set('plotbreak.refreshToken', 'revoked');
     const fake = fakeClient({});
     const store = new AuthStore(fake.client);
 

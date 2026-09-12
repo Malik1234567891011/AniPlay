@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BLACKWAKE } from '@aniplay/test-fixtures';
+import { BLACKWAKE } from '@plotbreak/test-fixtures';
 import { blocksFrom } from './fast-writer.js';
 import { toSecondPerson } from './second-person.js';
 import type { TurnContext } from './context.js';

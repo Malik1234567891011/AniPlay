@@ -1,5 +1,5 @@
 {
-  "name": "@aniplay/test-fixtures",
+  "name": "@plotbreak/test-fixtures",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,6 +13,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@aniplay/contracts": "*"
+    "@plotbreak/contracts": "*"
   }
 }

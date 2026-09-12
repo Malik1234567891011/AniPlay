@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState } from '@aniplay/engine';
-import { NINTH_ARCHIVE, LAST_FIVE } from '@aniplay/test-fixtures';
-import type { GameState } from '@aniplay/contracts';
+import { createInitialState } from '@plotbreak/engine';
+import { NINTH_ARCHIVE, LAST_FIVE } from '@plotbreak/test-fixtures';
+import type { GameState } from '@plotbreak/contracts';
 import { OPEN_HISTORY_TURNS, classifyClaim, directorNoteFor, proposalFor } from './player-canon.js';
 
 /**

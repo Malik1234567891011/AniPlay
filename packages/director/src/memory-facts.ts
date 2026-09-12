@@ -1,4 +1,4 @@
-import { translate, type Locale, type TranslationKey } from '@aniplay/i18n';
+import { translate, type Locale, type TranslationKey } from '@plotbreak/i18n';
 
 /**
  * Memory facts, as structure rather than as prose.

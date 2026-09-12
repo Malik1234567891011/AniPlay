@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE } from '@aniplay/test-fixtures';
+import { LAST_FIVE } from '@plotbreak/test-fixtures';
 import { speakerBrief } from './speaker-brief.js';
 import type { PresentCharacterContext } from './context.js';
 

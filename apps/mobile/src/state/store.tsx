@@ -13,8 +13,8 @@ import type {
   Locale,
   QualityTier,
   WalletSummary,
-} from '@aniplay/contracts';
-import { DEFAULT_LOCALE, isLocale, translatorFor } from '@aniplay/i18n';
+} from '@plotbreak/contracts';
+import { DEFAULT_LOCALE, isLocale, translatorFor } from '@plotbreak/i18n';
 import { applyDeviceTimeZone, deviceLocale } from '../i18n/device.js';
 import { api, ApiError } from '../api/client.js';
 import { auth, AuthError } from '../auth/index.js';
@@ -28,15 +28,15 @@ import { auth, AuthError } from '../auth/index.js';
  */
 
 const STORAGE_KEYS = {
-  ageVerified: 'aniplay.ageVerified',
-  tastes: 'aniplay.tastes',
-  quality: 'aniplay.qualityTier',
-  drafts: 'aniplay.composerDrafts',
-  locale: 'aniplay.locale',
+  ageVerified: 'plotbreak.ageVerified',
+  tastes: 'plotbreak.tastes',
+  quality: 'plotbreak.qualityTier',
+  drafts: 'plotbreak.composerDrafts',
+  locale: 'plotbreak.locale',
   // Set once the showcase is dismissed. Without it the taste picker and the
   // showcase were held in component state, so they came back on every cold
   // start and a returning player was re-onboarded forever.
-  onboarded: 'aniplay.onboarded',
+  onboarded: 'plotbreak.onboarded',
   /**
    * Which age band the player picked at the gate.
    *
@@ -44,7 +44,7 @@ const STORAGE_KEYS = {
    * and threw it away — so the one piece of information the app collects about
    * a person was not kept, and Settings had nothing to show them.
    */
-  ageBand: 'aniplay.ageBand',
+  ageBand: 'plotbreak.ageBand',
 } as const;
 
 export interface AppState {

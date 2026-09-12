@@ -8,7 +8,7 @@ import type {
   SessionSummary,
   StoryVersion,
   TurnRecord,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 
 /**
  * The persistence port.

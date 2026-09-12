@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, charactersPresent, locationForSchedule } from '@aniplay/engine';
-import { resourceBand } from '@aniplay/contracts';
+import { createInitialState, charactersPresent, locationForSchedule } from '@plotbreak/engine';
+import { resourceBand } from '@plotbreak/contracts';
 import { HUSH_HOUSE } from './index.js';
 
 /**

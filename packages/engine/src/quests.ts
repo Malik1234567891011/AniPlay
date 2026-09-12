@@ -6,7 +6,7 @@ import type {
   QuestStatus,
   StateMutation,
   StoryVersion,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 import { countItem } from './state.js';
 import { isDeadlinePassed } from './clock.js';
 

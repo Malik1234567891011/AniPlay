@@ -1,9 +1,9 @@
 import { getCalendars, getLocales } from 'expo-localization';
-import { DEFAULT_LOCALE, resolveDeviceLocale, type Locale } from '@aniplay/i18n';
+import { DEFAULT_LOCALE, resolveDeviceLocale, type Locale } from '@plotbreak/i18n';
 // From the polyfill entry, not the index: the index is deliberately free of
 // side effects, and the time zone belongs to the thing that replaced `Intl`.
 // The module is already loaded by `index.ts`, so this is a cache hit.
-import { setDefaultTimeZone } from '@aniplay/i18n/polyfill';
+import { setDefaultTimeZone } from '@plotbreak/i18n/polyfill';
 
 /**
  * What the phone says, and what the app does with it.
@@ -18,7 +18,7 @@ import { setDefaultTimeZone } from '@aniplay/i18n/polyfill';
  *
  * Returns `en` while `DEVICE_LOCALE_AUTODETECT` is off — the detection is
  * plumbed and tested, but a French-phone owner is not handed a half-built
- * French app on the strength of their OS settings. See `@aniplay/i18n`.
+ * French app on the strength of their OS settings. See `@plotbreak/i18n`.
  */
 export function deviceLocale(): Locale {
   try {

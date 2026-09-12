@@ -5,7 +5,7 @@ import type {
   Resolution,
   StateMutation,
   StoryVersion,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 import { applyMutations, regenerateResources, validateMutations, type MutationRejection } from './mutations.js';
 import { advanceQuests, rewardMutationsFor, type QuestTransition } from './quests.js';
 import { levelUpMutations, milestoneMutations } from './progression.js';

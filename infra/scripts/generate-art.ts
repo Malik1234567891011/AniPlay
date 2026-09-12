@@ -13,7 +13,7 @@
 import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
 import {
   characterPrompt,
   coverPrompt,
@@ -24,8 +24,8 @@ import {
   MediaGatewayError,
   type GeneratedAsset,
   type ImagePromptSpec,
-} from '@aniplay/director';
-import { coverAssetKey, REACTION_EMOTIONS } from '@aniplay/contracts';
+} from '@plotbreak/director';
+import { coverAssetKey, REACTION_EMOTIONS } from '@plotbreak/contracts';
 import { compositeTitle } from './cover-title.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');

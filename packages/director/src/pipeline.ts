@@ -10,8 +10,8 @@ import type {
   Resolution,
   StoryVersion,
   TurnRecord,
-} from '@aniplay/contracts';
-import { commitTurn, projectState, resolveIntent, type CommitResult } from '@aniplay/engine';
+} from '@plotbreak/contracts';
+import { commitTurn, projectState, resolveIntent, type CommitResult } from '@plotbreak/engine';
 import { buildTurnContext, type TurnContext } from './context.js';
 import { RuleBasedIntentParser, type IntentParser } from './parser.js';
 import { RuleBasedDirector, type Director } from './director.js';
@@ -24,10 +24,10 @@ import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { expandElliptical } from './elliptical.js';
 import { writeStreaming } from './fast-writer.js';
 import { pickReactionEmotion } from './director.js';
-import { reactionAssetKey } from '@aniplay/contracts';
+import { reactionAssetKey } from '@plotbreak/contracts';
 import type { ModelGateway } from './gateway/types.js';
 import { generateResponses } from './responses.js';
-import { recordMentions } from '@aniplay/engine';
+import { recordMentions } from '@plotbreak/engine';
 
 /**
  * Spec §17.1 — the turn pipeline, steps 4 through 12.

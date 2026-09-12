@@ -23,7 +23,7 @@
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
 import { manifestFor } from './fr-manifest.js';
 
 const ROOT = new URL('../..', import.meta.url).pathname.replace(/\/$/, '');

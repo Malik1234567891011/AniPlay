@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Image, Pressable, ScrollView, Switch, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { Locale, MeResponse, SessionSummary } from '@aniplay/contracts';
-import { LOCALES } from '@aniplay/i18n';
+import type { Locale, MeResponse, SessionSummary } from '@plotbreak/contracts';
+import { LOCALES } from '@plotbreak/i18n';
 import {
   Button,
   Card,
@@ -19,13 +19,13 @@ import {
   GUTTER,
   radius,
   spacing,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { ApiError, api, type PlayerCharacterCard } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation } from '../navigation.jsx';
 import type { BadgeView } from '../api/client.js';
-import { BADGES } from '@aniplay/contracts';
+import { BADGES } from '@plotbreak/contracts';
 
 /**
  * LB-01 / LB-02 Library, PR-01 / PR-02 / PR-03 Profile, SF-01 Report.

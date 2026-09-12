@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { NINE_WEEKS } from '@aniplay/test-fixtures';
+import { NINE_WEEKS } from '@plotbreak/test-fixtures';
 import { createInitialState } from './state.js';
 import { resolveIntent } from './resolve.js';
-import type { ActionIntent } from '@aniplay/contracts';
+import type { ActionIntent } from '@plotbreak/contracts';
 
 /**
  * Things the world should not forget.

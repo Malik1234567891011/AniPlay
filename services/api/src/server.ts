@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import { BADGES, BADGES_BY_ID } from '@aniplay/contracts';
-import { localizeStory } from '@aniplay/contracts';
+import { BADGES, BADGES_BY_ID } from '@plotbreak/contracts';
+import { localizeStory } from '@plotbreak/contracts';
 import { syncBadges, type PlayerRecord } from './badges.js';
 import { rankTopRanked, rankTrending, trendingScore } from './ranking.js';
 import Fastify, { type FastifyInstance } from 'fastify';
@@ -20,15 +20,15 @@ import {
   type ContinueCard,
   type DiscoverRail,
   type StorySummary,
-} from '@aniplay/contracts';
-import { createInitialState, forkState, sha256Hex } from '@aniplay/engine';
-import { formatList, resolveDeviceLocale, resolveLocale, translatorFor, type Locale } from '@aniplay/i18n';
+} from '@plotbreak/contracts';
+import { createInitialState, forkState, sha256Hex } from '@plotbreak/engine';
+import { formatList, resolveDeviceLocale, resolveLocale, translatorFor, type Locale } from '@plotbreak/i18n';
 import {
   applyCorrection,
   buildRecap,
   checkCorrectionConflict,
   rephraseNarration,
-} from '@aniplay/director';
+} from '@plotbreak/director';
 import {
   CONTRACT_HEADER,
   recentDegradations,
@@ -61,7 +61,7 @@ import {
   toTimeline,
   toWorldSheet,
 } from './projections.js';
-import { deriveCustomBuildWithModel } from '@aniplay/director';
+import { deriveCustomBuildWithModel } from '@plotbreak/director';
 import { availableCategories, categoriesFor, searchCatalog } from './catalog-taxonomy.js';
 import { registerMediaRoutes } from './media-routes.js';
 import type { SessionRecord, StorySignals } from './repo/types.js';

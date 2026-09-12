@@ -55,8 +55,8 @@ describe('narratesPlayerInThirdPerson', () => {
  */
 describe('repairing voice without swallowing an unknown speaker', () => {
   it('rewrites the one and drops the other', async () => {
-    const { NINTH_ARCHIVE } = await import('@aniplay/test-fixtures');
-    const { createInitialState, resolveIntent } = await import('@aniplay/engine');
+    const { NINTH_ARCHIVE } = await import('@plotbreak/test-fixtures');
+    const { createInitialState, resolveIntent } = await import('@plotbreak/engine');
     const { RuleBasedIntentParser } = await import('./parser.js');
     const { buildTurnContext } = await import('./context.js');
     const { validateNarrative, repairNarrative } = await import('./validator.js');

@@ -12,13 +12,13 @@
  *
  * Exits non-zero if anything is flagged, so it can gate a release.
  */
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
 import {
   checkNarrativeClarity,
   checkStoryChoiceClarity,
   narratesPlayerInThirdPerson,
-} from '@aniplay/director';
-import type { StoryVersion } from '@aniplay/contracts';
+} from '@plotbreak/director';
+import type { StoryVersion } from '@plotbreak/contracts';
 
 interface Problem {
   readonly world: string;

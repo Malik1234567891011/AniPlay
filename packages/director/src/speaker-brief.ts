@@ -19,7 +19,7 @@
  *
  * One projection, used by both stages, so they cannot drift apart again.
  */
-import type { Locale } from '@aniplay/i18n';
+import type { Locale } from '@plotbreak/i18n';
 import type { PresentCharacterContext } from './context.js';
 import { addressInstruction } from './address-fr.js';
 

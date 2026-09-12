@@ -14,7 +14,7 @@ import {
   GUTTER,
   radius,
   spacing,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { api } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';

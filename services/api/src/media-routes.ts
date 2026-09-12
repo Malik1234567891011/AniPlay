@@ -3,14 +3,14 @@ import { access, readFile, stat, mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { FastifyInstance } from 'fastify';
-import type { GameState, StoryVersion } from '@aniplay/contracts';
+import type { GameState, StoryVersion } from '@plotbreak/contracts';
 import {
   createMediaGatewayFromEnv,
   playerPortraitPrompt,
   MediaGatewayError,
   type MediaGateway,
-} from '@aniplay/director';
-import { relationshipLabel } from '@aniplay/engine';
+} from '@plotbreak/director';
+import { relationshipLabel } from '@plotbreak/engine';
 import type { AppContext } from './context.js';
 import { requireUser, sendError } from './context.js';
 import { InsufficientCreditsError } from './wallet.js';

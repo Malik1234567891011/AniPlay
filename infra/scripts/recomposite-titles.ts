@@ -12,9 +12,9 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
-import { coverAssetKey } from '@aniplay/contracts';
-import { TITLE_SAFE_AREA } from '@aniplay/director';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
+import { coverAssetKey } from '@plotbreak/contracts';
+import { TITLE_SAFE_AREA } from '@plotbreak/director';
 import { compositeTitle } from './cover-title.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');

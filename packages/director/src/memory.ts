@@ -5,11 +5,11 @@ import type {
   MemoryFact,
   MemoryProposal,
   StoryVersion,
-} from '@aniplay/contracts';
-import { formatWorldTime, outcomeLabel } from '@aniplay/engine';
-import { translate, type Locale } from '@aniplay/i18n';
+} from '@plotbreak/contracts';
+import { formatWorldTime, outcomeLabel } from '@plotbreak/engine';
+import { translate, type Locale } from '@plotbreak/i18n';
 import { isStructuredFact, predicatePhrase, renderStructuredFact } from './memory-facts.js';
-import { canCharacterKnow } from '@aniplay/engine';
+import { canCharacterKnow } from '@plotbreak/engine';
 
 /**
  * Spec §17.6 — memory retrieval.

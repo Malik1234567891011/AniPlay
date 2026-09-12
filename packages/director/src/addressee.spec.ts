@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { NINE_WEEKS } from '@aniplay/test-fixtures';
-import { createInitialState } from '@aniplay/engine';
-import type { TurnRecord } from '@aniplay/contracts';
+import { NINE_WEEKS } from '@plotbreak/test-fixtures';
+import { createInitialState } from '@plotbreak/engine';
+import type { TurnRecord } from '@plotbreak/contracts';
 import { RuleBasedIntentParser } from './parser.js';
 import { addresseeFrom } from './pipeline.js';
 

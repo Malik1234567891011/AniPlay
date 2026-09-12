@@ -6,7 +6,7 @@
  * client renders for whichever session is open, and a module-level default is
  * how those two get out of step.
  *
- * All of it assumes `@aniplay/i18n/polyfill` has been imported. Without it the
+ * All of it assumes `@plotbreak/i18n/polyfill` has been imported. Without it the
  * output is whatever the host engine happens to do, which on Hermes/iOS
  * includes throwing on `formatToParts` and ignoring `notation: 'compact'`.
  */
@@ -147,7 +147,7 @@ export type DateStyle = 'short' | 'medium' | 'long';
 /**
  * A real calendar date — "started 12 mars 2026", not the in-fiction clock.
  * World time is minute arithmetic and is formatted by the engine; see
- * `@aniplay/engine`'s clock.
+ * `@plotbreak/engine`'s clock.
  *
  * French is day → month → year, months lowercase, no comma before the year,
  * and **`1er` for the first of the month**. Neither CLDR/ICU nor Apple applies

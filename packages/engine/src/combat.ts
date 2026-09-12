@@ -5,7 +5,7 @@ import type {
   GameState,
   StateMutation,
   StoryVersion,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 import type { SeededRng } from './rng.js';
 import { attributeModifier } from './check.js';
 

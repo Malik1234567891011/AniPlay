@@ -11,8 +11,8 @@ import type {
   RelationshipState,
   ResourceState,
   StoryVersion,
-} from '@aniplay/contracts';
-import { ATTRIBUTE_KEYS } from '@aniplay/contracts';
+} from '@plotbreak/contracts';
+import { ATTRIBUTE_KEYS } from '@plotbreak/contracts';
 import { crewSkillModifier } from './crew.js';
 import { deriveCustomBuild } from './custom-build.js';
 import { attributeModifier } from './check.js';

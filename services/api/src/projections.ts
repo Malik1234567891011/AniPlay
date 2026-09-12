@@ -1,4 +1,4 @@
-import { abilityEffect, archetypeGrants } from '@aniplay/contracts';
+import { abilityEffect, archetypeGrants } from '@plotbreak/contracts';
 import type {
   ContinueCard,
   GameEvent,
@@ -13,7 +13,7 @@ import type {
   TimelineEntry,
   TurnRecord,
   WorldSheetResponse,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 import {
   attributeModifier,
   charactersPresent,
@@ -27,8 +27,8 @@ import {
   relationshipLabel,
   topObjective,
   dayNumber,
-} from '@aniplay/engine';
-import { translatorFor, type Locale, type TranslationKey, type Translator } from '@aniplay/i18n';
+} from '@plotbreak/engine';
+import { translatorFor, type Locale, type TranslationKey, type Translator } from '@plotbreak/i18n';
 import type { SessionRecord, StorySignals } from './repo/types.js';
 
 /**

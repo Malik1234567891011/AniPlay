@@ -4,7 +4,7 @@
  * Step 1's gate is "formatting snapshot tests pass on iOS **and** Android", and
  * a vitest file cannot satisfy that on its own — it runs on Node, against
  * Node's ICU, on a laptop. What makes the claim true is that
- * `@aniplay/i18n/polyfill` replaces the engine's `Intl` with the same
+ * `@plotbreak/i18n/polyfill` replaces the engine's `Intl` with the same
  * JavaScript implementation and the same CLDR data on every platform.
  *
  * This module is how that gets checked rather than asserted. It is a plain

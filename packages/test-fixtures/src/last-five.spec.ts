@@ -17,8 +17,8 @@ import {
   tendencyFlag,
   tendencyMutations,
   tendencyProfile,
-} from '@aniplay/engine';
-import type { GameState } from '@aniplay/contracts';
+} from '@plotbreak/engine';
+import type { GameState } from '@plotbreak/contracts';
 import { LAST_FIVE } from './index.js';
 
 /**

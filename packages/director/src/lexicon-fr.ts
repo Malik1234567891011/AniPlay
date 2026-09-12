@@ -1,4 +1,4 @@
-import type { Verb } from '@aniplay/contracts';
+import type { Verb } from '@plotbreak/contracts';
 
 /**
  * The French verb lexicon.

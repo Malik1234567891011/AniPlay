@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { NINE_WEEKS, NINTH_ARCHIVE as STORY } from '@aniplay/test-fixtures';
-import type { ActionIntent, GameState, StateMutation } from '@aniplay/contracts';
+import { NINE_WEEKS, NINTH_ARCHIVE as STORY } from '@plotbreak/test-fixtures';
+import type { ActionIntent, GameState, StateMutation } from '@plotbreak/contracts';
 import { SeededRng, deriveTurnSeed, sha256Hex } from './rng.js';
 import {
   attributeModifier,

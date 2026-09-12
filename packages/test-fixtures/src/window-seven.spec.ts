@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, charactersPresent } from '@aniplay/engine';
-import type { QuestPredicate, StoryVersion } from '@aniplay/contracts';
+import { createInitialState, charactersPresent } from '@plotbreak/engine';
+import type { QuestPredicate, StoryVersion } from '@plotbreak/contracts';
 import { WINDOW_SEVEN } from './index.js';
 
 /**

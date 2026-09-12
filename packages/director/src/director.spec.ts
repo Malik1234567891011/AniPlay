@@ -6,9 +6,9 @@ import {
   NINTH_ARCHIVE as STORY,
   SALT_ROAD,
   TIDEWALL,
-} from '@aniplay/test-fixtures';
-import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@aniplay/contracts';
-import { ActionIntent } from '@aniplay/contracts';
+} from '@plotbreak/test-fixtures';
+import type { GameState, MemoryFact, NarrativeTurn, TurnRecord } from '@plotbreak/contracts';
+import { ActionIntent } from '@plotbreak/contracts';
 import {
   commitTurn,
   createInitialState,
@@ -19,7 +19,7 @@ import {
   moraleFlag,
   evaluatePredicate,
   resolveIntent,
-} from '@aniplay/engine';
+} from '@plotbreak/engine';
 import { stripInventedTravel, stripSubstitutedPeople } from './entity-resolution.js';
 import { ModelGatewayError, OpenAiGateway, createGatewayFromEnv } from './gateway/index.js';
 import { RuleBasedIntentParser } from './parser.js';

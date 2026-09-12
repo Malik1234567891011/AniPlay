@@ -1,4 +1,4 @@
-import type { StoryVersion, TurnRecord } from '@aniplay/contracts';
+import type { StoryVersion, TurnRecord } from '@plotbreak/contracts';
 
 /**
  * Spec §17.4 — "Again."

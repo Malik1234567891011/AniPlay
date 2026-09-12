@@ -3,7 +3,7 @@ import { Image, Platform, ScrollView, Switch, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ViewShot from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
-import type { TranslationKey } from '@aniplay/i18n';
+import type { TranslationKey } from '@plotbreak/i18n';
 import {
   Button,
   Card,
@@ -16,7 +16,7 @@ import {
   GUTTER,
   radius,
   spacing,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';
@@ -261,8 +261,8 @@ function ArtifactCard({
         <Row style={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <Txt variant="micro" color={colors.text.muted}>
             {
-              // i18n-exempt: brand name; note that app.json says AniPlay and the server says Plotbreak — an open English-side question, see docs/localization/fr-FR/research/00_HANDOFF.md
-              byline ? `${byline} · AniPlay` : 'AniPlay'
+              // i18n-exempt: brand name
+              byline ? `${byline} · Plotbreak` : 'Plotbreak'
             }
           </Txt>
           {Platform.OS !== 'web' ? (

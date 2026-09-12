@@ -38,8 +38,8 @@
  */
 import { writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
-import { worldTextCoverage } from '@aniplay/contracts';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
+import { worldTextCoverage } from '@plotbreak/contracts';
 
 export type Tier = 'A' | 'B' | 'C';
 

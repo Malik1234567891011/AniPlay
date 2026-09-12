@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { ActionIntent, GameState } from '@aniplay/contracts';
-import { BLACKWAKE } from '@aniplay/test-fixtures';
+import type { ActionIntent, GameState } from '@plotbreak/contracts';
+import { BLACKWAKE } from '@plotbreak/test-fixtures';
 import { commitTurn } from './commit.js';
 import { crewFlag, departedFlag, isAboard, moraleFlag, moraleOf, moraleScale, moodLabel } from './crew.js';
 import { resolveIntent } from './resolve.js';

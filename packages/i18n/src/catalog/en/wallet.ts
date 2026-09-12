@@ -308,7 +308,7 @@ export const wallet = {
   'store.purchase_failed': 'That purchase did not go through. You have not been charged.',
   /**
    * The three badges `STORE_OFFERS` ships. They are English literals in
-   * `@aniplay/contracts`, which has no translator, so the offer carries the
+   * `@plotbreak/contracts`, which has no translator, so the offer carries the
    * word and the client rendered it — `Popular` and `Best value` sat on a
    * French store page next to French prices.
    */

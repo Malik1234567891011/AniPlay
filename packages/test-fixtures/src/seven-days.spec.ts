@@ -7,7 +7,7 @@ import {
   loopShouldReset,
   resetLoop,
   upcomingWorldEvents,
-} from '@aniplay/engine';
+} from '@plotbreak/engine';
 import { SEVEN_DAYS } from './index.js';
 
 /**

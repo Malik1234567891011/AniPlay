@@ -5,8 +5,8 @@ import type {
   MemoryFact,
   StoryVersion,
   TurnRecord,
-} from '@aniplay/contracts';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
+} from '@plotbreak/contracts';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
 import type {
   IdempotencyRecord,
   ReportRecord,

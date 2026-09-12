@@ -1,5 +1,5 @@
 {
-  "name": "@aniplay/director",
+  "name": "@plotbreak/director",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,10 +13,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@aniplay/contracts": "*",
-    "@aniplay/engine": "*",
-    "@aniplay/i18n": "*",
-    "@aniplay/test-fixtures": "*",
+    "@plotbreak/contracts": "*",
+    "@plotbreak/engine": "*",
+    "@plotbreak/i18n": "*",
+    "@plotbreak/test-fixtures": "*",
     "zod": "^3.24.1"
   }
 }

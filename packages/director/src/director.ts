@@ -5,14 +5,14 @@ import type {
   MemoryProposal,
   OrderedBeat,
   SuggestedAction,
-} from '@aniplay/contracts';
-import type { ReactionEmotion } from '@aniplay/contracts';
-import { QUALITY_TIERS, shortName } from '@aniplay/contracts';
-import { isSuccess, outcomeLabel, estimateRisk, attributeModifier } from '@aniplay/engine';
+} from '@plotbreak/contracts';
+import type { ReactionEmotion } from '@plotbreak/contracts';
+import { QUALITY_TIERS, shortName } from '@plotbreak/contracts';
+import { isSuccess, outcomeLabel, estimateRisk, attributeModifier } from '@plotbreak/engine';
 import { type HostileVerb, type StructuredFact } from './memory-facts.js';
 import type { TurnContext, PresentCharacterContext } from './context.js';
 import { renderableFacts } from './writer.js';
-import { detectCommitment } from '@aniplay/engine';
+import { detectCommitment } from '@plotbreak/engine';
 
 /**
  * Spec §16 — the director.

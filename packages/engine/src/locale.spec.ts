@@ -10,7 +10,7 @@ import {
 } from './clock.js';
 import { dcBandLabel, dcBandName, outcomeLabel, proficiencyLabel } from './check.js';
 import { relationshipLabel, relationshipTone } from './relationships.js';
-import type { RelationshipState } from '@aniplay/contracts';
+import type { RelationshipState } from '@plotbreak/contracts';
 
 /**
  * Step 4's gate: **`Jour 3 · 16:15` renders correctly with no client-side

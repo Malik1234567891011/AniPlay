@@ -1,7 +1,7 @@
 import React from 'react';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, spacing, GUTTER } from '@aniplay/ui';
+import { colors, spacing, GUTTER } from '@plotbreak/ui';
 import { Comments } from '../components/Comments.jsx';
 import { useStore } from '../state/store.jsx';
 import type { RootNavigation, RootRoute } from '../navigation.jsx';

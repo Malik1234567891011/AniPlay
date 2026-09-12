@@ -1,4 +1,4 @@
-import type { Locale } from '@aniplay/i18n';
+import type { Locale } from '@plotbreak/i18n';
 import type { StoryVersion } from './story.js';
 
 /**

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
-import { translatorFor, type Translator } from '@aniplay/i18n';
+import { translatorFor, type Translator } from '@plotbreak/i18n';
 import { AuthError, SupabaseAuth, type AuthSession } from './supabase.js';
 
 export { AuthError, SupabaseAuth };
@@ -22,9 +22,9 @@ export type { AuthSession };
  */
 
 const KEYS = {
-  refreshToken: 'aniplay.refreshToken',
+  refreshToken: 'plotbreak.refreshToken',
   /** Only for the offline development path below. */
-  devToken: 'aniplay.token',
+  devToken: 'plotbreak.token',
 } as const;
 
 /** Renew this far ahead of expiry, so a slow request never races the clock. */

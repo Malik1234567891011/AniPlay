@@ -4,7 +4,7 @@ import {
   keyArtAssetKey,
   locationAssetKey,
   type StoryVersion,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 
 /**
  * Fills in every generated-art key from the same derivation the image pipeline

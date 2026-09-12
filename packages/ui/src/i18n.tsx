@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { DEFAULT_LOCALE, translatorFor, type Locale, type Translator } from '@aniplay/i18n';
+import { DEFAULT_LOCALE, translatorFor, type Locale, type Translator } from '@plotbreak/i18n';
 
 /**
  * The design system's translator.

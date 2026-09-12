@@ -19,7 +19,7 @@
  *
  * See `DIALOGUE_AND_REGISTER.md` §2.2–2.4.
  */
-import type { AddressMode, AddressPair, CharacterDef, RelationshipState } from '@aniplay/contracts';
+import type { AddressMode, AddressPair, CharacterDef, RelationshipState } from '@plotbreak/contracts';
 
 /**
  * Roles that start on `vous` to the player, in French.

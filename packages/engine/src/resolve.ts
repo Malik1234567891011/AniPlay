@@ -10,7 +10,7 @@ import type {
   Resolution,
   StateMutation,
   StoryVersion,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 import { SeededRng } from './rng.js';
 import { attributeModifier, isSuccess, resolveCheck, DC_BANDS } from './check.js';
 import {
@@ -21,7 +21,7 @@ import {
   getRelationship,
 } from './state.js';
 import { TIME_COST_MINUTES, type TimeCostCategory } from './clock.js';
-import { elide, translate, type Locale, type TranslationKey } from '@aniplay/i18n';
+import { elide, translate, type Locale, type TranslationKey } from '@plotbreak/i18n';
 import { fireWorldEvents } from './world-events.js';
 import { recruitCheck, recruitMutations, updateCrew, isAboard } from './crew.js';
 import {
@@ -1219,7 +1219,7 @@ function resolveSocial(args: ResolveActionArgs): ActionOutcome {
 }
 
 /** How a social attempt is named to the player. Never the raw verb. */
-/** Verb to catalogue key. The words themselves live in `@aniplay/i18n`. */
+/** Verb to catalogue key. The words themselves live in `@plotbreak/i18n`. */
 const SOCIAL_LABEL: Record<string, TranslationKey> = {
   persuade: 'check.persuade',
   deceive: 'check.deceive',

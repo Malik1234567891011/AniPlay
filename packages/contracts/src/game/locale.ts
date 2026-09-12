@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { LOCALES } from '@aniplay/i18n';
+import { LOCALES } from '@plotbreak/i18n';
 
 /**
  * The locale, as a schema.
  *
- * The list itself lives in `@aniplay/i18n`, which is a leaf package with no
+ * The list itself lives in `@plotbreak/i18n`, which is a leaf package with no
  * workspace dependencies, so there is exactly one place a third locale would be
  * added and no chance of the schema and the formatter disagreeing about what
  * exists.

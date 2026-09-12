@@ -26,12 +26,12 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
-import { LAUNCH_CATALOG } from '@aniplay/test-fixtures';
-import { worldTextCoverage } from '@aniplay/contracts';
-import { createGatewayFromEnv } from '@aniplay/director';
+import { LAUNCH_CATALOG } from '@plotbreak/test-fixtures';
+import { worldTextCoverage } from '@plotbreak/contracts';
+import { createGatewayFromEnv } from '@plotbreak/director';
 import { FR_TIER_A, FR_TIER_B, glossaryBrief } from '../../packages/director/src/fr-adaptation.js';
 import { manifestFor, type ManifestField } from './fr-manifest.js';
-import { frenchTypography } from '@aniplay/i18n';
+import { frenchTypography } from '@plotbreak/i18n';
 
 const ROOT = new URL('../..', import.meta.url).pathname.replace(/\/$/, '');
 const OUT_DIR = join(ROOT, 'packages/test-fixtures/src/fr');
@@ -134,7 +134,7 @@ async function adaptBatch(
  * complies most of the time — which is not a typography standard, and the
  * misses are invisible in review.
  *
- * The implementation is `frenchTypography` in `@aniplay/i18n`, shared with the
+ * The implementation is `frenchTypography` in `@plotbreak/i18n`, shared with the
  * runtime path that normalises generated prose and cards. It had a private
  * copy here first, and the two immediately disagreed: the shared one learned
  * that `https://` must not take a space before its colon, and this one did not.
@@ -222,7 +222,7 @@ async function exceptionPass(
 /** The overlay file, with the hashes that make staleness detectable. */
 function render(storyId: string, title: string, fields: ManifestField[], fr: Map<string, string | string[]>): string {
   const lines: string[] = [];
-  lines.push("import { registerWorldText } from '@aniplay/contracts';");
+  lines.push("import { registerWorldText } from '@plotbreak/contracts';");
   lines.push('');
   lines.push('/**');
   lines.push(` * ${title}, in French.`);

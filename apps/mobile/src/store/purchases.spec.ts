@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { PurchaseSyncRequest } from '@aniplay/contracts';
+import type { PurchaseSyncRequest } from '@plotbreak/contracts';
 import { Purchases, type PurchaseServer, type SyncResult } from './purchases.js';
 
 /**

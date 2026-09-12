@@ -11,8 +11,8 @@ import {
   type NativeScrollEvent,
   type NativeSyntheticEvent,
 } from 'react-native';
-import type { StorySummary } from '@aniplay/contracts';
-import { StoryArt, Txt, colors, radius, spacing, GUTTER } from '@aniplay/ui';
+import type { StorySummary } from '@plotbreak/contracts';
+import { StoryArt, Txt, colors, radius, spacing, GUTTER } from '@plotbreak/ui';
 import { useT } from '../i18n/useT.js';
 
 /**

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Linking, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Divider, Row, Stack, Txt, colors, spacing, GUTTER } from '@aniplay/ui';
+import { Divider, Row, Stack, Txt, colors, spacing, GUTTER } from '@plotbreak/ui';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';
-import type { TranslationKey } from '@aniplay/i18n';
+import type { TranslationKey } from '@plotbreak/i18n';
 import type { RootNavigation } from '../navigation.jsx';
 import { LinkRow } from './LibraryProfile.jsx';
 import { TasteScreen } from './Onboarding.jsx';

@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { colors, UiLocaleProvider } from '@aniplay/ui';
+import { colors, UiLocaleProvider } from '@plotbreak/ui';
 import { AppStoreProvider, useStore } from './state/store';
 import { Navigation } from './navigation';
 

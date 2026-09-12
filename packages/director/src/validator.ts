@@ -2,8 +2,8 @@ import type {
   ConsistencyReport,
   ConsistencyViolation,
   NarrativeTurn,
-} from '@aniplay/contracts';
-import { countItem, isSuccess } from '@aniplay/engine';
+} from '@plotbreak/contracts';
+import { countItem, isSuccess } from '@plotbreak/engine';
 import type { TurnContext } from './context.js';
 import { findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 import { findEmptyConsequences, stripEmptyConsequences } from './empty-consequence.js';

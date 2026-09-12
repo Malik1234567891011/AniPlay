@@ -1,5 +1,5 @@
 {
-  "name": "@aniplay/worker",
+  "name": "@plotbreak/worker",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -8,8 +8,8 @@
   "exports": { ".": "./src/index.ts" },
   "scripts": { "typecheck": "tsc --noEmit", "test": "vitest run --passWithNoTests" },
   "dependencies": {
-    "@aniplay/contracts": "*",
-    "@aniplay/director": "*",
-    "@aniplay/config": "*"
+    "@plotbreak/contracts": "*",
+    "@plotbreak/director": "*",
+    "@plotbreak/config": "*"
   }
 }

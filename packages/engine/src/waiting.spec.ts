@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE } from '@aniplay/test-fixtures';
+import { LAST_FIVE } from '@plotbreak/test-fixtures';
 import { createInitialState, resolveIntent } from './index.js';
-import type { ActionIntent } from '@aniplay/contracts';
+import type { ActionIntent } from '@plotbreak/contracts';
 
 /**
  * Waiting in a conversation is a pause, not an afternoon.

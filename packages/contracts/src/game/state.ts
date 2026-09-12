@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { FactVisibility } from '../ai/primitives.js';
-import { GRAMMATICAL_GENDERS } from '@aniplay/i18n';
+import { GRAMMATICAL_GENDERS } from '@plotbreak/i18n';
 import { LocaleSchema } from './locale.js';
 import { AttributeKey, CharacterDef, LocationDef } from './story.js';
 

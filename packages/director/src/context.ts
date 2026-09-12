@@ -10,8 +10,8 @@ import type {
   Resolution,
   StoryVersion,
   TurnRecord,
-} from '@aniplay/contracts';
-import { QUALITY_TIERS, playerGrammar } from '@aniplay/contracts';
+} from '@plotbreak/contracts';
+import { QUALITY_TIERS, playerGrammar } from '@plotbreak/contracts';
 import {
   abandonedObjectiveNote,
   approachingEndings,
@@ -28,12 +28,12 @@ import {
   dayPartLabel,
   formatClock,
   lightAt,
-} from '@aniplay/engine';
-import type { DayPart, RelationshipTone } from '@aniplay/engine';
+} from '@plotbreak/engine';
+import type { DayPart, RelationshipTone } from '@plotbreak/engine';
 import { retrieveLore } from './authored-lore.js';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
 import { addressState } from './address-fr.js';
-import { pressureOf } from '@aniplay/engine';
+import { pressureOf } from '@plotbreak/engine';
 
 /**
  * Spec §17.5 — the context budget.
@@ -131,7 +131,7 @@ export interface TurnContext {
      * The grammar signal, as opposed to `pronouns` above. English does not
      * collect it and reads `UNSPECIFIED`; French cannot write a sentence
      * without it. `WRITER_POLICY_FR` turns it into a rule; `agree()` in
-     * `@aniplay/i18n` is the deterministic half.
+     * `@plotbreak/i18n` is the deterministic half.
      */
     readonly grammar: PlayerGrammar;
     readonly about: string;

@@ -1,10 +1,10 @@
-import type { LedgerEntry, LedgerEntryType, WalletSummary } from '@aniplay/contracts';
+import type { LedgerEntry, LedgerEntryType, WalletSummary } from '@plotbreak/contracts';
 import {
   FIRST_PURCHASE_OFFER,
   GRANT_DAILY,
   GRANT_NEW_USER,
   STORE_OFFERS,
-} from '@aniplay/contracts';
+} from '@plotbreak/contracts';
 import type { Repository } from './repo/types.js';
 
 /**

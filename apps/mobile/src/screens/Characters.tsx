@@ -17,7 +17,7 @@ import {
   haptic,
   radius,
   spacing,
-} from '@aniplay/ui';
+} from '@plotbreak/ui';
 import { api, ApiError, type PlayerCharacterCard } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useT } from '../i18n/useT.js';

@@ -1,9 +1,9 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { CONTRACT_VERSION } from '@aniplay/contracts';
-import type { ModelGateway } from '@aniplay/director';
-import { createGatewayFromEnv, createModerator, ModelDirector, ModelIntentParser, ModelWriter, createDefaultPipeline, type Moderator, type TurnPipelineDeps } from '@aniplay/director';
-import { createMediaGatewayFromEnv } from '@aniplay/director';
-import { JobQueue, registerHandlers } from '@aniplay/worker';
+import { CONTRACT_VERSION } from '@plotbreak/contracts';
+import type { ModelGateway } from '@plotbreak/director';
+import { createGatewayFromEnv, createModerator, ModelDirector, ModelIntentParser, ModelWriter, createDefaultPipeline, type Moderator, type TurnPipelineDeps } from '@plotbreak/director';
+import { createMediaGatewayFromEnv } from '@plotbreak/director';
+import { JobQueue, registerHandlers } from '@plotbreak/worker';
 import { MemoryRepository } from './repo/memory.js';
 import { PostgresRepository } from './repo/postgres.js';
 import { createTokenVerifierFromEnv, type TokenVerifier, type VerifiedToken } from './auth.js';

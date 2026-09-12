@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BADGES_BY_ID } from '@aniplay/contracts';
+import { BADGES_BY_ID } from '@plotbreak/contracts';
 import { evaluateBadges, syncBadges, type PlayerRecord } from './badges.js';
 import { MemoryRepository } from './repo/memory.js';
 

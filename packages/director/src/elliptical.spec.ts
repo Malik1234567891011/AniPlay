@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { Resolution, TurnRecord } from '@aniplay/contracts';
-import { LAST_FIVE, NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import type { Resolution, TurnRecord } from '@plotbreak/contracts';
+import { LAST_FIVE, NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
 import { expandElliptical } from './elliptical.js';
 
 /**

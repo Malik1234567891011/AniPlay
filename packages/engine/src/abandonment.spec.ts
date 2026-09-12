@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE, NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import { LAST_FIVE, NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
 import { abandonedObjectiveNote, createInitialState, objectiveIsAbandoned } from './index.js';
 
 /**

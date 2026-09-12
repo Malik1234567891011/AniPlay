@@ -1,7 +1,7 @@
-import { type Translator, type TranslationKey } from '@aniplay/i18n';
+import { type Translator, type TranslationKey } from '@plotbreak/i18n';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, Pressable, ScrollView, TextInput, View } from 'react-native';
-import { Button, Card, Chip, Row, Stack, Txt, colors, radius, spacing } from '@aniplay/ui';
+import { Button, Card, Chip, Row, Stack, Txt, colors, radius, spacing } from '@plotbreak/ui';
 import { api, type CommentView } from '../api/client.js';
 import { useT } from '../i18n/useT.js';
 

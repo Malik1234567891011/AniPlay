@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, charactersPresent } from '@aniplay/engine';
+import { createInitialState, charactersPresent } from '@plotbreak/engine';
 import { PINK_TIDE } from './index.js';
 
 /**

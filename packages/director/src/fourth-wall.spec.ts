@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { NarrativeBlock, StoryVersion } from '@aniplay/contracts';
-import { LAST_FIVE, NINTH_ARCHIVE } from '@aniplay/test-fixtures';
+import type { NarrativeBlock, StoryVersion } from '@plotbreak/contracts';
+import { LAST_FIVE, NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
 import { allowsMetaFiction, findFourthWallBreaks, fourthWallRepairNote } from './fourth-wall.js';
 
 /**

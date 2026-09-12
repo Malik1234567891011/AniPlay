@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { GameState, StateMutation } from '@aniplay/contracts';
-import { NINTH_ARCHIVE, SALT_ROAD } from '@aniplay/test-fixtures';
+import type { GameState, StateMutation } from '@plotbreak/contracts';
+import { NINTH_ARCHIVE, SALT_ROAD } from '@plotbreak/test-fixtures';
 import { applyMutations } from './mutations.js';
 import { deadFlag, deathConsequences, isAlive, lethalMutations, surrenderedFlag } from './combat.js';
 import { createInitialState } from './state.js';

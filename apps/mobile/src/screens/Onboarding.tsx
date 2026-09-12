@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, FlatList, Linking, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Chip, Row, Skeleton, Stack, StoryArt, Txt, colors, radius, spacing, GUTTER } from '@aniplay/ui';
-import type { StorySummary } from '@aniplay/contracts';
+import { Button, Chip, Row, Skeleton, Stack, StoryArt, Txt, colors, radius, spacing, GUTTER } from '@plotbreak/ui';
+import type { StorySummary } from '@plotbreak/contracts';
 import { api } from '../api/client.js';
 import { useStore } from '../state/store.jsx';
 import { useCategoryLabel, useT } from '../i18n/useT.js';
@@ -16,7 +16,7 @@ import { useCategoryLabel, useT } from '../i18n/useT.js';
 
 /**
  * The privacy policy and terms live wherever they are published, which is not
- * something the app gets to invent. These were `https://aniplay.example/...`,
+ * something the app gets to invent. These were `https://plotbreak.example/...`,
  * which is a link to nothing in a screen App Store review reads carefully.
  */
 async function openLegal(page: 'privacy' | 'terms'): Promise<void> {

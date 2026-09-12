@@ -3,8 +3,8 @@ import {
   BeatPlan,
   NarrativeTurn,
   QUALITY_TIERS,
-} from '@aniplay/contracts';
-import type { SuggestedAction } from '@aniplay/contracts';
+} from '@plotbreak/contracts';
+import type { SuggestedAction } from '@plotbreak/contracts';
 import type { ModelGateway, ModelMessage } from './gateway/types.js';
 import { ModelGatewayError } from './gateway/types.js';
 import { stripInventedTravel, stripSubstitutedPeople } from './entity-resolution.js';
@@ -30,7 +30,7 @@ import { stateBands, STATE_BAND_RULES } from './state-bands.js';
  * Spec §18.2 — every call is assembled in this order, and user text is always
  * passed as data rather than concatenated into privileged instructions (§18.3).
  */
-import type { Locale } from '@aniplay/i18n';
+import type { Locale } from '@plotbreak/i18n';
 import { SAFETY_POLICY_FR, WORLD_RULES_FR, WRITER_POLICY_FR } from './policies-fr.js';
 
 export function buildMessages(parts: {

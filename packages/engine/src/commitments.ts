@@ -22,7 +22,7 @@
  * rules are the floor, exactly as `VERB_LEXICON` is the floor under the model
  * parser.
  */
-import type { CharacterDef, GameState, Obligation, StoryVersion } from '@aniplay/contracts';
+import type { CharacterDef, GameState, Obligation, StoryVersion } from '@plotbreak/contracts';
 
 /**
  * A minute count written the way people write it.

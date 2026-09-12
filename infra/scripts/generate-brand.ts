@@ -15,7 +15,7 @@ import { readFile, writeFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { createMediaGatewayFromEnv, type ImagePromptSpec } from '@aniplay/director';
+import { createMediaGatewayFromEnv, type ImagePromptSpec } from '@plotbreak/director';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const ASSETS = join(ROOT, 'apps/mobile/assets');
@@ -107,8 +107,8 @@ async function main(): Promise<void> {
     assetKey: 'brand/icon',
     kind: 'COVER',
     aspect: 'SQUARE',
-    seed: 'aniplay:icon:v1',
-    alt: 'AniPlay app icon',
+    seed: 'plotbreak:icon:v1',
+    alt: 'Plotbreak app icon',
     prompt: ICON_PROMPT,
   };
 

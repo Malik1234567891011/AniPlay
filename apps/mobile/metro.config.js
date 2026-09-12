@@ -1,6 +1,6 @@
 // Monorepo Metro config.
 //
-// The app consumes @aniplay/* workspace packages as TypeScript source, so Metro
+// The app consumes @plotbreak/* workspace packages as TypeScript source, so Metro
 // has to watch the repo root and resolve modules from both the app's and the
 // root's node_modules.
 const { getDefaultConfig } = require('expo/metro-config');

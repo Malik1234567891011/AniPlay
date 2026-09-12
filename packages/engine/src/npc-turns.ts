@@ -1,4 +1,4 @@
-import type { EncounterState, GameState, StateMutation, StoryVersion } from '@aniplay/contracts';
+import type { EncounterState, GameState, StateMutation, StoryVersion } from '@plotbreak/contracts';
 import { attributeModifier, resolveCheck } from './check.js';
 import type { SeededRng } from './rng.js';
 import { advanceTurnOrder, surrenderedFlag, qualitativeHealth } from './combat.js';

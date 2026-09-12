@@ -1,4 +1,4 @@
-import type { AbilityDef, GameState, StateMutation, StoryVersion, TendencyDef } from '@aniplay/contracts';
+import type { AbilityDef, GameState, StateMutation, StoryVersion, TendencyDef } from '@plotbreak/contracts';
 
 /**
  * Spec §12.10 — what you keep doing, and who has noticed.

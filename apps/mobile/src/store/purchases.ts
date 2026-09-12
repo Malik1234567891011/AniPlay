@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
-import type { PurchaseSyncRequest } from '@aniplay/contracts';
-import { translatorFor, type TranslationKey, type Translator } from '@aniplay/i18n';
+import type { PurchaseSyncRequest } from '@plotbreak/contracts';
+import { translatorFor, type TranslationKey, type Translator } from '@plotbreak/i18n';
 
 /**
  * The native purchase flow (spec §20.6, §33.5).

@@ -1,6 +1,6 @@
-import type { ActionIntent, CharacterDef, GameState, StoryVersion } from '@aniplay/contracts';
-import { nameKeys } from '@aniplay/contracts';
-import { charactersPresent } from '@aniplay/engine';
+import type { ActionIntent, CharacterDef, GameState, StoryVersion } from '@plotbreak/contracts';
+import { nameKeys } from '@plotbreak/contracts';
+import { charactersPresent } from '@plotbreak/engine';
 
 /**
  * Entity resolution and world-authoring detection.

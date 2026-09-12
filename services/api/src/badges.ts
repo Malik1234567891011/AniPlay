@@ -11,7 +11,7 @@
  * The only thing stored is what cannot be derived: when a badge was unlocked
  * and when it was paid for.
  */
-import { BADGES, BADGES_BY_ID, type Badge, type BadgeProgress } from '@aniplay/contracts';
+import { BADGES, BADGES_BY_ID, type Badge, type BadgeProgress } from '@plotbreak/contracts';
 import type { Repository, UserBadgeRow } from './repo/types.js';
 
 /** What the whole badge set needs to know about a player, gathered once. */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, charactersPresent } from '@aniplay/engine';
+import { createInitialState, charactersPresent } from '@plotbreak/engine';
 import { LAST_SERVICE } from './index.js';
 
 /**

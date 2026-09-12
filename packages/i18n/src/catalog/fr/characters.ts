@@ -56,7 +56,7 @@ export const characters = {
    *
    * `de {name}` renders `de Élodie` on every vowel-initial display name, and
    * display names are free text so those are ordinary. ICU cannot inspect an
-   * argument's first letter; `elide()` in `@aniplay/i18n` handles the cases
+   * argument's first letter; `elide()` in `@plotbreak/i18n` handles the cases
    * that cannot be restructured, but rule 6 prefers a shape that never needs
    * it.
    */

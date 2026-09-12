@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, charactersPresent } from '@aniplay/engine';
+import { createInitialState, charactersPresent } from '@plotbreak/engine';
 import { GOOD_MORNING_HUSBAND, LAUNCH_CATALOG } from './index.js';
 
 /**

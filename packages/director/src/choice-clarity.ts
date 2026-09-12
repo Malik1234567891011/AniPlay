@@ -1,5 +1,5 @@
-import type { ArchetypeDef, CharacterSetupField, StoryVersion } from '@aniplay/contracts';
-import { archetypeGrants } from '@aniplay/contracts';
+import type { ArchetypeDef, CharacterSetupField, StoryVersion } from '@plotbreak/contracts';
+import { archetypeGrants } from '@plotbreak/contracts';
 import { inventedVocabulary } from './narrative-clarity.js';
 
 /**

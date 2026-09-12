@@ -1,4 +1,4 @@
-import type { GameState, StateMutation, StoryVersion, WorldEventDef } from '@aniplay/contracts';
+import type { GameState, StateMutation, StoryVersion, WorldEventDef } from '@plotbreak/contracts';
 
 /**
  * Spec §15.3 — the world moves on its own.

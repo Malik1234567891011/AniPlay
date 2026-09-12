@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LAST_FIVE, NINTH_ARCHIVE, TIDEWALL, UNDERSTUDY } from '@aniplay/test-fixtures';
+import { LAST_FIVE, NINTH_ARCHIVE, TIDEWALL, UNDERSTUDY } from '@plotbreak/test-fixtures';
 import { buildBudget, deriveCustomBuild } from './custom-build.js';
 import { createInitialState } from './state.js';
 

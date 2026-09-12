@@ -1,4 +1,4 @@
-import type { TurnStreamEvent, TurnStreamEventName } from '@aniplay/contracts';
+import type { TurnStreamEvent, TurnStreamEventName } from '@plotbreak/contracts';
 
 /**
  * Spec §17.9 — the SSE turn stream.

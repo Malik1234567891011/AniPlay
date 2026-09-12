@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { NINTH_ARCHIVE } from '@aniplay/test-fixtures';
-import type { GameState, StoryVersion, WorldEventDef } from '@aniplay/contracts';
+import { NINTH_ARCHIVE } from '@plotbreak/test-fixtures';
+import type { GameState, StoryVersion, WorldEventDef } from '@plotbreak/contracts';
 import { createInitialState } from './state.js';
 import { applyMutations } from './mutations.js';
 import { fireWorldEvents, firedFlag, upcomingWorldEvents } from './world-events.js';
@@ -241,9 +241,9 @@ describe('the loop', () => {
  */
 describe('paying for an ability', () => {
   it('moves an ascending cost the way the fiction means it', async () => {
-    const { UNBOUND } = await import('@aniplay/test-fixtures');
+    const { UNBOUND } = await import('@plotbreak/test-fixtures');
     const { resolveIntent } = await import('./resolve.js');
-    const { RuleBasedIntentParser } = await import('@aniplay/director');
+    const { RuleBasedIntentParser } = await import('@plotbreak/director');
 
     const state = createInitialState({
       sessionId: 's',
@@ -284,7 +284,7 @@ describe('paying for an ability', () => {
 /** In a world that starts again, dying is how most weeks end. */
 describe('dying inside a loop', () => {
   it('sends the clock to midnight rather than inventing a second ending', async () => {
-    const { NINTH_ARCHIVE } = await import('@aniplay/test-fixtures');
+    const { NINTH_ARCHIVE } = await import('@plotbreak/test-fixtures');
     const looping = {
       ...NINTH_ARCHIVE,
       rules: {
@@ -342,7 +342,7 @@ describe('dying inside a loop', () => {
 
     const { commitTurn } = await import('./commit.js');
     const { resolveIntent } = await import('./resolve.js');
-    const { RuleBasedIntentParser } = await import('@aniplay/director');
+    const { RuleBasedIntentParser } = await import('@plotbreak/director');
     const intent = new RuleBasedIntentParser().parseSync('I wait.', {
       story: looping,
       state,

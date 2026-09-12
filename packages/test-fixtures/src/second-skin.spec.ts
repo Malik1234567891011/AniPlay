@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialState, charactersPresent, locationForSchedule } from '@aniplay/engine';
+import { createInitialState, charactersPresent, locationForSchedule } from '@plotbreak/engine';
 import { SECOND_SKIN } from './index.js';
 
 /**

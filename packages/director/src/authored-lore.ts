@@ -23,7 +23,7 @@
  * Retrieved on its own small budget rather than sharing the session's, because
  * lore that crowds out what happened two turns ago is worse than no lore.
  */
-import type { GameState, MemoryFact, StoryVersion } from '@aniplay/contracts';
+import type { GameState, MemoryFact, StoryVersion } from '@plotbreak/contracts';
 import { lexicalSimilarity, retrieveMemories, type ScoredFact } from './memory.js';
 
 /** How many authored facts a turn may pull in beyond its session memories. */

@@ -1,5 +1,5 @@
-import type { StoryVersion } from '@aniplay/contracts';
-import { normalizeForSearch } from '@aniplay/i18n';
+import type { StoryVersion } from '@plotbreak/contracts';
+import { normalizeForSearch } from '@plotbreak/i18n';
 
 /**
  * The words a player browses in, and how they map onto what worlds are tagged.

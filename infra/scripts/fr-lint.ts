@@ -698,7 +698,7 @@ function lintCatalogue(json: boolean): boolean {
 /** Names that are capitalised because they are names. `TERMINOLOGY.md` §1. */
 const PROPER_NOUNS = [
   'Plotbreak',
-  'AniPlay',
+  'Plotbreak',
   'Apple',
   'App Store',
   'Google',
